@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}{{ year }} {{ etap }} - OMJ Validator{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb">
+    <a href="/years">Lata</a>
+    <span class="separator">/</span>
+    <a href="/years/{{ year }}">{{ year }}</a>
+    <span class="separator">/</span>
+    <span class="current">
+        {% if etap == "etap2" %}Etap II{% else %}{{ etap }}{% endif %}
+    </span>
+</nav>
+
+<div class="page-header">
+    <h1>{{ year }} - {% if etap == "etap2" %}Etap II (okręgowy){% else %}{{ etap }}{% endif %}</h1>
+    <p class="subtitle">Wybierz zadanie do rozwiązania</p>
+</div>
+
+<div class="tasks-list">
+    {% for task in tasks %}
+    <a href="/task/{{ year }}/{{ etap }}/{{ task.number }}" class="task-card {% if not task.has_content %}task-unavailable{% endif %}">
+        <div class="task-header">
+            <span class="task-number">Zadanie {{ task.number }}</span>
+            {% if task.submission_count > 0 %}
+            <span class="task-badge">{{ task.submission_count }} {% if task.submission_count == 1 %}próba{% elif task.submission_count < 5 %}próby{% else %}prób{% endif %}</span>
+            {% endif %}
+        </div>
+        <div class="task-title">{{ task.title }}</div>
+        <div class="task-stats">
+            {% if task.submission_count > 0 %}
+            <span class="stat">
+                <span class="stat-label">Najwyższy wynik:</span>
+                <span class="stat-value score-{{ task.highest_score }}">{{ task.highest_score }}/6</span>
+            </span>
+            {% else %}
+            <span class="stat stat-empty">Brak prób</span>
+            {% endif %}
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

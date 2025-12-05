@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Zadanie {{ task.number }} - {{ task.year }} - OMJ Validator{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb">
+    <a href="/years">Lata</a>
+    <span class="separator">/</span>
+    <a href="/years/{{ task.year }}">{{ task.year }}</a>
+    <span class="separator">/</span>
+    <a href="/years/{{ task.year }}/{{ task.etap }}">
+        {% if task.etap == "etap2" %}Etap II{% else %}{{ task.etap }}{% endif %}
+    </a>
+    <span class="separator">/</span>
+    <span class="current">Zadanie {{ task.number }}</span>
+</nav>
+
+<div class="task-detail">
+    <div class="task-detail-header">
+        <h1>Zadanie {{ task.number }}</h1>
+        <div class="task-meta">
+            <span class="meta-item">{{ task.year }}</span>
+            <span class="meta-item">{% if task.etap == "etap2" %}Etap II{% else %}{{ task.etap }}{% endif %}</span>
+        </div>
+    </div>
+
+    <div class="task-content-box">
+        <h2>Treść zadania</h2>
+        <div class="task-content">{{ task.content | nl2br_safe }}</div>
+    </div>
+
+    <div class="submit-section">
+        <h2>Prześlij rozwiązanie</h2>
+        <p class="submit-info">Prześlij zdjęcia swojego ręcznie napisanego rozwiązania. Możesz przesłać wiele zdjęć.</p>
+
+        <form id="submit-form" class="submit-form" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="images" class="file-label">
+                    <span class="file-label-text">Wybierz zdjęcia</span>
+                    <span class="file-label-hint">JPG, PNG, WebP (max {{ config.upload_max_size_mb if config else 10 }}MB każde)</span>
+                </label>
+                <input type="file" id="images" name="images" multiple
+                       accept="image/jpeg,image/png,image/webp,image/heic"
+                       class="file-input">
+                <div id="file-preview" class="file-preview"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="submit-btn">
+                <span class="btn-text">Prześlij do oceny</span>
+                <span class="btn-loading" style="display: none;">Analizuję...</span>
+            </button>
+        </form>
+
+        <div id="result-container" class="result-container" style="display: none;">
+            <h3>Wynik oceny</h3>
+            <div class="result-score">
+                <span class="score-value" id="result-score">0</span>
+                <span class="score-max">/ 6 punktów</span>
+            </div>
+            <div class="result-feedback" id="result-feedback"></div>
+        </div>
+    </div>
+
+    {% if submissions %}
+    <div class="history-section">
+        <div class="history-header">
+            <h2>Ostatnie próby</h2>
+            <a href="/task/{{ task.year }}/{{ task.etap }}/{{ task.number }}/history" class="btn btn-secondary btn-small">
+                Zobacz wszystkie ({{ stats.submission_count }})
+            </a>
+        </div>
+
+        <div class="submissions-list">
+            {% for sub in submissions %}
+            <div class="submission-card">
+                <div class="submission-header">
+                    <span class="submission-date">{{ sub.timestamp.strftime('%d.%m.%Y %H:%M') }}</span>
+                    <span class="submission-score score-{{ sub.score }}">{{ sub.score }}/6</span>
+                </div>
+                <div class="submission-feedback">{{ sub.feedback }}</div>
+                {% if sub.images %}
+                <div class="submission-images">
+                    {% for img in sub.images %}
+                    <a href="/{{ img }}" target="_blank" class="submission-image-link">
+                        <img src="/{{ img }}" alt="Rozwiązanie" class="submission-image-thumb">
+                    </a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/app.js"></script>
+<script>
+    initTaskPage('{{ task.year }}', '{{ task.etap }}', {{ task.number }});
+</script>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}{{ year }} - OMJ Validator{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb">
+    <a href="/years">Lata</a>
+    <span class="separator">/</span>
+    <span class="current">{{ year }}</span>
+</nav>
+
+<div class="page-header">
+    <h1>Rok {{ year }}</h1>
+    <p class="subtitle">Wybierz etap zawodów</p>
+</div>
+
+<div class="etaps-grid">
+    {% for etap in etaps %}
+    <a href="/years/{{ year }}/{{ etap }}" class="etap-card">
+        <span class="etap-name">
+            {% if etap == "etap1" %}
+            Etap I (szkolny)
+            {% elif etap == "etap2" %}
+            Etap II (okręgowy)
+            {% elif etap == "etap3" %}
+            Etap III (finał)
+            {% else %}
+            {{ etap }}
+            {% endif %}
+        </span>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

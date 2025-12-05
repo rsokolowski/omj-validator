@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Historia - Zadanie {{ num }} - {{ year }} - OMJ Validator{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb">
+    <a href="/years">Lata</a>
+    <span class="separator">/</span>
+    <a href="/years/{{ year }}">{{ year }}</a>
+    <span class="separator">/</span>
+    <a href="/years/{{ year }}/{{ etap }}">
+        {% if etap == "etap2" %}Etap II{% else %}{{ etap }}{% endif %}
+    </a>
+    <span class="separator">/</span>
+    <a href="/task/{{ year }}/{{ etap }}/{{ num }}">Zadanie {{ num }}</a>
+    <span class="separator">/</span>
+    <span class="current">Historia</span>
+</nav>
+
+<div class="page-header">
+    <h1>Historia prób - Zadanie {{ num }}</h1>
+    <p class="subtitle">{{ year }} {% if etap == "etap2" %}Etap II{% else %}{{ etap }}{% endif %}</p>
+</div>
+
+{% if submissions %}
+<div class="history-stats">
+    <div class="stat-box">
+        <span class="stat-value">{{ submissions | length }}</span>
+        <span class="stat-label">Wszystkich prób</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-value">{{ submissions | map(attribute='score') | max }}</span>
+        <span class="stat-label">Najwyższy wynik</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-value">{{ "%.1f" | format(submissions | map(attribute='score') | list | sum / submissions | length) }}</span>
+        <span class="stat-label">Średni wynik</span>
+    </div>
+</div>
+
+<div class="submissions-list submissions-list-full">
+    {% for sub in submissions %}
+    <div class="submission-card">
+        <div class="submission-header">
+            <span class="submission-date">{{ sub.timestamp.strftime('%d.%m.%Y %H:%M') }}</span>
+            <span class="submission-score score-{{ sub.score }}">{{ sub.score }}/6</span>
+        </div>
+        <div class="submission-feedback">{{ sub.feedback }}</div>
+        {% if sub.images %}
+        <div class="submission-images">
+            {% for img in sub.images %}
+            <a href="/{{ img }}" target="_blank" class="submission-image-link">
+                <img src="/{{ img }}" alt="Rozwiązanie" class="submission-image-thumb">
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p>Brak historii prób dla tego zadania.</p>
+    <a href="/task/{{ year }}/{{ etap }}/{{ num }}" class="btn btn-primary">Prześlij rozwiązanie</a>
+</div>
+{% endif %}
+{% endblock %}

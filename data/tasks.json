@@ -1,0 +1,902 @@
+{
+  "2024_etap2_1": {
+    "year": "2024",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Punkt E na boku CD prostokąta ABCD",
+    "content": "Punkt E leży na boku CD prostokąta ABCD, przy czym\n∠DAE + ∠EBC = ∠ABE.\nWykaż, że AB ≥ AD.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2024_etap2_2": {
+    "year": "2024",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Tablica 5×5 pomalowana na czerwono i niebiesko",
+    "content": "Każde pole tablicy 5×5 pomalowano albo na czerwono, albo na niebiesko. Okazało się, że w każdym wierszu tej tablicy liczba czerwonych pól jest taka sama, a w każdych dwóch kolumnach tej tablicy liczby niebieskich pól są różne. Wyznacz łączną liczbę niebieskich pól w całej tablicy. Podaj wszystkie możliwości.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2024_etap2_3": {
+    "year": "2024",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Trójkąt ABC z AC=BC i ∠ACB=150°",
+    "content": "Dany jest trójkąt ABC, w którym AC = BC i ∠ACB = 150°. Punkt A' jest symetryczny do punktu A względem prostej BC, punkt B' jest symetryczny do punktu B względem prostej AC, a punkt C' jest symetryczny do punktu C względem prostej AB. Udowodnij, że trójkąt A'B'C' jest równoboczny.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2024_etap2_4": {
+    "year": "2024",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Pierwiastki sześcienne a + b = ∛2025",
+    "content": "Czy istnieją takie dodatnie liczby całkowite a oraz b, że\n∛a + ∛b = ∛2025?\nUwaga. Symbol ∛x oznacza pierwiastek trzeciego stopnia z x, czyli taką liczbę rzeczywistą y, że y³ = x.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2024_etap2_5": {
+    "year": "2024",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Liczby olimpijskie",
+    "content": "Liczbę całkowitą nazwiemy olimpijską, jeśli można ją uzyskać z liczby 1 w wyniku wykonania pewnej liczby operacji polegających na zwiększeniu liczby o jej cyfrę jedności. Początkowymi liczbami olimpijskimi są więc 1, 2, 4, 8, 16, 22, 24, 28, 36, ...\nWykaż, że kwadrat liczby olimpijskiej jest liczbą olimpijską.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2023_etap2_1": {
+    "year": "2023",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Iloczyny a·(b+c) i b·(a+c) kolejne",
+    "content": "Liczby całkowite a, b oraz c są takie, że iloczyny\na·(b+c) oraz b·(a+c)\nsą dwiema kolejnymi liczbami całkowitymi. Wykaż, że co najmniej jeden z tych iloczynów jest kwadratem liczby całkowitej.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2023_etap2_2": {
+    "year": "2023",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Kwadrat 6×6 rozcięty na prostokąty",
+    "content": "Kwadrat 6×6 rozcięto na osiem prostokątów, z których każdy ma cztery boki o całkowitych długościach. Wykaż, że pewne dwa z tych ośmiu prostokątów mają równe pola.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2023_etap2_3": {
+    "year": "2023",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Trapez ABCD z punktem P na AC",
+    "content": "Dany jest trapez ABCD o podstawach AB i CD. Punkt P leży na odcinku AC, przy czym\n∠BPC = ∠BAD = ∠ABC = ∠ACB.\nWykaż, że AP = CD.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2023_etap2_4": {
+    "year": "2023",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Kwadrat ABCD podzielony na figury",
+    "content": "Punkty K, L, M, N leżą odpowiednio na bokach AB, BC, CD, DA kwadratu ABCD. Odcinki KL, MN, LN dzielą ten kwadrat na cztery figury o równych polach. Udowodnij, że odcinki KL, MN, KM również dzielą ten kwadrat na cztery figury o równych polach.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2023_etap2_5": {
+    "year": "2023",
+    "etap": "etap2",
+    "number": 5,
+    "title": "800 liczb na tablicy",
+    "content": "Na tablicy znajduje się osiemset dodatnich liczb całkowitych mniejszych od 21. Czterysta z tych liczb zapisano niebieską kredą, a czterysta — żółtą. Wykaż, że można zmazać pewne liczby z tablicy (co najmniej jedną, ale nie wszystkie) w taki sposób, aby suma pozostałych na tablicy niebieskich liczb była równa sumie pozostałych na tablicy żółtych liczb.\nUwaga. Liczby na tablicy mogą się powtarzać.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2022_etap2_1": {
+    "year": "2022",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Punkty D i E na bokach trójkąta ABC",
+    "content": "Na bokach AB i BC trójkąta ABC leżą odpowiednio takie punkty D i E, że\n∠ADC = ∠BDE oraz ∠BCD = ∠AED.\nWykaż, że AE = BE.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2022_etap2_2": {
+    "year": "2022",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Liczby 2 i 5 na tablicy",
+    "content": "Początkowo na tablicy napisane są liczby 2 oraz 5. Ruch polega na zastąpieniu jednej z dwóch liczb napisanych na tablicy ich sumą. Czy po wykonaniu pewnej liczby ruchów można uzyskać sytuację, w której na tablicy napisane są dwie kolejne liczby naturalne? Odpowiedź uzasadnij.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2022_etap2_3": {
+    "year": "2022",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Wstawianie cyfry - sześciokrotność n",
+    "content": "Liczba naturalna n jest co najmniej dwucyfrowa. Jeżeli pomiędzy cyfrę dziesiątek a cyfrę jedności tej liczby wpiszemy pewną cyfrę, to uzyskamy sześciokrotność liczby n. Wyznacz wszystkie liczby n o tej własności.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2022_etap2_4": {
+    "year": "2022",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Równoległobok ABCD z punktami X i Y",
+    "content": "Dany jest równoległobok ABCD, w którym AB > AD. Punkty X oraz Y, różne od B, leżą na półprostej BD→, przy czym\nCX = CB oraz AY = AB.\nUdowodnij, że DX = DY.\nUwaga: Zapis BD→ oznacza półprostą o początku w punkcie B przechodzącą przez punkt D.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2022_etap2_5": {
+    "year": "2022",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Tabela 4×4 z liczbami 1 i 2",
+    "content": "W każde pole tabeli 4×4 wpisano jedną z liczb 1 lub 2. Dla każdego wiersza obliczono sumę wpisanych w niego liczb, a dla każdej kolumny obliczono iloczyn wpisanych w nią liczb. Wykaż, że pewne dwa z ośmiu uzyskanych wyników są równe.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2021_etap2_1": {
+    "year": "2021",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Odcinki AB i CD prostopadłe",
+    "content": "Odcinki AB i CD są prostopadłe i przecinają się w punkcie X. Ponadto spełnione są równości\nAC = BD, AD = BX oraz DX = 1.\nWyznacz długość odcinka CX.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2021_etap2_2": {
+    "year": "2021",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Dzielniki a i b liczby n",
+    "content": "Dana jest liczba całkowita n ≥ 1 oraz jej dodatnie dzielniki a i b, które spełniają równość a + b + ab = n. Wykaż, że a = b.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2021_etap2_3": {
+    "year": "2021",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Kolorowanie liczb 1-100",
+    "content": "Niech n będzie dodatnią liczbą całkowitą. Każdą z liczb 1, 2, 3, ..., 100 pomalowano jednym z n kolorów w taki sposób, że każde dwie różne liczby o sumie podzielnej przez 4 zostały pomalowane różnymi kolorami. Wyznacz najmniejszą liczbę n, dla której taka sytuacja jest możliwa.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2021_etap2_4": {
+    "year": "2021",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Pięciokąt wypukły ABCDE",
+    "content": "W pięciokącie wypukłym ABCDE spełnione są równości\n∠CDE = 90°, AC = AD oraz BD = BE.\nWykaż, że trójkąt ABD i czworokąt ABCE mają równe pola.\nUwaga: Wielokąt nazywamy wypukłym, jeśli wszystkie jego kąty wewnętrzne są mniejsze od 180°.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2021_etap2_5": {
+    "year": "2021",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Punkty na prostej z parzystą sumą odległości",
+    "content": "Niech n ≥ 3 będzie liczbą nieparzystą. Na prostej zaznaczono n punktów w taki sposób, że odległość między każdymi dwoma z nich jest liczbą całkowitą. Okazało się, że każdy zaznaczony punkt ma parzystą sumę odległości od pozostałych n−1 zaznaczonych punktów. Wykaż, że odległość między każdymi dwoma zaznaczonymi punktami jest liczbą parzystą.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2020_etap2_1": {
+    "year": "2020",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Warunek 2a + a² = 2b + b²",
+    "content": "Liczby a, b spełniają warunek 2a + a² = 2b + b². Wykaż, że jeżeli liczba a jest całkowita, to liczba b także jest całkowita.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2020_etap2_2": {
+    "year": "2020",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Kwadrat ABCD z punktem E na przekątnej",
+    "content": "Dany jest kwadrat ABCD. Punkt E leży na przekątnej AC, przy czym AE > EC. Na boku AB wybrano punkt F, różny od B, dla którego EF = DE. Udowodnij, że ∠DEF = 90°.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2020_etap2_3": {
+    "year": "2020",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Podzielność 5a + 3b przez a + b",
+    "content": "Dane są takie dodatnie liczby całkowite a, b, dla których liczba 5a + 3b jest podzielna przez liczbę a + b. Wykaż, że a = b.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2020_etap2_4": {
+    "year": "2020",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Równoległobok ABCD z punktami K i L",
+    "content": "Punkty K i L znajdują się odpowiednio na bokach BC i CD równoległoboku ABCD, przy czym\nAB + BK = AD + DL.\nUdowodnij, że dwusieczna kąta BAD jest prostopadła do prostej KL.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2020_etap2_5": {
+    "year": "2020",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Zdalne przyjęcie urodzinowe",
+    "content": "Tomek zaprosił na zdalne przyjęcie urodzinowe 11 swoich znajomych, którzy kolejno będą dołączać do spotkania. Tomek dobrał gości w taki sposób, aby niezależnie od kolejności w jakiej będą dołączać, zawsze nowo przybyła osoba znała co najmniej połowę już obecnych osób, wliczając Tomka. Wykaż, że wśród zaproszonych gości istnieje taki, który zna wszystkich pozostałych 10 znajomych Tomka.\nUwaga: Przyjmujemy, że jeśli osoba A zna osobę B, to również B zna A.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2019_etap2_1": {
+    "year": "2019",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Trzy kolejne liczby całkowite",
+    "content": "Dane są liczby rzeczywiste a, b, c. Wiadomo, że liczby a+b, b+c, c+a są trzema kolejnymi liczbami całkowitymi, wypisanymi w pewnej kolejności, przy czym najmniejsza z nich jest nieparzysta. Wykaż, że liczby a, b, c są także trzema kolejnymi liczbami całkowitymi, wypisanymi w pewnej kolejności.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2019_etap2_2": {
+    "year": "2019",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Równoległobok ABCD z symetralną AB",
+    "content": "Dany jest równoległobok ABCD, w którym kąt przy wierzchołku A jest ostry. Symetralna odcinka AB przecina odcinek CD w punkcie X. Przekątne tego równoległoboku przecinają się w punkcie E. Udowodnij, że XE = ½AD.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2019_etap2_3": {
+    "year": "2019",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Turniej chłopców i dziewcząt",
+    "content": "W pewnym turnieju wzięli udział chłopcy i dziewczęta. Każda osoba rozegrała dokładnie jeden mecz z każdą inną osobą, nie było remisów. Po turnieju okazało się, że każdy przegrał co najmniej raz. Ponadto każdy chłopiec przegrał inną liczbę meczów niż każdy z pozostałych chłopców. Wykaż, że pewna dziewczynka wygrała mecz z pewnym chłopcem.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2019_etap2_4": {
+    "year": "2019",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Trójkąt ABC z kątem 45°",
+    "content": "Dany jest trójkąt ABC, w którym miara kąta przy wierzchołku A jest równa 45°, a kąt przy wierzchołku C jest rozwarty. Udowodnij, że\nBC + (√2−1)·CA < AB.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2019_etap2_5": {
+    "year": "2019",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Ułamek (a+n)/(b+n) skracalny",
+    "content": "Dane są dodatnie liczby całkowite a, b o następującej własności: dla każdej liczby naturalnej n ≥ 1 ułamek (a+n)/(b+n) jest skracalny. Wykaż, że a = b.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2018_etap2_1": {
+    "year": "2018",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Nierówność x² + x ≤ y",
+    "content": "Liczby rzeczywiste x oraz y spełniają nierówność x² + x ≤ y. Udowodnij, że y² + y ≥ x.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2018_etap2_2": {
+    "year": "2018",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Trapez ABCD z dwusieczną kąta BAD",
+    "content": "Dany jest trapez ABCD o podstawach AB i CD, w którym ∠ABC = 90°. Dwusieczna kąta BAD przecina odcinek BC w punkcie P. Wykaż, że jeśli ∠APD = 45°, to pole czworokąta APCD jest równe polu trójkąta ABP.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2018_etap2_3": {
+    "year": "2018",
+    "etap": "etap2",
+    "number": 3,
+    "title": "101-kąt foremny i prosta ℓ",
+    "content": "Dany jest 101-kąt foremny. Prosta ℓ leży w płaszczyźnie tego wielokąta i nie przechodzi przez żaden z jego wierzchołków. Udowodnij, że prosta ℓ przecina parzystą liczbę przekątnych danego wielokąta.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2018_etap2_4": {
+    "year": "2018",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Trójkąt ABC z AB = 3·BC",
+    "content": "Dany jest trójkąt ABC, w którym AB = 3·BC. Punkty P i Q leżą na boku AB i spełniają warunek AP = PQ = QB. Punkt M jest środkiem boku AC. Wykaż, że ∠PMQ = 90°.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2018_etap2_5": {
+    "year": "2018",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Cyfry 1, 2, 9 w zapisie 3n",
+    "content": "W zapisie dziesiętnym pewnej dodatniej liczby całkowitej n nie występuje żadna z cyfr 1, 2, 9. Udowodnij, że w zapisie dziesiętnym liczby 3n występuje co najmniej jedna z cyfr 1, 2, 9.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2017_etap2_1": {
+    "year": "2017",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Trójkąt ABC z kątem 45° i wysokościami",
+    "content": "Dany jest trójkąt ostrokątny ABC, w którym ∠BAC = 45°. Wysokości tego trójkąta przecinają się w punkcie H. Wykaż, że |AH| = |BC|.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2017_etap2_2": {
+    "year": "2017",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Tablica 4×4 z sumami potęgami 2",
+    "content": "W każde pole tablicy 4×4 należy wpisać pewną liczbę całkowitą w taki sposób, aby sumy liczb w każdej kolumnie i w każdym wierszu były potęgami liczby 2 o wykładniku całkowitym nieujemnym. Czy można to zrobić w taki sposób, aby każde dwie z tych ośmiu sum były różne? Odpowiedź uzasadnij.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2017_etap2_3": {
+    "year": "2017",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Trapez z prostopadłymi przekątnymi",
+    "content": "Wykaż, że jeżeli przekątne pewnego trapezu są prostopadłe, to suma długości podstaw tego trapezu jest nie większa od sumy długości ramion tego trapezu.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2017_etap2_4": {
+    "year": "2017",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Podzielność a+b przez d, a·b przez d²",
+    "content": "Dane są dodatnie liczby całkowite a, b, d. Wiadomo, że liczba a+b jest podzielna przez d, a liczba a·b jest podzielna przez d². Udowodnij, że każda z liczb a i b jest podzielna przez d.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2017_etap2_5": {
+    "year": "2017",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Liczby √2+1 lub √2−1",
+    "content": "Czy istnieją liczby x₁, x₂, ..., x₉₉, z których każda jest równa √2+1 lub √2−1 i które spełniają równość\nx₁x₂ + x₂x₃ + x₃x₄ + ... + x₉₈x₉₉ + x₉₉x₁ = 199?\nOdpowiedź uzasadnij.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2016_etap2_1": {
+    "year": "2016",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Trójki (a,b,c) z sumami pierwszymi",
+    "content": "Wyznacz wszystkie takie trójki (a, b, c) dodatnich liczb całkowitych, że każda z liczb\na+b, b+c, c+a oraz a+b+c\njest pierwsza.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2016_etap2_2": {
+    "year": "2016",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Równoległobok ABCD z AD=DX i AB=BY",
+    "content": "Dany jest równoległobok ABCD. Na bokach AB i AD leżą odpowiednio takie punkty X i Y różne od A, że AD = DX oraz AB = BY. Udowodnij, że CX = CY.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2016_etap2_3": {
+    "year": "2016",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Równości a+b=cd i c+d=ab",
+    "content": "Liczby rzeczywiste a, b, c, d spełniają równości\na+b = cd oraz c+d = ab.\nWykaż, że (a+1)(b+1)(c+1)(d+1) ≥ 0.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2016_etap2_4": {
+    "year": "2016",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Trójkąt ABC z ∠BAC + ∠MCB = 90°",
+    "content": "Punkt M jest środkiem boku AB trójkąta ABC, przy czym\n∠BAC + ∠MCB = 90°.\nWykaż, że trójkąt ABC jest równoramienny lub prostokątny.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2016_etap2_5": {
+    "year": "2016",
+    "etap": "etap2",
+    "number": 5,
+    "title": "100-kąt foremny z kolorowaniem",
+    "content": "Spośród wierzchołków 100-kąta foremnego wybrano pewne 50 i pokolorowano je na biało. Pozostałe wierzchołki pokolorowano na czerwono. Udowodnij, że wierzchołki tego 100-kąta można tak podzielić na 25 grup po 4 punkty, aby punkty w obrębie każdej grupy były wierzchołkami prostokąta o dwóch białych i dwóch czerwonych wierzchołkach.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2015_etap2_1": {
+    "year": "2015",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Liczby a+b=c+d i ac=bd",
+    "content": "Liczby dodatnie a, b, c, d spełniają warunki a+b = c+d oraz ac = bd. Udowodnij, że a = d oraz b = c.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2015_etap2_2": {
+    "year": "2015",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Trójkąt ABC z AE=BD",
+    "content": "Dany jest trójkąt ABC, w którym AC < BC. Punkty D i E leżą odpowiednio na bokach BC i AC tego trójkąta, przy czym AE = BD. Wykaż, że symetralne odcinków AB i DE przecinają się w punkcie leżącym na okręgu opisanym na trójkącie ABC.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2015_etap2_3": {
+    "year": "2015",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Sześcian z liczbami na ścianach",
+    "content": "Na każdej ścianie sześcianu napisano pewną liczbę całkowitą. Następnie każdej krawędzi sześcianu przyporządkowano sumę liczb z dwóch ścian, pomiędzy którymi znajduje się dana krawędź. Udowodnij, że wśród dwunastu liczb przyporządkowanych krawędziom są co najmniej cztery liczby parzyste.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2015_etap2_4": {
+    "year": "2015",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Cztery liczby pierwsze w ciągu arytmetycznym",
+    "content": "Liczby pierwsze p, q, r, s spełniają warunki p > q > r > s oraz p−q = q−r = r−s. Udowodnij, że liczba p−s jest podzielna przez 18.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2015_etap2_5": {
+    "year": "2015",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Trójkąt równoboczny ABC z punktem P",
+    "content": "Dany jest trójkąt równoboczny ABC. Niech P będzie punktem leżącym wewnątrz tego trójkąta. Proste AP, BP, CP przecinają odcinki BC, CA, AB odpowiednio w punktach D, E, F. Czy można punkt P wybrać w taki sposób, aby dokładnie cztery spośród trójkątów AEP, AFP, BFP, BDP, CDP, CEP miały równe pola? Odpowiedź uzasadnij.",
+    "has_solution": true,
+    "has_statistics": true
+  },
+  "2014_etap2_1": {
+    "year": "2014",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Trójka (a,b,c) liczb nieparzystych",
+    "content": "Czy istnieje taka trójka (a, b, c) dodatnich liczb nieparzystych, że\n√(a−c) + √(b−c) = √(a+b)?\nOdpowiedź uzasadnij.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2014_etap2_2": {
+    "year": "2014",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Trapez ABCD ze środkami M i N",
+    "content": "W trapezie ABCD punkty M i N są środkami odpowiednio podstaw AB i CD. Punkt P należy do odcinka MN. Udowodnij, że trójkąty ADP i BCP mają równe pola.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2014_etap2_3": {
+    "year": "2014",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Tablica 9×9 z kolejnymi sumami",
+    "content": "W każde pole tablicy o wymiarach 9×9 wpisano pewną dodatnią liczbę całkowitą. Następnie obliczono sumy liczb znajdujących się w każdym wierszu i w każdej kolumnie. Czy może się zdarzyć, że 18 obliczonych sum to kolejne liczby naturalne w pewnym porządku? Odpowiedź uzasadnij.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2014_etap2_4": {
+    "year": "2014",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Punkty pomalowane na trzy kolory",
+    "content": "Na płaszczyźnie zaznaczono n punktów (n ≥ 3), z których żadne trzy nie leżą na jednej prostej. Każdy z tych punktów pomalowano na jeden z trzech kolorów, przy czym każdego koloru użyto przynajmniej raz. Udowodnij, że istnieje taki trójkąt o wierzchołkach w zaznaczonych punktach, którego każde dwa wierzchołki mają różne kolory i do wnętrza którego nie należy żaden zaznaczony punkt.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2014_etap2_5": {
+    "year": "2014",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Trójkąt ABC z ∠CAE = ∠BCD",
+    "content": "W trójkącie ABC punkt D jest środkiem boku AB, a punkt E jest środkiem odcinka CD. Wykaż, że jeżeli ∠CAE = ∠BCD, to AC = CD.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2013_etap2_1": {
+    "year": "2013",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Pary (a,b) z a < b < 2013 i a+b = 4020",
+    "content": "Wyznacz wszystkie pary (a, b) liczb całkowitych spełniających warunki\na < b < 2013 oraz a+b = 4020.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2013_etap2_2": {
+    "year": "2013",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Trójkąt ostrokątny z całkowitymi bokami i wysokościami",
+    "content": "Czy istnieje taki trójkąt ostrokątny, w którym długości wszystkich boków i wszystkich wysokości są liczbami całkowitymi? Odpowiedź uzasadnij.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2013_etap2_3": {
+    "year": "2013",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Nierówność a√b + b√a + 1 > 3ab",
+    "content": "Wykaż, że jeśli liczby a i b są dodatnie i mniejsze od 1, to\na·√b + b·√a + 1 > 3ab.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2013_etap2_4": {
+    "year": "2013",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Kolorowanie punktów płaszczyzny",
+    "content": "Każdy punkt płaszczyzny należy pomalować na pewien kolor w taki sposób, aby każda prosta była jednokolorowa lub dwukolorowa. Jaka jest największa możliwa liczba kolorów, których można użyć do pomalowania punktów tej płaszczyzny? Odpowiedź uzasadnij.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2013_etap2_5": {
+    "year": "2013",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Liczby pierwsze (p,q) z p² + pq + q² kwadratem",
+    "content": "Wyznacz wszystkie pary liczb pierwszych (p, q), dla których liczba\np² + pq + q²\njest kwadratem liczby całkowitej.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2012_etap2_1": {
+    "year": "2012",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Pary (a,b) z ab podzielnym przez 175",
+    "content": "Wyznacz wszystkie pary dodatnich liczb całkowitych a, b, których iloczyn ab jest podzielny przez 175, a suma a+b równa się 175.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2012_etap2_2": {
+    "year": "2012",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Turniej 6 drużyn z sumą 41 punktów",
+    "content": "W pewnym turnieju uczestniczyło 6 drużyn. Każda drużyna rozegrała z każdą inną dokładnie jeden mecz. Za zwycięstwo w meczu drużyna otrzymywała 3 punkty, za porażkę 0 punktów, a za remis 1 punkt. Po turnieju okazało się, że suma punktów zdobytych przez wszystkie drużyny wynosi 41. Wykaż, że istnieją takie cztery drużyny, z których każda co najmniej jeden raz zremisowała.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2012_etap2_3": {
+    "year": "2012",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Trójkąt z polem ¼(ab+bc)",
+    "content": "Czy istnieje taki trójkąt o bokach długości a, b, c, którego pole jest równe ¼(ab+bc)? Odpowiedź uzasadnij.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2012_etap2_4": {
+    "year": "2012",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Trójki (a,b,c) z a+b+c = ab+bc+ca",
+    "content": "Wyznacz wszystkie trójki (a, b, c) liczb nieujemnych i nie większych od 1, dla których spełniona jest równość\na+b+c = ab+bc+ca.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2012_etap2_5": {
+    "year": "2012",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Czworokąt wypukły ABCD z okręgiem opisanym",
+    "content": "Dany jest czworokąt wypukły ABCD, w którym\n∠DAB + ∠BCD = ∠ABC.\nPunkt O jest środkiem okręgu opisanego na trójkącie ABC. Wykaż, że punkt O jest jednakowo odległy od prostych AD i CD.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2011_etap2_1": {
+    "year": "2011",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Pięciokąt wypukły ABCDE z równymi polami",
+    "content": "Dany jest taki pięciokąt wypukły ABCDE, w którym pola trójkątów ABD, BCE, CDA, DEB i EAC są równe. Wykaż, że każda przekątna tego pięciokąta jest równoległa do pewnego jego boku.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2011_etap2_2": {
+    "year": "2011",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Podzielność a² przez a+b",
+    "content": "Dane są dodatnie liczby całkowite a i b. Wykaż, że jeżeli liczba a² jest podzielna przez liczbę a+b, to także liczba b² jest podzielna przez liczbę a+b.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2011_etap2_3": {
+    "year": "2011",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Turniej tenisa stołowego n zawodników",
+    "content": "W turnieju tenisa stołowego wzięło udział n zawodników (n ≥ 4). Każdy zawodnik rozegrał dokładnie jeden mecz z każdym innym zawodnikiem, żaden mecz nie zakończył się remisem. Po turnieju wszyscy zawodnicy usiedli przy okrągłym stole w taki sposób, że każdy zawodnik wygrał z osobą siedzącą obok niego z jego lewej strony. Wykaż, że istnieją tacy trzej zawodnicy A, B i C, że A wygrał z B, B wygrał z C oraz C wygrał z A.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2011_etap2_4": {
+    "year": "2011",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Nierówność x(1−y)² + y(1−x)² < (1−xy)²",
+    "content": "Udowodnij, że dla każdych liczb x, y należących do przedziału (0, 1) spełniona jest nierówność\nx(1−y)² + y(1−x)² < (1−xy)².",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2011_etap2_5": {
+    "year": "2011",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Czworościan foremny z 6 kulami",
+    "content": "Dany jest czworościan foremny opisany na sferze o promieniu 1. Udowodnij, że w tym czworościanie można umieścić 6 kul o promieniu ½, w taki sposób, aby każde dwie kule miały co najwyżej jeden punkt wspólny.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2010_etap2_1": {
+    "year": "2010",
+    "etap": "etap2",
+    "number": 1,
+    "title": "21 liczb rzeczywistych",
+    "content": "Danych jest 21 liczb rzeczywistych. Wiadomo, że suma każdych jedenastu spośród tych liczb jest większa od sumy pozostałych dziesięciu. Wykaż, że wszystkie te liczby są dodatnie.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2010_etap2_2": {
+    "year": "2010",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Trapez ABCD z kątami 60°",
+    "content": "Dany jest trapez ABCD o podstawach AB i CD, w którym\n∠BAD = ∠ABC = 60° oraz CD < BC.\nNa boku BC tego trapezu wybrano taki punkt E, że EB = CD. Wykaż, że BD = AE.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2010_etap2_3": {
+    "year": "2010",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Liczby n²+n+1 i n²+n+3 pierwsze",
+    "content": "Wyznacz wszystkie takie dodatnie liczby całkowite n, dla których obie liczby\nn²+n+1 oraz n²+n+3\nsą pierwsze.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2010_etap2_4": {
+    "year": "2010",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Sześć osób z trzema znajomymi",
+    "content": "Na przyjęciu spotkało się sześć osób. Okazało się, że każda z nich ma wśród pozostałych dokładnie trzech znajomych. Wykaż, że pewne cztery z tych osób mogą usiąść przy okrągłym stole w taki sposób, aby każda z nich siedziała pomiędzy swoimi dwoma znajomymi.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2010_etap2_5": {
+    "year": "2010",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Ostrosłup czworokątny z prostopadłymi krawędziami",
+    "content": "Czy istnieje taki ostrosłup czworokątny, którego każda krawędź boczna jest prostopadła do którejś krawędzi podstawy? Odpowiedź uzasadnij.\nUwaga: Proste prostopadłe w przestrzeni nie muszą się przecinać.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2009_etap2_1": {
+    "year": "2009",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Trójki (a,b,c) liczb nieparzystych",
+    "content": "Wyznacz wszystkie trójki (a, b, c) liczb nieparzystych dodatnich spełniające zależność\n(a+c−b)/(b+c−a) = a/b.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2009_etap2_2": {
+    "year": "2009",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Liczby x₁,...,x₁₀₁ równe 1 lub −1",
+    "content": "Każda z liczb x₁, x₂, ..., x₁₀₁ jest równa 1 lub −1. Wyznacz najmniejszą możliwą wartość wyrażenia\nx₁x₂ + x₂x₃ + x₃x₄ + ... + x₁₀₀x₁₀₁ + x₁₀₁x₁.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2009_etap2_3": {
+    "year": "2009",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Równoległobok ABCD z punktem E",
+    "content": "Dany jest równoległobok ABCD oraz punkt E należący do boku BC. Przez punkt D prowadzimy prostą k równoległą do prostej AE. Na prostej k obieramy takie punkty K, L, że czworokąt AEKL jest równoległobokiem. Udowodnij, że równoległoboki ABCD i AEKL mają równe pola.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2009_etap2_4": {
+    "year": "2009",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Turniej 50 zawodników",
+    "content": "W turnieju tenisa stołowego wzięło udział 50 zawodników. Każdy zawodnik rozegrał jeden mecz z każdym innym zawodnikiem, nie było remisów. Czy możliwe jest, aby każdy z uczestników wygrał tę samą liczbę meczów? Odpowiedź uzasadnij.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2009_etap2_5": {
+    "year": "2009",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Ostrosłup sześciokątny z przekrojem",
+    "content": "Ostrosłup prawidłowy sześciokątny przecięto płaszczyzną, która przecina wszystkie jego krawędzie boczne. W przekroju otrzymano sześciokąt wypukły ABCDEF. Wykaż, że proste AD, BE i CF przecinają się w jednym punkcie.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2008_etap2_1": {
+    "year": "2008",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Średnia arytmetyczna i geometryczna",
+    "content": "Liczby dodatnie a, b spełniają warunek\n(a+b)/2 = √(ab) + 3.\nWykaż, że co najmniej jedna z liczb a, b jest niewymierna.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2008_etap2_2": {
+    "year": "2008",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Tablica 4×4 z sumami",
+    "content": "W każde pole tablicy o wymiarach 4×4 wpisano liczbę 0 lub 1. Następnie obliczono sumy liczb stojących w każdym wierszu, w każdej kolumnie i na obu przekątnych. Wykaż, że co najmniej trzy sumy są jednakowe.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2008_etap2_3": {
+    "year": "2008",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Sześciokąt foremny ABCDEF z punktem S",
+    "content": "Punkt S leży wewnątrz sześciokąta foremnego ABCDEF. Udowodnij, że suma pól trójkątów ABS, CDS, EFS jest równa połowie pola sześciokąta ABCDEF.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2008_etap2_4": {
+    "year": "2008",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Potęga 2ⁿ jako suma kolejnych liczb",
+    "content": "Czy istnieje taka dodatnia liczba całkowita n, dla której liczbę 2ⁿ można przedstawić w postaci sumy co najmniej dwóch kolejnych dodatnich liczb całkowitych? Odpowiedź uzasadnij.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2008_etap2_5": {
+    "year": "2008",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Sześcian z przekrojem pięciokątnym",
+    "content": "Czy można tak przeciąć sześcian płaskim cięciem na dwie bryły o równych objętościach, aby w przekroju otrzymać pięciokąt? Odpowiedź uzasadnij.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2007_etap2_1": {
+    "year": "2007",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Układ równań a²+b²+c²=23 i a+2b+4c=22",
+    "content": "Wyznacz wszystkie trójki (a, b, c) liczb rzeczywistych spełniające układ równań:\na² + b² + c² = 23\na + 2b + 4c = 22",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2007_etap2_2": {
+    "year": "2007",
+    "etap": "etap2",
+    "number": 2,
+    "title": "Sześciokąt ABCDEF z kątami 120°",
+    "content": "Miara każdego kąta sześciokąta ABCDEF jest równa 120°. Udowodnij, że symetralne odcinków AB, CD i EF przecinają się w jednym punkcie.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2007_etap2_3": {
+    "year": "2007",
+    "etap": "etap2",
+    "number": 3,
+    "title": "6 punktów i 10 odcinków",
+    "content": "W przestrzeni danych jest 6 punktów, z których żadne cztery nie leżą na jednej płaszczyźnie. Łącząc niektóre z tych punktów narysowano 10 odcinków. Wykaż, że w ten sposób uzyskano co najmniej jeden trójkąt.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2007_etap2_4": {
+    "year": "2007",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Iloczyn (a+b)(b+c)(c+d)(d+a) zakończony cyframi \"10\"",
+    "content": "Czy istnieją takie dodatnie liczby całkowite a, b, c, d, że liczba (a+b)(b+c)(c+d)(d+a) jest w systemie dziesiętnym zakończona cyframi \"10\"? Odpowiedź uzasadnij.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2007_etap2_5": {
+    "year": "2007",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Ostrosłup ABCS z kątami 20°",
+    "content": "Trójkąt ABC jest podstawą ostrosłupa ABCS, w którym\n∠ASB = ∠BSC = ∠CSA = 20°.\nWykaż, że obwód trójkąta ABC jest nie mniejszy od długości każdej z krawędzi AS, BS i CS.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2006_etap2_1": {
+    "year": "2006",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Graniastosłup i ostrosłup - liczba ścian",
+    "content": "Pewien graniastosłup ma dwa razy więcej wierzchołków niż pewien ostrosłup. Który z tych wielościanów ma więcej ścian i o ile więcej?",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2006_etap2_2": {
+    "year": "2006",
+    "etap": "etap2",
+    "number": 2,
+    "title": "111 liczb całkowitych - suma podzielna przez 11",
+    "content": "Danych jest 111 dodatnich liczb całkowitych. Wykaż, że spośród nich można wybrać 11 takich liczb, których suma jest podzielna przez 11.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2006_etap2_3": {
+    "year": "2006",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Trójkąt ostrokątny ABC z ∠BAC=45°",
+    "content": "Dany jest trójkąt ostrokątny ABC, w którym ∠BAC = 45°. Wysokości tego trójkąta przecinają się w punkcie H. Wykaż, że |AH| = |BC|.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2006_etap2_4": {
+    "year": "2006",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Liczba 14ⁿ − 9 pierwsza",
+    "content": "Wyznacz wszystkie dodatnie liczby całkowite n, dla których liczba 14ⁿ − 9 jest pierwsza.",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2006_etap2_5": {
+    "year": "2006",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Sześciokąt wypukły ABCDEF - pole",
+    "content": "Dany jest sześciokąt wypukły ABCDEF o kątach przy wierzchołkach A, B, C, D równych odpowiednio 90°, 128°, 142°, 90°. Wykaż, że pole tego sześciokąta jest mniejsze niż ½·|AD|².",
+    "has_solution": true,
+    "has_statistics": false
+  },
+  "2005_etap2_1": {
+    "year": "2005",
+    "etap": "etap2",
+    "number": 1,
+    "title": "Graniastosłup i ostrosłup",
+    "content": "Pewien graniastosłup ma dwa razy więcej wierzchołków niż pewien ostrosłup. Który z tych wielościanów ma więcej ścian i o ile więcej?",
+    "has_solution": false,
+    "has_statistics": false
+  },
+  "2005_etap2_2": {
+    "year": "2005",
+    "etap": "etap2",
+    "number": 2,
+    "title": "111 liczb - suma podzielna przez 11",
+    "content": "Danych jest 111 dodatnich liczb całkowitych. Wykaż, że spośród nich można wybrać 11 takich liczb, których suma jest podzielna przez 11.",
+    "has_solution": false,
+    "has_statistics": false
+  },
+  "2005_etap2_3": {
+    "year": "2005",
+    "etap": "etap2",
+    "number": 3,
+    "title": "Trójkąt z ∠BAC = 45° i wysokości",
+    "content": "Dany jest trójkąt ostrokątny ABC, w którym ∠BAC = 45°. Wysokości tego trójkąta przecinają się w punkcie H. Wykaż, że |AH| = |BC|.",
+    "has_solution": false,
+    "has_statistics": false
+  },
+  "2005_etap2_4": {
+    "year": "2005",
+    "etap": "etap2",
+    "number": 4,
+    "title": "Liczby n z 14ⁿ − 9 pierwszą",
+    "content": "Wyznacz wszystkie dodatnie liczby całkowite n, dla których liczba 14ⁿ − 9 jest pierwsza.",
+    "has_solution": false,
+    "has_statistics": false
+  },
+  "2005_etap2_5": {
+    "year": "2005",
+    "etap": "etap2",
+    "number": 5,
+    "title": "Sześciokąt wypukły z kątami 90°, 128°, 142°, 90°",
+    "content": "Dany jest sześciokąt wypukły ABCDEF o kątach przy wierzchołkach A, B, C, D równych odpowiednio 90°, 128°, 142°, 90°. Wykaż, że pole tego sześciokąta jest mniejsze niż ½·|AD|².",
+    "has_solution": false,
+    "has_statistics": false
+  }
+}
