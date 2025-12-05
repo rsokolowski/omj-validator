@@ -1,3 +1,4 @@
+import io
 import re
 import secrets
 import uuid
@@ -5,6 +6,7 @@ from pathlib import Path
 from typing import Annotated
 
 from fastapi import FastAPI, Request, Form, UploadFile, File, HTTPException, status
+from PIL import Image
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -203,6 +205,54 @@ def _validate_path_params(year: str, etap: str) -> bool:
     return bool(re.match(r"^\d{4}$", year) and re.match(r"^[a-zA-Z0-9_-]+$", etap))
 
 
+# Max image dimensions for Claude API compatibility
+MAX_IMAGE_DIMENSION = 2048
+
+
+def _resize_image_if_needed(file_path: Path) -> None:
+    """Resize image if it exceeds maximum dimensions."""
+    try:
+        with Image.open(file_path) as img:
+            # Check if resizing is needed
+            if img.width <= MAX_IMAGE_DIMENSION and img.height <= MAX_IMAGE_DIMENSION:
+                return
+
+            # Calculate new dimensions preserving aspect ratio
+            ratio = min(MAX_IMAGE_DIMENSION / img.width, MAX_IMAGE_DIMENSION / img.height)
+            new_size = (int(img.width * ratio), int(img.height * ratio))
+
+            # Resize and save
+            resized = img.resize(new_size, Image.Resampling.LANCZOS)
+
+            # Handle EXIF orientation
+            if hasattr(img, '_getexif') and img._getexif():
+                from PIL import ExifTags
+                for orientation in ExifTags.TAGS.keys():
+                    if ExifTags.TAGS[orientation] == 'Orientation':
+                        break
+                exif = img._getexif()
+                if exif and orientation in exif:
+                    # Apply orientation correction
+                    if exif[orientation] == 3:
+                        resized = resized.rotate(180, expand=True)
+                    elif exif[orientation] == 6:
+                        resized = resized.rotate(270, expand=True)
+                    elif exif[orientation] == 8:
+                        resized = resized.rotate(90, expand=True)
+
+            # Save as JPEG for consistency
+            resized_path = file_path.with_suffix('.jpg')
+            resized.convert('RGB').save(resized_path, 'JPEG', quality=85)
+
+            # Remove original if different
+            if resized_path != file_path:
+                file_path.unlink(missing_ok=True)
+
+    except Exception:
+        # If resize fails, keep original - Claude will report the error
+        pass
+
+
 @app.post("/task/{year}/{etap}/{num}/submit")
 async def submit_solution(
     request: Request,
@@ -287,6 +337,13 @@ async def submit_solution(
         except Exception:
             file_path.unlink(missing_ok=True)
             raise
+
+        # Resize if too large for Claude API
+        _resize_image_if_needed(file_path)
+
+        # Update path if extension changed (e.g., PNG -> JPG after resize)
+        if not file_path.exists():
+            file_path = file_path.with_suffix('.jpg')
 
         saved_paths.append(file_path)
 

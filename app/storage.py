@@ -83,13 +83,15 @@ def save_submission(submission: Submission) -> None:
 
 
 def load_submissions(year: str, etap: str, task_number: int) -> list[Submission]:
-    """Load all submissions for a specific task."""
+    """Load all submissions for a specific task, sorted by timestamp descending."""
     path = get_submissions_path(year, etap, task_number)
     submissions = []
-    for file in sorted(path.glob("submission_*.json"), reverse=True):
+    for file in path.glob("submission_*.json"):
         with open(file, "r", encoding="utf-8") as f:
             data = json.load(f)
         submissions.append(Submission(**data))
+    # Sort by timestamp, most recent first
+    submissions.sort(key=lambda s: s.timestamp, reverse=True)
     return submissions
 
 
