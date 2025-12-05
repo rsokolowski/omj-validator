@@ -1,0 +1,104 @@
+{
+  "review_id": "2025-12-05-001",
+  "timestamp": "2025-12-05T16:50:53.144Z",
+  "status": "needs_changes",
+  "round": 2,
+  "design_compliance": {
+    "follows_architecture": true,
+    "major_violations": []
+  },
+  "comments": [
+    {
+      "type": "specific",
+      "file": "app/auth.py",
+      "line": 15,
+      "severity": "minor",
+      "category": "security",
+      "comment": "The session token derivation is good, but using a global variable with lazy initialization could have threading issues in async context. While unlikely to cause problems in practice, it's worth noting.",
+      "suggested_fix": "Consider using contextvars or computing the token once at module load time since settings are available immediately."
+    },
+    {
+      "type": "specific",
+      "file": "app/claude_client.py",
+      "line": 98,
+      "severity": "minor",
+      "category": "security",
+      "comment": "The shell command still uses string concatenation with create_subprocess_shell. While prompt_file is a temp file path and settings values are controlled, this pattern remains a potential risk if code evolves. The previous review flagged this as major - it's now minor since the immediate risk is low, but the pattern could still be improved.",
+      "suggested_fix": "Consider using create_subprocess_exec with explicit argument list, or at minimum, use shlex.quote() on any variables interpolated into the command string."
+    },
+    {
+      "type": "specific",
+      "file": "app/claude_client.py",
+      "line": 163,
+      "severity": "minor",
+      "category": "bug",
+      "comment": "The JSON extraction regex is still fragile and will fail for feedback containing curly braces. This was noted in the previous review but not addressed. While not critical (failure returns a safe default), it could cause valid responses to be rejected.",
+      "suggested_fix": "Use a more robust approach: try parsing progressively larger substrings, or use a simple brace-matching algorithm to find the complete JSON object."
+    },
+    {
+      "type": "general",
+      "severity": "minor",
+      "category": "missing_feature",
+      "comment": "CSRF protection is still missing for the login and submit forms. While the preshared key auth model limits the attack surface, CSRF tokens are a defense-in-depth measure.",
+      "suggested_fix": "Add CSRF token middleware using fastapi-csrf-protect or implement a simple token-based approach."
+    },
+    {
+      "type": "specific",
+      "file": "app/main.py",
+      "line": 240,
+      "severity": "suggestion",
+      "category": "security",
+      "comment": "The upload directory creation uses year/etap/num from URL path parameters without validation. While the path traversal protection at serve_upload (line 350-353) handles the read side, a malicious etap parameter like '../../../etc' could theoretically create directories in unexpected locations during upload.",
+      "suggested_fix": "Validate year and etap parameters against expected patterns (e.g., year should match \\d{4}, etap should be alphanumeric) before using them in path construction."
+    },
+    {
+      "type": "specific",
+      "file": "app/main.py",
+      "line": 35,
+      "severity": "suggestion",
+      "category": "style",
+      "comment": "The nl2br_safe filter is well implemented - good use of markupsafe.escape() followed by Markup() for the <br> tags. This properly addresses the XSS concern from the previous review."
+    },
+    {
+      "type": "specific",
+      "file": "app/main.py",
+      "line": 64,
+      "severity": "suggestion",
+      "category": "style",
+      "comment": "The secrets import inside the login function is redundant - secrets is already available. Consider importing at module level for consistency with auth.py."
+    },
+    {
+      "type": "specific",
+      "file": "app/main.py",
+      "line": 259,
+      "severity": "suggestion",
+      "category": "style",
+      "comment": "The streaming upload implementation is good - checking size during streaming prevents memory exhaustion. However, chunks are accumulated in a list before writing, which still loads the full file into memory. For truly streaming writes, consider writing chunks directly to disk as they arrive.",
+      "suggested_fix": "Write chunks directly to the file handle as they arrive, tracking only the total size."
+    }
+  ],
+  "missing_requirements": [
+    {
+      "requirement": "CSRF protection for forms (noted in previous review, still missing)",
+      "severity": "minor"
+    },
+    {
+      "requirement": "Input validation for path parameters year/etap to prevent directory traversal during upload",
+      "severity": "minor"
+    }
+  ],
+  "summary": {
+    "design_violations": 0,
+    "critical_issues": 0,
+    "major_issues": 0,
+    "minor_issues": 4,
+    "suggestions": 4
+  },
+  "test_results": {
+    "passed": true,
+    "summary": "All imports successful. The test command correctly validates that core modules can be imported: Settings, load_tasks_index, load_tasks_data, and _get_session_token all imported without errors."
+  },
+  "overall_assessment": "lgtm_with_suggestions",
+  "__claudeSessionId": "aabeee86-c622-4e13-9d00-36b6c773ab67",
+  "__claudeModel": "default"
+}

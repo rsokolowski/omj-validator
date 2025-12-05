@@ -1,0 +1,130 @@
+{
+  "2005": {
+    "etap2": {
+      "tasks": "tasks/2005/etap2/omg01_2.pdf"
+    }
+  },
+  "2006": {
+    "etap2": {
+      "tasks": "tasks/2006/etap2/omg02_2.pdf",
+      "solutions": "tasks/2006/etap2/omg02_2r.pdf"
+    }
+  },
+  "2007": {
+    "etap2": {
+      "tasks": "tasks/2007/etap2/omg03_2.pdf",
+      "solutions": "tasks/2007/etap2/omg03_2r.pdf"
+    }
+  },
+  "2008": {
+    "etap2": {
+      "tasks": "tasks/2008/etap2/omg04_2.pdf",
+      "solutions": "tasks/2008/etap2/omg04_2r.pdf"
+    }
+  },
+  "2009": {
+    "etap2": {
+      "tasks": "tasks/2009/etap2/2etap10.pdf",
+      "solutions": "tasks/2009/etap2/omg05_2r.pdf"
+    }
+  },
+  "2010": {
+    "etap2": {
+      "tasks": "tasks/2010/etap2/2etap11.pdf",
+      "solutions": "tasks/2010/etap2/2etap11r.pdf"
+    }
+  },
+  "2011": {
+    "etap2": {
+      "tasks": "tasks/2011/etap2/2etap12.pdf",
+      "solutions": "tasks/2011/etap2/2etap12r.pdf"
+    }
+  },
+  "2012": {
+    "etap2": {
+      "tasks": "tasks/2012/etap2/2etap13.pdf",
+      "solutions": "tasks/2012/etap2/2etap13r.pdf"
+    }
+  },
+  "2013": {
+    "etap2": {
+      "tasks": "tasks/2013/etap2/2etap14.pdf",
+      "solutions": "tasks/2013/etap2/2etap14r.pdf"
+    }
+  },
+  "2014": {
+    "etap2": {
+      "tasks": "tasks/2014/etap2/2etap15.pdf",
+      "solutions": "tasks/2014/etap2/2etap15r.pdf"
+    }
+  },
+  "2015": {
+    "etap2": {
+      "tasks": "tasks/2015/etap2/2etap16.pdf",
+      "solutions": "tasks/2015/etap2/2etap16r.pdf",
+      "statistics": "tasks/2015/etap2/2etap16st.pdf"
+    }
+  },
+  "2016": {
+    "etap2": {
+      "tasks": "tasks/2016/etap2/2etap17.pdf",
+      "solutions": "tasks/2016/etap2/2etap17r.pdf",
+      "statistics": "tasks/2016/etap2/2etap17st.pdf"
+    }
+  },
+  "2017": {
+    "etap2": {
+      "tasks": "tasks/2017/etap2/2etap18.pdf",
+      "solutions": "tasks/2017/etap2/2etap18r.pdf",
+      "statistics": "tasks/2017/etap2/2etap18st.pdf"
+    }
+  },
+  "2018": {
+    "etap2": {
+      "tasks": "tasks/2018/etap2/2etap19.pdf",
+      "solutions": "tasks/2018/etap2/2etap19r.pdf",
+      "statistics": "tasks/2018/etap2/2etap19st.pdf"
+    }
+  },
+  "2019": {
+    "etap2": {
+      "tasks": "tasks/2019/etap2/2etap20.pdf",
+      "solutions": "tasks/2019/etap2/2etap20r.pdf",
+      "statistics": "tasks/2019/etap2/2etap20st.pdf"
+    }
+  },
+  "2020": {
+    "etap2": {
+      "tasks": "tasks/2020/etap2/2etap21.pdf",
+      "solutions": "tasks/2020/etap2/2etap21r.pdf",
+      "statistics": "tasks/2020/etap2/2etap21st.pdf"
+    }
+  },
+  "2021": {
+    "etap2": {
+      "tasks": "tasks/2021/etap2/2etap22.pdf",
+      "solutions": "tasks/2021/etap2/2etap22r.pdf",
+      "statistics": "tasks/2021/etap2/2etap22st.pdf"
+    }
+  },
+  "2022": {
+    "etap2": {
+      "tasks": "tasks/2022/etap2/18omj-2etap.pdf",
+      "solutions": "tasks/2022/etap2/18omj-2r.pdf"
+    }
+  },
+  "2023": {
+    "etap2": {
+      "tasks": "tasks/2023/etap2/19omj-2etap.pdf",
+      "solutions": "tasks/2023/etap2/19omj-2r.pdf",
+      "statistics": "tasks/2023/etap2/19omj-2etap-st.pdf"
+    }
+  },
+  "2024": {
+    "etap2": {
+      "tasks": "tasks/2024/etap2/20omj-2etap.pdf",
+      "solutions": "tasks/2024/etap2/20omj-2r.pdf",
+      "statistics": "tasks/2024/etap2/20omj-2etap-st.pdf"
+    }
+  }
+}

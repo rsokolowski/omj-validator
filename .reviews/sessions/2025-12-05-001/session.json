@@ -1,0 +1,296 @@
+{
+  "review_id": "2025-12-05-001",
+  "created_at": "2025-12-05T16:46:41.081Z",
+  "updated_at": "2025-12-05T16:51:39.715Z",
+  "status": "approved",
+  "rounds": [
+    {
+      "review_id": "2025-12-05-001",
+      "timestamp": "2025-12-05T16:47:47.683Z",
+      "status": "needs_changes",
+      "round": 1,
+      "design_compliance": {
+        "follows_architecture": true,
+        "major_violations": []
+      },
+      "comments": [
+        {
+          "type": "specific",
+          "file": "app/auth.py",
+          "line": 13,
+          "severity": "critical",
+          "category": "security",
+          "comment": "Authentication stores the raw auth key in a cookie. This is a security vulnerability - if the cookie is compromised, the attacker has the actual secret key. The cookie should contain a session token or a signed/hashed value, not the raw key itself.",
+          "suggested_fix": "Use a secure session management approach: generate a random session token, store it server-side (or sign it with a secret), and compare tokens instead of raw keys. Consider using itsdangerous for signed cookies or a proper session library."
+        },
+        {
+          "type": "specific",
+          "file": "app/main.py",
+          "line": 52,
+          "severity": "major",
+          "category": "security",
+          "comment": "Password comparison using '==' is vulnerable to timing attacks. While this is a low-risk scenario for a preshared key, it's a security best practice to use constant-time comparison.",
+          "suggested_fix": "Use secrets.compare_digest(key, settings.auth_key) instead of key != settings.auth_key"
+        },
+        {
+          "type": "specific",
+          "file": "app/claude_client.py",
+          "line": 98,
+          "severity": "major",
+          "category": "security",
+          "comment": "Using asyncio.create_subprocess_shell with string concatenation can be dangerous. While the prompt_file is a temp file path and not user-controlled, this pattern is risky. If any user input ever flows into the command, it could lead to shell injection.",
+          "suggested_fix": "Use asyncio.create_subprocess_exec with a list of arguments instead of create_subprocess_shell. This avoids shell interpretation entirely: await asyncio.create_subprocess_exec('sh', '-c', f'cat ... | claude ...', ...) or better yet, read the file and pass via stdin directly."
+        },
+        {
+          "type": "specific",
+          "file": "app/claude_client.py",
+          "line": 157,
+          "severity": "minor",
+          "category": "bug",
+          "comment": "The regex pattern for JSON extraction is fragile and will fail for nested objects or feedback text containing curly braces. For example, feedback like 'Use { } for sets' would break parsing.",
+          "suggested_fix": "Use a more robust JSON extraction approach: try parsing the entire result_text first, then use a recursive descent or find matching braces algorithm. Alternatively, use Claude's structured output capabilities if available."
+        },
+        {
+          "type": "specific",
+          "file": "app/main.py",
+          "line": 231,
+          "severity": "major",
+          "category": "bug",
+          "comment": "File size check happens AFTER reading the entire file content into memory. A malicious user could send many large files to exhaust server memory before the size check rejects them.",
+          "suggested_fix": "Use SpooledTemporaryFile or streaming reads with size limits. FastAPI's UploadFile can be configured with limits, or read in chunks and track total size while reading."
+        },
+        {
+          "type": "specific",
+          "file": "app/main.py",
+          "line": 227,
+          "severity": "minor",
+          "category": "security",
+          "comment": "File extension is derived from user-provided filename. While UUID prefix prevents overwriting, an attacker could upload files with dangerous extensions that might be served with incorrect MIME types or interpreted by other systems.",
+          "suggested_fix": "Validate and normalize extensions against an allowed list (e.g., '.jpg', '.png', '.webp'). Consider also storing files without extensions and serving with correct Content-Type based on validated type."
+        },
+        {
+          "type": "specific",
+          "file": "app/storage.py",
+          "line": 13,
+          "severity": "minor",
+          "category": "bug",
+          "comment": "load_tasks_index() reads the file without caching. This means every request that needs the index (years_page, year_detail, etap_detail, get_task_pdf_path, get_solution_pdf_path) will read from disk. Same issue with load_tasks_data().",
+          "suggested_fix": "Add simple caching with functools.lru_cache or load once at startup. The index files don't change during runtime."
+        },
+        {
+          "type": "specific",
+          "file": "app/main.py",
+          "line": 193,
+          "severity": "minor",
+          "category": "bug",
+          "comment": "No limit on number of images per submission. A user could upload hundreds of images in a single request, causing memory exhaustion and potentially overwhelming the Claude API call.",
+          "suggested_fix": "Add a maximum number of images limit (e.g., 10-20 images per submission) and return 400 if exceeded."
+        },
+        {
+          "type": "specific",
+          "file": "templates/task.html",
+          "line": 29,
+          "severity": "major",
+          "category": "security",
+          "comment": "Using {{ task.content | safe }} renders raw HTML without escaping. If task.content contains malicious scripts (from a compromised tasks.json), it would enable XSS attacks.",
+          "suggested_fix": "Ensure task.content is sanitized before storage, or use a whitelist of allowed HTML tags. Consider using a markdown renderer with sanitization instead of raw HTML."
+        },
+        {
+          "type": "specific",
+          "file": "app/config.py",
+          "line": 40,
+          "severity": "minor",
+          "category": "bug",
+          "comment": "Using 'class Config' inside a Pydantic BaseSettings is deprecated in Pydantic v2. The model_config attribute should be used instead.",
+          "suggested_fix": "Replace 'class Config:' with 'model_config = ConfigDict(env_file=\".env\", env_file_encoding=\"utf-8\")' and import ConfigDict from pydantic_settings."
+        },
+        {
+          "type": "general",
+          "severity": "minor",
+          "category": "missing_feature",
+          "comment": "No rate limiting on the submit endpoint. Users could spam submissions and exhaust Claude API credits rapidly.",
+          "suggested_fix": "Add rate limiting using slowapi or a simple in-memory counter per IP/session. Consider limiting to N submissions per task per hour."
+        },
+        {
+          "type": "general",
+          "severity": "suggestion",
+          "category": "style",
+          "comment": "The test command in the review request imports TaskStorage and SubmissionStorage which don't exist - the actual exports are functions. This suggests the test command was written before the implementation was finalized.",
+          "suggested_fix": "Update test command to match actual exports: python -c \"from app.storage import load_tasks_index, create_submission; print('OK')\""
+        },
+        {
+          "type": "specific",
+          "file": "app/main.py",
+          "line": 84,
+          "severity": "suggestion",
+          "category": "style",
+          "comment": "The task.html template references 'config.upload_max_size_mb' but config is not passed to the template context, causing it to fall back to hardcoded '10'.",
+          "suggested_fix": "Add 'config': settings to the template context in task_detail route, or pass upload_max_size_mb explicitly."
+        },
+        {
+          "type": "specific",
+          "file": "static/app.js",
+          "line": 129,
+          "severity": "minor",
+          "category": "bug",
+          "comment": "Drag and drop only filters by file.type.startsWith('image/'), but the backend also allows 'image/heic'. The file input accepts HEIC but the drag handler might not correctly identify HEIC files depending on browser support.",
+          "suggested_fix": "Add explicit check for HEIC files by extension if type detection fails, or use a more comprehensive MIME type check."
+        },
+        {
+          "type": "specific",
+          "file": "app/claude_client.py",
+          "line": 126,
+          "severity": "minor",
+          "category": "bug",
+          "comment": "asyncio.TimeoutError is caught but the subprocess may still be running. This could leave zombie processes if Claude CLI hangs.",
+          "suggested_fix": "Call proc.kill() or proc.terminate() in the timeout exception handler to ensure the subprocess is cleaned up."
+        }
+      ],
+      "missing_requirements": [
+        {
+          "requirement": "CSRF protection for form submissions",
+          "severity": "major"
+        },
+        {
+          "requirement": "Input validation for year/etap/num path parameters (potential path traversal via etap parameter)",
+          "severity": "minor"
+        }
+      ],
+      "summary": {
+        "design_violations": 0,
+        "critical_issues": 1,
+        "major_issues": 4,
+        "minor_issues": 8,
+        "suggestions": 2
+      },
+      "test_results": {
+        "passed": false,
+        "summary": "Test command failed with ImportError: cannot import name 'TaskStorage' from 'app.storage'. The test command references non-existent class names. The actual storage module exports functions (load_tasks_index, create_submission, etc.) not classes.",
+        "failing_tests": [
+          "Import test for TaskStorage, SubmissionStorage"
+        ]
+      },
+      "overall_assessment": "needs_changes",
+      "__claudeSessionId": "aabeee86-c622-4e13-9d00-36b6c773ab67",
+      "__claudeModel": "default"
+    },
+    {
+      "review_id": "2025-12-05-001",
+      "timestamp": "2025-12-05T16:50:53.144Z",
+      "status": "needs_changes",
+      "round": 2,
+      "design_compliance": {
+        "follows_architecture": true,
+        "major_violations": []
+      },
+      "comments": [
+        {
+          "type": "specific",
+          "file": "app/auth.py",
+          "line": 15,
+          "severity": "minor",
+          "category": "security",
+          "comment": "The session token derivation is good, but using a global variable with lazy initialization could have threading issues in async context. While unlikely to cause problems in practice, it's worth noting.",
+          "suggested_fix": "Consider using contextvars or computing the token once at module load time since settings are available immediately."
+        },
+        {
+          "type": "specific",
+          "file": "app/claude_client.py",
+          "line": 98,
+          "severity": "minor",
+          "category": "security",
+          "comment": "The shell command still uses string concatenation with create_subprocess_shell. While prompt_file is a temp file path and settings values are controlled, this pattern remains a potential risk if code evolves. The previous review flagged this as major - it's now minor since the immediate risk is low, but the pattern could still be improved.",
+          "suggested_fix": "Consider using create_subprocess_exec with explicit argument list, or at minimum, use shlex.quote() on any variables interpolated into the command string."
+        },
+        {
+          "type": "specific",
+          "file": "app/claude_client.py",
+          "line": 163,
+          "severity": "minor",
+          "category": "bug",
+          "comment": "The JSON extraction regex is still fragile and will fail for feedback containing curly braces. This was noted in the previous review but not addressed. While not critical (failure returns a safe default), it could cause valid responses to be rejected.",
+          "suggested_fix": "Use a more robust approach: try parsing progressively larger substrings, or use a simple brace-matching algorithm to find the complete JSON object."
+        },
+        {
+          "type": "general",
+          "severity": "minor",
+          "category": "missing_feature",
+          "comment": "CSRF protection is still missing for the login and submit forms. While the preshared key auth model limits the attack surface, CSRF tokens are a defense-in-depth measure.",
+          "suggested_fix": "Add CSRF token middleware using fastapi-csrf-protect or implement a simple token-based approach."
+        },
+        {
+          "type": "specific",
+          "file": "app/main.py",
+          "line": 240,
+          "severity": "suggestion",
+          "category": "security",
+          "comment": "The upload directory creation uses year/etap/num from URL path parameters without validation. While the path traversal protection at serve_upload (line 350-353) handles the read side, a malicious etap parameter like '../../../etc' could theoretically create directories in unexpected locations during upload.",
+          "suggested_fix": "Validate year and etap parameters against expected patterns (e.g., year should match \\d{4}, etap should be alphanumeric) before using them in path construction."
+        },
+        {
+          "type": "specific",
+          "file": "app/main.py",
+          "line": 35,
+          "severity": "suggestion",
+          "category": "style",
+          "comment": "The nl2br_safe filter is well implemented - good use of markupsafe.escape() followed by Markup() for the <br> tags. This properly addresses the XSS concern from the previous review."
+        },
+        {
+          "type": "specific",
+          "file": "app/main.py",
+          "line": 64,
+          "severity": "suggestion",
+          "category": "style",
+          "comment": "The secrets import inside the login function is redundant - secrets is already available. Consider importing at module level for consistency with auth.py."
+        },
+        {
+          "type": "specific",
+          "file": "app/main.py",
+          "line": 259,
+          "severity": "suggestion",
+          "category": "style",
+          "comment": "The streaming upload implementation is good - checking size during streaming prevents memory exhaustion. However, chunks are accumulated in a list before writing, which still loads the full file into memory. For truly streaming writes, consider writing chunks directly to disk as they arrive.",
+          "suggested_fix": "Write chunks directly to the file handle as they arrive, tracking only the total size."
+        }
+      ],
+      "missing_requirements": [
+        {
+          "requirement": "CSRF protection for forms (noted in previous review, still missing)",
+          "severity": "minor"
+        },
+        {
+          "requirement": "Input validation for path parameters year/etap to prevent directory traversal during upload",
+          "severity": "minor"
+        }
+      ],
+      "summary": {
+        "design_violations": 0,
+        "critical_issues": 0,
+        "major_issues": 0,
+        "minor_issues": 4,
+        "suggestions": 4
+      },
+      "test_results": {
+        "passed": true,
+        "summary": "All imports successful. The test command correctly validates that core modules can be imported: Settings, load_tasks_index, load_tasks_data, and _get_session_token all imported without errors."
+      },
+      "overall_assessment": "lgtm_with_suggestions",
+      "__claudeSessionId": "aabeee86-c622-4e13-9d00-36b6c773ab67",
+      "__claudeModel": "default"
+    }
+  ],
+  "request": {
+    "summary": "Built complete OMJ (Olimpiada Matematyczna Juniorów) handwritten solution validator web app. Features: preshared key authentication, hierarchical navigation (Year → Etap → Task), task content from 20 years of PDFs (100 tasks), photo upload for solutions, Claude CLI integration for scoring (0/2/5/6 points), submission history, Polish language throughout. Tech stack: FastAPI + Jinja2 + vanilla JS, file-based storage.",
+    "focus_areas": [
+      "Security (auth implementation, file upload handling)",
+      "Claude CLI subprocess integration",
+      "Error handling in async operations",
+      "File storage patterns",
+      "Frontend form submission and validation"
+    ],
+    "test_command": "cd /home/rafal/programming/omj && source venv/bin/activate && python -c \"from app.config import Settings; from app.storage import TaskStorage, SubmissionStorage; print('Imports OK')\""
+  },
+  "claudeSessionIds": {
+    "default": "aabeee86-c622-4e13-9d00-36b6c773ab67"
+  }
+}

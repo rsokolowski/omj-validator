@@ -1,0 +1,1 @@
+All critical and major security issues addressed. Applied: signed session tokens, timing-safe comparisons, streaming uploads with size limits, XSS protection, subprocess cleanup on timeout, image count limits, path validation, caching. Remaining minor items (CSRF, JSON parsing) are acceptable for single-user app.

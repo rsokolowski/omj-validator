@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Wybierz rok - OMJ Validator{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Olimpiada Matematyczna Juniorów</h1>
+    <p class="subtitle">Wybierz rok zawodów</p>
+</div>
+
+<div class="years-grid">
+    {% for year in years %}
+    <a href="/years/{{ year }}" class="year-card">
+        <span class="year-number">{{ year }}</span>
+        <span class="year-edition">{{ loop.revindex }}. edycja</span>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

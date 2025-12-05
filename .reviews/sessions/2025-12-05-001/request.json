@@ -1,0 +1,11 @@
+{
+  "summary": "Built complete OMJ (Olimpiada Matematyczna Juniorów) handwritten solution validator web app. Features: preshared key authentication, hierarchical navigation (Year → Etap → Task), task content from 20 years of PDFs (100 tasks), photo upload for solutions, Claude CLI integration for scoring (0/2/5/6 points), submission history, Polish language throughout. Tech stack: FastAPI + Jinja2 + vanilla JS, file-based storage.",
+  "focus_areas": [
+    "Security (auth implementation, file upload handling)",
+    "Claude CLI subprocess integration",
+    "Error handling in async operations",
+    "File storage patterns",
+    "Frontend form submission and validation"
+  ],
+  "test_command": "cd /home/rafal/programming/omj && source venv/bin/activate && python -c \"from app.config import Settings; from app.storage import TaskStorage, SubmissionStorage; print('Imports OK')\""
+}
