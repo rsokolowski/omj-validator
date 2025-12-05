@@ -27,3 +27,6 @@ data/submissions/*
 # OS
 .DS_Store
 Thumbs.db
+
+# Code reviews
+.reviews/
