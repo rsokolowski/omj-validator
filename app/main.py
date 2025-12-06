@@ -189,6 +189,16 @@ async def task_detail(request: Request, year: str, etap: str, num: int):
     stats = get_task_stats(year, etap, num)
     submissions = load_submissions(year, etap, num)
 
+    # Get PDF paths for links
+    task_pdf = get_task_pdf_path(year, etap)
+    solution_pdf = get_solution_pdf_path(year, etap)
+
+    pdf_links = {}
+    if task_pdf and task_pdf.exists():
+        pdf_links["tasks"] = f"/pdf/{year}/{etap}/{task_pdf.name}"
+    if solution_pdf and solution_pdf.exists():
+        pdf_links["solutions"] = f"/pdf/{year}/{etap}/{solution_pdf.name}"
+
     return templates.TemplateResponse(
         "task.html",
         {
@@ -196,6 +206,7 @@ async def task_detail(request: Request, year: str, etap: str, num: int):
             "task": task,
             "stats": stats,
             "submissions": submissions[:10],  # Last 10 submissions
+            "pdf_links": pdf_links,
         },
     )
 
@@ -406,6 +417,39 @@ async def task_history(request: Request, year: str, etap: str, num: int):
             "submissions": submissions,
         },
     )
+
+
+# --- Static file serving for PDFs ---
+
+
+@app.get("/pdf/{year}/{etap}/{filename}")
+async def serve_pdf(request: Request, year: str, etap: str, filename: str):
+    """Serve task/solution PDF files (with auth check)."""
+    redirect = require_auth_redirect(request)
+    if redirect:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    # Validate parameters
+    if not _validate_path_params(year, etap):
+        raise HTTPException(status_code=400, detail="Invalid parameters")
+
+    # Only allow .pdf files
+    if not filename.endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Invalid file type")
+
+    file_path = settings.tasks_dir / year / etap / filename
+    if not file_path.exists() or not file_path.is_file():
+        raise HTTPException(status_code=404, detail="PDF not found")
+
+    # Ensure path doesn't escape tasks dir
+    try:
+        file_path.resolve().relative_to(settings.tasks_dir.resolve())
+    except ValueError:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    from fastapi.responses import FileResponse
+
+    return FileResponse(file_path, media_type="application/pdf")
 
 
 # --- Static file serving for uploads ---
