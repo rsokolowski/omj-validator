@@ -431,3 +431,12 @@ async def serve_upload(request: Request, path: str):
     from fastapi.responses import FileResponse
 
     return FileResponse(file_path)
+
+
+# --- Health Check ---
+
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for deployment platforms."""
+    return {"status": "ok"}
