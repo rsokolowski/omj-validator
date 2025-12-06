@@ -25,6 +25,8 @@ build/
 # Uploads (user data)
 uploads/*
 !uploads/.gitkeep
+data/uploads/*
+!data/uploads/.gitkeep
 
 # Data (submissions)
 data/submissions/*
