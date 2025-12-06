@@ -52,13 +52,13 @@ class Settings(BaseSettings):
 
     @property
     def submissions_dir(self) -> Path:
-        path = self._data_path / "submissions"
+        path = self._data_path / "data" / "submissions"
         path.mkdir(parents=True, exist_ok=True)
         return path
 
     @property
     def uploads_dir(self) -> Path:
-        path = self._data_path / "uploads"
+        path = self._data_path / "data" / "uploads"
         path.mkdir(parents=True, exist_ok=True)
         return path
 
