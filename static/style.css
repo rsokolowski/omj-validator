@@ -649,7 +649,36 @@ h1, h2, h3, h4 {
     font-size: 1rem;
     line-height: 1.6;
     color: var(--color-gray-700);
-    white-space: pre-wrap;
+}
+
+.result-feedback p {
+    margin: 0 0 0.75rem;
+}
+
+.result-feedback p:last-child {
+    margin-bottom: 0;
+}
+
+.result-feedback ul,
+.result-feedback ol {
+    margin: 0 0 0.75rem;
+    padding-left: 1.5rem;
+}
+
+.result-feedback li {
+    margin-bottom: 0.25rem;
+}
+
+.result-feedback strong {
+    font-weight: 600;
+}
+
+.result-feedback code {
+    background: var(--color-gray-100);
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.875em;
 }
 
 /* === History Section === */
@@ -737,7 +766,36 @@ h1, h2, h3, h4 {
     font-size: 0.9375rem;
     color: var(--color-gray-700);
     line-height: 1.6;
-    white-space: pre-wrap;
+}
+
+.submission-feedback p {
+    margin: 0 0 0.5rem;
+}
+
+.submission-feedback p:last-child {
+    margin-bottom: 0;
+}
+
+.submission-feedback ul,
+.submission-feedback ol {
+    margin: 0 0 0.5rem;
+    padding-left: 1.5rem;
+}
+
+.submission-feedback li {
+    margin-bottom: 0.125rem;
+}
+
+.submission-feedback strong {
+    font-weight: 600;
+}
+
+.submission-feedback code {
+    background: var(--color-gray-100);
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: 0.875em;
 }
 
 .submission-images {

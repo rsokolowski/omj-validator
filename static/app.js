@@ -2,6 +2,71 @@
 
 let selectedFiles = [];
 
+/**
+ * Render feedback with Markdown and KaTeX math support.
+ * @param {string} text - The feedback text with optional LaTeX ($...$) and Markdown
+ * @param {HTMLElement} element - The DOM element to render into
+ */
+function renderFeedback(text, element) {
+    // Configure marked for safe rendering
+    marked.setOptions({
+        breaks: true,  // Convert \n to <br>
+        gfm: true,     // GitHub Flavored Markdown
+    });
+
+    // Render Markdown first
+    element.innerHTML = marked.parse(text);
+
+    // Then render KaTeX math expressions
+    if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(element, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+        });
+    }
+}
+
+/**
+ * Initialize Markdown and math rendering for all feedback elements on page load.
+ */
+function initFeedbackRendering() {
+    // Check if libraries are available
+    if (typeof renderMathInElement === 'undefined' || typeof marked === 'undefined') {
+        console.warn('KaTeX or marked not loaded yet, retrying...');
+        setTimeout(initFeedbackRendering, 100);
+        return;
+    }
+
+    // Configure marked for safe rendering
+    marked.setOptions({
+        breaks: true,
+        gfm: true,
+    });
+
+    // Render Markdown and math in all existing feedback elements
+    document.querySelectorAll('.submission-feedback').forEach(el => {
+        // Get text content and render as markdown
+        const text = el.textContent || '';
+        el.innerHTML = marked.parse(text);
+
+        // Then render math
+        renderMathInElement(el, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+        });
+    });
+}
+
 function initTaskPage(year, etap, taskNumber) {
     const form = document.getElementById('submit-form');
     const fileInput = document.getElementById('images');
@@ -82,7 +147,7 @@ function initTaskPage(year, etap, taskNumber) {
 
                 scoreEl.textContent = data.score;
                 scoreEl.className = 'score-value score-' + data.score;
-                feedbackEl.textContent = data.feedback;
+                renderFeedback(data.feedback, feedbackEl);
                 resultContainer.style.display = 'block';
 
                 // Clear selected files

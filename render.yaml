@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: omj-validator
+    runtime: python
+    region: frankfurt  # Closest to Poland
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app.main:app --workers 2 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: AUTH_KEY
+        sync: false  # Set manually in Render dashboard
+      - key: AI_PROVIDER
+        value: gemini
+      - key: GEMINI_API_KEY
+        sync: false  # Set manually in Render dashboard
+      - key: GEMINI_MODEL
+        value: gemini-3-pro-preview
+      - key: GEMINI_TIMEOUT
+        value: "90"
+      - key: UPLOAD_MAX_SIZE_MB
+        value: "10"
+      - key: DATA_DIR
+        value: /data  # Persistent storage for uploads and submissions
+    disk:
+      name: omj-data
+      mountPath: /data
+      sizeGB: 1
