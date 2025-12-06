@@ -22,9 +22,4 @@ services:
         value: "90"
       - key: UPLOAD_MAX_SIZE_MB
         value: "10"
-      - key: DATA_DIR
-        value: /data  # Persistent storage for uploads and submissions
-    disk:
-      name: omj-data
-      mountPath: /data
-      sizeGB: 1
+      # Note: Free tier has no persistent disk - data lost on restart
