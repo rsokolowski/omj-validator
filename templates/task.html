@@ -27,6 +27,20 @@
     <div class="task-content-box">
         <h2>Treść zadania</h2>
         <div class="task-content">{{ task.content | nl2br_safe }}</div>
+        {% if pdf_links %}
+        <div class="pdf-links">
+            {% if pdf_links.tasks %}
+            <a href="{{ pdf_links.tasks }}" target="_blank" class="btn btn-secondary btn-small">
+                Zadania PDF
+            </a>
+            {% endif %}
+            {% if pdf_links.solutions %}
+            <a href="{{ pdf_links.solutions }}" target="_blank" class="btn btn-secondary btn-small">
+                Rozwiązania PDF
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
     </div>
 
     <div class="submit-section">

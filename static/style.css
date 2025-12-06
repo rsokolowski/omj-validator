@@ -521,6 +521,15 @@ h1, h2, h3, h4 {
     white-space: pre-wrap;
 }
 
+.pdf-links {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-gray-200);
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
 /* === Submit Section === */
 .submit-section {
     background: white;
