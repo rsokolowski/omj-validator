@@ -41,7 +41,8 @@ from .storage import (
 )
 from .ai import create_ai_provider, AIProviderError
 from .models import SubmissionResult, TaskCategory, TaskStatus
-from .progress import build_progress_data, get_all_categories
+from .progress import build_progress_data, get_all_categories, get_prerequisite_statuses, compute_user_progress
+from .skills import get_skills_by_ids
 
 app = FastAPI(title="OMJ Validator", description="Walidator rozwiązań OMJ")
 
@@ -380,6 +381,16 @@ async def task_detail(request: Request, year: str, etap: str, num: int):
     if solution_pdf and solution_pdf.exists():
         pdf_links["solutions"] = f"/pdf/{year}/{etap}/{solution_pdf.name}"
 
+    # Load skills data
+    skills_required = get_skills_by_ids(task.skills_required)
+    skills_gained = get_skills_by_ids(task.skills_gained)
+
+    # Load prerequisite statuses (only for group members who can see progress)
+    prerequisite_statuses = []
+    if can_submit and task.prerequisites:
+        progress = compute_user_progress()
+        prerequisite_statuses = get_prerequisite_statuses(task.prerequisites, progress)
+
     return templates.TemplateResponse(
         "task.html",
         {
@@ -391,6 +402,9 @@ async def task_detail(request: Request, year: str, etap: str, num: int):
             "is_authenticated": user is not None,
             "can_submit": can_submit,
             "user": user,
+            "skills_required": skills_required,
+            "skills_gained": skills_gained,
+            "prerequisite_statuses": prerequisite_statuses,
         },
     )
 
