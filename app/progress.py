@@ -42,90 +42,137 @@ def compute_user_progress() -> dict[str, int]:
     return progress
 
 
-def is_task_mastered(task_key: str, progress: dict[str, int]) -> bool:
-    """Check if a task is mastered based on score threshold.
-
-    Args:
-        task_key: Task key in format year_etap_number
-        progress: Dict of task_key -> best_score
-
-    Returns:
-        True if task score meets mastery threshold
-    """
-    parts = task_key.split("_")
-    if len(parts) >= 3 and parts[1] in ("etap1", "etap2"):
-        etap = parts[1]
-        threshold = get_mastery_threshold(etap)
-        return progress.get(task_key, 0) >= threshold
-    return False
-
-
-def are_prerequisites_met(
-    task: TaskInfo,
-    progress: dict[str, int],
+def compute_prerequisites_met(
     all_tasks: dict[str, TaskInfo],
-    visited: set[str] = None
-) -> bool:
-    """Check if all prerequisites (including transitive) are mastered.
+    progress: dict[str, int]
+) -> dict[str, bool]:
+    """Compute prerequisite status for all tasks efficiently with memoization.
 
-    Handles transitive dependencies: if A requires B and B requires C,
-    then A requires both B and C to be mastered.
+    Uses dynamic programming approach: process tasks in dependency order,
+    caching results to avoid redundant computation. O(n + e) where n is
+    number of tasks and e is number of prerequisite edges.
 
     Args:
-        task: The task to check prerequisites for
+        all_tasks: Dict of all tasks
         progress: Dict of task_key -> best_score
-        all_tasks: Dict of all tasks for looking up transitive deps
-        visited: Set of already-visited task keys (for cycle detection)
 
     Returns:
-        True if all prerequisites (direct and transitive) are mastered
+        Dict mapping task_key -> bool (True if all prerequisites met)
     """
-    if visited is None:
-        visited = set()
+    # First, compute mastery status for all tasks (simple O(n))
+    mastered = {}
+    for key, task in all_tasks.items():
+        threshold = get_mastery_threshold(task.etap)
+        mastered[key] = progress.get(key, 0) >= threshold
 
-    task_key = get_task_key(task.year, task.etap, task.number)
+    # Memoization cache for "all prerequisites met" status
+    prereqs_met_cache: dict[str, bool] = {}
 
-    # Cycle detection
-    if task_key in visited:
-        logger.warning(f"Circular dependency detected involving task {task_key}")
-        return True  # Break cycle by assuming met
+    # Track tasks being processed to detect cycles
+    in_progress: set[str] = set()
 
-    visited.add(task_key)
+    def check_prereqs_met(task_key: str) -> bool:
+        """Recursively check if all prerequisites are met, with memoization."""
+        # Return cached result if available
+        if task_key in prereqs_met_cache:
+            return prereqs_met_cache[task_key]
 
-    for prereq_key in task.prerequisites:
-        # Validate prerequisite key format
-        parts = prereq_key.split("_")
-        if len(parts) < 3 or parts[1] not in ("etap1", "etap2"):
-            logger.warning(f"Invalid prerequisite key format: {prereq_key} in task {task_key}")
-            continue
+        # Cycle detection
+        if task_key in in_progress:
+            logger.warning(f"Circular dependency detected involving task {task_key}")
+            return True  # Break cycle by assuming met
 
-        # Check if direct prerequisite is mastered
-        if not is_task_mastered(prereq_key, progress):
-            return False
+        task = all_tasks.get(task_key)
+        if not task:
+            return True  # Unknown task, assume no prerequisites
 
-        # Check transitive prerequisites (prerequisite's prerequisites)
-        prereq_task = all_tasks.get(prereq_key)
-        if prereq_task and prereq_task.prerequisites:
-            if not are_prerequisites_met(prereq_task, progress, all_tasks, visited.copy()):
-                return False
+        # No prerequisites = always met
+        if not task.prerequisites:
+            prereqs_met_cache[task_key] = True
+            return True
 
-    return True
+        in_progress.add(task_key)
+
+        result = True
+        for prereq_key in task.prerequisites:
+            # Validate prerequisite key format
+            parts = prereq_key.split("_")
+            if len(parts) < 3 or parts[1] not in ("etap1", "etap2"):
+                logger.warning(f"Invalid prerequisite key format: {prereq_key} in task {task_key}")
+                continue
+
+            # Check if prerequisite is mastered
+            if not mastered.get(prereq_key, False):
+                result = False
+                break
+
+            # Check if prerequisite's prerequisites are met (recursive with memo)
+            if not check_prereqs_met(prereq_key):
+                result = False
+                break
+
+        in_progress.discard(task_key)
+        prereqs_met_cache[task_key] = result
+        return result
+
+    # Compute for all tasks
+    for key in all_tasks:
+        check_prereqs_met(key)
+
+    return prereqs_met_cache
+
+
+def get_task_status_batch(
+    all_tasks: dict[str, TaskInfo],
+    progress: dict[str, int]
+) -> dict[str, TaskStatus]:
+    """Compute status for all tasks efficiently in a single pass.
+
+    More efficient than calling get_task_status() for each task individually.
+    Uses memoized prerequisite computation.
+
+    Args:
+        all_tasks: Dict of all tasks
+        progress: Dict of task_key -> best_score
+
+    Returns:
+        Dict mapping task_key -> TaskStatus
+    """
+    # Compute all prerequisite statuses in one pass (O(n + e))
+    prereqs_met = compute_prerequisites_met(all_tasks, progress)
+
+    # Compute final status for each task
+    statuses = {}
+    for key, task in all_tasks.items():
+        threshold = get_mastery_threshold(task.etap)
+        best_score = progress.get(key, 0)
+
+        if best_score >= threshold:
+            statuses[key] = TaskStatus.MASTERED
+        elif prereqs_met.get(key, True):
+            statuses[key] = TaskStatus.UNLOCKED
+        else:
+            statuses[key] = TaskStatus.LOCKED
+
+    return statuses
 
 
 def get_task_status(
     task: TaskInfo,
     progress: dict[str, int],
-    all_tasks: dict[str, TaskInfo] = None
+    all_tasks: dict[str, TaskInfo] = None,
+    prereqs_met_cache: dict[str, bool] = None
 ) -> TaskStatus:
     """Determine if a task is locked, unlocked, or mastered.
 
-    Handles transitive dependencies automatically - only direct prerequisites
-    need to be specified in task metadata.
+    For batch operations, use get_task_status_batch() instead for better
+    performance. This function is provided for single-task lookups.
 
     Args:
         task: The task to check
         progress: Dict of task_key -> best_score
         all_tasks: Dict of all tasks (for transitive dependency lookup)
+        prereqs_met_cache: Optional pre-computed prerequisite status cache
 
     Returns:
         TaskStatus enum value
@@ -141,8 +188,13 @@ def get_task_status(
     if best_score >= threshold:
         return TaskStatus.MASTERED
 
-    # Check if locked (any prerequisite or transitive prerequisite not mastered)
-    if not are_prerequisites_met(task, progress, all_tasks):
+    # Use cached prereqs if available, otherwise compute
+    if prereqs_met_cache is not None:
+        prereqs_met = prereqs_met_cache.get(task_key, True)
+    else:
+        prereqs_met = compute_prerequisites_met(all_tasks, progress).get(task_key, True)
+
+    if not prereqs_met:
         return TaskStatus.LOCKED
 
     return TaskStatus.UNLOCKED
@@ -151,6 +203,8 @@ def get_task_status(
 def build_graph_nodes(progress: dict[str, int]) -> list[GraphNode]:
     """Build graph nodes for all tasks with their status.
 
+    Uses batch status computation for O(n + e) efficiency.
+
     Args:
         progress: Dict of task_key -> best_score
 
@@ -158,10 +212,13 @@ def build_graph_nodes(progress: dict[str, int]) -> list[GraphNode]:
         List of GraphNode objects
     """
     all_tasks = _load_all_tasks()
-    nodes = []
 
+    # Compute all statuses efficiently in one pass
+    statuses = get_task_status_batch(all_tasks, progress)
+
+    nodes = []
     for key, task in all_tasks.items():
-        status = get_task_status(task, progress, all_tasks)
+        status = statuses.get(key, TaskStatus.UNLOCKED)
         node = GraphNode(
             key=key,
             year=task.year,
