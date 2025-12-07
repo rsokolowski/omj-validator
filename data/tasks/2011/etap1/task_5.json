@@ -12,9 +12,9 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek pięciokąta ABCDE. Co oznacza fakt, że kąty przy B i D są proste? Przypomnij sobie, gdzie leżą punkty, z których odcinek jest widoczny pod kątem prostym.",
-    "Wykorzystaj twierdzenie odwrotne do twierdzenia Talesa: jeśli kąt $\\angle ABC = 90°$, to punkt B leży na okręgu o średnicy AC. Podobnie przeanalizuj punkt D.",
-    "Skoro B leży na okręgu o średnicy AC, to $AC \\geq AB + BC$ nie zachodzi, ale co możesz powiedzieć o związku między AC a BD? Rozważ, jak długości AC i CE odnoszą się do położenia punktów B i D na odpowiednich okręgach.",
-    "Zauważ, że $AC \\geq 2 \\cdot r_1$ gdzie $r_1$ to promień okręgu przez A, B, C (bo AC jest średnicą). Podobnie dla CE. Użyj nierówności trójkąta dla △BDE lub rozważ, że BD jest odcinkiem wewnątrz pewnej figury ograniczonej bokami trójkąta ACE."
+    "Narysuj dokładny rysunek pięciokąta wypukłego $ABCDE$ z kątami prostymi przy $B$ i $D$. Zastanów się, co oznacza warunek kąta prostego dla położenia punktu względem odcinka.",
+    "Przypomnij sobie twierdzenie o kącie wpisanym opartym na średnicy. Jeśli kąt $ABC = 90°$, to gdzie leży punkt $B$ względem odcinka $AC$?",
+    "Zauważ, że punkt $B$ leży na okręgu o średnicy $AC$, a punkt $D$ leży na okręgu o średnicy $CE$. Jaką maksymalną odległość od środka odcinka może mieć punkt leżący na takim okręgu?",
+    "Wykorzystaj, że $BD \\leq \\frac{AC}{2} + \\frac{CE}{2}$ (suma promieni okręgów). Jak to połączyć z faktem, że obwód trójkąta $ACE$ zawiera także bok $AE$?"
   ]
 }

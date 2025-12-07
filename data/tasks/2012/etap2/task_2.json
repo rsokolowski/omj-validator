@@ -7,15 +7,15 @@
     "solutions": "tasks/2012/etap2/2etap13r.pdf",
     "statistics": null
   },
-  "difficulty": 3,
+  "difficulty": 4,
   "categories": [
-    "kombinatoryka",
-    "logika"
+    "geometria",
+    "teoria_liczb"
   ],
   "hints": [
-    "Ile łącznie meczy rozegrano w turnieju? Ile punktów zostałoby rozdanych, gdyby żaden mecz nie zakończył się remisem?",
-    "Porównaj maksymalną możliwą sumę punktów z faktyczną sumą 41. Każdy remis zmniejsza łączną pulę punktów o określoną wartość.",
-    "Oblicz, ile meczy zakończyło się remisem. Zauważ, że w każdym remisie uczestniczą dokładnie dwie drużyny.",
-    "Zastanów się, ile drużyn musi uczestniczyć w remisach, skoro każdy remis angażuje 2 drużyny. Czy da się rozdzielić wszystkie remisy między mniej niż 4 drużyny?"
+    "Przypomnij sobie wzór na pole trójkąta wyrażony przez bok i odpowiadającą mu wysokość. Jaki związek łączy wszystkie trzy pary bok-wysokość?",
+    "Skoro $a \\cdot h_a = b \\cdot h_b = c \\cdot h_c = 2P$, zastanów się jakie warunki muszą spełniać boki i wysokości, aby wszystkie były całkowite. Czy możesz znaleźć konkretny przykład?",
+    "Poszukaj trójkąta o bokach będących wielokrotnościami pewnych liczb, tak aby pole było liczbą całkowitą dającą całkowite wysokości. Rozważ trójkąty o bokach proporcjonalnych do prostych liczb.",
+    "Zbadaj trójkąt o bokach $a$, $b$, $c$ takich, że $2P$ dzieli się przez każdy z boków. Sprawdź np. trójkąty o bokach będących wielokrotnościami liczb 3, 4, 5 lub podobnych - pamiętaj o warunku ostrokątności!"
   ]
 }

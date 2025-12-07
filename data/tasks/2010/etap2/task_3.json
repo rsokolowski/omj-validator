@@ -7,14 +7,15 @@
     "solutions": "tasks/2010/etap2/2etap11r.pdf",
     "statistics": null
   },
-  "difficulty": 3,
+  "difficulty": 4,
   "categories": [
-    "teoria_liczb"
+    "kombinatoryka",
+    "logika"
   ],
   "hints": [
-    "Mamy dwie liczby różniące się o 2. Zastanów się, jak często wśród trzech kolejnych liczb całkowitych występuje liczba podzielna przez 3.",
-    "Zbadaj reszty z dzielenia przez 3. Rozważ trzy kolejne liczby: $n^2+n+1$, $n^2+n+2$, $n^2+n+3$ - która z nich musi dzielić się przez 3?",
-    "Oblicz $n^2+n+2 = n(n+1)+2$. Zauważ, że $n(n+1)$ to iloczyn dwóch kolejnych liczb. Jaką resztę z dzielenia przez 3 daje taki iloczyn?",
-    "Skoro $n^2+n+2$ zawsze dzieli się przez 3, to jedna z liczb $n^2+n+1$ lub $n^2+n+3$ też musi się dzielić przez 3. Kiedy taka liczba podzielna przez 3 może być pierwsza?"
+    "Oznacz zawodników siedzących przy stole kolejno $Z_1, Z_2, \\ldots, Z_n$. Co oznacza warunek o wygrywaniu z sąsiadem po lewej? Narysuj diagram dla małego $n$, np. $n=4$.",
+    "Skup się na relacjach między zawodnikami, którzy NIE siedzą obok siebie. Czy możesz znaleźć parę zawodników $Z_i$ i $Z_j$ (niebędących sąsiadami), gdzie wynik meczu między nimi tworzy coś interesującego z wynikami ich meczów z osobami między nimi?",
+    "Rozważ zawodnika $Z_1$ i zawodnika $Z_3$ (przeskakując jedną osobę). Jeden z nich wygrał z drugim. Przeanalizuj oba przypadki i zobacz, jak wynik tego meczu łączy się z wynikami meczów z $Z_2$.",
+    "Jeśli $Z_1$ wygrał z $Z_3$, to mamy ciąg $Z_1 \\to Z_3 \\to Z_2 \\to Z_1$ (gdzie strzałka oznacza wygraną). Sprawdź, czy to daje szukany cykl. A jeśli $Z_3$ wygrał z $Z_1$?"
   ]
 }

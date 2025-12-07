@@ -7,15 +7,15 @@
     "solutions": "tasks/2010/etap2/2etap11r.pdf",
     "statistics": null
   },
-  "difficulty": 3,
+  "difficulty": 4,
   "categories": [
-    "algebra",
-    "kombinatoryka"
+    "geometria",
+    "algebra"
   ],
   "hints": [
-    "Oznacz 21 liczb jako $a_1, a_2, \\ldots, a_{21}$. Zastanów się: co by się stało, gdyby któraś z tych liczb była niedodatnia (ujemna lub równa zero)?",
-    "Spróbuj przeprowadzić dowód nie wprost. Załóż, że istnieje liczba $a_k \\leq 0$ i pokaż, że prowadzi to do sprzeczności z danym warunkiem.",
-    "Weź dowolny podział 21 liczb na grupę 11-elementową (zawierającą $a_k$) i grupę 10-elementową. Rozważ, co się stanie, gdy przeniesiesz $a_k$ do drugiej grupy i w zamian weźmiesz inną liczbę.",
-    "Porównaj dwa podziały: jeden gdzie $a_k$ jest wśród 11 liczb, drugi gdzie $a_k$ jest wśród 10 liczb. Zapisz nierówności wynikające z warunku zadania dla obu podziałów i sprawdź, czy mogą być jednocześnie spełnione."
+    "Przypomnij sobie, jak związane są pola dwóch trójkątów mających wspólną podstawę. Co można powiedzieć o ich wysokościach, gdy pola są równe?",
+    "Spróbuj porównywać pary trójkątów, które mają wspólny bok (przekątną). Wykorzystaj warunek równości pól, żeby wywnioskować coś o położeniu pozostałych wierzchołków.",
+    "Weź dowolną przekątną, np. $AC$. Znajdź dwa trójkąty z warunków zadania, które mają $AC$ jako bok. Co wynika z równości ich pól dla położenia przeciwległych wierzchołków względem prostej $AC$?",
+    "Jeśli trójkąty $EAC$ i $CDA$ mają równe pola i wspólną podstawę $AC$, to punkty $E$ i $D$ leżą w tej samej odległości od prostej $AC$. Co to oznacza dla odcinka $DE$ względem $AC$?"
   ]
 }

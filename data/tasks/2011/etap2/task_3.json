@@ -9,12 +9,13 @@
   },
   "difficulty": 4,
   "categories": [
-    "kombinatoryka"
+    "geometria",
+    "algebra"
   ],
   "hints": [
-    "Spróbuj zrozumieć strukturę problemu: mamy $n$ zawodników przy okrągłym stole, każdy pokonał sąsiada po lewej. Oznacza to, że istnieje 'cykl zwycięstw' wzdłuż stołu. Narysuj diagram dla małego $n$.",
-    "Rozważ dowód nie wprost: załóż, że nie istnieje trójka $A, B, C$ tworząca cykl zwycięstw. Co to oznacza dla struktury wyników między dowolnymi trzema zawodnikami?",
-    "Jeśli nie ma cyklu trzech zawodników, to wśród każdych trzech osób jedna musi pokonać obie pozostałe. Zastanów się, co to oznacza dla zawodnika, który pokonał najwięcej przeciwników - ilu minimum osób musiał pokonać?",
-    "Rozważ zawodnika $X$, który pokonał swojego sąsiada po prawej stronie (nazwijmy go $Y$). Skoro $X$ pokonał $Y$, a $Y$ pokonał sąsiada po swojej lewej (czyli $X$)... czy to nie jest sprzeczność? Przeanalizuj dokładniej relację między sąsiadami przy stole."
+    "Przypomnij sobie różne wzory na pole trójkąta. Który z nich najłatwiej porównać z wyrażeniem $\\frac{1}{4}(ab+bc)$? Spróbuj zapisać to wyrażenie w postaci $\\frac{1}{4}b(a+c)$.",
+    "Zastanów się, jaki jest maksymalny możliwy stosunek pola trójkąta do iloczynu dwóch jego boków. Rozważ, kiedy pole trójkąta o bokach $a$, $b$, $c$ osiąga wartość największą przy ustalonych długościach boków.",
+    "Porównaj wzór $P = \\frac{1}{2} \\cdot b \\cdot h$ z wyrażeniem $\\frac{1}{4}b(a+c)$. Co to mówi o wysokości $h$? Zbadaj, czy ta wysokość jest możliwa do osiągnięcia w trójkącie o bokach $a$, $b$, $c$.",
+    "Zauważ, że wysokość opuszczona na bok $b$ nie może przekroczyć długości żadnego z pozostałych boków. Sprawdź, czy warunek $h = \\frac{1}{2}(a+c)$ jest możliwy do spełnienia, porównując z ograniczeniami na wysokość."
   ]
 }

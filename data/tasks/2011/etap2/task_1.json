@@ -7,14 +7,14 @@
     "solutions": "tasks/2011/etap2/2etap12r.pdf",
     "statistics": null
   },
-  "difficulty": 4,
+  "difficulty": 3,
   "categories": [
-    "geometria"
+    "teoria_liczb"
   ],
   "hints": [
-    "Przyjrzyj się trójkątom, które mają wspólny bok. Co możesz powiedzieć o dwóch trójkątach mających tę samą podstawę i równe pola?",
-    "Przypomnij sobie, że trójkąty o wspólnej podstawie mają równe pola wtedy i tylko wtedy, gdy ich wierzchołki leżą na prostej równoległej do tej podstawy. Spróbuj zastosować tę własność do par trójkątów z zadania.",
-    "Rozważ trójkąty $ABD$ i $CBD$ - mają wspólną podstawę $BD$. Skoro $S_{ABD} = S_{CDA}$, a $S_{CDA}$ i $S_{CBD}$ dzielą wierzchołek $C$, poszukaj zależności między polami, które prowadzą do równoległości.",
-    "Porównaj pola trójkątów $ABD$ i $EBD$ (wspólna podstawa $BD$). Z równości $S_{ABD} = S_{DEB}$ wynika, że punkty $A$ i $E$ leżą w określonej odległości od prostej $BD$. Co to mówi o prostej $AE$ względem $BD$?"
+    "Zauważ, że $175 = 5^2 \\cdot 7$. Skoro $a + b = 175$, to możesz wyrazić $b$ przez $a$. Jaki warunek musi spełniać iloczyn $a \\cdot b$?",
+    "Zastanów się, jak czynniki pierwsze $5^2$ i $7$ mogą się rozłożyć między liczby $a$ i $b = 175 - a$. Rozważ osobno podzielność przez $7$ i przez $25$.",
+    "Zbadaj: jeśli $7 | a$, to co można powiedzieć o $175 - a$? Podobnie przeanalizuj podzielność przez $5$. Pamiętaj, że potrzebujesz łącznie co najmniej dwie piątki i jedną siódemkę w iloczynie.",
+    "Rozpisz wszystkie możliwości: (1) $a$ podzielne przez $175$, (2) $a$ podzielne przez $25$ ale nie przez $7$, (3) $a$ podzielne przez $7$ ale nie przez $25$, itd. Dla każdego przypadku sprawdź, czy drugi czynnik dostarcza brakujące dzielniki."
   ]
 }

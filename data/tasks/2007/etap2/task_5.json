@@ -10,12 +10,12 @@
   "difficulty": 4,
   "categories": [
     "geometria",
-    "algebra"
+    "kombinatoryka"
   ],
   "hints": [
-    "Narysuj ostrosłup i oznacz krawędzie boczne $SA$, $SB$, $SC$. Co możesz powiedzieć o trzech trójkątach tworzących ściany boczne? Jaką nierówność znasz dla boków dowolnego trójkąta?",
-    "Zastosuj nierówność trójkąta do każdej ze ścian bocznych ostrosłupa. Zapisz trzy nierówności dla krawędzi $AB$, $BC$ i $CA$ wyrażone przez krawędzie boczne.",
-    "Dodaj stronami trzy nierówności uzyskane z nierówności trójkąta. Zauważ, że po lewej stronie otrzymasz obwód podstawy. Co pojawia się po prawej stronie?",
-    "Po dodaniu nierówności uzyskasz $AB + BC + CA > SA + SB + SC - (SA + SB + SC) + ...$. Uprość prawą stronę i pokaż, że obwód jest nie mniejszy od każdej pojedynczej krawędzi bocznej."
+    "Zastanów się, ile ścian sześcianu może przeciąć jedna płaszczyzna. Narysuj sześcian i spróbuj wyobrazić sobie różne położenia płaszczyzny tnącej.",
+    "Aby powstał pięciokąt, płaszczyzna musi przeciąć dokładnie pięć ścian sześcianu. Pomyśl też, jak zapewnić równe objętości - czy symetria względem środka sześcianu może pomóc?",
+    "Rozważ płaszczyznę przechodzącą przez środek sześcianu (to zapewni równe objętości). Spróbuj tak ustawić płaszczyznę, by przecinała pięć ścian - musi być odpowiednio \"przekrzywiona\".",
+    "Weź punkty na krawędziach sześcianu: jeden na górnej ścianie, kilka na bocznych i jeden na dolnej. Płaszczyzna przez środek sześcianu, która omija jedną ścianę (np. przechodzi równolegle blisko jej krawędzi), da pięciokąt."
   ]
 }

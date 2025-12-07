@@ -9,13 +9,12 @@
   },
   "difficulty": 4,
   "categories": [
-    "geometria",
-    "logika"
+    "geometria"
   ],
   "hints": [
-    "Zastanów się najpierw: kiedy przekrój sześcianu płaszczyzną jest pięciokątem? Ile ścian sześcianu musi przecinać taka płaszczyzna? Spróbuj wyobrazić sobie lub narysować taką sytuację.",
-    "Pomyśl o ciągłej zmianie położenia płaszczyzny tnącej. Jeśli pewna płaszczyzna daje pięciokątny przekrój, czy możesz ją przesuwać tak, by przekrój pozostał pięciokątem, a zmieniał się stosunek objętości części?",
-    "Rozważ konkretną rodzinę płaszczyzn dających pięciokątne przekroje. Co się dzieje z objętościami dwóch części, gdy płaszczyzna przesuwa się od jednego skrajnego położenia do drugiego? Użyj argumentu o wartościach pośrednich.",
-    "Znajdź płaszczyznę przechodzącą przez 5 krawędzi sześcianu (np. przez wierzchołek i punkty na 4 krawędziach). Przesuwając ją równolegle, obserwuj jak zmienia się stosunek objętości - od bardzo małej części do bardzo dużej."
+    "Narysuj ostrosłup i zaznacz przekrój. Co wiesz o podstawie ostrosłupa prawidłowego sześciokątnego? Jakie ma własności symetrii?",
+    "Rozważ rzut środkowy z wierzchołka ostrosłupa na płaszczyznę podstawy. Co się stanie z punktami $A, B, C, D, E, F$ i prostymi przez nie przechodzącymi?",
+    "Zauważ, że przy rzucie środkowym z wierzchołka ostrosłupa, punkty leżące na tej samej krawędzi bocznej rzutują się na ten sam wierzchołek podstawy. Jakie punkty podstawy odpowiadają punktom przekroju?",
+    "Zbadaj, na co rzutują się proste $AD$, $BE$ i $CF$. Wykorzystaj fakt, że przekątne sześciokąta foremnego łączące przeciwległe wierzchołki przechodzą przez jeden punkt - środek sześciokąta."
   ]
 }

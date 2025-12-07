@@ -9,12 +9,12 @@
   },
   "difficulty": 3,
   "categories": [
-    "geometria"
+    "teoria_liczb"
   ],
   "hints": [
-    "Narysuj dokładny rysunek pomocniczy. Zaznacz punkt $E$ na boku $BC$ i poprowadź prostą $k$ przez $D$ równoległą do $AE$. Gdzie mogą leżeć punkty $K$ i $L$?",
-    "Przypomnij sobie, że pole równoległoboku można wyrazić jako iloczyn podstawy i wysokości. Zastanów się, czy oba równoległoboki mają jakiś wspólny element - może wspólny bok lub równe wysokości?",
-    "Zauważ, że równoległobok $AEKL$ ma bok $AE$ jako podstawę. Prosta $k$ jest równoległa do $AE$, więc odległość między tymi prostymi to wysokość równoległoboku $AEKL$. Jak ta wysokość ma się do równoległoboku $ABCD$?",
-    "Rozważ trójkąt $AED$ i wykorzystaj fakt, że $E$ leży na $BC \\parallel AD$. Porównaj odległość punktu $D$ od prostej $AE$ z wysokością równoległoboku $ABCD$ opuszczoną na bok $AD$."
+    "Oblicz wartości obu wyrażeń dla kilku początkowych wartości $n$ (np. $n = 1, 2, 3, 4, 5$). Które z otrzymanych liczb są pierwsze? Czy zauważasz jakąś prawidłowość?",
+    "Zastanów się nad podzielnością przez 3. Jakie reszty z dzielenia przez 3 może dawać $n$? Zbadaj, jaką resztę daje wtedy wyrażenie $n^2 + n$.",
+    "Zauważ, że $n^2 + n = n(n+1)$ to iloczyn dwóch kolejnych liczb. Co możesz powiedzieć o podzielności iloczynu kolejnych liczb przez małe liczby pierwsze?",
+    "Sprawdź podzielność przez 3: dla $n \\equiv 0, 1, 2 \\pmod{3}$ wyznacz reszty z dzielenia $n^2+n+1$ oraz $n^2+n+3$ przez 3. Kiedy obie liczby mogą być pierwsze większe od 3?"
   ]
 }

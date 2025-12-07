@@ -12,9 +12,9 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek równoległoboka $ABCD$ z zaznaczonymi punktami $X$ i $Y$. Jakie odcinki są równe na mocy założeń? Zaznacz wszystkie równe boki.",
-    "Skoro $AD = DX$ i $AB = BY$, to trójkąty $ADX$ i $ABY$ mają szczególną własność. Zastanów się, jak wykorzystać przystawanie trójkątów do wykazania równości $CX = CY$.",
-    "Przyjrzyj się trójkątom $CDX$ i $CBY$. Wykorzystaj własności równoległoboka ($CD = AB$, $BC = AD$) oraz fakt, że trójkąty $ADX$ i $ABY$ są równoramienne. Jakie kąty przy wierzchołkach $D$ i $B$ możesz porównać?",
-    "Wykaż, że $\\angle CDX = \\angle CBY$ korzystając z tego, że kąty przy podstawach trójkątów równoramiennych są równe. Następnie sprawdź warunki przystawania trójkątów $CDX$ i $CBY$ (bok-kąt-bok)."
+    "Narysuj dokładny rysunek równoległoboka $ABCD$ z zaznaczonymi punktami $X$ i $Y$. Oznacz na rysunku wszystkie równe odcinki wynikające z warunków zadania oraz własności równoległoboka.",
+    "Zastanów się, czy możesz znaleźć dwa trójkąty, które zawierają odcinki $CX$ i $CY$ jako odpowiednie boki. Spróbuj wykazać przystawanie tych trójkątów.",
+    "Zauważ, że $BC = AD = DX$ oraz $CD = AB = BY$. Rozważ trójkąty $CDX$ i $CBY$ - jakie boki mają równe?",
+    "Porównaj trójkąty $CDX$ i $CBY$. Masz już dwie pary równych boków. Zastanów się, jak wykorzystać kąty równoległoboka, aby wykazać równość trzeciej pary elementów."
   ]
 }

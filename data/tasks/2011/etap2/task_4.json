@@ -9,12 +9,13 @@
   },
   "difficulty": 4,
   "categories": [
-    "algebra"
+    "algebra",
+    "teoria_liczb"
   ],
   "hints": [
-    "Zacznij od przeniesienia wszystkiego na jedną stronę - chcesz pokazać, że $(1-xy)^2 - x(1-y)^2 - y(1-x)^2 > 0$. Rozwiń wszystkie wyrażenia i uprość.",
-    "Szukaj sposobu na przedstawienie różnicy jako sumy wyrażeń, które są zawsze dodatnie dla $x, y \\in (0,1)$. Grupowanie wyrazów podobnych może pomóc.",
-    "Po rozwinięciu i uporządkowaniu, zwróć uwagę na wyrazy zawierające $x^2$, $y^2$, $xy$ oraz wyrazy liniowe. Spróbuj wyłączyć wspólne czynniki lub znaleźć strukturę iloczynową.",
-    "Zauważ, że różnica stron da się przedstawić jako $(1-x)(1-y)$ pomnożone przez pewne wyrażenie. Sprawdź, jakie czynniki możesz wyciągnąć i czy pozostałe wyrażenie jest dodatnie dla $x, y \\in (0,1)$."
+    "Przepisz równanie w postaci $a+b+c - ab - bc - ca = 0$. Spróbuj pogrupować wyrazy tak, aby wyciągnąć wspólne czynniki. Co się stanie, gdy podstawisz wartości brzegowe $0$ lub $1$?",
+    "Rozważ przekształcenie wyrażenia poprzez dodanie i odjęcie odpowiednich składników. Czy potrafisz zapisać lewą stronę jako iloczyn czynników zawierających $(1-a)$, $(1-b)$, $(1-c)$?",
+    "Pomnóż równanie przez $2$ i spróbuj doprowadzić do sumy kwadratów lub iloczynów postaci $(1-a)(1-b)$ itp. Zauważ, że dla $a,b,c \\in [0,1]$ wyrażenia $(1-a)$, $(1-b)$, $(1-c)$ są nieujemne.",
+    "Przekształć równanie do postaci $a(1-b) + b(1-c) + c(1-a) = 0$ lub równoważnej. Skoro wszystkie czynniki są nieujemne w podanym przedziale, kiedy suma nieujemnych składników równa się zero?"
   ]
 }

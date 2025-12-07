@@ -12,9 +12,9 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj sześciokąt foremny i zaznacz punkt $S$ w jego wnętrzu. Połącz $S$ z wszystkimi wierzchołkami - na ile trójkątów podzieliłeś sześciokąt? Które z nich masz zsumować?",
-    "Sześciokąt foremny ma symetrię środkową. Zastanów się, jak boki $AB$, $CD$, $EF$ mają się do boków $BC$, $DE$, $FA$ - co łączy te dwie grupy?",
-    "Zauważ, że boki $AB$ i $DE$ są równoległe i równe (podobnie $CD$ i $FA$, oraz $EF$ i $BC$). Jak możesz wykorzystać fakt, że trójkąty o równych podstawach i tej samej wysokości mają równe pola?",
-    "Połącz punkt $S$ ze środkiem sześciokąta $O$. Rozważ pary trójkątów: $\\triangle ABS$ i $\\triangle DES$. Skoro $AB \\parallel DE$ i $|AB| = |DE|$, co możesz powiedzieć o sumie ich pól w zależności od odległości $S$ od tych boków?"
+    "Narysuj dokładny rysunek. Zaznacz równoległobok $ABCD$, punkt $E$ na boku $BC$, prostą $k$ przez $D$ równoległą do $AE$ oraz równoległobok $AEKL$. Jak oblicza się pole równoległoboku?",
+    "Pole równoległoboku to iloczyn podstawy i wysokości. Zastanów się, jakie podstawy i wysokości mają oba równoległoboki. Czy możesz wybrać wspólną podstawę dla obu figur?",
+    "Rozważ odcinek $AE$ jako wspólną podstawę obu równoległoboków. Jaka jest wysokość równoległoboku $ABCD$ opuszczona na prostą $AE$? A jaka jest wysokość równoległoboku $AEKL$?",
+    "Skoro $DL \\parallel AE$ (bo $AEKL$ to równoległobok z bokiem $AE$ i prosta $k$ jest równoległa do $AE$), to odległość od punktu $D$ do prostej $AE$ jest taka sama jak odległość od prostej $k$ do prostej $AE$. Wykorzystaj to do porównania wysokości obu równoległoboków."
   ]
 }

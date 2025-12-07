@@ -9,12 +9,13 @@
   },
   "difficulty": 4,
   "categories": [
-    "teoria_liczb"
+    "teoria_liczb",
+    "algebra"
   ],
   "hints": [
-    "Aby liczba kończyła się cyframi '10', musi być podzielna przez 10, ale nie przez 100. Co to oznacza dla podzielności przez 2 i przez 5?",
-    "Zauważ, że mamy cztery czynniki. Pogrupuj je w pary: $(a+b)(c+d)$ oraz $(b+c)(d+a)$. Czy widzisz jakąś zależność między sumami w tych parach?",
-    "Oblicz sumę $(a+b)+(c+d)$ oraz $(b+c)+(d+a)$. Co możesz powiedzieć o parzystości tych sum? Jak to wpływa na podzielność iloczynu przez 4?",
-    "Skoro obie pary czynników mają tę samą sumę $a+b+c+d$, to w każdej parze albo oba czynniki są parzyste, albo oba nieparzyste. Zbadaj, ile razy liczba 2 dzieli cały iloczyn w każdym przypadku."
+    "Zapisz sumę kolejnych liczb od $k$ do $k+m$ za pomocą wzoru na sumę ciągu arytmetycznego. Ile wynosi ta suma w zależności od $k$ i liczby składników?",
+    "Zastanów się nad podzielnością. Potęga $2^n$ ma bardzo specyficzną własność - jakie liczby są jej dzielnikami? Porównaj to z postacią otrzymanego wzoru.",
+    "Suma $(m+1)$ kolejnych liczb począwszy od $k$ wynosi $\\frac{(m+1)(2k+m)}{2}$. Przeanalizuj czynniki $(m+1)$ oraz $(2k+m)$ - czy któryś z nich musi być nieparzysty?",
+    "Zauważ, że spośród dwóch kolejnych liczb całkowitych $(m+1)$ i $(2k+m)$ dokładnie jedna jest parzysta. Co to oznacza dla dzielników ich iloczynu podzielonego przez $2$?"
   ]
 }

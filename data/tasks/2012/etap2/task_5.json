@@ -9,12 +9,13 @@
   },
   "difficulty": 4,
   "categories": [
-    "geometria"
+    "teoria_liczb",
+    "algebra"
   ],
   "hints": [
-    "Przypomnij sobie, co oznacza, że punkt jest równoodległy od dwóch prostych. Na jakiej szczególnej prostej musi wtedy leżeć? Narysuj dokładny rysunek z punktem $O$ jako środkiem okręgu opisanego na $\\triangle ABC$.",
-    "Zastanów się, jak powiązać warunek kątowy $\\angle DAB + \\angle BCD = \\angle ABC$ z położeniem punktu $O$. Pamiętaj, że $O$ leży na symetralnych boków trójkąta $ABC$ - jakie kąty tworzą promienie $OA$, $OB$, $OC$?",
-    "Zbadaj kąty $\\angle AOB$ i $\\angle BOC$ w trójkącie równoramiennym (promienie okręgu są równe). Jak kąty środkowe przy $O$ związane są z kątami trójkąta $ABC$? Spróbuj wyrazić kąt $\\angle AOC$ przez kąty czworokąta.",
-    "Wykaż, że prosta $OC$ jest dwusieczną kąta $\\angle ACD$. Wykorzystaj fakt, że $\\angle OCA = \\angle OAC$ (trójkąt $OAC$ jest równoramienny) i przekształć warunek kątowy zadania, by pokazać równość odpowiednich kątów."
+    "Zastanów się: jeśli $p^2 + pq + q^2 = k^2$, to jaką relację ma $k$ względem $p$ i $q$? Czy $k$ jest większe, mniejsze, czy równe pewnym wyrażeniom zależnym od $p$ i $q$?",
+    "Spróbuj oszacować wyrażenie $p^2 + pq + q^2$ z obu stron - znajdź kwadraty doskonałe, między którymi może się znajdować. Rozważ $(p+q)^2$ oraz inne naturalne kandydaty.",
+    "Zauważ, że $p^2 + pq + q^2$ leży między pewnymi kolejnymi kwadratami doskonałymi. Kiedy może być równe jednemu z nich? Zbadaj, co wynika z równości dla małych wartości $p$ i $q$.",
+    "Porównaj $p^2 + pq + q^2$ z $(p+q)^2$ i $p^2 + q^2$. Sprawdź przypadek $p = q$ osobno, a następnie przeanalizuj przypadek $p \\neq q$ korzystając z własności liczb pierwszych."
   ]
 }

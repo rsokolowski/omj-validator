@@ -12,9 +12,9 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trójkąta równoramiennego ABC z zaznaczonym punktem D na boku AB. Oznacz kąty przy wierzchołku A jako $\\alpha$. Jakie inne kąty możesz wyrazić przez $\\alpha$?",
-    "Skoro CD jest wysokością w trójkącie BCD (kąt prosty przy D), rozważ wykorzystanie własności trójkątów prostokątnych. Poszukaj podobnych trójkątów w tej konfiguracji.",
-    "Zauważ, że trójkąt ACD dzieli z trójkątem ABC pewne kąty. Wykorzystaj warunek BD = 2AD wraz z podobieństwem trójkątów, aby uzyskać równanie na boki.",
-    "Porównaj stosunki odpowiednich boków w trójkątach podobnych. Wykorzystaj fakt, że w trójkącie równoramiennym AC = BC, a punkt D dzieli AB w znanym stosunku."
+    "Narysuj dokładny rysunek trójkąta równoramiennego ABC z zaznaczonym punktem D na boku AB. Gdzie leży D, skoro BD = 2AD? Zaznacz kąt prosty przy C.",
+    "Poszukaj trójkątów podobnych w tej konfiguracji. Kąt prosty BCD sugeruje, że CD może być wysokością lub że powstają trójkąty prostokątne o specjalnych własnościach.",
+    "Rozważ trójkąty BCD i ACD. Jakie kąty są w nich równe? Wykorzystaj fakt, że AC = BC oraz że suma kątów przy wierzchołku C wynosi tyle, ile kąt ACB.",
+    "Oznacz kąt BAC = α. Wyraź pozostałe kąty w trójkącie przez α, korzystając z równoramienności. Następnie użyj warunku kąta prostego i stosunku BD:AD = 2:1, by utworzyć równanie na α."
   ]
 }

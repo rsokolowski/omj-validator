@@ -297,6 +297,7 @@ def main():
     parser.add_argument("--limit", type=int, help="Limit number of tasks to process")
     parser.add_argument("--year", type=str, help="Process only specific year")
     parser.add_argument("--etap", type=str, help="Process only specific etap")
+    parser.add_argument("--task", type=int, help="Process only specific task number")
     parser.add_argument("--model", type=str, default="opus", help="Claude model to use (default: opus)")
     parser.add_argument("--force", action="store_true", help="Regenerate even if already populated")
     args = parser.parse_args()
@@ -306,11 +307,13 @@ def main():
     # Find all task JSON files
     task_files = sorted(data_dir.glob("**/task_*.json"))
 
-    # Filter by year/etap if specified
+    # Filter by year/etap/task if specified
     if args.year:
         task_files = [f for f in task_files if f.parts[-3] == args.year]
     if args.etap:
         task_files = [f for f in task_files if f.parts[-2] == args.etap]
+    if args.task:
+        task_files = [f for f in task_files if f.name == f"task_{args.task}.json"]
 
     # Apply limit
     if args.limit:

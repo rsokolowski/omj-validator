@@ -9,13 +9,13 @@
   },
   "difficulty": 3,
   "categories": [
-    "teoria_liczb",
-    "algebra"
+    "kombinatoryka",
+    "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, jak można powiązać $a^2$ z $b^2$. Czy istnieje wyrażenie zawierające obie te wielkości, które łatwo się rozkłada?",
-    "Rozważ różnicę $a^2 - b^2$ i jej związek z liczbą $a+b$. Co wiesz o podzielności różnicy przez $a+b$?",
-    "Skoro $(a+b) \\mid a^2$ oraz $(a+b) \\mid (a^2 - b^2)$, to co możesz powiedzieć o podzielności $b^2$?",
-    "Wykorzystaj fakt, że jeśli liczba dzieli dwie wielkości, to dzieli również ich różnicę. Zapisz $b^2 = a^2 - (a^2 - b^2)$ i zastosuj własności podzielności."
+    "Ile łącznie meczów rozegrano w turnieju? Ile punktów łącznie rozdaje się w jednym meczu w zależności od jego wyniku (wygrana vs remis)?",
+    "Wyznacz, ile meczów zakończyło się remisem, a ile zwycięstwem którejś z drużyn. Zastanów się, ilu drużyn mogą dotyczyć remisy.",
+    "Każdy remis angażuje dokładnie dwie drużyny. Załóż nie wprost, że co najwyżej 3 drużyny miały jakikolwiek remis. Ile remisów mogłoby wtedy być maksymalnie?",
+    "Oblicz, ile remisów musiało być w turnieju. Następnie sprawdź, ile remisów maksymalnie może rozegrać między sobą 3 drużyny i porównaj z wymaganą liczbą."
   ]
 }

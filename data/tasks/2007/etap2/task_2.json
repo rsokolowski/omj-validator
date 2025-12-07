@@ -9,12 +9,13 @@
   },
   "difficulty": 4,
   "categories": [
-    "geometria"
+    "kombinatoryka",
+    "logika"
   ],
   "hints": [
-    "Narysuj sześciokąt $ABCDEF$ z wszystkimi kątami równymi $120°$. Zastanów się, jakie własności ma taki sześciokąt - czy przypomina ci jakąś znaną figurę? Co wiesz o symetralnych odcinków?",
-    "Spróbuj przedłużyć boki sześciokąta. Skoro każdy kąt wewnętrzny ma $120°$, to kąt zewnętrzny wynosi $60°$. Jaką figurę mogą tworzyć przedłużenia boków?",
-    "Zauważ, że przedłużając wszystkie boki sześciokąta równokątnego otrzymujesz trójkąt równoboczny. Zbadaj, jak boki $AB$, $CD$ i $EF$ są położone względem tego trójkąta.",
-    "Pokaż, że odcinki $AB$, $CD$ i $EF$ są równoległe do odpowiednich boków trójkąta równobocznego. Wykorzystaj fakt, że symetralna odcinka równoległego do boku trójkąta równobocznego przechodzi przez jego środek."
+    "Policz, ile różnych sum w ogóle obliczamy i jakie wartości mogą przyjmować. Czy sama zasada szufladkowa wystarczy do uzyskania trzech równych sum?",
+    "Zastanów się nad sumą wszystkich elementów tablicy. Jak można ją obliczyć na różne sposoby? Jakie to daje zależności między sumami wierszy i kolumn?",
+    "Przeanalizuj parzystość sum. Suma wszystkich wierszy równa się sumie wszystkich kolumn. Co możesz powiedzieć o liczbie sum parzystych i nieparzystych wśród wierszy? A wśród kolumn?",
+    "Podziel 10 sum na grupy według parzystości. W każdej grupie masz pewną liczbę sum, a każda może przyjąć tylko niektóre wartości (0, 2, 4 lub 1, 3). Zastosuj zasadę szufladkową osobno dla każdej grupy parzystości."
   ]
 }

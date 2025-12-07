@@ -9,13 +9,12 @@
   },
   "difficulty": 4,
   "categories": [
-    "geometria",
     "algebra"
   ],
   "hints": [
-    "Zapisz wyrażenie $\\frac{1}{4}(ab+bc)$ w prostszej postaci. Jakie znasz wzory na pole trójkąta i jakie jest maksymalne pole trójkąta o danych dwóch bokach?",
-    "Porównaj podane wyrażenie na pole z maksymalnym polem, jakie może mieć trójkąt. Zastanów się, kiedy pole trójkąta o bokach $a$ i $b$ jest największe.",
-    "Zauważ, że $\\frac{1}{4}(ab+bc) = \\frac{1}{4}b(a+c)$. Porównaj to z faktem, że pole trójkąta o bokach zawierających kąt prosty nie przekracza $\\frac{1}{2}$ iloczynu tych boków.",
-    "Wykorzystaj nierówność trójkąta: $a + c > b$. Co to oznacza dla wartości $\\frac{1}{4}b(a+c)$ w porównaniu z $\\frac{1}{4}b \\cdot b = \\frac{1}{4}b^2$? Porównaj z maksymalnym polem trójkąta."
+    "Zastanów się, co możesz powiedzieć o relacji między $\\sqrt{x}$ a $x$ dla liczby $x$ z przedziału $(0, 1)$. Sprawdź na konkretnym przykładzie, np. $x = \\frac{1}{4}$.",
+    "Rozważ podstawienie $\\sqrt{a} = x$ i $\\sqrt{b} = y$, gdzie $0 < x, y < 1$. Jak wtedy wygląda nierówność w zmiennych $x$ i $y$?",
+    "Po podstawieniu otrzymasz nierówność z iloczynem $xy$. Spróbuj pogrupować wyrazy tak, aby po jednej stronie mieć wyrażenia zawierające $xy$, a po drugiej wyrażenia, które łatwo oszacować.",
+    "Zauważ, że dla $0 < x, y < 1$ zachodzi $xy < x$ oraz $xy < y$. Wykorzystaj to do oszacowania lewej strony nierówności od dołu przez wyrażenie większe od $3x^2y^2$."
   ]
 }

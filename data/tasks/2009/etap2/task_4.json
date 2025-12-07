@@ -7,15 +7,15 @@
     "solutions": "tasks/2009/etap2/omg05_2r.pdf",
     "statistics": null
   },
-  "difficulty": 2,
+  "difficulty": 4,
   "categories": [
     "kombinatoryka",
-    "teoria_liczb"
+    "logika"
   ],
   "hints": [
-    "Zastanów się, ile łącznie meczów rozegrano w turnieju. Ile wygranych zostało rozdanych w sumie?",
-    "Policz całkowitą liczbę wygranych i sprawdź, czy da się ją równo podzielić między wszystkich zawodników.",
-    "Oblicz $\\binom{50}{2}$ — liczbę wszystkich meczów. Czy ta liczba jest podzielna przez 50?",
-    "Sprawdź, czy $\\frac{50 \\cdot 49}{2}$ dzieli się przez 50. Co to oznacza dla możliwości równego podziału wygranych?"
+    "Przedstaw sytuację jako graf, gdzie osoby to wierzchołki, a znajomości to krawędzie. Ile krawędzi ma taki graf? Jakie warunki musi spełniać?",
+    "Zastanów się, ile różnych grafów 3-regularnych na 6 wierzchołkach może istnieć. Spróbuj je narysować i sklasyfikować.",
+    "Szukamy cyklu długości 4 w tym grafie. Wybierz dowolną osobę i przeanalizuj, jak mogą wyglądać połączenia między jej znajomymi a pozostałymi osobami.",
+    "Rozważ dwa przypadki: gdy istnieją dwie osoby, które się nie znają i mają dokładnie dwóch wspólnych znajomych, oraz gdy każde dwie osoby nieznające się mają inną liczbę wspólnych znajomych."
   ]
 }

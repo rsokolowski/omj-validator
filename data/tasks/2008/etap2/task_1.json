@@ -13,9 +13,9 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Przypomnij sobie związek między średnią arytmetyczną $\\frac{a+b}{2}$ a średnią geometryczną $\\sqrt{ab}$. Kiedy są one równe? Co można powiedzieć o różnicy $\\frac{a+b}{2} - \\sqrt{ab}$?",
-    "Rozważ dowód nie wprost: załóż, że obie liczby $a$ i $b$ są wymierne. Co wynikałoby wtedy o $\\sqrt{ab}$? Wprowadź podstawienie $u = \\sqrt{a}$, $v = \\sqrt{b}$.",
-    "Przekształć warunek zadania używając podstawienia. Zauważ, że $(\\sqrt{a} - \\sqrt{b})^2 = a + b - 2\\sqrt{ab}$. Jak można wykorzystać tę tożsamość?",
-    "Z warunku zadania wyprowadź, że $(\\sqrt{a} - \\sqrt{b})^2 = 6$. Jeśli $a$ i $b$ są wymierne, to $\\sqrt{ab}$ też jest wymierna. Sprawdź, czy $\\sqrt{a} - \\sqrt{b}$ może być jednocześnie wymierna."
+    "Zastanów się, jakie warunki muszą spełniać $a$, $b$, $c$, aby mianowniki były dodatnie. Spróbuj przepisać równanie w prostszej postaci przez mnożenie krzyżowe.",
+    "Wykonaj mnożenie obu stron przez mianowniki i uprość otrzymane wyrażenie. Poszukaj zależności między zmiennymi $a$, $b$, $c$.",
+    "Po uproszczeniu powinieneś otrzymać równanie postaci $b^2 = ac$. Wykorzystaj fakt, że wszystkie liczby są nieparzyste dodatnie i zastanów się, kiedy iloczyn dwóch liczb nieparzystych jest kwadratem liczby nieparzystej.",
+    "Rozważ, jak można sparametryzować rozwiązania. Jeśli $b^2 = ac$ dla nieparzystych dodatnich $a$, $b$, $c$, to jakie trójki postaci $(a, b, c)$ spełniają ten warunek? Sprawdź warunek dodatniości mianowników dla znalezionych trójek."
   ]
 }

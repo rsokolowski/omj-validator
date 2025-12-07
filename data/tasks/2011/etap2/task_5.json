@@ -9,13 +9,12 @@
   },
   "difficulty": 4,
   "categories": [
-    "geometria",
-    "kombinatoryka"
+    "geometria"
   ],
   "hints": [
-    "Czworościan foremny ma 4 wierzchołki, 6 krawędzi i 4 ściany. Zastanów się, jak te liczby mogą się wiązać z liczbą 6 kul do umieszczenia.",
-    "Pomyśl o umieszczeniu środków kul w szczególnych punktach czworościanu - jakie punkty są naturalnie związane z liczbą 6?",
-    "Rozważ środki krawędzi czworościanu jako środki kul. Ile wynosi odległość między środkami dwóch sąsiednich krawędzi (mających wspólny wierzchołek) w porównaniu do długości krawędzi?",
-    "Wyznacz długość krawędzi czworościanu foremnego wpisanego w sferę o promieniu 1, korzystając z własności środka ciężkości. Następnie sprawdź, czy odległość między środkami różnych krawędzi jest co najmniej równa 1."
+    "Co oznacza, że punkt jest jednakowo odległy od dwóch prostych? Gdzie leżą wszystkie takie punkty? Narysuj dokładny rysunek czworokąta $ABCD$ z zaznaczonym środkiem $O$ okręgu opisanego na $\\triangle ABC$.",
+    "Przypomnij sobie własności środka okręgu opisanego na trójkącie - jaki kąt środkowy odpowiada kątowi wpisanemu? Zastanów się, jak wykorzystać warunek $\\angle DAB + \\angle BCD = \\angle ABC$ do znalezienia związku między kątami przy wierzchołkach $A$, $C$ i $D$.",
+    "Jeśli $O$ ma leżeć na dwusiecznej kąta $\\angle ADC$, to proste $AD$ i $CD$ muszą tworzyć z $O$ równe odległości. Zbadaj kąty $\\angle OAB$ i $\\angle OCB$ - jak się mają do kątów trójkąta $ABC$? Poszukaj trójkątów równoramiennych.",
+    "Wykorzystaj fakt, że $OA = OC$ (promienie). Rozważ, jak kąt $\\angle AOC$ (kąt środkowy) wiąże się z $\\angle ABC$. Następnie sprawdź, czy możesz pokazać, że $\\angle OAD = \\angle OCD$, co da równe odległości od prostych $AD$ i $CD$."
   ]
 }

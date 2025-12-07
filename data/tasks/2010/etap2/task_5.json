@@ -9,13 +9,12 @@
   },
   "difficulty": 4,
   "categories": [
-    "geometria",
-    "logika"
+    "geometria"
   ],
   "hints": [
-    "Narysuj rzut ostrosłupa z góry (widok na podstawę). Co oznacza warunek prostopadłości krawędzi bocznej do krawędzi podstawy w kontekście tego rzutu? Rozważ prosty przykład: kwadrat jako podstawę.",
-    "Zastanów się, ile różnych kierunków mają krawędzie podstawy czworokąta. Jeśli krawędź boczna ma być prostopadła do krawędzi podstawy, co to mówi o rzucie tej krawędzi bocznej? Spróbuj podejścia konstrukcyjnego.",
-    "Zauważ, że rzut krawędzi bocznej na płaszczyznę podstawy łączy wierzchołek podstawy z rzutem wierzchołka ostrosłupa. Przeanalizuj, jakie warunki musi spełniać położenie tego rzutu, aby wszystkie 4 warunki prostopadłości były spełnione jednocześnie.",
-    "Rozważ konkretny czworokąt - prostokąt o bokach $a$ i $b$. Dla każdego wierzchołka podstawy określ, do której krawędzi ma być prostopadła odpowiadająca krawędź boczna. Znajdź położenie rzutu wierzchołka ostrosłupa, które spełnia wszystkie warunki."
+    "Czworościan foremny ma 4 wierzchołki, 6 krawędzi i 4 ściany. Zastanów się, gdzie naturalnie można umieścić 6 identycznych obiektów w takiej figurze. Narysuj czworościan i zaznacz jego elementy.",
+    "Spróbuj umieścić środki kul w środkach krawędzi czworościanu. Każda krawędź ma dokładnie jeden środek, a krawędzi jest dokładnie 6 - tyle samo co kul do rozmieszczenia.",
+    "Wyznacz długość krawędzi czworościanu korzystając z tego, że jest on opisany na sferze o promieniu $1$. Przypomnij sobie (lub wyprowadź), jaka jest zależność między krawędzią czworościanu foremnego a promieniem sfery opisanej.",
+    "Sprawdź, że odległość między środkami dwóch sąsiednich krawędzi (mających wspólny wierzchołek) jest nie mniejsza niż $1$. Wykorzystaj fakt, że te środki tworzą trójkąt równoboczny na każdej ścianie czworościanu."
   ]
 }

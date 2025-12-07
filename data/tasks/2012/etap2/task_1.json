@@ -7,15 +7,15 @@
     "solutions": "tasks/2012/etap2/2etap13r.pdf",
     "statistics": null
   },
-  "difficulty": 3,
+  "difficulty": 2,
   "categories": [
-    "teoria_liczb",
-    "algebra"
+    "algebra",
+    "teoria_liczb"
   ],
   "hints": [
-    "Rozłóż liczbę 175 na czynniki pierwsze. Jakie warunki muszą spełniać liczby $a$ i $b$, aby ich iloczyn był podzielny przez 175?",
-    "Skoro $a + b = 175$, możesz zapisać $b = 175 - a$. Podstaw to do warunku podzielności iloczynu $a \\cdot b$ przez 175.",
-    "Zastanów się, kiedy iloczyn $a(175 - a)$ jest podzielny przez $5^2 \\cdot 7$. Rozważ osobno podzielność przez 25 i przez 7.",
-    "Przeanalizuj przypadki: co się dzieje, gdy $a$ jest podzielne przez 25? Przez 7? Przez 175? Sprawdź systematycznie wszystkie możliwości."
+    "Masz dwa warunki: nierówność $a < b < 2013$ oraz równanie $a + b = 4020$. Spróbuj wyrazić jedną zmienną przez drugą, aby pracować tylko z jedną niewiadomą.",
+    "Użyj równania $a + b = 4020$, aby wyeliminować $a$. Podstaw $a = 4020 - b$ do nierówności i rozwiąż je względem $b$.",
+    "Po podstawieniu otrzymasz nierówności dla $b$. Zwróć uwagę, że szukasz liczb całkowitych - jakie wartości $b$ spełniają wszystkie warunki jednocześnie?",
+    "Z nierówności $a < b$ oraz $b < 2013$ wyznacz przedział dla $b$. Następnie znajdź wszystkie liczby całkowite w tym przedziale i dla każdej oblicz odpowiadające $a$."
   ]
 }

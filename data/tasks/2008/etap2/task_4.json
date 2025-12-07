@@ -7,14 +7,15 @@
     "solutions": "tasks/2008/etap2/omg04_2r.pdf",
     "statistics": null
   },
-  "difficulty": 4,
+  "difficulty": 2,
   "categories": [
+    "kombinatoryka",
     "teoria_liczb"
   ],
   "hints": [
-    "Przypomnij sobie wzór na sumę kolejnych liczb całkowitych od $a$ do $b$. Jak można zapisać tę sumę w postaci iloczynu?",
-    "Jeśli suma kolejnych liczb ma być potęgą dwójki, zastanów się, jakie warunki muszą spełniać czynniki w tym iloczynie. Potęga dwójki ma bardzo szczególny rozkład na czynniki pierwsze.",
-    "Zapisz sumę $k$ kolejnych liczb zaczynając od $a$ jako $\\frac{k(2a+k-1)}{2}$. Zbadaj parzystość obu czynników $k$ oraz $2a+k-1$ - czy oba mogą być potęgami dwójki?",
-    "Zauważ, że suma $k + (2a+k-1) = 2a + 2k - 1$ jest zawsze nieparzysta. Co to oznacza dla parzystości tych dwóch czynników, gdy $k \\geq 2$?"
+    "Ile łącznie meczów zostanie rozegranych w turnieju? Każdy z 50 zawodników gra z każdym innym dokładnie raz.",
+    "Policz sumę wszystkich zwycięstw w turnieju. Zastanów się, co musiałoby być prawdą, gdyby każdy zawodnik wygrał tę samą liczbę meczów.",
+    "Jeśli każdy ma wygrać tyle samo meczów, to łączna liczba zwycięstw musi dzielić się przez liczbę zawodników. Sprawdź, czy tak jest.",
+    "Oblicz $\\frac{50 \\cdot 49}{2}$ i sprawdź, czy wynik dzieli się przez $50$. Co to oznacza dla możliwości równego podziału zwycięstw?"
   ]
 }

@@ -9,13 +9,13 @@
   },
   "difficulty": 4,
   "categories": [
-    "algebra",
-    "kombinatoryka"
+    "kombinatoryka",
+    "logika"
   ],
   "hints": [
-    "Przepisz równanie w postaci $a + b + c - ab - bc - ca = 0$. Co możesz zauważyć, podstawiając wartości brzegowe: $0$ lub $1$ za którąś ze zmiennych?",
-    "Spróbuj pogrupować wyrazy tak, by wyciągnąć wspólne czynniki. Rozważ rozbicie na przypadki w zależności od tego, ile zmiennych przyjmuje wartości skrajne ($0$ lub $1$).",
-    "Zauważ, że równanie można przekształcić do postaci zawierającej iloczyny typu $(1-a)(1-b)$ lub podobne. Zbadaj, kiedy taki iloczyn może być równy odpowiedniemu wyrażeniu przy ograniczeniu na przedział $[0,1]$.",
-    "Przekształć równanie do postaci $a(1-b) + c(1-b) = bc$, czyli $(a+c)(1-b) = bc$. Rozważ osobno przypadki $b = 0$, $b = 1$ oraz $0 < b < 1$, badając jakie warunki muszą spełniać pozostałe zmienne."
+    "Zastanów się, co oznacza warunek 'każda prosta jest jednokolorowa lub dwukolorowa'. Weź dwie różne proste przechodzące przez ten sam punkt — ile kolorów może mieć ten punkt wspólny?",
+    "Rozważ, ile kolorów może wystąpić łącznie na dwóch przecinających się prostych. Spróbuj znaleźć ograniczenie górne na liczbę kolorów, analizując konfigurację kilku prostych.",
+    "Weź trzy proste przechodzące przez jeden punkt. Każda para prostych dzieli wspólny punkt — jak to ogranicza możliwe kolory? Pomyśl też, czy da się skonstruować kolorowanie z użyciem tej maksymalnej liczby kolorów.",
+    "Spróbuj podzielić płaszczyznę na równoległe pasy i pokolorować je różnymi kolorami. Sprawdź, ile kolorów możesz użyć, aby każda prosta przecinała co najwyżej dwa pasy (lub leżała w jednym)."
   ]
 }

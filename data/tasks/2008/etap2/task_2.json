@@ -10,12 +10,12 @@
   "difficulty": 4,
   "categories": [
     "kombinatoryka",
-    "logika"
+    "algebra"
   ],
   "hints": [
-    "Ile różnych sum obliczamy łącznie? Jakie wartości mogą przyjmować poszczególne sumy w wierszu, kolumnie lub na przekątnej tablicy 4×4 wypełnionej zerami i jedynkami?",
-    "Zastosuj zasadę szufladkową (Dirichleta). Jeśli masz 10 sum i 5 możliwych wartości (0, 1, 2, 3, 4), co możesz powiedzieć o rozkładzie tych sum? Kiedy każda wartość mogłaby wystąpić dokładnie 2 razy?",
-    "Załóż, że żadna wartość nie występuje więcej niż 2 razy. Oblicz sumę wszystkich wierszy i sumę wszystkich kolumn - jak się ma to do całkowitej sumy elementów tablicy? Jakie wartości sum musiałyby wtedy wystąpić?",
-    "Jeśli każda z wartości 0, 1, 2, 3, 4 występuje dokładnie 2 razy wśród 10 sum, to suma wszystkich tych sum wynosi $2(0+1+2+3+4) = 20$. Porównaj to z faktem, że suma wierszy plus suma kolumn to $2S$, gdzie $S$ to suma wszystkich elementów tablicy."
+    "Zauważ, że każdy iloczyn $x_i x_{i+1}$ może przyjąć tylko wartość $1$ lub $-1$. Kiedy iloczyn jest równy $1$, a kiedy $-1$? Jak to się ma do relacji między sąsiednimi liczbami?",
+    "Pomyśl o tym zadaniu jako o zliczaniu: ile jest par sąsiednich liczb o tym samym znaku, a ile o różnych znakach? Oznacz te liczby i zastanów się, jakie ograniczenia na nie działają.",
+    "Skoro idziemy cyklicznie przez 101 liczb i wracamy do początku, policz ile razy musimy \"zmienić znak\" przechodząc z $1$ na $-1$ lub odwrotnie. Czy ta liczba zmian może być dowolna?",
+    "Liczba zmian znaku w cyklu musi być parzysta (wracamy do punktu wyjścia). Masz 101 iloczynów, chcesz jak najwięcej $-1$. Jaka jest największa parzysta liczba nieprzekraczająca 101?"
   ]
 }

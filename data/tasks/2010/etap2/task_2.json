@@ -7,14 +7,14 @@
     "solutions": "tasks/2010/etap2/2etap11r.pdf",
     "statistics": null
   },
-  "difficulty": 4,
+  "difficulty": 3,
   "categories": [
-    "geometria"
+    "teoria_liczb"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trapezu z zaznaczonymi kątami $60°$ przy wierzchołkach $A$ i $B$. Co możesz powiedzieć o bokach $AD$ i $BC$ tego trapezu? Jakie kąty są przy wierzchołkach $C$ i $D$?",
-    "Skoro trapez ma dwa kąty $60°$ przy tej samej podstawie, jest równoramienny. Poszukaj trójkątów przystających lub o równych bokach. Zastanów się, jakie trójkąty tworzą odcinki $BD$ i $AE$.",
-    "Rozważ trójkąty $\\triangle ABD$ i $\\triangle ABE$. Jakie boki i kąty tych trójkątów znasz? Wykorzystaj fakt, że $EB = CD$ oraz własności trapezu równoramiennego.",
-    "W trapezie równoramiennym zachodzi $AD = BC$. Ponieważ $EB = CD$, to $EC = BC - EB = AD - CD$. Porównaj trójkąty $\\triangle ABE$ i $\\triangle BAD$ - sprawdź, czy mają wspólny bok i równe pozostałe elementy."
+    "Zastanów się, co oznacza warunek $(a+b) | a^2$. Jak można zapisać $a$ w relacji do $b$ gdy rozważamy reszty z dzielenia przez $(a+b)$?",
+    "Spróbuj wykorzystać arytmetykę modularną. Jaka jest reszta z dzielenia $a$ przez $(a+b)$? A jaka jest reszta z dzielenia $(-b)$ przez $(a+b)$?",
+    "Zauważ, że $a + b \\equiv 0 \\pmod{a+b}$, więc $a \\equiv -b \\pmod{a+b}$. Co z tego wynika dla $a^2$?",
+    "Skoro $a \\equiv -b \\pmod{a+b}$, to podnieś obie strony do kwadratu. Jaką kongruencję otrzymujesz dla $a^2$ i $b^2$?"
   ]
 }

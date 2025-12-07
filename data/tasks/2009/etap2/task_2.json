@@ -9,13 +9,12 @@
   },
   "difficulty": 4,
   "categories": [
-    "kombinatoryka",
-    "algebra"
+    "geometria"
   ],
   "hints": [
-    "Zauważ, że każdy iloczyn $x_i x_{i+1}$ jest równy 1 lub $-1$. Kiedy iloczyn wynosi 1, a kiedy $-1$? Ile jest wszystkich składników w tej sumie cyklicznej?",
-    "Pomyśl o tym zadaniu jako o rozmieszczeniu liczb 1 i $-1$ na okręgu. Każda para sąsiednich liczb daje iloczyn. Aby zminimalizować sumę, chcesz jak najwięcej iloczynów równych $-1$. Zbadaj, ile razy znak może się zmienić przy przejściu po okręgu.",
-    "Policz iloczyn wszystkich 101 składników sumy, czyli $(x_1x_2) \\cdot (x_2x_3) \\cdot \\ldots \\cdot (x_{101}x_1)$. Uprość ten iloczyn i zastanów się, co to mówi o liczbie składników równych $-1$.",
-    "Skoro iloczyn wszystkich składników sumy wynosi 1, to liczba składników równych $-1$ musi być parzysta. Przy 101 składnikach, jaka jest maksymalna parzysta liczba składników równych $-1$? Spróbuj skonstruować ciąg realizujący to optimum."
+    "Narysuj dokładny rysunek trapezu z zaznaczonymi kątami $60°$ przy wierzchołkach $A$ i $B$. Jakie kąty mają ramiona trapezu z podstawami? Gdzie mogą powstać trójkąty równoboczne lub równoramienne?",
+    "Poszukaj trójkątów przystających. Skoro $EB = CD$, może uda się znaleźć trójkąt zawierający bok $AE$ przystający do trójkąta zawierającego bok $BD$?",
+    "Rozważ przedłużenie boków trapezu lub poprowadzenie przekątnych. Zbadaj trójkąt $ABD$ - jakie ma kąty? Podobnie zbadaj położenie punktu $E$ i trójkąt $ABE$.",
+    "Porównaj trójkąty $\\triangle ABD$ i $\\triangle BAE$. Mają wspólny bok $AB$. Sprawdź, czy $AD = BE$ (wykorzystaj, że $AD = CD$ w tym trapeziezie) oraz porównaj kąty przy tym boku."
   ]
 }
