@@ -42,16 +42,97 @@ def compute_user_progress() -> dict[str, int]:
     return progress
 
 
-def get_task_status(task: TaskInfo, progress: dict[str, int]) -> TaskStatus:
+def is_task_mastered(task_key: str, progress: dict[str, int]) -> bool:
+    """Check if a task is mastered based on score threshold.
+
+    Args:
+        task_key: Task key in format year_etap_number
+        progress: Dict of task_key -> best_score
+
+    Returns:
+        True if task score meets mastery threshold
+    """
+    parts = task_key.split("_")
+    if len(parts) >= 3 and parts[1] in ("etap1", "etap2"):
+        etap = parts[1]
+        threshold = get_mastery_threshold(etap)
+        return progress.get(task_key, 0) >= threshold
+    return False
+
+
+def are_prerequisites_met(
+    task: TaskInfo,
+    progress: dict[str, int],
+    all_tasks: dict[str, TaskInfo],
+    visited: set[str] = None
+) -> bool:
+    """Check if all prerequisites (including transitive) are mastered.
+
+    Handles transitive dependencies: if A requires B and B requires C,
+    then A requires both B and C to be mastered.
+
+    Args:
+        task: The task to check prerequisites for
+        progress: Dict of task_key -> best_score
+        all_tasks: Dict of all tasks for looking up transitive deps
+        visited: Set of already-visited task keys (for cycle detection)
+
+    Returns:
+        True if all prerequisites (direct and transitive) are mastered
+    """
+    if visited is None:
+        visited = set()
+
+    task_key = get_task_key(task.year, task.etap, task.number)
+
+    # Cycle detection
+    if task_key in visited:
+        logger.warning(f"Circular dependency detected involving task {task_key}")
+        return True  # Break cycle by assuming met
+
+    visited.add(task_key)
+
+    for prereq_key in task.prerequisites:
+        # Validate prerequisite key format
+        parts = prereq_key.split("_")
+        if len(parts) < 3 or parts[1] not in ("etap1", "etap2"):
+            logger.warning(f"Invalid prerequisite key format: {prereq_key} in task {task_key}")
+            continue
+
+        # Check if direct prerequisite is mastered
+        if not is_task_mastered(prereq_key, progress):
+            return False
+
+        # Check transitive prerequisites (prerequisite's prerequisites)
+        prereq_task = all_tasks.get(prereq_key)
+        if prereq_task and prereq_task.prerequisites:
+            if not are_prerequisites_met(prereq_task, progress, all_tasks, visited.copy()):
+                return False
+
+    return True
+
+
+def get_task_status(
+    task: TaskInfo,
+    progress: dict[str, int],
+    all_tasks: dict[str, TaskInfo] = None
+) -> TaskStatus:
     """Determine if a task is locked, unlocked, or mastered.
+
+    Handles transitive dependencies automatically - only direct prerequisites
+    need to be specified in task metadata.
 
     Args:
         task: The task to check
         progress: Dict of task_key -> best_score
+        all_tasks: Dict of all tasks (for transitive dependency lookup)
 
     Returns:
         TaskStatus enum value
     """
+    if all_tasks is None:
+        all_tasks = _load_all_tasks()
+
     task_key = get_task_key(task.year, task.etap, task.number)
     best_score = progress.get(task_key, 0)
     threshold = get_mastery_threshold(task.etap)
@@ -60,19 +141,9 @@ def get_task_status(task: TaskInfo, progress: dict[str, int]) -> TaskStatus:
     if best_score >= threshold:
         return TaskStatus.MASTERED
 
-    # Check if locked (any prerequisite not mastered)
-    for prereq_key in task.prerequisites:
-        prereq_score = progress.get(prereq_key, 0)
-        # Parse prereq key to get etap for threshold (format: year_etap_number)
-        parts = prereq_key.split("_")
-        if len(parts) >= 3 and parts[1] in ("etap1", "etap2"):
-            prereq_etap = parts[1]
-            prereq_threshold = get_mastery_threshold(prereq_etap)
-            if prereq_score < prereq_threshold:
-                return TaskStatus.LOCKED
-        else:
-            # Invalid prerequisite key format - log and skip
-            logger.warning(f"Invalid prerequisite key format: {prereq_key} in task {get_task_key(task.year, task.etap, task.number)}")
+    # Check if locked (any prerequisite or transitive prerequisite not mastered)
+    if not are_prerequisites_met(task, progress, all_tasks):
+        return TaskStatus.LOCKED
 
     return TaskStatus.UNLOCKED
 
@@ -90,7 +161,7 @@ def build_graph_nodes(progress: dict[str, int]) -> list[GraphNode]:
     nodes = []
 
     for key, task in all_tasks.items():
-        status = get_task_status(task, progress)
+        status = get_task_status(task, progress, all_tasks)
         node = GraphNode(
             key=key,
             year=task.year,
