@@ -131,23 +131,32 @@ Examples:
 - Etap I: Score >= 2 (out of 3)
 - Etap II: Score >= 5 (out of 6)
 
+**Transitive Dependencies:**
+
+The system automatically handles transitive dependencies. You only need to specify **direct** prerequisites - the framework will resolve the full dependency chain.
+
+For example, if:
+- Task A requires Task B (`A.prerequisites = ["B"]`)
+- Task B requires Task C (`B.prerequisites = ["C"]`)
+
+Then Task A is automatically locked until both B and C are mastered. You do NOT need to list C in A's prerequisites.
+
 **Example:**
 ```json
 {
   "number": 5,
   "title": "Advanced geometry problem",
-  "prerequisites": ["2023_etap1_2", "2023_etap2_1"],
+  "prerequisites": ["2023_etap2_1"],
   ...
 }
 ```
 
-This task requires mastering:
-- 2023 Etap I Task 2 (score >= 2)
-- 2023 Etap II Task 1 (score >= 5)
+This task requires mastering 2023 Etap II Task 1 (score >= 5), plus any tasks that 2023_etap2_1 depends on (transitively).
 
 **Best Practices:**
+- Only list direct prerequisites - transitive deps are resolved automatically
 - Prerequisites should represent genuine skill dependencies
-- Avoid circular dependencies (A requires B, B requires A)
+- Avoid circular dependencies (the system detects and warns about cycles)
 - Cross-year/etap prerequisites are allowed
 - Tasks with no prerequisites are "root" tasks (always unlocked)
 
