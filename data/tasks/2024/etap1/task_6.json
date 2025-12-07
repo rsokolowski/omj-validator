@@ -17,5 +17,15 @@
     "Zastanów się, ile różnych wartości sum potrzebujesz (dokładnie $2n$) i jaki jest zakres wszystkich możliwych sum. Czy dla każdego $n$ ten zakres jest wystarczająco duży?",
     "Zauważ, że suma w wierszu o $k$ polach może wynosić od $k$ do $2k$. Podobnie dla kolumn. Zbadaj, jakie sumy mogą się pojawiać i ile ich jest łącznie w zależności od $n$.",
     "Sprawdź małe przypadki ($n = 2, 3, 4$). Dla każdego wypisz możliwe zakresy sum wierszy i kolumn. Kiedy możesz wybrać $2n$ różnych wartości z dostępnego zakresu?"
+  ],
+  "prerequisites": [
+    "2023_etap1_7"
+  ],
+  "skills_required": [
+    "parity_arguments",
+    "counting_techniques"
+  ],
+  "skills_gained": [
+    "parity_arguments"
   ]
 }

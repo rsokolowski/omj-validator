@@ -16,5 +16,13 @@
     "Wykorzystaj symetrię kwadratu. Rozważ odbicie symetryczne względem przekątnej AC — gdzie przechodzi punkt D i jak to się ma do punktu F?",
     "Przekątna AC jest osią symetrii kwadratu. Punkt D przechodzi na punkt B przy tym odbiciu. Zbadaj, jak warunek $EF = DE$ wiąże się z tym odbiciem.",
     "Jeśli $E$ leży na osi symetrii, a $DE = EF$, to zastanów się, czy $F$ może być obrazem $D$ w pewnym przekształceniu. Zbadaj kąty w trójkącie $DEF$ wykorzystując własności tego przekształcenia."
-  ]
+  ],
+  "skills_required": [
+    "pythagorean_theorem",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "transformations"
+  ],
+  "prerequisites": ["2020_etap1_2"]
 }

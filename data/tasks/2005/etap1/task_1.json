@@ -16,5 +16,13 @@
     "Spróbuj zapisać wyrażenie typu $\\sqrt{a - \\sqrt{b}}$ w postaci $\\sqrt{x} - \\sqrt{y}$ dla odpowiednich $x$ i $y$. Jaki warunek muszą spełniać $x$ i $y$?",
     "Podnieś wyrażenie $\\sqrt{x} - \\sqrt{y}$ do kwadratu i porównaj z tym, co jest pod pierwiastkiem. Otrzymasz układ dwóch równań z dwiema niewiadomymi.",
     "Dla wyrażenia $\\sqrt{3 - \\sqrt{8}} = \\sqrt{3 - 2\\sqrt{2}}$ szukaj liczb $x, y$ takich, że $x + y = 3$ oraz $xy = 2$. Zastosuj tę metodę do każdego z trzech składników."
-  ]
+  ],
+  "skills_required": [
+    "nested_radicals",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "nested_radicals"
+  ],
+  "prerequisites": []
 }

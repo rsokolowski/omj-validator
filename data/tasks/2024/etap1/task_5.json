@@ -16,5 +16,13 @@
     "Rozważ wszystkie możliwe reszty z dzielenia przez 3 dla liczb $a$, $b$, $c$. Pamiętaj, że suma reszt modulo 3 określa resztę sumy.",
     "Przeanalizuj, jaką resztę z dzielenia przez 3 daje każda z pięciu liczb pierwszych. Zwróć szczególną uwagę na to, że liczba 3 jest jedyną liczbą pierwszą podzielną przez 3.",
     "Załóż, że $b$ nie jest podzielne przez 3 (czyli $b \\equiv 1$ lub $b \\equiv 2 \\pmod{3}$). Sprawdź, czy przy każdym wyborze reszt dla $a$ i $c$ wszystkie pięć sum może dawać reszty różne od 0 modulo 3."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "modular_arithmetic",
+    "primality_testing"
+  ],
+  "skills_gained": [
+    "modular_arithmetic"
   ]
 }

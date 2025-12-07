@@ -16,5 +16,15 @@
     "Środek łuku $BC$ niezawierającego $A$ leży na dwusiecznej kąta $\\angle BAC$. Podobnie dla punktu $Y$. Zastanów się, jak dwusieczne kątów trójkąta związane są z okręgiem wpisanym.",
     "Znajdź środek okręgu wpisanego $I$ i oblicz kąty w czworokącie $AXIY$ lub w trójkącie $XIY$. Wykorzystaj fakt, że $\\angle ACB = 60°$ wpływa na miary łuków $AB$, $BC$, $CA$.",
     "Aby udowodnić styczność prostej $XY$ do okręgu wpisanego, wyznacz odległość od środka $I$ do prostej $XY$. Sprawdź, czy punkt $I$ leży na okręgu opisanym w szczególnej pozycji względem $X$ i $Y$ - może $IX = IY = r$ dla pewnego promienia?"
-  ]
+  ],
+  "skills_required": [
+    "circle_theorems",
+    "angle_chasing",
+    "triangle_centers"
+  ],
+  "skills_gained": [
+    "tangential_quadrilateral",
+    "constructive_proof"
+  ],
+  "prerequisites": []
 }

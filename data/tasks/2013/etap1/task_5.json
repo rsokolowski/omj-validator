@@ -16,5 +16,16 @@
     "Spróbuj wyrazić pola czworokątów $BCLK$ i $DAKL$ przez pola trójkątów utworzonych przez przekątne lub odcinek $KL$. Przypomnij sobie, jak środek boku wpływa na pole trójkąta.",
     "Zauważ, że $K$ jest środkiem $AB$, więc trójkąty $AKL$ i $BKL$ mają równe pola (tę samą podstawę $KL$ i równe wysokości). Podobnie dla trójkątów przy wierzchołku $L$. Co wynika z równości pól obu czworokątów?",
     "Z warunku równości pól wyprowadź, że trójkąty $BCL$ i $ADL$ mają równe pola. Skoro $L$ jest środkiem $CD$, porównaj wysokości opuszczone z $B$ i $A$ na prostą $CD$ - co to oznacza dla równoległości?"
+  ],
+  "skills_required": [
+    "area_methods",
+    "trapezoid_parallelogram"
+  ],
+  "skills_gained": [
+    "area_methods",
+    "trapezoid_parallelogram"
+  ],
+  "prerequisites": [
+    "2010_etap1_4"
   ]
 }

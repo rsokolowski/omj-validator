@@ -16,5 +16,14 @@
     "Oprócz trzech czworokątów z zadania (QAKX, LCMX, NEPX) istnieją też trzy pozostałe (KBLX, MDNX, PFQX). Zastanów się, co można powiedzieć o sumie pól wszystkich sześciu czworokątów.",
     "Zauważ, że sześć czworokątów pokrywa cały sześciokąt, ale z pewnym nakładaniem się w okolicy punktu $X$. Zbadaj, jak pola trójkątów przy wierzchołku $X$ zależą (lub nie zależą) od jego położenia.",
     "Wykaż najpierw, że suma pól wszystkich sześciu czworokątów jest stała. Następnie pokaż, że suma pól KBLX + MDNX + PFQX też nie zależy od $X$ - wykorzystaj symetrię sytuacji."
-  ]
+  ],
+  "skills_required": [
+    "area_methods",
+    "transformations"
+  ],
+  "skills_gained": [
+    "area_methods",
+    "invariants"
+  ],
+  "prerequisites": []
 }

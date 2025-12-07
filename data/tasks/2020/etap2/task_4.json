@@ -16,5 +16,13 @@
     "Wykorzystaj własność dwusiecznej kąta: każdy punkt na dwusiecznej jest równoodległy od ramion kąta. Spróbuj znaleźć punkt na dwusiecznej, który będzie miał szczególny związek z odcinkami $AK$ i $AL$.",
     "Oznacz przez $P$ punkt przecięcia dwusiecznej kąta $BAD$ z prostą $KL$. Rozważ odległości punktu $P$ od prostych $AB$ i $AD$. Jak warunek $AB + BK = AD + DL$ wpływa na położenie punktów $K$ i $L$ względem dwusiecznej?",
     "Poprowadź przez punkt $P$ leżący na dwusiecznej proste równoległe do boków równoległoboku. Wykorzystaj równość odległości od ramion kąta, aby pokazać, że $P$ leży na prostej $KL$ w taki sposób, że $KL \\perp AP$."
-  ]
+  ],
+  "skills_required": [
+    "trapezoid_parallelogram",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "constructive_proof"
+  ],
+  "prerequisites": []
 }

@@ -16,5 +16,16 @@
     "Przypomnij sobie cechę podzielności przez 9 - suma cyfr liczby daje tę samą resztę z dzielenia przez 9 co sama liczba. Zbadaj reszty z dzielenia przez 9.",
     "Skoro $a$, $b$, $c$ mają te same cyfry, to każda z nich daje tę samą resztę z dzielenia przez 9. Oznacz tę resztę przez $r$ i zapisz, jaką resztę daje suma $a + b + c$.",
     "Oblicz resztę z dzielenia $10^{1001}$ przez 9 (skorzystaj z tego, że $10 \\equiv 1 \\pmod{9}$). Sprawdź, czy istnieje liczba $r \\in \\{0, 1, ..., 8\\}$ taka, że $3r$ daje tę resztę."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "digit_manipulation",
+    "modular_arithmetic",
+    "divisibility_arguments"
+  ],
+  "skills_gained": [
+    "digit_manipulation",
+    "modular_arithmetic",
+    "contradiction"
   ]
 }

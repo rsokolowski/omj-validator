@@ -12,6 +12,15 @@
     "kombinatoryka",
     "teoria_liczb"
   ],
+  "prerequisites": [],
+  "skills_required": [
+    "counting_techniques",
+    "constructive_proof"
+  ],
+  "skills_gained": [
+    "counting_techniques",
+    "case_analysis"
+  ],
   "hints": [
     "Zacznij od małych przypadków: co jeśli $n=3$ lub $n=4$? Sprawdź, czy warunki mogą być spełnione. Zastanów się, która liczba musi być niebieska, a która czerwona.",
     "Zwróć uwagę na ograniczenia: najmniejsza niebieska musi być różnicą dwóch czerwonych, a najmniejsza czerwona musi być sumą dwóch niebieskich. Przeanalizuj, jakie to nakłada warunki na wielkość tych liczb.",

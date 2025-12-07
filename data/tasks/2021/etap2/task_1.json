@@ -17,5 +17,16 @@
     "W każdym z trójkątów $\\triangle AXC$, $\\triangle AXD$, $\\triangle BXC$, $\\triangle BXD$ możesz zastosować twierdzenie Pitagorasa. Zapisz wyrażenia na długości $AC$, $BD$, $AD$ i $BX$ za pomocą wprowadzonych zmiennych.",
     "Wykorzystaj warunki $AC = BD$ oraz $AD = BX$, aby otrzymać układ równań wiążących zmienne $AX$, $BX$ i $CX$. Zauważ, że jedno z tych równań pozwala wyrazić jedną zmienną przez inne.",
     "Z równania $AC = BD$ wynika zależność między $AX$ i $BX$. Podstaw to do równania $AD = BX$ i rozwiąż powstałe równanie kwadratowe względem $CX$."
+  ],
+  "prerequisites": [
+    "2020_etap1_2"
+  ],
+  "skills_required": [
+    "pythagorean_theorem",
+    "coordinate_geometry",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "coordinate_geometry"
   ]
 }

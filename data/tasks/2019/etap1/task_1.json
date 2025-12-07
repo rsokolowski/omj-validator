@@ -17,5 +17,14 @@
     "Zapisz równanie wyrażające warunek zadania. Pamiętaj, że dopisana cyfra musi być cyfrą, czyli liczbą z określonego zakresu.",
     "Z otrzymanego równania wyraź dopisaną cyfrę przez $n$. Jakie ograniczenia musi spełniać ta cyfra?",
     "Skoro cyfra musi należeć do zbioru $\\{0, 1, 2, ..., 9\\}$, sprawdź dla których wartości z tego zbioru $n$ jest dodatnią liczbą całkowitą."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "digit_manipulation",
+    "diophantine_equations"
+  ],
+  "skills_gained": [
+    "digit_manipulation",
+    "case_analysis"
   ]
 }

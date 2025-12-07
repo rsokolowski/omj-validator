@@ -16,5 +16,14 @@
     "Przy zaginaniu papieru odległości między punktami na tej samej części kartki się zachowują. Wykorzystaj symetrię rombu - gdzie znajdzie się punkt B po pierwszym zagięciu?",
     "Po pierwszym zagięciu punkt B pokrywa się z punktem D (bo CB = CD w rombie). Zastanów się, jakie odcinki o równych długościach wychodzą z punktu A w oryginalnym rombie.",
     "Przypomnij sobie, że w rombie wszystkie boki są równe, więc $AB = AD$. Przekątna $AC$ jest wspólna. Po zagięciach sprawdź, które punkty się pokrywają i dlaczego punkt A jest równoodległy od powstałych wierzchołków trójkąta."
+  ],
+  "prerequisites": [
+    "2020_etap1_7"
+  ],
+  "skills_required": [
+    "transformations"
+  ],
+  "skills_gained": [
+    "transformations"
   ]
 }

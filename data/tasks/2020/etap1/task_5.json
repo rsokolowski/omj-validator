@@ -16,5 +16,13 @@
     "Skoro iloczyn ma być równy $5^{1002}$, każda z czterech liczb musi być potęgą piątki. Zbadaj własności takich liczb pod kątem parzystości.",
     "Jaka jest parzystość dowolnej potęgi liczby $5$? Co możesz powiedzieć o sumie czterech takich liczb?",
     "Suma czterech liczb nieparzystych daje liczbę parzystą, ale nie podzielną przez $4$ lub daje liczbę podzielną przez $4$, ale nie przez $8$. Sprawdź, przez jaką najwyższą potęgę dwójki może być podzielna suma czterech potęg piątki."
-  ]
+  ],
+  "skills_required": [
+    "prime_factorization"
+  ],
+  "skills_gained": [
+    "parity_arguments",
+    "contradiction"
+  ],
+  "prerequisites": []
 }

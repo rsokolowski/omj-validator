@@ -16,5 +16,13 @@
     "Skoro AB = BC = BD = 17, punkt B jest równoodległy od A, C i D. Poprowadź wysokość z punktu B na odcinek AD (lub CD) i zastosuj twierdzenie Pitagorasa.",
     "Oznacz przez H spodek wysokości z B na prostą AD. Trójkąt ABH jest prostokątny. Oblicz długość BH korzystając z twierdzenia Pitagorasa dla trójkąta ABD.",
     "Zauważ, że trójkąty ABD i CBD mają wspólną wysokość z wierzchołka B. Wykorzystaj, że AB = BC, aby powiązać położenie punktów A i C względem prostej przez B prostopadłej do AD."
-  ]
+  ],
+  "skills_required": [
+    "coordinate_geometry",
+    "pythagorean_theorem"
+  ],
+  "skills_gained": [
+    "coordinate_geometry"
+  ],
+  "prerequisites": []
 }

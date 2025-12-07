@@ -16,5 +16,14 @@
     "Rozważ parzystość sumy $a + b + c$. Skoro każda z sum $a+b$, $b+c$, $c+a$ ma być pierwsza, co możesz powiedzieć o tym, ile spośród $a$, $b$, $c$ jest parzystych?",
     "Zauważ, że jeśli wszystkie trzy liczby są nieparzyste, to każda z sum dwóch z nich jest parzysta i większa od 2. Rozważ przypadek, gdy dokładnie jedna z liczb jest parzysta - co wtedy możesz powiedzieć o sumie $a + b + c$?",
     "Skoro dokładnie jedna liczba musi być parzysta, a suma $a + b + c$ też ma być pierwsza (czyli nieparzysta lub równa 2), sprawdź małe wartości dla liczby parzystej równej 2."
-  ]
+  ],
+  "skills_required": [
+    "parity_arguments",
+    "primality_testing"
+  ],
+  "skills_gained": [
+    "case_analysis",
+    "constructive_proof"
+  ],
+  "prerequisites": []
 }

@@ -17,5 +17,14 @@
     "Spróbuj podejścia nie wprost: załóż, że $\\sqrt{a}$ jest niewymierna i zobacz, do jakiej sprzeczności to prowadzi. Wykorzystaj fakt, że $a$ i $b$ są wymierne.",
     "Zauważ, że możesz wyrazić $\\sqrt{a}$ jako kombinację wyrażeń zawierających $S$ i inne składniki. Spróbuj przekształcić $S - \\sqrt{ab}$ i sprawdź, czy możesz uzyskać równanie, w którym $\\sqrt{a}$ występuje po jednej stronie.",
     "Rozważ wyrażenie $(\\sqrt{a} + \\sqrt{b})^2 = a + b + 2\\sqrt{ab}$. Skoro $S$ jest wymierna, to $\\sqrt{a} + \\sqrt{b} = S - \\sqrt{ab}$. Zbadaj, kiedy kwadrat tej różnicy może być wymierny."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "algebraic_identities",
+    "contradiction"
+  ],
+  "skills_gained": [
+    "algebraic_identities",
+    "nested_radicals"
   ]
 }

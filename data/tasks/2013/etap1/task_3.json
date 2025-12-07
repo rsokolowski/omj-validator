@@ -16,5 +16,16 @@
     "Rozważ przystawanie trójkątów. Porównaj trójkąty $ABE$ i $DAF$ - co możesz powiedzieć o ich bokach i kątach? Wykorzystaj fakt, że $ABCD$ jest prostokątem.",
     "Skoro $M$ jest środkiem $AF$, to $AM = MF$. Zauważ, że $AE = AF$ (boki trójkąta równobocznego). Zbadaj, jak długość $BE$ ma się do długości $AE$ i $AF$.",
     "Wykaż najpierw, że $BE = CF = AM = MF$. Następnie zbadaj kąty trójkąta $BCM$ - wykorzystaj kąty w trójkątach $ABE$ i $DCF$ oraz fakt, że suma kątów przy wierzchołku $A$ w trójkątach $ABE$, $AEF$, $DAF$ wynosi $90°$."
+  ],
+  "skills_required": [
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "prerequisites": [
+    "2011_etap1_2"
   ]
 }

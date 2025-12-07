@@ -17,5 +17,17 @@
     "Kluczowe pytanie: ile razy każde pole diagramu jest zliczane, gdy sumujemy wszystkie 15 odcinków? Przyjrzyj się strukturze diagramu i policz, przez ile strzałek przechodzi każde pole.",
     "Oblicz sumę wszystkich 15 odcinków na dwa sposoby: jako $15 \\cdot S$ oraz jako sumę wszystkich pól pomnożonych przez liczbę strzałek je zawierających. Porównaj te wyrażenia.",
     "Sprawdź, czy równanie wynikające z podwójnego zliczania ma rozwiązanie w liczbach całkowitych. Zbadaj podzielność obu stron równania."
+  ],
+  "skills_required": [
+    "double_counting",
+    "parity_arguments"
+  ],
+  "skills_gained": [
+    "double_counting",
+    "parity_arguments",
+    "contradiction"
+  ],
+  "prerequisites": [
+    "2021_etap1_4"
   ]
 }

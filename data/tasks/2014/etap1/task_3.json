@@ -16,5 +16,15 @@
     "Spróbuj użyć nierówności między średnią arytmetyczną a geometryczną (AM-GM). Zastanów się, jak rozbić wyrażenie na składniki, dla których znasz iloczyn.",
     "Po podstawieniu $a = \\frac{1}{b}$ otrzymujesz wyrażenie zależne tylko od $b$. Spróbuj zapisać $\\frac{1}{b} + b^3$ jako sumę kilku składników, których iloczyn jest stały.",
     "Rozpisz $b^3 = b \\cdot b \\cdot b$ i zastosuj nierówność AM-GM do czterech składników: $\\frac{1}{b}, b, b, b$. Kiedy zachodzi równość w tej nierówności?"
+  ],
+  "skills_required": [
+    "inequality_manipulation",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "inequality_manipulation"
+  ],
+  "prerequisites": [
+    "2010_etap1_3"
   ]
 }

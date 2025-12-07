@@ -16,5 +16,15 @@
     "Oblicz kąt $\\angle AEB$ w trójkącie $ABE$. Pamiętaj, że $\\angle BAE = 90° - \\alpha$ (kąt prosty przy $A$ minus $\\angle DAE$). Użyj sumy kątów w trójkącie.",
     "Sprawdź, czy $\\angle AEB = \\angle ABE$. Jeśli tak, to trójkąt $ABE$ jest równoramienny - które boki są równe?",
     "Skoro $AB = AE$, porównaj $AE$ z $AD$ w trójkącie prostokątnym $ADE$. Przeciwprostokątna jest zawsze nie mniejsza od przyprostokątnej."
+  ],
+  "prerequisites": [
+    "2022_etap2_1"
+  ],
+  "skills_required": [
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "angle_chasing"
   ]
 }

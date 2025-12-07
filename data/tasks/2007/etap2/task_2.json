@@ -17,5 +17,16 @@
     "Zastanów się nad sumą wszystkich elementów tablicy. Jak można ją obliczyć na różne sposoby? Jakie to daje zależności między sumami wierszy i kolumn?",
     "Przeanalizuj parzystość sum. Suma wszystkich wierszy równa się sumie wszystkich kolumn. Co możesz powiedzieć o liczbie sum parzystych i nieparzystych wśród wierszy? A wśród kolumn?",
     "Podziel 10 sum na grupy według parzystości. W każdej grupie masz pewną liczbę sum, a każda może przyjąć tylko niektóre wartości (0, 2, 4 lub 1, 3). Zastosuj zasadę szufladkową osobno dla każdej grupy parzystości."
+  ],
+  "skills_required": [
+    "pigeonhole",
+    "parity_arguments"
+  ],
+  "skills_gained": [
+    "pigeonhole",
+    "parity_arguments"
+  ],
+  "prerequisites": [
+    "2005_etap2_2"
   ]
 }

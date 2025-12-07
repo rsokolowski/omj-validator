@@ -17,5 +17,8 @@
     "Skoro $a+b$ jest liczbą pierwszą, rozważ dwa przypadki: albo $3 | (a+b)$, albo $3 | (a^2 - ab + b^2)$. Co oznacza pierwszy przypadek dla wartości $a+b$?",
     "Zbadaj reszty z dzielenia $a$ i $b$ przez 3. Jaką resztę daje wyrażenie $a^2 - ab + b^2$ w zależności od reszt $a$ i $b$? Rozważ wszystkie kombinacje.",
     "Gdy $a+b \\neq 3$, sprawdź kiedy $a^2 - ab + b^2 \\equiv 0 \\pmod{3}$. Oblicz to wyrażenie modulo 3 dla każdej pary reszt $(a \\mod 3, b \\mod 3)$."
-  ]
+  ],
+  "prerequisites": ["2006_etap1_3"],
+  "skills_required": ["modular_arithmetic", "primality_testing", "algebraic_identities"],
+  "skills_gained": ["modular_arithmetic", "case_analysis"]
 }

@@ -17,5 +17,17 @@
     "Po przekształceniach algebraicznych otrzymasz warunek na iloczyn $(a-c)(b-c)$. Zastanów się, jaką postać musi mieć ten iloczyn, aby równanie było spełnione.",
     "Zbadaj parzystość wyrażeń $a-c$ i $b-c$ gdy $a$, $b$, $c$ są nieparzyste. Jaka jest parzystość różnicy dwóch liczb nieparzystych?",
     "Skoro $a-c$ i $b-c$ są parzyste, to ich iloczyn jest podzielny przez $4$. Sprawdź, czy $c^2$ dla nieparzystego $c$ może być podzielne przez $4$."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "parity_arguments",
+    "modular_arithmetic"
+  ],
+  "skills_gained": [
+    "parity_arguments",
+    "contradiction"
+  ],
+  "prerequisites": [
+    "2011_etap1_6"
   ]
 }

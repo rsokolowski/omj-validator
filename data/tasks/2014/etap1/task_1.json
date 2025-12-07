@@ -17,5 +17,14 @@
     "Masz układ dwóch równań z trzema niewiadomymi. Spróbuj wyrazić jedną zmienną przez inną i zastanów się, jakie ograniczenia nakładają warunki zadania na możliwe wartości.",
     "Po przekształceniu układu równań, zwróć uwagę na to, że $x$, $y$, $z$ muszą być liczbami całkowitymi nieujemnymi. Które z nich jest najbardziej ograniczone?",
     "Wyznacz $z$ z układu równań i sprawdź, dla jakich wartości $z$ pozostałe zmienne $x$ i $y$ są całkowite nieujemne."
-  ]
+  ],
+  "skills_required": [
+    "diophantine_equations",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "diophantine_equations",
+    "counting_techniques"
+  ],
+  "prerequisites": []
 }

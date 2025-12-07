@@ -17,5 +17,13 @@
     "Policz sumę wszystkich liczb napisanych na tablicy. Zauważ, że każda znajomość jest liczona dwukrotnie - raz przez każdą z dwóch zaprzyjaźnionych osób.",
     "Skoro suma wszystkich liczb musi być parzysta (bo każda znajomość dodaje 2 do sumy), to piąta liczba musi mieć określoną parzystość. Rozważ też, ile znajomych może mieć maksymalnie piąta osoba.",
     "Sprawdź osobno przypadki, gdy piąta liczba to $0$, $2$ lub $4$. Dla każdego przypadku spróbuj narysować konkretny układ znajomości lub wykaż, że jest niemożliwy."
-  ]
+  ],
+  "skills_required": [
+    "graph_theory"
+  ],
+  "skills_gained": [
+    "graph_theory",
+    "case_analysis"
+  ],
+  "prerequisites": []
 }

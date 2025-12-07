@@ -16,5 +16,15 @@
     "Przypomnij sobie własności symetrii osiowej: odbicie zachowuje odległości i kąty. Zastanów się, jakie odległości w konfiguracji są równe dzięki symetrii (np. $CA' = CA$, $CB' = CB$).",
     "Zbadaj położenie punktów $A'$ i $B'$. Zwróć uwagę, że punkt $A'$ leży na okręgu o środku $C$ i promieniu $CA$, podobnie $B'$. Jak możesz wykorzystać równość $CA = CB$ oraz miary kątów $\\angle A'CB$ i $\\angle ACB'$?",
     "Oblicz miary kątów $\\angle A'CB'$ oraz $\\angle ACB'$ i $\\angle BCA'$ korzystając z własności odbić. Następnie wyznacz odległości $CA'$, $CB'$, $CC'$ i sprawdź, czy punkt $C'$ jest równoodległy od $A'$ i $B'$ oraz czy te odległości są równe $A'B'$."
+  ],
+  "prerequisites": [
+    "2021_etap1_5"
+  ],
+  "skills_required": [
+    "isosceles_triangle",
+    "transformations"
+  ],
+  "skills_gained": [
+    "transformations"
   ]
 }

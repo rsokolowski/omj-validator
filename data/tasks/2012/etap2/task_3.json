@@ -16,5 +16,16 @@
     "Rozważ podstawienie $\\sqrt{a} = x$ i $\\sqrt{b} = y$, gdzie $0 < x, y < 1$. Jak wtedy wygląda nierówność w zmiennych $x$ i $y$?",
     "Po podstawieniu otrzymasz nierówność z iloczynem $xy$. Spróbuj pogrupować wyrazy tak, aby po jednej stronie mieć wyrażenia zawierające $xy$, a po drugiej wyrażenia, które łatwo oszacować.",
     "Zauważ, że dla $0 < x, y < 1$ zachodzi $xy < x$ oraz $xy < y$. Wykorzystaj to do oszacowania lewej strony nierówności od dołu przez wyrażenie większe od $3x^2y^2$."
+  ],
+  "skills_required": [
+    "inequality_manipulation",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "inequality_manipulation",
+    "algebraic_identities"
+  ],
+  "prerequisites": [
+    "2010_etap2_4"
   ]
 }

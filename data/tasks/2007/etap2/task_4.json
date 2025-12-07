@@ -17,5 +17,13 @@
     "Zastanów się nad podzielnością. Potęga $2^n$ ma bardzo specyficzną własność - jakie liczby są jej dzielnikami? Porównaj to z postacią otrzymanego wzoru.",
     "Suma $(m+1)$ kolejnych liczb począwszy od $k$ wynosi $\\frac{(m+1)(2k+m)}{2}$. Przeanalizuj czynniki $(m+1)$ oraz $(2k+m)$ - czy któryś z nich musi być nieparzysty?",
     "Zauważ, że spośród dwóch kolejnych liczb całkowitych $(m+1)$ i $(2k+m)$ dokładnie jedna jest parzysta. Co to oznacza dla dzielników ich iloczynu podzielonego przez $2$?"
-  ]
+  ],
+  "skills_required": [
+    "parity_arguments",
+    "sequences"
+  ],
+  "skills_gained": [
+    "parity_arguments"
+  ],
+  "prerequisites": []
 }

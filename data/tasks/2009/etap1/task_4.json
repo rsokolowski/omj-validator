@@ -16,5 +16,14 @@
     "Wykorzystaj własność kąta wpisanego w okrąg - jaki jest związek między kątem wpisanym a kątem środkowym opartym na tym samym łuku?",
     "Zbadaj, pod jakim kątem przecinają się poszczególne pary prostych. Policz, ile boków wielokąta rozpina każda cięciwa (np. $A_2A_7$ rozpina 5 boków) i wykorzystaj to do wyznaczenia odpowiednich kątów.",
     "Aby wykazać, że czworokąt jest prostokątem, pokaż że jego kąty są proste. Dla pytania o kwadrat - sprawdź czy sąsiednie boki prostokąta mają równe długości, analizując symetrię figury."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "circle_theorems",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "circle_theorems",
+    "angle_chasing"
   ]
 }

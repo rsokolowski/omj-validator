@@ -17,5 +17,14 @@
     "Oznacz parzystość liczby w każdym wierzchołku. Skoro suma trzech kolejnych jest parzysta, co możesz powiedzieć o parzystości co trzeciego wierzchołka?",
     "Zauważ, że jeśli $a_i + a_{i+1} + a_{i+2}$ jest parzyste i $a_{i+1} + a_{i+2} + a_{i+3}$ też jest parzyste, to $a_i$ i $a_{i+3}$ mają tę samą parzystość. Jak to ogranicza rozkład parzystości wokół $n$-kąta?",
     "Policz, ile jest liczb parzystych i nieparzystych wśród $1, 2, \\ldots, n$. Sprawdź, dla jakich $n$ możliwy jest odpowiedni podział wierzchołków na grupy o tej samej parzystości."
-  ]
+  ],
+  "skills_required": [
+    "parity_arguments",
+    "modular_arithmetic"
+  ],
+  "skills_gained": [
+    "invariants",
+    "case_analysis"
+  ],
+  "prerequisites": []
 }

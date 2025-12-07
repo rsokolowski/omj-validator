@@ -17,5 +17,14 @@
     "Wybór jednego pola z każdego wiersza i każdej kolumny to permutacja. Zbadaj, jak kolor pola na pozycji $(i, j)$ zależy od parzystości $i$ i $j$.",
     "Przeanalizuj parzystość sumy współrzędnych wybranych pól. Jeśli pole jest czarne gdy $i+j$ jest parzyste (lub nieparzyste), co to oznacza dla sumy wszystkich $i+j$?",
     "Policz sumę $\\sum(i+j)$ dla wszystkich 14 wybranych pól, wiedząc że $i$ i $j$ przebiegają wartości $1, 2, \\ldots, 14$. Sprawdź, czy możliwe jest uzyskanie dokładnie 7 pól o parzystej i 7 o nieparzystej sumie współrzędnych."
-  ]
+  ],
+  "skills_required": [
+    "parity_arguments",
+    "counting_techniques"
+  ],
+  "skills_gained": [
+    "parity_arguments",
+    "tiling"
+  ],
+  "prerequisites": []
 }

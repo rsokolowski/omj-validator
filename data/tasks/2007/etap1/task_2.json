@@ -16,5 +16,14 @@
     "Spróbuj powiązać boki czworokąta $KLMN$ z przekątnymi lub bokami czworokąta $ABCD$. Rozważ rozbicie obu czworokątów na trójkąty i porównanie ich pól.",
     "Zauważ, że np. $KL$ jest związane z odcinkiem $AC$. Zbadaj, jak boki czworokąta $KLMN$ mają się do przekątnych $AC$ i $BD$ oryginalnego czworokąta - sprawdź równoległość i stosunek długości.",
     "Pokaż, że $KLMN$ jest równoległobokiem, którego boki są równoległe do przekątnych $ABCD$ i dwukrotnie od nich dłuższe. Następnie porównaj pole $KLMN$ z polem $ABCD$, korzystając z rozkładu na trójkąty."
-  ]
+  ],
+  "skills_required": [
+    "transformations",
+    "area_methods"
+  ],
+  "skills_gained": [
+    "transformations",
+    "area_methods"
+  ],
+  "prerequisites": []
 }

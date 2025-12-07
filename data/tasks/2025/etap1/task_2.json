@@ -17,5 +17,14 @@
     "Przypomnij sobie kryterium podzielności przez 9: liczba jest podzielna przez 9 wtedy i tylko wtedy, gdy suma jej cyfr jest podzielna przez 9. Jak możesz to wykorzystać?",
     "Skoro $n = 21 \\cdot S(n)$, to zastanów się, jaką resztę z dzielenia przez 9 daje liczba $21$. Następnie pomyśl, co to oznacza dla reszty z dzielenia $n$ przez 9.",
     "Zauważ, że $21 = 2 \\cdot 9 + 3$, więc $21 \\equiv 3 \\pmod{9}$. Zapisz zależność między $n$ a $S(n)$ modulo 9 i wykorzystaj fakt, że $n \\equiv S(n) \\pmod{9}$."
-  ]
+  ],
+  "skills_required": [
+    "digit_manipulation",
+    "modular_arithmetic"
+  ],
+  "skills_gained": [
+    "digit_manipulation",
+    "modular_arithmetic"
+  ],
+  "prerequisites": []
 }

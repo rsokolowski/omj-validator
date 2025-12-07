@@ -17,5 +17,16 @@
     "Jeśli znasz ciąg operacji od 1 do $n$, jak skonstruować ciąg operacji od 1 do $n^2$? Pomyśl o związku między operacjami wykonywanymi na $n$ a operacjami na $n^2$.",
     "Kluczowa obserwacja: jeśli $n$ zwiększamy o cyfrę jedności $c$, to jak zmienia się $n^2$? Zbadaj, ile razy trzeba wykonać operację na $n^2$, aby uzyskać $(n+c)^2$.",
     "Rozważ różnicę $(n+c)^2 - n^2 = 2nc + c^2$. Pokaż, że tę różnicę można uzyskać przez odpowiednią liczbę operacji na $n^2$, wykorzystując fakt, że cyfra jedności $n^2$ zależy tylko od cyfry jedności $n$."
+  ],
+  "prerequisites": [
+    "2022_etap2_2"
+  ],
+  "skills_required": [
+    "induction",
+    "digit_manipulation",
+    "invariants"
+  ],
+  "skills_gained": [
+    "induction"
   ]
 }

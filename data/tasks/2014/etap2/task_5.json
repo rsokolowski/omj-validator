@@ -17,5 +17,17 @@
     "Rozważ, co się dzieje gdy punkt $P$ leży na osi symetrii trójkąta. Które trójkąty wtedy mają równe pola? Jak zmienia się sytuacja gdy przesuwamy $P$?",
     "Zauważ, że trójkąty $AEP$ i $AFP$ mają wspólny wierzchołek $A$ i punkt $P$. Jak ich pola zależą od odległości $E$ i $F$ od prostej $AP$? Przeanalizuj podobne pary dla wierzchołków $B$ i $C$.",
     "Zbadaj przypadek, gdy $P$ leży na jednej osi symetrii trójkąta - ile par trójkątów o równych polach wtedy powstaje? Następnie sprawdź, czy przesunięcie $P$ z osi pozwala uzyskać dokładnie cztery równe pola."
+  ],
+  "skills_required": [
+    "area_methods",
+    "isosceles_triangle",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "area_methods",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2013_etap1_3"
   ]
 }

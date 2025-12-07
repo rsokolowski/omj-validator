@@ -16,5 +16,17 @@
     "Skoro $DA \\perp DB$, $DB \\perp DC$ i $DC \\perp DA$, to punkt $D$ jest jak wierzchołek prostopadłościanu. Użyj twierdzenia Pitagorasa w trójkątach $ADB$, $BDC$, $CDA$ aby powiązać długości $DA$, $DB$, $DC$ z bokami podstawy.",
     "Oznacz $DA = a$, $DB = b$, $DC = c$. Z twierdzenia Pitagorasa w każdym z trzech trójkątów prostokątnych otrzymasz układ równań: $a^2 + b^2 = 1$, $b^2 + c^2 = 1$, $c^2 + a^2 = 1$. Co wynika z symetrii tego układu?",
     "Rozwiąż układ równań, aby znaleźć $a = b = c$. Objętość ostrosłupa o trzech wzajemnie prostopadłych krawędziach bocznych o długościach $a$, $b$, $c$ wyraża się wzorem $V = \\frac{1}{6}abc$."
+  ],
+  "skills_required": [
+    "spatial_3d",
+    "pythagorean_theorem"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "pythagorean_theorem",
+    "symmetric_systems"
+  ],
+  "prerequisites": [
+    "2015_etap1_7"
   ]
 }

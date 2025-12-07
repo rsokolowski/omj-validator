@@ -16,5 +16,16 @@
     "Zastanów się, jak przenieść problem do sytuacji, gdzie oba punkty są po tej samej stronie. Czy możesz przesunąć jeden z punktów równolegle do brzegu rzeki o szerokość mostu?",
     "Jeśli przesuniesz punkt $B$ równolegle do brzegów rzeki o szerokość mostu (w odpowiednim kierunku), to otrzymasz punkt $B'$. Zauważ, że odległość od $A$ do końca mostu równa się odległości od $B'$ do tego samego punktu. Co to oznacza dla położenia mostu?",
     "Skonstruuj punkt $B'$ przez przesunięcie $B$ o szerokość rzeki równolegle do brzegów. Most powinien zaczynać się w punkcie leżącym na symetralnej odcinka $AB'$. Znajdź przecięcie tej symetralnej z brzegiem rzeki."
+  ],
+  "skills_required": [
+    "transformations",
+    "constructive_proof"
+  ],
+  "skills_gained": [
+    "transformations",
+    "coordinate_geometry"
+  ],
+  "prerequisites": [
+    "2014_etap1_2"
   ]
 }

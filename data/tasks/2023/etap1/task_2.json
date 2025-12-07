@@ -16,5 +16,16 @@
     "Skoro masz wiele trójkątów równoramiennych, wprowadź oznaczenia na kąty przy ich podstawach. Pamiętaj, że w trójkącie równoramiennym kąty przy podstawie są równe. Spróbuj wyrazić wszystkie kąty przez jedną niewiadomą.",
     "Zwróć uwagę na trójkąt $MXC$ gdzie $MX = MC$ oraz na trójkąt $MYC$ gdzie $MY = MC$. Jakie są kąty w tych trójkątach? Wykorzystaj też fakt, że punkty $X$, $M$, $Y$ są współliniowe.",
     "Zapisz warunek, że suma kątów przy wierzchołku $C$ w trójkącie $ABC$ musi być równa $\\angle ACB$. Użyj również faktu, że kąty $\\angle XMC$ i $\\angle YMC$ są kątami przyległymi (sumują się do $180°$). Z tych zależności wyznacz miary kątów, a następnie oblicz $\\angle AMB$."
+  ],
+  "skills_required": [
+    "isosceles_triangle",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "isosceles_triangle",
+    "angle_chasing"
+  ],
+  "prerequisites": [
+    "2021_etap1_2"
   ]
 }

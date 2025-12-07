@@ -16,5 +16,13 @@
     "Skoro $P$ leży na symetralnej $AD$, to trójkąt $APD$ jest równoramienny. Analogicznie dla trójkąta $BQC$. Jak wyrażają się kąty przy podstawie trójkąta równoramiennego?",
     "Wyraź kąty $\\measuredangle APD$ i $\\measuredangle BQC$ przez kąty trapezu. Wykorzystaj fakt, że $AB \\parallel CD$ — jakie zależności między kątami trapezu to daje?",
     "Oznacz $\\measuredangle DAB = \\alpha$ i $\\measuredangle ABC = \\beta$. Zauważ, że $\\alpha + \\beta = 180°$ (kąty przy tym samym ramieniu trapezu). Wyraź oba szukane kąty przez $\\alpha$ i $\\beta$, korzystając z sumy kątów w trójkącie równoramiennym."
-  ]
+  ],
+  "skills_required": [
+    "trapezoid_parallelogram",
+    "circle_theorems"
+  ],
+  "skills_gained": [
+    "angle_chasing"
+  ],
+  "prerequisites": []
 }

@@ -17,5 +17,14 @@
     "Zastanów się, jaki jest maksymalny możliwy stosunek pola trójkąta do iloczynu dwóch jego boków. Rozważ, kiedy pole trójkąta o bokach $a$, $b$, $c$ osiąga wartość największą przy ustalonych długościach boków.",
     "Porównaj wzór $P = \\frac{1}{2} \\cdot b \\cdot h$ z wyrażeniem $\\frac{1}{4}b(a+c)$. Co to mówi o wysokości $h$? Zbadaj, czy ta wysokość jest możliwa do osiągnięcia w trójkącie o bokach $a$, $b$, $c$.",
     "Zauważ, że wysokość opuszczona na bok $b$ nie może przekroczyć długości żadnego z pozostałych boków. Sprawdź, czy warunek $h = \\frac{1}{2}(a+c)$ jest możliwy do spełnienia, porównując z ograniczeniami na wysokość."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "area_methods",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "area_methods",
+    "contradiction"
   ]
 }

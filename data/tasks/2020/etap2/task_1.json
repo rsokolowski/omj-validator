@@ -17,5 +17,12 @@
     "Po faktoryzacji powinieneś otrzymać iloczyn dwóch czynników równy zero. Rozważ, jakie warunki muszą spełniać $a$ i $b$, aby ten iloczyn był zerem.",
     "Zauważ, że jeśli $a \\neq b$, to z równości iloczynu wynika konkretna zależność między $a$ i $b$. Jak można wyrazić $b$ przez $a$?",
     "Jeśli $a + b + 2 = 0$, to $b = -a - 2$. Sprawdź, czy dla całkowitego $a$ wyrażenie to daje liczbę całkowitą."
-  ]
+  ],
+  "skills_required": [
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "case_analysis"
+  ],
+  "prerequisites": []
 }

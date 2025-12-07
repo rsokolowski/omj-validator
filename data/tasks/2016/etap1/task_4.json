@@ -16,5 +16,18 @@
     "Wykorzystaj twierdzenie o kątach wpisanych opartych na tym samym łuku. Zastanów się też, co wynika z równości $BC = CD$ dla trójkąta $BCD$.",
     "Skoro $BC = CD$, to trójkąt $BCD$ jest równoramienny. Znajdź kąty tego trójkąta wykorzystując własności czworokąta wpisanego. Poszukaj też innych równoramiennych trójkątów na rysunku.",
     "Odłóż na boku $AB$ punkt $E$ taki, że $AE = AD$. Zbadaj trójkąt $ADE$ - jest równoramienny. Wyznacz jego kąty i sprawdź, czy $BE = DC$."
+  ],
+  "skills_required": [
+    "circle_theorems",
+    "isosceles_triangle",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "circle_theorems",
+    "isosceles_triangle",
+    "constructive_proof"
+  ],
+  "prerequisites": [
+    "2015_etap1_4"
   ]
 }

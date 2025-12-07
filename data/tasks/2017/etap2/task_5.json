@@ -17,5 +17,15 @@
     "Użyj zasady szufladkowej. Jeśli masz trzy kolory i odpowiednio dużo liczb, to wiele z nich musi mieć ten sam kolor. Pomyśl o ciągu kolejnych kwadratów.",
     "Rozważ liczby $0, 1, 4, 9, 16, 25, \\ldots$ (kolejne kwadraty). Jakie różnice występują między nimi? Sprawdź, co się dzieje dla pierwszych kilku kwadratów $0, 1, 4, 9$.",
     "Przeanalizuj kolorowania liczb $0, 1, 2, 3, 4, 5$. Zauważ, że różnice $1-0$, $4-0$, $4-3$, $5-4$, $5-1$ są kwadratami. Sprawdź, czy każde kolorowanie tych sześciu liczb trzema kolorami daje parę tego samego koloru różniącą się o kwadrat."
+  ],
+  "skills_required": [
+    "pigeonhole",
+    "parity_arguments"
+  ],
+  "skills_gained": [
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2015_etap1_5"
   ]
 }

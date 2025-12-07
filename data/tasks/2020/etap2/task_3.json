@@ -17,5 +17,13 @@
     "Spróbuj przedstawić $5a+3b$ jako sumę wielokrotności $(a+b)$ i jakiejś reszty. Jaką wielokrotność $(a+b)$ warto odjąć od $5a+3b$?",
     "Zauważ, że $5a+3b = k(a+b) + r$ dla pewnych wartości. Oblicz $5a+3b - 3(a+b)$ lub $5a+3b - 5(a+b)$. Co otrzymujesz i co to mówi o podzielności?",
     "Skoro $(a+b) | (5a+3b)$ i $(a+b) | 3(a+b)$, to $(a+b) | (5a+3b - 3a - 3b) = 2(a-b)$. Analogicznie sprawdź odejmując $5(a+b)$. Wykorzystaj oba warunki podzielności dla $a, b > 0$."
-  ]
+  ],
+  "skills_required": [
+    "divisibility_arguments"
+  ],
+  "skills_gained": [
+    "algebraic_identities",
+    "contradiction"
+  ],
+  "prerequisites": []
 }

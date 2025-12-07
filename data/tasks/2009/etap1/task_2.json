@@ -16,5 +16,13 @@
     "Pole trójkąta to $\\frac{1}{2} \\cdot a \\cdot h$. Zastanów się, jak wysokość trójkąta (np. $[PAB]$) zależy od położenia punktu $P$ względem boku $AB$.",
     "Rozważ, jak zmienia się suma $[PAB] + [PCD]$ gdy punkt $P$ przesuwa się równolegle do podstaw trapezu. Zbadaj też, co dzieje się gdy $P$ przesuwa się prostopadle do podstaw.",
     "Znajdź miejsca geometryczne punktów, dla których $[PAB] + [PCD]$ ma stałą wartość. Poszukaj szczególnych punktów trapezu (np. środków boków lub przekątnych), które mogą spełniać warunek."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "area_methods",
+    "trapezoid_parallelogram"
+  ],
+  "skills_gained": [
+    "area_methods"
   ]
 }

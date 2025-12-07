@@ -17,5 +17,16 @@
     "Punkty $B'$, $D'$, $K$, $L$ leżą na jednej płaszczyźnie. Wykorzystaj własności przekątnych i symetrii sześcianu, aby znaleźć położenie punktu $L$ na krawędzi $AD$.",
     "Zauważ, że prosta $B'D'$ jest przekątną górnej ściany sześcianu. Zbadaj, w jakim stosunku punkt $L$ dzieli krawędź $AD$, korzystając z tego, że punkty $K$ i $L$ muszą leżeć na prostej równoległej do $B'D'$ (lub na płaszczyźnie przez te punkty).",
     "Aby obliczyć objętość ostrosłupa, wyznacz najpierw pole czworokąta $D'B'KL$ (rozważ podział na trójkąty lub wykorzystaj wzór na pole czworokąta). Następnie znajdź odległość punktu $A$ od płaszczyzny podstawy, korzystając z układu współrzędnych lub własności sześcianu."
+  ],
+  "skills_required": [
+    "spatial_3d",
+    "coordinate_geometry"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "coordinate_geometry"
+  ],
+  "prerequisites": [
+    "2017_etap1_7"
   ]
 }

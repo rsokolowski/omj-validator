@@ -17,5 +17,8 @@
     "Szukaj wielościanu, który ma wystarczająco wiele krawędzi i wierzchołków, by dawać rzuty o różnej liczbie boków. Rozważ bryły złożone lub graniastosłupy o odpowiedniej podstawie.",
     "Pomyśl o graniastosłupie o podstawie będącej wielokątem. Jak zmienia się liczba boków rzutu w zależności od tego, czy patrzymy prostopadle do podstawy, wzdłuż osi, czy pod kątem?",
     "Rozważ graniastosłup o podstawie czworokątnej. Sprawdź, jakie rzuty otrzymasz patrząc: prostopadle do podstawy, wzdłuż krawędzi bocznej, oraz pod odpowiednim kątem do przekątnej podstawy."
-  ]
+  ],
+  "prerequisites": ["2005_etap2_1"],
+  "skills_required": ["spatial_3d", "polyhedra"],
+  "skills_gained": ["spatial_3d", "constructive_proof"]
 }

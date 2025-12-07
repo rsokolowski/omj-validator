@@ -17,5 +17,15 @@
     "Przypomnij sobie kryterium podzielności przez 3. Jaką resztę z dzielenia przez 3 daje każda z tych 99 liczb?",
     "Jeśli każda liczba daje tę samą resztę $r$ z dzielenia przez 3, to jaka jest reszta z dzielenia iloczynu $k$ takich liczb? Porównaj reszty dla obu grup.",
     "Gdyby podział istniał, iloczyny obu grup byłyby równe, więc dawałyby tę samą resztę z dzielenia przez 3. Sprawdź, czy $r^k \\equiv r^{99-k} \\pmod{3}$ jest możliwe dla jakiegoś $k$."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "prime_factorization",
+    "divisibility_arguments",
+    "digit_manipulation"
+  ],
+  "skills_gained": [
+    "prime_factorization",
+    "modular_arithmetic"
   ]
 }

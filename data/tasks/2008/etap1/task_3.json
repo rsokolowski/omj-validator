@@ -17,5 +17,8 @@
     "Wykorzystaj symetrię środkową kwadratu względem jego środka. Co możesz powiedzieć o parach punktów $A, C$ oraz $B, D$?",
     "Zauważ, że jeśli środek kwadratu leży na prostej $\\ell$, to punkty symetryczne względem środka mają takie same odległości od tej prostej. Wprowadź układ współrzędnych ze środkiem kwadratu w początku.",
     "Umieść środek kwadratu w początku układu współrzędnych. Jeśli prosta $\\ell$ przechodzi przez początek, to $a = c$ oraz $b = d$. Wyraź współrzędne wierzchołków i oblicz sumę $a^2 + b^2 + c^2 + d^2 = 2a^2 + 2b^2$."
-  ]
+  ],
+  "prerequisites": [],
+  "skills_required": ["coordinate_geometry", "transformations"],
+  "skills_gained": ["invariants", "coordinate_geometry"]
 }

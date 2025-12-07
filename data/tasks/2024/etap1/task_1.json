@@ -17,5 +17,13 @@
     "Wykorzystaj fakt, że suma odległości punktu od dwóch równoległych boków kwadratu jest stała. Oblicz sumę wszystkich czterech odległości.",
     "Jeśli cztery kolejne liczby całkowite to $n, n+1, n+2, n+3$, wyraź ich sumę w zależności od $n$. Porównaj z sumą odległości od boków.",
     "Sprawdź, czy równanie na sumę czterech kolejnych liczb całkowitych ma rozwiązanie będące liczbą całkowitą. Co to oznacza dla istnienia takiego punktu?"
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "coordinate_geometry",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "constructive_proof"
   ]
 }

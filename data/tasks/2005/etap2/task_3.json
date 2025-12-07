@@ -16,5 +16,13 @@
     "Rozważ okrąg opisany na trójkącie $ABC$. Jak położenie ortocentrum $H$ związane jest z tym okręgiem? Poszukaj symetrycznego odbicia punktu $H$ względem boku lub środka boku.",
     "Jeśli $H'$ jest odbiciem punktu $H$ względem boku $BC$, to $H'$ leży na okręgu opisanym. Zastanów się, jaki kąt rozpiąłby łuk $BC$ widziany z punktu $H'$ i porównaj go z kątem $\\angle BAC$.",
     "Wykorzystaj fakt, że $|AH| = |HH'|/2$ nie jest tu pomocne - zamiast tego zbadaj czworokąt $BHCD$, gdzie $D$ to spodek wysokości z $A$. Jest on wpisany w okrąg o średnicy $BC$. Znajdź związek między $|AH|$ a tym okręgiem."
-  ]
+  ],
+  "skills_required": [
+    "triangle_centers",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "triangle_centers"
+  ],
+  "prerequisites": []
 }

@@ -16,5 +16,8 @@
     "Rozważ opisanie okręgu na boku $AB$ jako średnicy lub użycie wzoru na długość mediany przez boki trójkąta. Alternatywnie: czy pomocnicza konstrukcja (np. przedłużenie mediany) może pomóc?",
     "Punkt $M$ leży na okręgu o średnicy $AB$. Zauważ, że długość $CM$ zależy od położenia punktu $C$. Zbadaj, jak kąt $\\angle ACB = 120°$ ogranicza położenie wierzchołka $C$.",
     "Punkty, z których odcinek $AB$ widać pod kątem $120°$, leżą na pewnym łuku. Znajdź promień tego okręgu w zależności od $AB$ i określ minimalną odległość od punktu $M$ do tego łuku."
-  ]
+  ],
+  "skills_required": ["angle_chasing", "inequality_manipulation"],
+  "skills_gained": ["inequality_manipulation"],
+  "prerequisites": []
 }

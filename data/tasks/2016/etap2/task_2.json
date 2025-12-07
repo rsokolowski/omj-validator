@@ -16,5 +16,15 @@
     "Wykorzystaj prostopadłość przekątnych – w punkcie ich przecięcia powstają trójkąty prostokątne. Zastanów się, jak twierdzenie Pitagorasa może pomóc wyrazić długości boków.",
     "Opuść wysokości z wierzchołków na podstawy lub rozważ rzuty ramion na prostą zawierającą podstawę. Poszukaj związku między sumą podstaw a odcinkami powstałymi z projekcji.",
     "Oznacz punkt przecięcia przekątnych przez $P$. Wyraź kwadraty długości ramion przez odcinki $AP$, $BP$, $CP$, $DP$ używając twierdzenia Pitagorasa, a następnie porównaj z kwadratami sum odpowiednich odcinków na przekątnych."
-  ]
+  ],
+  "skills_required": [
+    "trapezoid_parallelogram",
+    "pythagorean_theorem",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "pythagorean_theorem",
+    "inequality_manipulation"
+  ],
+  "prerequisites": []
 }

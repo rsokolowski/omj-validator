@@ -16,5 +16,13 @@
     "Skoro $BX = AB$ i $XD = AB$, to trójkąty $ABX$ i pewien inny trójkąt są równoramienne. Wykorzystaj własności trójkątów równoramiennych do wyznaczenia kątów przy ich wierzchołkach.",
     "Zwróć uwagę, że stosunek $BC : AB = \\sqrt{2}$ nie jest przypadkowy. Sprawdź, jak długość przekątnej prostokąta ma się do boku $AB$. Czy punkt $X$ może leżeć na jakimś szczególnym miejscu?",
     "Oblicz długość przekątnej $BD$ korzystając z twierdzenia Pitagorasa i porównaj ją z długością $AB$. Jeśli $BX = XD = AB$, to co możesz powiedzieć o trójkącie $BXD$?"
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "isosceles_triangle",
+    "pythagorean_theorem"
+  ],
+  "skills_gained": [
+    "angle_chasing"
   ]
 }

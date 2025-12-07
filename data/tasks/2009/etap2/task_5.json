@@ -17,5 +17,15 @@
     "Spróbuj skonstruować konkretny przykład. Zastanów się, jaki czworokąt wybrać na podstawę i gdzie umieścić wierzchołek $S$, aby spełnić warunki prostopadłości. Rozważ prostokąt jako podstawę.",
     "Jeśli podstawą jest prostokąt $ABCD$, to krawędzie $AB \\parallel CD$ oraz $BC \\parallel AD$. Jeśli $SA \\perp AB$, to także $SA \\perp CD$. Zastanów się, jak rozmieścić wierzchołek $S$, aby każda krawędź boczna była prostopadła do odpowiedniej krawędzi podstawy.",
     "Umieść prostokąt w układzie współrzędnych tak, by jego boki były równoległe do osi. Poszukaj punktu $S$ takiego, że wektor każdej krawędzi bocznej jest prostopadły do wektora pewnej krawędzi podstawy. Sprawdź, czy da się to osiągnąć dla wszystkich czterech krawędzi bocznych jednocześnie."
+  ],
+  "prerequisites": ["2006_etap1_6"],
+  "skills_required": [
+    "spatial_3d",
+    "coordinate_geometry",
+    "constructive_proof"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "constructive_proof"
   ]
 }

@@ -17,5 +17,15 @@
     "Rozwiń drugie równanie i wykorzystaj fakt, że $a^2 + b^2 = c^2$. Spróbuj uprościć otrzymane wyrażenie, aby znaleźć warunek na $x$.",
     "Po uproszczeniu powinieneś otrzymać równanie, z którego wyznaczysz $x$ w zależności od $a$, $b$, $c$. Kiedy ta wartość $x$ jest dodatnia?",
     "Zbadaj, czy w trójkącie prostokątnym o bokach $a$, $b$ i przeciwprostokątnej $c$ może zachodzić nierówność $c > a + b$. Wykorzystaj nierówność trójkąta."
+  ],
+  "skills_required": [
+    "pythagorean_theorem",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "contradiction"
+  ],
+  "prerequisites": [
+    "2017_etap1_1"
   ]
 }

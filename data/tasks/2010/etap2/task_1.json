@@ -17,5 +17,16 @@
     "Spróbuj porównywać pary trójkątów, które mają wspólny bok (przekątną). Wykorzystaj warunek równości pól, żeby wywnioskować coś o położeniu pozostałych wierzchołków.",
     "Weź dowolną przekątną, np. $AC$. Znajdź dwa trójkąty z warunków zadania, które mają $AC$ jako bok. Co wynika z równości ich pól dla położenia przeciwległych wierzchołków względem prostej $AC$?",
     "Jeśli trójkąty $EAC$ i $CDA$ mają równe pola i wspólną podstawę $AC$, to punkty $E$ i $D$ leżą w tej samej odległości od prostej $AC$. Co to oznacza dla odcinka $DE$ względem $AC$?"
+  ],
+  "skills_required": [
+    "area_methods",
+    "trapezoid_parallelogram"
+  ],
+  "skills_gained": [
+    "area_methods",
+    "trapezoid_parallelogram"
+  ],
+  "prerequisites": [
+    "2010_etap1_4"
   ]
 }

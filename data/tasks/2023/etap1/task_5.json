@@ -16,5 +16,16 @@
     "Wykorzystaj własność prostokąta - jego przekątne są równe. Jak możesz wyrazić przekątną prostokąta przez jego boki?",
     "Zastanów się, co daje ci twierdzenie Pitagorasa zastosowane do przekątnej prostokąta wychodzącego z punktu O.",
     "Zapisz równość wynikającą z twierdzenia Pitagorasa dla boków i przekątnej prostokąta, a następnie porównaj wzory na pole koła ($\\pi r^2$) i pole pierścienia."
+  ],
+  "skills_required": [
+    "pythagorean_theorem",
+    "area_methods"
+  ],
+  "skills_gained": [
+    "pythagorean_theorem",
+    "area_methods"
+  ],
+  "prerequisites": [
+    "2020_etap1_2"
   ]
 }

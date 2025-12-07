@@ -16,5 +16,17 @@
     "Wykorzystaj własność trójkąta równoramiennego: kąty przy podstawie są równe. Oznacz kąty w trójkątach $ABP$ i $DCP$ i wyraź je przez kąty trapezu.",
     "Zwróć uwagę, że suma kątów wokół punktu $P$ wynosi $360°$. Jeden z tych kątów ($\\angle BPC$) jest dany. Jak wyrażają się pozostałe kąty przy $P$?",
     "Zapisz równanie: $\\angle APB + \\angle BPC + \\angle CPD + \\angle DPA = 360°$. Wyrażając $\\angle APB$ i $\\angle CPD$ przez kąty trapezu przy wierzchołkach $B$ i $C$, otrzymasz równanie na $\\angle APD$."
+  ],
+  "skills_required": [
+    "trapezoid_parallelogram",
+    "isosceles_triangle",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "prerequisites": [
+    "2023_etap2_3"
   ]
 }

@@ -16,5 +16,17 @@
     "Rozważ przedłużenie odcinka $AE$ poza punkt $E$. Jakie trójkąty mogą okazać się podobne lub przystające? Pomyśl o wykorzystaniu faktu, że $E$ jest środkiem $CD$.",
     "Przedłuż $AE$ do punktu $F$ tak, aby $E$ był środkiem $AF$. Zbadaj czworokąt $ACFD$ - jakie ma własności skoro $E$ jest środkiem obu przekątnych $AF$ i $CD$?",
     "Skoro $ACFD$ jest równoległobokiem, to $AC \\parallel DF$ i $AC = DF$. Wykorzystaj warunek $\\angle CAE = \\angle BCD$ oraz fakt, że $D$ jest środkiem $AB$, aby pokazać zależność między trójkątami $ACD$ i $BDF$."
+  ],
+  "skills_required": [
+    "angle_chasing",
+    "trapezoid_parallelogram",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "angle_chasing",
+    "constructive_proof"
+  ],
+  "prerequisites": [
+    "2011_etap1_2"
   ]
 }

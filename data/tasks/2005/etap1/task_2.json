@@ -16,5 +16,13 @@
     "Wykorzystaj dwie kluczowe własności: dla czworokąta stycznego sumy przeciwległych boków są równe ($a + c = b + d$), a przy prostopadłych przekątnych możesz łatwo wyrazić długości boków przez odcinki powstałe z podziału przekątnych.",
     "Niech przekątne dzielą się na odcinki $AP = p$, $CP = q$, $BP = r$, $DP = s$. Zapisz długości boków czworokąta używając twierdzenia Pitagorasa i podstaw do warunku na czworokąt styczny.",
     "Po podstawieniu do równania $a + c = b + d$ otrzymasz zależność między $p$, $q$, $r$, $s$. Spróbuj ją przekształcić, aby wykazać, że $p = q$ lub $r = s$."
-  ]
+  ],
+  "skills_required": [
+    "tangential_quadrilateral",
+    "pythagorean_theorem"
+  ],
+  "skills_gained": [
+    "tangential_quadrilateral"
+  ],
+  "prerequisites": []
 }

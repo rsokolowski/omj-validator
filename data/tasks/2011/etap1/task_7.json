@@ -16,5 +16,14 @@
     "Zastanów się, jak znaleźć minimalną odległość między dwoma odcinkami w przestrzeni. Pomocne może być rzutowanie na odpowiednio wybraną płaszczyznę lub wykorzystanie symetrii sześcianu.",
     "Zauważ, że odcinki KM i LN są do siebie równoległe lub skośne. Znajdź płaszczyznę przekroju sześcianu, która zawiera oba te odcinki lub jest do nich prostopadła. Jak wygląda ta płaszczyzna?",
     "Rozważ przekrój sześcianu płaszczyzną przechodzącą przez środek sześcianu, prostopadłą do obu odcinków KM i LN. Na tej płaszczyźnie zbadaj, jakie są możliwe położenia rzutów punktów P i Q, i kiedy ich odległość jest najmniejsza."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "spatial_3d",
+    "coordinate_geometry"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "extremal_principle"
   ]
 }

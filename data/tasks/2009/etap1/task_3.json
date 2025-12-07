@@ -17,5 +17,13 @@
     "Rozważ wszystkie możliwe przypadki: ile spośród czterech liczb może być nieparzystych? Dla każdego przypadku sprawdź, czy spełnione są oba warunki dotyczące sumy i iloczynu.",
     "Skoro $a+b+c+d=101$ jest nieparzyste, to nieparzysta musi być liczba nieparzystych składników. Zbadaj teraz, jakie warunki nakłada równanie $ab+cd=200$ na parzystość par $(a,b)$ i $(c,d)$.",
     "Kiedy iloczyn $ab$ jest nieparzysty? Rozważ przypadek, gdy dokładnie 3 liczby są nieparzyste - co wtedy możesz powiedzieć o parzystości $ab$ i $cd$? Porównaj z przypadkiem dokładnie 1 liczby nieparzystej."
+  ],
+  "prerequisites": ["2005_etap1_5"],
+  "skills_required": [
+    "parity_arguments",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "parity_arguments"
   ]
 }

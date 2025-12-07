@@ -16,5 +16,14 @@
     "Spróbuj pokazać, że lewa strona równania jest zawsze większa od prawej. Użyj prostych nierówności między pierwiastkiem a jego składnikami.",
     "Zauważ, że $x^2 + 1 > x^2$ dla każdego $x$. Co to oznacza dla wartości $\\sqrt{x^2+1}$ w porównaniu z $|x|$?",
     "Pokaż, że $\\sqrt{x^2+1} > x$ dla każdego rzeczywistego $x$ (rozważ osobno przypadki $x \\geq 0$ i $x < 0$). Następnie dodaj analogiczną nierówność dla $y$."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "inequality_manipulation",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "algebraic_identities",
+    "contradiction"
   ]
 }

@@ -17,5 +17,14 @@
     "Spróbuj przeprowadzić dowód nie wprost: załóż, że istnieje liczba $a \\leq 0$ i sprawdź, czy prowadzi to do sprzeczności z danym warunkiem.",
     "Jeśli $a \\leq 0$, porównaj sumę pewnych 11 liczb zawierających $a$ z sumą pozostałych 10 liczb. Następnie rozważ co się stanie, gdy $a$ przełożysz do drugiej grupy.",
     "Niech $a \\leq 0$. Weź dowolne 11 liczb zawierające $a$ - ich suma jest większa od sumy pozostałych 10. Co się stanie z tą nierównością, gdy usuniesz $a$ z grupy 11 i dodasz do grupy 10?"
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "contradiction",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "contradiction",
+    "inequality_manipulation"
   ]
 }

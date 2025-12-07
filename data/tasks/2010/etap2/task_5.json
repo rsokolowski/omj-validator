@@ -16,5 +16,15 @@
     "Spróbuj umieścić środki kul w środkach krawędzi czworościanu. Każda krawędź ma dokładnie jeden środek, a krawędzi jest dokładnie 6 - tyle samo co kul do rozmieszczenia.",
     "Wyznacz długość krawędzi czworościanu korzystając z tego, że jest on opisany na sferze o promieniu $1$. Przypomnij sobie (lub wyprowadź), jaka jest zależność między krawędzią czworościanu foremnego a promieniem sfery opisanej.",
     "Sprawdź, że odległość między środkami dwóch sąsiednich krawędzi (mających wspólny wierzchołek) jest nie mniejsza niż $1$. Wykorzystaj fakt, że te środki tworzą trójkąt równoboczny na każdej ścianie czworościanu."
-  ]
+  ],
+  "skills_required": [
+    "spatial_3d",
+    "pythagorean_theorem",
+    "constructive_proof"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "constructive_proof"
+  ],
+  "prerequisites": []
 }

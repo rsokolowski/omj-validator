@@ -16,5 +16,17 @@
     "Zastanów się, jak czynniki pierwsze $5^2$ i $7$ mogą się rozłożyć między liczby $a$ i $b = 175 - a$. Rozważ osobno podzielność przez $7$ i przez $25$.",
     "Zbadaj: jeśli $7 | a$, to co można powiedzieć o $175 - a$? Podobnie przeanalizuj podzielność przez $5$. Pamiętaj, że potrzebujesz łącznie co najmniej dwie piątki i jedną siódemkę w iloczynie.",
     "Rozpisz wszystkie możliwości: (1) $a$ podzielne przez $175$, (2) $a$ podzielne przez $25$ ale nie przez $7$, (3) $a$ podzielne przez $7$ ale nie przez $25$, itd. Dla każdego przypadku sprawdź, czy drugi czynnik dostarcza brakujące dzielniki."
+  ],
+  "prerequisites": [
+    "2011_etap1_4"
+  ],
+  "skills_required": [
+    "divisibility_arguments",
+    "case_analysis",
+    "prime_factorization"
+  ],
+  "skills_gained": [
+    "divisibility_arguments",
+    "diophantine_equations"
   ]
 }

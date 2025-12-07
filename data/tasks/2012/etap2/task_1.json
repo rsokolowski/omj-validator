@@ -17,5 +17,14 @@
     "Użyj równania $a + b = 4020$, aby wyeliminować $a$. Podstaw $a = 4020 - b$ do nierówności i rozwiąż je względem $b$.",
     "Po podstawieniu otrzymasz nierówności dla $b$. Zwróć uwagę, że szukasz liczb całkowitych - jakie wartości $b$ spełniają wszystkie warunki jednocześnie?",
     "Z nierówności $a < b$ oraz $b < 2013$ wyznacz przedział dla $b$. Następnie znajdź wszystkie liczby całkowite w tym przedziale i dla każdej oblicz odpowiadające $a$."
-  ]
+  ],
+  "skills_required": [
+    "inequality_manipulation",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "inequality_manipulation",
+    "case_analysis"
+  ],
+  "prerequisites": []
 }

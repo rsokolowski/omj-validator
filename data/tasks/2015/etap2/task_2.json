@@ -16,5 +16,14 @@
     "Zastanów się, czy możesz znaleźć dwa trójkąty, które zawierają odcinki $CX$ i $CY$ jako odpowiednie boki. Spróbuj wykazać przystawanie tych trójkątów.",
     "Zauważ, że $BC = AD = DX$ oraz $CD = AB = BY$. Rozważ trójkąty $CDX$ i $CBY$ - jakie boki mają równe?",
     "Porównaj trójkąty $CDX$ i $CBY$. Masz już dwie pary równych boków. Zastanów się, jak wykorzystać kąty równoległoboka, aby wykazać równość trzeciej pary elementów."
-  ]
+  ],
+  "skills_required": [
+    "trapezoid_parallelogram",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "transformations",
+    "constructive_proof"
+  ],
+  "prerequisites": []
 }

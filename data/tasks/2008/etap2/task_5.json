@@ -16,5 +16,8 @@
     "Rozważ rzut środkowy z wierzchołka ostrosłupa na płaszczyznę podstawy. Co się stanie z punktami $A, B, C, D, E, F$ i prostymi przez nie przechodzącymi?",
     "Zauważ, że przy rzucie środkowym z wierzchołka ostrosłupa, punkty leżące na tej samej krawędzi bocznej rzutują się na ten sam wierzchołek podstawy. Jakie punkty podstawy odpowiadają punktom przekroju?",
     "Zbadaj, na co rzutują się proste $AD$, $BE$ i $CF$. Wykorzystaj fakt, że przekątne sześciokąta foremnego łączące przeciwległe wierzchołki przechodzą przez jeden punkt - środek sześciokąta."
-  ]
+  ],
+  "prerequisites": [],
+  "skills_required": ["spatial_3d", "transformations"],
+  "skills_gained": ["spatial_3d", "transformations"]
 }

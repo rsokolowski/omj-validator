@@ -17,5 +17,13 @@
     "Aby liczby jabłek w wiadrach były różne i dodatnie, muszą to być co najmniej liczby $1, 2, 3, \\ldots, 15$. Oblicz sumę tych liczb.",
     "Przypomnij sobie wzór na sumę kolejnych liczb naturalnych: $1 + 2 + \\ldots + n = \\frac{n(n+1)}{2}$. Porównaj wynik z liczbą 121.",
     "Jeśli minimalna suma to 120, a masz 121 jabłek, to pozostaje ci 1 jabłko \"nadmiarowe\". Zastanów się, czy możesz je dodać do któregoś wiadra, zachowując różne liczby jabłek."
-  ]
+  ],
+  "skills_required": [
+    "sequences",
+    "counting_techniques"
+  ],
+  "skills_gained": [
+    "sequences"
+  ],
+  "prerequisites": []
 }

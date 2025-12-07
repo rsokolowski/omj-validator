@@ -17,5 +17,17 @@
     "Rozważ przekształcenie wyrażenia poprzez dodanie i odjęcie odpowiednich składników. Czy potrafisz zapisać lewą stronę jako iloczyn czynników zawierających $(1-a)$, $(1-b)$, $(1-c)$?",
     "Pomnóż równanie przez $2$ i spróbuj doprowadzić do sumy kwadratów lub iloczynów postaci $(1-a)(1-b)$ itp. Zauważ, że dla $a,b,c \\in [0,1]$ wyrażenia $(1-a)$, $(1-b)$, $(1-c)$ są nieujemne.",
     "Przekształć równanie do postaci $a(1-b) + b(1-c) + c(1-a) = 0$ lub równoważnej. Skoro wszystkie czynniki są nieujemne w podanym przedziale, kiedy suma nieujemnych składników równa się zero?"
+  ],
+  "prerequisites": [
+    "2010_etap1_1"
+  ],
+  "skills_required": [
+    "symmetric_systems",
+    "algebraic_identities",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "symmetric_systems",
+    "algebraic_identities"
   ]
 }

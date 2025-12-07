@@ -16,5 +16,14 @@
     "Przypomnij sobie twierdzenie o kącie wpisanym opartym na średnicy. Jeśli kąt $ABC = 90°$, to gdzie leży punkt $B$ względem odcinka $AC$?",
     "Zauważ, że punkt $B$ leży na okręgu o średnicy $AC$, a punkt $D$ leży na okręgu o średnicy $CE$. Jaką maksymalną odległość od środka odcinka może mieć punkt leżący na takim okręgu?",
     "Wykorzystaj, że $BD \\leq \\frac{AC}{2} + \\frac{CE}{2}$ (suma promieni okręgów). Jak to połączyć z faktem, że obwód trójkąta $ACE$ zawiera także bok $AE$?"
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "circle_theorems",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "circle_theorems",
+    "inequality_manipulation"
   ]
 }

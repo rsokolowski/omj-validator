@@ -16,5 +16,16 @@
     "Wyznacz współrzędne wszystkich kluczowych punktów: $P$, $Q$ (dzielą $AB$ na trzy równe części) oraz $M$ (środek $AC$). Następnie zastanów się, jak sprawdzić prostopadłość dwóch odcinków.",
     "Aby wykazać, że $\\angle PMQ = 90°$, sprawdź czy wektory $\\vec{MP}$ i $\\vec{MQ}$ są prostopadłe. Dwa wektory są prostopadłe, gdy suma iloczynów odpowiednich współrzędnych równa się zero.",
     "Oblicz współrzędne wektorów $\\vec{MP}$ i $\\vec{MQ}$, a następnie sprawdź warunek prostopadłości. Wykorzystaj fakt, że $|AB| = 3 \\cdot |BC|$ przy wyborze konkretnych współrzędnych wierzchołków."
+  ],
+  "skills_required": [
+    "coordinate_geometry",
+    "pythagorean_theorem"
+  ],
+  "skills_gained": [
+    "coordinate_geometry",
+    "pythagorean_theorem"
+  ],
+  "prerequisites": [
+    "2018_etap1_5"
   ]
 }

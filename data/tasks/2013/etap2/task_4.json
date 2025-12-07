@@ -17,5 +17,15 @@
     "Rozważ dwa przypadki: gdy na otoczce wypukłej są punkty wszystkich trzech kolorów oraz gdy są tylko jednego lub dwóch kolorów. W drugim przypadku szukaj trójkolorowego trójkąta używając punktów wewnątrz otoczki.",
     "Jeśli na otoczce są wszystkie trzy kolory, wybierz po jednym punkcie każdego koloru i zastanów się, czy taki trójkąt może zawierać w środku inne punkty ze zbioru. Jeśli tak, jak go poprawić?",
     "Gdy trójkąt trójkolorowy zawiera w środku punkty, wybierz jeden z nich i zastąp nim odpowiedni wierzchołek trójkąta - powstanie mniejszy trójkąt trójkolorowy. Powtarzaj aż do uzyskania pustego wnętrza."
-  ]
+  ],
+  "skills_required": [
+    "extremal_principle",
+    "case_analysis",
+    "graph_theory"
+  ],
+  "skills_gained": [
+    "extremal_principle",
+    "constructive_proof"
+  ],
+  "prerequisites": []
 }

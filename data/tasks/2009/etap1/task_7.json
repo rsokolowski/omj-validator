@@ -17,5 +17,13 @@
     "Spróbuj wyrazić jedno z wyrażeń przez drugie, używając faktoryzacji. Zauważ, że oba wyrażenia mają wspólny czynnik $a$.",
     "Rozważ wyrażenie $a^3 + a - a(a^2 + a)$. Co otrzymujesz? Jak możesz wykorzystać fakt, że suma i różnica liczb wymiernych jest wymierna?",
     "Oblicz $q - a \\cdot p = a^3 + a - a(a^2 + a) = a - a^2$. Teraz masz $a^2 + a$ oraz $a - a^2$ wymierne. Co daje ich suma?"
+  ],
+  "prerequisites": ["2007_etap2_1"],
+  "skills_required": [
+    "algebraic_identities",
+    "constructive_proof"
+  ],
+  "skills_gained": [
+    "algebraic_identities"
   ]
 }

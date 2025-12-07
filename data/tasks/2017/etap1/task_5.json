@@ -17,5 +17,13 @@
     "Rozważ, jakie liczby muszą być czerwone. Weź dowolną liczbę niebieską $a$ i dowolną liczbę zieloną $b$ - ich suma musi być czerwona. Co się stanie, gdy do czerwonej liczby dodasz liczbę niebieską lub zieloną?",
     "Zbadaj, co dzieje się z sumami postaci $a + b + c$, gdzie $a$ jest niebieska, $b$ jest zielona, a $c$ jest niebieska lub zielona. Zauważ, że $(a + b) + c$ to suma liczby czerwonej i liczby innego koloru.",
     "Pokaż, że prawie wszystkie liczby całkowite muszą być czerwone. Weź ustaloną liczbę niebieską $a$ i zieloną $b$. Dla dowolnej liczby całkowitej $n$ rozważ, czy $n - a - b$ może być niebieska lub zielona, i co z tego wynika dla koloru liczby $n$."
-  ]
+  ],
+  "skills_required": [
+    "case_analysis",
+    "constructive_proof"
+  ],
+  "skills_gained": [
+    "contradiction"
+  ],
+  "prerequisites": []
 }

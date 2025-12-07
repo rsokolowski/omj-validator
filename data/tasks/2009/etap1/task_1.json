@@ -16,5 +16,15 @@
     "Użyj wzoru skróconego mnożenia: $a^2 - b^2 = (a-b)(a+b)$. Skoro $c$ jest liczbą pierwszą, to ile może mieć dzielników?",
     "Liczba pierwsza $c$ ma tylko dzielniki $1$ i $c$. Zatem jeden z czynników $(a-b)$ lub $(a+b)$ musi być równy $1$. Który z nich może być równy $1$, jeśli $a$ i $b$ są dodatnie?",
     "Skoro $a - b = 1$, to $a$ i $b$ są kolejnymi liczbami naturalnymi. Które pary kolejnych liczb naturalnych są jednocześnie liczbami pierwszymi? Sprawdź małe przypadki."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "algebraic_identities",
+    "primality_testing",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "algebraic_identities",
+    "primality_testing"
   ]
 }

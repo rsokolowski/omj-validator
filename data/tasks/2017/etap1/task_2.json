@@ -16,5 +16,15 @@
     "Przypomnij sobie twierdzenie o odcinku łączącym środki dwóch boków trójkąta (środkowa trójkąta). Zastanów się, w jakim trójkącie możesz zastosować tę własność.",
     "Rozważ trójkąt $APC$ i jego środkowe. Punkt $N$ (środek $CD$) jest też środkiem przekątnej $AC$ równoległoboku. Jaki odcinek w trójkącie $APC$ jest równoległy do $PC$?",
     "Odcinek $MN$ (gdzie $M$ to środek $AP$, $N$ to środek $AC$) jest środkową trójkąta $APC$, więc $MN \\parallel PC$. Skoro $PC = BC$, to trójkąt $BPC$ jest równoramienny. Wykorzystaj własności tego trójkąta, by pokazać prostopadłość."
+  ],
+  "skills_required": [
+    "trapezoid_parallelogram",
+    "transformations"
+  ],
+  "skills_gained": [
+    "area_methods"
+  ],
+  "prerequisites": [
+    "2015_etap2_2"
   ]
 }

@@ -16,5 +16,14 @@
     "Skoro sfera jest styczna do każdej ściany bocznej, to w każdym trójkącie bocznym (np. $\\triangle SAB$) można wpisać okrąg. Wykorzystaj własność okręgu wpisanego w trójkąt i odcinków stycznych.",
     "Dla trójkąta o bokach $a$, $b$, $c$ z wpisanym okręgiem, odcinki styczne z wierzchołków mają długości wyrażające się przez obwód. Zbadaj, jak sumy odpowiednich odcinków stycznych w przeciwległych ścianach bocznych są ze sobą powiązane.",
     "Oznacz długości odcinków stycznych z wierzchołka $S$ do punktów styczności na poszczególnych ścianach. Pokaż, że suma pewnych par odcinków jest równa. Następnie wykorzystaj fakt, że w trójkątach równoramiennych o równych ramionach i równych podstawach kąty przy wierzchołku są równe."
-  ]
+  ],
+  "skills_required": [
+    "spatial_3d",
+    "circle_theorems"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "circle_theorems"
+  ],
+  "prerequisites": []
 }

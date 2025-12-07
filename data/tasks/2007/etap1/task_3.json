@@ -16,5 +16,14 @@
     "Pomyśl o przekształceniu każdego ułamka do postaci różnicy dwóch wyrażeń. Może uda się uzyskać sumę teleskopową, w której większość wyrazów się skróci?",
     "Zauważ, że $\\frac{a}{a+1} = 1 - \\frac{1}{a+1}$. Spróbuj analogicznie przekształcić pozostałe składniki, wyrażając je przez iloczyny postaci $\\frac{1}{(a+1)(b+1)...}$.",
     "Po przekształceniu każdego składnika do postaci różnicowej, zapisz całą sumę i sprawdź, które wyrazy się redukują. Jaki wyraz pozostaje na końcu i dlaczego jest mniejszy od 1?"
-  ]
+  ],
+  "skills_required": [
+    "telescoping",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "telescoping",
+    "inequality_manipulation"
+  ],
+  "prerequisites": []
 }

@@ -16,5 +16,14 @@
     "Rozważ analizę równania modulo 8. Jakie reszty z dzielenia przez 8 dają potęgi liczb nieparzystych?",
     "Zbadaj, jaką resztę z dzielenia przez 8 daje $a^2$ dla nieparzystego $a$, oraz jaką resztę daje $b^3$ dla nieparzystego $b$. Rozważ wszystkie możliwe nieparzyste reszty $b$ modulo 8.",
     "Pokaż, że $a^2 \\equiv 1 \\pmod{8}$ dla każdego nieparzystego $a$. Następnie sprawdź, jakie wartości może przyjmować $b^3 \\pmod{8}$ i czy różnica $a^2 - b^3$ może dawać resztę 4."
-  ]
+  ],
+  "skills_required": [
+    "modular_arithmetic",
+    "diophantine_equations"
+  ],
+  "skills_gained": [
+    "modular_arithmetic",
+    "contradiction"
+  ],
+  "prerequisites": []
 }

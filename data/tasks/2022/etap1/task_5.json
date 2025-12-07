@@ -11,6 +11,13 @@
   "categories": [
     "algebra"
   ],
+  "prerequisites": [],
+  "skills_required": [
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "inequality_manipulation"
+  ],
   "hints": [
     "Przyjrzyj się warunkom $a+b \\geq ab$, $b+c \\geq bc$, $c+a \\geq ca$. Spróbuj przekształcić każdą z tych nierówności do postaci, w której po jednej stronie masz 0 lub 1. Co można wywnioskować o wartościach $a$, $b$, $c$?",
     "Rozważ wprowadzenie nowych zmiennych przez podstawienie. Skoro nierówności dotyczą par zmiennych, może warto zapisać warunki w formie ograniczeń na iloczyny lub sumy. Pomyśl też o dodaniu stronami nierówności.",

@@ -16,5 +16,8 @@
     "Zbadaj podzielność przez 3. Jeśli liczba pierwsza $p > 3$, to jaką resztę z dzielenia przez 3 daje $p^2$? A co z $p^2 + 6$?",
     "Zauważ, że dla $p > 3$ wyrażenie $p^2 + 6$ jest zawsze podzielne przez 3, ale większe od 3. Co to oznacza dla pierwszości $q$?",
     "Sprawdź osobno przypadki $p = 2$ i $p = 3$, obliczając odpowiadające im wartości $q$ i $r$, a następnie weryfikując ich pierwszość."
-  ]
+  ],
+  "skills_required": ["modular_arithmetic", "primality_testing", "case_analysis"],
+  "skills_gained": ["primality_testing"],
+  "prerequisites": ["2005_etap2_4"]
 }

@@ -17,5 +17,14 @@
     "Skoro iloczyny są kolejne, ich różnica to $\\pm 1$. Otrzymasz równanie postaci $c(a-b) = \\pm 1$. Jakie pary liczb całkowitych mnożą się do $1$ lub $-1$?",
     "Rozważ wszystkie możliwe przypadki: $(c, a-b) \\in \\{(1,1), (1,-1), (-1,1), (-1,-1)\\}$. Dla każdego przypadku wyznacz zależność między $a$ i $b$.",
     "W każdym przypadku podstaw znalezioną zależność między $a$ i $b$ do wyrażeń $a(b+c)$ oraz $b(a+c)$. Sprawdź, czy któryś z iloczynów da się zapisać jako kwadrat."
-  ]
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "case_analysis",
+    "algebraic_identities"
+  ],
+  "prerequisites": []
 }

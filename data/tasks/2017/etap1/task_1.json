@@ -16,5 +16,13 @@
     "Zastanów się, jak z dwóch równań liniowych uzyskać wyrażenie kwadratowe. Jakie operacje na równaniach mogą prowadzić do sumy kwadratów?",
     "Spróbuj podnieść oba równania do kwadratu i zbadaj, co otrzymasz po ich dodaniu. Zwróć uwagę na wyrazy mieszane z $ab$ i $bc$.",
     "Po podniesieniu równań do kwadratu otrzymasz wyrażenia z $a^2$, $b^2$, $c^2$ oraz wyrazy z iloczynami. Sprawdź, czy wyrazy mieszane się zniosą po dodaniu stronami."
-  ]
+  ],
+  "skills_required": [
+    "symmetric_systems",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "pythagorean_theorem"
+  ],
+  "prerequisites": []
 }

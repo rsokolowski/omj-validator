@@ -17,5 +17,12 @@
     "Zapisz dwa równania: jedno dla obwodu równego $x$, drugie dla pola równego $x$. Oba wyrażenia są równe tej samej wartości $x$.",
     "Skoro obwód i pole są sobie równe (oba wynoszą $x$), możesz przyrównać do siebie wyrażenia na obwód i pole zapisane za pomocą $a$.",
     "Z równania $6a = 2a^2$ wyznacz wartość $a$, a następnie oblicz $x$ podstawiając do jednego ze wzorów."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "algebraic_identities"
   ]
 }

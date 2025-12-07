@@ -16,5 +16,14 @@
     "Po złożeniu figury powstaje bryła przestrzenna. Zastanów się, jakie trójkąty tworzą pięciokąty z bokami kwadratu. Wykorzystaj symetrię konstrukcji.",
     "Zwróć uwagę na trójkąty równoramienne, które powstają przy wierzchołkach kwadratu. Oblicz, ile wynoszą ich kąty przy podstawie, korzystając z tego, że kąt pięciokąta foremnego wynosi $108°$.",
     "Punkt $A$ i punkt $B$ leżą na pewnej wysokości nad płaszczyzną kwadratu. Znajdź tę wysokość oraz odległość poziomą między tymi punktami, a następnie użyj twierdzenia Pitagorasa w przestrzeni."
-  ]
+  ],
+  "skills_required": [
+    "angle_chasing",
+    "pythagorean_theorem"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "constructive_proof"
+  ],
+  "prerequisites": []
 }

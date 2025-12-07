@@ -16,5 +16,12 @@
     "Spróbuj wykorzystać własność wartości bezwzględnej: jeśli $|x| = d$, to $x = d$ lub $x = -d$. Rozważ także, co się stanie, gdy dodasz do siebie różnice $(a-b) + (b-c) + (c-a)$.",
     "Zauważ, że suma $(a-b) + (b-c) + (c-a) = 0$ niezależnie od wartości $a$, $b$, $c$. Czy istnieje kombinacja znaków dla trzech składników o różnych wartościach bezwzględnych, która daje w sumie zero?",
     "Sprawdź wszystkie możliwe kombinacje znaków dla równania $\\pm|a-b| \\pm|b-c| \\pm|c-a| = 0$. Podstaw wyrażenia przez $k$ i sprawdź, czy którakolwiek kombinacja (poza $k=0$) może spełnić to równanie."
-  ]
+  ],
+  "skills_required": [
+    "absolute_value"
+  ],
+  "skills_gained": [
+    "case_analysis"
+  ],
+  "prerequisites": []
 }

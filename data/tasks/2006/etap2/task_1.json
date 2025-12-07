@@ -16,5 +16,8 @@
     "Spróbuj przekształcić lewą stronę pierwszego równania, dodając i odejmując odpowiednie wyrazy, tak aby powstały pełne kwadraty. Współczynniki z drugiego równania mogą ci podpowiedzieć, jakie wyrazy dodać.",
     "Zauważ, że $1^2 + 2^2 + 4^2 = 21$. Co by się stało, gdybyś rozważył wyrażenie $(a-1)^2 + (b-2)^2 + (c-4)^2$? Rozwiń je i porównaj z danymi równaniami.",
     "Po rozwinięciu $(a-1)^2 + (b-2)^2 + (c-4)^2$ otrzymasz sumę kwadratów minus podwojone wyrażenie liniowe plus stałą. Podstaw wartości z obu równań układu i sprawdź, ile wynosi ta suma kwadratów."
-  ]
+  ],
+  "skills_required": ["inequality_manipulation", "algebraic_identities"],
+  "skills_gained": ["inequality_manipulation"],
+  "prerequisites": []
 }

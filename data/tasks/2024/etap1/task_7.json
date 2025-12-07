@@ -16,5 +16,15 @@
     "Aby udowodnić, że kąt jest prosty, możesz użyć twierdzenia odwrotnego do twierdzenia Pitagorasa. Oblicz długości odcinków BP, B'P i BB', a następnie sprawdź odpowiednią zależność między ich kwadratami.",
     "Skorzystaj z faktu, że w prostopadłościanie przekątna AC' ma długość $\\sqrt{AB^2 + AD^2 + AA'^2}$. Wykorzystaj też, że odcinki AB, AD, AA' są parami prostopadłe, co ułatwia obliczanie odległości.",
     "Oblicz $BP^2$ i $B'P^2$ korzystając z twierdzenia Pitagorasa w odpowiednich trójkątach prostokątnych. Następnie sprawdź, czy zachodzi równość $BP^2 + B'P^2 = BB'^2$, co da kąt prosty przy P."
+  ],
+  "prerequisites": [
+    "2020_etap1_2"
+  ],
+  "skills_required": [
+    "spatial_3d",
+    "pythagorean_theorem"
+  ],
+  "skills_gained": [
+    "pythagorean_theorem"
   ]
 }

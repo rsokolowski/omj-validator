@@ -17,5 +17,13 @@
     "Rozważ zasadę szufladkową w kontekście geometrycznym. Czy 99 małych obszarów może pokryć cały duży obszar? Pomyśl o polach.",
     "Oblicz pole koła o promieniu 10 oraz sumę pól 99 kółek o promieniu 1. Porównaj te wartości.",
     "Skoro suma pól małych kółek jest mniejsza niż pole dużego koła, to musi istnieć punkt niepokryty. Uzasadnij, że taki punkt spełnia warunki zadania."
-  ]
+  ],
+  "skills_required": [
+    "pigeonhole",
+    "area_methods"
+  ],
+  "skills_gained": [
+    "pigeonhole"
+  ],
+  "prerequisites": []
 }

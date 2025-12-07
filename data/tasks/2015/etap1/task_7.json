@@ -17,5 +17,14 @@
     "Wprowadź układ współrzędnych ze środkiem w punkcie $O$. Wyraź długości $AS$, $BS$, $CS$, $DS$ za pomocą współrzędnych punktu $S$ i wymiarów prostokąta.",
     "Zauważ, że $A$ i $C$ to wierzchołki przeciwległe (podobnie $B$ i $D$). Zbadaj, czy suma $AS + CS$ zależy od położenia $S$, czy może jest związana z sumą $BS + DS$ w szczególny sposób.",
     "Oblicz $AS^2 + CS^2$ oraz $BS^2 + DS^2$ używając wzoru na odległość. Co zauważasz? Czy z równości sum kwadratów wynika coś o sumach odległości?"
-  ]
+  ],
+  "skills_required": [
+    "coordinate_geometry",
+    "pythagorean_theorem"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "constructive_proof"
+  ],
+  "prerequisites": []
 }

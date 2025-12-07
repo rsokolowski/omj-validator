@@ -17,5 +17,13 @@
     "Spróbuj dowodu nie wprost: załóż, że $m > n$ i zobacz, jakie ograniczenia to nakłada na relację między $k$ i $m$.",
     "Zauważ, że funkcja $f(x) = x^2 + x$ jest rosnąca dla dodatnich $x$. Jeśli $m > n$, to porównaj wartości $k^2 + k$ oraz $m^2 + m$.",
     "Z założenia $m > n$ wyprowadź nierówność $k < m$, czyli $k \\leq m-1$. Podstaw to ograniczenie do wyrażenia na $n$ i sprawdź, czy $n$ może być dodatnie."
-  ]
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "contradiction"
+  ],
+  "prerequisites": []
 }

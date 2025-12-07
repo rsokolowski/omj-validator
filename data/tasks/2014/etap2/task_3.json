@@ -17,5 +17,17 @@
     "Rozważ podział ścian sześcianu ze względu na parzystość liczb na nich zapisanych. Ile ścian jest parzystych, a ile nieparzystych? Przeanalizuj różne przypadki.",
     "Zwróć uwagę na strukturę sześcianu: każda ściana sąsiaduje z dokładnie czterema innymi ścianami (przez krawędzie). Policz, ile krawędzi tworzy ściana parzysta z innymi parzystymi, a ile z nieparzystymi.",
     "Rozpatrz przypadki w zależności od liczby ścian nieparzystych (0, 1, 2, ..., 6). Dla każdego przypadku policz krawędzie między ścianami o tej samej parzystości - to właśnie te krawędzie mają sumy parzyste."
+  ],
+  "skills_required": [
+    "parity_arguments",
+    "case_analysis",
+    "polyhedra"
+  ],
+  "skills_gained": [
+    "parity_arguments",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2013_etap2_3"
   ]
 }

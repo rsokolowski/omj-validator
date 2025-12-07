@@ -17,5 +17,14 @@
     "Zapisz algebraicznie warunek, że nowa liczba jest równa $6n$. Rozważ najpierw przypadek, gdy $n$ jest dwucyfrowa, a potem sprawdź, czy liczby o większej liczbie cyfr mogą spełniać warunek.",
     "Dla liczby dwucyfrowej $n = 10a + b$ nowa liczba to $100a + 10d + b$. Przyrównaj to do $6n$ i uprość równanie. Pamiętaj, że cyfry muszą być z zakresu 0-9, a $a \\geq 1$.",
     "Z równania otrzymasz zależność między cyframi $a$, $b$ i $d$. Zbadaj, dla jakich wartości cyfry $a$ (pamiętając że $a \\geq 1$) istnieją rozwiązania z cyframi w dozwolonym zakresie."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "digit_manipulation",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "digit_manipulation",
+    "diophantine_equations"
   ]
 }

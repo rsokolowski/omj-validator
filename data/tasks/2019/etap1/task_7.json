@@ -17,5 +17,15 @@
     "Przekrój graniastosłupa prostego płaszczyzną przecinającą wszystkie krawędzie boczne jest zawsze równoległobokiem. Zastanów się, jakie warunki musi spełniać równoległobok, aby był kwadratem.",
     "Boki przekroju są równoległe do przekątnych rombu (dlaczego?). Aby powstał kwadrat, potrzebujesz dwóch par równych i prostopadłych boków. Wykorzystaj fakt, że przekątne rombu są prostopadłe.",
     "Oblicz długości przekątnych rombu o boku $a$ i kącie $60°$ (użyj własności trójkąta równobocznego). Następnie rozważ, jak wysokość \"wycięcia\" na krawędziach bocznych wpływa na długość boków przekroju - kiedy te boki będą równe?"
+  ],
+  "prerequisites": ["2017_etap1_7"],
+  "skills_required": [
+    "spatial_3d",
+    "pythagorean_theorem",
+    "trapezoid_parallelogram"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "coordinate_geometry"
   ]
 }

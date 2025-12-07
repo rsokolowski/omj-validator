@@ -17,5 +17,16 @@
     "Spróbuj podzielić wierzchołki wielokąta na dwie grupy: te leżące po jednej stronie prostej $\\ell$ i te po drugiej. Jak liczba wierzchołków w każdej grupie wpływa na liczbę przecinanych przekątnych?",
     "Przekątna jest przecinana przez prostą $\\ell$ wtedy i tylko wtedy, gdy jej końce leżą po przeciwnych stronach tej prostej. Jeśli po jednej stronie jest $k$ wierzchołków, ile przekątnych łączy wierzchołki z różnych stron?",
     "Oznacz liczbę wierzchołków po jednej stronie prostej przez $k$, a po drugiej przez $101-k$. Policz, ile jest przekątnych i boków łączących wierzchołki z różnych stron, a następnie zbadaj parzystość tej liczby."
+  ],
+  "skills_required": [
+    "parity_arguments",
+    "counting_techniques"
+  ],
+  "skills_gained": [
+    "parity_arguments",
+    "counting_techniques"
+  ],
+  "prerequisites": [
+    "2015_etap2_5"
   ]
 }

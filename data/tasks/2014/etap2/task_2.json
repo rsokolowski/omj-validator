@@ -16,5 +16,17 @@
     "Skoro szukamy punktu na okręgu opisanym, pomyśl o własnościach tego okręgu. Symetralna boku trójkąta przechodzi przez środek okręgu opisanego - jak to wykorzystać? Rozważ, jakie własności musi mieć punkt przecięcia symetralnych.",
     "Niech $P$ będzie punktem przecięcia symetralnych $AB$ i $DE$. Z definicji symetralnej: $PA = PB$ oraz $PD = PE$. Wykorzystaj warunek $AE = BD$ - jaką zależność możesz zapisać dla odcinków $PA$, $PB$, $PD$, $PE$, $AE$, $BD$?",
     "Rozważ trójkąty $PAE$ i $PBD$. Masz równości $PA = PB$, $PD = PE$ oraz $AE = BD$. Sprawdź, czy te trójkąty są przystające i co z tego wynika dla położenia punktu $P$ względem odcinka $AB$ i okręgu opisanego."
+  ],
+  "skills_required": [
+    "circle_theorems",
+    "angle_chasing",
+    "triangle_centers"
+  ],
+  "skills_gained": [
+    "circle_theorems",
+    "triangle_centers"
+  ],
+  "prerequisites": [
+    "2011_etap2_5"
   ]
 }

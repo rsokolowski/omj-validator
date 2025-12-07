@@ -16,5 +16,15 @@
     "Skoro $CX = CB$ i $AY = AB$, to trójkąty $BCX$ i $ABY$ są równoramienne. Zbadaj kąty przy podstawach tych trójkątów i wykorzystaj własności kątów w równoległoboku.",
     "Zwróć uwagę na kąty, jakie przekątna $BD$ tworzy z bokami równoległoboku. W równoległoboku $\\angle ABD = \\angle CDB$ (kąty naprzemianległe). Jak to wpływa na kąty w trójkątach $BCX$ i $ABY$?",
     "Wyznacz kąty $\\angle BXC$ i $\\angle BYA$ korzystając z tego, że suma kątów w trójkącie wynosi $180°$. Porównaj te kąty, pamiętając o zależnościach między kątami w równoległoboku."
+  ],
+  "prerequisites": ["2020_etap2_4"],
+  "skills_required": [
+    "trapezoid_parallelogram",
+    "isosceles_triangle",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "trapezoid_parallelogram",
+    "angle_chasing"
   ]
 }

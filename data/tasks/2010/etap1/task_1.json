@@ -16,5 +16,14 @@
     "Symetria układu sugeruje dwa podejścia: zbadanie przypadku $x = y$ oraz analizę różnicy równań.",
     "Odejmij równania stronami i rozłóż otrzymane wyrażenie na iloczyn. Jakie dwa przypadki otrzymujesz?",
     "Po rozłożeniu $(x-y)(x+y-4) = 0$ rozważ osobno przypadki $x = y$ oraz $x + y = 4$. W każdym przypadku podstaw do jednego z równań."
-  ]
+  ],
+  "skills_required": [
+    "symmetric_systems",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "symmetric_systems",
+    "case_analysis"
+  ],
+  "prerequisites": []
 }

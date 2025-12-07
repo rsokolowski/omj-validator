@@ -16,5 +16,14 @@
     "Spróbuj wykorzystać arytmetykę modularną. Jaka jest reszta z dzielenia $a$ przez $(a+b)$? A jaka jest reszta z dzielenia $(-b)$ przez $(a+b)$?",
     "Zauważ, że $a + b \\equiv 0 \\pmod{a+b}$, więc $a \\equiv -b \\pmod{a+b}$. Co z tego wynika dla $a^2$?",
     "Skoro $a \\equiv -b \\pmod{a+b}$, to podnieś obie strony do kwadratu. Jaką kongruencję otrzymujesz dla $a^2$ i $b^2$?"
-  ]
+  ],
+  "skills_required": [
+    "divisibility_arguments",
+    "modular_arithmetic"
+  ],
+  "skills_gained": [
+    "divisibility_arguments",
+    "modular_arithmetic"
+  ],
+  "prerequisites": []
 }

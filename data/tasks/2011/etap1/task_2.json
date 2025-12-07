@@ -16,5 +16,14 @@
     "Poszukaj trójkątów podobnych w tej konfiguracji. Kąt prosty BCD sugeruje, że CD może być wysokością lub że powstają trójkąty prostokątne o specjalnych własnościach.",
     "Rozważ trójkąty BCD i ACD. Jakie kąty są w nich równe? Wykorzystaj fakt, że AC = BC oraz że suma kątów przy wierzchołku C wynosi tyle, ile kąt ACB.",
     "Oznacz kąt BAC = α. Wyraź pozostałe kąty w trójkącie przez α, korzystając z równoramienności. Następnie użyj warunku kąta prostego i stosunku BD:AD = 2:1, by utworzyć równanie na α."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "isosceles_triangle",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "angle_chasing",
+    "case_analysis"
   ]
 }

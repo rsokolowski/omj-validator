@@ -17,5 +17,13 @@
     "Zastanów się, ile różnych grafów 3-regularnych na 6 wierzchołkach może istnieć. Spróbuj je narysować i sklasyfikować.",
     "Szukamy cyklu długości 4 w tym grafie. Wybierz dowolną osobę i przeanalizuj, jak mogą wyglądać połączenia między jej znajomymi a pozostałymi osobami.",
     "Rozważ dwa przypadki: gdy istnieją dwie osoby, które się nie znają i mają dokładnie dwóch wspólnych znajomych, oraz gdy każde dwie osoby nieznające się mają inną liczbę wspólnych znajomych."
+  ],
+  "prerequisites": ["2006_etap2_3"],
+  "skills_required": [
+    "graph_theory",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "graph_theory"
   ]
 }

@@ -16,5 +16,16 @@
     "Skoro $KM = LM$ i $\\angle KML = 90^\\circ$, to trójkąt $KML$ jest równoramiennym trójkątem prostokątnym. Zastanów się, jak wykorzystać obrót o $90^\\circ$ wokół punktu $M$.",
     "Rozważ obrót o $90^\\circ$ wokół punktu $M$, który przekształca punkt $K$ na punkt $L$. Gdzie przechodzi punkt $B$ przy tym obrocie? Jak to się ma do punktu $A$?",
     "Zbadaj trójkąty $BMK$ i $AML$ - sprawdź, czy obrót o $90^\\circ$ wokół $M$ przekształca jeden w drugi. Następnie wykorzystaj kąty w trójkącie $CKL$, pamiętając o kątach trójkąta równobocznego."
+  ],
+  "prerequisites": [
+    "2021_etap1_2"
+  ],
+  "skills_required": [
+    "isosceles_triangle",
+    "angle_chasing",
+    "transformations"
+  ],
+  "skills_gained": [
+    "transformations"
   ]
 }

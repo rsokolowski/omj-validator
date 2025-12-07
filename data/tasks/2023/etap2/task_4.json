@@ -17,5 +17,16 @@
     "Wprowadź współrzędne lub oznaczenia dla pozycji punktów na bokach. Wyraź pola powstałych figur przez te wielkości. Szukaj symetrii w układzie punktów.",
     "Zbadaj jakie warunki na położenie punktów $K$, $L$, $M$, $N$ wynikają z równości pól w pierwszym podziale. Zwróć uwagę na punkty $L$ i $N$ - występują w obu podziałach.",
     "Porównaj pole trójkąta $KLN$ z polem trójkąta $KMN$. Wykorzystaj fakt, że oba trójkąty mają wspólny bok $KN$ - jakie warunki musi spełniać położenie $L$ względem $M$?"
+  ],
+  "skills_required": [
+    "area_methods",
+    "coordinate_geometry"
+  ],
+  "skills_gained": [
+    "area_methods",
+    "coordinate_geometry"
+  ],
+  "prerequisites": [
+    "2022_etap1_3"
   ]
 }

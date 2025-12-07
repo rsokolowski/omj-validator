@@ -16,5 +16,14 @@
     "Skoro $\\angle CPD = 90°$, to punkt $P$ leży na okręgu o średnicy $CD$. Wykorzystaj fakt, że $P$ leży jednocześnie na dwóch okręgach.",
     "Trójkąt $ABP$ jest równoramienny (bo $AP = AB$). Zbadaj kąty w tym trójkącie i zastanów się, jak związane są z kątami przy wierzchołkach $C$ i $D$.",
     "Połącz punkt $P$ ze środkiem odcinka $CD$ i wykorzystaj własności trójkąta wpisanego w okrąg o średnicy $CD$. Poszukaj trójkątów podobnych lub przystających w tej konfiguracji."
-  ]
+  ],
+  "skills_required": [
+    "circle_theorems",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "coordinate_geometry",
+    "angle_chasing"
+  ],
+  "prerequisites": []
 }

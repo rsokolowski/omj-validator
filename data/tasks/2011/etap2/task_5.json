@@ -16,5 +16,16 @@
     "Przypomnij sobie własności środka okręgu opisanego na trójkącie - jaki kąt środkowy odpowiada kątowi wpisanemu? Zastanów się, jak wykorzystać warunek $\\angle DAB + \\angle BCD = \\angle ABC$ do znalezienia związku między kątami przy wierzchołkach $A$, $C$ i $D$.",
     "Jeśli $O$ ma leżeć na dwusiecznej kąta $\\angle ADC$, to proste $AD$ i $CD$ muszą tworzyć z $O$ równe odległości. Zbadaj kąty $\\angle OAB$ i $\\angle OCB$ - jak się mają do kątów trójkąta $ABC$? Poszukaj trójkątów równoramiennych.",
     "Wykorzystaj fakt, że $OA = OC$ (promienie). Rozważ, jak kąt $\\angle AOC$ (kąt środkowy) wiąże się z $\\angle ABC$. Następnie sprawdź, czy możesz pokazać, że $\\angle OAD = \\angle OCD$, co da równe odległości od prostych $AD$ i $CD$."
+  ],
+  "prerequisites": [
+    "2010_etap1_6"
+  ],
+  "skills_required": [
+    "circle_theorems",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "circle_theorems",
+    "angle_chasing"
   ]
 }

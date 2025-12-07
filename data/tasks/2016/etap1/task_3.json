@@ -17,5 +17,15 @@
     "Skoro suma całkowita musi spełniać oba warunki jednocześnie, zastanów się, jakie wartości mogą mieć sumy poszczególnych wierszy i kolumn. Czy mogą być różne od zera?",
     "W każdym wierszu suma wynosi 0, więc liczba jedynek równa się liczbie liczb $-1$. Ile pól pozostaje na zera w wierszu o 11 polach? Rozważ parzystość.",
     "Skonstruuj przykładową tablicę, w której każdy wiersz i każda kolumna ma dokładnie jedno zero. Spróbuj umieścić zera na przekątnej i odpowiednio rozłożyć jedynki oraz liczby $-1$."
-  ]
+  ],
+  "skills_required": [
+    "extremal_principle",
+    "constructive_proof"
+  ],
+  "skills_gained": [
+    "extremal_principle",
+    "constructive_proof",
+    "double_counting"
+  ],
+  "prerequisites": []
 }

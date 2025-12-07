@@ -16,5 +16,16 @@
     "Przekształć nierówność do postaci, w której badasz znak różnicy $(1-xy)^2 - x(1-y)^2 - y(1-x)^2$. Rozwiń wszystkie kwadraty i pogrupuj wyrazy podobne.",
     "Po rozwinięciu i uproszczeniu spróbuj przedstawić różnicę jako sumę składników, których znak łatwo określić. Zwróć uwagę, że dla $x, y \\in (0,1)$ mamy $1-x > 0$, $1-y > 0$ oraz $xy > 0$.",
     "Przekształć różnicę do postaci zawierającej wyrażenia typu $(1-x)(1-y)$ lub $xy(1-x)$, $xy(1-y)$. Każdy taki składnik jest dodatni dla $x, y \\in (0,1)$, co da ci tezę."
+  ],
+  "skills_required": [
+    "inequality_manipulation",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "inequality_manipulation",
+    "algebraic_identities"
+  ],
+  "prerequisites": [
+    "2010_etap1_3"
   ]
 }

@@ -17,5 +17,13 @@
     "Spróbuj podejścia nie wprost: załóż, że takie $a$ i $b$ istnieją, i poszukaj sprzeczności. Zwróć uwagę na to, które wyrażenia w rozwinięciu są wymierne, a które niewymierne.",
     "Po podniesieniu do sześcianu otrzymasz wyrażenie zawierające $\\sqrt[3]{a^2b}$ i $\\sqrt[3]{ab^2}$. Kiedy suma liczby wymiernej i niewymiernej może być wymierna? Rozważ, co musiałoby być spełnione.",
     "Zbadaj warunek, przy którym $\\sqrt[3]{ab}$ byłoby wymierne. Jeśli $ab = k^3$ dla pewnego $k$, to podstaw $b = \\frac{k^3}{a}$ i sprawdź, czy równanie może być spełnione dla dodatnich całkowitych $a$, $b$."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "algebraic_identities",
+    "contradiction"
+  ],
+  "skills_gained": [
+    "contradiction"
   ]
 }

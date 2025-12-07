@@ -16,5 +16,8 @@
     "Zauważ, że przedłużenia boków sześciokąta tworzą trójkąt. Zbadaj, jakiego typu jest ten trójkąt i jak sześciokąt jest w nim położony.",
     "Skoro każdy kąt sześciokąta ma $120°$, to kąty zewnętrzne mają po $60°$. Jak to wpływa na trójkąt utworzony przez przedłużenia boków? Gdzie leżą boki $AB$, $CD$, $EF$ względem tego trójkąta?",
     "Pokaż, że boki $AB$, $CD$, $EF$ leżą na bokach trójkąta równobocznego. Przypomnij sobie, gdzie przecinają się symetralne boków trójkąta równobocznego."
-  ]
+  ],
+  "skills_required": ["angle_chasing", "transformations"],
+  "skills_gained": ["angle_chasing"],
+  "prerequisites": []
 }

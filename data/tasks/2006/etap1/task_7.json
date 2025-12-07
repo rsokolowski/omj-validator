@@ -17,5 +17,8 @@
     "Spróbuj pogrupować wszystkie możliwe odcinki łączące wierzchołki według kierunków. Ile różnych kierunków (klas równoległości) występuje w 17-kącie foremnym? Użyj zasady szufladkowej.",
     "W 17-kącie foremnym odcinki są równoległe, gdy różnice numerów ich końców są równe lub sumują się do 17. Mając 10 punktów, ile odcinków można utworzyć? Ile mamy kierunków do rozważenia?",
     "Mając 10 wybranych wierzchołków, można utworzyć $\\binom{10}{2} = 45$ odcinków. Policz liczbę różnych kierunków w 17-kącie i zastosuj zasadę szufladkową, by znaleźć dwa odcinki równoległe rozłączne."
-  ]
+  ],
+  "skills_required": ["pigeonhole", "counting_techniques"],
+  "skills_gained": ["pigeonhole"],
+  "prerequisites": ["2005_etap2_2"]
 }

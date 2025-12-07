@@ -16,5 +16,12 @@
     "Spróbuj wyrazić pola różnych trójkątów przez boki prostokąta i odpowiednie odległości. Zastanów się, jak pole całego prostokąta można zapisać jako sumę pól mniejszych figur.",
     "Zauważ, że trójkąty $ADE$ i $BCE$ mają wspólną wysokość (bok $AB$). Podobnie przeanalizuj trójkąt $CDE$ - jak jego pole wiąże się z polami trójkątów $CDF$ i $DEF$?",
     "Zapisz równość: pole prostokąta = suma pól trójkątów $ADE$, $BCE$ i $CDE$. Następnie rozłóż pole trójkąta $CDE$ na pola trójkątów $CDF$ i $DEF$. Wykorzystaj warunek $P_{ADE} = P_{CDF}$ do pokazania tezy."
+  ],
+  "prerequisites": ["2021_etap2_4"],
+  "skills_required": [
+    "area_methods"
+  ],
+  "skills_gained": [
+    "area_methods"
   ]
 }

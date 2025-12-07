@@ -17,5 +17,16 @@
     "Rozważ użycie zasady szufladkowej - policz ile jest różnych możliwych wartości pól i porównaj z liczbą prostokątów.",
     "Zauważ, że suma pól wszystkich prostokątów musi wynosić 36. Które spośród możliwych pól prostokątów są osiągalne dla prostokątów mieszczących się w kwadracie $6 \\times 6$?",
     "Wypisz wszystkie możliwe pola prostokątów o bokach co najwyżej 6. Następnie sprawdź, czy można wybrać 8 różnych wartości z tej listy, których suma wynosi dokładnie 36."
+  ],
+  "skills_required": [
+    "pigeonhole",
+    "counting_techniques"
+  ],
+  "skills_gained": [
+    "pigeonhole",
+    "counting_techniques"
+  ],
+  "prerequisites": [
+    "2022_etap2_5"
   ]
 }

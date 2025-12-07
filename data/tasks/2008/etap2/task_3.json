@@ -16,5 +16,8 @@
     "Pole równoległoboku to iloczyn podstawy i wysokości. Zastanów się, jakie podstawy i wysokości mają oba równoległoboki. Czy możesz wybrać wspólną podstawę dla obu figur?",
     "Rozważ odcinek $AE$ jako wspólną podstawę obu równoległoboków. Jaka jest wysokość równoległoboku $ABCD$ opuszczona na prostą $AE$? A jaka jest wysokość równoległoboku $AEKL$?",
     "Skoro $DL \\parallel AE$ (bo $AEKL$ to równoległobok z bokiem $AE$ i prosta $k$ jest równoległa do $AE$), to odległość od punktu $D$ do prostej $AE$ jest taka sama jak odległość od prostej $k$ do prostej $AE$. Wykorzystaj to do porównania wysokości obu równoległoboków."
-  ]
+  ],
+  "prerequisites": [],
+  "skills_required": ["trapezoid_parallelogram", "area_methods"],
+  "skills_gained": ["area_methods", "trapezoid_parallelogram"]
 }

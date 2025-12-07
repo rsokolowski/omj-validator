@@ -17,5 +17,15 @@
     "Rozważ pomnożenie pierwszego równania przez $z$, a drugiego przez odpowiednią wartość, a następnie dodanie lub odjęcie równań. Poszukaj struktury iloczynowej.",
     "Zauważ, że po odpowiednim przekształceniu możesz uzyskać wyrażenie postaci $(x+y)(1+z)$ lub podobne. Jakie pary liczb całkowitych dają w iloczynie konkretną wartość?",
     "Dodaj oba równania stronami, aby otrzymać $x + y + z(x - y) = 3$, co można zapisać jako $(x+y)(1+z) - 2z = 3$. Teraz rozważ różne wartości całkowite $z$ i sprawdź, które dają całkowite $x$ i $y$."
+  ],
+  "skills_required": [
+    "diophantine_equations",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2015_etap1_1"
   ]
 }

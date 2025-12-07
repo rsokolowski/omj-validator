@@ -16,5 +16,14 @@
     "Przypomnij sobie, że punkty, z których odcinek widać pod kątem prostym, leżą na okręgu o tym odcinku jako średnicy. Poszukaj takich okręgów pomocniczych w zadaniu.",
     "Zauważ, że $\\angle BFC = 90°$ z konstrukcji. Zastanów się, na jakim okręgu leżą punkty $B$, $F$, $C$. Podobnie przeanalizuj, gdzie leżą punkty związane z przekątnymi.",
     "Wykorzystaj własności kątów wpisanych w czworokącie $ABCD$ oraz w okręgach pomocniczych. Spróbuj wykazać, że $\\angle AEF = 90°$ badając odpowiednie kąty wpisane oparte na tych samych łukach."
-  ]
+  ],
+  "skills_required": [
+    "circle_theorems",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "circle_theorems",
+    "angle_chasing"
+  ],
+  "prerequisites": []
 }

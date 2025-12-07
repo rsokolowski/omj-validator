@@ -16,5 +16,13 @@
     "Spróbuj dobudować do czworokąta pomocnicze trójkąty równoboczne. Kąt $120°$ to kąt pełny minus kąt trójkąta równobocznego - może to wykorzystać w konstrukcji.",
     "Zbuduj trójkąt równoboczny na boku $AB$ (na zewnątrz czworokąta). Oznacz nowy wierzchołek jako $E$. Zbadaj, jakie trójkąty powstają i czy któreś z nich są przystające lub podobne.",
     "Po dobudowaniu trójkąta równobocznego na $AB$, sprawdź czy punkty $E$, $B$, $C$ oraz $E$, $A$, $D$ tworzą konfigurację, która pozwala znaleźć $ED$. Następnie wykorzystaj własności powstałej figury do wyznaczenia $AD$."
-  ]
+  ],
+  "skills_required": [
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "transformations",
+    "pythagorean_theorem"
+  ],
+  "prerequisites": []
 }

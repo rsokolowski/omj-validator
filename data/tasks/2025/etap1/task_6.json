@@ -16,5 +16,13 @@
     "Liczba jest sześcianem wtedy i tylko wtedy, gdy wszystkie wykładniki w jej rozkładzie na czynniki pierwsze są podzielne przez 3. Analogicznie, liczba jest kwadratem, gdy wszystkie wykładniki są parzyste. Zapisz te warunki dla $2n$ i $3n$.",
     "Dla $2n = 2^{a+1} \\cdot 3^b \\cdot m$ masz warunki: $a+1 \\equiv 0 \\pmod{3}$, $b \\equiv 0 \\pmod{3}$. Dla $3n = 2^a \\cdot 3^{b+1} \\cdot m$ masz: $a \\equiv 0 \\pmod{2}$, $b+1 \\equiv 0 \\pmod{2}$. Jakie są minimalne wartości $a$ i $b$?",
     "Znajdź najmniejsze nieujemne $a$ spełniające $a+1 \\equiv 0 \\pmod{3}$ i $a \\equiv 0 \\pmod{2}$ jednocześnie. Podobnie dla $b$. Sprawdź też, jakie warunki musi spełniać $m$, i oblicz $2^a \\cdot 3^b$."
-  ]
+  ],
+  "skills_required": [
+    "prime_factorization"
+  ],
+  "skills_gained": [
+    "prime_factorization",
+    "divisibility_arguments"
+  ],
+  "prerequisites": []
 }

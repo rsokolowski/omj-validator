@@ -16,5 +16,16 @@
     "Po przekształceniach spróbuj wyciągnąć wspólne czynniki i doprowadzić równanie do postaci iloczynowej.",
     "Zauważ, że po uproszczeniu pojawia się czynnik $b^3$ oraz wyrażenie zawierające $a$ i $b^2$. Przeanalizuj, kiedy iloczyn tych czynników może być równy zero.",
     "Otrzymasz równanie postaci $b^3(a + b^2 - 1) = 0$. Skoro $b \\neq 0$, to $a = 1 - b^2$. Podstaw to do warunku $a \\neq 0$ i sprawdź, jaki znak musi mieć $b$."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "polynomial_analysis"
+  ],
+  "skills_gained": [
+    "algebraic_identities",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2023_etap1_6"
   ]
 }

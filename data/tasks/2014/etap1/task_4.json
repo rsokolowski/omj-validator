@@ -17,5 +17,16 @@
     "Policz sumę wszystkich znajomości - każda znajomość jest liczona dwukrotnie. Jakie warunki podzielności musi spełniać $n$, aby liczba krawędzi była całkowita?",
     "Na początku suma stopni to $3n$, na końcu $4n$. Sprawdź, dla jakich $n$ obie te sumy dają parzystą liczbę krawędzi i czy $n$ musi być parzyste.",
     "Wykaż, że $n$ musi być parzyste (dlaczego?), a potem skonstruuj przykłady dla małych parzystych wartości $n$. Czy istnieje dolne ograniczenie na $n$?"
+  ],
+  "skills_required": [
+    "graph_theory",
+    "parity_arguments"
+  ],
+  "skills_gained": [
+    "graph_theory",
+    "double_counting"
+  ],
+  "prerequisites": [
+    "2011_etap2_2"
   ]
 }

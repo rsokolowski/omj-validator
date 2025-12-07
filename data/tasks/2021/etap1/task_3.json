@@ -17,5 +17,12 @@
     "Przedział zawiera liczbę całkowitą, gdy jego długość jest wystarczająco duża. Spróbuj oszacować długość przedziału $(\\sqrt{2n}, \\sqrt{5n})$.",
     "Oblicz różnicę $\\sqrt{5n} - \\sqrt{2n}$ i sprawdź, kiedy jest ona większa od 1. Rozważ, jak ta różnica rośnie wraz z $n$.",
     "Pokaż, że $\\sqrt{5n} - \\sqrt{2n} > 1$ dla $n \\geq 1$. Możesz podnieść nierówność do kwadratu lub użyć faktu, że $\\sqrt{5} - \\sqrt{2} > 0{,}8$."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "constructive_proof"
   ]
 }

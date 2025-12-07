@@ -17,5 +17,16 @@
     "Spróbuj znaleźć związek algebraiczny między liczbami $a$ i $b$. Czy można wyrazić jedną z nich jako kombinację liniową drugiej i jakiejś wielokrotności 101?",
     "Zbadaj, ile wynosi reszta z dzielenia $10^7$ przez 101. Przyda się fakt, że $10^2 = 100 \\equiv -1 \\pmod{101}$.",
     "Pokaż, że $10b - a$ jest wielokrotnością 101. Oblicz tę różnicę, wykorzystując zapis $a = 10k + c$ oraz $b = c \\cdot 10^7 + k$."
+  ],
+  "skills_required": [
+    "modular_arithmetic",
+    "digit_manipulation"
+  ],
+  "skills_gained": [
+    "modular_arithmetic",
+    "digit_manipulation"
+  ],
+  "prerequisites": [
+    "2006_etap1_1"
   ]
 }

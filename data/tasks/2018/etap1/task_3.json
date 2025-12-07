@@ -17,5 +17,16 @@
     "Spróbuj pomnożyć równanie na krzyż i uprościć otrzymane wyrażenie. Szukaj postaci, która pozwoli wyciągnąć wspólne czynniki lub zapisać równość w prostszej formie.",
     "Po przekształceniu powinieneś otrzymać równość zawierającą $c^2$ oraz wyrażenia z $a$ i $b$. Zauważ, że $c^2 > 0$ dla $c \\neq 0$. Jak to wpływa na relację między $a$ i $b$?",
     "Z równania wynika zależność między $a$, $b$ i $c^2$. Przeanalizuj znaki: jeśli $c^2 > 0$, to jakie są możliwe znaki $a$ i $b$? Następnie oszacuj sumę $a + b + c$ rozważając przypadki dla znaku $c$."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "algebraic_identities",
+    "inequality_manipulation"
+  ],
+  "prerequisites": [
+    "2017_etap1_6"
   ]
 }

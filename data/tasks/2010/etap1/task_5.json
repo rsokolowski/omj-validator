@@ -17,5 +17,14 @@
     "Porównaj sumy dla dwóch różnych L-tetramin, które mają wspólne pola. Czy możesz wywnioskować, że pewne pola muszą mieć równe wartości?",
     "Spróbuj pokazać, że dowolne dwa sąsiednie pola (mające wspólny bok) muszą zawierać tę samą liczbę. Co to oznacza dla całej tablicy?",
     "Skoro wszystkie pola tablicy mają tę samą wartość $a$, a suma czterech takich pól w L-tetraminie wynosi $4a = 0$, wyznacz $a$ i oblicz sumę pól na przekątnych."
-  ]
+  ],
+  "skills_required": [
+    "invariants",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "invariants",
+    "tiling"
+  ],
+  "prerequisites": []
 }

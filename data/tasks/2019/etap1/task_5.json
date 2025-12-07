@@ -17,5 +17,16 @@
     "Każdy zawodnik musi zdobyć nieparzystą liczbę punktów. Zastanów się, jakie kombinacje zwycięstw (2 pkt) i remisów (1 pkt) dają taki wynik.",
     "Zwróć uwagę, że każdy zawodnik musi mieć nieparzystą liczbę remisów. Policz, ile łącznie \"końców remisowych\" muszą mieć wszyscy zawodnicy razem.",
     "Każdy remis angażuje dwóch zawodników (daje dwa \"końce remisowe\"). Użyj tego, aby znaleźć dolne ograniczenie na liczbę remisów, a następnie skonstruuj przykładowy turniej."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "graph_theory",
+    "parity_arguments",
+    "counting_techniques"
+  ],
+  "skills_gained": [
+    "graph_theory",
+    "extremal_principle",
+    "constructive_proof"
   ]
 }

@@ -16,5 +16,16 @@
     "To zadanie można rozwiązać za pomocą zasady szufladkowej (Dirichleta). Spróbuj określić, ile jest królewien (obiektów) i ile jest możliwych różnych wyników (szufladek).",
     "Zwróć uwagę na warunek, że każdy królewicz zatańczył z tą samą liczbą królewien. Co to oznacza dla królewny, która zatańczyła z wszystkimi królewiczami, i tej, która nie zatańczyła z żadnym?",
     "Pokaż, że nie może być jednocześnie królewny, która tańczyła z 0 królewiczami, i królewny, która tańczyła ze wszystkimi 102. Zatem możliwych wartości jest co najwyżej 102, a królewien jest 103."
+  ],
+  "skills_required": [
+    "pigeonhole",
+    "graph_theory"
+  ],
+  "skills_gained": [
+    "pigeonhole",
+    "graph_theory"
+  ],
+  "prerequisites": [
+    "2011_etap2_2"
   ]
 }

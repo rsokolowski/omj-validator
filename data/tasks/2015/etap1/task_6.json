@@ -16,5 +16,16 @@
     "Skoro $p$ i $q$ są różnymi liczbami pierwszymi nieparzystymi, zastanów się, które czynniki z rozkładu $q(q+1)$ mogą dzielić $p(p+1)$.",
     "Zauważ, że $p(p+1)$ jest iloczynem dwóch kolejnych liczb. Zbadaj, jak $q$ i $q+1$ mogą być związane z $p$ lub $p+1$.",
     "Jeśli $q \\mid p$, to z pierwszości wynika $p = q$, co jest sprzeczne. Rozważ przypadek $q \\mid (p+1)$ i pokaż, że wtedy $\\frac{p-q}{2}$ ma nietrywialny dzielnik."
+  ],
+  "skills_required": [
+    "prime_factorization",
+    "divisibility_arguments"
+  ],
+  "skills_gained": [
+    "contradiction",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2015_etap1_3"
   ]
 }

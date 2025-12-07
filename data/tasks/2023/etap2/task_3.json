@@ -16,5 +16,17 @@
     "Skoro trójkąt $ABC$ jest równoramienny, poszukaj innych trójkątów równoramiennych w tej konfiguracji. Zastanów się, jakie boki mogą być równe dzięki równościom kątów.",
     "Zwróć uwagę na trójkąt $BPC$ - znasz w nim kąt $\\sphericalangle BPC$ oraz $\\sphericalangle PCB$ (który jest częścią $\\sphericalangle ACB$). Porównaj ten trójkąt z innymi trójkątami na rysunku.",
     "Rozważ trójkąty $ABP$ i $CPD$ (lub $BPC$). Wykorzystaj fakt, że proste $AB$ i $CD$ są równoległe, więc powstają kąty naprzemianległe. Sprawdź, czy możesz wykazać przystawanie lub równość odpowiednich boków."
+  ],
+  "skills_required": [
+    "angle_chasing",
+    "isosceles_triangle",
+    "trapezoid_parallelogram"
+  ],
+  "skills_gained": [
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "prerequisites": [
+    "2022_etap2_1"
   ]
 }

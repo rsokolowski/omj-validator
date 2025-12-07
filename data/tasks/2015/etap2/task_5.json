@@ -17,5 +17,15 @@
     "Ile różnych prostokątów można wpisać w 100-kąt foremny? Każdy prostokąt jest wyznaczony przez parę prostopadłych średnic - spróbuj policzyć, ile jest takich par.",
     "Zauważ, że wszystkie prostokąty wpisane w 100-kąt mają środek w środku tego wielokąta. Każdy wierzchołek należy do dokładnie jednego prostokąta razem z trzema innymi wierzchołkami. Jak rozmieszczone są kolory na przeciwległych wierzchołkach?",
     "Skoro mamy 50 białych i 50 czerwonych wierzchołków, a wierzchołki przeciwległe (połączone średnicą) tworzą 50 par, zastosuj zasadę szufladkową do kolorów w parach przeciwległych wierzchołków."
-  ]
+  ],
+  "skills_required": [
+    "transformations",
+    "pigeonhole",
+    "counting_techniques"
+  ],
+  "skills_gained": [
+    "graph_theory",
+    "constructive_proof"
+  ],
+  "prerequisites": []
 }

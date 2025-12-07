@@ -12,6 +12,15 @@
     "kombinatoryka",
     "logika"
   ],
+  "prerequisites": [],
+  "skills_required": [
+    "tiling",
+    "parity_arguments"
+  ],
+  "skills_gained": [
+    "tiling",
+    "invariants"
+  ],
   "hints": [
     "Oblicz pole plusa i minusa. Zastanów się, jakie pola może mieć kwadrat o nieparzystym boku $n$ i czy da się je przedstawić jako sumę pól plusów i minusów.",
     "Samo sprawdzenie podzielności pola nie wystarczy. Poszukaj niezmiennika — spróbuj pokolorować kwadrat w specjalny sposób i zbadaj, ile pól każdego koloru pokrywa plus, a ile minus.",

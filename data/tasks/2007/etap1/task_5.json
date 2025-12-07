@@ -16,5 +16,17 @@
     "Punkty K, L, M, N leżą na okręgu, więc można rozważać kąty wpisane. Zastanów się, jak kąty $\\angle AKN$, $\\angle BKL$ związane są z łukami okręgu i kątami wpisanymi.",
     "Zauważ, że $\\angle KLM$ i $\\angle KNM$ to kąty wpisane oparte na tym samym łuku KM. Co to oznacza dla tych kątów? Użyj warunków zadania, by powiązać $\\angle AKN$ i $\\angle BKL$.",
     "Oznacz $\\angle AKN = \\alpha$ i $\\angle BKL = \\beta$. Z równości kątów wpisanych opartych na łuku KM dostaniesz równanie wiążące $\\alpha$ i $\\beta$. Rozwiąż układ i oblicz długość cięciwy LN z promienia okręgu."
+  ],
+  "skills_required": [
+    "tangential_quadrilateral",
+    "circle_theorems",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "tangential_quadrilateral",
+    "circle_theorems"
+  ],
+  "prerequisites": [
+    "2005_etap1_2"
   ]
 }

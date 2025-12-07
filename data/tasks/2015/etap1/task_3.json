@@ -17,5 +17,14 @@
     "Skorzystaj z rozkładu algebraicznego wyrażenia $n^4 + 4$. Znana tożsamość Sophie Germain pozwala zapisać $a^4 + 4b^4$ jako iloczyn dwóch czynników.",
     "Wyrażenie $n^4 + 4$ można rozłożyć na iloczyn $(n^2 - 2n + 2)(n^2 + 2n + 2)$. Aby iloraz przez 17 był liczbą pierwszą, zastanów się, jakie warunki muszą spełniać te czynniki.",
     "Zbadaj, kiedy jeden z czynników $(n^2 - 2n + 2)$ lub $(n^2 + 2n + 2)$ może być równy 17, a drugi dawać liczbę pierwszą. Dla jakich $n$ to zachodzi?"
-  ]
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "prime_factorization"
+  ],
+  "skills_gained": [
+    "primality_testing",
+    "case_analysis"
+  ],
+  "prerequisites": []
 }

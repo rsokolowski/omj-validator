@@ -17,5 +17,14 @@
     "Skoro wynik ma być liczbą pierwszą, a mamy iloczyn dwóch czynników, to co musi być prawdą o jednym z tych czynników?",
     "Zastanów się: czy czynnik $a^2 + ab + b^2$ może być równy 1 dla liczb pierwszych $a > b$? Co to oznacza dla czynnika $(a-b)$?",
     "Jeśli $a - b = 1$, to szukasz dwóch liczb pierwszych różniących się o 1. Ile jest takich par?"
-  ]
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "primality_testing"
+  ],
+  "skills_gained": [
+    "algebraic_identities",
+    "primality_testing"
+  ],
+  "prerequisites": []
 }

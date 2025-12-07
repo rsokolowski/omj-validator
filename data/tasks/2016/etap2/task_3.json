@@ -16,5 +16,16 @@
     "Skoro $a + b$ dzieli się przez $d$, to reszty z dzielenia $a$ i $b$ przez $d$ muszą się uzupełniać. Spróbuj wykorzystać ten fakt razem z warunkiem o podzielności iloczynu $a \\cdot b$ przez $d^2$.",
     "Zapisz $a = qd + r$ i $b = pd + s$, gdzie $r + s$ dzieli się przez $d$. Co możesz powiedzieć o iloczynie $a \\cdot b$ modulo $d^2$? Zwróć uwagę na wyrażenie $r \\cdot s$.",
     "Pokaż, że iloczyn reszt $r \\cdot s$ musi dzielić się przez $d^2$. Ale skoro $0 \\leq r, s < d$, to $r \\cdot s < d^2$. Jakie wartości mogą przyjmować $r$ i $s$?"
+  ],
+  "skills_required": [
+    "divisibility_arguments",
+    "modular_arithmetic"
+  ],
+  "skills_gained": [
+    "divisibility_arguments",
+    "modular_arithmetic"
+  ],
+  "prerequisites": [
+    "2016_etap1_7"
   ]
 }

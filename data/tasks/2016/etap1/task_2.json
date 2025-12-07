@@ -16,5 +16,16 @@
     "Rozważ użycie obrotów - kwadrat można scharakteryzować przez obrót o $90°$. Zastanów się, jak punkty $D$ i $G$ powstają przez obrót odpowiednich wierzchołków trójkąta.",
     "Zbadaj, jak środek okręgu opisanego $O$ jest równoodległy od wierzchołków. Czy możesz pokazać, że $O$ jest również równoodległy od punktów $D$ i $G$? Wykorzystaj fakt, że $\\angle ACB = 45°$.",
     "Pokaż, że obrót o $90°$ wokół punktu $B$ przekształca $C$ w $D$, a obrót o $90°$ wokół $C$ przekształca $A$ w $G$. Następnie zbadaj, jak te obroty działają na środek okręgu opisanego i wykorzystaj własność kąta $45°$ jako połowy kąta prostego."
+  ],
+  "skills_required": [
+    "circle_theorems",
+    "transformations"
+  ],
+  "skills_gained": [
+    "transformations",
+    "circle_theorems"
+  ],
+  "prerequisites": [
+    "2015_etap1_4"
   ]
 }

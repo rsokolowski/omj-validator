@@ -17,5 +17,14 @@
     "Policz, ile kątów może mieć ściana wielościanu przy zadanym warunku. Każda krawędź należy do dokładnie dwóch ścian - wykorzystaj to do związania liczby krawędzi z liczbą ścian.",
     "Zauważ, że wielokąt o $n$ bokach ma sumę kątów $(n-2) \\cdot 180°$. Jeśli każdy kąt ma być $\\geq 90°$, to ile boków może mieć taka ściana? Wyprowadź nierówność między liczbą krawędzi $K$ a liczbą ścian $S$.",
     "Skoro każda ściana ma co najwyżej 4 boki, to $2K \\leq 4S$, czyli $S \\geq \\frac{K}{2}$. Połącz to ze wzorem Eulera i warunkiem, że wielościan ma co najmniej 4 wierzchołki, aby sprawdzić, czy $K = 100$ jest możliwe."
-  ]
+  ],
+  "skills_required": [
+    "polyhedra",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "polyhedra",
+    "double_counting"
+  ],
+  "prerequisites": []
 }

@@ -17,5 +17,17 @@
     "Skoro $a \\cdot h_a = b \\cdot h_b = c \\cdot h_c = 2P$, zastanów się jakie warunki muszą spełniać boki i wysokości, aby wszystkie były całkowite. Czy możesz znaleźć konkretny przykład?",
     "Poszukaj trójkąta o bokach będących wielokrotnościami pewnych liczb, tak aby pole było liczbą całkowitą dającą całkowite wysokości. Rozważ trójkąty o bokach proporcjonalnych do prostych liczb.",
     "Zbadaj trójkąt o bokach $a$, $b$, $c$ takich, że $2P$ dzieli się przez każdy z boków. Sprawdź np. trójkąty o bokach będących wielokrotnościami liczb 3, 4, 5 lub podobnych - pamiętaj o warunku ostrokątności!"
+  ],
+  "skills_required": [
+    "area_methods",
+    "pythagorean_theorem",
+    "constructive_proof"
+  ],
+  "skills_gained": [
+    "area_methods",
+    "constructive_proof"
+  ],
+  "prerequisites": [
+    "2011_etap2_3"
   ]
 }

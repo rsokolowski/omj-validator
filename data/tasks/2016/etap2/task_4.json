@@ -17,5 +17,14 @@
     "Zauważ, że niektóre iloczyny zawierają $\\sqrt{2}$, a niektóre nie. Aby suma była liczbą wymierną (199), współczynnik przy $\\sqrt{2}$ musi się wyzerować. Policz, ile jest par sąsiednich liczb każdego typu.",
     "Oznacz przez $k$ liczbę par sąsiednich równych liczb, a przez $m$ liczbę par różnych. Zauważ, że $k + m = 99$ (cykl). Zapisz warunek na wymierność sumy i warunek na wartość sumy jako układ równań.",
     "Przy przejściu cyklicznym przez ciąg, każda zmiana z $\\sqrt{2}+1$ na $\\sqrt{2}-1$ (lub odwrotnie) musi być \"sparowana\" z powrotną zmianą. Zastanów się, czy liczba par różnych sąsiadów może być nieparzysta."
-  ]
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "nested_radicals"
+  ],
+  "skills_gained": [
+    "algebraic_identities",
+    "parity_arguments"
+  ],
+  "prerequisites": []
 }

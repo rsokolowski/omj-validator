@@ -16,5 +16,15 @@
     "Spróbuj z jednego równania wyrazić jedną zmienną przez drugą, a następnie podstawić do pozostałego równania.",
     "Z drugiego równania wyraź $y$ jako funkcję $x$. Zwróć uwagę, że $x \\neq 0$ (dlaczego?). Podstaw otrzymane wyrażenie do pierwszego równania.",
     "Po podstawieniu $y = 1 - \\frac{5}{2x}$ do pierwszego równania, pomnóż przez $x^2$ aby pozbyć się ułamków. Otrzymasz równanie, które można sprowadzić do postaci kwadratowej."
+  ],
+  "skills_required": [
+    "symmetric_systems",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "symmetric_systems"
+  ],
+  "prerequisites": [
+    "2010_etap1_1"
   ]
 }

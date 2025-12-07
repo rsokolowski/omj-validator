@@ -16,5 +16,13 @@
     "Rozwiązuj równanie \"od zewnątrz do wewnątrz\" - najpierw usuń zewnętrzną wartość bezwzględną, potem kolejne. Na każdym etapie otrzymasz równanie typu $|B| = c$.",
     "Zauważ, że $|B| = c$ dla $c > 0$ daje dwa przypadki: $B = c$ lub $B = -c$. Ile równań otrzymasz po usunięciu wszystkich wartości bezwzględnych?",
     "Zacznij od $||x-1|-2|-3| = 4$. Następnie rozważ przypadki $|x-1|-2|-3 = 4$ oraz $||x-1|-2|-3 = -4$. Kontynuuj analogicznie dla każdej warstwy, pamiętając że wartość bezwzględna nie może być ujemna."
-  ]
+  ],
+  "skills_required": [
+    "absolute_value",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "absolute_value"
+  ],
+  "prerequisites": []
 }

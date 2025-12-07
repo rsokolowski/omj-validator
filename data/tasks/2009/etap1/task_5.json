@@ -17,5 +17,14 @@
     "Policz, ile różnych reszt z dzielenia przez 5 mogą mieć kwadraty liczb całkowitych niepodzielnych przez 5. Czy przyda się tu zasada szufladkowa?",
     "Sprawdź reszty z dzielenia przez 5 dla $1^2, 2^2, 3^2, 4^2$. Ile jest różnych możliwych reszt? Porównaj tę liczbę z liczbą wierzchołków wielokąta.",
     "Skoro kwadraty liczb niepodzielnych przez 5 dają tylko dwie różne reszty modulo 5, a mamy 55 wierzchołków ułożonych w cykl, rozważ ciąg reszt kwadratów przy kolejnych wierzchołkach i użyj zasady szufladkowej dla par sąsiednich."
+  ],
+  "prerequisites": ["2005_etap2_2", "2009_etap1_3"],
+  "skills_required": [
+    "modular_arithmetic",
+    "pigeonhole"
+  ],
+  "skills_gained": [
+    "modular_arithmetic",
+    "pigeonhole"
   ]
 }

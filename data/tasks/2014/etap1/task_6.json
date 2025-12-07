@@ -17,5 +17,17 @@
     "Sama zgodność pól nie wystarcza do udowodnienia możliwości pokrycia. Poszukaj niezmiennika - spróbuj pokolorować kartkę w specjalny sposób i zbadaj, jak prostokąty pokrywają pola różnych kolorów.",
     "Pokoloruj kolumny kartki cyklicznie trzema kolorami (1, 2, 3, 1, 2, 3, ...). Policz, ile pól każdego koloru pokrywa prostokąt $1 \\times 6$ oraz $2 \\times 3$.",
     "Przy kolorowaniu kolumn trzema kolorami każdy prostokąt $1 \\times 6$ i $2 \\times 3$ pokrywa dokładnie 2 pola każdego koloru. Policz, ile pól każdego koloru ma pozostała figura po wycięciu kwadratu $5 \\times 5$."
+  ],
+  "skills_required": [
+    "tiling",
+    "invariants"
+  ],
+  "skills_gained": [
+    "tiling",
+    "invariants",
+    "parity_arguments"
+  ],
+  "prerequisites": [
+    "2013_etap1_7"
   ]
 }

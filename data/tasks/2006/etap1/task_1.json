@@ -16,5 +16,8 @@
     "Spróbuj oszacować, ile cyfr może mieć iloczyn $a \\cdot b$. Wykorzystaj fakt, że liczba o sumie cyfr równej $s$ musi mieć co najmniej pewną minimalną liczbę cyfr.",
     "Zauważ, że jeśli liczba $a$ ma sumę cyfr równą 2006, to $a$ ma co najmniej $\\lceil 2006/9 \\rceil$ cyfr. Podobnie dla $b$. Ile maksymalnie cyfr może mieć iloczyn dwóch takich liczb?",
     "Porównaj maksymalną możliwą sumę cyfr iloczynu $a \\cdot b$ (równą $9 \\times$ liczba cyfr iloczynu) z wymaganą wartością $2006^2$. Czy da się uzyskać tak dużą sumę cyfr?"
-  ]
+  ],
+  "skills_required": ["digit_manipulation", "modular_arithmetic"],
+  "skills_gained": ["digit_manipulation"],
+  "prerequisites": []
 }

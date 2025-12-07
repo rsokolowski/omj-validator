@@ -17,5 +17,13 @@
     "Wprowadź zmienne na liczbę boków podstawy każdego z wielościanów. Zapisz wzory na liczbę wierzchołków i ścian dla obu brył.",
     "Wykorzystaj warunek dotyczący wierzchołków, aby znaleźć związek między liczbą boków podstawy graniastosłupa i ostrosłupa.",
     "Podstaw znalezioną zależność do wzorów na liczbę ścian obu wielościanów i oblicz różnicę."
-  ]
+  ],
+  "skills_required": [
+    "polyhedra",
+    "counting_techniques"
+  ],
+  "skills_gained": [
+    "polyhedra"
+  ],
+  "prerequisites": []
 }

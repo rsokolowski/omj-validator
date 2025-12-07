@@ -17,5 +17,16 @@
     "Pomyśl o ciągu stanów: zacznij od wszystkich liczb i usuwaj je po kolei (jedną po drugiej). Śledź jak zmienia się różnica sum. Czy możesz użyć zasady szufladkowej lub argumentu o wartościach pośrednich?",
     "Każda liczba ma wartość od 1 do 20, więc usunięcie jednej liczby zmienia różnicę sum o co najwyżej 20. Rozważ wszystkie możliwe $2^{800}$ podzbiorów — ile różnych wartości może przyjąć różnica sum i ile jest podzbiorów?",
     "Dla każdego niepustego podzbioru liczb rozważ różnicę (suma niebieskich w podzbiorze) minus (suma żółtych w podzbiorze). Pokaż, że wśród wszystkich możliwych niepustych właściwych podzbiorów dwa muszą dawać tę samą różnicę — ich symetryczna różnica da różnicę równą 0."
+  ],
+  "skills_required": [
+    "pigeonhole",
+    "counting_techniques"
+  ],
+  "skills_gained": [
+    "pigeonhole",
+    "counting_techniques"
+  ],
+  "prerequisites": [
+    "2021_etap2_3"
   ]
 }

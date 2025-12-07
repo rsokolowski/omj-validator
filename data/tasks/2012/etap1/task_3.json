@@ -17,5 +17,14 @@
     "Zapisz liczbę $n$ w postaci algebraicznej używając cyfr. Jeśli $n$ ma cyfrę setek $a$ i pozostałą część $k$ (liczba dziesiątek i jedności), to $n = 100a + k$. Podobnie zapisz iloczyn po wstawieniu znaku mnożenia.",
     "Sformułuj równanie: iloczyn cyfry setek i liczby utworzonej z pozostałych cyfr ma być równy $\\frac{n}{2}$. Podstaw wyrażenie na $n$ i uprość. Zwróć uwagę na ograniczenia dla cyfry setek.",
     "Dla liczby trzycyfrowej $n = 100a + 10b + c$ mamy równanie $a \\cdot (10b + c) = \\frac{100a + 10b + c}{2}$. Zbadaj, dla jakich wartości cyfry $a$ (od 1 do 9) istnieją rozwiązania. Sprawdź też przypadek liczb czterocyfrowych."
-  ]
+  ],
+  "skills_required": [
+    "digit_manipulation",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "digit_manipulation",
+    "case_analysis"
+  ],
+  "prerequisites": []
 }

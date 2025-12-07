@@ -16,5 +16,14 @@
     "Oznacz szukane kąty jako zmienne (np. $\\alpha$, $\\beta$) i wykorzystaj własność trójkąta równoramiennego: kąty przy podstawie są równe.",
     "Rozważ kolejno trójkąty $ACP$, $CPQ$ i $PQB$. Dla każdego z nich zapisz zależności między kątami, korzystając z tego, że suma kątów w trójkącie wynosi $180^\\circ$.",
     "Zapisz układ równań łączący kąty przy wierzchołkach $A$ i $B$ z kątem $104^\\circ$. Pamiętaj, że punkty $P$ i $Q$ leżą na bokach trójkąta, więc kąty przy tych punktach sumują się do $180^\\circ$."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "isosceles_triangle",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "angle_chasing",
+    "isosceles_triangle"
   ]
 }

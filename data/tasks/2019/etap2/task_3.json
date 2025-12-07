@@ -17,5 +17,17 @@
     "Policz na dwa sposoby: ile łącznie jest porażek wśród samych chłopców w meczach między sobą? Porównaj z tym, ile porażek muszą mieć chłopcy łącznie.",
     "Jeśli jest $k$ chłopców i każdy ma inną liczbę przegranych (co najmniej 1), to jaka jest minimalna suma ich przegranych? Ile meczów rozegrali między sobą?",
     "Suma $k$ różnych liczb naturalnych dodatnich to co najmniej $1+2+...+k = \\frac{k(k+1)}{2}$. Porównaj to z liczbą meczów między $k$ chłopcami, czyli $\\frac{k(k-1)}{2}$."
+  ],
+  "prerequisites": ["2019_etap1_5"],
+  "skills_required": [
+    "graph_theory",
+    "pigeonhole",
+    "contradiction",
+    "counting_techniques"
+  ],
+  "skills_gained": [
+    "graph_theory",
+    "extremal_principle",
+    "contradiction"
   ]
 }

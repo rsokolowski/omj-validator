@@ -17,5 +17,8 @@
     "Kluczem jest zasada szufladkowa. Skonstruuj odpowiednią konfigurację punktów, w której wiele trójkątów prostokątnych równoramiennych dzieli wspólne wierzchołki.",
     "Rozważ kwadrat i jego środek - ile trójkątów prostokątnych równoramiennych możesz utworzyć z tych pięciu punktów? Co się stanie, gdy środek i jakiś wierzchołek kwadratu będą tego samego koloru?",
     "Weź kwadrat $ABCD$ ze środkiem $S$. Przeanalizuj przypadki: jeśli $S$ ma ten sam kolor co któryś wierzchołek, np. $A$, to poszukaj trzeciego punktu tego koloru wśród pozostałych, który utworzy odpowiedni trójkąt."
-  ]
+  ],
+  "prerequisites": ["2005_etap1_3"],
+  "skills_required": ["pigeonhole", "isosceles_triangle"],
+  "skills_gained": ["pigeonhole", "case_analysis"]
 }

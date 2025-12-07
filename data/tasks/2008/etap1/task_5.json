@@ -17,5 +17,8 @@
     "Spróbuj wyrazić pole trójkąta $ABC$ na dwa sposoby: jako sumę pól trójkątów $ACD$ i $BCD$, oraz bezpośrednio przez bok i wysokość. Czy możesz wykorzystać wspólną wysokość?",
     "Zwróć uwagę, że trójkąty $ACD$ i $BCD$ mają wspólną wysokość opuszczoną z wierzchołka $C$ na prostą $AB$. Porównaj tę wysokość z odcinkiem $d$ - która jest większa i dlaczego?",
     "Wyraź pole $ABC$ jako $\\frac{1}{2}(a+b) \\cdot h$, gdzie $h$ to wysokość z $C$ na $AB$, oraz jako $\\frac{1}{2} \\cdot AB \\cdot h_C$. Wykorzystaj fakt, że wysokość trójkąta jest zawsze mniejsza lub równa dowolnemu odcinkowi z wierzchołka do przeciwległego boku (chyba że ten odcinek jest wysokością)."
-  ]
+  ],
+  "prerequisites": [],
+  "skills_required": ["area_methods", "inequality_manipulation"],
+  "skills_gained": ["area_methods", "inequality_manipulation"]
 }

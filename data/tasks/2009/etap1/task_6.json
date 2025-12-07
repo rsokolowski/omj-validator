@@ -16,5 +16,13 @@
     "Przekrój czworokątny powstaje, gdy płaszczyzna przecina dokładnie cztery krawędzie. Pomyśl, jakie czworokąty mogą tak powstać - czy mogą być regularne? Rozważ symetrię czworościanu.",
     "Zauważ, że krawędzie czworościanu można podzielić na pary przeciwległych (nieprzecinających się). Zbadaj przekrój przechodzący przez środki czterech krawędzi - jaki to czworokąt?",
     "Przekrój przez środki dwóch par przeciwległych krawędzi daje kwadrat. Oblicz długość boku tego kwadratu korzystając z twierdzenia Pitagorasa w trójkącie utworzonym na ścianie czworościanu."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "spatial_3d",
+    "pythagorean_theorem"
+  ],
+  "skills_gained": [
+    "spatial_3d"
   ]
 }

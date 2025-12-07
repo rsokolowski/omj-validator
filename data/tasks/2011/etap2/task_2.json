@@ -17,5 +17,15 @@
     "Wyznacz, ile meczów zakończyło się remisem, a ile zwycięstwem którejś z drużyn. Zastanów się, ilu drużyn mogą dotyczyć remisy.",
     "Każdy remis angażuje dokładnie dwie drużyny. Załóż nie wprost, że co najwyżej 3 drużyny miały jakikolwiek remis. Ile remisów mogłoby wtedy być maksymalnie?",
     "Oblicz, ile remisów musiało być w turnieju. Następnie sprawdź, ile remisów maksymalnie może rozegrać między sobą 3 drużyny i porównaj z wymaganą liczbą."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "pigeonhole",
+    "parity_arguments",
+    "counting_techniques"
+  ],
+  "skills_gained": [
+    "pigeonhole",
+    "parity_arguments"
   ]
 }

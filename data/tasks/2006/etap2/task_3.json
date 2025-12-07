@@ -17,5 +17,8 @@
     "Rozważ sytuację odwrotną: zamiast patrzeć na narysowane odcinki, pomyśl o tych, których NIE narysowano. Co by się stało, gdyby trójkąt nie istniał?",
     "Jeśli nie ma żadnego trójkąta wśród narysowanych odcinków, to dla każdych trzech punktów co najmniej jeden odcinek między nimi nie został narysowany. Ile jest trójek punktów i ile odcinków \"brakuje\"?",
     "Mamy $\\binom{6}{3} = 20$ trójek punktów. Każdy brakujący odcinek może \"blokować\" co najwyżej 4 trójki (bo łączy 2 punkty, a pozostałe 4 punkty tworzą 4 trójki z tą parą). Sprawdź, czy 5 brakujących odcinków wystarczy, by zablokować wszystkie 20 trójek."
-  ]
+  ],
+  "skills_required": ["graph_theory", "contradiction"],
+  "skills_gained": ["graph_theory"],
+  "prerequisites": []
 }

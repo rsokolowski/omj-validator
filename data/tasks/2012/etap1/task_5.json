@@ -16,5 +16,14 @@
     "Przypomnij sobie, że wysokość trójkąta tworzy trójkąty prostokątne. Spróbuj wyrazić pola prostokątów przez boki i odcinki powstałe na bokach trójkąta.",
     "Zwróć uwagę na trójkąty prostokątne ABD i ABE. Jak można wyrazić odcinki BD i AE używając twierdzenia Pitagorasa lub własności rzutów prostokątnych?",
     "Zastosuj twierdzenie Pitagorasa do trójkątów ABD i ABE. Zauważ, że $BD \\cdot BC + AE \\cdot AC$ można przekształcić używając zależności $BD = AB \\cdot \\cos(\\angle ABC)$ wyrażonej przez boki trójkąta bez trygonometrii."
-  ]
+  ],
+  "skills_required": [
+    "area_methods",
+    "pythagorean_theorem"
+  ],
+  "skills_gained": [
+    "area_methods",
+    "pythagorean_theorem"
+  ],
+  "prerequisites": []
 }

@@ -16,5 +16,15 @@
     "Poszukaj trójkątów przystających. Skoro $EB = CD$, może uda się znaleźć trójkąt zawierający bok $AE$ przystający do trójkąta zawierającego bok $BD$?",
     "Rozważ przedłużenie boków trapezu lub poprowadzenie przekątnych. Zbadaj trójkąt $ABD$ - jakie ma kąty? Podobnie zbadaj położenie punktu $E$ i trójkąt $ABE$.",
     "Porównaj trójkąty $\\triangle ABD$ i $\\triangle BAE$. Mają wspólny bok $AB$. Sprawdź, czy $AD = BE$ (wykorzystaj, że $AD = CD$ w tym trapeziezie) oraz porównaj kąty przy tym boku."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "trapezoid_parallelogram",
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "trapezoid_parallelogram",
+    "angle_chasing"
   ]
 }

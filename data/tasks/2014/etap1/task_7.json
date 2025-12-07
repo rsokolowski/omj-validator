@@ -17,5 +17,15 @@
     "Zastosuj twierdzenie Pitagorasa oddzielnie do trójkątów $ACB$ i $ADB$. Oznacz nieznane boki i wyraź $AB^2$ w każdym z nich.",
     "Zauważ, że $BC$ i $AD$ to boki, które możesz powiązać. Spróbuj wyrazić $AB^2$ przez $CD$ używając obu równań z twierdzenia Pitagorasa.",
     "Z trójkąta $ACB$: $AB^2 = AC^2 + BC^2$, z trójkąta $ADB$: $AB^2 = AD^2 + DB^2$. Podstaw $AC = CD = DB$ i zastanów się, jaką nierówność spełniają $BC$ i $AD$, aby uzyskać oszacowanie $AB^2 < 4 \\cdot CD^2$."
-  ]
+  ],
+  "skills_required": [
+    "spatial_3d",
+    "pythagorean_theorem",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "pythagorean_theorem"
+  ],
+  "prerequisites": []
 }

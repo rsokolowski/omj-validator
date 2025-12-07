@@ -18,5 +18,13 @@
     "Jeśli suma górnego wiersza jest dwa razy większa od sumy dolnego, to jak można wyrazić sumę wszystkich 16 liczb przez sumę dolnego wiersza? Jakie warunki podzielności musi spełniać suma 16 liczb?",
     "Suma 16 liczb musi być podzielna zarówno przez 3 (z warunku o wierszach), jak i przez 8 (z warunku o kolumnach). Znajdź liczby od 1 do 17, których odjęcie od 153 daje wielokrotność 24.",
     "Sprawdź, które liczby od 1 do 17 dają przy odjęciu od 153 wielokrotność 24. Dla każdego kandydata sprawdź, czy da się skonstruować tabelę spełniającą wszystkie warunki (każda kolumna ma sumę będącą liczbą całkowitą)."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "divisibility_arguments",
+    "parity_arguments"
+  ],
+  "skills_gained": [
+    "case_analysis"
   ]
 }

@@ -17,5 +17,17 @@
     "Spróbuj oszacować wyrażenie $p^2 + pq + q^2$ z obu stron - znajdź kwadraty doskonałe, między którymi może się znajdować. Rozważ $(p+q)^2$ oraz inne naturalne kandydaty.",
     "Zauważ, że $p^2 + pq + q^2$ leży między pewnymi kolejnymi kwadratami doskonałymi. Kiedy może być równe jednemu z nich? Zbadaj, co wynika z równości dla małych wartości $p$ i $q$.",
     "Porównaj $p^2 + pq + q^2$ z $(p+q)^2$ i $p^2 + q^2$. Sprawdź przypadek $p = q$ osobno, a następnie przeanalizuj przypadek $p \\neq q$ korzystając z własności liczb pierwszych."
+  ],
+  "skills_required": [
+    "primality_testing",
+    "algebraic_identities",
+    "prime_factorization"
+  ],
+  "skills_gained": [
+    "primality_testing",
+    "algebraic_identities"
+  ],
+  "prerequisites": [
+    "2011_etap1_4"
   ]
 }

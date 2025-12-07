@@ -16,5 +16,16 @@
     "Zastanów się, jak wyrazić pola trójkątów $ADP$ i $BCP$ przez wspólne elementy. Czy możesz znaleźć taką podstawę dla każdego trójkąta, żeby wysokości były łatwe do porównania?",
     "Rozważ $AD$ jako podstawę trójkąta $ADP$ i $BC$ jako podstawę trójkąta $BCP$. Zbadaj, jakie są odległości punktu $P$ od prostych $AD$ i $BC$. Wykorzystaj fakt, że $M$ jest środkiem $AB$.",
     "Poprowadź wysokości z punktu $P$ na proste zawierające boki $AD$ i $BC$. Wykorzystaj własność, że punkt $P$ leży na odcinku łączącym środki podstaw trapezu - jak to wpływa na sumę lub różnicę tych wysokości w stosunku do położenia $P$?"
+  ],
+  "skills_required": [
+    "area_methods",
+    "trapezoid_parallelogram"
+  ],
+  "skills_gained": [
+    "area_methods",
+    "trapezoid_parallelogram"
+  ],
+  "prerequisites": [
+    "2013_etap1_5"
   ]
 }

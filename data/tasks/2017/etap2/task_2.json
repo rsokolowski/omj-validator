@@ -16,5 +16,15 @@
     "Spróbuj rozbić każdy z czworokątów na trójkąty o wspólnym wierzchołku. Zastanów się, jaką szczególną własność ma środek okręgu opisanego względem boków trójkąta - gdzie dokładnie leży $O$ względem odcinka $AB$?",
     "Zauważ, że $O$ leży na symetralnej odcinka $AB$. Poprowadź prostą przez $O$ równoległą do $AB$ lub rozważ, jak położenie $O$ wpływa na odległości od punktów $A$ i $B$. Porównaj pola trójkątów $AOK$ i $BOK$.",
     "Rozbij pole czworokąta $AKOC$ na sumę pól $\\triangle AKO$ i $\\triangle KOC$, podobnie $BKOC$ na $\\triangle BKO$ i $\\triangle KOC$. Skoro $\\triangle KOC$ jest wspólny, wystarczy pokazać równość pól $\\triangle AKO$ i $\\triangle BKO$. Wykorzystaj fakt, że $O$ leży na symetralnej $AB$."
+  ],
+  "skills_required": [
+    "triangle_centers",
+    "area_methods"
+  ],
+  "skills_gained": [
+    "circle_theorems"
+  ],
+  "prerequisites": [
+    "2016_etap1_2"
   ]
 }

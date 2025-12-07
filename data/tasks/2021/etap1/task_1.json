@@ -17,5 +17,10 @@
     "Wyraź średnią całej klasy przez $M$ i $S$. Następnie spróbuj wyrazić różnicę między wynikiem Marka a tą średnią.",
     "Skoro $M = \\frac{S}{16} + 17$, to możesz wyrazić $S$ przez $M$. Podstaw to do wzoru na średnią całej klasy.",
     "Uprość wyrażenie $M - \\frac{S + M}{17}$, podstawiając $S = 16(M - 17)$. Zauważ, że wynik nie zależy od konkretnej wartości $M$."
+  ],
+  "prerequisites": [],
+  "skills_required": [],
+  "skills_gained": [
+    "algebraic_identities"
   ]
 }

@@ -16,5 +16,15 @@
     "Zastanów się nad podzielnością przez 3. Jakie reszty z dzielenia przez 3 może dawać $n$? Zbadaj, jaką resztę daje wtedy wyrażenie $n^2 + n$.",
     "Zauważ, że $n^2 + n = n(n+1)$ to iloczyn dwóch kolejnych liczb. Co możesz powiedzieć o podzielności iloczynu kolejnych liczb przez małe liczby pierwsze?",
     "Sprawdź podzielność przez 3: dla $n \\equiv 0, 1, 2 \\pmod{3}$ wyznacz reszty z dzielenia $n^2+n+1$ oraz $n^2+n+3$ przez 3. Kiedy obie liczby mogą być pierwsze większe od 3?"
+  ],
+  "prerequisites": ["2006_etap1_3"],
+  "skills_required": [
+    "modular_arithmetic",
+    "primality_testing",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "modular_arithmetic",
+    "primality_testing"
   ]
 }

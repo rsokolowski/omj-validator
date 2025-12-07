@@ -16,5 +16,14 @@
     "Poszukaj par trójkątów, które mogą być podobne. Zwróć uwagę na trójkąty $ADE$, $BDE$, $ADC$ i $BCE$ - które z nich mają wspólne kąty?",
     "Zauważ, że z warunku $\\angle BCD = \\angle AED$ wynika, że czworokąt $CDEA$ jest wpisany w okrąg (kąty wpisane oparte na tym samym łuku). Co to daje dla pozostałych kątów?",
     "Skoro $CDEA$ jest czworokątem wpisanym, to $\\angle CAE = \\angle CDE$. Połącz to z pierwszym warunkiem, aby wykazać, że trójkąt $ABE$ jest równoramienny."
+  ],
+  "prerequisites": ["2021_etap1_5"],
+  "skills_required": [
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "angle_chasing",
+    "circle_theorems"
   ]
 }

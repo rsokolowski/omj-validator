@@ -17,5 +17,13 @@
     "Rozważ klasyfikację przekątnych według tego, na ile wierzchołków dzielą wielokąt po każdej stronie. Użyj zasady szufladkowej lub argumentu zliczania.",
     "Przekątna dzieli $(2n+2)$-kąt na dwa wielokąty. Suma ich wierzchołków to $(2n+2)+2 = 2n+4$. Kiedy oba wielokąty mają nieparzystą liczbę wierzchołków? Zbadaj parzystość.",
     "Aby oba wielokąty miały nieparzystą liczbę wierzchołków, przekątna musi pozostawiać po każdej stronie parzystą liczbę wierzchołków (poza końcami). Policz, ile jest takich przekątnych i porównaj z liczbą pozostałych."
-  ]
+  ],
+  "skills_required": [
+    "counting_techniques"
+  ],
+  "skills_gained": [
+    "parity_arguments",
+    "pigeonhole"
+  ],
+  "prerequisites": []
 }

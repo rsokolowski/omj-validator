@@ -17,5 +17,14 @@
     "Jeśli cztery liczby są kolejnymi liczbami całkowitymi, możesz je zapisać jako $n$, $n+1$, $n+2$, $n+3$ dla pewnego $n$. Jaka jest ich suma?",
     "Porównaj sumę czterech kolejnych liczb całkowitych z wartością sumy różnic, którą obliczyłeś w pierwszym kroku.",
     "Sprawdź, czy równanie $4n + 6 = 0$ ma rozwiązanie w liczbach całkowitych. Co to oznacza dla istnienia szukanych liczb?"
-  ]
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "telescoping"
+  ],
+  "skills_gained": [
+    "telescoping",
+    "contradiction"
+  ],
+  "prerequisites": []
 }

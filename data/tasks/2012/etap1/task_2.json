@@ -16,5 +16,16 @@
     "Skoro $AD + BC = CD$, spróbuj znaleźć punkt $P$ na odcinku $CD$ taki, że $DP = AD$ (lub $CP = BC$). Jakie trójkąty równoramienne powstają w tej konstrukcji? Jak dwusieczne kątów przechodzą przez takie trójkąty?",
     "Zauważ, że jeśli $DP = AD$, to trójkąt $ADP$ jest równoramienny. Dwusieczna kąta $\\angle ADC$ ma szczególną własność w tym trójkącie. Podobnie przeanalizuj sytuację przy wierzchołku $C$ z punktem $P$ takim, że $CP = BC$.",
     "Pokaż, że punkt $S$ leży na symetralnej odcinka $AB$. Wykorzystaj fakt, że dwusieczna w trójkącie równoramiennym jest jednocześnie symetralną podstawy. Jak punkty $A$, $P$, $B$ i dwusieczne tworzą konfigurację prowadzącą do $AS = BS$?"
+  ],
+  "skills_required": [
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "prerequisites": [
+    "2011_etap1_2"
   ]
 }

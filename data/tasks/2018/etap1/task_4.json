@@ -16,5 +16,16 @@
     "Pamiętaj, że reszta z dzielenia jest zawsze mniejsza od dzielnika. Jakie nierówności między $a$, $b$, $c$ z tego wynikają? Spróbuj ustalić, która z tych liczb jest największa, a która najmniejsza.",
     "Z warunku, że reszta z dzielenia wynosi $2$, wynika, że dzielnik musi być większy od $2$. Zbadaj, jakie ograniczenia na wartości $a$, $b$, $c$ dają te nierówności oraz warunek $c \\equiv 4 \\pmod{a}$.",
     "Skoro $b > 2$ i $c > 2$, a $a > c$ (bo reszta $4 < a$), to $a \\geq 5$. Jednocześnie $a = b \\cdot k + 2$ dla pewnego $k \\geq 1$. Rozważ przypadki dla małych wartości $k$ i sprawdź, czy znajdziesz sprzeczność lub jedyne rozwiązanie."
+  ],
+  "skills_required": [
+    "modular_arithmetic",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "modular_arithmetic",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2018_etap1_1"
   ]
 }

@@ -16,5 +16,8 @@
     "Skoro wszystkie kąty przy $S$ są równe, rozważ przypadek gdy krawędzie boczne mają równe długości. Jak wtedy wyglądają trójkąty boczne? Wykorzystaj własności trójkątów równoramiennych.",
     "Dla trójkąta równoramiennego z kątem $20°$ przy wierzchołku, jakie są kąty przy podstawie? Porównaj podstawę takiego trójkąta z jego ramionami - która jest dłuższa?",
     "W trójkącie, naprzeciw większego kąta leży dłuższy bok. Zbadaj, czy podstawa trójkąta równoramiennego z małym kątem przy wierzchołku jest krótsza od ramienia. Zsumuj wszystkie trzy podstawy."
-  ]
+  ],
+  "skills_required": ["spatial_3d", "isosceles_triangle", "inequality_manipulation"],
+  "skills_gained": ["spatial_3d"],
+  "prerequisites": []
 }

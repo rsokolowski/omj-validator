@@ -16,5 +16,14 @@
     "Zauważ, że każde wyrażenie można zapisać w postaci iloczynowej, np. $ab+b+1 = b(a+1)+1$. Jeśli jedno wyrażenie jest równe zeru, co możesz powiedzieć o wartości odpowiedniej zmiennej?",
     "Jeśli $ab+b+1 = 0$, to $b(a+1) = -1$. To oznacza, że $b \\neq 0$ i $a \\neq -1$. Jak możesz wyrazić $b$ przez $a$? Podstaw to wyrażenie do pozostałych równań.",
     "Z równania $ab+b+1=0$ wynika $b = \\frac{-1}{a+1}$. Podstaw tę wartość do drugiego wyrażenia, które też jest równe zeru, i wyznacz zależność między zmiennymi. Następnie sprawdź trzecie wyrażenie."
-  ]
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "symmetric_systems"
+  ],
+  "skills_gained": [
+    "algebraic_identities",
+    "symmetric_systems"
+  ],
+  "prerequisites": []
 }

@@ -17,5 +17,13 @@
     "Po przekształceniu równania otrzymasz związek między $(a+b)^2$ a $c^2$. Zastanów się, co to oznacza dla ilorazu $\\frac{a+b}{c}$ (gdy $c \\neq 0$).",
     "Zauważ, że jeśli $c \\neq 0$, to $\\frac{a+b}{c}$ musiałoby być liczbą wymierną (bo $a$, $b$, $c$ są wymierne). Sprawdź, czy kwadrat tej liczby może równać się pewnej konkretnej wartości.",
     "Z równania wynika, że $\\left(\\frac{a+b}{c}\\right)^2 = 2$. Przypomnij sobie, dlaczego $\\sqrt{2}$ nie jest liczbą wymierną, i wyciągnij wniosek o wartości $c$."
-  ]
+  ],
+  "skills_required": [
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "algebraic_identities",
+    "contradiction"
+  ],
+  "prerequisites": []
 }

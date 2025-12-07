@@ -16,5 +16,15 @@
     "Przedłuż płaszczyznę $KLM$ tak, aby przecięła również krawędź $DD'$ w pewnym punkcie $N$. Wtedy płaszczyzna przetnie prostopadłościan wzdłuż czworokąta $KLMN$. Oblicz, gdzie leży punkt $N$.",
     "Zauważ, że wysokości punktów $K$, $L$, $M$, $N$ nad podstawą tworzą ciąg arytmetyczny (lub sprawdź, czy $KLMN$ jest równoległobokiem). Jedna z brył to graniastosłup ścięty o podstawie będącej kwadratem.",
     "Objętość graniastosłupa ściętego o podstawie $S$ można obliczyć jako $S \\cdot h_{śr}$, gdzie $h_{śr}$ to średnia arytmetyczna wysokości w wierzchołkach podstawy. Oblicz średnią z $AK$, $BL$, $CM$, $DN$ i pomnóż przez pole podstawy."
+  ],
+  "skills_required": [
+    "spatial_3d",
+    "coordinate_geometry"
+  ],
+  "skills_gained": [
+    "area_methods"
+  ],
+  "prerequisites": [
+    "2016_etap1_6"
   ]
 }

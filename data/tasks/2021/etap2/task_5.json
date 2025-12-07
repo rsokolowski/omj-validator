@@ -17,5 +17,14 @@
     "Rozważ podział punktów na parzyste i nieparzyste. Wykorzystaj fakt, że $n$ jest nieparzyste - ile punktów musi być parzystych, a ile nieparzystych?",
     "Policz sumę odległości od punktu $x$ do pozostałych punktów w zależności od tego, ile z nich jest parzystych, a ile nieparzystych. Kiedy ta suma jest parzysta?",
     "Wykaż, że wszystkie punkty muszą mieć tę samą parzystość. Jeśli wszystkie są parzyste lub wszystkie nieparzyste, co możesz powiedzieć o parzystości ich różnic?"
+  ],
+  "prerequisites": [
+    "2020_etap1_6"
+  ],
+  "skills_required": [
+    "parity_arguments"
+  ],
+  "skills_gained": [
+    "parity_arguments"
   ]
 }

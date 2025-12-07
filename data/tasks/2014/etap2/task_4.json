@@ -16,5 +16,17 @@
     "Rozważ podzielność przez małe liczby. Co możesz powiedzieć o resztach z dzielenia liczb pierwszych (większych od 2 i 3) przez 2 i przez 3?",
     "Jeśli $p$, $q$, $r$, $s$ są większe od 3, to są nieparzyste. Co to oznacza dla parzystości $d$? Rozważ też reszty tych czterech liczb przy dzieleniu przez 3 - ile jest możliwych reszt i ile masz liczb?",
     "Skoro $d$ musi być parzyste (aby wszystkie liczby były nieparzyste), to $d$ jest podzielne przez 2. Użyj zasady szufladkowej dla reszt modulo 3: cztery liczby i trzy możliwe reszty - co z tego wynika dla $d$?"
+  ],
+  "skills_required": [
+    "modular_arithmetic",
+    "primality_testing",
+    "sequences"
+  ],
+  "skills_gained": [
+    "modular_arithmetic",
+    "sequences"
+  ],
+  "prerequisites": [
+    "2012_etap1_1"
   ]
 }

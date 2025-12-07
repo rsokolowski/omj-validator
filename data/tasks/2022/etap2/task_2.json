@@ -17,5 +17,14 @@
     "Poszukaj niezmiennika - własności, która nie zmienia się po każdym ruchu. Rozważ różne operacje modulo.",
     "Zbadaj reszty z dzielenia obu liczb na tablicy przez 3. Co dzieje się z tymi resztami po wykonaniu ruchu?",
     "Zauważ, że początkowe reszty z dzielenia przez 3 to: $2 \\mod 3 = 2$ i $5 \\mod 3 = 2$. Sprawdź, jakie reszty mogą mieć dwie kolejne liczby naturalne."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "invariants",
+    "modular_arithmetic"
+  ],
+  "skills_gained": [
+    "invariants",
+    "modular_arithmetic"
   ]
 }

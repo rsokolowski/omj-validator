@@ -17,5 +17,14 @@
     "Mamy 8 wyników, ale ile jest różnych możliwych wartości? Zastanów się, kiedy suma wiersza może być równa iloczynowi kolumny - rozważ użycie zasady szufladkowej lub analizy przypadków.",
     "Zauważ, że sumy wierszowe należą do zbioru $\\{4, 5, 6, 7, 8\\}$, a iloczyny kolumnowe do $\\{1, 2, 4, 8, 16\\}$. Wspólne wartości to $4$ i $8$. Jeśli żadne dwa wyniki nie są równe, to jakie wartości muszą przyjąć sumy i iloczyny?",
     "Jeśli wszystkie 8 wyników ma być różnych, to sumy muszą być z $\\{5, 6, 7\\}$ plus ewentualnie $4$ lub $8$ (ale nie oba, jeśli występują w iloczynach). Policz sumę wszystkich liczb w tabeli na dwa sposoby i sprawdź, czy to możliwe."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "pigeonhole",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "pigeonhole",
+    "counting_techniques"
   ]
 }

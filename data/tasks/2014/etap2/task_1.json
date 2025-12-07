@@ -16,5 +16,16 @@
     "Podstaw wyrażenie na $d$ do drugiego równania $ac = bd$ i przekształć otrzymane równanie. Szukaj możliwości faktoryzacji.",
     "Po podstawieniu i przekształceniu powinieneś otrzymać równanie, które można zapisać jako iloczyn dwóch czynników równy zero. Zastanów się, jakie wnioski można wyciągnąć dla liczb dodatnich.",
     "Spróbuj doprowadzić do równania postaci $(a-d)(a-c) = 0$ lub podobnej. Pamiętaj, że dla liczb dodatnich spełniających warunek $a + b = c + d$, równość $a = c$ pociągałaby $b = d$."
+  ],
+  "skills_required": [
+    "symmetric_systems",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "symmetric_systems",
+    "algebraic_identities"
+  ],
+  "prerequisites": [
+    "2011_etap2_4"
   ]
 }

@@ -17,5 +17,14 @@
     "Skup się na relacjach między zawodnikami, którzy NIE siedzą obok siebie. Czy możesz znaleźć parę zawodników $Z_i$ i $Z_j$ (niebędących sąsiadami), gdzie wynik meczu między nimi tworzy coś interesującego z wynikami ich meczów z osobami między nimi?",
     "Rozważ zawodnika $Z_1$ i zawodnika $Z_3$ (przeskakując jedną osobę). Jeden z nich wygrał z drugim. Przeanalizuj oba przypadki i zobacz, jak wynik tego meczu łączy się z wynikami meczów z $Z_2$.",
     "Jeśli $Z_1$ wygrał z $Z_3$, to mamy ciąg $Z_1 \\to Z_3 \\to Z_2 \\to Z_1$ (gdzie strzałka oznacza wygraną). Sprawdź, czy to daje szukany cykl. A jeśli $Z_3$ wygrał z $Z_1$?"
-  ]
+  ],
+  "skills_required": [
+    "graph_theory",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "graph_theory",
+    "case_analysis"
+  ],
+  "prerequisites": []
 }

@@ -11,6 +11,14 @@
   "categories": [
     "geometria"
   ],
+  "prerequisites": ["2020_etap1_7"],
+  "skills_required": [
+    "spatial_3d",
+    "pythagorean_theorem"
+  ],
+  "skills_gained": [
+    "spatial_3d"
+  ],
   "hints": [
     "Zastanów się, jak wygląda powstały czworościan. Które punkty sześciokąta stają się wierzchołkami czworościanu i jakie odcinki tworzą jego krawędzie?",
     "Oblicz długości wszystkich krawędzi czworościanu, korzystając z własności sześciokąta foremnego. Czy zauważasz jakąś regularność w tych długościach?",

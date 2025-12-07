@@ -16,5 +16,13 @@
     "Rozważ osobno przypadki gdy $n$ jest parzyste i gdy $n$ jest nieparzyste. Dla liczb parzystych przypomnij sobie wzór na różnicę kwadratów: $a^2 - b^2 = (a-b)(a+b)$.",
     "Dla nieparzystych $n > 1$ zbadaj reszty z dzielenia przez 5. Jaka jest reszta z dzielenia $14^n$ przez 5? A jaka reszta z dzielenia 9 przez 5? Co to oznacza dla $14^n - 9$?",
     "Zauważ, że $14 \\equiv 4 \\pmod{5}$ oraz $9 \\equiv 4 \\pmod{5}$. Oblicz $4^n \\pmod{5}$ dla nieparzystego $n$ i sprawdź, czy $14^n - 9$ jest podzielne przez 5."
-  ]
+  ],
+  "skills_required": [
+    "modular_arithmetic",
+    "primality_testing"
+  ],
+  "skills_gained": [
+    "primality_testing"
+  ],
+  "prerequisites": []
 }

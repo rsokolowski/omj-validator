@@ -17,5 +17,8 @@
     "Policz sumę wszystkich zwycięstw w turnieju. Zastanów się, co musiałoby być prawdą, gdyby każdy zawodnik wygrał tę samą liczbę meczów.",
     "Jeśli każdy ma wygrać tyle samo meczów, to łączna liczba zwycięstw musi dzielić się przez liczbę zawodników. Sprawdź, czy tak jest.",
     "Oblicz $\\frac{50 \\cdot 49}{2}$ i sprawdź, czy wynik dzieli się przez $50$. Co to oznacza dla możliwości równego podziału zwycięstw?"
-  ]
+  ],
+  "prerequisites": [],
+  "skills_required": ["graph_theory", "double_counting"],
+  "skills_gained": ["graph_theory", "double_counting"]
 }

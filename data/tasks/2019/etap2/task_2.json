@@ -16,5 +16,15 @@
     "Skoro $X$ leży na symetralnej $AB$, to $XA = XB$. Trójkąt $ABX$ jest więc równoramienny. Rozważ, jak wykorzystać własności środkowych trójkąta lub punktu $E$ jako środka równoległoboka.",
     "Zauważ, że $E$ jest środkiem przekątnej $AC$. Przyjrzyj się trójkątowi $AXC$ - jaki odcinek łączy środek jednego boku ze środkiem innego boku? Jak ma się on do trzeciego boku?",
     "W trójkącie $AXC$ punkt $E$ jest środkiem $AC$. Znajdź środek odcinka $AX$ (wykorzystaj równoramienność trójkąta $ABX$ i własności równoległoboka). Odcinek łączący środki dwóch boków trójkąta ma długość równą połowie trzeciego boku."
+  ],
+  "prerequisites": ["2017_etap1_2"],
+  "skills_required": [
+    "trapezoid_parallelogram",
+    "isosceles_triangle",
+    "area_methods"
+  ],
+  "skills_gained": [
+    "trapezoid_parallelogram",
+    "transformations"
   ]
 }

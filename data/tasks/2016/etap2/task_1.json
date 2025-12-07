@@ -18,5 +18,14 @@
     "Jeśli 8 sum ma być różnymi potęgami liczby $2$, to muszą być to pewne 8 różnych liczb z ciągu $1, 2, 4, 8, 16, \\ldots$ Zastanów się, jak podzielić je na dwie grupy o równych sumach.",
     "Rozważ własność sum potęg dwójki: jeśli $2^a$ jest największą potęgą w zbiorze, to suma pozostałych potęg (mniejszych od $2^a$) jest mniejsza niż $2^a$. Jak to wpływa na możliwość równego podziału?",
     "Weź 8 najmniejszych różnych potęg dwójki i sprawdź, czy można je podzielić na dwie grupy po 4 elementy o równych sumach. Porównaj największy element z sumą pozostałych w każdej grupie."
-  ]
+  ],
+  "skills_required": [
+    "constructive_proof",
+    "contradiction"
+  ],
+  "skills_gained": [
+    "contradiction",
+    "double_counting"
+  ],
+  "prerequisites": []
 }

@@ -17,5 +17,8 @@
     "Zapisz, ile wynosi suma wszystkich krawędzi prostopadłościanu przez $a$ i $h$. Zastanów się, jak połączyć dane równania, by uzyskać to wyrażenie.",
     "Oblicz $d^2 + b$ i sprawdź, czy wynik da się zapisać jako kwadrat pewnego wyrażenia zawierającego $a$ i $h$.",
     "Zauważ, że suma krawędzi to $4(2a + h)$. Sprawdź, czy wyrażenie $d^2 + b$ nie jest przypadkiem równe $(2a + h)^2$."
-  ]
+  ],
+  "prerequisites": [],
+  "skills_required": ["spatial_3d", "pythagorean_theorem", "algebraic_identities"],
+  "skills_gained": ["spatial_3d", "algebraic_identities"]
 }

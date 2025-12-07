@@ -17,5 +17,15 @@
     "Skoro każde trzy kolejne cyfry muszą zawierać 0 i być różne, przeanalizuj możliwe wzorce rozmieszczenia zer. Na których pozycjach musi stać 0?",
     "Zauważ, że jeśli 0 nie stoi na pozycji $i$, to musi stać na pozycjach $i-1$ i $i+1$ (aby trójki zawierające pozycję $i$ miały zero). Co to oznacza dla struktury całej liczby?",
     "Wykaż, że zera muszą stać dokładnie na pozycjach parzystych (2, 4, 6, ..., 14). Następnie policz, ile jest sposobów wyboru cyfr niezerowych na pozycje nieparzyste, pamiętając o warunku różności w trójkach."
-  ]
+  ],
+  "skills_required": [
+    "counting_techniques",
+    "digit_manipulation",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "counting_techniques",
+    "digit_manipulation"
+  ],
+  "prerequisites": []
 }

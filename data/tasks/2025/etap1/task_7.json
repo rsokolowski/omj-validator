@@ -17,5 +17,14 @@
     "Masz do dyspozycji dwa fakty: sumę kątów w trójkącie oraz ograniczenie na każdy kąt z osobna (ostrokątność). Spróbuj połączyć te warunki, aby uzyskać nierówności trójkąta.",
     "Zauważ, że jeśli $c < 90$ i $a + b + c = 180$, to możesz wywnioskować coś o sumie $a + b$. Jak to się ma do warunku $a + b > c$?",
     "Z równości $a + b + c = 180$ wyraź $a + b$ przez $c$. Następnie użyj faktu, że $c < 90°$, aby pokazać, że $a + b > c$. Analogicznie uzasadnij pozostałe dwie nierówności trójkąta."
-  ]
+  ],
+  "skills_required": [
+    "angle_chasing",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "case_analysis",
+    "constructive_proof"
+  ],
+  "prerequisites": []
 }

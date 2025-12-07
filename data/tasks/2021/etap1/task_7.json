@@ -17,5 +17,13 @@
     "Rozważ przypadek, gdy wszystkie $n$ cyfr jest identycznych. Liczba złożona z $n$ takich samych cyfr $c$ ma szczególną postać - spróbuj ją wyrazić przez $c$ i liczbę złożoną z samych jedynek.",
     "Liczba zapisana $n$ jedynkami to $\\frac{10^n - 1}{9}$. Zbadaj, dla jakich $n$ ta liczba jest podzielna przez 7. Przypomnij sobie, że reszty z dzielenia kolejnych potęg 10 przez 7 tworzą cykliczny wzorzec.",
     "Oblicz reszty $10^1, 10^2, 10^3, \\ldots$ z dzielenia przez 7 i znajdź długość cyklu. Następnie wykorzystaj fakt, że $10^n \\equiv 1 \\pmod{7}$ wtedy i tylko wtedy, gdy $n$ jest wielokrotnością tej długości cyklu."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "modular_arithmetic",
+    "divisibility_arguments"
+  ],
+  "skills_gained": [
+    "modular_arithmetic"
   ]
 }

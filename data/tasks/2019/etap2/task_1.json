@@ -17,5 +17,15 @@
     "Wykorzystaj fakt, że suma trzech kolejnych liczb całkowitych jest zawsze podzielna przez 3. Co to mówi o wartości $a+b+c$?",
     "Skoro znasz $a+b+c$ oraz wartości $a+b$, $b+c$, $c+a$, możesz wyznaczyć każdą z liczb $a$, $b$, $c$ osobno przez odejmowanie. Na przykład $c = (a+b+c) - (a+b)$.",
     "Rozważ przypadki przyporządkowania sum $a+b$, $b+c$, $c+a$ do kolejnych liczb $n$, $n+1$, $n+2$. Sprawdź, że w każdym przypadku $a$, $b$, $c$ wychodzą całkowite i kolejne."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "parity_arguments",
+    "algebraic_identities",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "parity_arguments",
+    "symmetric_systems"
   ]
 }

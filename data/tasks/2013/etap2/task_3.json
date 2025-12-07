@@ -18,5 +18,17 @@
     "Jeśli 18 sum to kolejne liczby naturalne, to możemy je oznaczyć jako $n, n+1, \\ldots, n+17$. Oblicz sumę wszystkich tych 18 liczb i zastanów się, jak musi się ona dzielić między wiersze i kolumny.",
     "Skoro suma wierszowa musi równać się sumie kolumnowej, to 9 z tych 18 kolejnych liczb musi dawać tę samą sumę co pozostałe 9. Zbadaj, czy suma $n + (n+1) + \\ldots + (n+17)$ jest podzielna przez 2.",
     "Oblicz sumę 18 kolejnych liczb naturalnych zaczynających się od $n$. Sprawdź parzystość tej sumy i zastanów się, czy można ją podzielić na dwie równe części."
+  ],
+  "skills_required": [
+    "parity_arguments",
+    "double_counting",
+    "sequences"
+  ],
+  "skills_gained": [
+    "parity_arguments",
+    "contradiction"
+  ],
+  "prerequisites": [
+    "2013_etap1_2"
   ]
 }

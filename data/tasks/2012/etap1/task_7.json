@@ -17,5 +17,16 @@
     "Skoro $n^3 - 7n = n(n^2 - 7)$, zastanów się, jakie warunki muszą spełniać czynniki $n$ oraz $n^2 - 7$, aby ich iloczyn był kwadratem liczby całkowitej. Rozważ, jaki jest ich największy wspólny dzielnik.",
     "Zbadaj NWD$(n, n^2 - 7)$. Zauważ, że $\\text{NWD}(n, n^2-7) = \\text{NWD}(n, 7)$, więc rozważ osobno przypadki: gdy $7 \\mid n$ oraz gdy $7 \\nmid n$.",
     "W przypadku gdy $7 \\nmid n$, czynniki $n$ i $n^2-7$ są względnie pierwsze, więc oba muszą być kwadratami. Kiedy $n^2 - 7$ może być kwadratem? Rozważ różnicę dwóch kwadratów i jej rozkład."
+  ],
+  "skills_required": [
+    "prime_factorization",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "prime_factorization",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2010_etap1_7"
   ]
 }

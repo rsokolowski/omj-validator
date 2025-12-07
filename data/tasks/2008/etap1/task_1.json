@@ -17,5 +17,8 @@
     "Rozważ przypadki ze względu na znak $x$ (czy $x \\geq 0$ czy $x < 0$). W każdym przypadku uprość wyrażenie $|x|$ i zbadaj, jaką prostą opisuje drugie równanie.",
     "Zauważ, że z drugiego równania wynika $y = |x| + a \\geq a$. Dla jakich wartości $y$ istnieją punkty na pierwszej figurze? Kiedy prosta może przecinać tę figurę?",
     "Podstaw $y = |x| + a$ do pierwszego równania, otrzymując $|x| + ||x| + a| = 1$. Przeanalizuj osobno przypadki $a \\geq 0$, $a < 0$ i zbadaj, ile rozwiązań ma równanie w zależności od wartości $a$."
-  ]
+  ],
+  "prerequisites": ["2007_etap1_1"],
+  "skills_required": ["absolute_value", "coordinate_geometry"],
+  "skills_gained": ["case_analysis", "absolute_value"]
 }

@@ -17,5 +17,17 @@
     "Rozważ użycie układu współrzędnych. Umieść środek sześcianu w początku układu - jak wtedy wyglądają współrzędne wierzchołków?",
     "Zauważ, że współrzędne każdego wierzchołka sześcianu to kombinacje wartości $\\pm a$ dla pewnego $a$. Jak uprości się suma kwadratów odległości od punktu $P = (x, y, z)$?",
     "Rozwiń każdy kwadrat odległości $(x \\pm a)^2 + (y \\pm a)^2 + (z \\pm a)^2$ i zsumuj po wszystkich 8 wierzchołkach. Zauważ, które wyrazy się zniosą dzięki symetrii."
+  ],
+  "skills_required": [
+    "coordinate_geometry",
+    "spatial_3d",
+    "invariants"
+  ],
+  "skills_gained": [
+    "invariants",
+    "coordinate_geometry"
+  ],
+  "prerequisites": [
+    "2010_etap1_5"
   ]
 }

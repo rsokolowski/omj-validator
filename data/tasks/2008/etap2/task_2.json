@@ -17,5 +17,8 @@
     "Pomyśl o tym zadaniu jako o zliczaniu: ile jest par sąsiednich liczb o tym samym znaku, a ile o różnych znakach? Oznacz te liczby i zastanów się, jakie ograniczenia na nie działają.",
     "Skoro idziemy cyklicznie przez 101 liczb i wracamy do początku, policz ile razy musimy \"zmienić znak\" przechodząc z $1$ na $-1$ lub odwrotnie. Czy ta liczba zmian może być dowolna?",
     "Liczba zmian znaku w cyklu musi być parzysta (wracamy do punktu wyjścia). Masz 101 iloczynów, chcesz jak najwięcej $-1$. Jaka jest największa parzysta liczba nieprzekraczająca 101?"
-  ]
+  ],
+  "prerequisites": [],
+  "skills_required": ["parity_arguments", "invariants"],
+  "skills_gained": ["parity_arguments", "invariants"]
 }

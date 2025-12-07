@@ -16,5 +16,13 @@
     "Wykorzystaj warunki $AC = AD$ oraz $BD = BE$ - co mówią one o położeniu punktów $A$ i $B$ względem odcinków $CD$ i $DE$? Przypomnij sobie własność symetralnej odcinka.",
     "Zauważ, że skoro $A$ leży na symetralnej $CD$, a $B$ leży na symetralnej $DE$, to pewne trójkąty mają równe pola (trójkąty o wspólnej podstawie i równych wysokościach). Jak kąt prosty $\\angle CDE$ wpływa na te symetralności?",
     "Przekształć warunek $P(ABD) = P(ABCE)$ do postaci $P(ABD) - P(ABC) = P(BCE)$, czyli $P(BCD) = P(BCE)$. Wykaż, że trójkąty $BCD$ i $BCE$ mają równe pola, korzystając z tego, że $B$ leży na symetralnej odcinka $DE$."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "area_methods",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "area_methods"
   ]
 }

@@ -17,5 +17,13 @@
     "Zastanów się, co się stanie gdy w pewnym miejscu wstawisz znak $=$. Lewa strona to suma początkowych wyrazów, prawa to pozostałe. Jak zmiana znaku wpływa na wartość?",
     "Jeśli przed liczbą $k$ był znak $-$ i zamieniamy go na $=$, to w prawej stronie ta liczba $k$ zmienia znak na $+$. Jak to wpływa na różnicę między stronami?",
     "Niech $L$ oznacza lewą stronę, $P$ prawą. Zauważ, że $L + P$ (ze starymi znakami) to wartość całego wyrażenia. Szukasz miejsca, gdzie $L = P$. Sprawdź, dla których $k$ jest to możliwe."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "sequences"
+  ],
+  "skills_gained": [
+    "sequences",
+    "parity_arguments"
   ]
 }

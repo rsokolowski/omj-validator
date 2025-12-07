@@ -17,5 +17,14 @@
     "Rozważ podstawienie $x = \\sqrt{a}$ i $y = \\sqrt{b}$. Jak wtedy wygląda warunek z zadania? Użyj dowodu nie wprost - załóż, że obie liczby $a$ i $b$ są wymierne.",
     "Przekształć równanie do postaci $(\\sqrt{a} - \\sqrt{b})^2 = 12$. Co z tego wynika dla wartości $\\sqrt{a} - \\sqrt{b}$? Czy $\\sqrt{12}$ jest liczbą wymierną?",
     "Jeśli $a$ i $b$ są wymierne, to czy $\\sqrt{a} - \\sqrt{b}$ może równać się $\\pm\\sqrt{12}$? Rozważ przypadki: gdy $\\sqrt{a}$ i $\\sqrt{b}$ są obie wymierne vs. gdy przynajmniej jedna jest niewymierna."
-  ]
+  ],
+  "skills_required": [
+    "inequality_manipulation",
+    "contradiction",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "contradiction"
+  ],
+  "prerequisites": []
 }

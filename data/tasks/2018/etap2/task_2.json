@@ -16,5 +16,17 @@
     "Zauważ, że równość pól $APCD$ i $ABP$ można przeformułować. Skoro te dwa obszary razem tworzą cały trapez, to każdy z nich stanowi połowę pola trapezu. Jak inaczej można to zapisać używając trójkąta $APD$?",
     "Zbadaj kąty w trójkącie $ABP$. Skoro $AP$ jest dwusieczną kąta $\\angle BAD$, a $\\angle ABP = 90°$, to czym jest kąt $\\angle APB$? Jak to się ma do kąta $\\angle APD = 45°$?",
     "Wykaż, że trójkąt $ABP$ jest równoramienny (wykorzystaj sumę kątów i własność dwusiecznej). Następnie porównaj pole trójkąta $ABP$ z polem trójkąta $APD$, szukając związku między ich podstawami i wysokościami."
+  ],
+  "skills_required": [
+    "trapezoid_parallelogram",
+    "angle_chasing",
+    "area_methods"
+  ],
+  "skills_gained": [
+    "trapezoid_parallelogram",
+    "area_methods"
+  ],
+  "prerequisites": [
+    "2017_etap2_4"
   ]
 }
