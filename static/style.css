@@ -885,7 +885,7 @@ h1, h2, h3, h4 {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.15s ease, visibility 0.15s ease;
-    z-index: 100;
+    z-index: 200;
     pointer-events: none;
     max-width: 280px;
     white-space: normal;
@@ -903,7 +903,7 @@ h1, h2, h3, h4 {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.15s ease, visibility 0.15s ease;
-    z-index: 100;
+    z-index: 200;
 }
 
 [data-tooltip]:hover::after,
@@ -1172,7 +1172,7 @@ h1, h2, h3, h4 {
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.5);
+    border: 2px solid var(--color-gray-200);
 }
 
 .user-name {
@@ -1181,7 +1181,7 @@ h1, h2, h3, h4 {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: white;
+    color: var(--color-gray-700);
 }
 
 .badge-readonly {
