@@ -16,6 +16,7 @@ class AIProvider(Protocol):
         solution_pdf_path: Optional[Path],
         image_paths: list[Path],
         task_number: int,
+        etap: str = "etap2",
     ) -> SubmissionResult:
         """
         Analyze a student's solution.
@@ -24,7 +25,8 @@ class AIProvider(Protocol):
             task_pdf_path: Path to the task PDF
             solution_pdf_path: Path to the official solution PDF (for reference)
             image_paths: Paths to uploaded images of student's solution
-            task_number: The task number (1-5)
+            task_number: The task number (1-7 for etap1, 1-5 for etap2)
+            etap: The competition stage ("etap1" or "etap2")
 
         Returns:
             SubmissionResult with score and feedback
