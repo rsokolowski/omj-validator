@@ -159,6 +159,8 @@ async def etap_detail(request: Request, year: str, etap: str):
                 "has_content": True,
                 "submission_count": stats.submission_count,
                 "highest_score": stats.highest_score,
+                "difficulty": task_info.difficulty,
+                "categories": task_info.categories,
             }
         )
 

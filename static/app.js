@@ -3,6 +3,53 @@
 let selectedFiles = [];
 
 /**
+ * Toggle hint visibility with progressive reveal.
+ * @param {HTMLElement} button - The hint toggle button
+ */
+function toggleHint(button) {
+    const hintItem = button.closest('.hint-item');
+    const hintIndex = parseInt(hintItem.dataset.hintIndex);
+    const allHints = document.querySelectorAll('.hint-item');
+
+    // If clicking on an already revealed hint, just toggle it
+    if (hintItem.classList.contains('revealed')) {
+        hintItem.classList.remove('revealed');
+        return;
+    }
+
+    // Reveal this hint and all previous hints
+    allHints.forEach((item, index) => {
+        if (index <= hintIndex) {
+            item.classList.add('revealed');
+            // Render math in the revealed hint content
+            const content = item.querySelector('.hint-content');
+            if (content && !content.dataset.mathRendered) {
+                renderMathInContent(content);
+                content.dataset.mathRendered = 'true';
+            }
+        }
+    });
+}
+
+/**
+ * Render math in a single element using KaTeX.
+ * @param {HTMLElement} element - The DOM element to render math in
+ */
+function renderMathInContent(element) {
+    if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(element, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+        });
+    }
+}
+
+/**
  * Render feedback with Markdown and KaTeX math support.
  * @param {string} text - The feedback text with optional LaTeX ($...$) and Markdown
  * @param {HTMLElement} element - The DOM element to render into
@@ -55,6 +102,19 @@ function initFeedbackRendering() {
         el.innerHTML = marked.parse(text);
 
         // Then render math
+        renderMathInElement(el, {
+            delimiters: [
+                {left: '$$', right: '$$', display: true},
+                {left: '$', right: '$', display: false},
+                {left: '\\(', right: '\\)', display: false},
+                {left: '\\[', right: '\\]', display: true}
+            ],
+            throwOnError: false
+        });
+    });
+
+    // Render math in task content
+    document.querySelectorAll('.task-content.math-content').forEach(el => {
         renderMathInElement(el, {
             delimiters: [
                 {left: '$$', right: '$$', display: true},

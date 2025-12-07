@@ -28,6 +28,21 @@
             {% endif %}
         </div>
         <div class="task-title">{{ task.title }}</div>
+        <div class="task-meta-row">
+            {% if task.difficulty %}
+            <span class="difficulty difficulty-{{ task.difficulty }}"
+                  data-tooltip="{{ {1: 'Bardzo łatwe', 2: 'Łatwe', 3: 'Średnie', 4: 'Trudne', 5: 'Bardzo trudne'}[task.difficulty] }}">
+                {% for i in range(task.difficulty) %}★{% endfor %}{% for i in range(5 - task.difficulty) %}☆{% endfor %}
+            </span>
+            {% endif %}
+            {% if task.categories %}
+            {% for cat in task.categories %}
+            <span class="category-badge category-badge-small category-{{ cat }}">
+                {{ {'algebra': 'Algebra', 'geometria': 'Geometria', 'teoria_liczb': 'Teoria liczb', 'kombinatoryka': 'Kombinatoryka', 'logika': 'Logika', 'arytmetyka': 'Arytmetyka'}[cat] }}
+            </span>
+            {% endfor %}
+            {% endif %}
+        </div>
         <div class="task-stats">
             {% if task.submission_count > 0 %}
             <span class="stat">

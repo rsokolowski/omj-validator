@@ -438,11 +438,30 @@ h1, h2, h3, h4 {
 .task-title {
     font-size: 1rem;
     color: var(--color-gray-700);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.task-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    min-height: 1.5rem;
+}
+
+.task-meta-row .difficulty {
+    font-size: 0.75rem;
+    letter-spacing: -1px;
+}
+
+.category-badge-small {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
 }
 
 .task-stats {
@@ -833,6 +852,238 @@ h1, h2, h3, h4 {
 
 .empty-state p {
     margin-bottom: 1rem;
+}
+
+/* === Tooltips === */
+[data-tooltip] {
+    position: relative;
+    cursor: help;
+}
+
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5rem 0.75rem;
+    background: var(--color-gray-800);
+    color: white;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.4;
+    white-space: nowrap;
+    border-radius: var(--radius-sm);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
+    z-index: 100;
+    pointer-events: none;
+    max-width: 280px;
+    white-space: normal;
+    text-align: center;
+}
+
+[data-tooltip]::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--color-gray-800);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
+    z-index: 100;
+}
+
+[data-tooltip]:hover::after,
+[data-tooltip]:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* === Difficulty Stars === */
+.difficulty {
+    font-size: 0.875rem;
+    letter-spacing: 1px;
+    cursor: help;
+}
+
+.difficulty-1 { color: #22c55e; }
+.difficulty-2 { color: #84cc16; }
+.difficulty-3 { color: #eab308; }
+.difficulty-4 { color: #f97316; }
+.difficulty-5 { color: #ef4444; }
+
+/* === Category Badges === */
+.task-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.category-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    border-radius: 9999px;
+    cursor: help;
+    transition: transform 0.15s ease;
+}
+
+.category-badge:hover {
+    transform: translateY(-1px);
+}
+
+.category-algebra {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.category-geometria {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.category-teoria_liczb {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.category-kombinatoryka {
+    background: #f3e8ff;
+    color: #7c3aed;
+}
+
+.category-logika {
+    background: #ffe4e6;
+    color: #be123c;
+}
+
+.category-arytmetyka {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+/* === Hints Section === */
+.hints-section {
+    background: white;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.hints-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.hints-header h2 {
+    font-size: 1.125rem;
+    color: var(--color-gray-700);
+    margin: 0;
+}
+
+.hints-info {
+    font-size: 0.8125rem;
+    color: var(--color-gray-500);
+}
+
+.hints-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.hint-item {
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+}
+
+.hint-item:hover {
+    border-color: var(--color-gray-300);
+}
+
+.hint-item.revealed {
+    border-color: var(--color-primary);
+    background: var(--color-gray-50);
+}
+
+.hint-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.9375rem;
+    color: var(--color-gray-700);
+    transition: background 0.15s ease;
+}
+
+.hint-toggle:hover {
+    background: var(--color-gray-50);
+}
+
+.hint-item.revealed .hint-toggle {
+    background: transparent;
+}
+
+.hint-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.hint-label {
+    flex: 1;
+    font-weight: 500;
+}
+
+.hint-chevron {
+    font-size: 0.75rem;
+    color: var(--color-gray-400);
+    transition: transform 0.2s ease;
+}
+
+.hint-item.revealed .hint-chevron {
+    transform: rotate(90deg);
+    color: var(--color-primary);
+}
+
+.hint-content {
+    display: none;
+    padding: 0 1rem 1rem 3rem;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-gray-700);
+}
+
+.hint-item.revealed .hint-content {
+    display: block;
+}
+
+/* Math content styling */
+.math-content {
+    line-height: 1.8;
+}
+
+.math-content .katex {
+    font-size: 1.05em;
 }
 
 /* === Responsive === */
