@@ -24,7 +24,8 @@ from .storage import (
     load_submissions,
     create_submission,
 )
-from .claude_client import analyze_solution
+from .ai import create_ai_provider, AIProviderError
+from .models import SubmissionResult
 
 app = FastAPI(title="OMJ Validator", description="Walidator rozwiązań OMJ")
 
@@ -216,7 +217,7 @@ def _validate_path_params(year: str, etap: str) -> bool:
     return bool(re.match(r"^\d{4}$", year) and re.match(r"^[a-zA-Z0-9_-]+$", etap))
 
 
-# Max image dimensions for Claude API compatibility
+# Max image dimensions for AI API compatibility
 MAX_IMAGE_DIMENSION = 2048
 
 
@@ -260,7 +261,7 @@ def _resize_image_if_needed(file_path: Path) -> None:
                 file_path.unlink(missing_ok=True)
 
     except Exception:
-        # If resize fails, keep original - Claude will report the error
+        # If resize fails, keep original - AI will report the error
         pass
 
 
@@ -349,7 +350,7 @@ async def submit_solution(
             file_path.unlink(missing_ok=True)
             raise
 
-        # Resize if too large for Claude API
+        # Resize if too large for AI API
         _resize_image_if_needed(file_path)
 
         # Update path if extension changed (e.g., PNG -> JPG after resize)
@@ -368,13 +369,25 @@ async def submit_solution(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
-    # Analyze with Claude
-    result = await analyze_solution(
-        task_pdf_path=task_pdf,
-        solution_pdf_path=solution_pdf,
-        image_paths=saved_paths,
-        task_number=num,
-    )
+    # Analyze with AI provider
+    try:
+        provider = create_ai_provider()
+        result = await provider.analyze_solution(
+            task_pdf_path=task_pdf,
+            solution_pdf_path=solution_pdf,
+            image_paths=saved_paths,
+            task_number=num,
+        )
+    except AIProviderError as e:
+        result = SubmissionResult(
+            score=0,
+            feedback=f"Błąd konfiguracji AI: {str(e)}",
+        )
+    except Exception as e:
+        result = SubmissionResult(
+            score=0,
+            feedback=f"Nieoczekiwany błąd: {str(e)}",
+        )
 
     # Save submission
     submission = create_submission(

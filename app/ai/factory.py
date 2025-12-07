@@ -26,12 +26,7 @@ def create_ai_provider() -> "AIProvider":
     """
     provider_name = settings.ai_provider.lower()
 
-    if provider_name == "claude":
-        from .providers.claude import ClaudeProvider
-
-        return ClaudeProvider()
-
-    elif provider_name == "gemini":
+    if provider_name == "gemini":
         from .providers.gemini import GeminiProvider
 
         if not settings.gemini_api_key:
@@ -44,5 +39,5 @@ def create_ai_provider() -> "AIProvider":
     else:
         raise AIProviderError(
             f"Unknown AI provider: {provider_name}. "
-            f"Supported providers: claude, gemini"
+            f"Supported providers: gemini"
         )

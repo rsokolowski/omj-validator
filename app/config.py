@@ -10,12 +10,7 @@ class Settings(BaseSettings):
     auth_key: str
 
     # AI Provider Selection
-    ai_provider: str = "claude"  # "claude" or "gemini"
-
-    # Claude CLI Configuration
-    claude_path: str = "claude"
-    claude_model: str = "opus"
-    claude_timeout: int = 300
+    ai_provider: str = "gemini"
 
     # Gemini API Configuration
     gemini_api_key: Optional[str] = None
@@ -65,10 +60,6 @@ class Settings(BaseSettings):
     @property
     def prompts_dir(self) -> Path:
         return self.base_dir / "prompts"
-
-    @property
-    def system_prompt_path(self) -> Path:
-        return self.prompts_dir / "system_prompt.txt"
 
     @property
     def gemini_prompt_path(self) -> Path:
