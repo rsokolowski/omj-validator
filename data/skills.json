@@ -19,6 +19,10 @@
     "logic": {
       "name": "Logika",
       "description": "Techniki dowodzenia i rozumowania logicznego"
+    },
+    "arithmetic": {
+      "name": "Arytmetyka",
+      "description": "Podstawowe operacje arytmetyczne, obliczenia i szacowanie wartości"
     }
   },
   "skills": {
@@ -449,6 +453,39 @@
         "Rozkład na ułamki proste",
         "Sumy różnic kolejnych wyrazów",
         "Iloczyny teleskopowe"
+      ]
+    },
+    "basic_operations": {
+      "id": "basic_operations",
+      "name": "Podstawowe działania",
+      "category": "arithmetic",
+      "description": "Wykonywanie obliczeń arytmetycznych, działania na ułamkach, procenty i proporcje.",
+      "examples": [
+        "Obliczenia z ułamkami zwykłymi i dziesiętnymi",
+        "Rozwiązywanie zadań z procentami",
+        "Proporcje i skala"
+      ]
+    },
+    "estimation": {
+      "id": "estimation",
+      "name": "Szacowanie i przybliżenia",
+      "category": "arithmetic",
+      "description": "Przybliżone obliczenia, szacowanie rzędu wielkości i sprawdzanie poprawności wyników.",
+      "examples": [
+        "Szacowanie wartości wyrażeń",
+        "Sprawdzanie rzędu wielkości wyniku",
+        "Przybliżenia w obliczeniach praktycznych"
+      ]
+    },
+    "word_problems": {
+      "id": "word_problems",
+      "name": "Zadania tekstowe",
+      "category": "arithmetic",
+      "description": "Tłumaczenie treści zadań na język matematyczny i rozwiązywanie problemów praktycznych.",
+      "examples": [
+        "Zadania o pracy, drodze i czasie",
+        "Problemy z mieszaninami i stężeniami",
+        "Zadania o cenach i rabatach"
       ]
     }
   }
