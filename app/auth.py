@@ -69,7 +69,13 @@ def require_auth(request: Request) -> None:
 def require_auth_redirect(request: Request) -> Optional[RedirectResponse]:
     """Return redirect to login if not authenticated, None otherwise."""
     if not verify_auth(request):
-        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+        # Include the current URL as 'next' parameter so user returns after login
+        from urllib.parse import urlencode
+        next_url = str(request.url.path)
+        if request.url.query:
+            next_url += f"?{request.url.query}"
+        login_url = f"/login?{urlencode({'next': next_url})}"
+        return RedirectResponse(url=login_url, status_code=status.HTTP_303_SEE_OTHER)
     return None
 
 
@@ -100,7 +106,13 @@ def require_group_member_redirect(request: Request) -> Optional[RedirectResponse
     For HTML routes - redirects to login or shows limited access page.
     """
     if not verify_auth(request):
-        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+        # Include the current URL as 'next' parameter so user returns after login
+        from urllib.parse import urlencode
+        next_url = str(request.url.path)
+        if request.url.query:
+            next_url += f"?{request.url.query}"
+        login_url = f"/login?{urlencode({'next': next_url})}"
+        return RedirectResponse(url=login_url, status_code=status.HTTP_303_SEE_OTHER)
 
     if not is_group_member(request):
         return RedirectResponse(url="/auth/limited", status_code=status.HTTP_303_SEE_OTHER)
