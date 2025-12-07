@@ -40,7 +40,9 @@ python populate_metadata_gemini.py             # Alternative using Gemini API
 app/
 ├── main.py          # FastAPI routes, image upload/processing, PDF serving
 ├── config.py        # Settings via pydantic-settings, all paths defined here
-├── auth.py          # Cookie-based auth with derived session tokens
+├── auth.py          # Session-based auth helpers (get_current_user, require_auth, etc.)
+├── oauth.py         # Google OAuth configuration (Authlib)
+├── groups.py        # Access control: email allowlist or Google Groups API
 ├── storage.py       # Task loading (dir scan + LRU cache), submissions storage
 ├── models.py        # Pydantic models (TaskInfo, TaskPdf, Submission, etc.)
 └── ai/
@@ -82,17 +84,30 @@ app/
 ### Configuration
 
 Environment variables (`.env`):
-- `AUTH_KEY` - authentication secret
+
+**Authentication:**
+- `AUTH_DISABLED` - set to `true` to disable auth (local development)
+- `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` - Google OAuth credentials
+- `SESSION_SECRET_KEY` - secret for session cookies (generate with `openssl rand -hex 32`)
+- `ALLOWED_EMAILS` - comma-separated list of emails with full access (can submit solutions)
+
+**AI Provider:**
 - `AI_PROVIDER` - currently only "gemini" supported
 - `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_TIMEOUT`
+
+**Other:**
 - `DATA_DIR` - optional external data directory for cloud deployments
+
+**Access Control:** Users can log in via Google OAuth. Only users in `ALLOWED_EMAILS` can submit solutions; others get read-only access (can view tasks but not submit).
 
 ### Templates
 
 Jinja2 templates in `templates/` with `base.html` layout. Polish language throughout the UI.
 
 Key templates:
-- `base.html` - includes KaTeX CSS/JS for math rendering
+- `base.html` - includes KaTeX CSS/JS for math rendering, user info in header
+- `login.html` - Google OAuth login page
+- `auth_limited.html` - shown to logged-in users without full access
 - `task.html` - task detail with hints (progressive reveal), submission form
 - `etap.html` - task list with difficulty stars and category badges
 
