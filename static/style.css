@@ -409,6 +409,7 @@ h1, h2, h3, h4 {
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
     text-decoration: none;
+    z-index: 101;
 }
 
 .task-card.task-unavailable {
@@ -715,6 +716,60 @@ h1, h2, h3, h4 {
     border-radius: var(--radius-sm);
     font-family: var(--font-mono);
     font-size: 0.875em;
+}
+
+/* === Validation Progress Bar === */
+.validation-progress {
+    margin-top: 1.5rem;
+}
+
+.progress-wrapper {
+    background: white;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.progress-bar {
+    height: 12px;
+    background: var(--color-gray-200);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark, #2563eb));
+    border-radius: 6px;
+    width: 0%;
+    transition: width 0.3s ease-out;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.progress-label {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-gray-700);
+}
+
+.progress-percent {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+.progress-time {
+    font-size: 0.8125rem;
+    color: var(--color-gray-500);
+    text-align: center;
 }
 
 /* === History Section === */

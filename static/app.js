@@ -3,6 +3,121 @@
 let selectedFiles = [];
 
 /**
+ * Progress bar controller for validation process.
+ * Simulates progress over expected duration with realistic phases.
+ */
+class ValidationProgress {
+    constructor(containerId, expectedDuration = 50000) {
+        this.container = document.getElementById(containerId);
+        this.expectedDuration = expectedDuration;
+        this.startTime = null;
+        this.animationFrame = null;
+        this.phases = [
+            { at: 0, label: 'Przesyłanie zdjęć...' },
+            { at: 15, label: 'Przesyłanie do Gemini...' },
+            { at: 30, label: 'Analizowanie treści zadania...' },
+            { at: 50, label: 'Sprawdzanie rozwiązania...' },
+            { at: 70, label: 'Weryfikowanie kroków...' },
+            { at: 85, label: 'Generowanie oceny...' },
+            { at: 95, label: 'Finalizowanie...' }
+        ];
+    }
+
+    show() {
+        if (!this.container) return;
+
+        this.container.innerHTML = `
+            <div class="progress-wrapper">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-info">
+                    <span class="progress-label">Przygotowywanie...</span>
+                    <span class="progress-percent">0%</span>
+                </div>
+                <div class="progress-time">Szacowany czas: ~${Math.round(this.expectedDuration / 1000)}s</div>
+            </div>
+        `;
+        this.container.style.display = 'block';
+
+        this.fillEl = this.container.querySelector('.progress-fill');
+        this.labelEl = this.container.querySelector('.progress-label');
+        this.percentEl = this.container.querySelector('.progress-percent');
+        this.timeEl = this.container.querySelector('.progress-time');
+
+        this.startTime = Date.now();
+        this.animate();
+    }
+
+    animate() {
+        const elapsed = Date.now() - this.startTime;
+
+        // Linear progress, capped at 95% until complete() is called
+        // Note: Phases are time-based estimates, not real backend status
+        const progress = Math.min(0.95, elapsed / this.expectedDuration);
+        const percent = Math.round(progress * 100);
+
+        // Update progress bar
+        this.fillEl.style.width = `${percent}%`;
+        this.percentEl.textContent = `${percent}%`;
+
+        // Update label based on phase
+        const phase = this.phases.filter(p => p.at <= percent).pop();
+        if (phase) {
+            this.labelEl.textContent = phase.label;
+        }
+
+        // Update time remaining
+        const remaining = Math.max(0, this.expectedDuration - elapsed);
+        if (remaining > 0) {
+            this.timeEl.textContent = `Pozostało: ~${Math.ceil(remaining / 1000)}s`;
+        } else {
+            this.timeEl.textContent = 'Prawie gotowe...';
+        }
+
+        // Continue animation (keep updating time display even after hitting 95%)
+        this.animationFrame = requestAnimationFrame(() => this.animate());
+    }
+
+    complete() {
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+
+        if (this.fillEl) {
+            this.fillEl.style.width = '100%';
+            this.percentEl.textContent = '100%';
+            this.labelEl.textContent = 'Gotowe!';
+            this.timeEl.textContent = '';
+        }
+
+        // Hide after short delay
+        setTimeout(() => this.hide(), 500);
+    }
+
+    hide() {
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+        if (this.container) {
+            this.container.style.display = 'none';
+        }
+    }
+
+    error(message) {
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+
+        if (this.fillEl) {
+            this.fillEl.style.background = 'var(--color-danger, #dc3545)';
+            this.labelEl.textContent = message || 'Wystąpił błąd';
+            this.timeEl.textContent = '';
+        }
+    }
+}
+
+/**
  * Toggle hint visibility with progressive reveal.
  * @param {HTMLElement} button - The hint toggle button
  */
@@ -170,6 +285,9 @@ function initTaskPage(year, etap, taskNumber) {
         });
     }
 
+    // Initialize progress bar (50s expected duration based on actual API timing)
+    const progress = new ValidationProgress('validation-progress', 50000);
+
     // Handle form submission
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -187,6 +305,9 @@ function initTaskPage(year, etap, taskNumber) {
         submitBtn.disabled = true;
         resultContainer.style.display = 'none';
 
+        // Start progress bar
+        progress.show();
+
         try {
             const formData = new FormData();
             selectedFiles.forEach(file => {
@@ -201,6 +322,9 @@ function initTaskPage(year, etap, taskNumber) {
             const data = await response.json();
 
             if (response.ok && data.success) {
+                // Complete progress bar
+                progress.complete();
+
                 // Show result
                 const scoreEl = document.getElementById('result-score');
                 const feedbackEl = document.getElementById('result-feedback');
@@ -218,10 +342,14 @@ function initTaskPage(year, etap, taskNumber) {
                 // Scroll to result
                 resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } else {
+                progress.error('Błąd walidacji');
+                setTimeout(() => progress.hide(), 2000);
                 alert(data.error || 'Wystąpił błąd podczas wysyłania rozwiązania.');
             }
         } catch (error) {
             console.error('Submit error:', error);
+            progress.error('Błąd połączenia');
+            setTimeout(() => progress.hide(), 2000);
             alert('Wystąpił błąd połączenia. Spróbuj ponownie.');
         } finally {
             // Reset button state
