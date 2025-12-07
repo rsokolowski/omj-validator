@@ -45,6 +45,7 @@ app/
 ├── groups.py        # Access control: email allowlist or Google Groups API
 ├── storage.py       # Task loading (dir scan + LRU cache), submissions storage
 ├── models.py        # Pydantic models (TaskInfo, TaskPdf, Submission, etc.)
+├── progress.py      # Progression graph: task status, prerequisites, recommendations
 └── ai/
     ├── protocol.py  # AIProvider Protocol defining analyze_solution interface
     ├── factory.py   # Provider factory based on AI_PROVIDER setting
@@ -57,7 +58,7 @@ app/
 
 1. **Task Loading**: Per-task JSON files at `data/tasks/{year}/{etap}/task_{num}.json`. All 247 task files are scanned on startup and cached in memory.
 
-   Task JSON structure:
+   Task JSON structure (see [docs/task-metadata.md](docs/task-metadata.md) for full reference):
    ```json
    {
      "number": 1,
@@ -66,7 +67,8 @@ app/
      "pdf": {"tasks": "...", "solutions": "...", "statistics": "..."},
      "difficulty": 3,           // 1-5 scale
      "categories": ["geometria", "algebra"],  // from predefined set
-     "hints": ["hint1", "hint2", "hint3", "hint4"]  // 4 progressive hints
+     "hints": ["hint1", "hint2", "hint3", "hint4"],  // 4 progressive hints
+     "prerequisites": ["2023_etap1_2"]  // task keys required for progression graph
    }
    ```
 
@@ -110,10 +112,13 @@ Key templates:
 - `auth_limited.html` - shown to logged-in users without full access
 - `task.html` - task detail with hints (progressive reveal), submission form
 - `etap.html` - task list with difficulty stars and category badges
+- `progress.html` - progression graph with Cytoscape.js visualization
 
 Frontend assets in `static/`:
 - `app.js` - KaTeX auto-rendering for `.math-content` elements, hint toggle, file upload
 - `style.css` - responsive design, difficulty/category badges, hint styling
+- `progress.js` - Cytoscape.js graph rendering, filtering, recommendations
+- `progress.css` - progression graph page styling
 
 ## Deployment
 
