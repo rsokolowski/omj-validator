@@ -17,9 +17,20 @@
                 {% block nav %}
                 <a href="/years">Zadania</a>
                 {% if is_authenticated %}
-                <a href="/logout" class="nav-logout">Wyloguj</a>
+                    {% if user %}
+                    <div class="user-info">
+                        {% if user.picture %}
+                        <img src="{{ user.picture }}" class="user-avatar" alt="{{ user.name }}" referrerpolicy="no-referrer">
+                        {% endif %}
+                        <span class="user-name">{{ user.name or user.email }}</span>
+                        {% if not user.is_group_member %}
+                        <span class="badge badge-readonly">tylko odczyt</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    <a href="/logout" class="nav-logout">Wyloguj</a>
                 {% else %}
-                <a href="/login" class="nav-login">Zaloguj</a>
+                    <a href="/login" class="nav-login">Zaloguj</a>
                 {% endif %}
                 {% endblock %}
             </nav>

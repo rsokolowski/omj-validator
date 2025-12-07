@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Ograniczony dostep - OMJ Validator{% endblock %}
+
+{% block content %}
+<div class="info-container">
+    <h1>Ograniczony dostep</h1>
+
+    {% if user %}
+    <p>Witaj, <strong>{{ user.name or user.email }}</strong>!</p>
+    {% endif %}
+
+    <p>Nie jestes czlonkiem grupy <strong>omj-validator-alpha</strong>.</p>
+
+    <p>Masz dostep tylko do odczytu - mozesz przegladac zadania, ale nie przesylac rozwiazan.</p>
+
+    <p>Skontaktuj sie z administratorem, aby uzyskac pelny dostep.</p>
+
+    <div class="action-buttons">
+        <a href="/years" class="btn btn-primary">Przejdz do zadan</a>
+        <a href="/logout" class="btn btn-secondary">Wyloguj</a>
+    </div>
+</div>
+{% endblock %}

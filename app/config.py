@@ -1,4 +1,6 @@
+import secrets
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import model_validator
 from pathlib import Path
 from typing import Optional
 
@@ -7,7 +9,40 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
     # Authentication
-    auth_key: str
+    auth_disabled: bool = False  # Set to True to disable all auth (local dev)
+    auth_key: str = ""  # Deprecated, kept for backward compatibility
+
+    # Google OAuth
+    google_client_id: Optional[str] = None
+    google_client_secret: Optional[str] = None
+
+    # Access control for alpha users
+    # Option 1: Email allowlist (comma-separated, simplest approach)
+    allowed_emails: Optional[str] = None  # e.g., "user1@gmail.com,user2@gmail.com"
+
+    # Option 2: Google Groups API (requires Workspace Admin + Domain-Wide Delegation)
+    google_group_email: str = "omj-validator-alpha@googlegroups.com"
+    google_service_account_json: Optional[str] = None  # JSON string or file path
+
+    # Session - MUST be set explicitly in production for multi-worker consistency
+    session_secret_key: Optional[str] = None
+
+    @model_validator(mode="after")
+    def validate_session_secret(self):
+        """Ensure session_secret_key is set in production (when auth is enabled)."""
+        if not self.auth_disabled and not self.session_secret_key:
+            # Auto-generate for development, but warn
+            import logging
+            logging.warning(
+                "SESSION_SECRET_KEY not set. Generating random key. "
+                "This will cause session loss on restart and issues with multiple workers. "
+                "Set SESSION_SECRET_KEY in production!"
+            )
+            self.session_secret_key = secrets.token_hex(32)
+        elif self.auth_disabled and not self.session_secret_key:
+            # Auth disabled, generate a throwaway key
+            self.session_secret_key = secrets.token_hex(32)
+        return self
 
     # AI Provider Selection
     ai_provider: str = "gemini"
