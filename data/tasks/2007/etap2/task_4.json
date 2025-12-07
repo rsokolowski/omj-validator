@@ -20,7 +20,8 @@
   ],
   "skills_required": [
     "parity_arguments",
-    "sequences"
+    "sequences",
+    "divisibility_arguments"
   ],
   "skills_gained": [
     "parity_arguments"

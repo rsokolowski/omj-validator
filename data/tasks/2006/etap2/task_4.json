@@ -18,7 +18,7 @@
     "Zauważ, że suma wszystkich czterech czynników to $2(a+b+c+d)$. Co to mówi o parzystości liczby czynników parzystych? Ile dwójek (jako czynników pierwszych) musi zawierać cały iloczyn?",
     "Pokaż, że iloczyn zawsze jest podzielny przez $4$ (czyli przez $2^2$). Następnie rozważ, kiedy iloczyn byłby podzielny przez dokładnie jedną piątkę - przeanalizuj, czy to jest możliwe przy jednoczesnej podzielności przez $2^2$ ale nie przez $100$."
   ],
-  "skills_required": ["modular_arithmetic", "parity_arguments"],
+  "skills_required": ["modular_arithmetic", "parity_arguments", "polynomial_analysis"],
   "skills_gained": ["modular_arithmetic"],
   "prerequisites": ["2006_etap1_1"]
 }

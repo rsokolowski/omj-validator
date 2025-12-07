@@ -25,7 +25,8 @@
   ],
   "skills_gained": [
     "area_methods",
-    "constructive_proof"
+    "constructive_proof",
+    "divisibility_arguments"
   ],
   "prerequisites": [
     "2011_etap2_3"

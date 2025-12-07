@@ -19,6 +19,6 @@
     "Umieść środek kwadratu w początku układu współrzędnych. Jeśli prosta $\\ell$ przechodzi przez początek, to $a = c$ oraz $b = d$. Wyraź współrzędne wierzchołków i oblicz sumę $a^2 + b^2 + c^2 + d^2 = 2a^2 + 2b^2$."
   ],
   "prerequisites": [],
-  "skills_required": ["coordinate_geometry", "transformations"],
+  "skills_required": ["coordinate_geometry", "transformations", "algebraic_identities"],
   "skills_gained": ["invariants", "coordinate_geometry"]
 }

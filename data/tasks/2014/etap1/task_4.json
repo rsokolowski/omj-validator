@@ -24,7 +24,8 @@
   ],
   "skills_gained": [
     "graph_theory",
-    "double_counting"
+    "double_counting",
+    "divisibility_arguments"
   ],
   "prerequisites": [
     "2011_etap2_2"

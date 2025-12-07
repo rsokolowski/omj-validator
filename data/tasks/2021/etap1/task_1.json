@@ -19,8 +19,11 @@
     "Uprość wyrażenie $M - \\frac{S + M}{17}$, podstawiając $S = 16(M - 17)$. Zauważ, że wynik nie zależy od konkretnej wartości $M$."
   ],
   "prerequisites": [],
-  "skills_required": [],
+  "skills_required": [
+    "basic_operations"
+  ],
   "skills_gained": [
+    "word_problems",
     "algebraic_identities"
   ]
 }

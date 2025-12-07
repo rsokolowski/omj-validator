@@ -18,7 +18,7 @@
     "Zbadaj, od których cyfr mogą zaczynać się dwucyfrowe kwadraty, a na których mogą się kończyć. Czy istnieje cyfra, która pozwala przejść z jednego kwadratu do następnego?",
     "Sprawdź systematycznie: dla każdego dwucyfrowego kwadratu znajdź wszystkie kwadraty, które mogą po nim następować (tzn. zaczynają się od jego ostatniej cyfry). Czy da się utworzyć łańcuch długości 5 takich połączeń?"
   ],
-  "skills_required": [],
+  "skills_required": ["digit_manipulation", "case_analysis"],
   "skills_gained": [
     "case_analysis",
     "counting_techniques"

@@ -24,7 +24,8 @@
   ],
   "skills_gained": [
     "pigeonhole",
-    "counting_techniques"
+    "counting_techniques",
+    "divisibility_arguments"
   ],
   "prerequisites": [
     "2022_etap2_5"

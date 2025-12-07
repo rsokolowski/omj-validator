@@ -18,7 +18,7 @@
     "Gdy $x = y = 1$, nierówność przyjmuje postać $1 < 2$, co jest prawdą. Ale czy to wystarczy? Sprawdź, co się dzieje dla innych wartości, np. gdy $y$ jest bardzo duże w porównaniu z $x$.",
     "Przeanalizuj zachowanie obu stron nierówności gdy $y \\to \\infty$ przy ustalonym $x > 0$. Porównaj, jak szybko rosną $xy^n$ oraz $x^4 + y^4$ w zależności od wartości $n$. Dla jakiego $n$ lewa strona rośnie szybciej niż prawa?"
   ],
-  "skills_required": ["inequality_manipulation", "case_analysis"],
+  "skills_required": ["inequality_manipulation", "case_analysis", "divisibility_arguments"],
   "skills_gained": ["inequality_manipulation"],
   "prerequisites": []
 }

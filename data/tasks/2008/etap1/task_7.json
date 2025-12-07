@@ -19,6 +19,6 @@
     "Rozważ graniastosłup o podstawie czworokątnej. Sprawdź, jakie rzuty otrzymasz patrząc: prostopadle do podstawy, wzdłuż krawędzi bocznej, oraz pod odpowiednim kątem do przekątnej podstawy."
   ],
   "prerequisites": ["2005_etap2_1"],
-  "skills_required": ["spatial_3d", "polyhedra"],
+  "skills_required": ["spatial_3d", "polyhedra", "counting_techniques"],
   "skills_gained": ["spatial_3d", "constructive_proof"]
 }

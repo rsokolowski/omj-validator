@@ -19,6 +19,6 @@
     "Oblicz $\\frac{50 \\cdot 49}{2}$ i sprawdź, czy wynik dzieli się przez $50$. Co to oznacza dla możliwości równego podziału zwycięstw?"
   ],
   "prerequisites": [],
-  "skills_required": ["graph_theory", "double_counting"],
+  "skills_required": ["graph_theory", "double_counting", "divisibility_arguments"],
   "skills_gained": ["graph_theory", "double_counting"]
 }

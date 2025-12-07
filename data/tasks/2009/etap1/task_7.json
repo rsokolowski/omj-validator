@@ -21,7 +21,8 @@
   "prerequisites": ["2007_etap2_1"],
   "skills_required": [
     "algebraic_identities",
-    "constructive_proof"
+    "constructive_proof",
+    "divisibility_arguments"
   ],
   "skills_gained": [
     "algebraic_identities"

@@ -19,6 +19,6 @@
     "Liczba zmian znaku w cyklu musi być parzysta (wracamy do punktu wyjścia). Masz 101 iloczynów, chcesz jak najwięcej $-1$. Jaka jest największa parzysta liczba nieprzekraczająca 101?"
   ],
   "prerequisites": [],
-  "skills_required": ["parity_arguments", "invariants"],
+  "skills_required": ["parity_arguments", "invariants", "sequences"],
   "skills_gained": ["parity_arguments", "invariants"]
 }

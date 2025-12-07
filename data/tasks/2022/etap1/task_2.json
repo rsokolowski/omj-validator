@@ -20,9 +20,11 @@
   ],
   "prerequisites": [],
   "skills_required": [
+    "basic_operations",
     "sequences"
   ],
   "skills_gained": [
+    "basic_operations",
     "sequences",
     "parity_arguments"
   ]

@@ -26,7 +26,8 @@
   "skills_gained": [
     "parity_arguments",
     "case_analysis",
-    "algebraic_identities"
+    "algebraic_identities",
+    "divisibility_arguments"
   ],
   "prerequisites": [
     "2015_etap1_5"

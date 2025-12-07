@@ -26,7 +26,8 @@
   ],
   "skills_gained": [
     "parity_arguments",
-    "contradiction"
+    "contradiction",
+    "divisibility_arguments"
   ],
   "prerequisites": [
     "2013_etap1_2"

@@ -25,7 +25,8 @@
   ],
   "skills_gained": [
     "invariants",
-    "coordinate_geometry"
+    "coordinate_geometry",
+    "algebraic_identities"
   ],
   "prerequisites": [
     "2010_etap1_5"

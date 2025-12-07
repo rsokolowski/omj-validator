@@ -23,7 +23,8 @@
   ],
   "skills_gained": [
     "diophantine_equations",
-    "constructive_proof"
+    "constructive_proof",
+    "counting_techniques"
   ],
   "prerequisites": []
 }

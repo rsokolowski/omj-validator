@@ -23,7 +23,8 @@
     "inequality_manipulation"
   ],
   "skills_gained": [
-    "contradiction"
+    "contradiction",
+    "diophantine_equations"
   ],
   "prerequisites": []
 }

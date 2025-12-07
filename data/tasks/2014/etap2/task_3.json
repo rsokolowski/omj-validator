@@ -25,7 +25,8 @@
   ],
   "skills_gained": [
     "parity_arguments",
-    "case_analysis"
+    "case_analysis",
+    "divisibility_arguments"
   ],
   "prerequisites": [
     "2013_etap2_3"

@@ -19,9 +19,11 @@
     "Skoro znasz już cyfrę jedności liczby $999^{1000}$, znajdź taką cyfrę $c$, że $3c$ daje tę samą cyfrę jedności. Sprawdź kolejno cyfry 0-9."
   ],
   "skills_required": [
+    "basic_operations",
     "modular_arithmetic"
   ],
   "skills_gained": [
+    "basic_operations",
     "modular_arithmetic",
     "digit_manipulation"
   ],

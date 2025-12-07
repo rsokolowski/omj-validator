@@ -19,6 +19,6 @@
     "Rozważ, jak można sparametryzować rozwiązania. Jeśli $b^2 = ac$ dla nieparzystych dodatnich $a$, $b$, $c$, to jakie trójki postaci $(a, b, c)$ spełniają ten warunek? Sprawdź warunek dodatniości mianowników dla znalezionych trójek."
   ],
   "prerequisites": ["2005_etap1_4"],
-  "skills_required": ["symmetric_systems", "algebraic_identities"],
+  "skills_required": ["symmetric_systems", "algebraic_identities", "divisibility_arguments"],
   "skills_gained": ["symmetric_systems", "algebraic_identities"]
 }

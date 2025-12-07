@@ -19,9 +19,11 @@
     "Liczba $n$ musi być podzielna przez $200$, aby $\\frac{203n}{200}$ było całkowite. Sprawdź, które wielokrotności $200$ nie przekraczają $404$ i dla których nowa liczba pasażerów też mieści się w pociągu."
   ],
   "skills_required": [
+    "basic_operations",
     "divisibility_arguments"
   ],
   "skills_gained": [
+    "word_problems",
     "divisibility_arguments"
   ],
   "prerequisites": []

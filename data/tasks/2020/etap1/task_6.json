@@ -23,7 +23,8 @@
   ],
   "skills_gained": [
     "parity_arguments",
-    "pigeonhole"
+    "pigeonhole",
+    "divisibility_arguments"
   ],
   "prerequisites": []
 }

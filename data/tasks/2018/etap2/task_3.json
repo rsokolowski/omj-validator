@@ -24,7 +24,8 @@
   ],
   "skills_gained": [
     "parity_arguments",
-    "counting_techniques"
+    "counting_techniques",
+    "transformations"
   ],
   "prerequisites": [
     "2015_etap2_5"

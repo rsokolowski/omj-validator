@@ -20,11 +20,13 @@
   ],
   "skills_required": [
     "pigeonhole",
-    "counting_techniques"
+    "counting_techniques",
+    "sequences"
   ],
   "skills_gained": [
     "pigeonhole",
-    "counting_techniques"
+    "counting_techniques",
+    "divisibility_arguments"
   ],
   "prerequisites": [
     "2021_etap2_3"

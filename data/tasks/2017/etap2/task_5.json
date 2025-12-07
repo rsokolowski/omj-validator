@@ -23,7 +23,8 @@
     "parity_arguments"
   ],
   "skills_gained": [
-    "case_analysis"
+    "case_analysis",
+    "modular_arithmetic"
   ],
   "prerequisites": [
     "2015_etap1_5"

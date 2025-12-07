@@ -23,7 +23,8 @@
   ],
   "skills_gained": [
     "algebraic_identities",
-    "contradiction"
+    "contradiction",
+    "primality_testing"
   ],
   "prerequisites": []
 }

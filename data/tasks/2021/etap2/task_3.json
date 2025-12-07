@@ -21,7 +21,8 @@
   "prerequisites": [],
   "skills_required": [
     "modular_arithmetic",
-    "graph_theory"
+    "graph_theory",
+    "sequences"
   ],
   "skills_gained": [
     "pigeonhole",

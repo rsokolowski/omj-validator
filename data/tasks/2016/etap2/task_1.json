@@ -25,7 +25,10 @@
   ],
   "skills_gained": [
     "contradiction",
-    "double_counting"
+    "double_counting",
+    "sequences",
+    "modular_arithmetic",
+    "counting_techniques"
   ],
   "prerequisites": []
 }

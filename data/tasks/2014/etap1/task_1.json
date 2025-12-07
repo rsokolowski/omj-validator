@@ -19,12 +19,15 @@
     "Wyznacz $z$ z układu równań i sprawdź, dla jakich wartości $z$ pozostałe zmienne $x$ i $y$ są całkowite nieujemne."
   ],
   "skills_required": [
+    "basic_operations",
     "diophantine_equations",
     "case_analysis"
   ],
   "skills_gained": [
+    "word_problems",
     "diophantine_equations",
-    "counting_techniques"
+    "counting_techniques",
+    "algebraic_identities"
   ],
   "prerequisites": []
 }
