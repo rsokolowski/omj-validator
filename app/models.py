@@ -51,6 +51,10 @@ class TaskInfo(BaseModel):
     # Prerequisites: list of task keys (e.g., ["2020_etap1_3", "2021_etap2_1"])
     # Task is "unlocked" when all prerequisites are mastered
     prerequisites: list[str] = []
+    # Skills needed to solve this task
+    skills_required: list[str] = []
+    # Skills developed by mastering this task
+    skills_gained: list[str] = []
 
     @computed_field
     @property
@@ -129,3 +133,30 @@ class ProgressData(BaseModel):
     edges: list[GraphEdge]
     recommendations: list[GraphNode]
     stats: dict  # {total, mastered, unlocked, locked}
+
+
+class SkillCategoryInfo(BaseModel):
+    """Skill category metadata from skills.json."""
+    id: str
+    name: str
+    description: str
+
+
+class SkillInfo(BaseModel):
+    """Skill information from skills.json."""
+    id: str
+    name: str
+    category: str  # Category ID (e.g., "number_theory")
+    description: str
+    examples: list[str] = []
+
+
+class PrerequisiteStatus(BaseModel):
+    """Prerequisite task with mastery status for display."""
+    key: str  # e.g., "2023_etap1_2"
+    year: str
+    etap: str
+    number: int
+    title: str
+    status: Literal["mastered", "in_progress"]  # mastered or not yet mastered
+    url: str  # e.g., "/task/2023/etap1/2"

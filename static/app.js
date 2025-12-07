@@ -118,6 +118,24 @@ class ValidationProgress {
 }
 
 /**
+ * Toggle collapsible section (Skills, Hints).
+ * @param {HTMLElement} button - The collapsible header button
+ */
+function toggleCollapsible(button) {
+    const section = button.closest('.collapsible-section');
+    section.classList.toggle('expanded');
+
+    // If expanding, render any math content that hasn't been rendered yet
+    if (section.classList.contains('expanded')) {
+        const mathElements = section.querySelectorAll('.math-content:not([data-math-rendered])');
+        mathElements.forEach(el => {
+            renderMathInContent(el);
+            el.dataset.mathRendered = 'true';
+        });
+    }
+}
+
+/**
  * Toggle hint visibility with progressive reveal.
  * @param {HTMLElement} button - The hint toggle button
  */

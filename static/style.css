@@ -1033,35 +1033,7 @@ h1, h2, h3, h4 {
     color: #0369a1;
 }
 
-/* === Hints Section === */
-.hints-section {
-    background: white;
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    box-shadow: var(--shadow);
-}
-
-.hints-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--color-gray-200);
-}
-
-.hints-header h2 {
-    font-size: 1.125rem;
-    color: var(--color-gray-700);
-    margin: 0;
-}
-
-.hints-info {
-    font-size: 0.8125rem;
-    color: var(--color-gray-500);
-}
-
+/* === Hints Section (inside collapsible) === */
 .hints-list {
     display: flex;
     flex-direction: column;
@@ -1297,4 +1269,229 @@ h1, h2, h3, h4 {
     padding: 1rem;
     border-radius: var(--radius);
     text-align: center;
+}
+
+/* === Collapsible Sections (Skills, Hints) === */
+.collapsible-section {
+    background: white;
+    border-radius: var(--radius);
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+    overflow: visible;
+    position: relative;
+}
+
+.collapsible-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease;
+}
+
+.collapsible-header:hover {
+    background: var(--color-gray-50);
+}
+
+.collapsible-header h2 {
+    font-size: 1.125rem;
+    color: var(--color-gray-700);
+    margin: 0;
+}
+
+.collapsible-info {
+    flex: 1;
+    font-size: 0.8125rem;
+    color: var(--color-gray-500);
+}
+
+.collapsible-chevron {
+    font-size: 0.75rem;
+    color: var(--color-gray-400);
+    transition: transform 0.2s ease;
+}
+
+.collapsible-section.expanded .collapsible-chevron {
+    transform: rotate(90deg);
+    color: var(--color-primary);
+}
+
+.collapsible-content {
+    display: none;
+    padding: 0 1.5rem 1.5rem;
+}
+
+.collapsible-section.expanded .collapsible-content {
+    display: block;
+}
+
+/* === Skills Section === */
+.skills-section .collapsible-content {
+    overflow: visible;
+}
+
+.skills-group {
+    margin-bottom: 1.25rem;
+    overflow: visible;
+}
+
+.skills-group:last-child {
+    margin-bottom: 0;
+}
+
+.skills-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    overflow: visible;
+    padding-bottom: 0.5rem;
+}
+
+.skills-group-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-gray-600);
+    margin: 0 0 0.5rem 0;
+}
+
+.skill-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: help;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border: 2px solid;
+    position: relative;
+}
+
+.skill-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    z-index: 100;
+}
+
+/* Required skills: outlined badges */
+.skill-required {
+    background: white;
+}
+
+/* Gained skills: filled badges */
+.skill-gained {
+    color: white !important;
+    border-color: transparent !important;
+}
+
+/* Category colors for skill badges */
+.skill-number_theory.skill-required {
+    border-color: #92400e;
+    color: #92400e;
+}
+.skill-number_theory.skill-gained {
+    background: #92400e;
+}
+
+.skill-algebra.skill-required {
+    border-color: #1e40af;
+    color: #1e40af;
+}
+.skill-algebra.skill-gained {
+    background: #1e40af;
+}
+
+.skill-geometry.skill-required {
+    border-color: #166534;
+    color: #166534;
+}
+.skill-geometry.skill-gained {
+    background: #166534;
+}
+
+.skill-combinatorics.skill-required {
+    border-color: #7c3aed;
+    color: #7c3aed;
+}
+.skill-combinatorics.skill-gained {
+    background: #7c3aed;
+}
+
+.skill-logic.skill-required {
+    border-color: #be123c;
+    color: #be123c;
+}
+.skill-logic.skill-gained {
+    background: #be123c;
+}
+
+.skill-arithmetic.skill-required {
+    border-color: #0369a1;
+    color: #0369a1;
+}
+.skill-arithmetic.skill-gained {
+    background: #0369a1;
+}
+
+/* === Prerequisites Row === */
+.task-prerequisites-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+}
+
+.prerequisites-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-gray-600);
+}
+
+.prerequisite-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.625rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.prerequisite-link:hover {
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+.prerequisite-mastered {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
+}
+
+.prerequisite-mastered:hover {
+    background: #bbf7d0;
+}
+
+.prerequisite-in_progress {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+}
+
+.prerequisite-in_progress:hover {
+    background: #fde68a;
+}
+
+.prerequisite-icon {
+    font-size: 0.75rem;
+    font-weight: bold;
 }

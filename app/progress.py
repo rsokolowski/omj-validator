@@ -376,3 +376,48 @@ def get_all_categories() -> list[str]:
     for task in all_tasks.values():
         categories.update(task.categories)
     return sorted(categories)
+
+
+def get_prerequisite_statuses(
+    prerequisite_keys: list[str],
+    progress: dict[str, int]
+) -> list["PrerequisiteStatus"]:
+    """Get mastery status for each prerequisite task.
+
+    Args:
+        prerequisite_keys: List of task keys (e.g., ["2023_etap1_2"])
+        progress: Dict of task_key -> best_score
+
+    Returns:
+        List of PrerequisiteStatus objects with mastery status
+    """
+    from .models import PrerequisiteStatus
+
+    all_tasks = _load_all_tasks()
+    statuses = []
+
+    for prereq_key in prerequisite_keys:
+        task = all_tasks.get(prereq_key)
+        if not task:
+            logger.warning(f"Prerequisite task not found: {prereq_key}")
+            continue
+
+        # Determine status
+        threshold = get_mastery_threshold(task.etap)
+        best_score = progress.get(prereq_key, 0)
+        status = "mastered" if best_score >= threshold else "in_progress"
+
+        # Build URL
+        url = f"/task/{task.year}/{task.etap}/{task.number}"
+
+        statuses.append(PrerequisiteStatus(
+            key=prereq_key,
+            year=task.year,
+            etap=task.etap,
+            number=task.number,
+            title=task.title,
+            status=status,
+            url=url
+        ))
+
+    return statuses

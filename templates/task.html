@@ -37,6 +37,19 @@
             {% endfor %}
             {% endif %}
         </div>
+        {% if prerequisite_statuses %}
+        <div class="task-prerequisites-row">
+            <span class="prerequisites-label">Powiązane zadania:</span>
+            {% for prereq in prerequisite_statuses %}
+            <a href="{{ prereq.url }}"
+               class="prerequisite-link prerequisite-{{ prereq.status }}"
+               data-tooltip="{{ prereq.title }}">
+                <span class="prerequisite-icon">{% if prereq.status == 'mastered' %}✓{% else %}○{% endif %}</span>
+                Zad. {{ prereq.number }} ({{ prereq.year }})
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 
     <div class="task-content-box">
@@ -58,25 +71,67 @@
         {% endif %}
     </div>
 
-    {% if task.hints and task.hints|length > 0 %}
-    <div class="hints-section">
-        <div class="hints-header">
-            <h2>Wskazówki</h2>
-            <span class="hints-info">Kliknij, aby odsłonić kolejne wskazówki</span>
-        </div>
-        <div class="hints-list">
-            {% set hint_labels = ['Zrozumienie', 'Strategia', 'Kierunek', 'Wskazówka'] %}
-            {% set hint_icons = ['💡', '🎯', '🧭', '🔑'] %}
-            {% for hint in task.hints %}
-            <div class="hint-item" data-hint-index="{{ loop.index0 }}">
-                <button class="hint-toggle" onclick="toggleHint(this)">
-                    <span class="hint-icon">{{ hint_icons[loop.index0] }}</span>
-                    <span class="hint-label">{{ hint_labels[loop.index0] }}</span>
-                    <span class="hint-chevron">▶</span>
-                </button>
-                <div class="hint-content math-content">{{ hint }}</div>
+    {% if skills_required or skills_gained %}
+    <div class="collapsible-section skills-section">
+        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+            <h2>Umiejętności</h2>
+            <span class="collapsible-info">Kompetencje matematyczne związane z zadaniem</span>
+            <span class="collapsible-chevron">▶</span>
+        </button>
+        <div class="collapsible-content">
+            {% if skills_required %}
+            <div class="skills-group">
+                <h3 class="skills-group-title">Wymagane umiejętności</h3>
+                <div class="skills-badges">
+                    {% for skill in skills_required %}
+                    <span class="skill-badge skill-required skill-{{ skill.category }}"
+                          data-tooltip="{{ skill.description }}">
+                        {{ skill.name }}
+                    </span>
+                    {% endfor %}
+                </div>
             </div>
-            {% endfor %}
+            {% endif %}
+
+            {% if skills_gained %}
+            <div class="skills-group">
+                <h3 class="skills-group-title">Umiejętności zdobyte</h3>
+                <div class="skills-badges">
+                    {% for skill in skills_gained %}
+                    <span class="skill-badge skill-gained skill-{{ skill.category }}"
+                          data-tooltip="{{ skill.description }}">
+                        {{ skill.name }}
+                    </span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if task.hints and task.hints|length > 0 %}
+    <div class="collapsible-section hints-section">
+        <button class="collapsible-header" onclick="toggleCollapsible(this)">
+            <h2>Wskazówki</h2>
+            <span class="collapsible-info">Kliknij, aby odsłonić kolejne wskazówki</span>
+            <span class="collapsible-chevron">▶</span>
+        </button>
+        <div class="collapsible-content">
+            <div class="hints-list">
+                {% set hint_labels = ['Zrozumienie', 'Strategia', 'Kierunek', 'Wskazówka'] %}
+                {% set hint_icons = ['💡', '🎯', '🧭', '🔑'] %}
+                {% for hint in task.hints %}
+                <div class="hint-item" data-hint-index="{{ loop.index0 }}">
+                    <button class="hint-toggle" onclick="toggleHint(this)">
+                        <span class="hint-icon">{{ hint_icons[loop.index0] }}</span>
+                        <span class="hint-label">{{ hint_labels[loop.index0] }}</span>
+                        <span class="hint-chevron">▶</span>
+                    </button>
+                    <div class="hint-content math-content">{{ hint }}</div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
     {% endif %}
