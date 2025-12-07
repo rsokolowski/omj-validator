@@ -5,7 +5,14 @@
     "solutions": "tasks/2019/etap2/2etap20r.pdf",
     "statistics": "tasks/2019/etap2/2etap20st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza, że ułamek jest skracalny. Jaki warunek musi spełniać największy wspólny dzielnik licznika i mianownika?",
+    "Spróbuj zbadać, jak zmienia się NWD$(a+n, b+n)$ w zależności od $n$. Czy istnieje związek między NWD$(a+n, b+n)$ a różnicą $a-b$?",
+    "Zauważ, że jeśli liczba $d$ dzieli zarówno $a+n$ jak i $b+n$, to dzieli również ich różnicę. Co to mówi o możliwych dzielnikach wspólnych?",
+    "Rozważ, co się stanie gdy $n$ będzie odpowiednio dużą wielokrotnością liczby $|a-b|$. Czy ułamek nadal będzie skracalny, jeśli $a \\neq b$?"
+  ]
 }

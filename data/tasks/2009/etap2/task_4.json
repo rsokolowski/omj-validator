@@ -5,7 +5,15 @@
     "solutions": "tasks/2009/etap2/omg05_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, ile łącznie meczów rozegrano w turnieju. Ile wygranych zostało rozdanych w sumie?",
+    "Policz całkowitą liczbę wygranych i sprawdź, czy da się ją równo podzielić między wszystkich zawodników.",
+    "Oblicz $\\binom{50}{2}$ — liczbę wszystkich meczów. Czy ta liczba jest podzielna przez 50?",
+    "Sprawdź, czy $\\frac{50 \\cdot 49}{2}$ dzieli się przez 50. Co to oznacza dla możliwości równego podziału wygranych?"
+  ]
 }

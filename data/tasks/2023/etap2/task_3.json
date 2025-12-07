@@ -5,7 +5,14 @@
     "solutions": "tasks/2023/etap2/19omj-2r.pdf",
     "statistics": "tasks/2023/etap2/19omj-2etap-st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek trapezu z zaznaczonym punktem $P$ na przekątnej $AC$. Jakie wnioski możesz wyciągnąć z warunku $\\sphericalangle ABC = \\sphericalangle ACB$ dla trójkąta $ABC$?",
+    "Skoro trójkąt $ABC$ jest równoramienny, poszukaj innych trójkątów równoramiennych w tej konfiguracji. Zastanów się, jakie boki mogą być równe dzięki równościom kątów.",
+    "Zwróć uwagę na trójkąt $BPC$ - znasz w nim kąt $\\sphericalangle BPC$ oraz $\\sphericalangle PCB$ (który jest częścią $\\sphericalangle ACB$). Porównaj ten trójkąt z innymi trójkątami na rysunku.",
+    "Rozważ trójkąty $ABP$ i $CPD$ (lub $BPC$). Wykorzystaj fakt, że proste $AB$ i $CD$ są równoległe, więc powstają kąty naprzemianległe. Sprawdź, czy możesz wykazać przystawanie lub równość odpowiednich boków."
+  ]
 }

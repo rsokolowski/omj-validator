@@ -5,7 +5,14 @@
     "solutions": "tasks/2010/etap2/2etap11r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek trapezu z zaznaczonymi kątami $60°$ przy wierzchołkach $A$ i $B$. Co możesz powiedzieć o bokach $AD$ i $BC$ tego trapezu? Jakie kąty są przy wierzchołkach $C$ i $D$?",
+    "Skoro trapez ma dwa kąty $60°$ przy tej samej podstawie, jest równoramienny. Poszukaj trójkątów przystających lub o równych bokach. Zastanów się, jakie trójkąty tworzą odcinki $BD$ i $AE$.",
+    "Rozważ trójkąty $\\triangle ABD$ i $\\triangle ABE$. Jakie boki i kąty tych trójkątów znasz? Wykorzystaj fakt, że $EB = CD$ oraz własności trapezu równoramiennego.",
+    "W trapezie równoramiennym zachodzi $AD = BC$. Ponieważ $EB = CD$, to $EC = BC - EB = AD - CD$. Porównaj trójkąty $\\triangle ABE$ i $\\triangle BAD$ - sprawdź, czy mają wspólny bok i równe pozostałe elementy."
+  ]
 }

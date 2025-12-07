@@ -5,7 +5,15 @@
     "solutions": "tasks/2023/etap2/19omj-2r.pdf",
     "statistics": "tasks/2023/etap2/19omj-2etap-st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Oblicz różnicę $a(b+c) - b(a+c)$ i uprość otrzymane wyrażenie. Co wiesz o różnicy dwóch kolejnych liczb całkowitych?",
+    "Skoro iloczyny są kolejne, ich różnica to $\\pm 1$. Otrzymasz równanie postaci $c(a-b) = \\pm 1$. Jakie pary liczb całkowitych mnożą się do $1$ lub $-1$?",
+    "Rozważ wszystkie możliwe przypadki: $(c, a-b) \\in \\{(1,1), (1,-1), (-1,1), (-1,-1)\\}$. Dla każdego przypadku wyznacz zależność między $a$ i $b$.",
+    "W każdym przypadku podstaw znalezioną zależność między $a$ i $b$ do wyrażeń $a(b+c)$ oraz $b(a+c)$. Sprawdź, czy któryś z iloczynów da się zapisać jako kwadrat."
+  ]
 }

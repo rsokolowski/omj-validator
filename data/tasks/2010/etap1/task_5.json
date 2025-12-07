@@ -5,7 +5,15 @@
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza warunek o L-tetraminach dla sąsiednich pól tablicy. Rozważ najpierw małą tablicę, np. $3 \\times 3$, i sprawdź jakie zależności między polami wymusza ten warunek.",
+    "Porównaj sumy dla dwóch różnych L-tetramin, które mają wspólne pola. Czy możesz wywnioskować, że pewne pola muszą mieć równe wartości?",
+    "Spróbuj pokazać, że dowolne dwa sąsiednie pola (mające wspólny bok) muszą zawierać tę samą liczbę. Co to oznacza dla całej tablicy?",
+    "Skoro wszystkie pola tablicy mają tę samą wartość $a$, a suma czterech takich pól w L-tetraminie wynosi $4a = 0$, wyznacz $a$ i oblicz sumę pól na przekątnych."
+  ]
 }

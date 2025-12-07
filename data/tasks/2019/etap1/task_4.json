@@ -5,7 +5,14 @@
     "solutions": "tasks/2019/etap1/1etap19r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek prostokąta z punktami $E$ i $F$. Oznacz kąty przy wierzchołku $A$ w trójkątach $ABE$ i $ADF$. Co możesz powiedzieć o sumie tych kątów, wiedząc że $\\angle EAF = 45°$ i $\\angle DAB = 90°$?",
+    "Spróbuj znaleźć związek między trójkątami $ABE$ i $ADF$. Warunek $BE = DF$ wraz z własnościami prostokąta sugeruje, że te trójkąty mogą być w szczególnej relacji.",
+    "Zbadaj, czy trójkąty $ABE$ i $ADF$ są przystające. Jakie boki i kąty możesz porównać? Jeśli są przystające, co to oznacza dla ich pól i dla boków $AE$, $AF$?",
+    "Jeśli $AE = AF$, to trójkąt $AEF$ jest równoramienny z kątem $45°$ przy wierzchołku $A$. Wyraź pola wszystkich trzech trójkątów przez odpowiednie boki i kąty, korzystając ze wzoru $\\frac{1}{2} \\cdot a \\cdot b$ dla trójkątów prostokątnych."
+  ]
 }

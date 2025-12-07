@@ -5,7 +5,14 @@
     "solutions": "tasks/2015/etap2/2etap16r.pdf",
     "statistics": "tasks/2015/etap2/2etap16st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Przypomnij sobie, jaka jest jedyna parzysta liczba pierwsza. Zastanów się, jakie muszą być parzystości liczb $a$, $b$, $c$, aby sumy dwóch z nich mogły być pierwsze.",
+    "Rozważ parzystość sumy $a + b + c$. Skoro każda z sum $a+b$, $b+c$, $c+a$ ma być pierwsza, co możesz powiedzieć o tym, ile spośród $a$, $b$, $c$ jest parzystych?",
+    "Zauważ, że jeśli wszystkie trzy liczby są nieparzyste, to każda z sum dwóch z nich jest parzysta i większa od 2. Rozważ przypadek, gdy dokładnie jedna z liczb jest parzysta - co wtedy możesz powiedzieć o sumie $a + b + c$?",
+    "Skoro dokładnie jedna liczba musi być parzysta, a suma $a + b + c$ też ma być pierwsza (czyli nieparzysta lub równa 2), sprawdź małe wartości dla liczby parzystej równej 2."
+  ]
 }

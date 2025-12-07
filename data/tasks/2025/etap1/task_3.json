@@ -5,7 +5,15 @@
     "solutions": "tasks/2025/etap1/21omj-1etap-r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Narysuj 5 punktów reprezentujących osoby i zaznacz znajomości jako linie łączące punkty. Zastanów się, co oznacza \"znajomość\" dla obu osób jednocześnie.",
+    "Policz sumę wszystkich liczb napisanych na tablicy. Zauważ, że każda znajomość jest liczona dwukrotnie - raz przez każdą z dwóch zaprzyjaźnionych osób.",
+    "Skoro suma wszystkich liczb musi być parzysta (bo każda znajomość dodaje 2 do sumy), to piąta liczba musi mieć określoną parzystość. Rozważ też, ile znajomych może mieć maksymalnie piąta osoba.",
+    "Sprawdź osobno przypadki, gdy piąta liczba to $0$, $2$ lub $4$. Dla każdego przypadku spróbuj narysować konkretny układ znajomości lub wykaż, że jest niemożliwy."
+  ]
 }

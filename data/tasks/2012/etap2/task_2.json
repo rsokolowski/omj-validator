@@ -5,7 +5,15 @@
     "solutions": "tasks/2012/etap2/2etap13r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Ile łącznie meczy rozegrano w turnieju? Ile punktów zostałoby rozdanych, gdyby żaden mecz nie zakończył się remisem?",
+    "Porównaj maksymalną możliwą sumę punktów z faktyczną sumą 41. Każdy remis zmniejsza łączną pulę punktów o określoną wartość.",
+    "Oblicz, ile meczy zakończyło się remisem. Zauważ, że w każdym remisie uczestniczą dokładnie dwie drużyny.",
+    "Zastanów się, ile drużyn musi uczestniczyć w remisach, skoro każdy remis angażuje 2 drużyny. Czy da się rozdzielić wszystkie remisy między mniej niż 4 drużyny?"
+  ]
 }

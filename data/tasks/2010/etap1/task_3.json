@@ -5,7 +5,14 @@
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Przyjrzyj się każdemu składnikowi lewej strony osobno. Co możesz powiedzieć o mianownikach typu $\\sqrt{a+b}$ w porównaniu z $\\sqrt{a+b+c}$?",
+    "Spróbuj oszacować każdy ułamek z dołu, zamieniając mianownik na coś większego. Pamiętaj, że zwiększenie mianownika zmniejsza wartość ułamka.",
+    "Zauważ, że $\\sqrt{a+b} < \\sqrt{a+b+c}$, więc $\\frac{a}{\\sqrt{a+b}} > \\frac{a}{\\sqrt{a+b+c}}$. Zastosuj podobne oszacowanie do pozostałych składników.",
+    "Po oszacowaniu każdego z trzech składników przez odpowiedni ułamek z $\\sqrt{a+b+c}$ w mianowniku, dodaj te nierówności stronami i uprość licznik."
+  ]
 }

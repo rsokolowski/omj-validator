@@ -5,7 +5,14 @@
     "solutions": "tasks/2015/etap1/1etap15r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek z okręgiem opisanym, punktami $X$ i $Y$ jako środkami odpowiednich łuków, oraz okręgiem wpisanym. Przypomnij sobie, co oznacza bycie środkiem łuku - jakie odcinki z tego punktu są równe?",
+    "Środek łuku $BC$ niezawierającego $A$ leży na dwusiecznej kąta $\\angle BAC$. Podobnie dla punktu $Y$. Zastanów się, jak dwusieczne kątów trójkąta związane są z okręgiem wpisanym.",
+    "Znajdź środek okręgu wpisanego $I$ i oblicz kąty w czworokącie $AXIY$ lub w trójkącie $XIY$. Wykorzystaj fakt, że $\\angle ACB = 60°$ wpływa na miary łuków $AB$, $BC$, $CA$.",
+    "Aby udowodnić styczność prostej $XY$ do okręgu wpisanego, wyznacz odległość od środka $I$ do prostej $XY$. Sprawdź, czy punkt $I$ leży na okręgu opisanym w szczególnej pozycji względem $X$ i $Y$ - może $IX = IY = r$ dla pewnego promienia?"
+  ]
 }

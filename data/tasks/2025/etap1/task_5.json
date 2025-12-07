@@ -5,7 +5,14 @@
     "solutions": "tasks/2025/etap1/21omj-1etap-r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Zauważ, że warunki $AB = BP$ i $DC = CP$ oznaczają, że mamy do czynienia z trójkątami równoramiennymi. Narysuj dokładny rysunek i zaznacz na nim równe odcinki.",
+    "Wykorzystaj własność trójkąta równoramiennego: kąty przy podstawie są równe. Oznacz kąty w trójkątach $ABP$ i $DCP$ i wyraź je przez kąty trapezu.",
+    "Zwróć uwagę, że suma kątów wokół punktu $P$ wynosi $360°$. Jeden z tych kątów ($\\angle BPC$) jest dany. Jak wyrażają się pozostałe kąty przy $P$?",
+    "Zapisz równanie: $\\angle APB + \\angle BPC + \\angle CPD + \\angle DPA = 360°$. Wyrażając $\\angle APB$ i $\\angle CPD$ przez kąty trapezu przy wierzchołkach $B$ i $C$, otrzymasz równanie na $\\angle APD$."
+  ]
 }

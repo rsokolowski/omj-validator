@@ -113,8 +113,8 @@ function initFeedbackRendering() {
         });
     });
 
-    // Render math in task content
-    document.querySelectorAll('.task-content.math-content').forEach(el => {
+    // Render math in task content and titles
+    document.querySelectorAll('.math-content').forEach(el => {
         renderMathInElement(el, {
             delimiters: [
                 {left: '$$', right: '$$', display: true},

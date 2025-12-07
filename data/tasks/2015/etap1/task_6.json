@@ -5,7 +5,14 @@
     "solutions": "tasks/2015/etap1/1etap15r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Rozłóż wyrażenia $p^2+p$ oraz $q^2+q$ na czynniki. Co zauważasz o ich strukturze?",
+    "Skoro $p$ i $q$ są różnymi liczbami pierwszymi nieparzystymi, zastanów się, które czynniki z rozkładu $q(q+1)$ mogą dzielić $p(p+1)$.",
+    "Zauważ, że $p(p+1)$ jest iloczynem dwóch kolejnych liczb. Zbadaj, jak $q$ i $q+1$ mogą być związane z $p$ lub $p+1$.",
+    "Jeśli $q \\mid p$, to z pierwszości wynika $p = q$, co jest sprzeczne. Rozważ przypadek $q \\mid (p+1)$ i pokaż, że wtedy $\\frac{p-q}{2}$ ma nietrywialny dzielnik."
+  ]
 }

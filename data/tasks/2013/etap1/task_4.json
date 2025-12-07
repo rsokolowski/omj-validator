@@ -5,7 +5,14 @@
     "solutions": "tasks/2013/etap1/1etap13r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Przyjrzyj się drugiemu równaniu - czy można wyciągnąć wspólny czynnik przed nawias? Co to mówi o możliwych wartościach $x$?",
+    "Spróbuj z jednego równania wyrazić jedną zmienną przez drugą, a następnie podstawić do pozostałego równania.",
+    "Z drugiego równania wyraź $y$ jako funkcję $x$. Zwróć uwagę, że $x \\neq 0$ (dlaczego?). Podstaw otrzymane wyrażenie do pierwszego równania.",
+    "Po podstawieniu $y = 1 - \\frac{5}{2x}$ do pierwszego równania, pomnóż przez $x^2$ aby pozbyć się ułamków. Otrzymasz równanie, które można sprowadzić do postaci kwadratowej."
+  ]
 }

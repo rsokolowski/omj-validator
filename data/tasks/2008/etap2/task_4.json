@@ -5,7 +5,14 @@
     "solutions": "tasks/2008/etap2/omg04_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Przypomnij sobie wzór na sumę kolejnych liczb całkowitych od $a$ do $b$. Jak można zapisać tę sumę w postaci iloczynu?",
+    "Jeśli suma kolejnych liczb ma być potęgą dwójki, zastanów się, jakie warunki muszą spełniać czynniki w tym iloczynie. Potęga dwójki ma bardzo szczególny rozkład na czynniki pierwsze.",
+    "Zapisz sumę $k$ kolejnych liczb zaczynając od $a$ jako $\\frac{k(2a+k-1)}{2}$. Zbadaj parzystość obu czynników $k$ oraz $2a+k-1$ - czy oba mogą być potęgami dwójki?",
+    "Zauważ, że suma $k + (2a+k-1) = 2a + 2k - 1$ jest zawsze nieparzysta. Co to oznacza dla parzystości tych dwóch czynników, gdy $k \\geq 2$?"
+  ]
 }

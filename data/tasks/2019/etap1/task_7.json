@@ -5,7 +5,15 @@
     "solutions": "tasks/2019/etap1/1etap19r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria",
+    "algebra"
+  ],
+  "hints": [
+    "Narysuj romb o kącie ostrym $60°$ i zastanów się, jakie są długości jego przekątnych w zależności od boku $a$. Jak wygląda przekrój graniastosłupa prostego płaszczyzną przecinającą krawędzie boczne?",
+    "Przekrój graniastosłupa prostego płaszczyzną przecinającą wszystkie krawędzie boczne jest zawsze równoległobokiem. Zastanów się, jakie warunki musi spełniać równoległobok, aby był kwadratem.",
+    "Boki przekroju są równoległe do przekątnych rombu (dlaczego?). Aby powstał kwadrat, potrzebujesz dwóch par równych i prostopadłych boków. Wykorzystaj fakt, że przekątne rombu są prostopadłe.",
+    "Oblicz długości przekątnych rombu o boku $a$ i kącie $60°$ (użyj własności trójkąta równobocznego). Następnie rozważ, jak wysokość \"wycięcia\" na krawędziach bocznych wpływa na długość boków przekroju - kiedy te boki będą równe?"
+  ]
 }

@@ -5,7 +5,15 @@
     "solutions": "tasks/2020/etap2/2etap21r.pdf",
     "statistics": "tasks/2020/etap2/2etap21st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Przenieś wszystkie wyrazy na jedną stronę równania. Co otrzymasz? Spróbuj rozłożyć powstałe wyrażenie na czynniki.",
+    "Po faktoryzacji powinieneś otrzymać iloczyn dwóch czynników równy zero. Rozważ, jakie warunki muszą spełniać $a$ i $b$, aby ten iloczyn był zerem.",
+    "Zauważ, że jeśli $a \\neq b$, to z równości iloczynu wynika konkretna zależność między $a$ i $b$. Jak można wyrazić $b$ przez $a$?",
+    "Jeśli $a + b + 2 = 0$, to $b = -a - 2$. Sprawdź, czy dla całkowitego $a$ wyrażenie to daje liczbę całkowitą."
+  ]
 }

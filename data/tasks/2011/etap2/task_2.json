@@ -5,7 +5,15 @@
     "solutions": "tasks/2011/etap2/2etap12r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zastanów się, jak można powiązać $a^2$ z $b^2$. Czy istnieje wyrażenie zawierające obie te wielkości, które łatwo się rozkłada?",
+    "Rozważ różnicę $a^2 - b^2$ i jej związek z liczbą $a+b$. Co wiesz o podzielności różnicy przez $a+b$?",
+    "Skoro $(a+b) \\mid a^2$ oraz $(a+b) \\mid (a^2 - b^2)$, to co możesz powiedzieć o podzielności $b^2$?",
+    "Wykorzystaj fakt, że jeśli liczba dzieli dwie wielkości, to dzieli również ich różnicę. Zapisz $b^2 = a^2 - (a^2 - b^2)$ i zastosuj własności podzielności."
+  ]
 }

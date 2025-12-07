@@ -5,7 +5,14 @@
     "solutions": "tasks/2016/etap1/1etap16r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek czworokąta wpisanego w okrąg. Zaznacz równe odcinki $BC = CD$ i kąt $60°$. Jakie własności ma czworokąt wpisany w okrąg?",
+    "Wykorzystaj twierdzenie o kątach wpisanych opartych na tym samym łuku. Zastanów się też, co wynika z równości $BC = CD$ dla trójkąta $BCD$.",
+    "Skoro $BC = CD$, to trójkąt $BCD$ jest równoramienny. Znajdź kąty tego trójkąta wykorzystując własności czworokąta wpisanego. Poszukaj też innych równoramiennych trójkątów na rysunku.",
+    "Odłóż na boku $AB$ punkt $E$ taki, że $AE = AD$. Zbadaj trójkąt $ADE$ - jest równoramienny. Wyznacz jego kąty i sprawdź, czy $BE = DC$."
+  ]
 }

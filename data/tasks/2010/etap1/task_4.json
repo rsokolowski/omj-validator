@@ -5,7 +5,14 @@
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj sześciokąt z punktem $X$ i zaznacz wszystkie środki boków. Jakie czworokąty powstają? Czy widzisz jakiś wzorzec w tym, jak są rozmieszczone?",
+    "Oprócz trzech czworokątów z zadania (QAKX, LCMX, NEPX) istnieją też trzy pozostałe (KBLX, MDNX, PFQX). Zastanów się, co można powiedzieć o sumie pól wszystkich sześciu czworokątów.",
+    "Zauważ, że sześć czworokątów pokrywa cały sześciokąt, ale z pewnym nakładaniem się w okolicy punktu $X$. Zbadaj, jak pola trójkątów przy wierzchołku $X$ zależą (lub nie zależą) od jego położenia.",
+    "Wykaż najpierw, że suma pól wszystkich sześciu czworokątów jest stała. Następnie pokaż, że suma pól KBLX + MDNX + PFQX też nie zależy od $X$ - wykorzystaj symetrię sytuacji."
+  ]
 }

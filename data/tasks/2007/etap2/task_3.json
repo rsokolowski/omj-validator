@@ -5,7 +5,14 @@
     "solutions": "tasks/2007/etap2/omg03_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Pomyśl o tym zadaniu jak o grafie: punkty to wierzchołki, odcinki to krawędzie. Pytamy, czy istnieje trójkąt, czyli trzy wierzchołki połączone każdy z każdym. Ile maksymalnie krawędzi może mieć graf bez trójkąta?",
+    "Spróbuj podejścia nie wprost: załóż, że nie ma żadnego trójkąta i zbadaj, ile krawędzi może mieć taki graf na 6 wierzchołkach. Rozważ, jak rozłożyć wierzchołki na grupy.",
+    "Jeśli graf nie ma trójkąta, to dla każdego wierzchołka jego sąsiedzi nie mogą być połączeni między sobą. Policz sumę stopni wierzchołków i zastanów się, jak maksymalizować liczbę krawędzi bez tworzenia trójkąta.",
+    "Rozważ podział 6 wierzchołków na dwie grupy i łączenie tylko wierzchołków z różnych grup (graf dwudzielny). Jaki podział daje najwięcej krawędzi? Porównaj tę liczbę z 10."
+  ]
 }

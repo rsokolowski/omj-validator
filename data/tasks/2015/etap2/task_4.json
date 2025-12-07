@@ -5,7 +5,14 @@
     "solutions": "tasks/2015/etap2/2etap16r.pdf",
     "statistics": "tasks/2015/etap2/2etap16st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek trójkąta $ABC$ z zaznaczonym środkiem $M$ boku $AB$. Jakie odcinki możesz poprowadzić z punktu $M$? Przypomnij sobie własności środkowej trójkąta.",
+    "Rozważ okrąg opisany na trójkącie $ABC$. Środkowa z wierzchołka $C$ do środka przeciwprostokątnej ma szczególną własność w trójkącie prostokątnym. Spróbuj też wykorzystać kąty wpisane.",
+    "Połącz punkt $M$ z wierzchołkiem $C$. Zauważ, że warunek $\\angle BAC + \\angle MCB = 90°$ można powiązać z kątami w trójkącie $MBC$. Co możesz powiedzieć o trójkącie $AMC$?",
+    "Rozważ dwa przypadki: gdy $\\angle ACB = 90°$ oraz gdy $\\angle ACB \\neq 90°$. W drugim przypadku zbadaj, kiedy punkt $M$ leży na okręgu opisanym w szczególny sposób i co to implikuje dla boków trójkąta."
+  ]
 }

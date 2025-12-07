@@ -5,7 +5,14 @@
     "solutions": "tasks/2011/etap2/2etap12r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Spróbuj zrozumieć strukturę problemu: mamy $n$ zawodników przy okrągłym stole, każdy pokonał sąsiada po lewej. Oznacza to, że istnieje 'cykl zwycięstw' wzdłuż stołu. Narysuj diagram dla małego $n$.",
+    "Rozważ dowód nie wprost: załóż, że nie istnieje trójka $A, B, C$ tworząca cykl zwycięstw. Co to oznacza dla struktury wyników między dowolnymi trzema zawodnikami?",
+    "Jeśli nie ma cyklu trzech zawodników, to wśród każdych trzech osób jedna musi pokonać obie pozostałe. Zastanów się, co to oznacza dla zawodnika, który pokonał najwięcej przeciwników - ilu minimum osób musiał pokonać?",
+    "Rozważ zawodnika $X$, który pokonał swojego sąsiada po prawej stronie (nazwijmy go $Y$). Skoro $X$ pokonał $Y$, a $Y$ pokonał sąsiada po swojej lewej (czyli $X$)... czy to nie jest sprzeczność? Przeanalizuj dokładniej relację między sąsiadami przy stole."
+  ]
 }

@@ -5,7 +5,14 @@
     "solutions": "tasks/2007/etap2/omg03_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Aby liczba kończyła się cyframi '10', musi być podzielna przez 10, ale nie przez 100. Co to oznacza dla podzielności przez 2 i przez 5?",
+    "Zauważ, że mamy cztery czynniki. Pogrupuj je w pary: $(a+b)(c+d)$ oraz $(b+c)(d+a)$. Czy widzisz jakąś zależność między sumami w tych parach?",
+    "Oblicz sumę $(a+b)+(c+d)$ oraz $(b+c)+(d+a)$. Co możesz powiedzieć o parzystości tych sum? Jak to wpływa na podzielność iloczynu przez 4?",
+    "Skoro obie pary czynników mają tę samą sumę $a+b+c+d$, to w każdej parze albo oba czynniki są parzyste, albo oba nieparzyste. Zbadaj, ile razy liczba 2 dzieli cały iloczyn w każdym przypadku."
+  ]
 }

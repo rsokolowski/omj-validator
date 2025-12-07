@@ -5,7 +5,15 @@
     "solutions": "tasks/2020/etap2/2etap21r.pdf",
     "statistics": "tasks/2020/etap2/2etap21st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza warunek 'niezależnie od kolejności dołączania'. Rozważ różne scenariusze - co się dzieje, gdy jako pierwsza dołącza osoba A, a co gdy osoba B?",
+    "Spróbuj rozumowania nie wprost: załóż, że żaden z gości nie zna wszystkich pozostałych. Co to oznacza dla każdego gościa?",
+    "Jeśli każdy gość nie zna co najmniej jednego innego gościa, rozważ co się stanie, gdy taki 'nieznany' gość dołączy jako ostatni. Ile osób już obecnych musi wtedy znać?",
+    "Przeanalizuj sytuację, gdy gość, który nie zna kogoś, dołącza jako ostatni z 11 gości. Musi znać co najmniej połowę z 11 obecnych osób. Sprawdź, czy to prowadzi do sprzeczności z założeniem."
+  ]
 }

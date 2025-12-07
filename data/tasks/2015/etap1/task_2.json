@@ -5,7 +5,14 @@
     "solutions": "tasks/2015/etap1/1etap15r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek kwadratu z punktem $P$ spełniającym oba warunki. Zauważ, że $AP = AB$ oznacza, że punkt $P$ leży na pewnym okręgu o środku w $A$.",
+    "Skoro $\\angle CPD = 90°$, to punkt $P$ leży na okręgu o średnicy $CD$. Wykorzystaj fakt, że $P$ leży jednocześnie na dwóch okręgach.",
+    "Trójkąt $ABP$ jest równoramienny (bo $AP = AB$). Zbadaj kąty w tym trójkącie i zastanów się, jak związane są z kątami przy wierzchołkach $C$ i $D$.",
+    "Połącz punkt $P$ ze środkiem odcinka $CD$ i wykorzystaj własności trójkąta wpisanego w okrąg o średnicy $CD$. Poszukaj trójkątów podobnych lub przystających w tej konfiguracji."
+  ]
 }

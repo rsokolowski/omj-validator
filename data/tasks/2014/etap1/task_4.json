@@ -5,7 +5,15 @@
     "solutions": "tasks/2014/etap1/1etap14r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, ile krawędzi (znajomości) ma graf na początku, a ile na końcu przyjęcia. Co oznacza, że każdy ma 3 znajomych w kontekście sumy stopni wierzchołków?",
+    "Policz sumę wszystkich znajomości - każda znajomość jest liczona dwukrotnie. Jakie warunki podzielności musi spełniać $n$, aby liczba krawędzi była całkowita?",
+    "Na początku suma stopni to $3n$, na końcu $4n$. Sprawdź, dla jakich $n$ obie te sumy dają parzystą liczbę krawędzi i czy $n$ musi być parzyste.",
+    "Wykaż, że $n$ musi być parzyste (dlaczego?), a potem skonstruuj przykłady dla małych parzystych wartości $n$. Czy istnieje dolne ograniczenie na $n$?"
+  ]
 }

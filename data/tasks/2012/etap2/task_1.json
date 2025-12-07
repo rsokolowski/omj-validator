@@ -5,7 +5,15 @@
     "solutions": "tasks/2012/etap2/2etap13r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Rozłóż liczbę 175 na czynniki pierwsze. Jakie warunki muszą spełniać liczby $a$ i $b$, aby ich iloczyn był podzielny przez 175?",
+    "Skoro $a + b = 175$, możesz zapisać $b = 175 - a$. Podstaw to do warunku podzielności iloczynu $a \\cdot b$ przez 175.",
+    "Zastanów się, kiedy iloczyn $a(175 - a)$ jest podzielny przez $5^2 \\cdot 7$. Rozważ osobno podzielność przez 25 i przez 7.",
+    "Przeanalizuj przypadki: co się dzieje, gdy $a$ jest podzielne przez 25? Przez 7? Przez 175? Sprawdź systematycznie wszystkie możliwości."
+  ]
 }

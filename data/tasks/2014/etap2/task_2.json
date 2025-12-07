@@ -5,7 +5,14 @@
     "solutions": "tasks/2014/etap2/2etap15r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Przypomnij sobie, czym jest symetralna odcinka - jaki zbiór punktów ona tworzy? Narysuj dokładny rysunek z okręgiem opisanym na trójkącie $ABC$ i zastanów się, gdzie leży środek tego okręgu względem symetralnej $AB$.",
+    "Skoro szukamy punktu na okręgu opisanym, pomyśl o własnościach tego okręgu. Symetralna boku trójkąta przechodzi przez środek okręgu opisanego - jak to wykorzystać? Rozważ, jakie własności musi mieć punkt przecięcia symetralnych.",
+    "Niech $P$ będzie punktem przecięcia symetralnych $AB$ i $DE$. Z definicji symetralnej: $PA = PB$ oraz $PD = PE$. Wykorzystaj warunek $AE = BD$ - jaką zależność możesz zapisać dla odcinków $PA$, $PB$, $PD$, $PE$, $AE$, $BD$?",
+    "Rozważ trójkąty $PAE$ i $PBD$. Masz równości $PA = PB$, $PD = PE$ oraz $AE = BD$. Sprawdź, czy te trójkąty są przystające i co z tego wynika dla położenia punktu $P$ względem odcinka $AB$ i okręgu opisanego."
+  ]
 }

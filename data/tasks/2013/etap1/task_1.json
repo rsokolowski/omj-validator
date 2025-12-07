@@ -5,7 +5,15 @@
     "solutions": "tasks/2013/etap1/1etap13r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "arytmetyka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza wzrost o $1{,}5\\%$. Jak można zapisać $1{,}5\\%$ jako ułamek zwykły? Pamiętaj, że liczba pasażerów musi być liczbą całkowitą.",
+    "Zapisz $1{,}5\\%$ jako ułamek w najprostszej postaci. Jeśli początkowa liczba pasażerów to $n$, to nowa liczba to $n$ powiększone o ten ułamek. Co musi być prawdą o $n$, żeby wynik był liczbą całkowitą?",
+    "Skoro $1{,}5\\% = \\frac{3}{200}$, to nowa liczba pasażerów wynosi $n + \\frac{3n}{200} = \\frac{203n}{200}$. Jakie wartości $n$ dają liczbę całkowitą? Które z nich spełniają ograniczenie pojemności pociągu?",
+    "Liczba $n$ musi być podzielna przez $200$, aby $\\frac{203n}{200}$ było całkowite. Sprawdź, które wielokrotności $200$ nie przekraczają $404$ i dla których nowa liczba pasażerów też mieści się w pociągu."
+  ]
 }

@@ -5,7 +5,14 @@
     "solutions": "tasks/2025/etap1/21omj-1etap-r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Rozwiń lewą stronę równania $(a+b^2)(a^3+b^3)$ i porównaj z prawą stroną. Co otrzymasz po uproszczeniu?",
+    "Po przekształceniach spróbuj wyciągnąć wspólne czynniki i doprowadzić równanie do postaci iloczynowej.",
+    "Zauważ, że po uproszczeniu pojawia się czynnik $b^3$ oraz wyrażenie zawierające $a$ i $b^2$. Przeanalizuj, kiedy iloczyn tych czynników może być równy zero.",
+    "Otrzymasz równanie postaci $b^3(a + b^2 - 1) = 0$. Skoro $b \\neq 0$, to $a = 1 - b^2$. Podstaw to do warunku $a \\neq 0$ i sprawdź, jaki znak musi mieć $b$."
+  ]
 }

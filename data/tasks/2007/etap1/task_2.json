@@ -5,7 +5,14 @@
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek czworokąta $ABCD$ i zaznacz wszystkie punkty $K$, $L$, $M$, $N$. Co oznacza, że punkt $K$ jest symetryczny do $B$ względem $A$? Jak można to wyrazić za pomocą odcinków?",
+    "Spróbuj powiązać boki czworokąta $KLMN$ z przekątnymi lub bokami czworokąta $ABCD$. Rozważ rozbicie obu czworokątów na trójkąty i porównanie ich pól.",
+    "Zauważ, że np. $KL$ jest związane z odcinkiem $AC$. Zbadaj, jak boki czworokąta $KLMN$ mają się do przekątnych $AC$ i $BD$ oryginalnego czworokąta - sprawdź równoległość i stosunek długości.",
+    "Pokaż, że $KLMN$ jest równoległobokiem, którego boki są równoległe do przekątnych $ABCD$ i dwukrotnie od nich dłuższe. Następnie porównaj pole $KLMN$ z polem $ABCD$, korzystając z rozkładu na trójkąty."
+  ]
 }

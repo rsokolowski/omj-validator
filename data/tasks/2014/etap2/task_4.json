@@ -5,7 +5,14 @@
     "solutions": "tasks/2014/etap2/2etap15r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Oznacz różnicę ciągu arytmetycznego przez $d$. Jak wyrazić $p - s$ przez $d$? Zastanów się, jakie własności musi mieć $d$, skoro wszystkie cztery liczby są pierwsze.",
+    "Rozważ podzielność przez małe liczby. Co możesz powiedzieć o resztach z dzielenia liczb pierwszych (większych od 2 i 3) przez 2 i przez 3?",
+    "Jeśli $p$, $q$, $r$, $s$ są większe od 3, to są nieparzyste. Co to oznacza dla parzystości $d$? Rozważ też reszty tych czterech liczb przy dzieleniu przez 3 - ile jest możliwych reszt i ile masz liczb?",
+    "Skoro $d$ musi być parzyste (aby wszystkie liczby były nieparzyste), to $d$ jest podzielne przez 2. Użyj zasady szufladkowej dla reszt modulo 3: cztery liczby i trzy możliwe reszty - co z tego wynika dla $d$?"
+  ]
 }

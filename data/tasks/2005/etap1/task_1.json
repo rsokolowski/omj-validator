@@ -5,7 +5,14 @@
     "solutions": "tasks/2005/etap1/omg01_1r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Przyjrzyj się wyrażeniom pod każdym z trzech głównych pierwiastków. Czy potrafisz zauważyć jakąś regularność? Spróbuj rozpisać $\\sqrt{8}$, $\\sqrt{24}$, $\\sqrt{48}$ w prostszej postaci.",
+    "Spróbuj zapisać wyrażenie typu $\\sqrt{a - \\sqrt{b}}$ w postaci $\\sqrt{x} - \\sqrt{y}$ dla odpowiednich $x$ i $y$. Jaki warunek muszą spełniać $x$ i $y$?",
+    "Podnieś wyrażenie $\\sqrt{x} - \\sqrt{y}$ do kwadratu i porównaj z tym, co jest pod pierwiastkiem. Otrzymasz układ dwóch równań z dwiema niewiadomymi.",
+    "Dla wyrażenia $\\sqrt{3 - \\sqrt{8}} = \\sqrt{3 - 2\\sqrt{2}}$ szukaj liczb $x, y$ takich, że $x + y = 3$ oraz $xy = 2$. Zastosuj tę metodę do każdego z trzech składników."
+  ]
 }

@@ -5,7 +5,15 @@
     "solutions": "tasks/2010/etap2/2etap11r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Narysuj diagram: 6 punktów reprezentujących osoby i połącz krawędziami tych, którzy się znają. Ile krawędzi wychodzi z każdego punktu? Ile jest wszystkich krawędzi w tym grafie?",
+    "Pomyśl o strukturze takiego grafu. Skoro każdy wierzchołek ma dokładnie 3 sąsiadów, to również ma dokładnie 2 \"nieznajomych\". Rozważ, jak mogą wyglądać relacje między nieznajomymi danej osoby.",
+    "Wybierz dowolną osobę A i przyjrzyj się jej trzem znajomym. Zastanów się: czy wśród tych trzech znajomych są jakieś dwie osoby, które też się znają? Co to oznacza dla szukanego czworokąta?",
+    "Weź osobę A i jednego z jej znajomych B. Razem znają oni pewną liczbę osób (różnych od A i B). Przeanalizuj, ilu wspólnych znajomych mogą mieć A i B, a ilu znajomych ma tylko jedno z nich. Szukaj sytuacji, gdzie A-X-B-Y tworzą zamknięty cykl znajomości."
+  ]
 }

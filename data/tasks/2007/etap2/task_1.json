@@ -5,7 +5,14 @@
     "solutions": "tasks/2007/etap2/omg03_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Masz dwa równania: jedno z sumą kwadratów, drugie liniowe. Co łączy współczynniki $1, 2, 4$ z liczbami $1, 4, 16$? Czy możesz jakoś połączyć te równania?",
+    "Spróbuj przekształcić układ tak, aby otrzymać sumę kwadratów równą zeru. Pomyśl o uzupełnianiu do pełnych kwadratów lub o nierówności między sumą kwadratów a kwadratem sumy.",
+    "Zauważ, że $1^2 + 2^2 + 4^2 = 21$. Rozważ wyrażenie $(a-1)^2 + (b-2)^2 + (c-4)^2$ i sprawdź, do czego prowadzi jego rozwinięcie.",
+    "Rozwiń $(a-1)^2 + (b-2)^2 + (c-4)^2$ i wykorzystaj oba równania układu. Jaką wartość przyjmuje ta suma kwadratów? Co to oznacza dla $a$, $b$ i $c$?"
+  ]
 }

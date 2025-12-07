@@ -5,7 +5,14 @@
     "solutions": "tasks/2010/etap2/2etap11r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Mamy dwie liczby różniące się o 2. Zastanów się, jak często wśród trzech kolejnych liczb całkowitych występuje liczba podzielna przez 3.",
+    "Zbadaj reszty z dzielenia przez 3. Rozważ trzy kolejne liczby: $n^2+n+1$, $n^2+n+2$, $n^2+n+3$ - która z nich musi dzielić się przez 3?",
+    "Oblicz $n^2+n+2 = n(n+1)+2$. Zauważ, że $n(n+1)$ to iloczyn dwóch kolejnych liczb. Jaką resztę z dzielenia przez 3 daje taki iloczyn?",
+    "Skoro $n^2+n+2$ zawsze dzieli się przez 3, to jedna z liczb $n^2+n+1$ lub $n^2+n+3$ też musi się dzielić przez 3. Kiedy taka liczba podzielna przez 3 może być pierwsza?"
+  ]
 }

@@ -5,7 +5,14 @@
     "solutions": "tasks/2007/etap2/omg03_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj sześciokąt $ABCDEF$ z wszystkimi kątami równymi $120°$. Zastanów się, jakie własności ma taki sześciokąt - czy przypomina ci jakąś znaną figurę? Co wiesz o symetralnych odcinków?",
+    "Spróbuj przedłużyć boki sześciokąta. Skoro każdy kąt wewnętrzny ma $120°$, to kąt zewnętrzny wynosi $60°$. Jaką figurę mogą tworzyć przedłużenia boków?",
+    "Zauważ, że przedłużając wszystkie boki sześciokąta równokątnego otrzymujesz trójkąt równoboczny. Zbadaj, jak boki $AB$, $CD$ i $EF$ są położone względem tego trójkąta.",
+    "Pokaż, że odcinki $AB$, $CD$ i $EF$ są równoległe do odpowiednich boków trójkąta równobocznego. Wykorzystaj fakt, że symetralna odcinka równoległego do boku trójkąta równobocznego przechodzi przez jego środek."
+  ]
 }
