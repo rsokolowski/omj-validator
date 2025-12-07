@@ -1,0 +1,11 @@
+{
+  "number": 4,
+  "pdf": {
+    "tasks": "tasks/2017/etap2/2etap18.pdf",
+    "solutions": "tasks/2017/etap2/2etap18r.pdf",
+    "statistics": "tasks/2017/etap2/2etap18st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

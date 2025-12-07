@@ -38,19 +38,12 @@ class Settings(BaseSettings):
         return self.base_dir / "tasks"
 
     @property
-    def tasks_index_path(self) -> Path:
-        return self.base_dir / "tasks_index.json"
-
-    @property
     def tasks_data_dir(self) -> Path:
         return self.base_dir / "data" / "tasks"
 
-    @property
-    def tasks_index_data_path(self) -> Path:
-        return self.tasks_data_dir / "index.json"
-
-    def tasks_year_data_path(self, year: str) -> Path:
-        return self.tasks_data_dir / f"{year}.json"
+    def task_data_path(self, year: str, etap: str, number: int) -> Path:
+        """Path to individual task metadata file."""
+        return self.tasks_data_dir / year / etap / f"task_{number}.json"
 
     @property
     def submissions_dir(self) -> Path:

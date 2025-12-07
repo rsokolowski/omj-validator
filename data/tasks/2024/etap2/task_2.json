@@ -1,0 +1,11 @@
+{
+  "number": 2,
+  "pdf": {
+    "tasks": "tasks/2024/etap2/20omj-2etap.pdf",
+    "solutions": "tasks/2024/etap2/20omj-2r.pdf",
+    "statistics": "tasks/2024/etap2/20omj-2etap-st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

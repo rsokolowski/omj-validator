@@ -1,4 +1,5 @@
 import json
+import logging
 from pathlib import Path
 from datetime import datetime
 from typing import Optional
@@ -6,57 +7,67 @@ from functools import lru_cache
 import uuid
 
 from .config import settings
-from .models import TaskInfo, TaskStats, Submission
+from .models import TaskInfo, TaskPdf, TaskStats, Submission
+
+logger = logging.getLogger(__name__)
 
 
 @lru_cache(maxsize=1)
-def load_tasks_index() -> dict:
-    """Load the tasks index from JSON file (cached)."""
-    with open(settings.tasks_index_path, "r", encoding="utf-8") as f:
-        return json.load(f)
+def _load_all_tasks() -> dict[str, TaskInfo]:
+    """Scan data/tasks/{year}/{etap}/task_*.json and load all tasks (cached)."""
+    tasks = {}
+    tasks_dir = settings.tasks_data_dir
+
+    if not tasks_dir.exists():
+        return tasks
+
+    for year_dir in sorted(tasks_dir.iterdir()):
+        if not year_dir.is_dir():
+            continue
+        for etap_dir in sorted(year_dir.iterdir()):
+            if not etap_dir.is_dir():
+                continue
+            for task_file in sorted(etap_dir.glob("task_*.json")):
+                try:
+                    with open(task_file, "r", encoding="utf-8") as f:
+                        data = json.load(f)
+                    key = get_task_key(year_dir.name, etap_dir.name, data["number"])
+                    tasks[key] = TaskInfo(
+                        year=year_dir.name,
+                        etap=etap_dir.name,
+                        **data
+                    )
+                except (json.JSONDecodeError, KeyError, IOError) as e:
+                    logger.warning(f"Failed to load task file {task_file}: {e}")
+                    continue
+
+    return tasks
 
 
-@lru_cache(maxsize=1)
-def load_tasks_data_index() -> dict:
-    """Load tasks data index with year/etap metadata (cached)."""
-    if not settings.tasks_index_data_path.exists():
-        return {}
-    with open(settings.tasks_index_data_path, "r", encoding="utf-8") as f:
-        return json.load(f)
+def clear_task_cache() -> None:
+    """Clear the task cache. Call after modifying task files at runtime."""
+    _load_all_tasks.cache_clear()
 
 
-@lru_cache(maxsize=32)
-def _load_year_tasks_raw(year: str) -> dict:
-    """Load raw tasks data for a specific year (cached)."""
-    year_path = settings.tasks_year_data_path(year)
-    if not year_path.exists():
-        return {}
-    with open(year_path, "r", encoding="utf-8") as f:
-        return json.load(f)
+def get_available_years() -> list[str]:
+    """Get list of available years, sorted descending."""
+    tasks = _load_all_tasks()
+    years = set(task.year for task in tasks.values())
+    return sorted(years, reverse=True)
 
 
-def load_year_tasks(year: str) -> dict[str, TaskInfo]:
-    """Load task content for a specific year with TaskInfo models."""
-    data = _load_year_tasks_raw(year)
-    result = {}
-    for etap, tasks in data.items():
-        for task in tasks:
-            key = get_task_key(year, etap, task["number"])
-            result[key] = TaskInfo(
-                year=year,
-                etap=etap,
-                **task
-            )
-    return result
+def get_etaps_for_year(year: str) -> list[str]:
+    """Get list of etaps for a given year."""
+    tasks = _load_all_tasks()
+    etaps = set(task.etap for task in tasks.values() if task.year == year)
+    return sorted(etaps)
 
 
-def load_tasks_data() -> dict[str, TaskInfo]:
-    """Load all task content (for backward compatibility)."""
-    index = load_tasks_data_index()
-    result = {}
-    for year in index.keys():
-        result.update(load_year_tasks(year))
-    return result
+def get_tasks_for_etap(year: str, etap: str) -> list[TaskInfo]:
+    """Get all tasks for a given year/etap, sorted by number."""
+    tasks = _load_all_tasks()
+    result = [t for t in tasks.values() if t.year == year and t.etap == etap]
+    return sorted(result, key=lambda t: t.number)
 
 
 def get_task_key(year: str, etap: str, number: int) -> str:
@@ -66,31 +77,34 @@ def get_task_key(year: str, etap: str, number: int) -> str:
 
 def get_task(year: str, etap: str, number: int) -> Optional[TaskInfo]:
     """Get a specific task by year, etap, and number."""
-    tasks = load_year_tasks(year)
+    tasks = _load_all_tasks()
     key = get_task_key(year, etap, number)
     return tasks.get(key)
 
 
 def get_task_pdf_path(year: str, etap: str) -> Optional[Path]:
-    """Get the path to the task PDF for a given year and etap."""
-    index = load_tasks_index()
-    if year not in index or etap not in index[year]:
+    """Get the path to the task PDF for a given year and etap.
+
+    PDF paths are shared across all tasks in the same year/etap,
+    so we fetch from the first task.
+    """
+    tasks = get_tasks_for_etap(year, etap)
+    if not tasks:
         return None
-    tasks_file = index[year][etap].get("tasks")
-    if not tasks_file:
-        return None
-    return settings.base_dir / tasks_file
+    pdf_path = tasks[0].pdf.tasks
+    return settings.base_dir / pdf_path
 
 
 def get_solution_pdf_path(year: str, etap: str) -> Optional[Path]:
-    """Get the path to the solution PDF for a given year and etap."""
-    index = load_tasks_index()
-    if year not in index or etap not in index[year]:
+    """Get the path to the solution PDF for a given year and etap.
+
+    PDF paths are shared across all tasks in the same year/etap,
+    so we fetch from the first task.
+    """
+    tasks = get_tasks_for_etap(year, etap)
+    if not tasks or not tasks[0].pdf.solutions:
         return None
-    solution_file = index[year][etap].get("solutions")
-    if not solution_file:
-        return None
-    return settings.base_dir / solution_file
+    return settings.base_dir / tasks[0].pdf.solutions
 
 
 def get_submissions_path(year: str, etap: str, task_number: int) -> Path:
