@@ -1,0 +1,83 @@
+{
+  "etap2": [
+    {
+      "number": 1,
+      "title": "Trójki (a,b,c) z sumami pierwszymi",
+      "content": "Wyznacz wszystkie takie trójki (a, b, c) dodatnich liczb całkowitych, że każda z liczb\na+b, b+c, c+a oraz a+b+c\njest pierwsza.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 2,
+      "title": "Równoległobok ABCD z AD=DX i AB=BY",
+      "content": "Dany jest równoległobok ABCD. Na bokach AB i AD leżą odpowiednio takie punkty X i Y różne od A, że AD = DX oraz AB = BY. Udowodnij, że CX = CY.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 3,
+      "title": "Równości a+b=cd i c+d=ab",
+      "content": "Liczby rzeczywiste a, b, c, d spełniają równości\na+b = cd oraz c+d = ab.\nWykaż, że (a+1)(b+1)(c+1)(d+1) ≥ 0.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 4,
+      "title": "Trójkąt ABC z ∠BAC + ∠MCB = 90°",
+      "content": "Punkt M jest środkiem boku AB trójkąta ABC, przy czym\n∠BAC + ∠MCB = 90°.\nWykaż, że trójkąt ABC jest równoramienny lub prostokątny.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 5,
+      "title": "100-kąt foremny z kolorowaniem",
+      "content": "Spośród wierzchołków 100-kąta foremnego wybrano pewne 50 i pokolorowano je na biało. Pozostałe wierzchołki pokolorowano na czerwono. Udowodnij, że wierzchołki tego 100-kąta można tak podzielić na 25 grup po 4 punkty, aby punkty w obrębie każdej grupy były wierzchołkami prostokąta o dwóch białych i dwóch czerwonych wierzchołkach.",
+      "has_solution": true,
+      "has_statistics": true
+    }
+  ],
+  "etap1": [
+    {
+      "number": 1,
+      "title": "Równanie (a+b+c)(a+b−c) = c²",
+      "content": "Liczby wymierne a, b, c spełniają równanie (a+b+c)(a+b−c) = c². Wykaż, że a+b = c = 0.",
+      "has_solution": true
+    },
+    {
+      "number": 2,
+      "title": "Trójkąt ABC z ∠ACB=45° i kwadratami",
+      "content": "Dany jest trójkąt ostrokątny ABC, w którym ∠ACB = 45°. Niech BCED oraz ACFG będą kwadratami leżącymi na zewnątrz trójkąta ABC. Udowodnij, że środek odcinka DG pokrywa się ze środkiem okręgu opisanego na trójkącie ABC.",
+      "has_solution": true
+    },
+    {
+      "number": 3,
+      "title": "Tablica 11×11 z −1, 0, 1",
+      "content": "W każde pole tablicy 11×11 należy wpisać jedną z liczb −1, 0, 1 w taki sposób, aby suma liczb w każdej kolumnie była nieujemna, a suma liczb w każdym wierszu była niedodatnia. Jaką najmniejszą liczbę zer można w ten sposób wpisać w pola tablicy? Odpowiedź uzasadnij.",
+      "has_solution": true
+    },
+    {
+      "number": 4,
+      "title": "Czworokąt ABCD z ∠ABC=60° i BC=CD",
+      "content": "Czworokąt ABCD jest wpisany w okrąg, przy czym ∠ABC = 60° oraz BC = CD. Udowodnij, że AB = AD + DC.",
+      "has_solution": true
+    },
+    {
+      "number": 5,
+      "title": "Różnica kwadratów dwóch liczb całkowitych",
+      "content": "Liczby całkowite a, b są dodatnie. Wykaż, że co najmniej jedną z liczb a, b, a+b można przedstawić w postaci różnicy kwadratów dwóch liczb całkowitych.",
+      "has_solution": true
+    },
+    {
+      "number": 6,
+      "title": "Ostrosłup ABCD z kątami 90°",
+      "content": "Podstawą ostrosłupa ABCD jest trójkąt równoboczny ABC o boku 1. Ponadto ∠ADB = ∠BDC = ∠CDA = 90°. Oblicz objętość ostrosłupa ABCD.",
+      "has_solution": true
+    },
+    {
+      "number": 7,
+      "title": "Dzielnik pierwszy a+b+1 liczby 4ab−1",
+      "content": "Dane są takie dodatnie liczby całkowite a i b, że liczba a+b+1 jest dzielnikiem pierwszym liczby 4ab−1. Udowodnij, że a = b.",
+      "has_solution": true
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "etap2": [
+    {
+      "number": 1,
+      "title": "Punkty D i E na bokach trójkąta ABC",
+      "content": "Na bokach AB i BC trójkąta ABC leżą odpowiednio takie punkty D i E, że\n∠ADC = ∠BDE oraz ∠BCD = ∠AED.\nWykaż, że AE = BE.",
+      "has_solution": true
+    },
+    {
+      "number": 2,
+      "title": "Liczby 2 i 5 na tablicy",
+      "content": "Początkowo na tablicy napisane są liczby 2 oraz 5. Ruch polega na zastąpieniu jednej z dwóch liczb napisanych na tablicy ich sumą. Czy po wykonaniu pewnej liczby ruchów można uzyskać sytuację, w której na tablicy napisane są dwie kolejne liczby naturalne? Odpowiedź uzasadnij.",
+      "has_solution": true
+    },
+    {
+      "number": 3,
+      "title": "Wstawianie cyfry - sześciokrotność n",
+      "content": "Liczba naturalna n jest co najmniej dwucyfrowa. Jeżeli pomiędzy cyfrę dziesiątek a cyfrę jedności tej liczby wpiszemy pewną cyfrę, to uzyskamy sześciokrotność liczby n. Wyznacz wszystkie liczby n o tej własności.",
+      "has_solution": true
+    },
+    {
+      "number": 4,
+      "title": "Równoległobok ABCD z punktami X i Y",
+      "content": "Dany jest równoległobok ABCD, w którym AB > AD. Punkty X oraz Y, różne od B, leżą na półprostej BD→, przy czym\nCX = CB oraz AY = AB.\nUdowodnij, że DX = DY.\nUwaga: Zapis BD→ oznacza półprostą o początku w punkcie B przechodzącą przez punkt D.",
+      "has_solution": true
+    },
+    {
+      "number": 5,
+      "title": "Tabela 4×4 z liczbami 1 i 2",
+      "content": "W każde pole tabeli 4×4 wpisano jedną z liczb 1 lub 2. Dla każdego wiersza obliczono sumę wpisanych w niego liczb, a dla każdej kolumny obliczono iloczyn wpisanych w nią liczb. Wykaż, że pewne dwa z ośmiu uzyskanych wyników są równe.",
+      "has_solution": true
+    }
+  ],
+  "etap1": [
+    {
+      "number": 1,
+      "title": "Prostokąt o obwodzie x i polu x",
+      "content": "Dany jest prostokąt o obwodzie x cm, w którym stosunek długości boków wynosi 1:2. Załóżmy, że pole tego prostokąta jest równe x cm². Wyznacz x.",
+      "has_solution": true
+    },
+    {
+      "number": 2,
+      "title": "Działanie 1−2+3−4+...−100",
+      "content": "Kamil napisał na tablicy działanie polegające na naprzemiennym odejmowaniu i dodawaniu liczb naturalnych od 1 do 100: 1−2+3−4+5−6+...−98+99−100. Następnie Kamil starł jeden ze znaków + lub − i wpisał w jego miejsce znak =, uzyskując w ten sposób prawdziwą równość. Którą liczbę poprzedzał starty znak? Podaj wszystkie możliwości. Odpowiedź uzasadnij.",
+      "has_solution": true
+    },
+    {
+      "number": 3,
+      "title": "Prostokąt ABCD z punktami E i F",
+      "content": "Dany jest prostokąt ABCD. Punkt E leży na boku AB, a punkt F leży na odcinku CE. Wykaż, że jeśli trójkąty ADE i CDF mają równe pola, to również trójkąty BCE i DEF mają równe pola.",
+      "has_solution": true
+    },
+    {
+      "number": 4,
+      "title": "Kolorowanie liczb od 1 do n",
+      "content": "Każdą z liczb naturalnych od 1 do n pokolorowano albo na niebiesko, albo na czerwono, przy czym każdego z tych kolorów użyto co najmniej raz. Okazało się, że: każda liczba czerwona jest sumą pewnych dwóch różnych liczb niebieskich; każda liczba niebieska jest różnicą pewnych dwóch liczb czerwonych. Wyznacz najmniejszą liczbę n, dla której takie kolorowanie jest możliwe.",
+      "has_solution": true
+    },
+    {
+      "number": 5,
+      "title": "Nierówność a+b+c ≥ (3/4)abc",
+      "content": "Liczby dodatnie a, b, c spełniają nierówności a+b ≥ ab, b+c ≥ bc oraz c+a ≥ ca. Udowodnij, że a+b+c ≥ (3/4)abc.",
+      "has_solution": true
+    },
+    {
+      "number": 6,
+      "title": "Kwadrat o boku n z plusami i minusami",
+      "content": "Plusem nazwiemy przedstawioną na rysunku figurę złożoną z pięciu kwadratów o boku 1, a minusem — każdy prostokąt złożony z dwóch takich kwadratów. Czy istnieje liczba nieparzysta n o tej własności, że kwadrat o boku n można rozciąć na plusy i minusy? Odpowiedź uzasadnij.",
+      "has_solution": true
+    },
+    {
+      "number": 7,
+      "title": "Sześciokąt foremny ABCDEF o boku 2",
+      "content": "Dany jest sześciokąt foremny ABCDEF o boku 2. Punkt M jest środkiem przekątnej AE. Pięciokąt ABCDE zagięto wzdłuż odcinków BD, BM, DM w taki sposób, że punkty A, C oraz E spotkały się. W wyniku tej operacji otrzymano czworościan. Wyznacz jego objętość.",
+      "has_solution": true
+    }
+  ]
+}

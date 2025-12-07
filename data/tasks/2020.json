@@ -1,0 +1,83 @@
+{
+  "etap2": [
+    {
+      "number": 1,
+      "title": "Warunek 2a + a² = 2b + b²",
+      "content": "Liczby a, b spełniają warunek 2a + a² = 2b + b². Wykaż, że jeżeli liczba a jest całkowita, to liczba b także jest całkowita.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 2,
+      "title": "Kwadrat ABCD z punktem E na przekątnej",
+      "content": "Dany jest kwadrat ABCD. Punkt E leży na przekątnej AC, przy czym AE > EC. Na boku AB wybrano punkt F, różny od B, dla którego EF = DE. Udowodnij, że ∠DEF = 90°.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 3,
+      "title": "Podzielność 5a + 3b przez a + b",
+      "content": "Dane są takie dodatnie liczby całkowite a, b, dla których liczba 5a + 3b jest podzielna przez liczbę a + b. Wykaż, że a = b.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 4,
+      "title": "Równoległobok ABCD z punktami K i L",
+      "content": "Punkty K i L znajdują się odpowiednio na bokach BC i CD równoległoboku ABCD, przy czym\nAB + BK = AD + DL.\nUdowodnij, że dwusieczna kąta BAD jest prostopadła do prostej KL.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 5,
+      "title": "Zdalne przyjęcie urodzinowe",
+      "content": "Tomek zaprosił na zdalne przyjęcie urodzinowe 11 swoich znajomych, którzy kolejno będą dołączać do spotkania. Tomek dobrał gości w taki sposób, aby niezależnie od kolejności w jakiej będą dołączać, zawsze nowo przybyła osoba znała co najmniej połowę już obecnych osób, wliczając Tomka. Wykaż, że wśród zaproszonych gości istnieje taki, który zna wszystkich pozostałych 10 znajomych Tomka.\nUwaga: Przyjmujemy, że jeśli osoba A zna osobę B, to również B zna A.",
+      "has_solution": true,
+      "has_statistics": true
+    }
+  ],
+  "etap1": [
+    {
+      "number": 1,
+      "title": "Liczba sześciocyfrowa z kwadratami",
+      "content": "Czy istnieje taka liczba sześciocyfrowa, której każde dwie kolejne cyfry tworzą pewną liczbę dwucyfrową będącą kwadratem liczby całkowitej? Odpowiedź uzasadnij.",
+      "has_solution": true
+    },
+    {
+      "number": 2,
+      "title": "Trójkąt ABC z AC=BC=5",
+      "content": "Dany jest trójkąt ABC, w którym AC = BC = 5. Wysokość tego trójkąta poprowadzona z wierzchołka A ma długość 4. Oblicz długość wysokości trójkąta ABC poprowadzonej z wierzchołka C.",
+      "has_solution": true
+    },
+    {
+      "number": 3,
+      "title": "Warunek |a−b| = 2|b−c| = 3|c−a|",
+      "content": "Liczby a, b, c spełniają warunek |a−b| = 2|b−c| = 3|c−a|. Udowodnij, że a = b = c.",
+      "has_solution": true
+    },
+    {
+      "number": 4,
+      "title": "Czworokąt ABCD z kątami 120°",
+      "content": "Dany jest czworokąt wypukły ABCD, w którym ∠DAB = ∠ABC = 120° oraz CD = 3, BC = 2, AB = 1. Oblicz długość odcinka AD.",
+      "has_solution": true
+    },
+    {
+      "number": 5,
+      "title": "Cztery liczby z sumą 2^1002 i iloczynem 5^1002",
+      "content": "Czy istnieją takie cztery dodatnie liczby całkowite, których suma jest równa 2^1002, a iloczyn jest równy 5^1002? Odpowiedź uzasadnij.",
+      "has_solution": true
+    },
+    {
+      "number": 6,
+      "title": "(2n+2)-kąt z n² przekątnymi",
+      "content": "W (2n+2)-kącie wypukłym narysowano n² przekątnych. Udowodnij, że pewna z tych przekątnych rozcina (2n+2)-kąt na dwa wielokąty, z których każdy ma nieparzystą liczbę wierzchołków.",
+      "has_solution": true
+    },
+    {
+      "number": 7,
+      "title": "Figura z pięciokątów foremnych",
+      "content": "Figurę złożoną z czterech pięciokątów foremnych o boku długości 1 sklejono w przestrzeni. Najpierw zagięto ją wzdłuż odcinków przerywanych, łącząc pogrubione odcinki, a następnie uformowano w taki sposób, aby kolorowe odcinki utworzyły kwadrat. Wyznacz długość powstałego w ten sposób odcinka AB.",
+      "has_solution": true
+    }
+  ]
+}

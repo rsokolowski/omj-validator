@@ -1,0 +1,83 @@
+{
+  "etap2": [
+    {
+      "number": 1,
+      "title": "Nierówność x² + x ≤ y",
+      "content": "Liczby rzeczywiste x oraz y spełniają nierówność x² + x ≤ y. Udowodnij, że y² + y ≥ x.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 2,
+      "title": "Trapez ABCD z dwusieczną kąta BAD",
+      "content": "Dany jest trapez ABCD o podstawach AB i CD, w którym ∠ABC = 90°. Dwusieczna kąta BAD przecina odcinek BC w punkcie P. Wykaż, że jeśli ∠APD = 45°, to pole czworokąta APCD jest równe polu trójkąta ABP.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 3,
+      "title": "101-kąt foremny i prosta ℓ",
+      "content": "Dany jest 101-kąt foremny. Prosta ℓ leży w płaszczyźnie tego wielokąta i nie przechodzi przez żaden z jego wierzchołków. Udowodnij, że prosta ℓ przecina parzystą liczbę przekątnych danego wielokąta.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 4,
+      "title": "Trójkąt ABC z AB = 3·BC",
+      "content": "Dany jest trójkąt ABC, w którym AB = 3·BC. Punkty P i Q leżą na boku AB i spełniają warunek AP = PQ = QB. Punkt M jest środkiem boku AC. Wykaż, że ∠PMQ = 90°.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 5,
+      "title": "Cyfry 1, 2, 9 w zapisie 3n",
+      "content": "W zapisie dziesiętnym pewnej dodatniej liczby całkowitej n nie występuje żadna z cyfr 1, 2, 9. Udowodnij, że w zapisie dziesiętnym liczby 3n występuje co najmniej jedna z cyfr 1, 2, 9.",
+      "has_solution": true,
+      "has_statistics": true
+    }
+  ],
+  "etap1": [
+    {
+      "number": 1,
+      "title": "Cyfra jedności n przy 3n = 999^1000",
+      "content": "Liczbę naturalną n pomnożono przez 3, otrzymując w wyniku liczbę 999^1000. Wyznacz cyfrę jedności liczby n.",
+      "has_solution": true
+    },
+    {
+      "number": 2,
+      "title": "Czworokąt ABCD z kątami 45°",
+      "content": "Dany jest czworokąt wypukły ABCD, w którym ∠DAB = ∠ABC = 45° oraz DA = 3, AB = 7√2, BC = 4. Oblicz długość boku CD.",
+      "has_solution": true
+    },
+    {
+      "number": 3,
+      "title": "Warunek a/(b+c²) = (a+c²)/b",
+      "content": "Liczby całkowite a, b, c są różne od 0 i spełniają zależność a/(b+c²) = (a+c²)/b. Wykaż, że a+b+c ≤ 0.",
+      "has_solution": true
+    },
+    {
+      "number": 4,
+      "title": "Reszty z dzielenia - c = 4",
+      "content": "Dodatnie liczby całkowite a, b, c mają tę własność, że: a daje resztę 2 z dzielenia przez b, b daje resztę 2 z dzielenia przez c, c daje resztę 4 z dzielenia przez a. Udowodnij, że c = 4.",
+      "has_solution": true
+    },
+    {
+      "number": 5,
+      "title": "Równoległobok ABCD z AP=BD",
+      "content": "Dany jest równoległobok ABCD. Na przekątnej BD wybrano taki punkt P, że spełniona jest równość AP = BD. Punkt Q jest środkiem odcinka CP. Wykaż, że ∠BQD = 90°.",
+      "has_solution": true
+    },
+    {
+      "number": 6,
+      "title": "Szachownica 14×14",
+      "content": "Pola szachownicy o wymiarach 14×14 pokolorowano w sposób przedstawiony na rysunku. Czy można wybrać siedem pól czarnych i siedem pól białych tej szachownicy w taki sposób, aby w każdym wierszu i w każdej kolumnie znalazło się dokładnie jedno wybrane pole? Odpowiedź uzasadnij.",
+      "has_solution": true
+    },
+    {
+      "number": 7,
+      "title": "Sześcian z ostrosłupem",
+      "content": "Dany jest sześcian ABCDA'B'C'D' o krawędzi długości 2. Punkt K jest środkiem krawędzi AB. Płaszczyzna zawierająca punkty B', D', K przecina krawędź AD w punkcie L. Oblicz objętość ostrosłupa o podstawie czworokąta D'B'KL i wierzchołku A.",
+      "has_solution": true
+    }
+  ]
+}

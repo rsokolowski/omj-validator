@@ -15,7 +15,8 @@ from .config import settings
 from .auth import AUTH_COOKIE_NAME, verify_auth, require_auth_redirect, _get_session_token
 from .storage import (
     load_tasks_index,
-    load_tasks_data,
+    load_tasks_data_index,
+    load_year_tasks,
     get_task,
     get_task_key,
     get_task_pdf_path,
@@ -151,13 +152,17 @@ async def etap_detail(request: Request, year: str, etap: str):
     if year not in index or etap not in index[year]:
         raise HTTPException(status_code=404, detail="Etap nie znaleziony")
 
-    tasks_data = load_tasks_data()
+    # Get task count from data index
+    data_index = load_tasks_data_index()
+    task_count = data_index.get(year, {}).get(etap, {}).get("count", 5)
+
+    year_tasks = load_year_tasks(year)
 
     # Build task list with stats
     tasks = []
-    for num in range(1, 6):  # Tasks 1-5
+    for num in range(1, task_count + 1):
         key = get_task_key(year, etap, num)
-        task_info = tasks_data.get(key)
+        task_info = year_tasks.get(key)
         stats = get_task_stats(year, etap, num)
 
         tasks.append(
