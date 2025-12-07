@@ -82,9 +82,9 @@
     {% endif %}
 
     <div class="submit-section">
-        <h2>Prześlij rozwiązanie</h2>
-        {% if is_authenticated %}
-        <p class="submit-info">Prześlij zdjęcia swojego ręcznie napisanego rozwiązania. Możesz przesłać wiele zdjęć.</p>
+        <h2>Przeslij rozwiazanie</h2>
+        {% if can_submit %}
+        <p class="submit-info">Przeslij zdjecia swojego recznie napisanego rozwiazania. Mozesz przeslac wiele zdjec.</p>
 
         <form id="submit-form" class="submit-form" enctype="multipart/form-data">
             <div class="form-group">
@@ -112,12 +112,14 @@
             </div>
             <div class="result-feedback" id="result-feedback"></div>
         </div>
+        {% elif is_authenticated %}
+        <p class="submit-info">Przesylanie rozwiazan wymaga czlonkostwa w grupie <strong>omj-validator-alpha</strong>.</p>
         {% else %}
-        <p class="submit-info"><a href="/login">Zaloguj się</a>, aby przesłać rozwiązanie do oceny.</p>
+        <p class="submit-info"><a href="/login">Zaloguj sie</a>, aby przeslac rozwiazanie do oceny.</p>
         {% endif %}
     </div>
 
-    {% if is_authenticated and submissions %}
+    {% if can_submit and submissions %}
     <div class="history-section">
         <div class="history-header">
             <h2>Ostatnie próby</h2>

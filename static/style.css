@@ -1118,3 +1118,128 @@ h1, h2, h3, h4 {
         grid-template-columns: repeat(3, 1fr);
     }
 }
+
+/* === OAuth Login Styles === */
+.oauth-section {
+    margin-bottom: 1.5rem;
+}
+
+.btn-google {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    width: 100%;
+    background: white;
+    color: #444;
+    border: 1px solid #ddd;
+    padding: 0.875rem 1.5rem;
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-google:hover {
+    border-color: #4285F4;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: #f8f9fa;
+}
+
+.btn-google svg {
+    flex-shrink: 0;
+}
+
+.login-note {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+    text-align: center;
+}
+
+/* === User Info in Header === */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+}
+
+.user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.user-name {
+    font-size: 0.875rem;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: white;
+}
+
+.badge-readonly {
+    font-size: 0.6875rem;
+    padding: 0.125rem 0.5rem;
+    background: #ff9800;
+    border-radius: 3px;
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* === Info/Limited Access Container === */
+.info-container {
+    max-width: 600px;
+    margin: 3rem auto;
+    padding: 2rem;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.info-container h1 {
+    font-size: 1.5rem;
+    color: var(--color-gray-800);
+    margin-bottom: 1rem;
+}
+
+.info-container p {
+    color: var(--color-gray-600);
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.btn-secondary {
+    background: var(--color-gray-100);
+    color: var(--color-gray-700);
+    border: 1px solid var(--color-gray-300);
+}
+
+.btn-secondary:hover {
+    background: var(--color-gray-200);
+}
+
+/* === Warning Alert === */
+.alert-warning {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    color: #856404;
+    padding: 1rem;
+    border-radius: var(--radius);
+    text-align: center;
+}

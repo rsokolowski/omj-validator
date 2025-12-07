@@ -10,8 +10,17 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: "3.12.0"
-      - key: AUTH_KEY
+      # Google OAuth
+      - key: GOOGLE_CLIENT_ID
         sync: false  # Set manually in Render dashboard
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false  # Set manually in Render dashboard
+      - key: SESSION_SECRET_KEY
+        sync: false  # Set manually (generate with: openssl rand -hex 32)
+      # Access control - comma-separated list of allowed emails
+      - key: ALLOWED_EMAILS
+        sync: false  # Set manually in Render dashboard
+      # AI Provider
       - key: AI_PROVIDER
         value: gemini
       - key: GEMINI_API_KEY

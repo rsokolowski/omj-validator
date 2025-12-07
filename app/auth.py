@@ -1,43 +1,60 @@
-import secrets
-import hashlib
-import hmac
+"""Authentication module using Google OAuth sessions."""
+
+from typing import Optional
 
 from fastapi import Request, HTTPException, status
 from fastapi.responses import RedirectResponse
 
 from .config import settings
 
-AUTH_COOKIE_NAME = "omj_auth"
-# Session token is derived from auth_key - changes when key changes
-_SESSION_TOKEN = None
+# Session key for storing user info
+SESSION_USER_KEY = "user"
 
 
-def _get_session_token() -> str:
-    """Get or create a session token derived from the auth key."""
-    global _SESSION_TOKEN
-    if _SESSION_TOKEN is None:
-        # Derive a fixed session token from the auth key
-        _SESSION_TOKEN = hashlib.sha256(
-            f"omj_session_{settings.auth_key}".encode()
-        ).hexdigest()
-    return _SESSION_TOKEN
+def get_current_user(request: Request) -> Optional[dict]:
+    """
+    Get current user from session.
+
+    Returns:
+        User dict with keys: email, name, picture, is_group_member
+        None if not authenticated
+    """
+    # Auth disabled = anonymous user with full access
+    if settings.auth_disabled:
+        return {
+            "email": "anonymous@localhost",
+            "name": "Anonymous (auth disabled)",
+            "picture": None,
+            "is_group_member": True,
+        }
+
+    return request.session.get(SESSION_USER_KEY)
+
+
+def is_group_member(request: Request) -> bool:
+    """
+    Check if the current user is a member of the required group.
+
+    Returns:
+        True if user is authenticated AND is a group member
+        False otherwise
+    """
+    user = get_current_user(request)
+    if not user:
+        return False
+    return user.get("is_group_member", False)
 
 
 def verify_auth(request: Request) -> bool:
-    """Check if request has valid authentication."""
-    expected_token = _get_session_token()
+    """
+    Check if request has valid authentication.
 
-    # Check cookie (contains derived token, not raw key)
-    cookie_token = request.cookies.get(AUTH_COOKIE_NAME)
-    if cookie_token and hmac.compare_digest(cookie_token, expected_token):
+    For backward compatibility with existing code that checks is_authenticated.
+    Returns True if user is logged in (regardless of group membership).
+    """
+    if settings.auth_disabled:
         return True
-
-    # Check header (for API calls) - accepts raw key for backward compat
-    header_token = request.headers.get("X-Auth-Token")
-    if header_token and secrets.compare_digest(header_token, settings.auth_key):
-        return True
-
-    return False
+    return get_current_user(request) is not None
 
 
 def require_auth(request: Request) -> None:
@@ -49,8 +66,43 @@ def require_auth(request: Request) -> None:
         )
 
 
-def require_auth_redirect(request: Request) -> RedirectResponse | None:
+def require_auth_redirect(request: Request) -> Optional[RedirectResponse]:
     """Return redirect to login if not authenticated, None otherwise."""
     if not verify_auth(request):
         return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+    return None
+
+
+def require_group_member(request: Request) -> None:
+    """
+    Raise exception if not authenticated or not a group member.
+
+    Use this for routes that require full access (e.g., submitting solutions).
+    """
+    if not verify_auth(request):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Nieautoryzowany dostęp",
+        )
+
+    if not is_group_member(request):
+        from .config import settings
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=f"Dostęp wymaga członkostwa w grupie {settings.google_group_email}",
+        )
+
+
+def require_group_member_redirect(request: Request) -> Optional[RedirectResponse]:
+    """
+    Return redirect if not authenticated or not a group member.
+
+    For HTML routes - redirects to login or shows limited access page.
+    """
+    if not verify_auth(request):
+        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+
+    if not is_group_member(request):
+        return RedirectResponse(url="/auth/limited", status_code=status.HTTP_303_SEE_OTHER)
+
     return None

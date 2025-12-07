@@ -1,18 +1,27 @@
-import io
+import logging
 import re
-import secrets
 import uuid
 from pathlib import Path
-from typing import Annotated
 
-from fastapi import FastAPI, Request, Form, UploadFile, File, HTTPException, status
+from fastapi import FastAPI, Request, UploadFile, File, HTTPException, status
 from PIL import Image
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from starlette.middleware.sessions import SessionMiddleware
 
 from .config import settings
-from .auth import AUTH_COOKIE_NAME, verify_auth, require_auth_redirect, _get_session_token
+from .auth import (
+    SESSION_USER_KEY,
+    verify_auth,
+    require_auth_redirect,
+    get_current_user,
+    is_group_member,
+)
+from .oauth import oauth
+from .groups import check_group_membership
+
+logger = logging.getLogger(__name__)
 from .storage import (
     get_available_years,
     get_etaps_for_year,
@@ -28,6 +37,15 @@ from .ai import create_ai_provider, AIProviderError
 from .models import SubmissionResult
 
 app = FastAPI(title="OMJ Validator", description="Walidator rozwiązań OMJ")
+
+# Add session middleware for OAuth
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=settings.session_secret_key,
+    max_age=30 * 24 * 60 * 60,  # 30 days
+    https_only=not settings.auth_disabled,  # Require HTTPS in production
+    same_site="lax",  # CSRF protection
+)
 
 # Mount static files
 app.mount("/static", StaticFiles(directory=settings.base_dir / "static"), name="static")
@@ -52,46 +70,107 @@ templates.env.filters["nl2br_safe"] = nl2br_safe
 
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
-    """Display login page."""
+    """Display login page with Google OAuth option."""
     if verify_auth(request):
         return RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
-    return templates.TemplateResponse("login.html", {"request": request})
+
+    error_msg = None
+    error_code = request.query_params.get("error")
+    if error_code == "oauth_failed":
+        error_msg = "Wystąpił błąd podczas logowania przez Google. Spróbuj ponownie."
+    elif error_code == "oauth_not_configured":
+        error_msg = "Logowanie przez Google nie jest skonfigurowane."
+
+    return templates.TemplateResponse(
+        "login.html",
+        {
+            "request": request,
+            "error": error_msg,
+            "oauth_available": bool(settings.google_client_id),
+        },
+    )
 
 
-@app.post("/login")
-async def login(
-    request: Request,
-    key: Annotated[str, Form()],
-    remember: Annotated[bool, Form()] = False,
-):
-    """Process login form."""
-    if not secrets.compare_digest(key, settings.auth_key):
-        return templates.TemplateResponse(
-            "login.html",
-            {"request": request, "error": "Nieprawidłowy klucz dostępu"},
-            status_code=status.HTTP_401_UNAUTHORIZED,
+@app.get("/login/google")
+async def google_login(request: Request):
+    """Initiate Google OAuth flow."""
+    if not settings.google_client_id:
+        return RedirectResponse(
+            url="/login?error=oauth_not_configured",
+            status_code=status.HTTP_303_SEE_OTHER,
         )
 
-    response = RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
+    redirect_uri = request.url_for("google_auth_callback")
+    return await oauth.google.authorize_redirect(request, redirect_uri)
 
-    # Set cookie with derived session token (not raw key)
-    max_age = 30 * 24 * 60 * 60 if remember else None
-    response.set_cookie(
-        key=AUTH_COOKIE_NAME,
-        value=_get_session_token(),
-        max_age=max_age,
-        httponly=True,
-        samesite="lax",
+
+@app.get("/auth/callback")
+async def google_auth_callback(request: Request):
+    """Handle Google OAuth callback."""
+    try:
+        token = await oauth.google.authorize_access_token(request)
+        user_info = token.get("userinfo")
+
+        if not user_info or "email" not in user_info:
+            logger.error("OAuth callback: missing user info")
+            return RedirectResponse(
+                url="/login?error=oauth_failed",
+                status_code=status.HTTP_303_SEE_OTHER,
+            )
+
+        # Check Google Group membership
+        is_member = await check_group_membership(user_info["email"])
+
+        # Store user in session
+        request.session[SESSION_USER_KEY] = {
+            "email": user_info["email"],
+            "name": user_info.get("name", ""),
+            "picture": user_info.get("picture"),
+            "is_group_member": is_member,
+        }
+
+        logger.info(
+            f"User logged in: {user_info['email']} (group member: {is_member})"
+        )
+
+        # Redirect to limited access page if not a group member
+        if not is_member:
+            return RedirectResponse(
+                url="/auth/limited", status_code=status.HTTP_303_SEE_OTHER
+            )
+
+        return RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
+
+    except Exception as e:
+        logger.error(f"OAuth callback error: {e}")
+        return RedirectResponse(
+            url="/login?error=oauth_failed",
+            status_code=status.HTTP_303_SEE_OTHER,
+        )
+
+
+@app.get("/auth/limited", response_class=HTMLResponse)
+async def auth_limited_page(request: Request):
+    """Show limited access page for users not in the required group."""
+    user = get_current_user(request)
+    if not user:
+        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+
+    # If user is actually a group member, redirect to main page
+    if user.get("is_group_member"):
+        return RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
+
+    return templates.TemplateResponse(
+        "auth_limited.html",
+        {"request": request, "user": user, "is_authenticated": True},
     )
-    return response
 
 
 @app.get("/logout")
-async def logout():
-    """Log out user."""
-    response = RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
-    response.delete_cookie(AUTH_COOKIE_NAME)
-    return response
+async def logout(request: Request):
+    """Log out user by clearing session."""
+    request.session.clear()
+    return RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
 
 
 # --- Main Routes ---
@@ -107,11 +186,16 @@ async def root(request: Request):
 async def years_page(request: Request):
     """Display available years (public)."""
     years = get_available_years()
-    is_authenticated = verify_auth(request)
+    user = get_current_user(request)
 
     return templates.TemplateResponse(
         "index.html",
-        {"request": request, "years": years, "is_authenticated": is_authenticated},
+        {
+            "request": request,
+            "years": years,
+            "is_authenticated": user is not None,
+            "user": user,
+        },
     )
 
 
@@ -122,24 +206,31 @@ async def year_detail(request: Request, year: str):
     if not etaps:
         raise HTTPException(status_code=404, detail="Rok nie znaleziony")
 
-    is_authenticated = verify_auth(request)
+    user = get_current_user(request)
 
     return templates.TemplateResponse(
         "year.html",
-        {"request": request, "year": year, "etaps": etaps, "is_authenticated": is_authenticated},
+        {
+            "request": request,
+            "year": year,
+            "etaps": etaps,
+            "is_authenticated": user is not None,
+            "user": user,
+        },
     )
 
 
 @app.get("/years/{year}/{etap}", response_class=HTMLResponse)
 async def etap_detail(request: Request, year: str, etap: str):
-    """Display tasks for a year/etap (public). Stats shown only to authenticated users."""
+    """Display tasks for a year/etap (public). Stats shown only to group members."""
     etap_tasks = get_tasks_for_etap(year, etap)
     if not etap_tasks:
         raise HTTPException(status_code=404, detail="Etap nie znaleziony")
 
-    is_authenticated = verify_auth(request)
+    user = get_current_user(request)
+    can_see_stats = is_group_member(request)
 
-    # Build task list - stats only for authenticated users
+    # Build task list - stats only for group members
     tasks = []
     for task_info in etap_tasks:
         task_data = {
@@ -151,7 +242,7 @@ async def etap_detail(request: Request, year: str, etap: str):
             "submission_count": 0,
             "highest_score": None,
         }
-        if is_authenticated:
+        if can_see_stats:
             stats = get_task_stats(year, etap, task_info.number)
             task_data["submission_count"] = stats.submission_count
             task_data["highest_score"] = stats.highest_score
@@ -159,23 +250,31 @@ async def etap_detail(request: Request, year: str, etap: str):
 
     return templates.TemplateResponse(
         "etap.html",
-        {"request": request, "year": year, "etap": etap, "tasks": tasks, "is_authenticated": is_authenticated},
+        {
+            "request": request,
+            "year": year,
+            "etap": etap,
+            "tasks": tasks,
+            "is_authenticated": user is not None,
+            "user": user,
+        },
     )
 
 
 @app.get("/task/{year}/{etap}/{num}", response_class=HTMLResponse)
 async def task_detail(request: Request, year: str, etap: str, num: int):
-    """Display task detail (public). Submission form, stats, and history only for authenticated users."""
+    """Display task detail (public). Submission form, stats, and history only for group members."""
     task = get_task(year, etap, num)
     if not task:
         raise HTTPException(status_code=404, detail="Zadanie nie znalezione")
 
-    is_authenticated = verify_auth(request)
+    user = get_current_user(request)
+    can_submit = is_group_member(request)
 
-    # Stats and submissions only for authenticated users
+    # Stats and submissions only for group members
     stats = None
     submissions = []
-    if is_authenticated:
+    if can_submit:
         stats = get_task_stats(year, etap, num)
         submissions = load_submissions(year, etap, num)[:10]
 
@@ -197,7 +296,9 @@ async def task_detail(request: Request, year: str, etap: str, num: int):
             "stats": stats,
             "submissions": submissions,
             "pdf_links": pdf_links,
-            "is_authenticated": is_authenticated,
+            "is_authenticated": user is not None,
+            "can_submit": can_submit,
+            "user": user,
         },
     )
 
@@ -263,12 +364,19 @@ async def submit_solution(
     num: int,
     images: list[UploadFile] = File(...),
 ):
-    """Submit solution images for analysis."""
-    redirect = require_auth_redirect(request)
-    if redirect:
+    """Submit solution images for analysis (requires group membership)."""
+    # Check if user is authenticated
+    if not verify_auth(request):
         return JSONResponse(
             {"error": "Nieautoryzowany dostęp"},
             status_code=status.HTTP_401_UNAUTHORIZED,
+        )
+
+    # Check if user is a group member
+    if not is_group_member(request):
+        return JSONResponse(
+            {"error": "Dostęp wymaga członkostwa w grupie omj-validator-alpha"},
+            status_code=status.HTTP_403_FORBIDDEN,
         )
 
     # Validate path parameters to prevent directory traversal
@@ -402,13 +510,17 @@ async def submit_solution(
 
 @app.get("/task/{year}/{etap}/{num}/history", response_class=HTMLResponse)
 async def task_history(request: Request, year: str, etap: str, num: int):
-    """Display submission history for a task (requires auth)."""
-    redirect = require_auth_redirect(request)
-    if redirect:
-        return redirect
+    """Display submission history for a task (requires group membership)."""
+    # Require group membership to view history
+    if not verify_auth(request):
+        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+
+    if not is_group_member(request):
+        return RedirectResponse(url="/auth/limited", status_code=status.HTTP_303_SEE_OTHER)
 
     task = get_task(year, etap, num)
     submissions = load_submissions(year, etap, num)
+    user = get_current_user(request)
 
     return templates.TemplateResponse(
         "history.html",
@@ -419,7 +531,8 @@ async def task_history(request: Request, year: str, etap: str, num: int):
             "etap": etap,
             "num": num,
             "submissions": submissions,
-            "is_authenticated": True,  # Always true since route requires auth
+            "is_authenticated": True,
+            "user": user,
         },
     )
 
