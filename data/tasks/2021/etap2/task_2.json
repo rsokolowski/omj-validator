@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Dzielniki a i b liczby n",
+  "content": "Dana jest liczba całkowita n ≥ 1 oraz jej dodatnie dzielniki a i b, które spełniają równość a + b + ab = n. Wykaż, że a = b.",
+  "pdf": {
+    "tasks": "tasks/2021/etap2/2etap22.pdf",
+    "solutions": "tasks/2021/etap2/2etap22r.pdf",
+    "statistics": "tasks/2021/etap2/2etap22st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

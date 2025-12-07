@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Liczba (n⁴+4)/17 pierwsza",
+  "content": "Wyznacz wszystkie liczby naturalne n, dla których liczba (n⁴+4)/17 jest pierwsza.",
+  "pdf": {
+    "tasks": "tasks/2015/etap1/1etap15.pdf",
+    "solutions": "tasks/2015/etap1/1etap15r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Prostokąt ABCD z AB=BX=XD",
+  "content": "W prostokącie ABCD stosunek długości boków BC:AB jest równy √2. Wewnątrz tego prostokąta zaznaczono taki punkt X, że AB = BX = XD. Wyznacz miarę kąta BXD.",
+  "pdf": {
+    "tasks": "tasks/2021/etap1/1etap21.pdf",
+    "solutions": "tasks/2021/etap1/1etap21rr.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

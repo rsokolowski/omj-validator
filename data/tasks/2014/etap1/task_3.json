@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Minimum wyrażenia a+b³",
+  "content": "Wyznacz najmniejszą możliwą wartość wyrażenia a+b³, gdzie a i b są dodatnimi liczbami o iloczynie równym 1.",
+  "pdf": {
+    "tasks": "tasks/2014/etap1/1etap14.pdf",
+    "solutions": "tasks/2014/etap1/1etap14r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

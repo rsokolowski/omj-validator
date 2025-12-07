@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Pary (a,b) z a+b pierwszą i a³+b³ podzielną przez 3",
+  "content": "Wyznacz wszystkie takie pary (a,b) dodatnich liczb całkowitych, że liczba a+b jest liczbą pierwszą oraz liczba a³+b³ jest podzielna przez 3.",
+  "pdf": {
+    "tasks": "tasks/2008/etap1/omg04_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

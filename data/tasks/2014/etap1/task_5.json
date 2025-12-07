@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Most przez rzekę",
+  "content": "Po dwóch stronach rzeki o równoległych brzegach znajdują się dwa domy A i B, przy czym prosta AB nie jest prostopadła do brzegów rzeki. W którym miejscu należy wybudować most, prostopadły do brzegów rzeki, aby drogi z obu domów do mostu, biegnące w linii prostej, były równej długości? Podaj odpowiednią konstrukcję cyrklem i linijką oraz uzasadnij jej poprawność.",
+  "pdf": {
+    "tasks": "tasks/2014/etap1/1etap14.pdf",
+    "solutions": "tasks/2014/etap1/1etap14r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

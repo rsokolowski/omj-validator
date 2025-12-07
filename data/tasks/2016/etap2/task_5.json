@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "100-kąt foremny z kolorowaniem",
+  "content": "Spośród wierzchołków 100-kąta foremnego wybrano pewne 50 i pokolorowano je na biało. Pozostałe wierzchołki pokolorowano na czerwono. Udowodnij, że wierzchołki tego 100-kąta można tak podzielić na 25 grup po 4 punkty, aby punkty w obrębie każdej grupy były wierzchołkami prostokąta o dwóch białych i dwóch czerwonych wierzchołkach.",
+  "pdf": {
+    "tasks": "tasks/2016/etap2/2etap17.pdf",
+    "solutions": "tasks/2016/etap2/2etap17r.pdf",
+    "statistics": "tasks/2016/etap2/2etap17st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

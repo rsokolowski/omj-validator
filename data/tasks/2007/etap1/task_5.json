@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Okrąg wpisany w czworokąt ABCD",
+  "content": "Okrąg o promieniu 1 jest wpisany w czworokąt wypukły ABCD. Okrąg ten jest styczny do boków AB, BC, CD, DA odpowiednio w punktach K, L, M, N. Wiadomo, że ∠KLM = 4∠AKN oraz ∠KNM = 4∠BKL. Oblicz długość odcinka LN.",
+  "pdf": {
+    "tasks": "tasks/2007/etap1/omg03_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

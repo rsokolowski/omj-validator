@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Prostokąt o obwodzie x i polu x",
+  "content": "Dany jest prostokąt o obwodzie x cm, w którym stosunek długości boków wynosi 1:2. Załóżmy, że pole tego prostokąta jest równe x cm². Wyznacz x.",
+  "pdf": {
+    "tasks": "tasks/2022/etap1/18omj-1etap.pdf",
+    "solutions": "tasks/2022/etap1/18omj-1r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

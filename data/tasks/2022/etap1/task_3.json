@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Prostokąt ABCD z punktami E i F",
+  "content": "Dany jest prostokąt ABCD. Punkt E leży na boku AB, a punkt F leży na odcinku CE. Wykaż, że jeśli trójkąty ADE i CDF mają równe pola, to również trójkąty BCE i DEF mają równe pola.",
+  "pdf": {
+    "tasks": "tasks/2022/etap1/18omj-1etap.pdf",
+    "solutions": "tasks/2022/etap1/18omj-1r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

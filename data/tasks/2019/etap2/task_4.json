@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Trójkąt ABC z kątem 45°",
+  "content": "Dany jest trójkąt ABC, w którym miara kąta przy wierzchołku A jest równa 45°, a kąt przy wierzchołku C jest rozwarty. Udowodnij, że\nBC + (√2−1)·CA < AB.",
+  "pdf": {
+    "tasks": "tasks/2019/etap2/2etap20.pdf",
+    "solutions": "tasks/2019/etap2/2etap20r.pdf",
+    "statistics": "tasks/2019/etap2/2etap20st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

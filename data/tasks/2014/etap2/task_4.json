@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Punkty pomalowane na trzy kolory",
+  "content": "Na płaszczyźnie zaznaczono n punktów (n ≥ 3), z których żadne trzy nie leżą na jednej prostej. Każdy z tych punktów pomalowano na jeden z trzech kolorów, przy czym każdego koloru użyto przynajmniej raz. Udowodnij, że istnieje taki trójkąt o wierzchołkach w zaznaczonych punktach, którego każde dwa wierzchołki mają różne kolory i do wnętrza którego nie należy żaden zaznaczony punkt.",
+  "pdf": {
+    "tasks": "tasks/2014/etap2/2etap15.pdf",
+    "solutions": "tasks/2014/etap2/2etap15r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

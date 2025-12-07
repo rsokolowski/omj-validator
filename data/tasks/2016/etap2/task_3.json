@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Równości a+b=cd i c+d=ab",
+  "content": "Liczby rzeczywiste a, b, c, d spełniają równości\na+b = cd oraz c+d = ab.\nWykaż, że (a+1)(b+1)(c+1)(d+1) ≥ 0.",
+  "pdf": {
+    "tasks": "tasks/2016/etap2/2etap17.pdf",
+    "solutions": "tasks/2016/etap2/2etap17r.pdf",
+    "statistics": "tasks/2016/etap2/2etap17st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

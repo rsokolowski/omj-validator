@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Tablica 4×4 z sumami",
+  "content": "W każde pole tablicy o wymiarach 4×4 wpisano liczbę 0 lub 1. Następnie obliczono sumy liczb stojących w każdym wierszu, w każdej kolumnie i na obu przekątnych. Wykaż, że co najmniej trzy sumy są jednakowe.",
+  "pdf": {
+    "tasks": "tasks/2008/etap2/omg04_2.pdf",
+    "solutions": "tasks/2008/etap2/omg04_2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

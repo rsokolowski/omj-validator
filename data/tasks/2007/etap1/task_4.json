@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Liczba ośmiocyfrowa podzielna przez 101",
+  "content": "Dana jest liczba ośmiocyfrowa a. Liczba ośmiocyfrowa b powstaje z liczby a poprzez przestawienie cyfry jedności liczby a na początek. Wykaż, że jeśli liczba a jest podzielna przez 101, to liczba b jest także podzielna przez 101.",
+  "pdf": {
+    "tasks": "tasks/2007/etap1/omg03_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

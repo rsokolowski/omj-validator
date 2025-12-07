@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Sześciokąt ABCDEF z kątami 120°",
+  "content": "Miara każdego kąta sześciokąta ABCDEF jest równa 120°. Udowodnij, że symetralne odcinków AB, CD i EF przecinają się w jednym punkcie.",
+  "pdf": {
+    "tasks": "tasks/2007/etap2/omg03_2.pdf",
+    "solutions": "tasks/2007/etap2/omg03_2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

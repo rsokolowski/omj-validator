@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Sześcian z ostrosłupem",
+  "content": "Dany jest sześcian ABCDA'B'C'D' o krawędzi długości 2. Punkt K jest środkiem krawędzi AB. Płaszczyzna zawierająca punkty B', D', K przecina krawędź AD w punkcie L. Oblicz objętość ostrosłupa o podstawie czworokąta D'B'KL i wierzchołku A.",
+  "pdf": {
+    "tasks": "tasks/2018/etap1/1etap18.pdf",
+    "solutions": "tasks/2018/etap1/1etap18r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

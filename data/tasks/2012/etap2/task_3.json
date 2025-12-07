@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Trójkąt z polem ¼(ab+bc)",
+  "content": "Czy istnieje taki trójkąt o bokach długości a, b, c, którego pole jest równe ¼(ab+bc)? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2012/etap2/2etap13.pdf",
+    "solutions": "tasks/2012/etap2/2etap13r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

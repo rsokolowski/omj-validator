@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Liczby n z n³−7n kwadratem",
+  "content": "Wyznacz wszystkie dodatnie liczby całkowite n, dla których liczba n³−7n jest kwadratem liczby całkowitej.",
+  "pdf": {
+    "tasks": "tasks/2012/etap1/1etap12.pdf",
+    "solutions": "tasks/2012/etap1/1etap12r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

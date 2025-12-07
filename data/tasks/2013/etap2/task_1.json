@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Pary (a,b) z a < b < 2013 i a+b = 4020",
+  "content": "Wyznacz wszystkie pary (a, b) liczb całkowitych spełniających warunki\na < b < 2013 oraz a+b = 4020.",
+  "pdf": {
+    "tasks": "tasks/2013/etap2/2etap14.pdf",
+    "solutions": "tasks/2013/etap2/2etap14r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Trapez z prostopadłymi przekątnymi",
+  "content": "Wykaż, że jeżeli przekątne pewnego trapezu są prostopadłe, to suma długości podstaw tego trapezu jest nie większa od sumy długości ramion tego trapezu.",
+  "pdf": {
+    "tasks": "tasks/2017/etap2/2etap18.pdf",
+    "solutions": "tasks/2017/etap2/2etap18r.pdf",
+    "statistics": "tasks/2017/etap2/2etap18st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

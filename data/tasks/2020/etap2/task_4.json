@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Równoległobok ABCD z punktami K i L",
+  "content": "Punkty K i L znajdują się odpowiednio na bokach BC i CD równoległoboku ABCD, przy czym\nAB + BK = AD + DL.\nUdowodnij, że dwusieczna kąta BAD jest prostopadła do prostej KL.",
+  "pdf": {
+    "tasks": "tasks/2020/etap2/2etap21.pdf",
+    "solutions": "tasks/2020/etap2/2etap21r.pdf",
+    "statistics": "tasks/2020/etap2/2etap21st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

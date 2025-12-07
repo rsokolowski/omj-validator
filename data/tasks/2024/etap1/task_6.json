@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Schodkowy diagram n×n",
+  "content": "Z tablicy n×n usunięto pola znajdujące się w całości powyżej jednej z przekątnych, otrzymując schodkowy diagram. W każde pole diagramu należy wpisać jedną z liczb 1 lub 2. Wyznacz wszystkie liczby całkowite n ≥ 2, dla których można to zrobić w taki sposób, aby pośród 2n sum liczb w wierszach i kolumnach nie było dwóch równych liczb.",
+  "pdf": {
+    "tasks": "tasks/2024/etap1/20omj-1etap.pdf",
+    "solutions": "tasks/2024/etap1/20omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

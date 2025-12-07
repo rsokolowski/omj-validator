@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Trójki (a,b,c) z sumami pierwszymi",
+  "content": "Wyznacz wszystkie takie trójki (a, b, c) dodatnich liczb całkowitych, że każda z liczb\na+b, b+c, c+a oraz a+b+c\njest pierwsza.",
+  "pdf": {
+    "tasks": "tasks/2016/etap2/2etap17.pdf",
+    "solutions": "tasks/2016/etap2/2etap17r.pdf",
+    "statistics": "tasks/2016/etap2/2etap17st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

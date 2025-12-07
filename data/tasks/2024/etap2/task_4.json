@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Pierwiastki sześcienne a + b = ∛2025",
+  "content": "Czy istnieją takie dodatnie liczby całkowite a oraz b, że\n∛a + ∛b = ∛2025?\nUwaga. Symbol ∛x oznacza pierwiastek trzeciego stopnia z x, czyli taką liczbę rzeczywistą y, że y³ = x.",
+  "pdf": {
+    "tasks": "tasks/2024/etap2/20omj-2etap.pdf",
+    "solutions": "tasks/2024/etap2/20omj-2r.pdf",
+    "statistics": "tasks/2024/etap2/20omj-2etap-st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

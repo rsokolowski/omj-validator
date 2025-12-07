@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Liczby olimpijskie",
+  "content": "Liczbę całkowitą nazwiemy olimpijską, jeśli można ją uzyskać z liczby 1 w wyniku wykonania pewnej liczby operacji polegających na zwiększeniu liczby o jej cyfrę jedności. Początkowymi liczbami olimpijskimi są więc 1, 2, 4, 8, 16, 22, 24, 28, 36, ...\nWykaż, że kwadrat liczby olimpijskiej jest liczbą olimpijską.",
+  "pdf": {
+    "tasks": "tasks/2024/etap2/20omj-2etap.pdf",
+    "solutions": "tasks/2024/etap2/20omj-2r.pdf",
+    "statistics": "tasks/2024/etap2/20omj-2etap-st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

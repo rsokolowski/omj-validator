@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Ułamek (a+n)/(b+n) skracalny",
+  "content": "Dane są dodatnie liczby całkowite a, b o następującej własności: dla każdej liczby naturalnej n ≥ 1 ułamek (a+n)/(b+n) jest skracalny. Wykaż, że a = b.",
+  "pdf": {
+    "tasks": "tasks/2019/etap2/2etap20.pdf",
+    "solutions": "tasks/2019/etap2/2etap20r.pdf",
+    "statistics": "tasks/2019/etap2/2etap20st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

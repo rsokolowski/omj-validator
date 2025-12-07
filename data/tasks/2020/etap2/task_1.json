@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Warunek 2a + a² = 2b + b²",
+  "content": "Liczby a, b spełniają warunek 2a + a² = 2b + b². Wykaż, że jeżeli liczba a jest całkowita, to liczba b także jest całkowita.",
+  "pdf": {
+    "tasks": "tasks/2020/etap2/2etap21.pdf",
+    "solutions": "tasks/2020/etap2/2etap21r.pdf",
+    "statistics": "tasks/2020/etap2/2etap21st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

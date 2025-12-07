@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Wstawianie cyfry - połowa liczby n",
+  "content": "Liczba naturalna n jest co najmniej trzycyfrowa. Jeżeli pomiędzy cyfrę setek a cyfrę dziesiątek tej liczby wpiszemy znak mnożenia, to po wykonaniu mnożenia otrzymamy połowę liczby n. Wyznacz wszystkie liczby n o tej własności.",
+  "pdf": {
+    "tasks": "tasks/2012/etap1/1etap12.pdf",
+    "solutions": "tasks/2012/etap1/1etap12r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

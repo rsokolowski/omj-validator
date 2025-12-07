@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Tablica 9×9 z kolejnymi sumami",
+  "content": "W każde pole tablicy o wymiarach 9×9 wpisano pewną dodatnią liczbę całkowitą. Następnie obliczono sumy liczb znajdujących się w każdym wierszu i w każdej kolumnie. Czy może się zdarzyć, że 18 obliczonych sum to kolejne liczby naturalne w pewnym porządku? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2014/etap2/2etap15.pdf",
+    "solutions": "tasks/2014/etap2/2etap15r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

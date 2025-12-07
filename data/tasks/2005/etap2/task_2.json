@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "111 liczb - suma podzielna przez 11",
+  "content": "Danych jest 111 dodatnich liczb całkowitych. Wykaż, że spośród nich można wybrać 11 takich liczb, których suma jest podzielna przez 11.",
+  "pdf": {
+    "tasks": "tasks/2005/etap2/omg01_2.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Odcinki AB i CD prostopadłe",
+  "content": "Odcinki AB i CD są prostopadłe i przecinają się w punkcie X. Ponadto spełnione są równości\nAC = BD, AD = BX oraz DX = 1.\nWyznacz długość odcinka CX.",
+  "pdf": {
+    "tasks": "tasks/2021/etap2/2etap22.pdf",
+    "solutions": "tasks/2021/etap2/2etap22r.pdf",
+    "statistics": "tasks/2021/etap2/2etap22st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

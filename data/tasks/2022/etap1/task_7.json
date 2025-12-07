@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Sześciokąt foremny ABCDEF o boku 2",
+  "content": "Dany jest sześciokąt foremny ABCDEF o boku 2. Punkt M jest środkiem przekątnej AE. Pięciokąt ABCDE zagięto wzdłuż odcinków BD, BM, DM w taki sposób, że punkty A, C oraz E spotkały się. W wyniku tej operacji otrzymano czworościan. Wyznacz jego objętość.",
+  "pdf": {
+    "tasks": "tasks/2022/etap1/18omj-1etap.pdf",
+    "solutions": "tasks/2022/etap1/18omj-1r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

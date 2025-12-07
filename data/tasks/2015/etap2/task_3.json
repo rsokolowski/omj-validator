@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Sześcian z liczbami na ścianach",
+  "content": "Na każdej ścianie sześcianu napisano pewną liczbę całkowitą. Następnie każdej krawędzi sześcianu przyporządkowano sumę liczb z dwóch ścian, pomiędzy którymi znajduje się dana krawędź. Udowodnij, że wśród dwunastu liczb przyporządkowanych krawędziom są co najmniej cztery liczby parzyste.",
+  "pdf": {
+    "tasks": "tasks/2015/etap2/2etap16.pdf",
+    "solutions": "tasks/2015/etap2/2etap16r.pdf",
+    "statistics": "tasks/2015/etap2/2etap16st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

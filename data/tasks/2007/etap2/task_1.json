@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Układ równań a²+b²+c²=23 i a+2b+4c=22",
+  "content": "Wyznacz wszystkie trójki (a, b, c) liczb rzeczywistych spełniające układ równań:\na² + b² + c² = 23\na + 2b + 4c = 22",
+  "pdf": {
+    "tasks": "tasks/2007/etap2/omg03_2.pdf",
+    "solutions": "tasks/2007/etap2/omg03_2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

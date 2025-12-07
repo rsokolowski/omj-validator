@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Graniastosłup i ostrosłup",
+  "content": "Pewien graniastosłup ma dwa razy więcej wierzchołków niż pewien ostrosłup. Który z tych wielościanów ma więcej ścian i o ile więcej?",
+  "pdf": {
+    "tasks": "tasks/2005/etap2/omg01_2.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

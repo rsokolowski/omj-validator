@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Równoległobok ABCD z AP=BD",
+  "content": "Dany jest równoległobok ABCD. Na przekątnej BD wybrano taki punkt P, że spełniona jest równość AP = BD. Punkt Q jest środkiem odcinka CP. Wykaż, że ∠BQD = 90°.",
+  "pdf": {
+    "tasks": "tasks/2018/etap1/1etap18.pdf",
+    "solutions": "tasks/2018/etap1/1etap18r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

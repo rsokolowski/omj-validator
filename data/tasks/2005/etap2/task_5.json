@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Sześciokąt wypukły z kątami 90°, 128°, 142°, 90°",
+  "content": "Dany jest sześciokąt wypukły ABCDEF o kątach przy wierzchołkach A, B, C, D równych odpowiednio 90°, 128°, 142°, 90°. Wykaż, że pole tego sześciokąta jest mniejsze niż ½·|AD|².",
+  "pdf": {
+    "tasks": "tasks/2005/etap2/omg01_2.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

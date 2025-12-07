@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Dopisanie cyfry - 13 razy większa",
+  "content": "Do pewnej dodatniej liczby całkowitej n dopisano na końcu pewną cyfrę, uzyskując w ten sposób liczbę 13 razy większą od liczby n. Wyznacz wszystkie liczby n o tej własności.",
+  "pdf": {
+    "tasks": "tasks/2019/etap1/1etap19.pdf",
+    "solutions": "tasks/2019/etap1/1etap19r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

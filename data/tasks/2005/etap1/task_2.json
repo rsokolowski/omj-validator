@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Czworokąt z wpisanym okręgiem i prostopadłymi przekątnymi",
+  "content": "Dany jest czworokąt wypukły o następujących własnościach: w czworokąt można wpisać okrąg oraz przekątne czworokąta są prostopadłe. Dowieść, że jedna z przekątnych czworokąta dzieli drugą na połowy.",
+  "pdf": {
+    "tasks": "tasks/2005/etap1/omg01_1.pdf",
+    "solutions": "tasks/2005/etap1/omg01_1r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Liczby pierwsze p,q z p²+p podzielnym przez q²+q",
+  "content": "Różne liczby pierwsze nieparzyste p i q mają tę własność, że liczba p²+p jest podzielna przez q²+q. Udowodnij, że liczba ½(p−q) jest złożona.",
+  "pdf": {
+    "tasks": "tasks/2015/etap1/1etap15.pdf",
+    "solutions": "tasks/2015/etap1/1etap15r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

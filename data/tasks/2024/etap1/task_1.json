@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Punkt wewnątrz kwadratu o boku 20",
+  "content": "Czy wewnątrz kwadratu o boku długości 20 istnieje punkt, którego odległości od boków tego kwadratu są czterema kolejnymi liczbami całkowitymi?",
+  "pdf": {
+    "tasks": "tasks/2024/etap1/20omj-1etap.pdf",
+    "solutions": "tasks/2024/etap1/20omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

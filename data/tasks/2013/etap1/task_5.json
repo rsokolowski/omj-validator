@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Czworokąt wypukły ABCD z równymi polami",
+  "content": "Dany jest czworokąt wypukły ABCD. Punkty K i L są środkami odpowiednio boków AB i CD. Wykaż, że jeżeli pola czworokątów BCLK i DAKL są równe, to czworokąt ABCD jest trapezem.",
+  "pdf": {
+    "tasks": "tasks/2013/etap1/1etap13.pdf",
+    "solutions": "tasks/2013/etap1/1etap13r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

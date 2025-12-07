@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Trapez ABCD z punktem P",
+  "content": "Dany jest trapez ABCD o podstawach AB i CD. Wyznacz wszystkie punkty P leżące wewnątrz tego trapezu i spełniające równość [PAB]+[PCD] = [PBC]+[PDA], gdzie [XYZ] oznacza pole trójkąta XYZ.",
+  "pdf": {
+    "tasks": "tasks/2009/etap1/omg05_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

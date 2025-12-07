@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Nierówność x² + x ≤ y",
+  "content": "Liczby rzeczywiste x oraz y spełniają nierówność x² + x ≤ y. Udowodnij, że y² + y ≥ x.",
+  "pdf": {
+    "tasks": "tasks/2018/etap2/2etap19.pdf",
+    "solutions": "tasks/2018/etap2/2etap19r.pdf",
+    "statistics": "tasks/2018/etap2/2etap19st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

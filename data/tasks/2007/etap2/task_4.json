@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Iloczyn (a+b)(b+c)(c+d)(d+a) zakończony cyframi \"10\"",
+  "content": "Czy istnieją takie dodatnie liczby całkowite a, b, c, d, że liczba (a+b)(b+c)(c+d)(d+a) jest w systemie dziesiętnym zakończona cyframi \"10\"? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2007/etap2/omg03_2.pdf",
+    "solutions": "tasks/2007/etap2/omg03_2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

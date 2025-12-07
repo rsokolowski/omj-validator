@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Równość m² + n = k² + k",
+  "content": "Dodatnie liczby całkowite k, m, n spełniają równość m² + n = k² + k. Wykaż, że m ≤ n.",
+  "pdf": {
+    "tasks": "tasks/2017/etap1/1etap17.pdf",
+    "solutions": "tasks/2017/etap1/1etap17r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

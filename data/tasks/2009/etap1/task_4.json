@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "18-kąt foremny z prostokątem",
+  "content": "Dany jest 18-kąt foremny A₁A₂...A₁₈. Wykaż, że czworokąt ograniczony prostymi A₂A₇, A₃A₁₅, A₆A₁₂ i A₁₀A₁₇ jest prostokątem. Czy ten prostokąt jest kwadratem?",
+  "pdf": {
+    "tasks": "tasks/2009/etap1/omg05_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Pięciokąt wypukły ABCDE z równymi polami",
+  "content": "Dany jest taki pięciokąt wypukły ABCDE, w którym pola trójkątów ABD, BCE, CDA, DEB i EAC są równe. Wykaż, że każda przekątna tego pięciokąta jest równoległa do pewnego jego boku.",
+  "pdf": {
+    "tasks": "tasks/2011/etap2/2etap12.pdf",
+    "solutions": "tasks/2011/etap2/2etap12r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

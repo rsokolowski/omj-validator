@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Kartka 25×25 z wyciętym kwadratem 5×5",
+  "content": "Od kwadratowej kartki o boku 25 odcięto kwadrat o boku 5. Czy pozostałą część kartki można pociąć na 100 prostokątów, z których każdy ma wymiary 1×6 lub 2×3? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2014/etap1/1etap14.pdf",
+    "solutions": "tasks/2014/etap1/1etap14r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

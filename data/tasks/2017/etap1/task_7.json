@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Prostopadłościan przecięty płaszczyzną",
+  "content": "Kwadrat ABCD o boku 4 jest podstawą prostopadłościanu ABCDA'B'C'D'. Krawędzie boczne AA', BB', CC', DD' tego prostopadłościanu mają długość 7. Punkty K, L, M leżą odpowiednio na odcinkach AA', BB', CC', przy czym AK = 3, BL = 2, CM = 5. Płaszczyzna przechodząca przez punkty K, L, M rozcina prostopadłościan na dwie bryły. Wyznacz objętości obu tych brył.",
+  "pdf": {
+    "tasks": "tasks/2017/etap1/1etap17.pdf",
+    "solutions": "tasks/2017/etap1/1etap17r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

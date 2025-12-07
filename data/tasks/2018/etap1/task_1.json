@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Cyfra jedności n przy 3n = 999^1000",
+  "content": "Liczbę naturalną n pomnożono przez 3, otrzymując w wyniku liczbę 999^1000. Wyznacz cyfrę jedności liczby n.",
+  "pdf": {
+    "tasks": "tasks/2018/etap1/1etap18.pdf",
+    "solutions": "tasks/2018/etap1/1etap18r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

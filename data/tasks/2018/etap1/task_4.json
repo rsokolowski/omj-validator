@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Reszty z dzielenia - c = 4",
+  "content": "Dodatnie liczby całkowite a, b, c mają tę własność, że: a daje resztę 2 z dzielenia przez b, b daje resztę 2 z dzielenia przez c, c daje resztę 4 z dzielenia przez a. Udowodnij, że c = 4.",
+  "pdf": {
+    "tasks": "tasks/2018/etap1/1etap18.pdf",
+    "solutions": "tasks/2018/etap1/1etap18r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Punkty X, Y na bokach trójkąta ABC",
+  "content": "Punkty X oraz Y leżą odpowiednio na bokach AC oraz BC trójkąta ABC. Punkt M jest środkiem odcinka XY. Załóżmy, że AX = MX = MC = MY = BY. Wyznacz miarę kąta AMB.",
+  "pdf": {
+    "tasks": "tasks/2023/etap1/19omj-1etap.pdf",
+    "solutions": "tasks/2023/etap1/19omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

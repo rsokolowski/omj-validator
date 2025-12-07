@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "99 liczb z jedynkami, dwójkami i zerami",
+  "content": "Każda spośród pewnych 99 liczb naturalnych ma w zapisie dziesiętnym 10 jedynek, 20 dwójek oraz pewną liczbę zer. Udowodnij, że liczb tych nie można rozdzielić na dwie grupy w taki sposób, aby iloczyn liczb z pierwszej grupy był równy iloczynowi liczb z drugiej grupy.",
+  "pdf": {
+    "tasks": "tasks/2011/etap1/1etap11.pdf",
+    "solutions": "tasks/2011/etap1/1etap11r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

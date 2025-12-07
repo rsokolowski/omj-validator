@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Liczby x₁,...,x₁₀₁ równe 1 lub −1",
+  "content": "Każda z liczb x₁, x₂, ..., x₁₀₁ jest równa 1 lub −1. Wyznacz najmniejszą możliwą wartość wyrażenia\nx₁x₂ + x₂x₃ + x₃x₄ + ... + x₁₀₀x₁₀₁ + x₁₀₁x₁.",
+  "pdf": {
+    "tasks": "tasks/2009/etap2/2etap10.pdf",
+    "solutions": "tasks/2009/etap2/omg05_2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Czworokąt ABCD z ∠ABC=60° i BC=CD",
+  "content": "Czworokąt ABCD jest wpisany w okrąg, przy czym ∠ABC = 60° oraz BC = CD. Udowodnij, że AB = AD + DC.",
+  "pdf": {
+    "tasks": "tasks/2016/etap1/1etap16.pdf",
+    "solutions": "tasks/2016/etap1/1etap16r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

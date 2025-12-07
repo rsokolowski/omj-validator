@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Kolorowanie liczb całkowitych na trzy kolory",
+  "content": "Każdą liczbę całkowitą należy pokolorować na jeden z trzech kolorów, w tym czerwony. Należy to uczynić w taki sposób, by każda liczba, którą można przedstawić w postaci sumy dwóch liczb o różnych kolorach miała kolor czerwony. Czy da się zrealizować takie kolorowanie, używając wszystkich trzech kolorów? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2017/etap1/1etap17.pdf",
+    "solutions": "tasks/2017/etap1/1etap17r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

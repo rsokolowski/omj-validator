@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Turniej chłopców i dziewcząt",
+  "content": "W pewnym turnieju wzięli udział chłopcy i dziewczęta. Każda osoba rozegrała dokładnie jeden mecz z każdą inną osobą, nie było remisów. Po turnieju okazało się, że każdy przegrał co najmniej raz. Ponadto każdy chłopiec przegrał inną liczbę meczów niż każdy z pozostałych chłopców. Wykaż, że pewna dziewczynka wygrała mecz z pewnym chłopcem.",
+  "pdf": {
+    "tasks": "tasks/2019/etap2/2etap20.pdf",
+    "solutions": "tasks/2019/etap2/2etap20r.pdf",
+    "statistics": "tasks/2019/etap2/2etap20st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

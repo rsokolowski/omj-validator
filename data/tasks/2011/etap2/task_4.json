@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Nierówność x(1−y)² + y(1−x)² < (1−xy)²",
+  "content": "Udowodnij, że dla każdych liczb x, y należących do przedziału (0, 1) spełniona jest nierówność\nx(1−y)² + y(1−x)² < (1−xy)².",
+  "pdf": {
+    "tasks": "tasks/2011/etap2/2etap12.pdf",
+    "solutions": "tasks/2011/etap2/2etap12r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

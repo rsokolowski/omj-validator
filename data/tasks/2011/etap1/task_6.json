@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Wymierna suma √a+√b+√(ab)",
+  "content": "Dane są takie dodatnie liczby wymierne a i b, dla których liczba √a+√b+√(ab) jest wymierna. Wykaż, że liczby √a oraz √b także są wymierne.",
+  "pdf": {
+    "tasks": "tasks/2011/etap1/1etap11.pdf",
+    "solutions": "tasks/2011/etap1/1etap11r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

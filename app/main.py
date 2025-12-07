@@ -14,11 +14,10 @@ from fastapi.templating import Jinja2Templates
 from .config import settings
 from .auth import AUTH_COOKIE_NAME, verify_auth, require_auth_redirect, _get_session_token
 from .storage import (
-    load_tasks_index,
-    load_tasks_data_index,
-    load_year_tasks,
+    get_available_years,
+    get_etaps_for_year,
+    get_tasks_for_etap,
     get_task,
-    get_task_key,
     get_task_pdf_path,
     get_solution_pdf_path,
     get_task_stats,
@@ -113,8 +112,7 @@ async def years_page(request: Request):
     if redirect:
         return redirect
 
-    index = load_tasks_index()
-    years = sorted(index.keys(), reverse=True)
+    years = get_available_years()
 
     return templates.TemplateResponse(
         "index.html",
@@ -129,11 +127,9 @@ async def year_detail(request: Request, year: str):
     if redirect:
         return redirect
 
-    index = load_tasks_index()
-    if year not in index:
+    etaps = get_etaps_for_year(year)
+    if not etaps:
         raise HTTPException(status_code=404, detail="Rok nie znaleziony")
-
-    etaps = list(index[year].keys())
 
     return templates.TemplateResponse(
         "year.html",
@@ -148,28 +144,19 @@ async def etap_detail(request: Request, year: str, etap: str):
     if redirect:
         return redirect
 
-    index = load_tasks_index()
-    if year not in index or etap not in index[year]:
+    etap_tasks = get_tasks_for_etap(year, etap)
+    if not etap_tasks:
         raise HTTPException(status_code=404, detail="Etap nie znaleziony")
-
-    # Get task count from data index
-    data_index = load_tasks_data_index()
-    task_count = data_index.get(year, {}).get(etap, {}).get("count", 5)
-
-    year_tasks = load_year_tasks(year)
 
     # Build task list with stats
     tasks = []
-    for num in range(1, task_count + 1):
-        key = get_task_key(year, etap, num)
-        task_info = year_tasks.get(key)
-        stats = get_task_stats(year, etap, num)
-
+    for task_info in etap_tasks:
+        stats = get_task_stats(year, etap, task_info.number)
         tasks.append(
             {
-                "number": num,
-                "title": task_info.title if task_info else f"Zadanie {num}",
-                "has_content": task_info is not None,
+                "number": task_info.number,
+                "title": task_info.title,
+                "has_content": True,
                 "submission_count": stats.submission_count,
                 "highest_score": stats.highest_score,
             }

@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Tablica 100×100 z L-tetraminami",
+  "content": "W każde pole kwadratowej tablicy 100×100 wpisano liczbę rzeczywistą. Okazało się, że suma liczb wpisanych w każde cztery pola, które można nakryć L-tetraminem, jest równa 0. Wyznacz sumę liczb wpisanych w pola, które znajdują się na obu przekątnych tablicy.",
+  "pdf": {
+    "tasks": "tasks/2010/etap1/omg06_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

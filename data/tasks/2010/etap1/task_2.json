@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Czworościan z okręgami opisanymi",
+  "content": "W pewnym czworościanie każdy wierzchołek połączono odcinkiem ze środkiem okręgu opisanego na przeciwległej ścianie. Okazało się, że otrzymane odcinki są wysokościami czworościanu. Wykaż, że czworościan ten jest foremny.",
+  "pdf": {
+    "tasks": "tasks/2010/etap1/omg06_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

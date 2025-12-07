@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Bal z 102 królewiczami i 103 królewna­mi",
+  "content": "W balu wzięło udział 102 królewiczów i 103 królewny. Po balu okazało się, że każdy królewicz zatańczył z taką samą liczbą królewien. Udowodnij, że pewne dwie królewny zatańczyły z taką samą liczbą królewiczów.",
+  "pdf": {
+    "tasks": "tasks/2012/etap1/1etap12.pdf",
+    "solutions": "tasks/2012/etap1/1etap12r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Liczby n z 14ⁿ − 9 pierwszą",
+  "content": "Wyznacz wszystkie dodatnie liczby całkowite n, dla których liczba 14ⁿ − 9 jest pierwsza.",
+  "pdf": {
+    "tasks": "tasks/2005/etap2/omg01_2.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

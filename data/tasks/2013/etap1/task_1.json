@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Pociąg z 1,5% wzrostem pasażerów",
+  "content": "Do pociągu, który może pomieścić co najwyżej 404 pasażerów, wsiadła na początkowej stacji pewna liczba podróżnych. Na następnej stacji liczba pasażerów tego pociągu zwiększyła się o 1,5%. Ilu podróżnych wsiadło do pociągu na początkowej stacji? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2013/etap1/1etap13.pdf",
+    "solutions": "tasks/2013/etap1/1etap13r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

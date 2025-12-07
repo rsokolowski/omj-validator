@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Średnia arytmetyczna i geometryczna",
+  "content": "Liczby dodatnie a, b spełniają warunek\n(a+b)/2 = √(ab) + 3.\nWykaż, że co najmniej jedna z liczb a, b jest niewymierna.",
+  "pdf": {
+    "tasks": "tasks/2008/etap2/omg04_2.pdf",
+    "solutions": "tasks/2008/etap2/omg04_2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Trójkąt ABC z AC=BC=5",
+  "content": "Dany jest trójkąt ABC, w którym AC = BC = 5. Wysokość tego trójkąta poprowadzona z wierzchołka A ma długość 4. Oblicz długość wysokości trójkąta ABC poprowadzonej z wierzchołka C.",
+  "pdf": {
+    "tasks": "tasks/2020/etap1/1etap20.pdf",
+    "solutions": "tasks/2020/etap1/1etap20r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

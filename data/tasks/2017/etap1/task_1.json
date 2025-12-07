@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Zależność 3a+4b=3c i 4a−3b=4c",
+  "content": "Liczby a, b, c spełniają zależności 3a+4b = 3c oraz 4a−3b = 4c. Wykaż, że a² + b² = c².",
+  "pdf": {
+    "tasks": "tasks/2017/etap1/1etap17.pdf",
+    "solutions": "tasks/2017/etap1/1etap17r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

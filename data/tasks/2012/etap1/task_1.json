@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Cyfry jedności n, n⁵, n⁹, n¹³, n¹⁷,...",
+  "content": "Wykaż, że dla każdej dodatniej liczby całkowitej n, liczby n, n⁵, n⁹, n¹³, n¹⁷,... mają jednakowe cyfry jedności.",
+  "pdf": {
+    "tasks": "tasks/2012/etap1/1etap12.pdf",
+    "solutions": "tasks/2012/etap1/1etap12r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Czworościan z ∠ACB=∠ADB=90°",
+  "content": "Dany jest czworościan ABCD, w którym ∠ACB = ∠ADB = 90° oraz AC = CD = DB. Wykaż, że AB < 2·CD.",
+  "pdf": {
+    "tasks": "tasks/2014/etap1/1etap14.pdf",
+    "solutions": "tasks/2014/etap1/1etap14r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Trapez ABCD z punktem P",
+  "content": "Dany jest trapez ABCD o podstawach AB i CD. Punkt P znajduje się wewnątrz trapezu ABCD, przy czym AB = BP, DC = CP oraz ∠BPC = 90°. Oblicz miarę kąta APD.",
+  "pdf": {
+    "tasks": "tasks/2025/etap1/21omj-1etap-zad.pdf",
+    "solutions": "tasks/2025/etap1/21omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

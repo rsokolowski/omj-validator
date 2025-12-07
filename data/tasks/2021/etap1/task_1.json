@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Wynik Marka na teście",
+  "content": "W klasie Marka jest 17 uczniów i wszyscy napisali test. Marek uzyskał wynik o 17 punktów wyższy od średniej arytmetycznej wyników pozostałych uczniów. O ile punktów wynik Marka jest wyższy od średniej arytmetycznej wyników całej klasy? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2021/etap1/1etap21.pdf",
+    "solutions": "tasks/2021/etap1/1etap21rr.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Dwusieczna z d < 2ab/(a+b)",
+  "content": "W trójkącie ABC dwusieczna kąta ACB przecina bok AB w punkcie D. Długości boków BC i AC są równe odpowiednio a i b, a długość odcinka CD jest równa d. Wykaż, że d < 2ab/(a+b).",
+  "pdf": {
+    "tasks": "tasks/2008/etap1/omg04_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

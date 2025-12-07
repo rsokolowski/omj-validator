@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Punkty D i E na bokach trójkąta ABC",
+  "content": "Na bokach AB i BC trójkąta ABC leżą odpowiednio takie punkty D i E, że\n∠ADC = ∠BDE oraz ∠BCD = ∠AED.\nWykaż, że AE = BE.",
+  "pdf": {
+    "tasks": "tasks/2022/etap2/18omj-2etap.pdf",
+    "solutions": "tasks/2022/etap2/18omj-2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

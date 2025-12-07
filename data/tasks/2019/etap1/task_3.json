@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Trójki (x,y,z) z xy(x+y)=yz(y+z)=zx(z+x)",
+  "content": "Wyznacz wszystkie trójki (x,y,z) liczb rzeczywistych różnych od 0, dla których xy(x+y) = yz(y+z) = zx(z+x).",
+  "pdf": {
+    "tasks": "tasks/2019/etap1/1etap19.pdf",
+    "solutions": "tasks/2019/etap1/1etap19r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

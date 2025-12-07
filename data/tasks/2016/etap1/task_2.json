@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Trójkąt ABC z ∠ACB=45° i kwadratami",
+  "content": "Dany jest trójkąt ostrokątny ABC, w którym ∠ACB = 45°. Niech BCED oraz ACFG będą kwadratami leżącymi na zewnątrz trójkąta ABC. Udowodnij, że środek odcinka DG pokrywa się ze środkiem okręgu opisanego na trójkącie ABC.",
+  "pdf": {
+    "tasks": "tasks/2016/etap1/1etap16.pdf",
+    "solutions": "tasks/2016/etap1/1etap16r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

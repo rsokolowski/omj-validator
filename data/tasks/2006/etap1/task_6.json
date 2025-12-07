@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Czworościan z trójkątem rozwartokątnym",
+  "content": "Czy istnieje taki czworościan, w którym co najmniej jedna ściana jest trójkątem rozwartokątnym, a środek sfery opisanej na tym czworościanie leży w jego wnętrzu? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2006/etap1/omg02_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

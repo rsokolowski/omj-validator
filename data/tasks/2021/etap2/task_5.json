@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Punkty na prostej z parzystą sumą odległości",
+  "content": "Niech n ≥ 3 będzie liczbą nieparzystą. Na prostej zaznaczono n punktów w taki sposób, że odległość między każdymi dwoma z nich jest liczbą całkowitą. Okazało się, że każdy zaznaczony punkt ma parzystą sumę odległości od pozostałych n−1 zaznaczonych punktów. Wykaż, że odległość między każdymi dwoma zaznaczonymi punktami jest liczbą parzystą.",
+  "pdf": {
+    "tasks": "tasks/2021/etap2/2etap22.pdf",
+    "solutions": "tasks/2021/etap2/2etap22r.pdf",
+    "statistics": "tasks/2021/etap2/2etap22st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

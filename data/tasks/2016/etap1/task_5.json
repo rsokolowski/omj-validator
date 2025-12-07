@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Różnica kwadratów dwóch liczb całkowitych",
+  "content": "Liczby całkowite a, b są dodatnie. Wykaż, że co najmniej jedną z liczb a, b, a+b można przedstawić w postaci różnicy kwadratów dwóch liczb całkowitych.",
+  "pdf": {
+    "tasks": "tasks/2016/etap1/1etap16.pdf",
+    "solutions": "tasks/2016/etap1/1etap16r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

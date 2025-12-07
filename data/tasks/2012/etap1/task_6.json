@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Ostrosłup SABCD z wpisaną sferą",
+  "content": "W ostrosłup SABCD, którego podstawą jest czworokąt wypukły ABCD, można wpisać sferę. Udowodnij, że ∠ASB + ∠CSD = ∠BSC + ∠DSA.",
+  "pdf": {
+    "tasks": "tasks/2012/etap1/1etap12.pdf",
+    "solutions": "tasks/2012/etap1/1etap12r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

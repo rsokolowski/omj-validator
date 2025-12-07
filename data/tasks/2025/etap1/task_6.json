@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Liczba n z 2n sześcianem i 3n kwadratem",
+  "content": "Dana jest liczba całkowita n o tej własności, że liczba 2n jest sześcianem liczby całkowitej, a liczba 3n jest kwadratem liczby całkowitej. Udowodnij, że liczba n jest podzielna przez 108.",
+  "pdf": {
+    "tasks": "tasks/2025/etap1/21omj-1etap-zad.pdf",
+    "solutions": "tasks/2025/etap1/21omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

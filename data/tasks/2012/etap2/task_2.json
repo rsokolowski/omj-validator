@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Turniej 6 drużyn z sumą 41 punktów",
+  "content": "W pewnym turnieju uczestniczyło 6 drużyn. Każda drużyna rozegrała z każdą inną dokładnie jeden mecz. Za zwycięstwo w meczu drużyna otrzymywała 3 punkty, za porażkę 0 punktów, a za remis 1 punkt. Po turnieju okazało się, że suma punktów zdobytych przez wszystkie drużyny wynosi 41. Wykaż, że istnieją takie cztery drużyny, z których każda co najmniej jeden raz zremisowała.",
+  "pdf": {
+    "tasks": "tasks/2012/etap2/2etap13.pdf",
+    "solutions": "tasks/2012/etap2/2etap13r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

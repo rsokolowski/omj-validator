@@ -1,6 +1,13 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, computed_field
 from datetime import datetime
 from typing import Optional
+
+
+class TaskPdf(BaseModel):
+    """PDF file paths for a task (shared across tasks in same etap)."""
+    tasks: str  # Path to tasks PDF
+    solutions: Optional[str] = None  # Path to solutions PDF
+    statistics: Optional[str] = None  # Path to statistics PDF
 
 
 class TaskInfo(BaseModel):
@@ -9,8 +16,20 @@ class TaskInfo(BaseModel):
     number: int
     title: str
     content: str
-    has_solution: bool = False
-    has_statistics: bool = False
+    pdf: TaskPdf
+    difficulty: Optional[int] = None  # Future: 1-5 scale
+    categories: list[str] = []  # Future: e.g., ["geometry", "algebra"]
+    hints: list[str] = []  # Future: progressive hints
+
+    @computed_field
+    @property
+    def has_solution(self) -> bool:
+        return self.pdf.solutions is not None
+
+    @computed_field
+    @property
+    def has_statistics(self) -> bool:
+        return self.pdf.statistics is not None
 
 
 class TaskStats(BaseModel):

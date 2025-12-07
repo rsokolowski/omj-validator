@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Liczby pierwsze (p,q) z p² + pq + q² kwadratem",
+  "content": "Wyznacz wszystkie pary liczb pierwszych (p, q), dla których liczba\np² + pq + q²\njest kwadratem liczby całkowitej.",
+  "pdf": {
+    "tasks": "tasks/2013/etap2/2etap14.pdf",
+    "solutions": "tasks/2013/etap2/2etap14r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

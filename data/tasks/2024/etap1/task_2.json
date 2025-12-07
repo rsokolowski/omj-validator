@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Zaginanie rombu ABCD",
+  "content": "Arek ma kartkę w kształcie rombu ABCD, w którym ∠BCD ≤ 90°. Najpierw zagina ją w taki sposób, aby odcinki CB oraz CD pokryły się na prostej CA, a następnie w taki sposób, aby otrzymać trójkąt. Udowodnij, że odległości punktu A od wszystkich trzech wierzchołków otrzymanego trójkąta są równe.",
+  "pdf": {
+    "tasks": "tasks/2024/etap1/20omj-1etap.pdf",
+    "solutions": "tasks/2024/etap1/20omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

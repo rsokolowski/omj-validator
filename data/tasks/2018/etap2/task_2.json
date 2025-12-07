@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Trapez ABCD z dwusieczną kąta BAD",
+  "content": "Dany jest trapez ABCD o podstawach AB i CD, w którym ∠ABC = 90°. Dwusieczna kąta BAD przecina odcinek BC w punkcie P. Wykaż, że jeśli ∠APD = 45°, to pole czworokąta APCD jest równe polu trójkąta ABP.",
+  "pdf": {
+    "tasks": "tasks/2018/etap2/2etap19.pdf",
+    "solutions": "tasks/2018/etap2/2etap19r.pdf",
+    "statistics": "tasks/2018/etap2/2etap19st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

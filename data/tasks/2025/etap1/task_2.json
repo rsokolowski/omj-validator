@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Liczba n 21 razy większa od sumy cyfr",
+  "content": "Dodatnia liczba całkowita n jest 21 razy większa od sumy swoich cyfr. Udowodnij, że liczba n jest podzielna przez 9.",
+  "pdf": {
+    "tasks": "tasks/2025/etap1/21omj-1etap-zad.pdf",
+    "solutions": "tasks/2025/etap1/21omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

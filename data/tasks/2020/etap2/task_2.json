@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Kwadrat ABCD z punktem E na przekątnej",
+  "content": "Dany jest kwadrat ABCD. Punkt E leży na przekątnej AC, przy czym AE > EC. Na boku AB wybrano punkt F, różny od B, dla którego EF = DE. Udowodnij, że ∠DEF = 90°.",
+  "pdf": {
+    "tasks": "tasks/2020/etap2/2etap21.pdf",
+    "solutions": "tasks/2020/etap2/2etap21r.pdf",
+    "statistics": "tasks/2020/etap2/2etap21st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

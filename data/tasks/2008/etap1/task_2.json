@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Prostopadłościan o podstawie kwadratowej",
+  "content": "Dany jest prostopadłościan o podstawie kwadratowej. Przekątna tego prostopadłościanu ma długość d, a jego pole powierzchni jest równe b. Oblicz sumę długości wszystkich krawędzi prostopadłościanu.",
+  "pdf": {
+    "tasks": "tasks/2008/etap1/omg04_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

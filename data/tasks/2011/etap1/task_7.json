@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Sześcian z PQ ≥ √2",
+  "content": "Niech ABCDA'B'C'D' będzie sześcianem. Punkty K, L, M, N są odpowiednio środkami krawędzi AD, BC, A'B', C'D'. Punkty P i Q leżą odpowiednio na odcinkach KM i LN. Krawędź sześcianu jest równa 2. Udowodnij, że PQ ≥ √2.",
+  "pdf": {
+    "tasks": "tasks/2011/etap1/1etap11.pdf",
+    "solutions": "tasks/2011/etap1/1etap11r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

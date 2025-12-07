@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Ostrosłup czworokątny z prostopadłymi krawędziami",
+  "content": "Czy istnieje taki ostrosłup czworokątny, którego każda krawędź boczna jest prostopadła do którejś krawędzi podstawy? Odpowiedź uzasadnij.\nUwaga: Proste prostopadłe w przestrzeni nie muszą się przecinać.",
+  "pdf": {
+    "tasks": "tasks/2010/etap2/2etap11.pdf",
+    "solutions": "tasks/2010/etap2/2etap11r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

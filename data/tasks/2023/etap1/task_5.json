@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Trzy okręgi o wspólnym środku",
+  "content": "Dane są trzy okręgi o₁, o₂, o₃ o wspólnym środku O. Na tych okręgach leżą odpowiednio punkty A, B, C, przy czym czworokąt ABCO jest prostokątem. Wykaż, że pole koła ograniczonego okręgiem o₁ jest równe polu pierścienia kołowego ograniczonego okręgami o₂ i o₃.",
+  "pdf": {
+    "tasks": "tasks/2023/etap1/19omj-1etap.pdf",
+    "solutions": "tasks/2023/etap1/19omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

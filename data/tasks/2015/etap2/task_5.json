@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Trójkąt równoboczny ABC z punktem P",
+  "content": "Dany jest trójkąt równoboczny ABC. Niech P będzie punktem leżącym wewnątrz tego trójkąta. Proste AP, BP, CP przecinają odcinki BC, CA, AB odpowiednio w punktach D, E, F. Czy można punkt P wybrać w taki sposób, aby dokładnie cztery spośród trójkątów AEP, AFP, BFP, BDP, CDP, CEP miały równe pola? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2015/etap2/2etap16.pdf",
+    "solutions": "tasks/2015/etap2/2etap16r.pdf",
+    "statistics": "tasks/2015/etap2/2etap16st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Różnice |b−c|, |c−a|, |a−b| między 1 i 2",
+  "content": "Czy istnieją takie liczby rzeczywiste a, b, c, że każda z liczb |b−c|, |c−a|, |a−b| jest większa od 1, ale mniejsza od 2?",
+  "pdf": {
+    "tasks": "tasks/2024/etap1/20omj-1etap.pdf",
+    "solutions": "tasks/2024/etap1/20omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

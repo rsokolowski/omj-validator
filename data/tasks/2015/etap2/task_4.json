@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Cztery liczby pierwsze w ciągu arytmetycznym",
+  "content": "Liczby pierwsze p, q, r, s spełniają warunki p > q > r > s oraz p−q = q−r = r−s. Udowodnij, że liczba p−s jest podzielna przez 18.",
+  "pdf": {
+    "tasks": "tasks/2015/etap2/2etap16.pdf",
+    "solutions": "tasks/2015/etap2/2etap16r.pdf",
+    "statistics": "tasks/2015/etap2/2etap16st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

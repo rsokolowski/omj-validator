@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "21 liczb rzeczywistych",
+  "content": "Danych jest 21 liczb rzeczywistych. Wiadomo, że suma każdych jedenastu spośród tych liczb jest większa od sumy pozostałych dziesięciu. Wykaż, że wszystkie te liczby są dodatnie.",
+  "pdf": {
+    "tasks": "tasks/2010/etap2/2etap11.pdf",
+    "solutions": "tasks/2010/etap2/2etap11r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

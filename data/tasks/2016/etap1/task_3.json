@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Tablica 11×11 z −1, 0, 1",
+  "content": "W każde pole tablicy 11×11 należy wpisać jedną z liczb −1, 0, 1 w taki sposób, aby suma liczb w każdej kolumnie była nieujemna, a suma liczb w każdym wierszu była niedodatnia. Jaką najmniejszą liczbę zer można w ten sposób wpisać w pola tablicy? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2016/etap1/1etap16.pdf",
+    "solutions": "tasks/2016/etap1/1etap16r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

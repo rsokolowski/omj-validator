@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "17-kąt foremny z trapezem",
+  "content": "Spośród wszystkich wierzchołków 17-kąta foremnego wybrano dziesięć. Wykaż, że wśród wybranych punktów są cztery będące wierzchołkami trapezu.",
+  "pdf": {
+    "tasks": "tasks/2006/etap1/omg02_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

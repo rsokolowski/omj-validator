@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Tabela z liczbami 1 do 17",
+  "content": "W każde pole tabeli należy wpisać inną liczbę całkowitą spośród liczb od 1 do 17 w taki sposób, aby sumy liczb we wszystkich ośmiu kolumnach były równe, a suma liczb w górnym wierszu była dwa razy większa od sumy liczb w dolnym wierszu. Której z liczb od 1 do 17 można nie wpisać do tabeli? Podaj wszystkie takie liczby. Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2021/etap1/1etap21.pdf",
+    "solutions": "tasks/2021/etap1/1etap21rr.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

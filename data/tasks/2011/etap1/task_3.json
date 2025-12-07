@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Prostokąty o równych polach i obwodach",
+  "content": "Dane są dwa prostokąty o równych polach i o równych obwodach. Wykaż, że długości przekątnych obu prostokątów także są równe.",
+  "pdf": {
+    "tasks": "tasks/2011/etap1/1etap11.pdf",
+    "solutions": "tasks/2011/etap1/1etap11r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

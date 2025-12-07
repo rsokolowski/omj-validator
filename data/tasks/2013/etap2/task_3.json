@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Nierówność a√b + b√a + 1 > 3ab",
+  "content": "Wykaż, że jeśli liczby a i b są dodatnie i mniejsze od 1, to\na·√b + b·√a + 1 > 3ab.",
+  "pdf": {
+    "tasks": "tasks/2013/etap2/2etap14.pdf",
+    "solutions": "tasks/2013/etap2/2etap14r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

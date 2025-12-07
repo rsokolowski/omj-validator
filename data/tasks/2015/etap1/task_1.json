@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Równanie x(y−z)+y(z−x)=6",
+  "content": "Wykaż, że istnieje nieskończenie wiele trójek (x,y,z) dodatnich liczb całkowitych spełniających równanie x(y−z)+y(z−x) = 6.",
+  "pdf": {
+    "tasks": "tasks/2015/etap1/1etap15.pdf",
+    "solutions": "tasks/2015/etap1/1etap15r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

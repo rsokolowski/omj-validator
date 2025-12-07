@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Liczby √2+1 lub √2−1",
+  "content": "Czy istnieją liczby x₁, x₂, ..., x₉₉, z których każda jest równa √2+1 lub √2−1 i które spełniają równość\nx₁x₂ + x₂x₃ + x₃x₄ + ... + x₉₈x₉₉ + x₉₉x₁ = 199?\nOdpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2017/etap2/2etap18.pdf",
+    "solutions": "tasks/2017/etap2/2etap18r.pdf",
+    "statistics": "tasks/2017/etap2/2etap18st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

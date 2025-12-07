@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Układ równań 2x²+y²=4 i 2xy−2x=−5",
+  "content": "Rozwiąż układ równań: 2x²+y² = 4 oraz 2xy−2x = −5.",
+  "pdf": {
+    "tasks": "tasks/2013/etap1/1etap13.pdf",
+    "solutions": "tasks/2013/etap1/1etap13r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

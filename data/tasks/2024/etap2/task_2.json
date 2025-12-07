@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Tablica 5×5 pomalowana na czerwono i niebiesko",
+  "content": "Każde pole tablicy 5×5 pomalowano albo na czerwono, albo na niebiesko. Okazało się, że w każdym wierszu tej tablicy liczba czerwonych pól jest taka sama, a w każdych dwóch kolumnach tej tablicy liczby niebieskich pól są różne. Wyznacz łączną liczbę niebieskich pól w całej tablicy. Podaj wszystkie możliwości.",
+  "pdf": {
+    "tasks": "tasks/2024/etap2/20omj-2etap.pdf",
+    "solutions": "tasks/2024/etap2/20omj-2r.pdf",
+    "statistics": "tasks/2024/etap2/20omj-2etap-st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

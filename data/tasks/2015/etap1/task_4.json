@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Trójkąt ABC z ∠ACB=60° i styczna",
+  "content": "Dany jest trójkąt ABC, w którym ∠ACB = 60°. Na trójkącie tym opisano okrąg o. Punkt X jest środkiem tego łuku BC okręgu o, który nie zawiera punktu A, a punkt Y jest środkiem tego łuku CA okręgu o, który nie zawiera punktu B. Udowodnij, że prosta XY jest styczna do okręgu wpisanego w trójkąt ABC.",
+  "pdf": {
+    "tasks": "tasks/2015/etap1/1etap15.pdf",
+    "solutions": "tasks/2015/etap1/1etap15r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

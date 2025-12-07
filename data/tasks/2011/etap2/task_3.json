@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Turniej tenisa stołowego n zawodników",
+  "content": "W turnieju tenisa stołowego wzięło udział n zawodników (n ≥ 4). Każdy zawodnik rozegrał dokładnie jeden mecz z każdym innym zawodnikiem, żaden mecz nie zakończył się remisem. Po turnieju wszyscy zawodnicy usiedli przy okrągłym stole w taki sposób, że każdy zawodnik wygrał z osobą siedzącą obok niego z jego lewej strony. Wykaż, że istnieją tacy trzej zawodnicy A, B i C, że A wygrał z B, B wygrał z C oraz C wygrał z A.",
+  "pdf": {
+    "tasks": "tasks/2011/etap2/2etap12.pdf",
+    "solutions": "tasks/2011/etap2/2etap12r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

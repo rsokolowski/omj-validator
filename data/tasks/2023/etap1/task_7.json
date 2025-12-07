@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Diagram z liczbami 11 do 29",
+  "content": "Czy w pola diagramu przedstawionego na rysunku można wpisać liczby całkowite od 11 do 29, każdą dokładnie raz, w taki sposób aby sumy liczb na wszystkich piętnastu odcinkach oznaczonych strzałkami były równe? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2023/etap1/19omj-1etap.pdf",
+    "solutions": "tasks/2023/etap1/19omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

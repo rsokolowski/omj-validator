@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Podzielność a+b przez d, a·b przez d²",
+  "content": "Dane są dodatnie liczby całkowite a, b, d. Wiadomo, że liczba a+b jest podzielna przez d, a liczba a·b jest podzielna przez d². Udowodnij, że każda z liczb a i b jest podzielna przez d.",
+  "pdf": {
+    "tasks": "tasks/2017/etap2/2etap18.pdf",
+    "solutions": "tasks/2017/etap2/2etap18r.pdf",
+    "statistics": "tasks/2017/etap2/2etap18st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

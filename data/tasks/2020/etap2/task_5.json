@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Zdalne przyjęcie urodzinowe",
+  "content": "Tomek zaprosił na zdalne przyjęcie urodzinowe 11 swoich znajomych, którzy kolejno będą dołączać do spotkania. Tomek dobrał gości w taki sposób, aby niezależnie od kolejności w jakiej będą dołączać, zawsze nowo przybyła osoba znała co najmniej połowę już obecnych osób, wliczając Tomka. Wykaż, że wśród zaproszonych gości istnieje taki, który zna wszystkich pozostałych 10 znajomych Tomka.\nUwaga: Przyjmujemy, że jeśli osoba A zna osobę B, to również B zna A.",
+  "pdf": {
+    "tasks": "tasks/2020/etap2/2etap21.pdf",
+    "solutions": "tasks/2020/etap2/2etap21r.pdf",
+    "statistics": "tasks/2020/etap2/2etap21st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

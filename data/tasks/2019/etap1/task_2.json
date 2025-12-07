@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Trójkąt ABC z AC=CP=PQ=QB",
+  "content": "Na bokach AB i BC trójkąta ABC leżą odpowiednio takie punkty P i Q (różne od wierzchołków trójkąta), że AC = CP = PQ = QB. Wiedząc, że ∠ACB = 104°, wyznacz miary pozostałych kątów trójkąta ABC.",
+  "pdf": {
+    "tasks": "tasks/2019/etap1/1etap19.pdf",
+    "solutions": "tasks/2019/etap1/1etap19r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

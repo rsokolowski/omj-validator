@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Monety dwuzłotówki i pięciozłotówki",
+  "content": "Jaś ma monety o łącznej wartości równej dokładnie 100 złotych, przy czym każda z tych monet jest dwuzłotówką albo pięciozłotówką. Wykaż, że Jaś może spośród tych monet wybrać takie, których łączna wartość jest równa dokładnie 50 złotych.",
+  "pdf": {
+    "tasks": "tasks/2025/etap1/21omj-1etap-zad.pdf",
+    "solutions": "tasks/2025/etap1/21omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

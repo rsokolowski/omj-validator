@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Trójkąt ABC z ∠BAC + ∠MCB = 90°",
+  "content": "Punkt M jest środkiem boku AB trójkąta ABC, przy czym\n∠BAC + ∠MCB = 90°.\nWykaż, że trójkąt ABC jest równoramienny lub prostokątny.",
+  "pdf": {
+    "tasks": "tasks/2016/etap2/2etap17.pdf",
+    "solutions": "tasks/2016/etap2/2etap17r.pdf",
+    "statistics": "tasks/2016/etap2/2etap17st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

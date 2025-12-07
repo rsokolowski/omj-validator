@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Liczba sześciocyfrowa z kwadratami",
+  "content": "Czy istnieje taka liczba sześciocyfrowa, której każde dwie kolejne cyfry tworzą pewną liczbę dwucyfrową będącą kwadratem liczby całkowitej? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2020/etap1/1etap20.pdf",
+    "solutions": "tasks/2020/etap1/1etap20r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Trójki liczb pierwszych z a²=b²+c",
+  "content": "Wyznacz wszystkie trójki liczb pierwszych a, b, c, dla których a² = b² + c.",
+  "pdf": {
+    "tasks": "tasks/2009/etap1/omg05_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

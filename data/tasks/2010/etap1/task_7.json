@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Równanie a²−b³=4 w nieparzystych",
+  "content": "Udowodnij, że nie istnieją dodatnie liczby nieparzyste a i b spełniające równanie a²−b³ = 4.",
+  "pdf": {
+    "tasks": "tasks/2010/etap1/omg06_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

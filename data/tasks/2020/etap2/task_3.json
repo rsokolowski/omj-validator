@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Podzielność 5a + 3b przez a + b",
+  "content": "Dane są takie dodatnie liczby całkowite a, b, dla których liczba 5a + 3b jest podzielna przez liczbę a + b. Wykaż, że a = b.",
+  "pdf": {
+    "tasks": "tasks/2020/etap2/2etap21.pdf",
+    "solutions": "tasks/2020/etap2/2etap21r.pdf",
+    "statistics": "tasks/2020/etap2/2etap21st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

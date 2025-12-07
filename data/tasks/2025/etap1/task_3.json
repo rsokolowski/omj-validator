@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Pięć osób i liczba znajomych",
+  "content": "Każda z pięciu osób napisała na tablicy, ilu znajomych ma wśród czterech pozostałych osób (jeżeli osoba A zna osobę B, to osoba B zna osobę A). Cztery z napisanych liczb są równe 1. Wyznacz wszystkie możliwe wartości piątej liczby. Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2025/etap1/21omj-1etap-zad.pdf",
+    "solutions": "tasks/2025/etap1/21omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

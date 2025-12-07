@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Iloczyny a·(b+c) i b·(a+c) kolejne",
+  "content": "Liczby całkowite a, b oraz c są takie, że iloczyny\na·(b+c) oraz b·(a+c)\nsą dwiema kolejnymi liczbami całkowitymi. Wykaż, że co najmniej jeden z tych iloczynów jest kwadratem liczby całkowitej.",
+  "pdf": {
+    "tasks": "tasks/2023/etap2/19omj-2etap.pdf",
+    "solutions": "tasks/2023/etap2/19omj-2r.pdf",
+    "statistics": "tasks/2023/etap2/19omj-2etap-st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

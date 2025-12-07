@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "55-kąt foremny z liczbami",
+  "content": "Przy każdym wierzchołku 55-kąta foremnego napisano liczbę całkowitą. Żadna z tych liczb nie jest podzielna przez 5. Wykaż, że istnieją takie dwie liczby a i b, napisane przy sąsiednich wierzchołkach tego wielokąta, że liczba a²−b² jest podzielna przez 5.",
+  "pdf": {
+    "tasks": "tasks/2009/etap1/omg05_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

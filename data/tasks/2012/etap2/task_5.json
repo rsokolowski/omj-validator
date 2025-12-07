@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Czworokąt wypukły ABCD z okręgiem opisanym",
+  "content": "Dany jest czworokąt wypukły ABCD, w którym\n∠DAB + ∠BCD = ∠ABC.\nPunkt O jest środkiem okręgu opisanego na trójkącie ABC. Wykaż, że punkt O jest jednakowo odległy od prostych AD i CD.",
+  "pdf": {
+    "tasks": "tasks/2012/etap2/2etap13.pdf",
+    "solutions": "tasks/2012/etap2/2etap13r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

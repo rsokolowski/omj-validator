@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Trójkąt prostokątny równoramienny jednokolorowy",
+  "content": "Każdy punkt płaszczyzny pokolorowano na niebiesko lub czerwono. Udowodnij, że istnieje trójkąt prostokątny równoramienny, którego wierzchołki są tego samego koloru.",
+  "pdf": {
+    "tasks": "tasks/2008/etap1/omg04_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Szachownica 14×14",
+  "content": "Pola szachownicy o wymiarach 14×14 pokolorowano w sposób przedstawiony na rysunku. Czy można wybrać siedem pól czarnych i siedem pól białych tej szachownicy w taki sposób, aby w każdym wierszu i w każdej kolumnie znalazło się dokładnie jedno wybrane pole? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2018/etap1/1etap18.pdf",
+    "solutions": "tasks/2018/etap1/1etap18r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

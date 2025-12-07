@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Pierwiastki √(3−√8)+√(5−√24)+√(7−√48)=1",
+  "content": "Dowieść, że √(3−√8)+√(5−√24)+√(7−√48) = 1.",
+  "pdf": {
+    "tasks": "tasks/2005/etap1/omg01_1.pdf",
+    "solutions": "tasks/2005/etap1/omg01_1r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

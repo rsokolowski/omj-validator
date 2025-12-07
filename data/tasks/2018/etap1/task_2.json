@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Czworokąt ABCD z kątami 45°",
+  "content": "Dany jest czworokąt wypukły ABCD, w którym ∠DAB = ∠ABC = 45° oraz DA = 3, AB = 7√2, BC = 4. Oblicz długość boku CD.",
+  "pdf": {
+    "tasks": "tasks/2018/etap1/1etap18.pdf",
+    "solutions": "tasks/2018/etap1/1etap18r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

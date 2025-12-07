@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Trapez ABCD ze środkami M i N",
+  "content": "W trapezie ABCD punkty M i N są środkami odpowiednio podstaw AB i CD. Punkt P należy do odcinka MN. Udowodnij, że trójkąty ADP i BCP mają równe pola.",
+  "pdf": {
+    "tasks": "tasks/2014/etap2/2etap15.pdf",
+    "solutions": "tasks/2014/etap2/2etap15r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

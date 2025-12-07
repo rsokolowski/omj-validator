@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Kolorowanie punktów płaszczyzny",
+  "content": "Każdy punkt płaszczyzny należy pomalować na pewien kolor w taki sposób, aby każda prosta była jednokolorowa lub dwukolorowa. Jaka jest największa możliwa liczba kolorów, których można użyć do pomalowania punktów tej płaszczyzny? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2013/etap2/2etap14.pdf",
+    "solutions": "tasks/2013/etap2/2etap14r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

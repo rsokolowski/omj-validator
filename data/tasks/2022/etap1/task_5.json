@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Nierówność a+b+c ≥ (3/4)abc",
+  "content": "Liczby dodatnie a, b, c spełniają nierówności a+b ≥ ab, b+c ≥ bc oraz c+a ≥ ca. Udowodnij, że a+b+c ≥ (3/4)abc.",
+  "pdf": {
+    "tasks": "tasks/2022/etap1/18omj-1etap.pdf",
+    "solutions": "tasks/2022/etap1/18omj-1r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

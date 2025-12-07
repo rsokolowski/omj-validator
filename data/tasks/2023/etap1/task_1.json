@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Liczba 11...199...9 pierwsza",
+  "content": "Wyznacz wszystkie takie liczby naturalne n, że liczba 11...1 (n jedynek) 99...9 (n dziewiątek) jest pierwsza.",
+  "pdf": {
+    "tasks": "tasks/2023/etap1/19omj-1etap.pdf",
+    "solutions": "tasks/2023/etap1/19omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

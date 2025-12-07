@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Pięciokąt ABCDE z kątami prostymi",
+  "content": "W pięciokącie wypukłym ABCDE kąty przy wierzchołkach B i D są proste. Wykaż, że obwód trójkąta ACE jest nie mniejszy od 2BD.",
+  "pdf": {
+    "tasks": "tasks/2011/etap1/1etap11.pdf",
+    "solutions": "tasks/2011/etap1/1etap11r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

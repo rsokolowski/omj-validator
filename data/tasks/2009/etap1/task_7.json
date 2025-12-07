@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Wymierna a przy wymiernych a²+a i a³+a",
+  "content": "Dana jest taka liczba rzeczywista a, że liczby a²+a oraz a³+a są wymierne. Udowodnij, że liczba a jest wymierna.",
+  "pdf": {
+    "tasks": "tasks/2009/etap1/omg05_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

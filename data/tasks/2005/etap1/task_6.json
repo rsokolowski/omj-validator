@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "5 monet o wadze 48 gramów",
+  "content": "Wiadomo, że prawdziwa moneta waży 10 gramów, a fałszywa 9 gramów. Mamy 5 monet o łącznej wadze 48 gramów i dysponujemy wagą elektroniczną. Czy wykonując nie więcej niż 3 ważenia możemy zawsze rozpoznać, które z danych monet są fałszywe, a które prawdziwe?",
+  "pdf": {
+    "tasks": "tasks/2005/etap1/omg01_1.pdf",
+    "solutions": "tasks/2005/etap1/omg01_1r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

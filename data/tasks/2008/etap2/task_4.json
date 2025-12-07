@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Potęga 2ⁿ jako suma kolejnych liczb",
+  "content": "Czy istnieje taka dodatnia liczba całkowita n, dla której liczbę 2ⁿ można przedstawić w postaci sumy co najmniej dwóch kolejnych dodatnich liczb całkowitych? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2008/etap2/omg04_2.pdf",
+    "solutions": "tasks/2008/etap2/omg04_2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

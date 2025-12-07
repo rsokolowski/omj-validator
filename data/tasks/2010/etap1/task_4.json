@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Sześciokąt ABCDEF z punktem X",
+  "content": "Dany jest sześciokąt wypukły ABCDEF. Punkt X leży wewnątrz tego sześciokąta. Punkty K, L, M, N, P, Q są odpowiednio środkami boków AB, BC, CD, DE, EF, FA. Wykaż, że suma pól czworokątów QAKX, LCMX, NEPX nie zależy od wyboru punktu X.",
+  "pdf": {
+    "tasks": "tasks/2010/etap1/omg06_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

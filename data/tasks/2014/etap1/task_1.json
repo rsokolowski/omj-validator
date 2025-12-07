@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Rozmienienie 50 zł na 13 monet",
+  "content": "Ania rozmieniła banknot o nominale 50 zł na 13 monet, z których każda miała wartość 1 zł, 2 zł lub 5 zł. Ile monet pięciozłotowych otrzymała Ania? Podaj wszystkie możliwości. Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2014/etap1/1etap14.pdf",
+    "solutions": "tasks/2014/etap1/1etap14r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

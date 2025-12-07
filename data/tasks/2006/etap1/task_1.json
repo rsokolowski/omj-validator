@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Suma cyfr a·b równa 2006²",
+  "content": "Czy istnieją takie dodatnie liczby całkowite a, b, że suma cyfr każdej z nich jest równa 2006, a suma cyfr liczby a·b jest równa 2006²? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2006/etap1/omg02_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Czworokąt ABCD z symetrycznymi punktami",
+  "content": "Dany jest czworokąt wypukły ABCD o polu 1. Punkt K jest symetryczny do punktu B względem punktu A, punkt L jest symetryczny do punktu C względem punktu B, punkt M jest symetryczny do punktu D względem punktu C, punkt N jest symetryczny do punktu A względem punktu D. Oblicz pole czworokąta KLMN.",
+  "pdf": {
+    "tasks": "tasks/2007/etap1/omg03_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

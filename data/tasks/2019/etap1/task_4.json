@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Prostokąt ABCD z ∠EAF=45°",
+  "content": "Dany jest prostokąt ABCD. Punkty E i F leżą odpowiednio na bokach BC i CD, przy czym ∠EAF = 45° oraz BE = DF. Wykaż, że pole trójkąta AEF jest równe sumie pól trójkątów ABE i ADF.",
+  "pdf": {
+    "tasks": "tasks/2019/etap1/1etap19.pdf",
+    "solutions": "tasks/2019/etap1/1etap19r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Równoległobok ABCD z AD=DX i AB=BY",
+  "content": "Dany jest równoległobok ABCD. Na bokach AB i AD leżą odpowiednio takie punkty X i Y różne od A, że AD = DX oraz AB = BY. Udowodnij, że CX = CY.",
+  "pdf": {
+    "tasks": "tasks/2016/etap2/2etap17.pdf",
+    "solutions": "tasks/2016/etap2/2etap17r.pdf",
+    "statistics": "tasks/2016/etap2/2etap17st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

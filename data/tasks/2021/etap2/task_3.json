@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Kolorowanie liczb 1-100",
+  "content": "Niech n będzie dodatnią liczbą całkowitą. Każdą z liczb 1, 2, 3, ..., 100 pomalowano jednym z n kolorów w taki sposób, że każde dwie różne liczby o sumie podzielnej przez 4 zostały pomalowane różnymi kolorami. Wyznacz najmniejszą liczbę n, dla której taka sytuacja jest możliwa.",
+  "pdf": {
+    "tasks": "tasks/2021/etap2/2etap22.pdf",
+    "solutions": "tasks/2021/etap2/2etap22r.pdf",
+    "statistics": "tasks/2021/etap2/2etap22st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Kwadrat o boku n z plusami i minusami",
+  "content": "Plusem nazwiemy przedstawioną na rysunku figurę złożoną z pięciu kwadratów o boku 1, a minusem — każdy prostokąt złożony z dwóch takich kwadratów. Czy istnieje liczba nieparzysta n o tej własności, że kwadrat o boku n można rozciąć na plusy i minusy? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2022/etap1/18omj-1etap.pdf",
+    "solutions": "tasks/2022/etap1/18omj-1r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

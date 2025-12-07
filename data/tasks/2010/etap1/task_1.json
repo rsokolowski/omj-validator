@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Układ równań x²+x(y−4)=−2",
+  "content": "Rozwiąż układ równań: x²+x(y−4) = −2 oraz y²+y(x−4) = −2.",
+  "pdf": {
+    "tasks": "tasks/2010/etap1/omg06_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

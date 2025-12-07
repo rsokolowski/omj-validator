@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Trójki (a,b,c) liczb nieparzystych",
+  "content": "Wyznacz wszystkie trójki (a, b, c) liczb nieparzystych dodatnich spełniające zależność\n(a+c−b)/(b+c−a) = a/b.",
+  "pdf": {
+    "tasks": "tasks/2009/etap2/2etap10.pdf",
+    "solutions": "tasks/2009/etap2/omg05_2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

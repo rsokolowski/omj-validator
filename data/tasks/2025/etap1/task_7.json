@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Trójkąt o bokach a, b, c (miary kątów)",
+  "content": "Miary kątów wewnętrznych trójkąta ostrokątnego są równe a°, b°, c°. Wykaż, że istnieje trójkąt o bokach długości a, b, c.",
+  "pdf": {
+    "tasks": "tasks/2025/etap1/21omj-1etap-zad.pdf",
+    "solutions": "tasks/2025/etap1/21omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

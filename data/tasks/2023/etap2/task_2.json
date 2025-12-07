@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Kwadrat 6×6 rozcięty na prostokąty",
+  "content": "Kwadrat 6×6 rozcięto na osiem prostokątów, z których każdy ma cztery boki o całkowitych długościach. Wykaż, że pewne dwa z tych ośmiu prostokątów mają równe pola.",
+  "pdf": {
+    "tasks": "tasks/2023/etap2/19omj-2etap.pdf",
+    "solutions": "tasks/2023/etap2/19omj-2r.pdf",
+    "statistics": "tasks/2023/etap2/19omj-2etap-st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

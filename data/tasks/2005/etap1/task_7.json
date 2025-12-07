@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Punkty A, B, C, D z AB=BC=BD=17",
+  "content": "Na płaszczyźnie dane są punkty A, B, C, D. Punkt B jest środkiem odcinka AC, a przy tym AB = BC = BD = 17 oraz AD = 16. Obliczyć długość odcinka CD.",
+  "pdf": {
+    "tasks": "tasks/2005/etap1/omg01_1.pdf",
+    "solutions": "tasks/2005/etap1/omg01_1r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

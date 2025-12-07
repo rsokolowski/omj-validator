@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Układ równań 25x²+9y²=12yz",
+  "content": "Wyznaczyć wszystkie rozwiązania układu równań: 25x²+9y² = 12yz, 9y²+4z² = 20xz, 4z²+25x² = 30xy w liczbach rzeczywistych x, y, z.",
+  "pdf": {
+    "tasks": "tasks/2005/etap1/omg01_1.pdf",
+    "solutions": "tasks/2005/etap1/omg01_1r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

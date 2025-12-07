@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Równoległobok ABCD z PC=BC",
+  "content": "Wewnątrz równoległoboku ABCD znajduje się taki punkt P, że PC = BC. Udowodnij, że prosta BP jest prostopadła do prostej łączącej środki odcinków AP i CD.",
+  "pdf": {
+    "tasks": "tasks/2017/etap1/1etap17.pdf",
+    "solutions": "tasks/2017/etap1/1etap17r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

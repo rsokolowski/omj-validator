@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Dzielnik pierwszy a+b+1 liczby 4ab−1",
+  "content": "Dane są takie dodatnie liczby całkowite a i b, że liczba a+b+1 jest dzielnikiem pierwszym liczby 4ab−1. Udowodnij, że a = b.",
+  "pdf": {
+    "tasks": "tasks/2016/etap1/1etap16.pdf",
+    "solutions": "tasks/2016/etap1/1etap16r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

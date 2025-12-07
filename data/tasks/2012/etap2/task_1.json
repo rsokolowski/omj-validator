@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Pary (a,b) z ab podzielnym przez 175",
+  "content": "Wyznacz wszystkie pary dodatnich liczb całkowitych a, b, których iloczyn ab jest podzielny przez 175, a suma a+b równa się 175.",
+  "pdf": {
+    "tasks": "tasks/2012/etap2/2etap13.pdf",
+    "solutions": "tasks/2012/etap2/2etap13r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

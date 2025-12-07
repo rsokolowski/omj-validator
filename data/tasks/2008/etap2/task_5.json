@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Sześcian z przekrojem pięciokątnym",
+  "content": "Czy można tak przeciąć sześcian płaskim cięciem na dwie bryły o równych objętościach, aby w przekroju otrzymać pięciokąt? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2008/etap2/omg04_2.pdf",
+    "solutions": "tasks/2008/etap2/omg04_2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

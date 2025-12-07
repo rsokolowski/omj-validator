@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Prostopadłościan z AC' = AB + AD",
+  "content": "Dany jest prostopadłościan ABCDA'B'C'D' o wierzchołkach oznaczonych jak na rysunku, w którym AC' = AB + AD. Niech P będzie takim punktem na odcinku AC', że AP = AB oraz C'P = AD. Udowodnij, że ∠BPB' = 90°.",
+  "pdf": {
+    "tasks": "tasks/2024/etap1/20omj-1etap.pdf",
+    "solutions": "tasks/2024/etap1/20omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

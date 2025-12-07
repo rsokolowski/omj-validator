@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Sześć osób z trzema znajomymi",
+  "content": "Na przyjęciu spotkało się sześć osób. Okazało się, że każda z nich ma wśród pozostałych dokładnie trzech znajomych. Wykaż, że pewne cztery z tych osób mogą usiąść przy okrągłym stole w taki sposób, aby każda z nich siedziała pomiędzy swoimi dwoma znajomymi.",
+  "pdf": {
+    "tasks": "tasks/2010/etap2/2etap11.pdf",
+    "solutions": "tasks/2010/etap2/2etap11r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

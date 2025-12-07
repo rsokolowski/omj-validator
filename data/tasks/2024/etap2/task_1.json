@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Punkt E na boku CD prostokąta ABCD",
+  "content": "Punkt E leży na boku CD prostokąta ABCD, przy czym\n∠DAE + ∠EBC = ∠ABE.\nWykaż, że AB ≥ AD.",
+  "pdf": {
+    "tasks": "tasks/2024/etap2/20omj-2etap.pdf",
+    "solutions": "tasks/2024/etap2/20omj-2r.pdf",
+    "statistics": "tasks/2024/etap2/20omj-2etap-st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

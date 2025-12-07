@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "121 jabłek w 15 wiadrach",
+  "content": "Ogrodnik włożył 121 jabłek do 15 wiader w taki sposób, że w każdym wiadrze znalazło się co najmniej jedno jabłko. Czy jest możliwe, że w każdym wiadrze znajduje się inna liczba jabłek?",
+  "pdf": {
+    "tasks": "tasks/2005/etap1/omg01_1.pdf",
+    "solutions": "tasks/2005/etap1/omg01_1r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

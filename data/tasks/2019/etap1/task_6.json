@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Suma a+b+c = 10^1001",
+  "content": "Dane są liczby naturalne a, b, c, które w zapisie dziesiętnym są zapisane takimi samymi cyframi (tzn. każda cyfra liczby a występuje w jej zapisie dziesiętnym tyle samo razy co w zapisie każdej z liczb b i c). Czy jest możliwe, aby a+b+c = 10^1001? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2019/etap1/1etap19.pdf",
+    "solutions": "tasks/2019/etap1/1etap19r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

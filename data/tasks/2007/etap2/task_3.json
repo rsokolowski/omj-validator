@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "6 punktów i 10 odcinków",
+  "content": "W przestrzeni danych jest 6 punktów, z których żadne cztery nie leżą na jednej płaszczyźnie. Łącząc niektóre z tych punktów narysowano 10 odcinków. Wykaż, że w ten sposób uzyskano co najmniej jeden trójkąt.",
+  "pdf": {
+    "tasks": "tasks/2007/etap2/omg03_2.pdf",
+    "solutions": "tasks/2007/etap2/omg03_2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

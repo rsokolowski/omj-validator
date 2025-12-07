@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Równoległobok ABCD z punktami X i Y",
+  "content": "Dany jest równoległobok ABCD, w którym AB > AD. Punkty X oraz Y, różne od B, leżą na półprostej BD→, przy czym\nCX = CB oraz AY = AB.\nUdowodnij, że DX = DY.\nUwaga: Zapis BD→ oznacza półprostą o początku w punkcie B przechodzącą przez punkt D.",
+  "pdf": {
+    "tasks": "tasks/2022/etap2/18omj-2etap.pdf",
+    "solutions": "tasks/2022/etap2/18omj-2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

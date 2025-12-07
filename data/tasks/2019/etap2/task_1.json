@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Trzy kolejne liczby całkowite",
+  "content": "Dane są liczby rzeczywiste a, b, c. Wiadomo, że liczby a+b, b+c, c+a są trzema kolejnymi liczbami całkowitymi, wypisanymi w pewnej kolejności, przy czym najmniejsza z nich jest nieparzysta. Wykaż, że liczby a, b, c są także trzema kolejnymi liczbami całkowitymi, wypisanymi w pewnej kolejności.",
+  "pdf": {
+    "tasks": "tasks/2019/etap2/2etap20.pdf",
+    "solutions": "tasks/2019/etap2/2etap20r.pdf",
+    "statistics": "tasks/2019/etap2/2etap20st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

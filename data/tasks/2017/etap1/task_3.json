@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Liczby pierwsze a,b,c większe od 3",
+  "content": "Liczby pierwsze a, b, c są większe od 3. Udowodnij, że liczba (a−b)(b−c)(c−a) jest podzielna przez 48.",
+  "pdf": {
+    "tasks": "tasks/2017/etap1/1etap17.pdf",
+    "solutions": "tasks/2017/etap1/1etap17r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

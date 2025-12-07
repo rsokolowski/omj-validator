@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Nierówność xy^n < x⁴+y⁴",
+  "content": "Wyznacz wszystkie dodatnie liczby całkowite n o następującej własności: Dla każdej pary liczb rzeczywistych dodatnich x, y zachodzi nierówność xy^n < x⁴+y⁴.",
+  "pdf": {
+    "tasks": "tasks/2006/etap1/omg02_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

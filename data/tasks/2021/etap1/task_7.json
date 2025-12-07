@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Cyfry podzielne przez 7",
+  "content": "Wybrano n (niekoniecznie różnych) cyfr, z których żadna nie jest równa 0 ani 7. Okazało się, że każda liczba n-cyfrowa zapisana wszystkimi wybranymi cyframi jest podzielna przez 7. Udowodnij, że liczba n jest podzielna przez 6.",
+  "pdf": {
+    "tasks": "tasks/2021/etap1/1etap21.pdf",
+    "solutions": "tasks/2021/etap1/1etap21rr.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

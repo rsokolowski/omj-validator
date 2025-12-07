@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "100 kamieni czerwonych i niebieskich",
+  "content": "Sto kamieni leży w jednym rzędzie. Wśród nich jest 50 kamieni czerwonych i 50 kamieni niebieskich. Wykaż, że można tak usunąć po 25 kamieni każdego koloru, aby pomiędzy dowolnymi dwoma kamieniami tego samego koloru nie pozostał ani jeden kamień innego koloru.",
+  "pdf": {
+    "tasks": "tasks/2024/etap1/20omj-1etap.pdf",
+    "solutions": "tasks/2024/etap1/20omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

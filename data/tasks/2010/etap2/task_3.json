@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Liczby n²+n+1 i n²+n+3 pierwsze",
+  "content": "Wyznacz wszystkie takie dodatnie liczby całkowite n, dla których obie liczby\nn²+n+1 oraz n²+n+3\nsą pierwsze.",
+  "pdf": {
+    "tasks": "tasks/2010/etap2/2etap11.pdf",
+    "solutions": "tasks/2010/etap2/2etap11r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

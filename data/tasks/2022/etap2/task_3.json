@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Wstawianie cyfry - sześciokrotność n",
+  "content": "Liczba naturalna n jest co najmniej dwucyfrowa. Jeżeli pomiędzy cyfrę dziesiątek a cyfrę jedności tej liczby wpiszemy pewną cyfrę, to uzyskamy sześciokrotność liczby n. Wyznacz wszystkie liczby n o tej własności.",
+  "pdf": {
+    "tasks": "tasks/2022/etap2/18omj-2etap.pdf",
+    "solutions": "tasks/2022/etap2/18omj-2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

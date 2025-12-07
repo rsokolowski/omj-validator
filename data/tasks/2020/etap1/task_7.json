@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Figura z pięciokątów foremnych",
+  "content": "Figurę złożoną z czterech pięciokątów foremnych o boku długości 1 sklejono w przestrzeni. Najpierw zagięto ją wzdłuż odcinków przerywanych, łącząc pogrubione odcinki, a następnie uformowano w taki sposób, aby kolorowe odcinki utworzyły kwadrat. Wyznacz długość powstałego w ten sposób odcinka AB.",
+  "pdf": {
+    "tasks": "tasks/2020/etap1/1etap20.pdf",
+    "solutions": "tasks/2020/etap1/1etap20r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

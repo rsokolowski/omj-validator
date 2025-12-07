@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Trapez ABCD z kątami 60°",
+  "content": "Dany jest trapez ABCD o podstawach AB i CD, w którym\n∠BAD = ∠ABC = 60° oraz CD < BC.\nNa boku BC tego trapezu wybrano taki punkt E, że EB = CD. Wykaż, że BD = AE.",
+  "pdf": {
+    "tasks": "tasks/2010/etap2/2etap11.pdf",
+    "solutions": "tasks/2010/etap2/2etap11r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

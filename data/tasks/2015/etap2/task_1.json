@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Liczby a+b=c+d i ac=bd",
+  "content": "Liczby dodatnie a, b, c, d spełniają warunki a+b = c+d oraz ac = bd. Udowodnij, że a = d oraz b = c.",
+  "pdf": {
+    "tasks": "tasks/2015/etap2/2etap16.pdf",
+    "solutions": "tasks/2015/etap2/2etap16r.pdf",
+    "statistics": "tasks/2015/etap2/2etap16st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

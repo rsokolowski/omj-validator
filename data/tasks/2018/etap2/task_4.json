@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Trójkąt ABC z AB = 3·BC",
+  "content": "Dany jest trójkąt ABC, w którym AB = 3·BC. Punkty P i Q leżą na boku AB i spełniają warunek AP = PQ = QB. Punkt M jest środkiem boku AC. Wykaż, że ∠PMQ = 90°.",
+  "pdf": {
+    "tasks": "tasks/2018/etap2/2etap19.pdf",
+    "solutions": "tasks/2018/etap2/2etap19r.pdf",
+    "statistics": "tasks/2018/etap2/2etap19st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

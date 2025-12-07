@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Czworościan foremny z 6 kulami",
+  "content": "Dany jest czworościan foremny opisany na sferze o promieniu 1. Udowodnij, że w tym czworościanie można umieścić 6 kul o promieniu ½, w taki sposób, aby każde dwie kule miały co najwyżej jeden punkt wspólny.",
+  "pdf": {
+    "tasks": "tasks/2011/etap2/2etap12.pdf",
+    "solutions": "tasks/2011/etap2/2etap12r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

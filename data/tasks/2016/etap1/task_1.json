@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Równanie (a+b+c)(a+b−c) = c²",
+  "content": "Liczby wymierne a, b, c spełniają równanie (a+b+c)(a+b−c) = c². Wykaż, że a+b = c = 0.",
+  "pdf": {
+    "tasks": "tasks/2016/etap1/1etap16.pdf",
+    "solutions": "tasks/2016/etap1/1etap16r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

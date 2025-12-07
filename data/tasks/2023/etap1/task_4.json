@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Różnica sześcianów dwóch liczb pierwszych",
+  "content": "Wyznacz wszystkie liczby pierwsze, które można przedstawić jako różnicę sześcianów dwóch liczb pierwszych.",
+  "pdf": {
+    "tasks": "tasks/2023/etap1/19omj-1etap.pdf",
+    "solutions": "tasks/2023/etap1/19omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Czworokąt ABCD z prostopadłymi EF i AD",
+  "content": "Czworokąt wypukły ABCD jest wpisany w okrąg. Jego przekątne przecinają się w punkcie E, a kąt BEC jest rozwarty. Prosta przechodząca przez punkt C i prostopadła do prostej AC przecina prostą przechodzącą przez punkt B i prostopadłą do prostej BD w punkcie F. Wykaż, że proste EF i AD są prostopadłe.",
+  "pdf": {
+    "tasks": "tasks/2010/etap1/omg06_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

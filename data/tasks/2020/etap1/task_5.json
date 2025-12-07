@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Cztery liczby z sumą 2^1002 i iloczynem 5^1002",
+  "content": "Czy istnieją takie cztery dodatnie liczby całkowite, których suma jest równa 2^1002, a iloczyn jest równy 5^1002? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2020/etap1/1etap20.pdf",
+    "solutions": "tasks/2020/etap1/1etap20r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

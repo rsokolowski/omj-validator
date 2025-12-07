@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Układanie cyfr z patyczków",
+  "content": "Tomek ma do dyspozycji n jednakowych patyczków, z których układa liczby wielocyfrowe. Tomek zauważył, że suma cyfr największej z możliwych do ułożenia przez niego liczb jest równa dokładnie n. Wyznacz wszystkie liczby n, dla których taka sytuacja jest możliwa.",
+  "pdf": {
+    "tasks": "tasks/2023/etap1/19omj-1etap.pdf",
+    "solutions": "tasks/2023/etap1/19omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

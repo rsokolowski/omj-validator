@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Nierówność a/√(a+b)+b/√(b+c)+c/√(c+a)>√(a+b+c)",
+  "content": "Udowodnij, że dla każdych dodatnich liczb a, b, c spełniona jest nierówność a/√(a+b) + b/√(b+c) + c/√(c+a) > √(a+b+c).",
+  "pdf": {
+    "tasks": "tasks/2010/etap1/omg06_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

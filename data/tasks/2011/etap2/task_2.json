@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Podzielność a² przez a+b",
+  "content": "Dane są dodatnie liczby całkowite a i b. Wykaż, że jeżeli liczba a² jest podzielna przez liczbę a+b, to także liczba b² jest podzielna przez liczbę a+b.",
+  "pdf": {
+    "tasks": "tasks/2011/etap2/2etap12.pdf",
+    "solutions": "tasks/2011/etap2/2etap12r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

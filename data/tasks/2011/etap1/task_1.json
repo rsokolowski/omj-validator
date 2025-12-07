@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Równanie √(x²+1)+√(y²+1)=x+y",
+  "content": "Czy istnieją takie liczby rzeczywiste x, y, dla których √(x²+1)+√(y²+1) = x+y? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2011/etap1/1etap11.pdf",
+    "solutions": "tasks/2011/etap1/1etap11r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

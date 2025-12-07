@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Czworokąt ABCD z kątami 120°",
+  "content": "Dany jest czworokąt wypukły ABCD, w którym ∠DAB = ∠ABC = 120° oraz CD = 3, BC = 2, AB = 1. Oblicz długość odcinka AD.",
+  "pdf": {
+    "tasks": "tasks/2020/etap1/1etap20.pdf",
+    "solutions": "tasks/2020/etap1/1etap20r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

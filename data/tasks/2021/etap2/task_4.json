@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Pięciokąt wypukły ABCDE",
+  "content": "W pięciokącie wypukłym ABCDE spełnione są równości\n∠CDE = 90°, AC = AD oraz BD = BE.\nWykaż, że trójkąt ABD i czworokąt ABCE mają równe pola.\nUwaga: Wielokąt nazywamy wypukłym, jeśli wszystkie jego kąty wewnętrzne są mniejsze od 180°.",
+  "pdf": {
+    "tasks": "tasks/2021/etap2/2etap22.pdf",
+    "solutions": "tasks/2021/etap2/2etap22r.pdf",
+    "statistics": "tasks/2021/etap2/2etap22st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

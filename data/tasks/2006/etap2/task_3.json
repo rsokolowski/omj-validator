@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Trójkąt ostrokątny ABC z ∠BAC=45°",
+  "content": "Dany jest trójkąt ostrokątny ABC, w którym ∠BAC = 45°. Wysokości tego trójkąta przecinają się w punkcie H. Wykaż, że |AH| = |BC|.",
+  "pdf": {
+    "tasks": "tasks/2006/etap2/omg02_2.pdf",
+    "solutions": "tasks/2006/etap2/omg02_2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

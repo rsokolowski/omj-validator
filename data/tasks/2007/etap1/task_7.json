@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Ostrosłup czworokątny z przekrojem",
+  "content": "Czy istnieje taki ostrosłup czworokątny oraz taka płaszczyzna przecinająca wszystkie jego krawędzie boczne, że pole uzyskanego przekroju jest większe od pola podstawy ostrosłupa? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2007/etap1/omg03_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Turniej 50 zawodników",
+  "content": "W turnieju tenisa stołowego wzięło udział 50 zawodników. Każdy zawodnik rozegrał jeden mecz z każdym innym zawodnikiem, nie było remisów. Czy możliwe jest, aby każdy z uczestników wygrał tę samą liczbę meczów? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2009/etap2/2etap10.pdf",
+    "solutions": "tasks/2009/etap2/omg05_2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

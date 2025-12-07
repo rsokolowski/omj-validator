@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Trójkąt ABC z AE=BD",
+  "content": "Dany jest trójkąt ABC, w którym AC < BC. Punkty D i E leżą odpowiednio na bokach BC i AC tego trójkąta, przy czym AE = BD. Wykaż, że symetralne odcinków AB i DE przecinają się w punkcie leżącym na okręgu opisanym na trójkącie ABC.",
+  "pdf": {
+    "tasks": "tasks/2015/etap2/2etap16.pdf",
+    "solutions": "tasks/2015/etap2/2etap16r.pdf",
+    "statistics": "tasks/2015/etap2/2etap16st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 1,
+  "title": "Trójka (a,b,c) liczb nieparzystych",
+  "content": "Czy istnieje taka trójka (a, b, c) dodatnich liczb nieparzystych, że\n√(a−c) + √(b−c) = √(a+b)?\nOdpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2014/etap2/2etap15.pdf",
+    "solutions": "tasks/2014/etap2/2etap15r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

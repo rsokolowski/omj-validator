@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Liczby 2 i 5 na tablicy",
+  "content": "Początkowo na tablicy napisane są liczby 2 oraz 5. Ruch polega na zastąpieniu jednej z dwóch liczb napisanych na tablicy ich sumą. Czy po wykonaniu pewnej liczby ruchów można uzyskać sytuację, w której na tablicy napisane są dwie kolejne liczby naturalne? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2022/etap2/18omj-2etap.pdf",
+    "solutions": "tasks/2022/etap2/18omj-2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

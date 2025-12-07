@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Trapez ABCD z symetralnymi",
+  "content": "Dany jest trapez ABCD o podstawach AB i CD. Symetralne ramion AD i BC przecinają odcinki BC i AD odpowiednio w punktach P i Q. Wykaż, że ∠APD = ∠BQC.",
+  "pdf": {
+    "tasks": "tasks/2017/etap1/1etap17.pdf",
+    "solutions": "tasks/2017/etap1/1etap17r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

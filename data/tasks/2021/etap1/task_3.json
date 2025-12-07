@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Liczba między √(2n) a √(5n)",
+  "content": "Niech n ≥ 1 będzie liczbą całkowitą. Wykaż, że istnieje taka liczba całkowita, która jest większa od √(2n) i mniejsza od √(5n).",
+  "pdf": {
+    "tasks": "tasks/2021/etap1/1etap21.pdf",
+    "solutions": "tasks/2021/etap1/1etap21rr.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

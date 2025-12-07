@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Trójkąt równoboczny ABC i punkty D, E",
+  "content": "Trójkąt równoboczny ABC jest wpisany w okrąg o. Punkt D leży na krótszym łuku BC okręgu o. Punkt E jest symetryczny do punktu B względem prostej CD. Wykaż, że punkty A, D, E leżą na jednej prostej.",
+  "pdf": {
+    "tasks": "tasks/2014/etap1/1etap14.pdf",
+    "solutions": "tasks/2014/etap1/1etap14r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Równoległobok ABCD z symetralną AB",
+  "content": "Dany jest równoległobok ABCD, w którym kąt przy wierzchołku A jest ostry. Symetralna odcinka AB przecina odcinek CD w punkcie X. Przekątne tego równoległoboku przecinają się w punkcie E. Udowodnij, że XE = ½AD.",
+  "pdf": {
+    "tasks": "tasks/2019/etap2/2etap20.pdf",
+    "solutions": "tasks/2019/etap2/2etap20r.pdf",
+    "statistics": "tasks/2019/etap2/2etap20st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

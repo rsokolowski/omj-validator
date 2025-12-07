@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Turniej 8 zawodników z remisami",
+  "content": "W turnieju wzięło udział 8 zawodników. Każda para zawodników rozegrała dokładnie jeden mecz, który zakończył się zwycięstwem jednego z nich lub remisem. Zwycięzca meczu otrzymywał 2 punkty, jego przeciwnik 0 punktów, a w przypadku remisu obaj zawodnicy uzyskiwali po 1 punkcie. Po rozegraniu wszystkich meczów okazało się, że każdy zawodnik miał tę samą liczbę punktów. Jaka jest najmniejsza możliwa liczba meczów, które zakończyły się remisem? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2019/etap1/1etap19.pdf",
+    "solutions": "tasks/2019/etap1/1etap19r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

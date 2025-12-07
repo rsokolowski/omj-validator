@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Trójkąt ostrokątny z całkowitymi bokami i wysokościami",
+  "content": "Czy istnieje taki trójkąt ostrokątny, w którym długości wszystkich boków i wszystkich wysokości są liczbami całkowitymi? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2013/etap2/2etap14.pdf",
+    "solutions": "tasks/2013/etap2/2etap14r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

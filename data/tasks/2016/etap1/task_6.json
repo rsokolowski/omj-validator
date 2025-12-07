@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Ostrosłup ABCD z kątami 90°",
+  "content": "Podstawą ostrosłupa ABCD jest trójkąt równoboczny ABC o boku 1. Ponadto ∠ADB = ∠BDC = ∠CDA = 90°. Oblicz objętość ostrosłupa ABCD.",
+  "pdf": {
+    "tasks": "tasks/2016/etap1/1etap16.pdf",
+    "solutions": "tasks/2016/etap1/1etap16r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

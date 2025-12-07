@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Cyfry 1, 2, 9 w zapisie 3n",
+  "content": "W zapisie dziesiętnym pewnej dodatniej liczby całkowitej n nie występuje żadna z cyfr 1, 2, 9. Udowodnij, że w zapisie dziesiętnym liczby 3n występuje co najmniej jedna z cyfr 1, 2, 9.",
+  "pdf": {
+    "tasks": "tasks/2018/etap2/2etap19.pdf",
+    "solutions": "tasks/2018/etap2/2etap19r.pdf",
+    "statistics": "tasks/2018/etap2/2etap19st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

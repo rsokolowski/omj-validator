@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "800 liczb na tablicy",
+  "content": "Na tablicy znajduje się osiemset dodatnich liczb całkowitych mniejszych od 21. Czterysta z tych liczb zapisano niebieską kredą, a czterysta — żółtą. Wykaż, że można zmazać pewne liczby z tablicy (co najmniej jedną, ale nie wszystkie) w taki sposób, aby suma pozostałych na tablicy niebieskich liczb była równa sumie pozostałych na tablicy żółtych liczb.\nUwaga. Liczby na tablicy mogą się powtarzać.",
+  "pdf": {
+    "tasks": "tasks/2023/etap2/19omj-2etap.pdf",
+    "solutions": "tasks/2023/etap2/19omj-2r.pdf",
+    "statistics": "tasks/2023/etap2/19omj-2etap-st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

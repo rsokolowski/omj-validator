@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Warunek (a+b²)(a³+b³)=a⁴+b⁵",
+  "content": "Niezerowe liczby rzeczywiste a, b spełniają warunek (a+b²)(a³+b³)=a⁴+b⁵. Wykaż, że b<0.",
+  "pdf": {
+    "tasks": "tasks/2025/etap1/21omj-1etap-zad.pdf",
+    "solutions": "tasks/2025/etap1/21omj-1etap-r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

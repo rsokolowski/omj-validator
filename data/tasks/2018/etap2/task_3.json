@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "101-kąt foremny i prosta ℓ",
+  "content": "Dany jest 101-kąt foremny. Prosta ℓ leży w płaszczyźnie tego wielokąta i nie przechodzi przez żaden z jego wierzchołków. Udowodnij, że prosta ℓ przecina parzystą liczbę przekątnych danego wielokąta.",
+  "pdf": {
+    "tasks": "tasks/2018/etap2/2etap19.pdf",
+    "solutions": "tasks/2018/etap2/2etap19r.pdf",
+    "statistics": "tasks/2018/etap2/2etap19st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

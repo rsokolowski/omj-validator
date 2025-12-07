@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Tabela 4×4 z liczbami 1 i 2",
+  "content": "W każde pole tabeli 4×4 wpisano jedną z liczb 1 lub 2. Dla każdego wiersza obliczono sumę wpisanych w niego liczb, a dla każdej kolumny obliczono iloczyn wpisanych w nią liczb. Wykaż, że pewne dwa z ośmiu uzyskanych wyników są równe.",
+  "pdf": {
+    "tasks": "tasks/2022/etap2/18omj-2etap.pdf",
+    "solutions": "tasks/2022/etap2/18omj-2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

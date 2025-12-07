@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Trójki liczb pierwszych q=p²+6 i r=q²+6",
+  "content": "Wyznacz wszystkie trójki liczb pierwszych p, q, r spełniające układ równań: q = p²+6 oraz r = q²+6.",
+  "pdf": {
+    "tasks": "tasks/2006/etap1/omg02_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

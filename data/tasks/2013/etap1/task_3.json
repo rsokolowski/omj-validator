@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Prostokąt ABCD z trójkątem równobocznym AEF",
+  "content": "Punkty E i F leżą odpowiednio na bokach BC i CD prostokąta ABCD, przy czym trójkąt AEF jest równoboczny. Punkt M jest środkiem odcinka AF. Wykaż, że trójkąt BCM jest równoboczny.",
+  "pdf": {
+    "tasks": "tasks/2013/etap1/1etap13.pdf",
+    "solutions": "tasks/2013/etap1/1etap13r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

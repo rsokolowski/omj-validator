@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Kolorowanie liczb od 1 do n",
+  "content": "Każdą z liczb naturalnych od 1 do n pokolorowano albo na niebiesko, albo na czerwono, przy czym każdego z tych kolorów użyto co najmniej raz. Okazało się, że: każda liczba czerwona jest sumą pewnych dwóch różnych liczb niebieskich; każda liczba niebieska jest różnicą pewnych dwóch liczb czerwonych. Wyznacz najmniejszą liczbę n, dla której takie kolorowanie jest możliwe.",
+  "pdf": {
+    "tasks": "tasks/2022/etap1/18omj-1etap.pdf",
+    "solutions": "tasks/2022/etap1/18omj-1r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

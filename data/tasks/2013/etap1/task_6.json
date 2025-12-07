@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Punkt P na sferze opisanej na sześcianie",
+  "content": "Punkt P leży na sferze opisanej na sześcianie. Wykaż, że suma kwadratów odległości punktu P od wierzchołków sześcianu nie zależy od wyboru punktu P.",
+  "pdf": {
+    "tasks": "tasks/2013/etap1/1etap13.pdf",
+    "solutions": "tasks/2013/etap1/1etap13r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

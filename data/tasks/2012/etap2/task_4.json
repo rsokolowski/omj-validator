@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Trójki (a,b,c) z a+b+c = ab+bc+ca",
+  "content": "Wyznacz wszystkie trójki (a, b, c) liczb nieujemnych i nie większych od 1, dla których spełniona jest równość\na+b+c = ab+bc+ca.",
+  "pdf": {
+    "tasks": "tasks/2012/etap2/2etap13.pdf",
+    "solutions": "tasks/2012/etap2/2etap13r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

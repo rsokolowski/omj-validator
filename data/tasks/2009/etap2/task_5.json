@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Ostrosłup sześciokątny z przekrojem",
+  "content": "Ostrosłup prawidłowy sześciokątny przecięto płaszczyzną, która przecina wszystkie jego krawędzie boczne. W przekroju otrzymano sześciokąt wypukły ABCDEF. Wykaż, że proste AD, BE i CF przecinają się w jednym punkcie.",
+  "pdf": {
+    "tasks": "tasks/2009/etap2/2etap10.pdf",
+    "solutions": "tasks/2009/etap2/omg05_2r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

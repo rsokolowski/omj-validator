@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "Trójkąt równoboczny ABC z punktami K, L, M",
+  "content": "Punkty K, L, M leżą odpowiednio na bokach BC, CA, AB trójkąta równobocznego ABC i spełniają warunki KM = LM, ∠KML = 90° oraz AM = BK. Udowodnij, że ∠CKL = 90°.",
+  "pdf": {
+    "tasks": "tasks/2021/etap1/1etap21.pdf",
+    "solutions": "tasks/2021/etap1/1etap21rr.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

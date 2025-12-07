@@ -1,0 +1,13 @@
+{
+  "number": 5,
+  "title": "n-kąt foremny z sumami parzystymi",
+  "content": "W wierzchołkach n-kąta foremnego rozmieszczono liczby 1,2,...,n w taki sposób, że suma liczb znajdujących się w każdych trzech kolejnych wierzchołkach n-kąta jest parzysta. Wyznacz wszystkie liczby naturalne n ≥ 3, dla których takie rozmieszczenie jest możliwe.",
+  "pdf": {
+    "tasks": "tasks/2015/etap1/1etap15.pdf",
+    "solutions": "tasks/2015/etap1/1etap15r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

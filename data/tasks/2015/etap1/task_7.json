@@ -1,0 +1,13 @@
+{
+  "number": 7,
+  "title": "Ostrosłup ABCDS z AS+CS=BS+DS",
+  "content": "Czy istnieje taki ostrosłup ABCDS, którego podstawą jest prostokąt ABCD i którego każde dwie krawędzie boczne są różnych długości, a ponadto spełniona jest równość AS + CS = BS + DS? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2015/etap1/1etap15.pdf",
+    "solutions": "tasks/2015/etap1/1etap15r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

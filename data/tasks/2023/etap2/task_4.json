@@ -1,0 +1,13 @@
+{
+  "number": 4,
+  "title": "Kwadrat ABCD podzielony na figury",
+  "content": "Punkty K, L, M, N leżą odpowiednio na bokach AB, BC, CD, DA kwadratu ABCD. Odcinki KL, MN, LN dzielą ten kwadrat na cztery figury o równych polach. Udowodnij, że odcinki KL, MN, KM również dzielą ten kwadrat na cztery figury o równych polach.",
+  "pdf": {
+    "tasks": "tasks/2023/etap2/19omj-2etap.pdf",
+    "solutions": "tasks/2023/etap2/19omj-2r.pdf",
+    "statistics": "tasks/2023/etap2/19omj-2etap-st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

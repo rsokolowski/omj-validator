@@ -1,0 +1,13 @@
+{
+  "number": 6,
+  "title": "Czworościan foremny z przekrojem czworokątnym",
+  "content": "Czworościan foremny o krawędzi 1 przecięto płaszczyzną tak, że w przekroju otrzymano czworokąt. Jaki jest najmniejszy możliwy obwód tego czworokąta? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2009/etap1/omg05_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

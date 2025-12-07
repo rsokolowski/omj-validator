@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Warunek a/(b+c²) = (a+c²)/b",
+  "content": "Liczby całkowite a, b, c są różne od 0 i spełniają zależność a/(b+c²) = (a+c²)/b. Wykaż, że a+b+c ≤ 0.",
+  "pdf": {
+    "tasks": "tasks/2018/etap1/1etap18.pdf",
+    "solutions": "tasks/2018/etap1/1etap18r.pdf",
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

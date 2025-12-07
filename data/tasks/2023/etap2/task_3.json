@@ -1,0 +1,13 @@
+{
+  "number": 3,
+  "title": "Trapez ABCD z punktem P na AC",
+  "content": "Dany jest trapez ABCD o podstawach AB i CD. Punkt P leży na odcinku AC, przy czym\n∠BPC = ∠BAD = ∠ABC = ∠ACB.\nWykaż, że AP = CD.",
+  "pdf": {
+    "tasks": "tasks/2023/etap2/19omj-2etap.pdf",
+    "solutions": "tasks/2023/etap2/19omj-2r.pdf",
+    "statistics": "tasks/2023/etap2/19omj-2etap-st.pdf"
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}

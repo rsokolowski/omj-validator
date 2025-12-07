@@ -1,0 +1,13 @@
+{
+  "number": 2,
+  "title": "Trójkąt ABC z kwadratem APBQ",
+  "content": "Dany jest trójkąt ABC, w którym ∠ACB = 90° oraz AC ≠ BC. Punkty P i Q są takie, że czworokąt APBQ jest kwadratem. Udowodnij, że proste CP i CQ są prostopadłe.",
+  "pdf": {
+    "tasks": "tasks/2006/etap1/omg02_1.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": null,
+  "categories": [],
+  "hints": []
+}
