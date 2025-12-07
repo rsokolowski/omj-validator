@@ -1,0 +1,78 @@
+{
+  "etap2": [
+    {
+      "number": 1,
+      "title": "Trójki (a,b,c) liczb nieparzystych",
+      "content": "Wyznacz wszystkie trójki (a, b, c) liczb nieparzystych dodatnich spełniające zależność\n(a+c−b)/(b+c−a) = a/b.",
+      "has_solution": true
+    },
+    {
+      "number": 2,
+      "title": "Liczby x₁,...,x₁₀₁ równe 1 lub −1",
+      "content": "Każda z liczb x₁, x₂, ..., x₁₀₁ jest równa 1 lub −1. Wyznacz najmniejszą możliwą wartość wyrażenia\nx₁x₂ + x₂x₃ + x₃x₄ + ... + x₁₀₀x₁₀₁ + x₁₀₁x₁.",
+      "has_solution": true
+    },
+    {
+      "number": 3,
+      "title": "Równoległobok ABCD z punktem E",
+      "content": "Dany jest równoległobok ABCD oraz punkt E należący do boku BC. Przez punkt D prowadzimy prostą k równoległą do prostej AE. Na prostej k obieramy takie punkty K, L, że czworokąt AEKL jest równoległobokiem. Udowodnij, że równoległoboki ABCD i AEKL mają równe pola.",
+      "has_solution": true
+    },
+    {
+      "number": 4,
+      "title": "Turniej 50 zawodników",
+      "content": "W turnieju tenisa stołowego wzięło udział 50 zawodników. Każdy zawodnik rozegrał jeden mecz z każdym innym zawodnikiem, nie było remisów. Czy możliwe jest, aby każdy z uczestników wygrał tę samą liczbę meczów? Odpowiedź uzasadnij.",
+      "has_solution": true
+    },
+    {
+      "number": 5,
+      "title": "Ostrosłup sześciokątny z przekrojem",
+      "content": "Ostrosłup prawidłowy sześciokątny przecięto płaszczyzną, która przecina wszystkie jego krawędzie boczne. W przekroju otrzymano sześciokąt wypukły ABCDEF. Wykaż, że proste AD, BE i CF przecinają się w jednym punkcie.",
+      "has_solution": true
+    }
+  ],
+  "etap1": [
+    {
+      "number": 1,
+      "title": "Trójki liczb pierwszych z a²=b²+c",
+      "content": "Wyznacz wszystkie trójki liczb pierwszych a, b, c, dla których a² = b² + c.",
+      "has_solution": false
+    },
+    {
+      "number": 2,
+      "title": "Trapez ABCD z punktem P",
+      "content": "Dany jest trapez ABCD o podstawach AB i CD. Wyznacz wszystkie punkty P leżące wewnątrz tego trapezu i spełniające równość [PAB]+[PCD] = [PBC]+[PDA], gdzie [XYZ] oznacza pole trójkąta XYZ.",
+      "has_solution": false
+    },
+    {
+      "number": 3,
+      "title": "Układ a+b+c+d=101 i ab+cd=200",
+      "content": "Liczby całkowite a, b, c, d spełniają układ równań: a+b+c+d = 101 oraz ab+cd = 200. Wykaż, że dokładnie jedna z liczb a, b, c, d jest nieparzysta.",
+      "has_solution": false
+    },
+    {
+      "number": 4,
+      "title": "18-kąt foremny z prostokątem",
+      "content": "Dany jest 18-kąt foremny A₁A₂...A₁₈. Wykaż, że czworokąt ograniczony prostymi A₂A₇, A₃A₁₅, A₆A₁₂ i A₁₀A₁₇ jest prostokątem. Czy ten prostokąt jest kwadratem?",
+      "has_solution": false
+    },
+    {
+      "number": 5,
+      "title": "55-kąt foremny z liczbami",
+      "content": "Przy każdym wierzchołku 55-kąta foremnego napisano liczbę całkowitą. Żadna z tych liczb nie jest podzielna przez 5. Wykaż, że istnieją takie dwie liczby a i b, napisane przy sąsiednich wierzchołkach tego wielokąta, że liczba a²−b² jest podzielna przez 5.",
+      "has_solution": false
+    },
+    {
+      "number": 6,
+      "title": "Czworościan foremny z przekrojem czworokątnym",
+      "content": "Czworościan foremny o krawędzi 1 przecięto płaszczyzną tak, że w przekroju otrzymano czworokąt. Jaki jest najmniejszy możliwy obwód tego czworokąta? Odpowiedź uzasadnij.",
+      "has_solution": false
+    },
+    {
+      "number": 7,
+      "title": "Wymierna a przy wymiernych a²+a i a³+a",
+      "content": "Dana jest taka liczba rzeczywista a, że liczby a²+a oraz a³+a są wymierne. Udowodnij, że liczba a jest wymierna.",
+      "has_solution": false
+    }
+  ]
+}

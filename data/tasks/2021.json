@@ -1,0 +1,83 @@
+{
+  "etap2": [
+    {
+      "number": 1,
+      "title": "Odcinki AB i CD prostopadłe",
+      "content": "Odcinki AB i CD są prostopadłe i przecinają się w punkcie X. Ponadto spełnione są równości\nAC = BD, AD = BX oraz DX = 1.\nWyznacz długość odcinka CX.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 2,
+      "title": "Dzielniki a i b liczby n",
+      "content": "Dana jest liczba całkowita n ≥ 1 oraz jej dodatnie dzielniki a i b, które spełniają równość a + b + ab = n. Wykaż, że a = b.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 3,
+      "title": "Kolorowanie liczb 1-100",
+      "content": "Niech n będzie dodatnią liczbą całkowitą. Każdą z liczb 1, 2, 3, ..., 100 pomalowano jednym z n kolorów w taki sposób, że każde dwie różne liczby o sumie podzielnej przez 4 zostały pomalowane różnymi kolorami. Wyznacz najmniejszą liczbę n, dla której taka sytuacja jest możliwa.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 4,
+      "title": "Pięciokąt wypukły ABCDE",
+      "content": "W pięciokącie wypukłym ABCDE spełnione są równości\n∠CDE = 90°, AC = AD oraz BD = BE.\nWykaż, że trójkąt ABD i czworokąt ABCE mają równe pola.\nUwaga: Wielokąt nazywamy wypukłym, jeśli wszystkie jego kąty wewnętrzne są mniejsze od 180°.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 5,
+      "title": "Punkty na prostej z parzystą sumą odległości",
+      "content": "Niech n ≥ 3 będzie liczbą nieparzystą. Na prostej zaznaczono n punktów w taki sposób, że odległość między każdymi dwoma z nich jest liczbą całkowitą. Okazało się, że każdy zaznaczony punkt ma parzystą sumę odległości od pozostałych n−1 zaznaczonych punktów. Wykaż, że odległość między każdymi dwoma zaznaczonymi punktami jest liczbą parzystą.",
+      "has_solution": true,
+      "has_statistics": true
+    }
+  ],
+  "etap1": [
+    {
+      "number": 1,
+      "title": "Wynik Marka na teście",
+      "content": "W klasie Marka jest 17 uczniów i wszyscy napisali test. Marek uzyskał wynik o 17 punktów wyższy od średniej arytmetycznej wyników pozostałych uczniów. O ile punktów wynik Marka jest wyższy od średniej arytmetycznej wyników całej klasy? Odpowiedź uzasadnij.",
+      "has_solution": true
+    },
+    {
+      "number": 2,
+      "title": "Prostokąt ABCD z AB=BX=XD",
+      "content": "W prostokącie ABCD stosunek długości boków BC:AB jest równy √2. Wewnątrz tego prostokąta zaznaczono taki punkt X, że AB = BX = XD. Wyznacz miarę kąta BXD.",
+      "has_solution": true
+    },
+    {
+      "number": 3,
+      "title": "Liczba między √(2n) a √(5n)",
+      "content": "Niech n ≥ 1 będzie liczbą całkowitą. Wykaż, że istnieje taka liczba całkowita, która jest większa od √(2n) i mniejsza od √(5n).",
+      "has_solution": true
+    },
+    {
+      "number": 4,
+      "title": "Tabela z liczbami 1 do 17",
+      "content": "W każde pole tabeli należy wpisać inną liczbę całkowitą spośród liczb od 1 do 17 w taki sposób, aby sumy liczb we wszystkich ośmiu kolumnach były równe, a suma liczb w górnym wierszu była dwa razy większa od sumy liczb w dolnym wierszu. Której z liczb od 1 do 17 można nie wpisać do tabeli? Podaj wszystkie takie liczby. Odpowiedź uzasadnij.",
+      "has_solution": true
+    },
+    {
+      "number": 5,
+      "title": "Trójkąt równoboczny ABC z punktami K, L, M",
+      "content": "Punkty K, L, M leżą odpowiednio na bokach BC, CA, AB trójkąta równobocznego ABC i spełniają warunki KM = LM, ∠KML = 90° oraz AM = BK. Udowodnij, że ∠CKL = 90°.",
+      "has_solution": true
+    },
+    {
+      "number": 6,
+      "title": "Tablica 10×10 ze strzałkami",
+      "content": "W każdym polu tablicy 10×10 znajduje się strzałka skierowana w górę, w dół, w lewo lub w prawo. Wykaż, że można tak usunąć z tablicy 50 strzałek, aby żadne dwie z pozostałych nie wskazywały na siebie nawzajem. Uwaga: Strzałki wskazują na siebie nawzajem także wtedy, gdy ich pola nie sąsiadują lub gdy pomiędzy nimi są inne strzałki.",
+      "has_solution": true
+    },
+    {
+      "number": 7,
+      "title": "Cyfry podzielne przez 7",
+      "content": "Wybrano n (niekoniecznie różnych) cyfr, z których żadna nie jest równa 0 ani 7. Okazało się, że każda liczba n-cyfrowa zapisana wszystkimi wybranymi cyframi jest podzielna przez 7. Udowodnij, że liczba n jest podzielna przez 6.",
+      "has_solution": true
+    }
+  ]
+}

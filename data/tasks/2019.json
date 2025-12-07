@@ -1,0 +1,83 @@
+{
+  "etap2": [
+    {
+      "number": 1,
+      "title": "Trzy kolejne liczby całkowite",
+      "content": "Dane są liczby rzeczywiste a, b, c. Wiadomo, że liczby a+b, b+c, c+a są trzema kolejnymi liczbami całkowitymi, wypisanymi w pewnej kolejności, przy czym najmniejsza z nich jest nieparzysta. Wykaż, że liczby a, b, c są także trzema kolejnymi liczbami całkowitymi, wypisanymi w pewnej kolejności.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 2,
+      "title": "Równoległobok ABCD z symetralną AB",
+      "content": "Dany jest równoległobok ABCD, w którym kąt przy wierzchołku A jest ostry. Symetralna odcinka AB przecina odcinek CD w punkcie X. Przekątne tego równoległoboku przecinają się w punkcie E. Udowodnij, że XE = ½AD.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 3,
+      "title": "Turniej chłopców i dziewcząt",
+      "content": "W pewnym turnieju wzięli udział chłopcy i dziewczęta. Każda osoba rozegrała dokładnie jeden mecz z każdą inną osobą, nie było remisów. Po turnieju okazało się, że każdy przegrał co najmniej raz. Ponadto każdy chłopiec przegrał inną liczbę meczów niż każdy z pozostałych chłopców. Wykaż, że pewna dziewczynka wygrała mecz z pewnym chłopcem.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 4,
+      "title": "Trójkąt ABC z kątem 45°",
+      "content": "Dany jest trójkąt ABC, w którym miara kąta przy wierzchołku A jest równa 45°, a kąt przy wierzchołku C jest rozwarty. Udowodnij, że\nBC + (√2−1)·CA < AB.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 5,
+      "title": "Ułamek (a+n)/(b+n) skracalny",
+      "content": "Dane są dodatnie liczby całkowite a, b o następującej własności: dla każdej liczby naturalnej n ≥ 1 ułamek (a+n)/(b+n) jest skracalny. Wykaż, że a = b.",
+      "has_solution": true,
+      "has_statistics": true
+    }
+  ],
+  "etap1": [
+    {
+      "number": 1,
+      "title": "Dopisanie cyfry - 13 razy większa",
+      "content": "Do pewnej dodatniej liczby całkowitej n dopisano na końcu pewną cyfrę, uzyskując w ten sposób liczbę 13 razy większą od liczby n. Wyznacz wszystkie liczby n o tej własności.",
+      "has_solution": true
+    },
+    {
+      "number": 2,
+      "title": "Trójkąt ABC z AC=CP=PQ=QB",
+      "content": "Na bokach AB i BC trójkąta ABC leżą odpowiednio takie punkty P i Q (różne od wierzchołków trójkąta), że AC = CP = PQ = QB. Wiedząc, że ∠ACB = 104°, wyznacz miary pozostałych kątów trójkąta ABC.",
+      "has_solution": true
+    },
+    {
+      "number": 3,
+      "title": "Trójki (x,y,z) z xy(x+y)=yz(y+z)=zx(z+x)",
+      "content": "Wyznacz wszystkie trójki (x,y,z) liczb rzeczywistych różnych od 0, dla których xy(x+y) = yz(y+z) = zx(z+x).",
+      "has_solution": true
+    },
+    {
+      "number": 4,
+      "title": "Prostokąt ABCD z ∠EAF=45°",
+      "content": "Dany jest prostokąt ABCD. Punkty E i F leżą odpowiednio na bokach BC i CD, przy czym ∠EAF = 45° oraz BE = DF. Wykaż, że pole trójkąta AEF jest równe sumie pól trójkątów ABE i ADF.",
+      "has_solution": true
+    },
+    {
+      "number": 5,
+      "title": "Turniej 8 zawodników z remisami",
+      "content": "W turnieju wzięło udział 8 zawodników. Każda para zawodników rozegrała dokładnie jeden mecz, który zakończył się zwycięstwem jednego z nich lub remisem. Zwycięzca meczu otrzymywał 2 punkty, jego przeciwnik 0 punktów, a w przypadku remisu obaj zawodnicy uzyskiwali po 1 punkcie. Po rozegraniu wszystkich meczów okazało się, że każdy zawodnik miał tę samą liczbę punktów. Jaka jest najmniejsza możliwa liczba meczów, które zakończyły się remisem? Odpowiedź uzasadnij.",
+      "has_solution": true
+    },
+    {
+      "number": 6,
+      "title": "Suma a+b+c = 10^1001",
+      "content": "Dane są liczby naturalne a, b, c, które w zapisie dziesiętnym są zapisane takimi samymi cyframi (tzn. każda cyfra liczby a występuje w jej zapisie dziesiętnym tyle samo razy co w zapisie każdej z liczb b i c). Czy jest możliwe, aby a+b+c = 10^1001? Odpowiedź uzasadnij.",
+      "has_solution": true
+    },
+    {
+      "number": 7,
+      "title": "Graniastosłup prosty z rombem",
+      "content": "Dany jest graniastosłup prosty, którego podstawą jest romb o boku długości a i kącie ostrym 60°. Graniastosłup ten przecięto płaszczyzną, przecinając jego krawędzie boczne i uzyskując w przekroju kwadrat. Wyznacz wszystkie możliwe wartości, jakie może przyjąć długość boku tego kwadratu.",
+      "has_solution": true
+    }
+  ]
+}

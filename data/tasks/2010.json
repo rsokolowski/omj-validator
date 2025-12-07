@@ -1,0 +1,78 @@
+{
+  "etap2": [
+    {
+      "number": 1,
+      "title": "21 liczb rzeczywistych",
+      "content": "Danych jest 21 liczb rzeczywistych. Wiadomo, że suma każdych jedenastu spośród tych liczb jest większa od sumy pozostałych dziesięciu. Wykaż, że wszystkie te liczby są dodatnie.",
+      "has_solution": true
+    },
+    {
+      "number": 2,
+      "title": "Trapez ABCD z kątami 60°",
+      "content": "Dany jest trapez ABCD o podstawach AB i CD, w którym\n∠BAD = ∠ABC = 60° oraz CD < BC.\nNa boku BC tego trapezu wybrano taki punkt E, że EB = CD. Wykaż, że BD = AE.",
+      "has_solution": true
+    },
+    {
+      "number": 3,
+      "title": "Liczby n²+n+1 i n²+n+3 pierwsze",
+      "content": "Wyznacz wszystkie takie dodatnie liczby całkowite n, dla których obie liczby\nn²+n+1 oraz n²+n+3\nsą pierwsze.",
+      "has_solution": true
+    },
+    {
+      "number": 4,
+      "title": "Sześć osób z trzema znajomymi",
+      "content": "Na przyjęciu spotkało się sześć osób. Okazało się, że każda z nich ma wśród pozostałych dokładnie trzech znajomych. Wykaż, że pewne cztery z tych osób mogą usiąść przy okrągłym stole w taki sposób, aby każda z nich siedziała pomiędzy swoimi dwoma znajomymi.",
+      "has_solution": true
+    },
+    {
+      "number": 5,
+      "title": "Ostrosłup czworokątny z prostopadłymi krawędziami",
+      "content": "Czy istnieje taki ostrosłup czworokątny, którego każda krawędź boczna jest prostopadła do którejś krawędzi podstawy? Odpowiedź uzasadnij.\nUwaga: Proste prostopadłe w przestrzeni nie muszą się przecinać.",
+      "has_solution": true
+    }
+  ],
+  "etap1": [
+    {
+      "number": 1,
+      "title": "Układ równań x²+x(y−4)=−2",
+      "content": "Rozwiąż układ równań: x²+x(y−4) = −2 oraz y²+y(x−4) = −2.",
+      "has_solution": false
+    },
+    {
+      "number": 2,
+      "title": "Czworościan z okręgami opisanymi",
+      "content": "W pewnym czworościanie każdy wierzchołek połączono odcinkiem ze środkiem okręgu opisanego na przeciwległej ścianie. Okazało się, że otrzymane odcinki są wysokościami czworościanu. Wykaż, że czworościan ten jest foremny.",
+      "has_solution": false
+    },
+    {
+      "number": 3,
+      "title": "Nierówność a/√(a+b)+b/√(b+c)+c/√(c+a)>√(a+b+c)",
+      "content": "Udowodnij, że dla każdych dodatnich liczb a, b, c spełniona jest nierówność a/√(a+b) + b/√(b+c) + c/√(c+a) > √(a+b+c).",
+      "has_solution": false
+    },
+    {
+      "number": 4,
+      "title": "Sześciokąt ABCDEF z punktem X",
+      "content": "Dany jest sześciokąt wypukły ABCDEF. Punkt X leży wewnątrz tego sześciokąta. Punkty K, L, M, N, P, Q są odpowiednio środkami boków AB, BC, CD, DE, EF, FA. Wykaż, że suma pól czworokątów QAKX, LCMX, NEPX nie zależy od wyboru punktu X.",
+      "has_solution": false
+    },
+    {
+      "number": 5,
+      "title": "Tablica 100×100 z L-tetraminami",
+      "content": "W każde pole kwadratowej tablicy 100×100 wpisano liczbę rzeczywistą. Okazało się, że suma liczb wpisanych w każde cztery pola, które można nakryć L-tetraminem, jest równa 0. Wyznacz sumę liczb wpisanych w pola, które znajdują się na obu przekątnych tablicy.",
+      "has_solution": false
+    },
+    {
+      "number": 6,
+      "title": "Czworokąt ABCD z prostopadłymi EF i AD",
+      "content": "Czworokąt wypukły ABCD jest wpisany w okrąg. Jego przekątne przecinają się w punkcie E, a kąt BEC jest rozwarty. Prosta przechodząca przez punkt C i prostopadła do prostej AC przecina prostą przechodzącą przez punkt B i prostopadłą do prostej BD w punkcie F. Wykaż, że proste EF i AD są prostopadłe.",
+      "has_solution": false
+    },
+    {
+      "number": 7,
+      "title": "Równanie a²−b³=4 w nieparzystych",
+      "content": "Udowodnij, że nie istnieją dodatnie liczby nieparzyste a i b spełniające równanie a²−b³ = 4.",
+      "has_solution": false
+    }
+  ]
+}

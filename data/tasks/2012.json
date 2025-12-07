@@ -1,0 +1,78 @@
+{
+  "etap2": [
+    {
+      "number": 1,
+      "title": "Pary (a,b) z ab podzielnym przez 175",
+      "content": "Wyznacz wszystkie pary dodatnich liczb całkowitych a, b, których iloczyn ab jest podzielny przez 175, a suma a+b równa się 175.",
+      "has_solution": true
+    },
+    {
+      "number": 2,
+      "title": "Turniej 6 drużyn z sumą 41 punktów",
+      "content": "W pewnym turnieju uczestniczyło 6 drużyn. Każda drużyna rozegrała z każdą inną dokładnie jeden mecz. Za zwycięstwo w meczu drużyna otrzymywała 3 punkty, za porażkę 0 punktów, a za remis 1 punkt. Po turnieju okazało się, że suma punktów zdobytych przez wszystkie drużyny wynosi 41. Wykaż, że istnieją takie cztery drużyny, z których każda co najmniej jeden raz zremisowała.",
+      "has_solution": true
+    },
+    {
+      "number": 3,
+      "title": "Trójkąt z polem ¼(ab+bc)",
+      "content": "Czy istnieje taki trójkąt o bokach długości a, b, c, którego pole jest równe ¼(ab+bc)? Odpowiedź uzasadnij.",
+      "has_solution": true
+    },
+    {
+      "number": 4,
+      "title": "Trójki (a,b,c) z a+b+c = ab+bc+ca",
+      "content": "Wyznacz wszystkie trójki (a, b, c) liczb nieujemnych i nie większych od 1, dla których spełniona jest równość\na+b+c = ab+bc+ca.",
+      "has_solution": true
+    },
+    {
+      "number": 5,
+      "title": "Czworokąt wypukły ABCD z okręgiem opisanym",
+      "content": "Dany jest czworokąt wypukły ABCD, w którym\n∠DAB + ∠BCD = ∠ABC.\nPunkt O jest środkiem okręgu opisanego na trójkącie ABC. Wykaż, że punkt O jest jednakowo odległy od prostych AD i CD.",
+      "has_solution": true
+    }
+  ],
+  "etap1": [
+    {
+      "number": 1,
+      "title": "Cyfry jedności n, n⁵, n⁹, n¹³, n¹⁷,...",
+      "content": "Wykaż, że dla każdej dodatniej liczby całkowitej n, liczby n, n⁵, n⁹, n¹³, n¹⁷,... mają jednakowe cyfry jedności.",
+      "has_solution": true
+    },
+    {
+      "number": 2,
+      "title": "Czworokąt ABCD z AD+BC=CD",
+      "content": "Dany jest czworokąt wypukły ABCD, w którym AD + BC = CD. Dwusieczne kątów BCD i CDA przecinają się w punkcie S. Udowodnij, że AS = BS.",
+      "has_solution": true
+    },
+    {
+      "number": 3,
+      "title": "Wstawianie cyfry - połowa liczby n",
+      "content": "Liczba naturalna n jest co najmniej trzycyfrowa. Jeżeli pomiędzy cyfrę setek a cyfrę dziesiątek tej liczby wpiszemy znak mnożenia, to po wykonaniu mnożenia otrzymamy połowę liczby n. Wyznacz wszystkie liczby n o tej własności.",
+      "has_solution": true
+    },
+    {
+      "number": 4,
+      "title": "Bal z 102 królewiczami i 103 królewna­mi",
+      "content": "W balu wzięło udział 102 królewiczów i 103 królewny. Po balu okazało się, że każdy królewicz zatańczył z taką samą liczbą królewien. Udowodnij, że pewne dwie królewny zatańczyły z taką samą liczbą królewiczów.",
+      "has_solution": true
+    },
+    {
+      "number": 5,
+      "title": "Wysokości trójkąta i kwadraty",
+      "content": "Odcinki AD i BE są wysokościami trójkąta ostrokątnego ABC. Po zewnętrznej stronie trójkąta ABC zbudowano kwadrat ABKL oraz prostokąty BDMN i AEPQ, przy czym BN = BC oraz AQ = AC. Udowodnij, że suma pól prostokątów BDMN i AEPQ jest równa polu kwadratu ABKL.",
+      "has_solution": true
+    },
+    {
+      "number": 6,
+      "title": "Ostrosłup SABCD z wpisaną sferą",
+      "content": "W ostrosłup SABCD, którego podstawą jest czworokąt wypukły ABCD, można wpisać sferę. Udowodnij, że ∠ASB + ∠CSD = ∠BSC + ∠DSA.",
+      "has_solution": true
+    },
+    {
+      "number": 7,
+      "title": "Liczby n z n³−7n kwadratem",
+      "content": "Wyznacz wszystkie dodatnie liczby całkowite n, dla których liczba n³−7n jest kwadratem liczby całkowitej.",
+      "has_solution": true
+    }
+  ]
+}

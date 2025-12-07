@@ -1,0 +1,78 @@
+{
+  "etap2": [
+    {
+      "number": 1,
+      "title": "Średnia arytmetyczna i geometryczna",
+      "content": "Liczby dodatnie a, b spełniają warunek\n(a+b)/2 = √(ab) + 3.\nWykaż, że co najmniej jedna z liczb a, b jest niewymierna.",
+      "has_solution": true
+    },
+    {
+      "number": 2,
+      "title": "Tablica 4×4 z sumami",
+      "content": "W każde pole tablicy o wymiarach 4×4 wpisano liczbę 0 lub 1. Następnie obliczono sumy liczb stojących w każdym wierszu, w każdej kolumnie i na obu przekątnych. Wykaż, że co najmniej trzy sumy są jednakowe.",
+      "has_solution": true
+    },
+    {
+      "number": 3,
+      "title": "Sześciokąt foremny ABCDEF z punktem S",
+      "content": "Punkt S leży wewnątrz sześciokąta foremnego ABCDEF. Udowodnij, że suma pól trójkątów ABS, CDS, EFS jest równa połowie pola sześciokąta ABCDEF.",
+      "has_solution": true
+    },
+    {
+      "number": 4,
+      "title": "Potęga 2ⁿ jako suma kolejnych liczb",
+      "content": "Czy istnieje taka dodatnia liczba całkowita n, dla której liczbę 2ⁿ można przedstawić w postaci sumy co najmniej dwóch kolejnych dodatnich liczb całkowitych? Odpowiedź uzasadnij.",
+      "has_solution": true
+    },
+    {
+      "number": 5,
+      "title": "Sześcian z przekrojem pięciokątnym",
+      "content": "Czy można tak przeciąć sześcian płaskim cięciem na dwie bryły o równych objętościach, aby w przekroju otrzymać pięciokąt? Odpowiedź uzasadnij.",
+      "has_solution": true
+    }
+  ],
+  "etap1": [
+    {
+      "number": 1,
+      "title": "Liczba rozwiązań układu |x|+|y|=1",
+      "content": "Wyznacz w zależności od parametru a liczbę rozwiązań układu równań: |x|+|y| = 1 oraz |x|+a = y.",
+      "has_solution": false
+    },
+    {
+      "number": 2,
+      "title": "Prostopadłościan o podstawie kwadratowej",
+      "content": "Dany jest prostopadłościan o podstawie kwadratowej. Przekątna tego prostopadłościanu ma długość d, a jego pole powierzchni jest równe b. Oblicz sumę długości wszystkich krawędzi prostopadłościanu.",
+      "has_solution": false
+    },
+    {
+      "number": 3,
+      "title": "Kwadrat ABCD z prostą przez środek",
+      "content": "Dany jest kwadrat ABCD o boku 1 oraz prosta ℓ przechodząca przez jego środek. Niech a, b, c, d oznaczają odpowiednio odległości punktów A, B, C, D od prostej ℓ. Wykaż, że a²+b²+c²+d² = 1.",
+      "has_solution": false
+    },
+    {
+      "number": 4,
+      "title": "Pary (a,b) z a+b pierwszą i a³+b³ podzielną przez 3",
+      "content": "Wyznacz wszystkie takie pary (a,b) dodatnich liczb całkowitych, że liczba a+b jest liczbą pierwszą oraz liczba a³+b³ jest podzielna przez 3.",
+      "has_solution": false
+    },
+    {
+      "number": 5,
+      "title": "Dwusieczna z d < 2ab/(a+b)",
+      "content": "W trójkącie ABC dwusieczna kąta ACB przecina bok AB w punkcie D. Długości boków BC i AC są równe odpowiednio a i b, a długość odcinka CD jest równa d. Wykaż, że d < 2ab/(a+b).",
+      "has_solution": false
+    },
+    {
+      "number": 6,
+      "title": "Trójkąt prostokątny równoramienny jednokolorowy",
+      "content": "Każdy punkt płaszczyzny pokolorowano na niebiesko lub czerwono. Udowodnij, że istnieje trójkąt prostokątny równoramienny, którego wierzchołki są tego samego koloru.",
+      "has_solution": false
+    },
+    {
+      "number": 7,
+      "title": "Wielościan z rzutami na płaszczyzny",
+      "content": "Czy istnieje taki wielościan, którego rzuty prostokątne na pewne trzy płaszczyzny są odpowiednio czworokątem, sześciokątem i ośmiokątem? Odpowiedź uzasadnij.",
+      "has_solution": false
+    }
+  ]
+}

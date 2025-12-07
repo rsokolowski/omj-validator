@@ -1,0 +1,83 @@
+{
+  "etap2": [
+    {
+      "number": 1,
+      "title": "Punkt E na boku CD prostokąta ABCD",
+      "content": "Punkt E leży na boku CD prostokąta ABCD, przy czym\n∠DAE + ∠EBC = ∠ABE.\nWykaż, że AB ≥ AD.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 2,
+      "title": "Tablica 5×5 pomalowana na czerwono i niebiesko",
+      "content": "Każde pole tablicy 5×5 pomalowano albo na czerwono, albo na niebiesko. Okazało się, że w każdym wierszu tej tablicy liczba czerwonych pól jest taka sama, a w każdych dwóch kolumnach tej tablicy liczby niebieskich pól są różne. Wyznacz łączną liczbę niebieskich pól w całej tablicy. Podaj wszystkie możliwości.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 3,
+      "title": "Trójkąt ABC z AC=BC i ∠ACB=150°",
+      "content": "Dany jest trójkąt ABC, w którym AC = BC i ∠ACB = 150°. Punkt A' jest symetryczny do punktu A względem prostej BC, punkt B' jest symetryczny do punktu B względem prostej AC, a punkt C' jest symetryczny do punktu C względem prostej AB. Udowodnij, że trójkąt A'B'C' jest równoboczny.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 4,
+      "title": "Pierwiastki sześcienne a + b = ∛2025",
+      "content": "Czy istnieją takie dodatnie liczby całkowite a oraz b, że\n∛a + ∛b = ∛2025?\nUwaga. Symbol ∛x oznacza pierwiastek trzeciego stopnia z x, czyli taką liczbę rzeczywistą y, że y³ = x.",
+      "has_solution": true,
+      "has_statistics": true
+    },
+    {
+      "number": 5,
+      "title": "Liczby olimpijskie",
+      "content": "Liczbę całkowitą nazwiemy olimpijską, jeśli można ją uzyskać z liczby 1 w wyniku wykonania pewnej liczby operacji polegających na zwiększeniu liczby o jej cyfrę jedności. Początkowymi liczbami olimpijskimi są więc 1, 2, 4, 8, 16, 22, 24, 28, 36, ...\nWykaż, że kwadrat liczby olimpijskiej jest liczbą olimpijską.",
+      "has_solution": true,
+      "has_statistics": true
+    }
+  ],
+  "etap1": [
+    {
+      "number": 1,
+      "title": "Punkt wewnątrz kwadratu o boku 20",
+      "content": "Czy wewnątrz kwadratu o boku długości 20 istnieje punkt, którego odległości od boków tego kwadratu są czterema kolejnymi liczbami całkowitymi?",
+      "has_solution": true
+    },
+    {
+      "number": 2,
+      "title": "Zaginanie rombu ABCD",
+      "content": "Arek ma kartkę w kształcie rombu ABCD, w którym ∠BCD ≤ 90°. Najpierw zagina ją w taki sposób, aby odcinki CB oraz CD pokryły się na prostej CA, a następnie w taki sposób, aby otrzymać trójkąt. Udowodnij, że odległości punktu A od wszystkich trzech wierzchołków otrzymanego trójkąta są równe.",
+      "has_solution": true
+    },
+    {
+      "number": 3,
+      "title": "Różnice |b−c|, |c−a|, |a−b| między 1 i 2",
+      "content": "Czy istnieją takie liczby rzeczywiste a, b, c, że każda z liczb |b−c|, |c−a|, |a−b| jest większa od 1, ale mniejsza od 2?",
+      "has_solution": true
+    },
+    {
+      "number": 4,
+      "title": "100 kamieni czerwonych i niebieskich",
+      "content": "Sto kamieni leży w jednym rzędzie. Wśród nich jest 50 kamieni czerwonych i 50 kamieni niebieskich. Wykaż, że można tak usunąć po 25 kamieni każdego koloru, aby pomiędzy dowolnymi dwoma kamieniami tego samego koloru nie pozostał ani jeden kamień innego koloru.",
+      "has_solution": true
+    },
+    {
+      "number": 5,
+      "title": "Liczby pierwsze a, a+b, a+b+c, b+c, c",
+      "content": "Liczby całkowite a, b, c są większe od 1 i mają tę własność, że liczby a, a+b, a+b+c, b+c, c są pierwsze. Wykaż, że liczba b jest podzielna przez 3.",
+      "has_solution": true
+    },
+    {
+      "number": 6,
+      "title": "Schodkowy diagram n×n",
+      "content": "Z tablicy n×n usunięto pola znajdujące się w całości powyżej jednej z przekątnych, otrzymując schodkowy diagram. W każde pole diagramu należy wpisać jedną z liczb 1 lub 2. Wyznacz wszystkie liczby całkowite n ≥ 2, dla których można to zrobić w taki sposób, aby pośród 2n sum liczb w wierszach i kolumnach nie było dwóch równych liczb.",
+      "has_solution": true
+    },
+    {
+      "number": 7,
+      "title": "Prostopadłościan z AC' = AB + AD",
+      "content": "Dany jest prostopadłościan ABCDA'B'C'D' o wierzchołkach oznaczonych jak na rysunku, w którym AC' = AB + AD. Niech P będzie takim punktem na odcinku AC', że AP = AB oraz C'P = AD. Udowodnij, że ∠BPB' = 90°.",
+      "has_solution": true
+    }
+  ]
+}
