@@ -2,6 +2,12 @@
 
 Aplikacja webowa do sprawdzania rozwiązań zadań z Olimpiady Matematycznej Juniorów. Uczniowie mogą przesyłać zdjęcia swoich odręcznych rozwiązań, które są analizowane przez AI na podstawie oficjalnych zadań PDF i kryteriów oceniania.
 
+## Zrzuty ekranu
+
+| Lista zadań | Szczegóły zadania | Ocena rozwiązania |
+|:-----------:|:-----------------:|:-----------------:|
+| ![Lista zadań](docs/screenshots/task-list.png) | ![Szczegóły zadania](docs/screenshots/task-detail.png) | ![Ocena rozwiązania](docs/screenshots/submission-evaluation.png) |
+
 ## Funkcje
 
 - Przeglądanie 20 lat zadań OMJ/OMG (2005-2025)
