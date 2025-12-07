@@ -463,6 +463,10 @@ async def serve_upload(request: Request, path: str):
     if redirect:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
+    # Handle legacy paths that include 'uploads/' prefix (from old submissions)
+    if path.startswith("uploads/"):
+        path = path[8:]  # Strip 'uploads/' prefix
+
     file_path = settings.uploads_dir / path
     if not file_path.exists() or not file_path.is_file():
         raise HTTPException(status_code=404, detail="File not found")
