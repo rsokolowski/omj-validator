@@ -68,9 +68,9 @@ class Settings(BaseSettings):
     def prompts_dir(self) -> Path:
         return self.base_dir / "prompts"
 
-    @property
-    def gemini_prompt_path(self) -> Path:
-        return self.prompts_dir / "gemini_prompt.txt"
+    def gemini_prompt_path(self, etap: str = "etap2") -> Path:
+        """Get Gemini prompt path for specific etap (etap1 or etap2)."""
+        return self.prompts_dir / f"gemini_prompt_{etap}.txt"
 
 
 settings = Settings()

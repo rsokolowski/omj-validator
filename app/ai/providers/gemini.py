@@ -34,9 +34,9 @@ class GeminiProvider:
         genai.configure(api_key=settings.gemini_api_key)
         self._model = genai.GenerativeModel(settings.gemini_model)
 
-    def _load_prompt(self) -> str:
-        """Load Gemini-specific prompt from file."""
-        with open(settings.gemini_prompt_path, "r", encoding="utf-8") as f:
+    def _load_prompt(self, etap: str = "etap2") -> str:
+        """Load Gemini-specific prompt from file for given etap."""
+        with open(settings.gemini_prompt_path(etap), "r", encoding="utf-8") as f:
             return f.read()
 
     def get_timeout(self) -> int:
@@ -49,6 +49,7 @@ class GeminiProvider:
         solution_pdf_path: Optional[Path],
         image_paths: list[Path],
         task_number: int,
+        etap: str = "etap2",
     ) -> SubmissionResult:
         """
         Analyze a student's solution using Gemini API.
@@ -57,7 +58,8 @@ class GeminiProvider:
             task_pdf_path: Path to the task PDF
             solution_pdf_path: Path to the official solution PDF (for reference)
             image_paths: Paths to uploaded images of student's solution
-            task_number: The task number (1-5)
+            task_number: The task number (1-7 for etap1, 1-5 for etap2)
+            etap: The competition stage ("etap1" or "etap2")
 
         Returns:
             SubmissionResult with score and feedback
@@ -68,8 +70,8 @@ class GeminiProvider:
             # Build content parts for multimodal request
             content_parts = []
 
-            # Add system prompt
-            prompt_text = self._load_prompt()
+            # Add system prompt (etap-specific scoring criteria)
+            prompt_text = self._load_prompt(etap)
             prompt_text += f"\n\n## Zadanie {task_number}\n"
             prompt_text += "Przeanalizuj poniższe pliki.\n\n"
 
@@ -119,8 +121,8 @@ class GeminiProvider:
                     feedback="Gemini nie zwrócił odpowiedzi. Spróbuj ponownie.",
                 )
 
-            # Use shared parsing utility
-            return parse_ai_response(response.text, provider_name="Gemini")
+            # Use shared parsing utility with etap-specific scoring
+            return parse_ai_response(response.text, provider_name="Gemini", etap=etap)
 
         except asyncio.TimeoutError:
             return SubmissionResult(

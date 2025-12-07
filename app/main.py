@@ -374,7 +374,7 @@ async def submit_solution(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
-    # Analyze with AI provider
+    # Analyze with AI provider (etap-specific scoring: etap1=0/1/3, etap2=0/2/5/6)
     try:
         provider = create_ai_provider()
         result = await provider.analyze_solution(
@@ -382,6 +382,7 @@ async def submit_solution(
             solution_pdf_path=solution_pdf,
             image_paths=saved_paths,
             task_number=num,
+            etap=etap,
         )
     except AIProviderError as e:
         result = SubmissionResult(
