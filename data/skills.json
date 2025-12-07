@@ -1,0 +1,455 @@
+{
+  "categories": {
+    "number_theory": {
+      "name": "Teoria liczb",
+      "description": "Techniki związane z własnościami liczb całkowitych, podzielności i arytmetyki modularnej"
+    },
+    "algebra": {
+      "name": "Algebra",
+      "description": "Manipulacje algebraiczne, równania, nierówności i tożsamości"
+    },
+    "geometry": {
+      "name": "Geometria",
+      "description": "Własności figur płaskich i przestrzennych, konstrukcje i przekształcenia"
+    },
+    "combinatorics": {
+      "name": "Kombinatoryka",
+      "description": "Zliczanie, argumenty probabilistyczne i struktury dyskretne"
+    },
+    "logic": {
+      "name": "Logika",
+      "description": "Techniki dowodzenia i rozumowania logicznego"
+    }
+  },
+  "skills": {
+    "modular_arithmetic": {
+      "id": "modular_arithmetic",
+      "name": "Arytmetyka modularna",
+      "category": "number_theory",
+      "description": "Analiza wyrażeń w arytmetyce modulo n. Obejmuje znajdowanie reszt z dzielenia, własności kongruencji oraz wykorzystanie małego twierdzenia Fermata.",
+      "examples": [
+        "Obliczanie ostatniej cyfry dużych potęg",
+        "Badanie podzielności przez analizę reszt",
+        "Znajdowanie okresowości ciągów modulo n"
+      ]
+    },
+    "prime_factorization": {
+      "id": "prime_factorization",
+      "name": "Rozkład na czynniki pierwsze",
+      "category": "number_theory",
+      "description": "Wykorzystanie rozkładu liczb na czynniki pierwsze do analizy ich własności. Obejmuje znajdowanie NWD, NWW oraz badanie struktury dzielników.",
+      "examples": [
+        "Określanie liczby dzielników",
+        "Badanie kiedy wyrażenie jest potęgą doskonałą",
+        "Analiza iloczynów i sum przez pryzmat czynników pierwszych"
+      ]
+    },
+    "divisibility_arguments": {
+      "id": "divisibility_arguments",
+      "name": "Argumenty podzielności",
+      "category": "number_theory",
+      "description": "Dowodzenie warunków podzielności i wykorzystanie własności dzielników. Obejmuje analizę NWD, NWW oraz własności liczb pierwszych.",
+      "examples": [
+        "Dowodzenie że wyrażenie jest podzielne przez daną liczbę",
+        "Wykorzystanie własności NWD do pokazania równości",
+        "Analiza podzielności iloczynów i sum"
+      ]
+    },
+    "diophantine_equations": {
+      "id": "diophantine_equations",
+      "name": "Równania diofantyczne",
+      "category": "number_theory",
+      "description": "Rozwiązywanie równań w liczbach całkowitych. Obejmuje równania liniowe, kwadratowe oraz wykorzystanie faktoryzacji do znajdowania rozwiązań.",
+      "examples": [
+        "Znajdowanie wszystkich par (x,y) spełniających ax + by = c",
+        "Analiza równań typu x² - y² = n",
+        "Rozwiązywanie układów równań w liczbach całkowitych"
+      ]
+    },
+    "digit_manipulation": {
+      "id": "digit_manipulation",
+      "name": "Manipulacje cyfrowe",
+      "category": "number_theory",
+      "description": "Analiza liczb przez pryzmat ich cyfr. Obejmuje sumy cyfr, zapis pozycyjny oraz własności liczb związane z ich reprezentacją dziesiętną.",
+      "examples": [
+        "Wykorzystanie faktu że suma cyfr ≡ liczba (mod 9)",
+        "Analiza liczb przez ich zapis dziesiętny",
+        "Badanie własności liczb po przestawieniu cyfr"
+      ]
+    },
+    "primality_testing": {
+      "id": "primality_testing",
+      "name": "Badanie pierwszości",
+      "category": "number_theory",
+      "description": "Określanie kiedy wyrażenia algebraiczne są liczbami pierwszymi. Obejmuje testowanie małych przypadków, faktoryzację oraz wykorzystanie własności modularnych.",
+      "examples": [
+        "Sprawdzanie dla jakich n wyrażenie f(n) jest pierwsze",
+        "Wykorzystanie podzielności do eliminacji kandydatów",
+        "Analiza wyrażeń typu aⁿ ± b"
+      ]
+    },
+    "symmetric_systems": {
+      "id": "symmetric_systems",
+      "name": "Układy symetryczne",
+      "category": "algebra",
+      "description": "Rozwiązywanie układów równań o strukturze symetrycznej lub cyklicznej. Obejmuje wykorzystanie symetrii, podstawienia oraz analizę przypadków.",
+      "examples": [
+        "Układy typu x + y = a, xy = b",
+        "Równania cykliczne z trzema lub więcej zmiennymi",
+        "Wykorzystanie podstawień symetrycznych"
+      ]
+    },
+    "nested_radicals": {
+      "id": "nested_radicals",
+      "name": "Zagnieżdżone pierwiastki",
+      "category": "algebra",
+      "description": "Upraszczanie wyrażeń zawierających pierwiastki pod pierwiastkami. Obejmuje technikę denestingu oraz rozpoznawanie wzorców.",
+      "examples": [
+        "Sprowadzanie √(a ± √b) do postaci √x ± √y",
+        "Upraszczanie sum zagnieżdżonych pierwiastków",
+        "Rozpoznawanie ukrytych tożsamości"
+      ]
+    },
+    "algebraic_identities": {
+      "id": "algebraic_identities",
+      "name": "Tożsamości algebraiczne",
+      "category": "algebra",
+      "description": "Wykorzystanie tożsamości algebraicznych do przekształcania wyrażeń. Obejmuje faktoryzację, uzupełnianie do kwadratu, wzory skróconego mnożenia.",
+      "examples": [
+        "Faktoryzacja a³ + b³ = (a+b)(a² - ab + b²)",
+        "Tożsamość Sophie Germain: a⁴ + 4b⁴",
+        "Uzupełnianie do pełnego kwadratu"
+      ]
+    },
+    "inequality_manipulation": {
+      "id": "inequality_manipulation",
+      "name": "Nierówności",
+      "category": "algebra",
+      "description": "Dowodzenie i wykorzystywanie nierówności. Obejmuje nierówności AM-GM, Cauchy'ego-Schwarza oraz techniki estymacji.",
+      "examples": [
+        "Stosowanie AM-GM: (a+b)/2 ≥ √(ab)",
+        "Nierówność Cauchy'ego-Schwarza",
+        "Szacowanie wyrażeń przez prostsze ograniczenia"
+      ]
+    },
+    "polynomial_analysis": {
+      "id": "polynomial_analysis",
+      "name": "Analiza wielomianów",
+      "category": "algebra",
+      "description": "Badanie własności wielomianów, ich pierwiastków i współczynników. Obejmuje wzory Viète'a, faktoryzację i analizę reszt.",
+      "examples": [
+        "Wykorzystanie związków między pierwiastkami a współczynnikami",
+        "Faktoryzacja wielomianów",
+        "Analiza wielomianów modulo liczba pierwsza"
+      ]
+    },
+    "absolute_value": {
+      "id": "absolute_value",
+      "name": "Wartość bezwzględna",
+      "category": "algebra",
+      "description": "Rozwiązywanie równań i nierówności z wartością bezwzględną. Obejmuje analizę przypadków i interpretację geometryczną.",
+      "examples": [
+        "Rozwiązywanie równań z zagnieżdżonymi wartościami bezwzględnymi",
+        "Analiza przypadków ze względu na znak",
+        "Interpretacja |a-b| jako odległości"
+      ]
+    },
+    "angle_chasing": {
+      "id": "angle_chasing",
+      "name": "Ściganie kątów",
+      "category": "geometry",
+      "description": "Systematyczne wyznaczanie miar kątów w figurach geometrycznych. Obejmuje wykorzystanie sumy kątów, kątów wpisanych i własności figur.",
+      "examples": [
+        "Obliczanie kątów w trójkątach i czworokątach",
+        "Wykorzystanie kątów wpisanych i środkowych",
+        "Analiza kątów przy równoległych prostych"
+      ]
+    },
+    "circle_theorems": {
+      "id": "circle_theorems",
+      "name": "Twierdzenia o okręgach",
+      "category": "geometry",
+      "description": "Wykorzystanie własności okręgów, kątów wpisanych, stycznych i siecznych. Obejmuje czworokąty wpisane i opisane.",
+      "examples": [
+        "Twierdzenie o kącie wpisanym",
+        "Własności stycznych do okręgu",
+        "Czworokąty wpisane w okrąg (suma przeciwnych kątów = 180°)"
+      ]
+    },
+    "tangential_quadrilateral": {
+      "id": "tangential_quadrilateral",
+      "name": "Czworokąty z okręgiem wpisanym",
+      "category": "geometry",
+      "description": "Własności czworokątów, w które można wpisać okrąg. Obejmuje warunek na sumy przeciwnych boków i własności punktów styczności.",
+      "examples": [
+        "Wykorzystanie faktu a + c = b + d",
+        "Analiza odcinków stycznych z wierzchołków",
+        "Kombinowanie z innymi własnościami czworokątów"
+      ]
+    },
+    "area_methods": {
+      "id": "area_methods",
+      "name": "Metody polowe",
+      "category": "geometry",
+      "description": "Wykorzystanie pól figur do dowodzenia twierdzeń geometrycznych. Obejmuje rozkład na części, porównywanie pól i niezmienniki polowe.",
+      "examples": [
+        "Rozkład figury na trójkąty o znanych polach",
+        "Dowodzenie równości pól przez porównanie",
+        "Wykorzystanie stosunku pól podobnych figur"
+      ]
+    },
+    "coordinate_geometry": {
+      "id": "coordinate_geometry",
+      "name": "Geometria analityczna",
+      "category": "geometry",
+      "description": "Rozwiązywanie problemów geometrycznych metodami algebraicznymi. Obejmuje układy współrzędnych, równania prostych i okręgów, wzory na odległość.",
+      "examples": [
+        "Wprowadzenie układu współrzędnych",
+        "Obliczanie odległości i pól za pomocą współrzędnych",
+        "Równania prostych i okręgów"
+      ]
+    },
+    "spatial_3d": {
+      "id": "spatial_3d",
+      "name": "Geometria przestrzenna",
+      "category": "geometry",
+      "description": "Analiza figur i brył w przestrzeni trójwymiarowej. Obejmuje objętości, przekroje, prostopadłość i równoległość w 3D.",
+      "examples": [
+        "Obliczanie objętości ostrosłupów i graniastosłupów",
+        "Analiza przekrojów brył płaszczyznami",
+        "Badanie prostopadłości prostych i płaszczyzn"
+      ]
+    },
+    "transformations": {
+      "id": "transformations",
+      "name": "Przekształcenia geometryczne",
+      "category": "geometry",
+      "description": "Wykorzystanie symetrii, obrotów, przesunięć i jednokładności. Obejmuje szukanie niezmienników przekształceń.",
+      "examples": [
+        "Symetria osiowa i środkowa",
+        "Obroty o zadany kąt",
+        "Jednokładność i podobieństwo"
+      ]
+    },
+    "triangle_centers": {
+      "id": "triangle_centers",
+      "name": "Punkty szczególne trójkąta",
+      "category": "geometry",
+      "description": "Własności środka ciężkości, ortocentrum, środka okręgu wpisanego i opisanego. Obejmuje związki między tymi punktami.",
+      "examples": [
+        "Własności ortocentrum i wysokości",
+        "Środek okręgu opisanego i wpisanego",
+        "Prosta Eulera"
+      ]
+    },
+    "isosceles_triangle": {
+      "id": "isosceles_triangle",
+      "name": "Trójkąt równoramienny",
+      "category": "geometry",
+      "description": "Wykorzystanie własności trójkątów równoramiennych i równobocznych. Obejmuje związki między bokami i kątami.",
+      "examples": [
+        "Kąty przy podstawie są równe",
+        "Własności trójkąta równobocznego",
+        "Rozpoznawanie trójkątów równoramiennych z warunków na odcinki"
+      ]
+    },
+    "trapezoid_parallelogram": {
+      "id": "trapezoid_parallelogram",
+      "name": "Trapezy i równoległoboki",
+      "category": "geometry",
+      "description": "Własności trapezów i równoległoboków. Obejmuje przekątne, wysokości, pola i warunki szczególne.",
+      "examples": [
+        "Własności przekątnych równoległoboku",
+        "Linia środkowa trapezu",
+        "Warunki na prostokąt, romb, kwadrat"
+      ]
+    },
+    "pythagorean_theorem": {
+      "id": "pythagorean_theorem",
+      "name": "Twierdzenie Pitagorasa",
+      "category": "geometry",
+      "description": "Stosowanie twierdzenia Pitagorasa i jego uogólnień. Obejmuje trójki pitagorejskie i twierdzenie cosinusów.",
+      "examples": [
+        "Obliczanie długości w trójkątach prostokątnych",
+        "Trójki pitagorejskie",
+        "Twierdzenie cosinusów jako uogólnienie"
+      ]
+    },
+    "pigeonhole": {
+      "id": "pigeonhole",
+      "name": "Zasada szufladkowa",
+      "category": "combinatorics",
+      "description": "Zasada Dirichleta - jeśli n+1 obiektów umieszczamy w n szufladkach, to co najmniej jedna szufladka zawiera więcej niż jeden obiekt.",
+      "examples": [
+        "Dowodzenie istnienia powtórzeń",
+        "Znajdowanie elementów o tej samej własności",
+        "Kombinowanie z argumentami modulo"
+      ]
+    },
+    "parity_arguments": {
+      "id": "parity_arguments",
+      "name": "Argumenty parzystości",
+      "category": "combinatorics",
+      "description": "Wykorzystanie parzystości i nieparzystości do dowodzenia twierdzeń. Obejmuje analizę sum, iloczynów i zmian parzystości.",
+      "examples": [
+        "Dowodzenie niemożliwości przez analizę parzystości",
+        "Śledzenie zmian parzystości w procesach",
+        "Kolorowanie i parzystość"
+      ]
+    },
+    "invariants": {
+      "id": "invariants",
+      "name": "Niezmienniki",
+      "category": "combinatorics",
+      "description": "Znajdowanie wielkości, które nie zmieniają się podczas dozwolonych operacji. Obejmuje niezmienniki i monowarianty.",
+      "examples": [
+        "Pokazanie że pewna wielkość pozostaje stała",
+        "Monowarianty - wielkości tylko rosnące lub malejące",
+        "Niezmienniki kolorowania"
+      ]
+    },
+    "graph_theory": {
+      "id": "graph_theory",
+      "name": "Teoria grafów",
+      "category": "combinatorics",
+      "description": "Wykorzystanie grafów do modelowania problemów kombinatorycznych. Obejmuje stopnie wierzchołków, kolorowania, cykle i drzewa.",
+      "examples": [
+        "Lemat o uściskach dłoni (suma stopni parzysta)",
+        "Kolorowanie grafów",
+        "Znajdowanie cykli i ścieżek"
+      ]
+    },
+    "counting_techniques": {
+      "id": "counting_techniques",
+      "name": "Techniki zliczania",
+      "category": "combinatorics",
+      "description": "Systematyczne zliczanie obiektów kombinatorycznych. Obejmuje permutacje, kombinacje, zasadę włączeń-wyłączeń.",
+      "examples": [
+        "Zliczanie permutacji i kombinacji",
+        "Zasada włączeń-wyłączeń",
+        "Zliczanie przez bijekcje"
+      ]
+    },
+    "extremal_principle": {
+      "id": "extremal_principle",
+      "name": "Zasada ekstremalna",
+      "category": "combinatorics",
+      "description": "Rozpatrywanie elementów ekstremalnych (największych, najmniejszych) w celu uzyskania sprzeczności lub konstrukcji.",
+      "examples": [
+        "Rozpatrywanie największego/najmniejszego elementu",
+        "Dowody przez minimum/maksimum",
+        "Konstrukcje optymalne"
+      ]
+    },
+    "case_analysis": {
+      "id": "case_analysis",
+      "name": "Analiza przypadków",
+      "category": "logic",
+      "description": "Systematyczne rozpatrywanie wszystkich możliwych przypadków. Obejmuje podział na przypadki i wyczerpujące sprawdzenie.",
+      "examples": [
+        "Podział ze względu na znak lub parzystość",
+        "Rozpatrywanie wszystkich możliwych konfiguracji",
+        "Systematyczne testowanie małych przypadków"
+      ]
+    },
+    "contradiction": {
+      "id": "contradiction",
+      "name": "Dowód nie wprost",
+      "category": "logic",
+      "description": "Dowodzenie przez założenie przeciwnej tezy i wyprowadzenie sprzeczności. Obejmuje dowody niemożliwości.",
+      "examples": [
+        "Założenie że teza jest fałszywa",
+        "Wyprowadzenie sprzeczności z założeniami",
+        "Dowody że coś nie istnieje"
+      ]
+    },
+    "constructive_proof": {
+      "id": "constructive_proof",
+      "name": "Dowód konstruktywny",
+      "category": "logic",
+      "description": "Dowodzenie istnienia przez jawną konstrukcję przykładu. Obejmuje budowanie rozwiązań i optymalizację.",
+      "examples": [
+        "Konstrukcja obiektu spełniającego warunki",
+        "Znajdowanie optymalnych przykładów",
+        "Algorytmiczne podejście do istnienia"
+      ]
+    },
+    "induction": {
+      "id": "induction",
+      "name": "Indukcja matematyczna",
+      "category": "logic",
+      "description": "Dowodzenie twierdzeń dla wszystkich liczb naturalnych przez indukcję. Obejmuje indukcję zwykłą, zupełną i pozaskończoną.",
+      "examples": [
+        "Baza i krok indukcyjny",
+        "Indukcja zupełna (silna)",
+        "Indukcja po wielu parametrach"
+      ]
+    },
+    "double_counting": {
+      "id": "double_counting",
+      "name": "Podwójne zliczanie",
+      "category": "logic",
+      "description": "Zliczanie tego samego zbioru na dwa sposoby i porównywanie wyników. Podstawowa technika kombinatoryczna.",
+      "examples": [
+        "Zliczanie par (element, zbiór zawierający element)",
+        "Dowody tożsamości kombinatorycznych",
+        "Lemat o uściskach dłoni"
+      ]
+    },
+    "weighing_problems": {
+      "id": "weighing_problems",
+      "name": "Problemy ważenia",
+      "category": "logic",
+      "description": "Strategie identyfikacji fałszywych monet lub określania wag przy ograniczonej liczbie ważeń.",
+      "examples": [
+        "Znajdowanie fałszywej monety",
+        "Optymalizacja liczby ważeń",
+        "Strategie dla wagi szalkowej i elektronicznej"
+      ]
+    },
+    "polyhedra": {
+      "id": "polyhedra",
+      "name": "Wielościany",
+      "category": "geometry",
+      "description": "Własności wielościanów, wzór Eulera V-E+F=2, zliczanie wierzchołków, krawędzi i ścian.",
+      "examples": [
+        "Stosowanie wzoru Eulera",
+        "Zliczanie elementów wielościanów",
+        "Wielościany foremne i półforemne"
+      ]
+    },
+    "tiling": {
+      "id": "tiling",
+      "name": "Pokrycia i parkietaże",
+      "category": "combinatorics",
+      "description": "Problemy pokrywania figur mniejszymi elementami. Obejmuje argumenty parzystości i kolorowania.",
+      "examples": [
+        "Pokrywanie szachownicy klockami domino",
+        "Argumenty kolorowania w pokryciach",
+        "Niemożliwość pewnych pokryć"
+      ]
+    },
+    "sequences": {
+      "id": "sequences",
+      "name": "Ciągi liczbowe",
+      "category": "algebra",
+      "description": "Analiza ciągów arytmetycznych, geometrycznych i rekurencyjnych. Obejmuje sumy częściowe i własności graniczne.",
+      "examples": [
+        "Sumy ciągów arytmetycznych i geometrycznych",
+        "Ciągi rekurencyjne",
+        "Szeregi teleskopowe"
+      ]
+    },
+    "telescoping": {
+      "id": "telescoping",
+      "name": "Sumowanie teleskopowe",
+      "category": "algebra",
+      "description": "Przekształcanie sum w postać teleskopową, gdzie większość wyrazów się redukuje.",
+      "examples": [
+        "Rozkład na ułamki proste",
+        "Sumy różnic kolejnych wyrazów",
+        "Iloczyny teleskopowe"
+      ]
+    }
+  }
+}
