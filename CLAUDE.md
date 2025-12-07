@@ -32,8 +32,8 @@ app/
 ├── main.py          # FastAPI routes, image upload/processing, PDF serving
 ├── config.py        # Settings via pydantic-settings, all paths defined here
 ├── auth.py          # Cookie-based auth with derived session tokens
-├── storage.py       # JSON-based storage for tasks index and submissions
-├── models.py        # Pydantic models (TaskInfo, Submission, etc.)
+├── storage.py       # Task loading (dir scan + LRU cache), submissions storage
+├── models.py        # Pydantic models (TaskInfo, TaskPdf, Submission, etc.)
 └── ai/
     ├── protocol.py  # AIProvider Protocol defining analyze_solution interface
     ├── factory.py   # Provider factory based on AI_PROVIDER setting
@@ -44,7 +44,7 @@ app/
 
 ### Key Data Flows
 
-1. **Task Loading**: `tasks_index.json` maps year/etap to PDF files in `tasks/` directory. Task content stored in `data/tasks/` with year-based files (e.g., `2024.json`) and a lightweight `index.json` for metadata. This structure enables efficient editing - only ~4KB per year vs 96KB monolithic file.
+1. **Task Loading**: Per-task JSON files at `data/tasks/{year}/{etap}/task_{num}.json`. Each file contains task metadata (title, content), PDF paths, and extensibility fields (difficulty, categories, hints). All ~247 task files are scanned on startup and cached in memory.
 
 2. **Submission Flow**:
    - Images uploaded to `data/uploads/{year}/{etap}/{task_num}/`
