@@ -23,7 +23,7 @@
     <a href="/task/{{ year }}/{{ etap }}/{{ task.number }}" class="task-card {% if not task.has_content %}task-unavailable{% endif %}">
         <div class="task-header">
             <span class="task-number">Zadanie {{ task.number }}</span>
-            {% if task.submission_count > 0 %}
+            {% if is_authenticated and task.submission_count > 0 %}
             <span class="task-badge">{{ task.submission_count }} {% if task.submission_count == 1 %}próba{% elif task.submission_count < 5 %}próby{% else %}prób{% endif %}</span>
             {% endif %}
         </div>
@@ -43,6 +43,7 @@
             {% endfor %}
             {% endif %}
         </div>
+        {% if is_authenticated %}
         <div class="task-stats">
             {% if task.submission_count > 0 %}
             <span class="stat">
@@ -53,6 +54,7 @@
             <span class="stat stat-empty">Brak prób</span>
             {% endif %}
         </div>
+        {% endif %}
     </a>
     {% endfor %}
 </div>

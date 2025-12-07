@@ -89,7 +89,7 @@ async def login(
 @app.get("/logout")
 async def logout():
     """Log out user."""
-    response = RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+    response = RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
     response.delete_cookie(AUTH_COOKIE_NAME)
     return response
 
@@ -99,90 +99,85 @@ async def logout():
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    """Redirect to years or login."""
-    if verify_auth(request):
-        return RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
-    return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+    """Redirect to years page."""
+    return RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
 
 
 @app.get("/years", response_class=HTMLResponse)
 async def years_page(request: Request):
-    """Display available years."""
-    redirect = require_auth_redirect(request)
-    if redirect:
-        return redirect
-
+    """Display available years (public)."""
     years = get_available_years()
+    is_authenticated = verify_auth(request)
 
     return templates.TemplateResponse(
         "index.html",
-        {"request": request, "years": years},
+        {"request": request, "years": years, "is_authenticated": is_authenticated},
     )
 
 
 @app.get("/years/{year}", response_class=HTMLResponse)
 async def year_detail(request: Request, year: str):
-    """Display etaps for a year."""
-    redirect = require_auth_redirect(request)
-    if redirect:
-        return redirect
-
+    """Display etaps for a year (public)."""
     etaps = get_etaps_for_year(year)
     if not etaps:
         raise HTTPException(status_code=404, detail="Rok nie znaleziony")
 
+    is_authenticated = verify_auth(request)
+
     return templates.TemplateResponse(
         "year.html",
-        {"request": request, "year": year, "etaps": etaps},
+        {"request": request, "year": year, "etaps": etaps, "is_authenticated": is_authenticated},
     )
 
 
 @app.get("/years/{year}/{etap}", response_class=HTMLResponse)
 async def etap_detail(request: Request, year: str, etap: str):
-    """Display tasks for a year/etap with stats."""
-    redirect = require_auth_redirect(request)
-    if redirect:
-        return redirect
-
+    """Display tasks for a year/etap (public). Stats shown only to authenticated users."""
     etap_tasks = get_tasks_for_etap(year, etap)
     if not etap_tasks:
         raise HTTPException(status_code=404, detail="Etap nie znaleziony")
 
-    # Build task list with stats
+    is_authenticated = verify_auth(request)
+
+    # Build task list - stats only for authenticated users
     tasks = []
     for task_info in etap_tasks:
-        stats = get_task_stats(year, etap, task_info.number)
-        tasks.append(
-            {
-                "number": task_info.number,
-                "title": task_info.title,
-                "has_content": True,
-                "submission_count": stats.submission_count,
-                "highest_score": stats.highest_score,
-                "difficulty": task_info.difficulty,
-                "categories": task_info.categories,
-            }
-        )
+        task_data = {
+            "number": task_info.number,
+            "title": task_info.title,
+            "has_content": True,
+            "difficulty": task_info.difficulty,
+            "categories": task_info.categories,
+            "submission_count": 0,
+            "highest_score": None,
+        }
+        if is_authenticated:
+            stats = get_task_stats(year, etap, task_info.number)
+            task_data["submission_count"] = stats.submission_count
+            task_data["highest_score"] = stats.highest_score
+        tasks.append(task_data)
 
     return templates.TemplateResponse(
         "etap.html",
-        {"request": request, "year": year, "etap": etap, "tasks": tasks},
+        {"request": request, "year": year, "etap": etap, "tasks": tasks, "is_authenticated": is_authenticated},
     )
 
 
 @app.get("/task/{year}/{etap}/{num}", response_class=HTMLResponse)
 async def task_detail(request: Request, year: str, etap: str, num: int):
-    """Display task detail with submission form."""
-    redirect = require_auth_redirect(request)
-    if redirect:
-        return redirect
-
+    """Display task detail (public). Submission form, stats, and history only for authenticated users."""
     task = get_task(year, etap, num)
     if not task:
         raise HTTPException(status_code=404, detail="Zadanie nie znalezione")
 
-    stats = get_task_stats(year, etap, num)
-    submissions = load_submissions(year, etap, num)
+    is_authenticated = verify_auth(request)
+
+    # Stats and submissions only for authenticated users
+    stats = None
+    submissions = []
+    if is_authenticated:
+        stats = get_task_stats(year, etap, num)
+        submissions = load_submissions(year, etap, num)[:10]
 
     # Get PDF paths for links
     task_pdf = get_task_pdf_path(year, etap)
@@ -200,8 +195,9 @@ async def task_detail(request: Request, year: str, etap: str, num: int):
             "request": request,
             "task": task,
             "stats": stats,
-            "submissions": submissions[:10],  # Last 10 submissions
+            "submissions": submissions,
             "pdf_links": pdf_links,
+            "is_authenticated": is_authenticated,
         },
     )
 
@@ -384,12 +380,12 @@ async def submit_solution(
             feedback=f"Nieoczekiwany błąd: {str(e)}",
         )
 
-    # Save submission
+    # Save submission (store image paths relative to uploads_dir for clean URLs)
     submission = create_submission(
         year=year,
         etap=etap,
         task_number=num,
-        images=[str(p.relative_to(settings.base_dir)) for p in saved_paths],
+        images=[str(p.relative_to(settings.uploads_dir)) for p in saved_paths],
         score=result.score,
         feedback=result.feedback,
     )
@@ -406,7 +402,7 @@ async def submit_solution(
 
 @app.get("/task/{year}/{etap}/{num}/history", response_class=HTMLResponse)
 async def task_history(request: Request, year: str, etap: str, num: int):
-    """Display submission history for a task."""
+    """Display submission history for a task (requires auth)."""
     redirect = require_auth_redirect(request)
     if redirect:
         return redirect
@@ -423,6 +419,7 @@ async def task_history(request: Request, year: str, etap: str, num: int):
             "etap": etap,
             "num": num,
             "submissions": submissions,
+            "is_authenticated": True,  # Always true since route requires auth
         },
     )
 
@@ -432,11 +429,7 @@ async def task_history(request: Request, year: str, etap: str, num: int):
 
 @app.get("/pdf/{year}/{etap}/{filename}")
 async def serve_pdf(request: Request, year: str, etap: str, filename: str):
-    """Serve task/solution PDF files (with auth check)."""
-    redirect = require_auth_redirect(request)
-    if redirect:
-        raise HTTPException(status_code=401, detail="Unauthorized")
-
+    """Serve task/solution PDF files (public)."""
     # Validate parameters
     if not _validate_path_params(year, etap):
         raise HTTPException(status_code=400, detail="Invalid parameters")
