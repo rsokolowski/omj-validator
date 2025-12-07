@@ -21,6 +21,15 @@ pip install -r requirements.txt
 
 # Download task PDFs from omj.edu.pl
 python download_tasks.py
+
+# Update task content with LaTeX from PDFs (uses Claude CLI)
+python fix_latex_content.py 2024 etap1        # Specific year/etap
+python fix_latex_content.py --all             # All tasks
+
+# Generate/update task metadata (difficulty, categories, hints)
+python populate_metadata.py                    # Uses Claude CLI
+python populate_metadata.py --year 2024 --force
+python populate_metadata_gemini.py             # Alternative using Gemini API
 ```
 
 ## Architecture
@@ -44,7 +53,22 @@ app/
 
 ### Key Data Flows
 
-1. **Task Loading**: Per-task JSON files at `data/tasks/{year}/{etap}/task_{num}.json`. Each file contains task metadata (title, content), PDF paths, and extensibility fields (difficulty, categories, hints). All ~247 task files are scanned on startup and cached in memory.
+1. **Task Loading**: Per-task JSON files at `data/tasks/{year}/{etap}/task_{num}.json`. All 247 task files are scanned on startup and cached in memory.
+
+   Task JSON structure:
+   ```json
+   {
+     "number": 1,
+     "title": "Task title with $LaTeX$",
+     "content": "Full task content with $LaTeX$ notation",
+     "pdf": {"tasks": "...", "solutions": "...", "statistics": "..."},
+     "difficulty": 3,           // 1-5 scale
+     "categories": ["geometria", "algebra"],  // from predefined set
+     "hints": ["hint1", "hint2", "hint3", "hint4"]  // 4 progressive hints
+   }
+   ```
+
+   Valid categories: `algebra`, `geometria`, `teoria_liczb`, `kombinatoryka`, `logika`, `arytmetyka`
 
 2. **Submission Flow**:
    - Images uploaded to `data/uploads/{year}/{etap}/{task_num}/`
@@ -52,6 +76,8 @@ app/
    - Results stored as JSON in `data/submissions/{year}/{etap}/{task_num}/`
 
 3. **AI Integration**: Uses Gemini File API to upload PDFs and images, then generates analysis. Prompt in `prompts/gemini_prompt.txt` defines OMJ scoring criteria (0, 2, 5, 6 points).
+
+4. **LaTeX Rendering**: Frontend uses KaTeX to render mathematical notation. Elements with `.math-content` class are auto-rendered. Task titles and content support inline math (`$...$`) and display math (`$$...$$`).
 
 ### Configuration
 
@@ -64,6 +90,15 @@ Environment variables (`.env`):
 ### Templates
 
 Jinja2 templates in `templates/` with `base.html` layout. Polish language throughout the UI.
+
+Key templates:
+- `base.html` - includes KaTeX CSS/JS for math rendering
+- `task.html` - task detail with hints (progressive reveal), submission form
+- `etap.html` - task list with difficulty stars and category badges
+
+Frontend assets in `static/`:
+- `app.js` - KaTeX auto-rendering for `.math-content` elements, hint toggle, file upload
+- `style.css` - responsive design, difficulty/category badges, hint styling
 
 ## Deployment
 
