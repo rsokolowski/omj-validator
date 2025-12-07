@@ -7,7 +7,15 @@
     "solutions": "tasks/2024/etap1/20omj-1etap-r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "algebra",
+    "logika"
+  ],
+  "hints": [
+    "Wyobraź sobie liczby $a$, $b$, $c$ jako punkty na osi liczbowej. Co oznaczają wtedy wartości $|b-c|$, $|c-a|$, $|a-b|$?",
+    "Zastanów się, jaki związek zachodzi między sumą $|b-c| + |c-a| + |a-b|$ a odległościami między punktami. Czy zawsze musimy \"przejść\" tę samą drogę dwukrotnie?",
+    "Uporządkuj liczby rosnąco i oznacz je np. jako $x \\leq y \\leq z$. Zapisz każdą z trzech różnic przez $x$, $y$, $z$ i zbadaj, co daje ich suma.",
+    "Zauważ, że jedna z wartości bezwzględnych równa się sumie dwóch pozostałych. Sprawdź, czy warunki zadania mogą być wtedy jednocześnie spełnione."
+  ]
 }

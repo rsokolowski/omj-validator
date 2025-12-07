@@ -21,12 +21,26 @@
         <div class="task-meta">
             <span class="meta-item">{{ task.year }}</span>
             <span class="meta-item">{% if task.etap == "etap2" %}Etap II{% else %}{{ task.etap }}{% endif %}</span>
+            {% if task.difficulty %}
+            <span class="meta-item difficulty difficulty-{{ task.difficulty }}"
+                  data-tooltip="{{ {1: 'Bardzo łatwe - podstawowe zastosowanie wzorów', 2: 'Łatwe - wymaga prostego wglądu', 3: 'Średnie - kilka kroków rozumowania', 4: 'Trudne - wymaga znacznego wglądu', 5: 'Bardzo trudne - kreatywne podejście'}[task.difficulty] }}">
+                {% for i in range(task.difficulty) %}★{% endfor %}{% for i in range(5 - task.difficulty) %}☆{% endfor %}
+            </span>
+            {% endif %}
+            {% if task.categories %}
+            {% for cat in task.categories %}
+            <span class="meta-item category-badge category-{{ cat }}"
+                  data-tooltip="{{ {'algebra': 'Układy równań, tożsamości algebraiczne, nierówności', 'geometria': 'Geometria płaska: trójkąty, czworokąty, okręgi', 'teoria_liczb': 'Podzielność, liczby pierwsze, cyfry, równania diofantyczne', 'kombinatoryka': 'Zliczanie, dowody istnienia, zasada szufladkowa', 'logika': 'Ważenie, optymalizacja, teoria gier, strategia', 'arytmetyka': 'Średnie, stosunki, proste obliczenia'}[cat] }}">
+                {{ {'algebra': 'Algebra', 'geometria': 'Geometria', 'teoria_liczb': 'Teoria liczb', 'kombinatoryka': 'Kombinatoryka', 'logika': 'Logika', 'arytmetyka': 'Arytmetyka'}[cat] }}
+            </span>
+            {% endfor %}
+            {% endif %}
         </div>
     </div>
 
     <div class="task-content-box">
         <h2>Treść zadania</h2>
-        <div class="task-content">{{ task.content | nl2br_safe }}</div>
+        <div class="task-content math-content">{{ task.content | nl2br_safe }}</div>
         {% if pdf_links %}
         <div class="pdf-links">
             {% if pdf_links.tasks %}
@@ -42,6 +56,29 @@
         </div>
         {% endif %}
     </div>
+
+    {% if task.hints and task.hints|length > 0 %}
+    <div class="hints-section">
+        <div class="hints-header">
+            <h2>Wskazówki</h2>
+            <span class="hints-info">Kliknij, aby odsłonić kolejne wskazówki</span>
+        </div>
+        <div class="hints-list">
+            {% set hint_labels = ['Zrozumienie', 'Strategia', 'Kierunek', 'Wskazówka'] %}
+            {% set hint_icons = ['💡', '🎯', '🧭', '🔑'] %}
+            {% for hint in task.hints %}
+            <div class="hint-item" data-hint-index="{{ loop.index0 }}">
+                <button class="hint-toggle" onclick="toggleHint(this)">
+                    <span class="hint-icon">{{ hint_icons[loop.index0] }}</span>
+                    <span class="hint-label">{{ hint_labels[loop.index0] }}</span>
+                    <span class="hint-chevron">▶</span>
+                </button>
+                <div class="hint-content math-content">{{ hint }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 
     <div class="submit-section">
         <h2>Prześlij rozwiązanie</h2>

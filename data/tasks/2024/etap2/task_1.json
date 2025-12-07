@@ -7,7 +7,14 @@
     "solutions": "tasks/2024/etap2/20omj-2r.pdf",
     "statistics": "tasks/2024/etap2/20omj-2etap-st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny diagram prostokąta $ABCD$ z punktem $E$ na boku $CD$. Oznacz kąty $\\angle DAE = \\alpha$, $\\angle EBC = \\beta$ i $\\angle ABE = \\gamma$. Jakie inne kąty możesz wyrazić przez te wielkości?",
+    "Wykorzystaj fakt, że w prostokącie kąty przy wierzchołkach wynoszą $90°$. Rozważ sumę kątów w trójkątach $ABE$ i $BCE$. Spróbuj wyrazić warunek zadania jako zależność między kątami przy wierzchołku $B$.",
+    "Zwróć uwagę, że $\\angle ABE + \\angle EBC = 90°$ (kąt prosty w wierzchołku $B$). Podstaw warunek z zadania do tej równości. Co możesz powiedzieć o kącie $\\angle DAE$ w relacji do innych kątów?",
+    "Z warunku zadania i faktu, że $\\angle ABE + \\angle EBC = 90°$, wyprowadź związek między $\\angle DAE$ a $\\angle ABE$. Następnie porównaj kąty $\\angle DAE$ i $\\angle AEB$ w trójkącie $ADE$, aby wywnioskować relację między bokami prostokąta."
+  ]
 }

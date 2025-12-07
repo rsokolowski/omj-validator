@@ -7,7 +7,14 @@
     "solutions": "tasks/2024/etap1/20omj-1etap-r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, jakie reszty z dzielenia przez 3 mogą dawać liczby pierwsze większe od 3. Czy liczba pierwsza może być podzielna przez 3?",
+    "Rozważ wszystkie możliwe reszty z dzielenia przez 3 dla liczb $a$, $b$, $c$. Pamiętaj, że suma reszt modulo 3 określa resztę sumy.",
+    "Przeanalizuj, jaką resztę z dzielenia przez 3 daje każda z pięciu liczb pierwszych. Zwróć szczególną uwagę na to, że liczba 3 jest jedyną liczbą pierwszą podzielną przez 3.",
+    "Załóż, że $b$ nie jest podzielne przez 3 (czyli $b \\equiv 1$ lub $b \\equiv 2 \\pmod{3}$). Sprawdź, czy przy każdym wyborze reszt dla $a$ i $c$ wszystkie pięć sum może dawać reszty różne od 0 modulo 3."
+  ]
 }

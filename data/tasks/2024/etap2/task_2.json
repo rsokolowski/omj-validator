@@ -7,7 +7,16 @@
     "solutions": "tasks/2024/etap2/20omj-2r.pdf",
     "statistics": "tasks/2024/etap2/20omj-2etap-st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika",
+    "arytmetyka"
+  ],
+  "hints": [
+    "Zastanów się, ile różnych wartości może przyjąć liczba niebieskich pól w kolumnie (od 0 do 5). Skoro w 5 kolumnach muszą być różne liczby niebieskich pól, jakie zestawy wartości są możliwe?",
+    "Policz całkowitą liczbę niebieskich pól na dwa sposoby: sumując po kolumnach (gdzie znasz możliwe wartości) oraz wykorzystując informację o wierszach. Niech $r$ oznacza liczbę czerwonych pól w każdym wierszu.",
+    "Zauważ, że suma niebieskich pól we wszystkich kolumnach musi być równa sumie niebieskich pól we wszystkich wierszach. Skoro w każdym wierszu jest $r$ czerwonych pól, ile jest niebieskich? Rozważ jakie sumy $0+1+2+3+4$ oraz $1+2+3+4+5$ są możliwe.",
+    "Sprawdź, które wartości $r \\in \\{0,1,2,3,4,5\\}$ dają liczbę niebieskich pól zgodną z jedną z dwóch możliwych sum po kolumnach. Dla każdego przypadku zweryfikuj, czy da się faktycznie pokolorować tablicę."
+  ]
 }

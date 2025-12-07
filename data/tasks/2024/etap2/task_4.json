@@ -7,7 +7,15 @@
     "solutions": "tasks/2024/etap2/20omj-2r.pdf",
     "statistics": "tasks/2024/etap2/20omj-2etap-st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zastanów się, co się stanie, gdy podniesiesz obie strony równania do sześcianu. Jaką postać przyjmie lewa strona? Rozpisz $(\\sqrt[3]{a} + \\sqrt[3]{b})^3$ korzystając ze wzoru na sześcian sumy.",
+    "Spróbuj podejścia nie wprost: załóż, że takie $a$ i $b$ istnieją, i poszukaj sprzeczności. Zwróć uwagę na to, które wyrażenia w rozwinięciu są wymierne, a które niewymierne.",
+    "Po podniesieniu do sześcianu otrzymasz wyrażenie zawierające $\\sqrt[3]{a^2b}$ i $\\sqrt[3]{ab^2}$. Kiedy suma liczby wymiernej i niewymiernej może być wymierna? Rozważ, co musiałoby być spełnione.",
+    "Zbadaj warunek, przy którym $\\sqrt[3]{ab}$ byłoby wymierne. Jeśli $ab = k^3$ dla pewnego $k$, to podstaw $b = \\frac{k^3}{a}$ i sprawdź, czy równanie może być spełnione dla dodatnich całkowitych $a$, $b$."
+  ]
 }

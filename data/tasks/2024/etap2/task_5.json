@@ -7,7 +7,15 @@
     "solutions": "tasks/2024/etap2/20omj-2r.pdf",
     "statistics": "tasks/2024/etap2/20omj-2etap-st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza, że liczba jest olimpijska. Jak wygląda ciąg operacji prowadzący od 1 do danej liczby olimpijskiej $n$? Spróbuj zapisać to formalnie.",
+    "Jeśli znasz ciąg operacji od 1 do $n$, jak skonstruować ciąg operacji od 1 do $n^2$? Pomyśl o związku między operacjami wykonywanymi na $n$ a operacjami na $n^2$.",
+    "Kluczowa obserwacja: jeśli $n$ zwiększamy o cyfrę jedności $c$, to jak zmienia się $n^2$? Zbadaj, ile razy trzeba wykonać operację na $n^2$, aby uzyskać $(n+c)^2$.",
+    "Rozważ różnicę $(n+c)^2 - n^2 = 2nc + c^2$. Pokaż, że tę różnicę można uzyskać przez odpowiednią liczbę operacji na $n^2$, wykorzystując fakt, że cyfra jedności $n^2$ zależy tylko od cyfry jedności $n$."
+  ]
 }

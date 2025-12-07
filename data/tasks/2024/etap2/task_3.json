@@ -7,7 +7,14 @@
     "solutions": "tasks/2024/etap2/20omj-2r.pdf",
     "statistics": "tasks/2024/etap2/20omj-2etap-st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek trójkąta $ABC$ z zaznaczonymi kątami. Następnie wykonaj kolejno odbicia punktów $A$, $B$ i $C$ względem odpowiednich prostych. Jakie kąty ma trójkąt $ABC$ przy wierzchołkach $A$ i $B$?",
+    "Przypomnij sobie własności symetrii osiowej: odbicie zachowuje odległości i kąty. Zastanów się, jakie odległości w konfiguracji są równe dzięki symetrii (np. $CA' = CA$, $CB' = CB$).",
+    "Zbadaj położenie punktów $A'$ i $B'$. Zwróć uwagę, że punkt $A'$ leży na okręgu o środku $C$ i promieniu $CA$, podobnie $B'$. Jak możesz wykorzystać równość $CA = CB$ oraz miary kątów $\\angle A'CB$ i $\\angle ACB'$?",
+    "Oblicz miary kątów $\\angle A'CB'$ oraz $\\angle ACB'$ i $\\angle BCA'$ korzystając z własności odbić. Następnie wyznacz odległości $CA'$, $CB'$, $CC'$ i sprawdź, czy punkt $C'$ jest równoodległy od $A'$ i $B'$ oraz czy te odległości są równe $A'B'$."
+  ]
 }

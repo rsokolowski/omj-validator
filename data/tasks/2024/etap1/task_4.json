@@ -7,7 +7,15 @@
     "solutions": "tasks/2024/etap1/20omj-1etap-r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Zastanów się, jak muszą być ułożone kamienie, które pozostaną. Jeśli między dwoma kamieniami tego samego koloru nie ma kamienia innego koloru, to co to oznacza dla całego pozostałego ciągu?",
+    "Pozostałe kamienie muszą tworzyć ciąg naprzemiennie zmieniających się kolorów. Poszukaj więc sposobu na wybranie 50 kamieni tworzących taki naprzemienny wzór.",
+    "Rozważ wszystkie możliwe wybory 50 kolejnych pozycji w rzędzie (pozycje 1-50, 2-51, ..., 51-100). Dla każdego takiego wyboru policz, ile czerwonych kamieni jest na pozycjach nieparzystych w tym fragmencie.",
+    "Gdy przesuwamy okno o jedną pozycję, liczba czerwonych kamieni na pozycjach nieparzystych zmienia się co najwyżej o 1. Skorzystaj z tego, że wartości skrajne (dla pierwszego i ostatniego okna) różnią się, więc gdzieś pomiędzy osiągamy wartość 25."
+  ]
 }
