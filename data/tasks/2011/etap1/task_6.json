@@ -23,6 +23,7 @@
   ],
   "skills_gained": [
     "algebraic_identities",
-    "nested_radicals"
+    "nested_radicals",
+    "primality_testing"
   ]
 }

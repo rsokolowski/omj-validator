@@ -21,7 +21,8 @@
     "constructive_proof"
   ],
   "skills_gained": [
-    "contradiction"
+    "contradiction",
+    "pigeonhole"
   ],
   "prerequisites": []
 }

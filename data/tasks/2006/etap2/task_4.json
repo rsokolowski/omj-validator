@@ -18,7 +18,8 @@
   ],
   "skills_required": [
     "modular_arithmetic",
-    "parity_arguments"
+    "parity_arguments",
+    "polynomial_analysis"
   ],
   "skills_gained": [
     "modular_arithmetic"

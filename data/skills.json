@@ -466,17 +466,6 @@
         "Proporcje i skala"
       ]
     },
-    "estimation": {
-      "id": "estimation",
-      "name": "Szacowanie i przybliżenia",
-      "category": "arithmetic",
-      "description": "Przybliżone obliczenia, szacowanie rzędu wielkości i sprawdzanie poprawności wyników.",
-      "examples": [
-        "Szacowanie wartości wyrażeń",
-        "Sprawdzanie rzędu wielkości wyniku",
-        "Przybliżenia w obliczeniach praktycznych"
-      ]
-    },
     "word_problems": {
       "id": "word_problems",
       "name": "Zadania tekstowe",

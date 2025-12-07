@@ -19,7 +19,8 @@
   "prerequisites": [],
   "skills_required": [
     "coordinate_geometry",
-    "transformations"
+    "transformations",
+    "algebraic_identities"
   ],
   "skills_gained": [
     "invariants",

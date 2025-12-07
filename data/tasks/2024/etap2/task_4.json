@@ -22,6 +22,7 @@
     "contradiction"
   ],
   "skills_gained": [
-    "contradiction"
+    "contradiction",
+    "primality_testing"
   ]
 }

@@ -21,7 +21,9 @@
   ],
   "skills_required": [
     "parity_arguments",
-    "case_analysis"
+    "case_analysis",
+    "algebraic_identities",
+    "modular_arithmetic"
   ],
   "skills_gained": [
     "parity_arguments"

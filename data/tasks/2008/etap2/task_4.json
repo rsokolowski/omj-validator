@@ -19,7 +19,8 @@
   "prerequisites": [],
   "skills_required": [
     "graph_theory",
-    "double_counting"
+    "double_counting",
+    "divisibility_arguments"
   ],
   "skills_gained": [
     "graph_theory",
