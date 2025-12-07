@@ -1,13 +1,21 @@
 {
   "number": 5,
-  "title": "Tablica 100×100 z L-tetraminami",
-  "content": "W każde pole kwadratowej tablicy 100×100 wpisano liczbę rzeczywistą. Okazało się, że suma liczb wpisanych w każde cztery pola, które można nakryć L-tetraminem, jest równa 0. Wyznacz sumę liczb wpisanych w pola, które znajdują się na obu przekątnych tablicy.",
+  "title": "Tablica $100 \\times 100$ z L-tetraminami",
+  "content": "W każde pole kwadratowej tablicy $100 \\times 100$ wpisano liczbę rzeczywistą. Okazało się, że suma liczb wpisanych w każde cztery pola, które można nakryć L-tetraminem, jest równa $0$. Wyznacz sumę liczb wpisanych w pola, które znajdują się na obu przekątnych tablicy.\n\n*Uwaga:* L-tetraminem nazywamy figurę składającą się z czterech kwadratów o boku $1$, ułożonych jak na rysunku obok. L-tetramina można obracać i odbijać symetrycznie.",
   "pdf": {
     "tasks": "tasks/2010/etap1/omg06_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza warunek o L-tetraminach dla sąsiednich pól tablicy. Rozważ najpierw małą tablicę, np. $3 \\times 3$, i sprawdź jakie zależności między polami wymusza ten warunek.",
+    "Porównaj sumy dla dwóch różnych L-tetramin, które mają wspólne pola. Czy możesz wywnioskować, że pewne pola muszą mieć równe wartości?",
+    "Spróbuj pokazać, że dowolne dwa sąsiednie pola (mające wspólny bok) muszą zawierać tę samą liczbę. Co to oznacza dla całej tablicy?",
+    "Skoro wszystkie pola tablicy mają tę samą wartość $a$, a suma czterech takich pól w L-tetraminie wynosi $4a = 0$, wyznacz $a$ i oblicz sumę pól na przekątnych."
+  ]
 }

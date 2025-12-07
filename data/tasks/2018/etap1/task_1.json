@@ -1,13 +1,21 @@
 {
   "number": 1,
-  "title": "Cyfra jedności n przy 3n = 999^1000",
-  "content": "Liczbę naturalną n pomnożono przez 3, otrzymując w wyniku liczbę 999^1000. Wyznacz cyfrę jedności liczby n.",
+  "title": "Cyfra jedności $n$ przy $3n = 999^{1000}$",
+  "content": "Liczbę naturalną $n$ pomnożono przez $3$, otrzymując w wyniku liczbę $999^{1000}$. Wyznacz cyfrę jedności liczby $n$.",
   "pdf": {
     "tasks": "tasks/2018/etap1/1etap18.pdf",
     "solutions": "tasks/2018/etap1/1etap18r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "teoria_liczb",
+    "arytmetyka"
+  ],
+  "hints": [
+    "Zastanów się, co tak naprawdę wyznacza cyfrę jedności liczby. Czy musisz znać całą liczbę $999^{1000}$, żeby poznać jej cyfrę jedności?",
+    "Zbadaj cykliczność cyfr jedności kolejnych potęg liczby 999. Jaka jest cyfra jedności liczby $999^1$, $999^2$, $999^3$...?",
+    "Zauważ, że $999 \\equiv -1 \\pmod{10}$. Co to oznacza dla potęg parzystych?",
+    "Skoro znasz już cyfrę jedności liczby $999^{1000}$, znajdź taką cyfrę $c$, że $3c$ daje tę samą cyfrę jedności. Sprawdź kolejno cyfry 0-9."
+  ]
 }

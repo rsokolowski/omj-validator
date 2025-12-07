@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Trójkąt z ∠BAC = 45° i wysokości",
-  "content": "Dany jest trójkąt ostrokątny ABC, w którym ∠BAC = 45°. Wysokości tego trójkąta przecinają się w punkcie H. Wykaż, że |AH| = |BC|.",
+  "title": "Trójkąt z $\\angle BAC = 45°$ i wysokości",
+  "content": "Dany jest trójkąt ostrokątny $ABC$, w którym $\\angle BAC = 45°$. Wysokości tego trójkąta przecinają się w punkcie $H$. Wykaż, że $|AH| = |BC|$.",
   "pdf": {
     "tasks": "tasks/2005/etap2/omg01_2.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek trójkąta ostrokątnego z kątem $45°$ przy $A$. Zaznacz wszystkie trzy wysokości i ich punkt przecięcia $H$. Oznacz też spodki wysokości.",
+    "Rozważ okrąg opisany na trójkącie $ABC$. Jak położenie ortocentrum $H$ związane jest z tym okręgiem? Poszukaj symetrycznego odbicia punktu $H$ względem boku lub środka boku.",
+    "Jeśli $H'$ jest odbiciem punktu $H$ względem boku $BC$, to $H'$ leży na okręgu opisanym. Zastanów się, jaki kąt rozpiąłby łuk $BC$ widziany z punktu $H'$ i porównaj go z kątem $\\angle BAC$.",
+    "Wykorzystaj fakt, że $|AH| = |HH'|/2$ nie jest tu pomocne - zamiast tego zbadaj czworokąt $BHCD$, gdzie $D$ to spodek wysokości z $A$. Jest on wpisany w okrąg o średnicy $BC$. Znajdź związek między $|AH|$ a tym okręgiem."
+  ]
 }

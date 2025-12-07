@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Sześciokąt ABCDEF z kątami 120°",
-  "content": "Miara każdego kąta sześciokąta ABCDEF jest równa 120°. Udowodnij, że symetralne odcinków AB, CD i EF przecinają się w jednym punkcie.",
+  "title": "Tablica $4 \\times 4$ z zerami i jedynkami",
+  "content": "W każde pole tablicy o wymiarach $4 \\times 4$ wpisano liczbę $0$ lub $1$. Następnie obliczono sumy liczb stojących w każdym wierszu, w każdej kolumnie i na obu przekątnych. Wykaż, że co najmniej trzy sumy są jednakowe.",
   "pdf": {
     "tasks": "tasks/2007/etap2/omg03_2.pdf",
     "solutions": "tasks/2007/etap2/omg03_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj sześciokąt $ABCDEF$ z wszystkimi kątami równymi $120°$. Zastanów się, jakie własności ma taki sześciokąt - czy przypomina ci jakąś znaną figurę? Co wiesz o symetralnych odcinków?",
+    "Spróbuj przedłużyć boki sześciokąta. Skoro każdy kąt wewnętrzny ma $120°$, to kąt zewnętrzny wynosi $60°$. Jaką figurę mogą tworzyć przedłużenia boków?",
+    "Zauważ, że przedłużając wszystkie boki sześciokąta równokątnego otrzymujesz trójkąt równoboczny. Zbadaj, jak boki $AB$, $CD$ i $EF$ są położone względem tego trójkąta.",
+    "Pokaż, że odcinki $AB$, $CD$ i $EF$ są równoległe do odpowiednich boków trójkąta równobocznego. Wykorzystaj fakt, że symetralna odcinka równoległego do boku trójkąta równobocznego przechodzi przez jego środek."
+  ]
 }

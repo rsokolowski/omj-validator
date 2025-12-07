@@ -1,13 +1,20 @@
 {
   "number": 7,
   "title": "Prostopadłościan przecięty płaszczyzną",
-  "content": "Kwadrat ABCD o boku 4 jest podstawą prostopadłościanu ABCDA'B'C'D'. Krawędzie boczne AA', BB', CC', DD' tego prostopadłościanu mają długość 7. Punkty K, L, M leżą odpowiednio na odcinkach AA', BB', CC', przy czym AK = 3, BL = 2, CM = 5. Płaszczyzna przechodząca przez punkty K, L, M rozcina prostopadłościan na dwie bryły. Wyznacz objętości obu tych brył.",
+  "content": "Kwadrat $ABCD$ o boku 4 jest podstawą prostopadłościanu $ABCDA'B'C'D'$. Krawędzie boczne $AA'$, $BB'$, $CC'$, $DD'$ tego prostopadłościanu mają długość 7. Punkty $K$, $L$, $M$ leżą odpowiednio na odcinkach $AA'$, $BB'$, $CC'$, przy czym $AK = 3$, $BL = 2$, $CM = 5$. Płaszczyzna przechodząca przez punkty $K$, $L$, $M$ rozcina prostopadłościan na dwie bryły. Wyznacz objętości obu tych brył.",
   "pdf": {
     "tasks": "tasks/2017/etap1/1etap17.pdf",
     "solutions": "tasks/2017/etap1/1etap17r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj prostopadłościan i zaznacz punkty $K$, $L$, $M$ na odpowiednich krawędziach. Zastanów się, które wierzchołki prostopadłościanu znajdą się po której stronie płaszczyzny $KLM$.",
+    "Przedłuż płaszczyznę $KLM$ tak, aby przecięła również krawędź $DD'$ w pewnym punkcie $N$. Wtedy płaszczyzna przetnie prostopadłościan wzdłuż czworokąta $KLMN$. Oblicz, gdzie leży punkt $N$.",
+    "Zauważ, że wysokości punktów $K$, $L$, $M$, $N$ nad podstawą tworzą ciąg arytmetyczny (lub sprawdź, czy $KLMN$ jest równoległobokiem). Jedna z brył to graniastosłup ścięty o podstawie będącej kwadratem.",
+    "Objętość graniastosłupa ściętego o podstawie $S$ można obliczyć jako $S \\cdot h_{śr}$, gdzie $h_{śr}$ to średnia arytmetyczna wysokości w wierzchołkach podstawy. Oblicz średnią z $AK$, $BL$, $CM$, $DN$ i pomnóż przez pole podstawy."
+  ]
 }

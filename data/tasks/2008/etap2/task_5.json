@@ -1,13 +1,21 @@
 {
   "number": 5,
-  "title": "Sześcian z przekrojem pięciokątnym",
-  "content": "Czy można tak przeciąć sześcian płaskim cięciem na dwie bryły o równych objętościach, aby w przekroju otrzymać pięciokąt? Odpowiedź uzasadnij.",
+  "title": "Ostrosłup sześciokątny i przekrój",
+  "content": "Ostrosłup prawidłowy sześciokątny przecięto płaszczyzną, która przecina wszystkie jego krawędzie boczne. W przekroju otrzymano sześciokąt wypukły $ABCDEF$. Wykaż, że proste $AD$, $BE$ i $CF$ przecinają się w jednym punkcie.",
   "pdf": {
     "tasks": "tasks/2008/etap2/omg04_2.pdf",
     "solutions": "tasks/2008/etap2/omg04_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "logika"
+  ],
+  "hints": [
+    "Zastanów się najpierw: kiedy przekrój sześcianu płaszczyzną jest pięciokątem? Ile ścian sześcianu musi przecinać taka płaszczyzna? Spróbuj wyobrazić sobie lub narysować taką sytuację.",
+    "Pomyśl o ciągłej zmianie położenia płaszczyzny tnącej. Jeśli pewna płaszczyzna daje pięciokątny przekrój, czy możesz ją przesuwać tak, by przekrój pozostał pięciokątem, a zmieniał się stosunek objętości części?",
+    "Rozważ konkretną rodzinę płaszczyzn dających pięciokątne przekroje. Co się dzieje z objętościami dwóch części, gdy płaszczyzna przesuwa się od jednego skrajnego położenia do drugiego? Użyj argumentu o wartościach pośrednich.",
+    "Znajdź płaszczyznę przechodzącą przez 5 krawędzi sześcianu (np. przez wierzchołek i punkty na 4 krawędziach). Przesuwając ją równolegle, obserwuj jak zmienia się stosunek objętości - od bardzo małej części do bardzo dużej."
+  ]
 }

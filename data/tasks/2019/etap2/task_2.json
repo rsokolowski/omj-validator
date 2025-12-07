@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Równoległobok ABCD z symetralną AB",
-  "content": "Dany jest równoległobok ABCD, w którym kąt przy wierzchołku A jest ostry. Symetralna odcinka AB przecina odcinek CD w punkcie X. Przekątne tego równoległoboku przecinają się w punkcie E. Udowodnij, że XE = ½AD.",
+  "title": "Równoległobok $ABCD$ z symetralną $AB$",
+  "content": "Dany jest równoległobok $ABCD$, w którym kąt przy wierzchołku $A$ jest ostry. Symetralna odcinka $AB$ przecina odcinek $CD$ w punkcie $X$. Przekątne tego równoległoboku przecinają się w punkcie $E$. Udowodnij, że $XE = \\frac{1}{2}AD$.",
   "pdf": {
     "tasks": "tasks/2019/etap2/2etap20.pdf",
     "solutions": "tasks/2019/etap2/2etap20r.pdf",
     "statistics": "tasks/2019/etap2/2etap20st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek równoległoboka $ABCD$ z symetralną odcinka $AB$. Zaznacz punkt $X$ na $CD$ i punkt $E$ jako przecięcie przekątnych. Jaką szczególną własność ma punkt $X$ leżący na symetralnej?",
+    "Skoro $X$ leży na symetralnej $AB$, to $XA = XB$. Trójkąt $ABX$ jest więc równoramienny. Rozważ, jak wykorzystać własności środkowych trójkąta lub punktu $E$ jako środka równoległoboka.",
+    "Zauważ, że $E$ jest środkiem przekątnej $AC$. Przyjrzyj się trójkątowi $AXC$ - jaki odcinek łączy środek jednego boku ze środkiem innego boku? Jak ma się on do trzeciego boku?",
+    "W trójkącie $AXC$ punkt $E$ jest środkiem $AC$. Znajdź środek odcinka $AX$ (wykorzystaj równoramienność trójkąta $ABX$ i własności równoległoboka). Odcinek łączący środki dwóch boków trójkąta ma długość równą połowie trzeciego boku."
+  ]
 }

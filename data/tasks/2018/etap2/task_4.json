@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Trójkąt ABC z AB = 3·BC",
-  "content": "Dany jest trójkąt ABC, w którym AB = 3·BC. Punkty P i Q leżą na boku AB i spełniają warunek AP = PQ = QB. Punkt M jest środkiem boku AC. Wykaż, że ∠PMQ = 90°.",
+  "title": "Trójkąt $ABC$ z $AB = 3 \\cdot BC$",
+  "content": "Dany jest trójkąt $ABC$, w którym $AB = 3 \\cdot BC$. Punkty $P$ i $Q$ leżą na boku $AB$ i spełniają warunek $AP = PQ = QB$. Punkt $M$ jest środkiem boku $AC$. Wykaż, że $\\angle PMQ = 90^\\circ$.",
   "pdf": {
     "tasks": "tasks/2018/etap2/2etap19.pdf",
     "solutions": "tasks/2018/etap2/2etap19r.pdf",
     "statistics": "tasks/2018/etap2/2etap19st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Wprowadź układ współrzędnych umieszczając jeden wierzchołek w początku układu. Które położenie wierzchołków uprości obliczenia, biorąc pod uwagę warunek $AB = 3 \\cdot BC$?",
+    "Wyznacz współrzędne wszystkich kluczowych punktów: $P$, $Q$ (dzielą $AB$ na trzy równe części) oraz $M$ (środek $AC$). Następnie zastanów się, jak sprawdzić prostopadłość dwóch odcinków.",
+    "Aby wykazać, że $\\angle PMQ = 90°$, sprawdź czy wektory $\\vec{MP}$ i $\\vec{MQ}$ są prostopadłe. Dwa wektory są prostopadłe, gdy suma iloczynów odpowiednich współrzędnych równa się zero.",
+    "Oblicz współrzędne wektorów $\\vec{MP}$ i $\\vec{MQ}$, a następnie sprawdź warunek prostopadłości. Wykorzystaj fakt, że $|AB| = 3 \\cdot |BC|$ przy wyborze konkretnych współrzędnych wierzchołków."
+  ]
 }

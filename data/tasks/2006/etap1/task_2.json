@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Trójkąt ABC z kwadratem APBQ",
-  "content": "Dany jest trójkąt ABC, w którym ∠ACB = 90° oraz AC ≠ BC. Punkty P i Q są takie, że czworokąt APBQ jest kwadratem. Udowodnij, że proste CP i CQ są prostopadłe.",
+  "title": "Trójkąt $ABC$ z kwadratem $APBQ$",
+  "content": "Dany jest trójkąt $ABC$, w którym $\\angle ACB = 90^\\circ$ oraz $AC \\neq BC$. Punkty $P$ i $Q$ są takie, że czworokąt $APBQ$ jest kwadratem. Udowodnij, że proste $CP$ i $CQ$ są prostopadłe.",
   "pdf": {
     "tasks": "tasks/2006/etap1/omg02_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek: trójkąt prostokątny z kątem prostym przy $C$ i kwadrat $APBQ$ zbudowany na przeciwprostokątnej $AB$. Gdzie leżą punkty $P$ i $Q$ względem trójkąta?",
+    "Zastanów się, jak udowodnić prostopadłość dwóch prostych. Jedną z metod jest pokazanie, że kąt $\\angle PCQ = 90°$. Czy możesz wykorzystać okrąg lub własności kątów?",
+    "Zauważ, że punkt $C$ leży na okręgu o średnicy $AB$ (bo $\\angle ACB = 90°$). Jak położone są punkty $P$ i $Q$ względem tego okręgu i jego środka?",
+    "Środek kwadratu $APBQ$ jest jednocześnie środkiem okręgu opisanego na trójkącie $ABC$. Wykorzystaj symetrię kwadratu i własność kąta wpisanego opartego na średnicy, aby zbadać kąt $\\angle PCQ$."
+  ]
 }

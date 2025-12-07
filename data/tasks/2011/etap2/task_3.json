@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Turniej tenisa stołowego n zawodników",
-  "content": "W turnieju tenisa stołowego wzięło udział n zawodników (n ≥ 4). Każdy zawodnik rozegrał dokładnie jeden mecz z każdym innym zawodnikiem, żaden mecz nie zakończył się remisem. Po turnieju wszyscy zawodnicy usiedli przy okrągłym stole w taki sposób, że każdy zawodnik wygrał z osobą siedzącą obok niego z jego lewej strony. Wykaż, że istnieją tacy trzej zawodnicy A, B i C, że A wygrał z B, B wygrał z C oraz C wygrał z A.",
+  "title": "Trójkąt o polu $\\frac{1}{4}(ab+bc)$",
+  "content": "Czy istnieje taki trójkąt o bokach długości $a$, $b$, $c$, którego pole jest równe $\\frac{1}{4}(ab+bc)$? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2011/etap2/2etap12.pdf",
     "solutions": "tasks/2011/etap2/2etap12r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Spróbuj zrozumieć strukturę problemu: mamy $n$ zawodników przy okrągłym stole, każdy pokonał sąsiada po lewej. Oznacza to, że istnieje 'cykl zwycięstw' wzdłuż stołu. Narysuj diagram dla małego $n$.",
+    "Rozważ dowód nie wprost: załóż, że nie istnieje trójka $A, B, C$ tworząca cykl zwycięstw. Co to oznacza dla struktury wyników między dowolnymi trzema zawodnikami?",
+    "Jeśli nie ma cyklu trzech zawodników, to wśród każdych trzech osób jedna musi pokonać obie pozostałe. Zastanów się, co to oznacza dla zawodnika, który pokonał najwięcej przeciwników - ilu minimum osób musiał pokonać?",
+    "Rozważ zawodnika $X$, który pokonał swojego sąsiada po prawej stronie (nazwijmy go $Y$). Skoro $X$ pokonał $Y$, a $Y$ pokonał sąsiada po swojej lewej (czyli $X$)... czy to nie jest sprzeczność? Przeanalizuj dokładniej relację między sąsiadami przy stole."
+  ]
 }

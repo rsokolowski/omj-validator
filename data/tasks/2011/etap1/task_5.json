@@ -1,13 +1,20 @@
 {
   "number": 5,
-  "title": "Pięciokąt ABCDE z kątami prostymi",
-  "content": "W pięciokącie wypukłym ABCDE kąty przy wierzchołkach B i D są proste. Wykaż, że obwód trójkąta ACE jest nie mniejszy od 2BD.",
+  "title": "Pięciokąt $ABCDE$ z kątami prostymi",
+  "content": "W pięciokącie wypukłym $ABCDE$ kąty przy wierzchołkach $B$ i $D$ są proste. Wykaż, że obwód trójkąta $ACE$ jest nie mniejszy od $2BD$.",
   "pdf": {
     "tasks": "tasks/2011/etap1/1etap11.pdf",
     "solutions": "tasks/2011/etap1/1etap11r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek pięciokąta ABCDE. Co oznacza fakt, że kąty przy B i D są proste? Przypomnij sobie, gdzie leżą punkty, z których odcinek jest widoczny pod kątem prostym.",
+    "Wykorzystaj twierdzenie odwrotne do twierdzenia Talesa: jeśli kąt $\\angle ABC = 90°$, to punkt B leży na okręgu o średnicy AC. Podobnie przeanalizuj punkt D.",
+    "Skoro B leży na okręgu o średnicy AC, to $AC \\geq AB + BC$ nie zachodzi, ale co możesz powiedzieć o związku między AC a BD? Rozważ, jak długości AC i CE odnoszą się do położenia punktów B i D na odpowiednich okręgach.",
+    "Zauważ, że $AC \\geq 2 \\cdot r_1$ gdzie $r_1$ to promień okręgu przez A, B, C (bo AC jest średnicą). Podobnie dla CE. Użyj nierówności trójkąta dla △BDE lub rozważ, że BD jest odcinkiem wewnątrz pewnej figury ograniczonej bokami trójkąta ACE."
+  ]
 }

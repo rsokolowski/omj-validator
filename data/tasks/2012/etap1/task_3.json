@@ -1,13 +1,21 @@
 {
   "number": 3,
-  "title": "Wstawianie cyfry - połowa liczby n",
-  "content": "Liczba naturalna n jest co najmniej trzycyfrowa. Jeżeli pomiędzy cyfrę setek a cyfrę dziesiątek tej liczby wpiszemy znak mnożenia, to po wykonaniu mnożenia otrzymamy połowę liczby n. Wyznacz wszystkie liczby n o tej własności.",
+  "title": "Wstawianie znaku mnożenia - połowa liczby $n$",
+  "content": "Liczba naturalna $n$ jest co najmniej trzycyfrowa. Jeżeli pomiędzy cyfrę setek a cyfrę dziesiątek tej liczby wpiszemy znak mnożenia, to po wykonaniu mnożenia otrzymamy połowę liczby $n$. Wyznacz wszystkie liczby $n$ o tej własności.",
   "pdf": {
     "tasks": "tasks/2012/etap1/1etap12.pdf",
     "solutions": "tasks/2012/etap1/1etap12r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Jak można zapisać liczbę za pomocą jej cyfr? Jeśli liczba ma cyfry $a$, $b$, $c$, $d$, ..., to jak wyrazić jej wartość? Rozważ najpierw przypadek liczby trzycyfrowej.",
+    "Zapisz liczbę $n$ w postaci algebraicznej używając cyfr. Jeśli $n$ ma cyfrę setek $a$ i pozostałą część $k$ (liczba dziesiątek i jedności), to $n = 100a + k$. Podobnie zapisz iloczyn po wstawieniu znaku mnożenia.",
+    "Sformułuj równanie: iloczyn cyfry setek i liczby utworzonej z pozostałych cyfr ma być równy $\\frac{n}{2}$. Podstaw wyrażenie na $n$ i uprość. Zwróć uwagę na ograniczenia dla cyfry setek.",
+    "Dla liczby trzycyfrowej $n = 100a + 10b + c$ mamy równanie $a \\cdot (10b + c) = \\frac{100a + 10b + c}{2}$. Zbadaj, dla jakich wartości cyfry $a$ (od 1 do 9) istnieją rozwiązania. Sprawdź też przypadek liczb czterocyfrowych."
+  ]
 }

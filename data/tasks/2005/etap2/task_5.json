@@ -1,13 +1,20 @@
 {
   "number": 5,
   "title": "Sześciokąt wypukły z kątami 90°, 128°, 142°, 90°",
-  "content": "Dany jest sześciokąt wypukły ABCDEF o kątach przy wierzchołkach A, B, C, D równych odpowiednio 90°, 128°, 142°, 90°. Wykaż, że pole tego sześciokąta jest mniejsze niż ½·|AD|².",
+  "content": "Dany jest sześciokąt wypukły $ABCDEF$ o kątach przy wierzchołkach $A$, $B$, $C$, $D$ równych odpowiednio $90°$, $128°$, $142°$, $90°$. Wykaż, że pole tego sześciokąta jest mniejsze niż $\\frac{1}{2} \\cdot |AD|^2$.",
   "pdf": {
     "tasks": "tasks/2005/etap2/omg01_2.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Zwróć uwagę na szczególne kąty w tym sześciokącie. Które z nich mają wartość 90°? Co to może sugerować o położeniu pewnych wierzchołków względem odcinka $AD$?",
+    "Spróbuj znaleźć figurę, w której można zamknąć cały sześciokąt, a której pole łatwo wyrazić przez $|AD|$. Przypomnij sobie, z jakiej figury widać odcinek pod kątem prostym.",
+    "Skoro kąty $\\angle DAB$ i $\\angle CDA$ są proste, to wierzchołki $B$ i $C$ leżą na okręgu o średnicy $AD$ (twierdzenie odwrotne do Talesa). Sprawdź, czy podobnie jest z pozostałymi wierzchołkami.",
+    "Wykaż, że wszystkie wierzchołki $B, C, E, F$ leżą wewnątrz lub na brzegu półkola o średnicy $AD$. Następnie porównaj pole tego półkola z wartością $\\frac{1}{2}|AD|^2$."
+  ]
 }

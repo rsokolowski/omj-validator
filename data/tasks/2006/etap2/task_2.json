@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "111 liczb całkowitych - suma podzielna przez 11",
-  "content": "Danych jest 111 dodatnich liczb całkowitych. Wykaż, że spośród nich można wybrać 11 takich liczb, których suma jest podzielna przez 11.",
+  "title": "Sześciokąt $ABCDEF$ z kątami $120°$ - symetralne",
+  "content": "Miara każdego kąta sześciokąta $ABCDEF$ jest równa $120°$. Udowodnij, że symetralne odcinków $AB$, $CD$ i $EF$ przecinają się w jednym punkcie.",
   "pdf": {
     "tasks": "tasks/2006/etap2/omg02_2.pdf",
     "solutions": "tasks/2006/etap2/omg02_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj sześciokąt $ABCDEF$ z kątami $120°$. Przedłuż jego boki i zobacz, jaką figurę tworzą te przedłużenia. Co powstaje na zewnątrz sześciokąta?",
+    "Zauważ, że przedłużenia boków sześciokąta tworzą trójkąt. Zbadaj, jakiego typu jest ten trójkąt i jak sześciokąt jest w nim położony.",
+    "Skoro każdy kąt sześciokąta ma $120°$, to kąty zewnętrzne mają po $60°$. Jak to wpływa na trójkąt utworzony przez przedłużenia boków? Gdzie leżą boki $AB$, $CD$, $EF$ względem tego trójkąta?",
+    "Pokaż, że boki $AB$, $CD$, $EF$ leżą na bokach trójkąta równobocznego. Przypomnij sobie, gdzie przecinają się symetralne boków trójkąta równobocznego."
+  ]
 }

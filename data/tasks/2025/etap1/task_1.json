@@ -7,7 +7,15 @@
     "solutions": "tasks/2025/etap1/21omj-1etap-r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "teoria_liczb",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Oznacz liczbę dwuzłotówek przez $a$, a pięciozłotówek przez $b$. Zapisz równanie opisujące łączną wartość monet. Jakie pary $(a, b)$ spełniają to równanie?",
+    "Wypisz wszystkie możliwe kombinacje liczby monet spełniające warunek $2a + 5b = 100$. Rozważ każdy przypadek osobno i sprawdź, czy można uzyskać 50 złotych.",
+    "Zauważ, że 50 złotych można uzyskać na różne sposoby: samymi dwuzłotówkami (25 sztuk), samymi pięciozłotówkami (10 sztuk), lub mieszanką. Sprawdź, czy w każdym przypadku masz wystarczająco dużo monet odpowiedniego typu.",
+    "Dla każdej możliwej pary $(a, b)$ sprawdź, czy $a \\geq 25$ (wtedy wybierz 25 dwuzłotówek), lub czy $b \\geq 10$ (wtedy wybierz 10 pięciozłotówek), lub czy można wybrać odpowiednią mieszankę monet."
+  ]
 }

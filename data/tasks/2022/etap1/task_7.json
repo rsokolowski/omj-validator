@@ -1,13 +1,20 @@
 {
   "number": 7,
-  "title": "Sześciokąt foremny ABCDEF o boku 2",
-  "content": "Dany jest sześciokąt foremny ABCDEF o boku 2. Punkt M jest środkiem przekątnej AE. Pięciokąt ABCDE zagięto wzdłuż odcinków BD, BM, DM w taki sposób, że punkty A, C oraz E spotkały się. W wyniku tej operacji otrzymano czworościan. Wyznacz jego objętość.",
+  "title": "Sześciokąt foremny $ABCDEF$ o boku 2",
+  "content": "Dany jest sześciokąt foremny $ABCDEF$ o boku 2. Punkt $M$ jest środkiem przekątnej $AE$. Pięciokąt $ABCDE$ zagięto wzdłuż odcinków $BD$, $BM$, $DM$ w taki sposób, że punkty $A$, $C$ oraz $E$ spotkały się. W wyniku tej operacji otrzymano czworościan. Wyznacz jego objętość.",
   "pdf": {
     "tasks": "tasks/2022/etap1/18omj-1etap.pdf",
     "solutions": "tasks/2022/etap1/18omj-1r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Zastanów się, jak wygląda powstały czworościan. Które punkty sześciokąta stają się wierzchołkami czworościanu i jakie odcinki tworzą jego krawędzie?",
+    "Oblicz długości wszystkich krawędzi czworościanu, korzystając z własności sześciokąta foremnego. Czy zauważasz jakąś regularność w tych długościach?",
+    "Powstały czworościan ma szczególną strukturę - sprawdź, czy jego ściany są trójkątami równobocznymi lub równoramiennymi. Zastanów się, jak znaleźć jego wysokość.",
+    "Wyznacz pole podstawy czworościanu (trójkąta $BMD$) i znajdź wysokość opuszczoną z wierzchołka powstałego ze złożenia punktów $A$, $C$, $E$. Skorzystaj z twierdzenia Pitagorasa."
+  ]
 }

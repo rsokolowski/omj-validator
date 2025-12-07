@@ -1,13 +1,21 @@
 {
   "number": 2,
-  "title": "Podzielność a² przez a+b",
-  "content": "Dane są dodatnie liczby całkowite a i b. Wykaż, że jeżeli liczba a² jest podzielna przez liczbę a+b, to także liczba b² jest podzielna przez liczbę a+b.",
+  "title": "Turniej 6 drużyn z remisami",
+  "content": "W pewnym turnieju uczestniczyło $6$ drużyn. Każda drużyna rozegrała z każdą inną dokładnie jeden mecz. Za zwycięstwo w meczu drużyna otrzymywała $3$ punkty, za porażkę $0$ punktów, a za remis $1$ punkt. Po turnieju okazało się, że suma punktów zdobytych przez wszystkie drużyny wynosi $41$. Wykaż, że istnieją takie cztery drużyny, z których każda co najmniej jeden raz zremisowała.",
   "pdf": {
     "tasks": "tasks/2011/etap2/2etap12.pdf",
     "solutions": "tasks/2011/etap2/2etap12r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zastanów się, jak można powiązać $a^2$ z $b^2$. Czy istnieje wyrażenie zawierające obie te wielkości, które łatwo się rozkłada?",
+    "Rozważ różnicę $a^2 - b^2$ i jej związek z liczbą $a+b$. Co wiesz o podzielności różnicy przez $a+b$?",
+    "Skoro $(a+b) \\mid a^2$ oraz $(a+b) \\mid (a^2 - b^2)$, to co możesz powiedzieć o podzielności $b^2$?",
+    "Wykorzystaj fakt, że jeśli liczba dzieli dwie wielkości, to dzieli również ich różnicę. Zapisz $b^2 = a^2 - (a^2 - b^2)$ i zastosuj własności podzielności."
+  ]
 }

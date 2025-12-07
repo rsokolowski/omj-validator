@@ -1,13 +1,21 @@
 {
   "number": 4,
-  "title": "Liczba ośmiocyfrowa podzielna przez 101",
-  "content": "Dana jest liczba ośmiocyfrowa a. Liczba ośmiocyfrowa b powstaje z liczby a poprzez przestawienie cyfry jedności liczby a na początek. Wykaż, że jeśli liczba a jest podzielna przez 101, to liczba b jest także podzielna przez 101.",
+  "title": "Liczba ośmiocyfrowa podzielna przez $101$",
+  "content": "Dana jest liczba ośmiocyfrowa $a$. Liczba ośmiocyfrowa $b$ powstaje z liczby $a$ poprzez przestawienie cyfry jedności liczby $a$ na początek. Wykaż, że jeśli liczba $a$ jest podzielna przez $101$, to liczba $b$ jest także podzielna przez $101$.",
   "pdf": {
     "tasks": "tasks/2007/etap1/omg03_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zapisz liczbę $a$ w postaci $a = 10k + c$, gdzie $c$ to cyfra jedności, a $k$ to liczba siedmiocyfrowa utworzona z pozostałych cyfr. Jak wyrazić liczbę $b$ przez $k$ i $c$?",
+    "Spróbuj znaleźć związek algebraiczny między liczbami $a$ i $b$. Czy można wyrazić jedną z nich jako kombinację liniową drugiej i jakiejś wielokrotności 101?",
+    "Zbadaj, ile wynosi reszta z dzielenia $10^7$ przez 101. Przyda się fakt, że $10^2 = 100 \\equiv -1 \\pmod{101}$.",
+    "Pokaż, że $10b - a$ jest wielokrotnością 101. Oblicz tę różnicę, wykorzystując zapis $a = 10k + c$ oraz $b = c \\cdot 10^7 + k$."
+  ]
 }

@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Trapez ABCD z punktem P na AC",
-  "content": "Dany jest trapez ABCD o podstawach AB i CD. Punkt P leży na odcinku AC, przy czym\n∠BPC = ∠BAD = ∠ABC = ∠ACB.\nWykaż, że AP = CD.",
+  "title": "Trapez $ABCD$ z punktem $P$ na $AC$",
+  "content": "Dany jest trapez $ABCD$ o podstawach $AB$ i $CD$. Punkt $P$ leży na odcinku $AC$, przy czym\n$$\\sphericalangle BPC = \\sphericalangle BAD = \\sphericalangle ABC = \\sphericalangle ACB.$$\nWykaż, że $AP = CD$.",
   "pdf": {
     "tasks": "tasks/2023/etap2/19omj-2etap.pdf",
     "solutions": "tasks/2023/etap2/19omj-2r.pdf",
     "statistics": "tasks/2023/etap2/19omj-2etap-st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek trapezu z zaznaczonym punktem $P$ na przekątnej $AC$. Jakie wnioski możesz wyciągnąć z warunku $\\sphericalangle ABC = \\sphericalangle ACB$ dla trójkąta $ABC$?",
+    "Skoro trójkąt $ABC$ jest równoramienny, poszukaj innych trójkątów równoramiennych w tej konfiguracji. Zastanów się, jakie boki mogą być równe dzięki równościom kątów.",
+    "Zwróć uwagę na trójkąt $BPC$ - znasz w nim kąt $\\sphericalangle BPC$ oraz $\\sphericalangle PCB$ (który jest częścią $\\sphericalangle ACB$). Porównaj ten trójkąt z innymi trójkątami na rysunku.",
+    "Rozważ trójkąty $ABP$ i $CPD$ (lub $BPC$). Wykorzystaj fakt, że proste $AB$ i $CD$ są równoległe, więc powstają kąty naprzemianległe. Sprawdź, czy możesz wykazać przystawanie lub równość odpowiednich boków."
+  ]
 }

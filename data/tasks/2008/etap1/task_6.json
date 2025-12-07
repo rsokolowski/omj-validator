@@ -7,7 +7,15 @@
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "geometria"
+  ],
+  "hints": [
+    "Zastanów się, ile punktów musisz rozważyć, aby mieć pewność, że trzy z nich będą tego samego koloru. Spróbuj narysować kilka trójkątów prostokątnych równoramiennych i zobacz, jak mogą na siebie zachodzić.",
+    "Kluczem jest zasada szufladkowa. Skonstruuj odpowiednią konfigurację punktów, w której wiele trójkątów prostokątnych równoramiennych dzieli wspólne wierzchołki.",
+    "Rozważ kwadrat i jego środek - ile trójkątów prostokątnych równoramiennych możesz utworzyć z tych pięciu punktów? Co się stanie, gdy środek i jakiś wierzchołek kwadratu będą tego samego koloru?",
+    "Weź kwadrat $ABCD$ ze środkiem $S$. Przeanalizuj przypadki: jeśli $S$ ma ten sam kolor co któryś wierzchołek, np. $A$, to poszukaj trzeciego punktu tego koloru wśród pozostałych, który utworzy odpowiedni trójkąt."
+  ]
 }

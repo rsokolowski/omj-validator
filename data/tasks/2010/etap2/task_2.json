@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Trapez ABCD z kątami 60°",
-  "content": "Dany jest trapez ABCD o podstawach AB i CD, w którym\n∠BAD = ∠ABC = 60° oraz CD < BC.\nNa boku BC tego trapezu wybrano taki punkt E, że EB = CD. Wykaż, że BD = AE.",
+  "title": "Podzielność $a^2$ i $b^2$ przez $a+b$",
+  "content": "Dane są dodatnie liczby całkowite $a$ i $b$. Wykaż, że jeżeli liczba $a^2$ jest podzielna przez liczbę $a+b$, to także liczba $b^2$ jest podzielna przez liczbę $a+b$.",
   "pdf": {
     "tasks": "tasks/2010/etap2/2etap11.pdf",
     "solutions": "tasks/2010/etap2/2etap11r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek trapezu z zaznaczonymi kątami $60°$ przy wierzchołkach $A$ i $B$. Co możesz powiedzieć o bokach $AD$ i $BC$ tego trapezu? Jakie kąty są przy wierzchołkach $C$ i $D$?",
+    "Skoro trapez ma dwa kąty $60°$ przy tej samej podstawie, jest równoramienny. Poszukaj trójkątów przystających lub o równych bokach. Zastanów się, jakie trójkąty tworzą odcinki $BD$ i $AE$.",
+    "Rozważ trójkąty $\\triangle ABD$ i $\\triangle ABE$. Jakie boki i kąty tych trójkątów znasz? Wykorzystaj fakt, że $EB = CD$ oraz własności trapezu równoramiennego.",
+    "W trapezie równoramiennym zachodzi $AD = BC$. Ponieważ $EB = CD$, to $EC = BC - EB = AD - CD$. Porównaj trójkąty $\\triangle ABE$ i $\\triangle BAD$ - sprawdź, czy mają wspólny bok i równe pozostałe elementy."
+  ]
 }

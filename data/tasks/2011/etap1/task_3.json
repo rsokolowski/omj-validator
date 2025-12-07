@@ -7,7 +7,15 @@
     "solutions": "tasks/2011/etap1/1etap11r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "algebra",
+    "geometria"
+  ],
+  "hints": [
+    "Oznacz boki pierwszego prostokąta przez $a$ i $b$, a drugiego przez $c$ i $d$. Zapisz warunki równości pól i obwodów jako równania. Co musisz pokazać o przekątnych?",
+    "Przekątna prostokąta wyraża się przez boki za pomocą twierdzenia Pitagorasa. Spróbuj wyrazić długość przekątnej przez $a^2 + b^2$. Jak powiązać sumę kwadratów z danymi warunkami?",
+    "Zastanów się, jak wyrazić $a^2 + b^2$ używając tylko sumy $a + b$ i iloczynu $ab$. Przypomnij sobie wzór na kwadrat sumy.",
+    "Skorzystaj z tożsamości $(a+b)^2 = a^2 + 2ab + b^2$, czyli $a^2 + b^2 = (a+b)^2 - 2ab$. Podstaw dane warunki i porównaj wyniki dla obu prostokątów."
+  ]
 }

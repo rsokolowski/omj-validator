@@ -1,13 +1,21 @@
 {
   "number": 3,
-  "title": "101-kąt foremny i prosta ℓ",
-  "content": "Dany jest 101-kąt foremny. Prosta ℓ leży w płaszczyźnie tego wielokąta i nie przechodzi przez żaden z jego wierzchołków. Udowodnij, że prosta ℓ przecina parzystą liczbę przekątnych danego wielokąta.",
+  "title": "101-kąt foremny i prosta $\\ell$",
+  "content": "Dany jest 101-kąt foremny. Prosta $\\ell$ leży w płaszczyźnie tego wielokąta i nie przechodzi przez żaden z jego wierzchołków. Udowodnij, że prosta $\\ell$ przecina parzystą liczbę przekątnych danego wielokąta.",
   "pdf": {
     "tasks": "tasks/2018/etap2/2etap19.pdf",
     "solutions": "tasks/2018/etap2/2etap19r.pdf",
     "statistics": "tasks/2018/etap2/2etap19st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "geometria"
+  ],
+  "hints": [
+    "Zastanów się, ile jest wszystkich przekątnych w 101-kącie i jak można je sklasyfikować względem prostej $\\ell$. Co się dzieje z wierzchołkami wielokąta po obu stronach prostej?",
+    "Spróbuj podzielić wierzchołki wielokąta na dwie grupy: te leżące po jednej stronie prostej $\\ell$ i te po drugiej. Jak liczba wierzchołków w każdej grupie wpływa na liczbę przecinanych przekątnych?",
+    "Przekątna jest przecinana przez prostą $\\ell$ wtedy i tylko wtedy, gdy jej końce leżą po przeciwnych stronach tej prostej. Jeśli po jednej stronie jest $k$ wierzchołków, ile przekątnych łączy wierzchołki z różnych stron?",
+    "Oznacz liczbę wierzchołków po jednej stronie prostej przez $k$, a po drugiej przez $101-k$. Policz, ile jest przekątnych i boków łączących wierzchołki z różnych stron, a następnie zbadaj parzystość tej liczby."
+  ]
 }

@@ -1,13 +1,21 @@
 {
   "number": 3,
-  "title": "Podzielność 5a + 3b przez a + b",
-  "content": "Dane są takie dodatnie liczby całkowite a, b, dla których liczba 5a + 3b jest podzielna przez liczbę a + b. Wykaż, że a = b.",
+  "title": "Podzielność $5a + 3b$ przez $a + b$",
+  "content": "Dane są takie dodatnie liczby całkowite $a$, $b$, dla których liczba $5a + 3b$ jest podzielna przez liczbę $a + b$. Wykaż, że $a = b$.",
   "pdf": {
     "tasks": "tasks/2020/etap2/2etap21.pdf",
     "solutions": "tasks/2020/etap2/2etap21r.pdf",
     "statistics": "tasks/2020/etap2/2etap21st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zapisz warunek podzielności: $(a+b) | (5a+3b)$. Co to oznacza? Jeśli $(a+b)$ dzieli pewną liczbę, to dzieli też jej wielokrotności oraz sumy z innymi liczbami podzielnymi przez $(a+b)$.",
+    "Spróbuj przedstawić $5a+3b$ jako sumę wielokrotności $(a+b)$ i jakiejś reszty. Jaką wielokrotność $(a+b)$ warto odjąć od $5a+3b$?",
+    "Zauważ, że $5a+3b = k(a+b) + r$ dla pewnych wartości. Oblicz $5a+3b - 3(a+b)$ lub $5a+3b - 5(a+b)$. Co otrzymujesz i co to mówi o podzielności?",
+    "Skoro $(a+b) | (5a+3b)$ i $(a+b) | 3(a+b)$, to $(a+b) | (5a+3b - 3a - 3b) = 2(a-b)$. Analogicznie sprawdź odejmując $5(a+b)$. Wykorzystaj oba warunki podzielności dla $a, b > 0$."
+  ]
 }

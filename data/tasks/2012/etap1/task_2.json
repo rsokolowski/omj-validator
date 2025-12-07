@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Czworokąt ABCD z AD+BC=CD",
-  "content": "Dany jest czworokąt wypukły ABCD, w którym AD + BC = CD. Dwusieczne kątów BCD i CDA przecinają się w punkcie S. Udowodnij, że AS = BS.",
+  "title": "Czworokąt $ABCD$ z $AD + BC = CD$",
+  "content": "Dany jest czworokąt wypukły $ABCD$, w którym $AD + BC = CD$. Dwusieczne kątów $BCD$ i $CDA$ przecinają się w punkcie $S$. Udowodnij, że $AS = BS$.",
   "pdf": {
     "tasks": "tasks/2012/etap1/1etap12.pdf",
     "solutions": "tasks/2012/etap1/1etap12r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek czworokąta ABCD i zaznacz dwusieczne kątów $\\angle BCD$ i $\\angle CDA$. Co oznacza warunek $AD + BC = CD$ geometrycznie? Czy możesz zaznaczyć odpowiednie odcinki na boku $CD$?",
+    "Skoro $AD + BC = CD$, spróbuj znaleźć punkt $P$ na odcinku $CD$ taki, że $DP = AD$ (lub $CP = BC$). Jakie trójkąty równoramienne powstają w tej konstrukcji? Jak dwusieczne kątów przechodzą przez takie trójkąty?",
+    "Zauważ, że jeśli $DP = AD$, to trójkąt $ADP$ jest równoramienny. Dwusieczna kąta $\\angle ADC$ ma szczególną własność w tym trójkącie. Podobnie przeanalizuj sytuację przy wierzchołku $C$ z punktem $P$ takim, że $CP = BC$.",
+    "Pokaż, że punkt $S$ leży na symetralnej odcinka $AB$. Wykorzystaj fakt, że dwusieczna w trójkącie równoramiennym jest jednocześnie symetralną podstawy. Jak punkty $A$, $P$, $B$ i dwusieczne tworzą konfigurację prowadzącą do $AS = BS$?"
+  ]
 }

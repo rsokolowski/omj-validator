@@ -7,7 +7,15 @@
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria",
+    "logika"
+  ],
+  "hints": [
+    "Przypomnij sobie, gdzie leży środek okręgu opisanego na trójkącie rozwartokątnym. Jak to się ma do położenia tego trójkąta względem środka sfery opisanej na czworościanie?",
+    "Rozważ konkretny przykład konstrukcyjny. Czy można zbudować czworościan, startując od trójkąta rozwartokątnego jako podstawy i odpowiednio dobierając czwarty wierzchołek?",
+    "Zauważ, że środek sfery opisanej leży na prostej prostopadłej do każdej ściany, przechodzącej przez środek okręgu opisanego na tej ścianie. Gdzie leży ta prosta dla ściany rozwartokątnej?",
+    "Rozważ czworościan o podstawie będącej trójkątem rozwartokątnym i wierzchołku położonym odpowiednio wysoko nad podstawą. Zbadaj, czy środek sfery może wtedy znajdować się wewnątrz czworościanu."
+  ]
 }

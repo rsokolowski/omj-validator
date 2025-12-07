@@ -1,13 +1,21 @@
 {
   "number": 3,
   "title": "99 punktów w kole",
-  "content": "W kole o promieniu 10 wybrano 99 punktów. Dowieść, że wewnątrz koła istnieje punkt odległy od każdego z wybranych punktów o więcej niż 1.",
+  "content": "W kole o promieniu $10$ wybrano $99$ punktów. Dowieść, że wewnątrz koła istnieje punkt odległy od każdego z wybranych punktów o więcej niż $1$.",
   "pdf": {
     "tasks": "tasks/2005/etap1/omg01_1.pdf",
     "solutions": "tasks/2005/etap1/omg01_1r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "geometria"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza, że punkt jest odległy od wybranego punktu o więcej niż 1. Jakiego obszaru powinniśmy unikać wokół każdego z 99 punktów?",
+    "Rozważ zasadę szufladkową w kontekście geometrycznym. Czy 99 małych obszarów może pokryć cały duży obszar? Pomyśl o polach.",
+    "Oblicz pole koła o promieniu 10 oraz sumę pól 99 kółek o promieniu 1. Porównaj te wartości.",
+    "Skoro suma pól małych kółek jest mniejsza niż pole dużego koła, to musi istnieć punkt niepokryty. Uzasadnij, że taki punkt spełnia warunki zadania."
+  ]
 }

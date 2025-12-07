@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Kwadrat ABCD z punktem E na przekątnej",
-  "content": "Dany jest kwadrat ABCD. Punkt E leży na przekątnej AC, przy czym AE > EC. Na boku AB wybrano punkt F, różny od B, dla którego EF = DE. Udowodnij, że ∠DEF = 90°.",
+  "title": "Kwadrat $ABCD$ z punktem $E$ na przekątnej",
+  "content": "Dany jest kwadrat $ABCD$. Punkt $E$ leży na przekątnej $AC$, przy czym $AE > EC$. Na boku $AB$ wybrano punkt $F$, różny od $B$, dla którego $EF = DE$. Udowodnij, że $\\angle DEF = 90^\\circ$.",
   "pdf": {
     "tasks": "tasks/2020/etap2/2etap21.pdf",
     "solutions": "tasks/2020/etap2/2etap21r.pdf",
     "statistics": "tasks/2020/etap2/2etap21st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek kwadratu z przekątną AC i zaznacz punkty E oraz F. Jakie kąty w kwadracie już znasz? Jak leży przekątna względem boków?",
+    "Wykorzystaj symetrię kwadratu. Rozważ odbicie symetryczne względem przekątnej AC — gdzie przechodzi punkt D i jak to się ma do punktu F?",
+    "Przekątna AC jest osią symetrii kwadratu. Punkt D przechodzi na punkt B przy tym odbiciu. Zbadaj, jak warunek $EF = DE$ wiąże się z tym odbiciem.",
+    "Jeśli $E$ leży na osi symetrii, a $DE = EF$, to zastanów się, czy $F$ może być obrazem $D$ w pewnym przekształceniu. Zbadaj kąty w trójkącie $DEF$ wykorzystując własności tego przekształcenia."
+  ]
 }

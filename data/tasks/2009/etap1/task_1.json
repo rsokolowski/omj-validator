@@ -1,13 +1,20 @@
 {
   "number": 1,
-  "title": "Trójki liczb pierwszych z a²=b²+c",
-  "content": "Wyznacz wszystkie trójki liczb pierwszych a, b, c, dla których a² = b² + c.",
+  "title": "Trójki liczb pierwszych z $a^2 = b^2 + c$",
+  "content": "Wyznacz wszystkie trójki liczb pierwszych $a$, $b$, $c$, dla których $a^2 = b^2 + c$.",
   "pdf": {
     "tasks": "tasks/2009/etap1/omg05_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Przepisz równanie $a^2 = b^2 + c$ w postaci różnicy: $a^2 - b^2 = c$. Co wiesz o rozkładzie różnicy kwadratów?",
+    "Użyj wzoru skróconego mnożenia: $a^2 - b^2 = (a-b)(a+b)$. Skoro $c$ jest liczbą pierwszą, to ile może mieć dzielników?",
+    "Liczba pierwsza $c$ ma tylko dzielniki $1$ i $c$. Zatem jeden z czynników $(a-b)$ lub $(a+b)$ musi być równy $1$. Który z nich może być równy $1$, jeśli $a$ i $b$ są dodatnie?",
+    "Skoro $a - b = 1$, to $a$ i $b$ są kolejnymi liczbami naturalnymi. Które pary kolejnych liczb naturalnych są jednocześnie liczbami pierwszymi? Sprawdź małe przypadki."
+  ]
 }

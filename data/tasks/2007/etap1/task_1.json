@@ -1,13 +1,20 @@
 {
   "number": 1,
-  "title": "Równanie |||x−1|−2|−3|−4|=0",
-  "content": "Rozwiąż równanie: |||x−1|−2|−3|−4| = 0.",
+  "title": "Równanie $\\Big|||x-1|-2|-3\\Big|-4=0$",
+  "content": "Rozwiąż równanie: $\\Big|||x-1|-2|-3\\Big|-4 = 0$.",
   "pdf": {
     "tasks": "tasks/2007/etap1/omg03_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Przypomnij sobie, kiedy wartość bezwzględna jest równa zero. Jeśli $|A| = 0$, to co możesz powiedzieć o $A$?",
+    "Rozwiązuj równanie \"od zewnątrz do wewnątrz\" - najpierw usuń zewnętrzną wartość bezwzględną, potem kolejne. Na każdym etapie otrzymasz równanie typu $|B| = c$.",
+    "Zauważ, że $|B| = c$ dla $c > 0$ daje dwa przypadki: $B = c$ lub $B = -c$. Ile równań otrzymasz po usunięciu wszystkich wartości bezwzględnych?",
+    "Zacznij od $||x-1|-2|-3| = 4$. Następnie rozważ przypadki $|x-1|-2|-3 = 4$ oraz $||x-1|-2|-3 = -4$. Kontynuuj analogicznie dla każdej warstwy, pamiętając że wartość bezwzględna nie może być ujemna."
+  ]
 }

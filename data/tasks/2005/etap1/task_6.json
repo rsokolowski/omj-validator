@@ -1,13 +1,21 @@
 {
   "number": 6,
   "title": "5 monet o wadze 48 gramów",
-  "content": "Wiadomo, że prawdziwa moneta waży 10 gramów, a fałszywa 9 gramów. Mamy 5 monet o łącznej wadze 48 gramów i dysponujemy wagą elektroniczną. Czy wykonując nie więcej niż 3 ważenia możemy zawsze rozpoznać, które z danych monet są fałszywe, a które prawdziwe?",
+  "content": "Wiadomo, że prawdziwa moneta waży $10$ gramów, a fałszywa $9$ gramów. Mamy $5$ monet o łącznej wadze $48$ gramów i dysponujemy wagą elektroniczną. Wykonując ważenie możemy położyć na wagę dowolną liczbę wybranych przez nas monet i odczytać ich łączną wagę. Czy wykonując nie więcej niż $3$ ważenia możemy zawsze rozpoznać, które z danych monet są fałszywe, a które prawdziwe?",
   "pdf": {
     "tasks": "tasks/2005/etap1/omg01_1.pdf",
     "solutions": "tasks/2005/etap1/omg01_1r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "logika",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Zauważ, że znając łączną wagę 48 g, możesz określić ile jest fałszywych monet. Ile gramów \"brakuje\" w porównaniu do 5 prawdziwych monet?",
+    "Pomyśl o strategii dzielenia monet na grupy i ważeniu poszczególnych grup. Jaką informację daje ci wynik każdego ważenia?",
+    "Rozważ ważenie pojedynczych monet lub par. Jeśli zważysz jedną monetę, od razu wiesz czy jest prawdziwa. Ile monet musisz sprawdzić, żeby znaleźć obie fałszywe?",
+    "Zaplanuj: w pierwszym ważeniu zważ 2 monety razem. Przeanalizuj przypadki: suma 20 g, 19 g lub 18 g. Dla każdego przypadku określ, ile fałszywych monet jest w tej parze i jak znaleźć pozostałe."
+  ]
 }

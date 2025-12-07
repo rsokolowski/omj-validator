@@ -1,13 +1,21 @@
 {
   "number": 5,
-  "title": "Cyfry 1, 2, 9 w zapisie 3n",
-  "content": "W zapisie dziesiętnym pewnej dodatniej liczby całkowitej n nie występuje żadna z cyfr 1, 2, 9. Udowodnij, że w zapisie dziesiętnym liczby 3n występuje co najmniej jedna z cyfr 1, 2, 9.",
+  "title": "Cyfry 1, 2, 9 w zapisie $3n$",
+  "content": "W zapisie dziesiętnym pewnej dodatniej liczby całkowitej $n$ nie występuje żadna z cyfr 1, 2, 9. Udowodnij, że w zapisie dziesiętnym liczby $3n$ występuje co najmniej jedna z cyfr 1, 2, 9.",
   "pdf": {
     "tasks": "tasks/2018/etap2/2etap19.pdf",
     "solutions": "tasks/2018/etap2/2etap19r.pdf",
     "statistics": "tasks/2018/etap2/2etap19st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "logika"
+  ],
+  "hints": [
+    "Zastanów się, jakie cyfry może mieć liczba $n$ - są to tylko 0, 3, 4, 5, 6, 7, 8. Co to oznacza dla możliwych reszt z dzielenia $n$ przez pewną liczbę?",
+    "Rozważ dowód nie wprost: załóż, że w $3n$ również nie ma cyfr 1, 2, 9. Jakie ograniczenia to nakłada na obie liczby?",
+    "Jeśli $n$ i $3n$ mają tylko cyfry ze zbioru {0, 3, 4, 5, 6, 7, 8}, to każda cyfra daje resztę 0, 3, 4, 5, 6, 7 lub 8 modulo 9. Zbadaj, jaką resztę z dzielenia przez 9 może mieć suma cyfr takiej liczby.",
+    "Suma cyfr liczby złożonej tylko z cyfr {0,3,4,5,6,7,8} nie może dawać reszty 1, 2 ani 9 przy dzieleniu przez 9. Skoro $n \\equiv$ suma cyfr $n$ (mod 9), sprawdź czy $n$ i $3n$ mogą jednocześnie spełniać to ograniczenie."
+  ]
 }

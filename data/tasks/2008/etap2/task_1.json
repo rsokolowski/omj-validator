@@ -1,13 +1,21 @@
 {
   "number": 1,
-  "title": "Średnia arytmetyczna i geometryczna",
-  "content": "Liczby dodatnie a, b spełniają warunek\n(a+b)/2 = √(ab) + 3.\nWykaż, że co najmniej jedna z liczb a, b jest niewymierna.",
+  "title": "Trójki liczb nieparzystych",
+  "content": "Wyznacz wszystkie trójki $(a, b, c)$ liczb nieparzystych dodatnich spełniające zależność\n$$\\frac{a+c-b}{b+c-a} = \\frac{a}{b}.$$",
   "pdf": {
     "tasks": "tasks/2008/etap2/omg04_2.pdf",
     "solutions": "tasks/2008/etap2/omg04_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Przypomnij sobie związek między średnią arytmetyczną $\\frac{a+b}{2}$ a średnią geometryczną $\\sqrt{ab}$. Kiedy są one równe? Co można powiedzieć o różnicy $\\frac{a+b}{2} - \\sqrt{ab}$?",
+    "Rozważ dowód nie wprost: załóż, że obie liczby $a$ i $b$ są wymierne. Co wynikałoby wtedy o $\\sqrt{ab}$? Wprowadź podstawienie $u = \\sqrt{a}$, $v = \\sqrt{b}$.",
+    "Przekształć warunek zadania używając podstawienia. Zauważ, że $(\\sqrt{a} - \\sqrt{b})^2 = a + b - 2\\sqrt{ab}$. Jak można wykorzystać tę tożsamość?",
+    "Z warunku zadania wyprowadź, że $(\\sqrt{a} - \\sqrt{b})^2 = 6$. Jeśli $a$ i $b$ są wymierne, to $\\sqrt{ab}$ też jest wymierna. Sprawdź, czy $\\sqrt{a} - \\sqrt{b}$ może być jednocześnie wymierna."
+  ]
 }

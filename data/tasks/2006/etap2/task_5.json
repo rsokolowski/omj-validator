@@ -1,13 +1,20 @@
 {
   "number": 5,
-  "title": "Sześciokąt wypukły ABCDEF - pole",
-  "content": "Dany jest sześciokąt wypukły ABCDEF o kątach przy wierzchołkach A, B, C, D równych odpowiednio 90°, 128°, 142°, 90°. Wykaż, że pole tego sześciokąta jest mniejsze niż ½·|AD|².",
+  "title": "Ostrosłup $ABCS$ z kątami $\\angle ASB = \\angle BSC = \\angle CSA = 20°$",
+  "content": "Trójkąt $ABC$ jest podstawą ostrosłupa $ABCS$, w którym $\\angle ASB = \\angle BSC = \\angle CSA = 20°$. Wykaż, że obwód trójkąta $ABC$ jest nie mniejszy od długości każdej z krawędzi $AS$, $BS$ i $CS$.",
   "pdf": {
     "tasks": "tasks/2006/etap2/omg02_2.pdf",
     "solutions": "tasks/2006/etap2/omg02_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj ostrosłup i oznacz długości krawędzi bocznych. Co możesz powiedzieć o trójkątach $ASB$, $BSC$ i $CSA$? Jakie mają kąty przy wierzchołku $S$?",
+    "Skoro wszystkie kąty przy $S$ są równe, rozważ przypadek gdy krawędzie boczne mają równe długości. Jak wtedy wyglądają trójkąty boczne? Wykorzystaj własności trójkątów równoramiennych.",
+    "Dla trójkąta równoramiennego z kątem $20°$ przy wierzchołku, jakie są kąty przy podstawie? Porównaj podstawę takiego trójkąta z jego ramionami - która jest dłuższa?",
+    "W trójkącie, naprzeciw większego kąta leży dłuższy bok. Zbadaj, czy podstawa trójkąta równoramiennego z małym kątem przy wierzchołku jest krótsza od ramienia. Zsumuj wszystkie trzy podstawy."
+  ]
 }

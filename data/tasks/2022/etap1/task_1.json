@@ -1,13 +1,21 @@
 {
   "number": 1,
-  "title": "Prostokąt o obwodzie x i polu x",
-  "content": "Dany jest prostokąt o obwodzie x cm, w którym stosunek długości boków wynosi 1:2. Załóżmy, że pole tego prostokąta jest równe x cm². Wyznacz x.",
+  "title": "Prostokąt o obwodzie $x$ i polu $x$",
+  "content": "Dany jest prostokąt o obwodzie $x$ cm, w którym stosunek długości boków wynosi $1 : 2$. Załóżmy, że pole tego prostokąta jest równe $x$ cm$^2$. Wyznacz $x$.",
   "pdf": {
     "tasks": "tasks/2022/etap1/18omj-1etap.pdf",
     "solutions": "tasks/2022/etap1/18omj-1r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "algebra",
+    "arytmetyka"
+  ],
+  "hints": [
+    "Oznacz krótszy bok prostokąta przez $a$. Jak wyrazisz dłuższy bok, obwód i pole za pomocą $a$?",
+    "Zapisz dwa równania: jedno dla obwodu równego $x$, drugie dla pola równego $x$. Oba wyrażenia są równe tej samej wartości $x$.",
+    "Skoro obwód i pole są sobie równe (oba wynoszą $x$), możesz przyrównać do siebie wyrażenia na obwód i pole zapisane za pomocą $a$.",
+    "Z równania $6a = 2a^2$ wyznacz wartość $a$, a następnie oblicz $x$ podstawiając do jednego ze wzorów."
+  ]
 }

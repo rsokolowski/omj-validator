@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Sześciokąt foremny ABCDEF z punktem S",
-  "content": "Punkt S leży wewnątrz sześciokąta foremnego ABCDEF. Udowodnij, że suma pól trójkątów ABS, CDS, EFS jest równa połowie pola sześciokąta ABCDEF.",
+  "title": "Równoległoboki o równych polach",
+  "content": "Dany jest równoległobok $ABCD$ oraz punkt $E$ należący do boku $BC$. Przez punkt $D$ prowadzimy prostą $k$ równoległą do prostej $AE$. Na prostej $k$ obieramy takie punkty $K$, $L$, że czworokąt $AEKL$ jest równoległobokiem. Udowodnij, że równoległoboki $ABCD$ i $AEKL$ mają równe pola.",
   "pdf": {
     "tasks": "tasks/2008/etap2/omg04_2.pdf",
     "solutions": "tasks/2008/etap2/omg04_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj sześciokąt foremny i zaznacz punkt $S$ w jego wnętrzu. Połącz $S$ z wszystkimi wierzchołkami - na ile trójkątów podzieliłeś sześciokąt? Które z nich masz zsumować?",
+    "Sześciokąt foremny ma symetrię środkową. Zastanów się, jak boki $AB$, $CD$, $EF$ mają się do boków $BC$, $DE$, $FA$ - co łączy te dwie grupy?",
+    "Zauważ, że boki $AB$ i $DE$ są równoległe i równe (podobnie $CD$ i $FA$, oraz $EF$ i $BC$). Jak możesz wykorzystać fakt, że trójkąty o równych podstawach i tej samej wysokości mają równe pola?",
+    "Połącz punkt $S$ ze środkiem sześciokąta $O$. Rozważ pary trójkątów: $\\triangle ABS$ i $\\triangle DES$. Skoro $AB \\parallel DE$ i $|AB| = |DE|$, co możesz powiedzieć o sumie ich pól w zależności od odległości $S$ od tych boków?"
+  ]
 }

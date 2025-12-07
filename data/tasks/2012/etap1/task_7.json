@@ -1,13 +1,21 @@
 {
   "number": 7,
-  "title": "Liczby n z n³−7n kwadratem",
-  "content": "Wyznacz wszystkie dodatnie liczby całkowite n, dla których liczba n³−7n jest kwadratem liczby całkowitej.",
+  "title": "Liczby $n$ z $n^3 - 7n$ kwadratem",
+  "content": "Wyznacz wszystkie dodatnie liczby całkowite $n$, dla których liczba $n^3 - 7n$ jest kwadratem liczby całkowitej.",
   "pdf": {
     "tasks": "tasks/2012/etap1/1etap12.pdf",
     "solutions": "tasks/2012/etap1/1etap12r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Rozłóż wyrażenie $n^3 - 7n$ na iloczyn czynników. Co możesz wyciągnąć przed nawias? Sprawdź kilka małych wartości $n$, aby zobaczyć, kiedy wynik jest kwadratem.",
+    "Skoro $n^3 - 7n = n(n^2 - 7)$, zastanów się, jakie warunki muszą spełniać czynniki $n$ oraz $n^2 - 7$, aby ich iloczyn był kwadratem liczby całkowitej. Rozważ, jaki jest ich największy wspólny dzielnik.",
+    "Zbadaj NWD$(n, n^2 - 7)$. Zauważ, że $\\text{NWD}(n, n^2-7) = \\text{NWD}(n, 7)$, więc rozważ osobno przypadki: gdy $7 \\mid n$ oraz gdy $7 \\nmid n$.",
+    "W przypadku gdy $7 \\nmid n$, czynniki $n$ i $n^2-7$ są względnie pierwsze, więc oba muszą być kwadratami. Kiedy $n^2 - 7$ może być kwadratem? Rozważ różnicę dwóch kwadratów i jej rozkład."
+  ]
 }

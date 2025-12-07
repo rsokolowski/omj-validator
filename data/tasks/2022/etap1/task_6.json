@@ -1,13 +1,21 @@
 {
   "number": 6,
-  "title": "Kwadrat o boku n z plusami i minusami",
-  "content": "Plusem nazwiemy przedstawioną na rysunku figurę złożoną z pięciu kwadratów o boku 1, a minusem — każdy prostokąt złożony z dwóch takich kwadratów. Czy istnieje liczba nieparzysta n o tej własności, że kwadrat o boku n można rozciąć na plusy i minusy? Odpowiedź uzasadnij.",
+  "title": "Kwadrat o boku $n$ z plusami i minusami",
+  "content": "*Plusem* nazwiemy przedstawioną na rysunku figurę złożoną z pięciu kwadratów o boku 1, a *minusem* — każdy prostokąt złożony z dwóch takich kwadratów. Czy istnieje liczba nieparzysta $n$ o tej własności, że kwadrat o boku $n$ można rozciąć na plusy i minusy? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2022/etap1/18omj-1etap.pdf",
     "solutions": "tasks/2022/etap1/18omj-1r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Oblicz pole plusa i minusa. Zastanów się, jakie pola może mieć kwadrat o nieparzystym boku $n$ i czy da się je przedstawić jako sumę pól plusów i minusów.",
+    "Samo sprawdzenie podzielności pola nie wystarczy. Poszukaj niezmiennika — spróbuj pokolorować kwadrat w specjalny sposób i zbadaj, ile pól każdego koloru pokrywa plus, a ile minus.",
+    "Użyj kolorowania szachownicowego. Policz, ile jest czarnych i białych pól w kwadracie $n \\times n$ dla nieparzystego $n$. Ile pól każdego koloru pokrywa minus? A ile plus (rozważ różne położenia środka plusa)?",
+    "Plus o środku na polu białym pokrywa 3 białe i 2 czarne pola (lub odwrotnie). Minus zawsze pokrywa 1 białe i 1 czarne. Sprawdź, czy da się zbilansować liczbę pokrytych pól obu kolorów dla nieparzystego $n$."
+  ]
 }

@@ -1,13 +1,20 @@
 {
   "number": 1,
-  "title": "Nierówność x² + x ≤ y",
-  "content": "Liczby rzeczywiste x oraz y spełniają nierówność x² + x ≤ y. Udowodnij, że y² + y ≥ x.",
+  "title": "Nierówność $x^2 + x \\leq y$",
+  "content": "Liczby rzeczywiste $x$ oraz $y$ spełniają nierówność $x^2 + x \\leq y$. Udowodnij, że $y^2 + y \\geq x$.",
   "pdf": {
     "tasks": "tasks/2018/etap2/2etap19.pdf",
     "solutions": "tasks/2018/etap2/2etap19r.pdf",
     "statistics": "tasks/2018/etap2/2etap19st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Rozważ funkcję $f(t) = t^2 + t$. Jak wygląda jej wykres? Dla jakich wartości $t$ funkcja ta jest rosnąca, a dla jakich malejąca?",
+    "Spróbuj przeformułować warunek zadania: z $x^2 + x \\leq y$ wynika coś o $f(x)$ i $y$. Co musisz pokazać o $f(y)$ i $x$? Zastanów się, czy możesz wykorzystać monotoniczność funkcji $f$.",
+    "Zauważ, że $f(t) = t^2 + t = (t + \\frac{1}{2})^2 - \\frac{1}{4}$. Funkcja $f$ jest rosnąca dla $t \\geq -\\frac{1}{2}$. Rozważ dwa przypadki: gdy $x \\geq -\\frac{1}{2}$ oraz gdy $x < -\\frac{1}{2}$.",
+    "Dla przypadku $x \\geq -\\frac{1}{2}$: skoro $f(x) \\leq y$, to $x \\leq y$ (bo $f(x) \\geq x$ dla takich $x$). Następnie wykorzystaj monotoniczność $f$. Dla $x < -\\frac{1}{2}$ sprawdź, czy $f(y) \\geq x$ zachodzi bezpośrednio."
+  ]
 }

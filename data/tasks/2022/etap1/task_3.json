@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Prostokąt ABCD z punktami E i F",
-  "content": "Dany jest prostokąt ABCD. Punkt E leży na boku AB, a punkt F leży na odcinku CE. Wykaż, że jeśli trójkąty ADE i CDF mają równe pola, to również trójkąty BCE i DEF mają równe pola.",
+  "title": "Prostokąt $ABCD$ z punktami $E$ i $F$",
+  "content": "Dany jest prostokąt $ABCD$. Punkt $E$ leży na boku $AB$, a punkt $F$ leży na odcinku $CE$. Wykaż, że jeśli trójkąty $ADE$ i $CDF$ mają równe pola, to również trójkąty $BCE$ i $DEF$ mają równe pola.",
   "pdf": {
     "tasks": "tasks/2022/etap1/18omj-1etap.pdf",
     "solutions": "tasks/2022/etap1/18omj-1r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek prostokąta $ABCD$ z punktami $E$ i $F$. Oznacz pola wszystkich trójkątów, na które odcinek $CE$ i punkt $F$ dzielą prostokąt. Jakie trójkąty widzisz?",
+    "Spróbuj wyrazić pola różnych trójkątów przez boki prostokąta i odpowiednie odległości. Zastanów się, jak pole całego prostokąta można zapisać jako sumę pól mniejszych figur.",
+    "Zauważ, że trójkąty $ADE$ i $BCE$ mają wspólną wysokość (bok $AB$). Podobnie przeanalizuj trójkąt $CDE$ - jak jego pole wiąże się z polami trójkątów $CDF$ i $DEF$?",
+    "Zapisz równość: pole prostokąta = suma pól trójkątów $ADE$, $BCE$ i $CDE$. Następnie rozłóż pole trójkąta $CDE$ na pola trójkątów $CDF$ i $DEF$. Wykorzystaj warunek $P_{ADE} = P_{CDF}$ do pokazania tezy."
+  ]
 }

@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Równoległobok ABCD z PC=BC",
-  "content": "Wewnątrz równoległoboku ABCD znajduje się taki punkt P, że PC = BC. Udowodnij, że prosta BP jest prostopadła do prostej łączącej środki odcinków AP i CD.",
+  "title": "Równoległobok $ABCD$ z $PC = BC$",
+  "content": "Wewnątrz równoległoboku $ABCD$ znajduje się taki punkt $P$, że $PC = BC$. Udowodnij, że prosta $BP$ jest prostopadła do prostej łączącej środki odcinków $AP$ i $CD$.",
   "pdf": {
     "tasks": "tasks/2017/etap1/1etap17.pdf",
     "solutions": "tasks/2017/etap1/1etap17r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Oznacz środek odcinka $AP$ jako $M$, a środek odcinka $CD$ jako $N$. Co wiesz o położeniu punktu $N$ względem równoległoboku? Narysuj dokładny rysunek.",
+    "Przypomnij sobie twierdzenie o odcinku łączącym środki dwóch boków trójkąta (środkowa trójkąta). Zastanów się, w jakim trójkącie możesz zastosować tę własność.",
+    "Rozważ trójkąt $APC$ i jego środkowe. Punkt $N$ (środek $CD$) jest też środkiem przekątnej $AC$ równoległoboku. Jaki odcinek w trójkącie $APC$ jest równoległy do $PC$?",
+    "Odcinek $MN$ (gdzie $M$ to środek $AP$, $N$ to środek $AC$) jest środkową trójkąta $APC$, więc $MN \\parallel PC$. Skoro $PC = BC$, to trójkąt $BPC$ jest równoramienny. Wykorzystaj własności tego trójkąta, by pokazać prostopadłość."
+  ]
 }

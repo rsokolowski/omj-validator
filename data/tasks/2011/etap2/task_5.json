@@ -1,13 +1,21 @@
 {
   "number": 5,
-  "title": "Czworościan foremny z 6 kulami",
-  "content": "Dany jest czworościan foremny opisany na sferze o promieniu 1. Udowodnij, że w tym czworościanie można umieścić 6 kul o promieniu ½, w taki sposób, aby każde dwie kule miały co najwyżej jeden punkt wspólny.",
+  "title": "Czworokąt wypukły i środek okręgu",
+  "content": "Dany jest czworokąt wypukły $ABCD$, w którym\n$$\\angle DAB + \\angle BCD = \\angle ABC.$$\nPunkt $O$ jest środkiem okręgu opisanego na trójkącie $ABC$. Wykaż, że punkt $O$ jest jednakowo odległy od prostych $AD$ i $CD$.",
   "pdf": {
     "tasks": "tasks/2011/etap2/2etap12.pdf",
     "solutions": "tasks/2011/etap2/2etap12r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Czworościan foremny ma 4 wierzchołki, 6 krawędzi i 4 ściany. Zastanów się, jak te liczby mogą się wiązać z liczbą 6 kul do umieszczenia.",
+    "Pomyśl o umieszczeniu środków kul w szczególnych punktach czworościanu - jakie punkty są naturalnie związane z liczbą 6?",
+    "Rozważ środki krawędzi czworościanu jako środki kul. Ile wynosi odległość między środkami dwóch sąsiednich krawędzi (mających wspólny wierzchołek) w porównaniu do długości krawędzi?",
+    "Wyznacz długość krawędzi czworościanu foremnego wpisanego w sferę o promieniu 1, korzystając z własności środka ciężkości. Następnie sprawdź, czy odległość między środkami różnych krawędzi jest co najmniej równa 1."
+  ]
 }

@@ -1,13 +1,21 @@
 {
   "number": 5,
   "title": "Różnica kwadratów dwóch liczb całkowitych",
-  "content": "Liczby całkowite a, b są dodatnie. Wykaż, że co najmniej jedną z liczb a, b, a+b można przedstawić w postaci różnicy kwadratów dwóch liczb całkowitych.",
+  "content": "Liczby całkowite $a$, $b$ są dodatnie. Wykaż, że co najmniej jedną z liczb $a$, $b$, $a+b$ można przedstawić w postaci różnicy kwadratów dwóch liczb całkowitych.",
   "pdf": {
     "tasks": "tasks/2016/etap1/1etap16.pdf",
     "solutions": "tasks/2016/etap1/1etap16r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Przypomnij sobie wzór na różnicę kwadratów: $a^2 - b^2 = (a-b)(a+b)$. Jakie liczby można zapisać jako iloczyn dwóch czynników o tej samej parzystości?",
+    "Rozważ przypadki w zależności od parzystości liczb $a$ i $b$. Ile jest możliwych kombinacji parzystości dla pary $(a, b)$?",
+    "Zauważ, że różnica kwadratów $(m-n)(m+n)$ daje iloczyn dwóch liczb o tej samej parzystości. Kiedy liczba nieparzysta lub parzysta podzielna przez 4 da się tak przedstawić?",
+    "Każdą liczbę nieparzystą $2k+1$ można zapisać jako $(k+1)^2 - k^2$. Dla liczb parzystych sprawdź, kiedy $a$ lub $b$ lub $a+b$ jest podzielne przez 4."
+  ]
 }

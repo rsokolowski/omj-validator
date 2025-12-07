@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Trójki liczb pierwszych q=p²+6 i r=q²+6",
-  "content": "Wyznacz wszystkie trójki liczb pierwszych p, q, r spełniające układ równań: q = p²+6 oraz r = q²+6.",
+  "title": "Trójki liczb pierwszych $q = p^2 + 6$ i $r = q^2 + 6$",
+  "content": "Wyznacz wszystkie trójki liczb pierwszych $p$, $q$, $r$ spełniające układ równań\n$$\\begin{cases} q = p^2 + 6 \\\\ r = q^2 + 6 \\end{cases}$$",
   "pdf": {
     "tasks": "tasks/2006/etap1/omg02_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, jakie reszty z dzielenia przez 3 mogą dawać liczby pierwsze. Czy każda liczba pierwsza może dawać dowolną resztę?",
+    "Zbadaj podzielność przez 3. Jeśli liczba pierwsza $p > 3$, to jaką resztę z dzielenia przez 3 daje $p^2$? A co z $p^2 + 6$?",
+    "Zauważ, że dla $p > 3$ wyrażenie $p^2 + 6$ jest zawsze podzielne przez 3, ale większe od 3. Co to oznacza dla pierwszości $q$?",
+    "Sprawdź osobno przypadki $p = 2$ i $p = 3$, obliczając odpowiadające im wartości $q$ i $r$, a następnie weryfikując ich pierwszość."
+  ]
 }

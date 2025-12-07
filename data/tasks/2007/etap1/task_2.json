@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Czworokąt ABCD z symetrycznymi punktami",
-  "content": "Dany jest czworokąt wypukły ABCD o polu 1. Punkt K jest symetryczny do punktu B względem punktu A, punkt L jest symetryczny do punktu C względem punktu B, punkt M jest symetryczny do punktu D względem punktu C, punkt N jest symetryczny do punktu A względem punktu D. Oblicz pole czworokąta KLMN.",
+  "title": "Czworokąt $ABCD$ z symetrycznymi punktami",
+  "content": "Dany jest czworokąt wypukły $ABCD$ o polu $1$. Punkt $K$ jest symetryczny do punktu $B$ względem punktu $A$, punkt $L$ jest symetryczny do punktu $C$ względem punktu $B$, punkt $M$ jest symetryczny do punktu $D$ względem punktu $C$, punkt $N$ jest symetryczny do punktu $A$ względem punktu $D$. Oblicz pole czworokąta $KLMN$.",
   "pdf": {
     "tasks": "tasks/2007/etap1/omg03_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek czworokąta $ABCD$ i zaznacz wszystkie punkty $K$, $L$, $M$, $N$. Co oznacza, że punkt $K$ jest symetryczny do $B$ względem $A$? Jak można to wyrazić za pomocą odcinków?",
+    "Spróbuj powiązać boki czworokąta $KLMN$ z przekątnymi lub bokami czworokąta $ABCD$. Rozważ rozbicie obu czworokątów na trójkąty i porównanie ich pól.",
+    "Zauważ, że np. $KL$ jest związane z odcinkiem $AC$. Zbadaj, jak boki czworokąta $KLMN$ mają się do przekątnych $AC$ i $BD$ oryginalnego czworokąta - sprawdź równoległość i stosunek długości.",
+    "Pokaż, że $KLMN$ jest równoległobokiem, którego boki są równoległe do przekątnych $ABCD$ i dwukrotnie od nich dłuższe. Następnie porównaj pole $KLMN$ z polem $ABCD$, korzystając z rozkładu na trójkąty."
+  ]
 }

@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Bal z 102 królewiczami i 103 królewna­mi",
+  "title": "Bal z 102 królewiczami i 103 królewnami",
   "content": "W balu wzięło udział 102 królewiczów i 103 królewny. Po balu okazało się, że każdy królewicz zatańczył z taką samą liczbą królewien. Udowodnij, że pewne dwie królewny zatańczyły z taką samą liczbą królewiczów.",
   "pdf": {
     "tasks": "tasks/2012/etap1/1etap12.pdf",
     "solutions": "tasks/2012/etap1/1etap12r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Zastanów się, ile różnych wartości może przyjąć liczba królewiczów, z którymi zatańczyła dana królewna. Jakie są możliwe wartości minimalna i maksymalna?",
+    "To zadanie można rozwiązać za pomocą zasady szufladkowej (Dirichleta). Spróbuj określić, ile jest królewien (obiektów) i ile jest możliwych różnych wyników (szufladek).",
+    "Zwróć uwagę na warunek, że każdy królewicz zatańczył z tą samą liczbą królewien. Co to oznacza dla królewny, która zatańczyła z wszystkimi królewiczami, i tej, która nie zatańczyła z żadnym?",
+    "Pokaż, że nie może być jednocześnie królewny, która tańczyła z 0 królewiczami, i królewny, która tańczyła ze wszystkimi 102. Zatem możliwych wartości jest co najwyżej 102, a królewien jest 103."
+  ]
 }

@@ -1,13 +1,21 @@
 {
   "number": 4,
-  "title": "Pary (a,b) z a+b pierwszą i a³+b³ podzielną przez 3",
-  "content": "Wyznacz wszystkie takie pary (a,b) dodatnich liczb całkowitych, że liczba a+b jest liczbą pierwszą oraz liczba a³+b³ jest podzielna przez 3.",
+  "title": "Pary $(a,b)$ z $a+b$ pierwszą i $a^3+b^3$ podzielną przez 3",
+  "content": "Wyznacz wszystkie takie pary $(a, b)$ dodatnich liczb całkowitych, że liczba $a+b$ jest liczbą pierwszą oraz liczba $a^3+b^3$ jest podzielna przez 3.",
   "pdf": {
     "tasks": "tasks/2008/etap1/omg04_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Przypomnij sobie wzór na sumę sześcianów: $a^3 + b^3 = (a+b)(a^2 - ab + b^2)$. Kiedy iloczyn dwóch liczb jest podzielny przez 3?",
+    "Skoro $a+b$ jest liczbą pierwszą, rozważ dwa przypadki: albo $3 | (a+b)$, albo $3 | (a^2 - ab + b^2)$. Co oznacza pierwszy przypadek dla wartości $a+b$?",
+    "Zbadaj reszty z dzielenia $a$ i $b$ przez 3. Jaką resztę daje wyrażenie $a^2 - ab + b^2$ w zależności od reszt $a$ i $b$? Rozważ wszystkie kombinacje.",
+    "Gdy $a+b \\neq 3$, sprawdź kiedy $a^2 - ab + b^2 \\equiv 0 \\pmod{3}$. Oblicz to wyrażenie modulo 3 dla każdej pary reszt $(a \\mod 3, b \\mod 3)$."
+  ]
 }

@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Układ równań 25x²+9y²=12yz",
-  "content": "Wyznaczyć wszystkie rozwiązania układu równań: 25x²+9y² = 12yz, 9y²+4z² = 20xz, 4z²+25x² = 30xy w liczbach rzeczywistych x, y, z.",
+  "title": "Układ równań $25x^2+9y^2=12yz$",
+  "content": "Wyznaczyć wszystkie rozwiązania układu równań\n$$\\begin{cases} 25x^2 + 9y^2 = 12yz \\\\ 9y^2 + 4z^2 = 20xz \\\\ 4z^2 + 25x^2 = 30xy \\end{cases}$$\nw liczbach rzeczywistych $x$, $y$, $z$.",
   "pdf": {
     "tasks": "tasks/2005/etap1/omg01_1.pdf",
     "solutions": "tasks/2005/etap1/omg01_1r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Przyjrzyj się współczynnikom przy kwadratach: $25 = 5^2$, $9 = 3^2$, $4 = 2^2$. Co możesz powiedzieć o współczynnikach po prawej stronie (12, 20, 30)? Czy widzisz związek z liczbami 2, 3, 5?",
+    "Spróbuj dodać wszystkie trzy równania stronami. Czy powstałe wyrażenie można zgrupować w jakiś użyteczny sposób?",
+    "Po dodaniu równań, spróbuj pogrupować wyrazy tak, aby powstały kwadraty dwumianów. Przypomnij sobie wzór: $(a-b)^2 = a^2 - 2ab + b^2$.",
+    "Sprawdź, czy sumę można zapisać jako $(5x-3y)^2 + (3y-2z)^2 + (2z-5x)^2$. Kiedy suma kwadratów liczb rzeczywistych równa się zero?"
+  ]
 }

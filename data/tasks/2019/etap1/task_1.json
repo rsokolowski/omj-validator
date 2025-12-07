@@ -1,13 +1,21 @@
 {
   "number": 1,
-  "title": "Dopisanie cyfry - 13 razy większa",
-  "content": "Do pewnej dodatniej liczby całkowitej n dopisano na końcu pewną cyfrę, uzyskując w ten sposób liczbę 13 razy większą od liczby n. Wyznacz wszystkie liczby n o tej własności.",
+  "title": "Dopisanie cyfry - liczba 13 razy większa",
+  "content": "Do pewnej dodatniej liczby całkowitej $n$ dopisano na końcu pewną cyfrę, uzyskując w ten sposób liczbę 13 razy większą od liczby $n$. Wyznacz wszystkie liczby $n$ o tej własności.",
   "pdf": {
     "tasks": "tasks/2019/etap1/1etap19.pdf",
     "solutions": "tasks/2019/etap1/1etap19r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, jak zapisać algebraicznie operację \"dopisania cyfry na końcu liczby\". Jeśli masz liczbę $n$, a dopisujesz cyfrę $c$, jaka jest wartość nowej liczby?",
+    "Zapisz równanie wyrażające warunek zadania. Pamiętaj, że dopisana cyfra musi być cyfrą, czyli liczbą z określonego zakresu.",
+    "Z otrzymanego równania wyraź dopisaną cyfrę przez $n$. Jakie ograniczenia musi spełniać ta cyfra?",
+    "Skoro cyfra musi należeć do zbioru $\\{0, 1, 2, ..., 9\\}$, sprawdź dla których wartości z tego zbioru $n$ jest dodatnią liczbą całkowitą."
+  ]
 }

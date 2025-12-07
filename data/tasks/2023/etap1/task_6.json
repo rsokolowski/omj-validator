@@ -1,13 +1,20 @@
 {
   "number": 6,
-  "title": "Warunek ab+b+1, bc+c+1, ca+a+1",
-  "content": "Dane są liczby rzeczywiste a, b, c. Udowodnij, że jeżeli pewne dwie z liczb ab+b+1, bc+c+1, ca+a+1 są równe 0, to także trzecia z nich jest równa 0.",
+  "title": "Warunek $ab+b+1$, $bc+c+1$, $ca+a+1$",
+  "content": "Dane są liczby rzeczywiste $a$, $b$, $c$. Udowodnij, że jeżeli pewne dwie z liczb $$ab+b+1, \\quad bc+c+1, \\quad ca+a+1$$ są równe $0$, to także trzecia z nich jest równa $0$.",
   "pdf": {
     "tasks": "tasks/2023/etap1/19omj-1etap.pdf",
     "solutions": "tasks/2023/etap1/19omj-1etap-r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Oznacz te trzy wyrażenia jako $P = ab+b+1$, $Q = bc+c+1$, $R = ca+a+1$. Spróbuj wyciągnąć wspólny czynnik w każdym z nich. Co łączy te wyrażenia?",
+    "Zauważ, że każde wyrażenie można zapisać w postaci iloczynowej, np. $ab+b+1 = b(a+1)+1$. Jeśli jedno wyrażenie jest równe zeru, co możesz powiedzieć o wartości odpowiedniej zmiennej?",
+    "Jeśli $ab+b+1 = 0$, to $b(a+1) = -1$. To oznacza, że $b \\neq 0$ i $a \\neq -1$. Jak możesz wyrazić $b$ przez $a$? Podstaw to wyrażenie do pozostałych równań.",
+    "Z równania $ab+b+1=0$ wynika $b = \\frac{-1}{a+1}$. Podstaw tę wartość do drugiego wyrażenia, które też jest równe zeru, i wyznacz zależność między zmiennymi. Następnie sprawdź trzecie wyrażenie."
+  ]
 }

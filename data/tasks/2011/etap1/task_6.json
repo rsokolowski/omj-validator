@@ -1,13 +1,21 @@
 {
   "number": 6,
-  "title": "Wymierna suma √a+√b+√(ab)",
-  "content": "Dane są takie dodatnie liczby wymierne a i b, dla których liczba √a+√b+√(ab) jest wymierna. Wykaż, że liczby √a oraz √b także są wymierne.",
+  "title": "Wymierna suma $\\sqrt{a}+\\sqrt{b}+\\sqrt{ab}$",
+  "content": "Dane są takie dodatnie liczby wymierne $a$ i $b$, dla których liczba $\\sqrt{a}+\\sqrt{b}+\\sqrt{ab}$ jest wymierna. Wykaż, że liczby $\\sqrt{a}$ oraz $\\sqrt{b}$ także są wymierne.",
   "pdf": {
     "tasks": "tasks/2011/etap1/1etap11.pdf",
     "solutions": "tasks/2011/etap1/1etap11r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Oznacz $S = \\sqrt{a} + \\sqrt{b} + \\sqrt{ab}$. Co możesz powiedzieć o wyrażeniu $\\sqrt{ab} = \\sqrt{a} \\cdot \\sqrt{b}$? Rozważ, co by było, gdyby jedna z liczb $\\sqrt{a}$ lub $\\sqrt{b}$ była niewymierna.",
+    "Spróbuj podejścia nie wprost: załóż, że $\\sqrt{a}$ jest niewymierna i zobacz, do jakiej sprzeczności to prowadzi. Wykorzystaj fakt, że $a$ i $b$ są wymierne.",
+    "Zauważ, że możesz wyrazić $\\sqrt{a}$ jako kombinację wyrażeń zawierających $S$ i inne składniki. Spróbuj przekształcić $S - \\sqrt{ab}$ i sprawdź, czy możesz uzyskać równanie, w którym $\\sqrt{a}$ występuje po jednej stronie.",
+    "Rozważ wyrażenie $(\\sqrt{a} + \\sqrt{b})^2 = a + b + 2\\sqrt{ab}$. Skoro $S$ jest wymierna, to $\\sqrt{a} + \\sqrt{b} = S - \\sqrt{ab}$. Zbadaj, kiedy kwadrat tej różnicy może być wymierny."
+  ]
 }

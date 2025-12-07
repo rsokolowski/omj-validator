@@ -1,13 +1,21 @@
 {
   "number": 5,
   "title": "Punkty na prostej z parzystą sumą odległości",
-  "content": "Niech n ≥ 3 będzie liczbą nieparzystą. Na prostej zaznaczono n punktów w taki sposób, że odległość między każdymi dwoma z nich jest liczbą całkowitą. Okazało się, że każdy zaznaczony punkt ma parzystą sumę odległości od pozostałych n−1 zaznaczonych punktów. Wykaż, że odległość między każdymi dwoma zaznaczonymi punktami jest liczbą parzystą.",
+  "content": "Niech $n \\geq 3$ będzie liczbą nieparzystą. Na prostej zaznaczono $n$ punktów w taki sposób, że odległość między każdymi dwoma z nich jest liczbą całkowitą. Okazało się, że każdy zaznaczony punkt ma parzystą sumę odległości od pozostałych $n - 1$ zaznaczonych punktów. Wykaż, że odległość między każdymi dwoma zaznaczonymi punktami jest liczbą parzystą.",
   "pdf": {
     "tasks": "tasks/2021/etap2/2etap22.pdf",
     "solutions": "tasks/2021/etap2/2etap22r.pdf",
     "statistics": "tasks/2021/etap2/2etap22st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Oznacz punkty jako liczby całkowite na osi liczbowej. Zastanów się, co parzystość sumy odległości od danego punktu mówi o parzystości współrzędnej tego punktu.",
+    "Rozważ podział punktów na parzyste i nieparzyste. Wykorzystaj fakt, że $n$ jest nieparzyste - ile punktów musi być parzystych, a ile nieparzystych?",
+    "Policz sumę odległości od punktu $x$ do pozostałych punktów w zależności od tego, ile z nich jest parzystych, a ile nieparzystych. Kiedy ta suma jest parzysta?",
+    "Wykaż, że wszystkie punkty muszą mieć tę samą parzystość. Jeśli wszystkie są parzyste lub wszystkie nieparzyste, co możesz powiedzieć o parzystości ich różnic?"
+  ]
 }

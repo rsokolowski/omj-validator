@@ -1,13 +1,21 @@
 {
   "number": 2,
-  "title": "Liczby x₁,...,x₁₀₁ równe 1 lub −1",
-  "content": "Każda z liczb x₁, x₂, ..., x₁₀₁ jest równa 1 lub −1. Wyznacz najmniejszą możliwą wartość wyrażenia\nx₁x₂ + x₂x₃ + x₃x₄ + ... + x₁₀₀x₁₀₁ + x₁₀₁x₁.",
+  "title": "Trapez $ABCD$ z punktem $E$ na boku $BC$",
+  "content": "Dany jest trapez $ABCD$ o podstawach $AB$ i $CD$, w którym $\\angle BAD = \\angle ABC = 60^\\circ$ oraz $CD < BC$. Na boku $BC$ tego trapezu wybrano taki punkt $E$, że $EB = CD$. Wykaż, że $BD = AE$.",
   "pdf": {
     "tasks": "tasks/2009/etap2/2etap10.pdf",
     "solutions": "tasks/2009/etap2/omg05_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "algebra"
+  ],
+  "hints": [
+    "Zauważ, że każdy iloczyn $x_i x_{i+1}$ jest równy 1 lub $-1$. Kiedy iloczyn wynosi 1, a kiedy $-1$? Ile jest wszystkich składników w tej sumie cyklicznej?",
+    "Pomyśl o tym zadaniu jako o rozmieszczeniu liczb 1 i $-1$ na okręgu. Każda para sąsiednich liczb daje iloczyn. Aby zminimalizować sumę, chcesz jak najwięcej iloczynów równych $-1$. Zbadaj, ile razy znak może się zmienić przy przejściu po okręgu.",
+    "Policz iloczyn wszystkich 101 składników sumy, czyli $(x_1x_2) \\cdot (x_2x_3) \\cdot \\ldots \\cdot (x_{101}x_1)$. Uprość ten iloczyn i zastanów się, co to mówi o liczbie składników równych $-1$.",
+    "Skoro iloczyn wszystkich składników sumy wynosi 1, to liczba składników równych $-1$ musi być parzysta. Przy 101 składnikach, jaka jest maksymalna parzysta liczba składników równych $-1$? Spróbuj skonstruować ciąg realizujący to optimum."
+  ]
 }

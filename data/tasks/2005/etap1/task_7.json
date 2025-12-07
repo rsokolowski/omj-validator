@@ -1,13 +1,20 @@
 {
   "number": 7,
-  "title": "Punkty A, B, C, D z AB=BC=BD=17",
-  "content": "Na płaszczyźnie dane są punkty A, B, C, D. Punkt B jest środkiem odcinka AC, a przy tym AB = BC = BD = 17 oraz AD = 16. Obliczyć długość odcinka CD.",
+  "title": "Punkty $A$, $B$, $C$, $D$ z $AB=BC=BD=17$",
+  "content": "Na płaszczyźnie dane są punkty $A$, $B$, $C$, $D$. Punkt $B$ jest środkiem odcinka $AC$, a przy tym $AB = BC = BD = 17$ oraz $AD = 16$. Obliczyć długość odcinka $CD$.",
   "pdf": {
     "tasks": "tasks/2005/etap1/omg01_1.pdf",
     "solutions": "tasks/2005/etap1/omg01_1r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek z punktami A, B, C na jednej prostej (B jest środkiem AC) oraz punktem D. Zaznacz wszystkie dane długości. Co zauważasz o odległościach od punktu B?",
+    "Skoro AB = BC = BD = 17, punkt B jest równoodległy od A, C i D. Poprowadź wysokość z punktu B na odcinek AD (lub CD) i zastosuj twierdzenie Pitagorasa.",
+    "Oznacz przez H spodek wysokości z B na prostą AD. Trójkąt ABH jest prostokątny. Oblicz długość BH korzystając z twierdzenia Pitagorasa dla trójkąta ABD.",
+    "Zauważ, że trójkąty ABD i CBD mają wspólną wysokość z wierzchołka B. Wykorzystaj, że AB = BC, aby powiązać położenie punktów A i C względem prostej przez B prostopadłej do AD."
+  ]
 }

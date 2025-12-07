@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Trójkąt ABC z AE=BD",
-  "content": "Dany jest trójkąt ABC, w którym AC < BC. Punkty D i E leżą odpowiednio na bokach BC i AC tego trójkąta, przy czym AE = BD. Wykaż, że symetralne odcinków AB i DE przecinają się w punkcie leżącym na okręgu opisanym na trójkącie ABC.",
+  "title": "Równoległobok $ABCD$ z $AD = DX$ i $AB = BY$",
+  "content": "Dany jest równoległobok $ABCD$. Na bokach $AB$ i $AD$ leżą odpowiednio takie punkty $X$ i $Y$ różne od $A$, że $AD = DX$ oraz $AB = BY$. Udowodnij, że $CX = CY$.",
   "pdf": {
     "tasks": "tasks/2015/etap2/2etap16.pdf",
     "solutions": "tasks/2015/etap2/2etap16r.pdf",
     "statistics": "tasks/2015/etap2/2etap16st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek równoległoboka $ABCD$ z zaznaczonymi punktami $X$ i $Y$. Jakie odcinki są równe na mocy założeń? Zaznacz wszystkie równe boki.",
+    "Skoro $AD = DX$ i $AB = BY$, to trójkąty $ADX$ i $ABY$ mają szczególną własność. Zastanów się, jak wykorzystać przystawanie trójkątów do wykazania równości $CX = CY$.",
+    "Przyjrzyj się trójkątom $CDX$ i $CBY$. Wykorzystaj własności równoległoboka ($CD = AB$, $BC = AD$) oraz fakt, że trójkąty $ADX$ i $ABY$ są równoramienne. Jakie kąty przy wierzchołkach $D$ i $B$ możesz porównać?",
+    "Wykaż, że $\\angle CDX = \\angle CBY$ korzystając z tego, że kąty przy podstawach trójkątów równoramiennych są równe. Następnie sprawdź warunki przystawania trójkątów $CDX$ i $CBY$ (bok-kąt-bok)."
+  ]
 }

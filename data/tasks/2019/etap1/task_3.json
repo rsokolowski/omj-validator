@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Trójki (x,y,z) z xy(x+y)=yz(y+z)=zx(z+x)",
-  "content": "Wyznacz wszystkie trójki (x,y,z) liczb rzeczywistych różnych od 0, dla których xy(x+y) = yz(y+z) = zx(z+x).",
+  "title": "Trójki $(x,y,z)$ z $xy(x+y) = yz(y+z) = zx(z+x)$",
+  "content": "Wyznacz wszystkie trójki $(x, y, z)$ liczb rzeczywistych różnych od 0, dla których $$xy(x+y) = yz(y+z) = zx(z+x).$$",
   "pdf": {
     "tasks": "tasks/2019/etap1/1etap19.pdf",
     "solutions": "tasks/2019/etap1/1etap19r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Mamy trzy wyrażenia, które są sobie równe. Oznacz ich wspólną wartość przez $k$ i zastanów się, co można wywnioskować z każdej pary równości.",
+    "Spróbuj odjąć stronami dwie równości, np. $xy(x+y) = yz(y+z)$. Wyciągnij wspólne czynniki i rozważ, kiedy iloczyn może być równy zero.",
+    "Po przekształceniu $xy(x+y) - yz(y+z) = 0$ otrzymasz wyrażenie z czynnikiem $y$. Sprawdź osobno przypadek, gdy pozostałe zmienne są równe, i przypadek, gdy są różne.",
+    "Rozwiń i pogrupuj: $y(x^2 + xy - yz - z^2) = y((x^2-z^2) + y(x-z)) = y(x-z)(x+y+z)$. Skoro $y \\neq 0$, rozważ co wynika z tego równania i analogicznych dla innych par."
+  ]
 }

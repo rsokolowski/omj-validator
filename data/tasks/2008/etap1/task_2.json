@@ -1,13 +1,21 @@
 {
   "number": 2,
   "title": "Prostopadłościan o podstawie kwadratowej",
-  "content": "Dany jest prostopadłościan o podstawie kwadratowej. Przekątna tego prostopadłościanu ma długość d, a jego pole powierzchni jest równe b. Oblicz sumę długości wszystkich krawędzi prostopadłościanu.",
+  "content": "Dany jest prostopadłościan o podstawie kwadratowej. Przekątna tego prostopadłościanu ma długość $d$, a jego pole powierzchni jest równe $b$. Oblicz sumę długości wszystkich krawędzi prostopadłościanu.",
   "pdf": {
     "tasks": "tasks/2008/etap1/omg04_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria",
+    "algebra"
+  ],
+  "hints": [
+    "Narysuj prostopadłościan i oznacz krawędź podstawy jako $a$, a wysokość jako $h$. Zapisz wzory na przekątną bryły i pole powierzchni w tych oznaczeniach.",
+    "Zapisz, ile wynosi suma wszystkich krawędzi prostopadłościanu przez $a$ i $h$. Zastanów się, jak połączyć dane równania, by uzyskać to wyrażenie.",
+    "Oblicz $d^2 + b$ i sprawdź, czy wynik da się zapisać jako kwadrat pewnego wyrażenia zawierającego $a$ i $h$.",
+    "Zauważ, że suma krawędzi to $4(2a + h)$. Sprawdź, czy wyrażenie $d^2 + b$ nie jest przypadkiem równe $(2a + h)^2$."
+  ]
 }

@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Równoległobok ABCD z punktami K i L",
-  "content": "Punkty K i L znajdują się odpowiednio na bokach BC i CD równoległoboku ABCD, przy czym\nAB + BK = AD + DL.\nUdowodnij, że dwusieczna kąta BAD jest prostopadła do prostej KL.",
+  "title": "Równoległobok $ABCD$ z punktami $K$ i $L$",
+  "content": "Punkty $K$ i $L$ znajdują się odpowiednio na bokach $BC$ i $CD$ równoległoboku $ABCD$, przy czym\n$$AB + BK = AD + DL.$$\nUdowodnij, że dwusieczna kąta $BAD$ jest prostopadła do prostej $KL$.",
   "pdf": {
     "tasks": "tasks/2020/etap2/2etap21.pdf",
     "solutions": "tasks/2020/etap2/2etap21r.pdf",
     "statistics": "tasks/2020/etap2/2etap21st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek równoległoboku $ABCD$ z punktami $K$ na $BC$ i $L$ na $CD$. Zaznacz dwusieczną kąta $BAD$. Co wiesz o punktach leżących na dwusiecznej kąta?",
+    "Wykorzystaj własność dwusiecznej kąta: każdy punkt na dwusiecznej jest równoodległy od ramion kąta. Spróbuj znaleźć punkt na dwusiecznej, który będzie miał szczególny związek z odcinkami $AK$ i $AL$.",
+    "Oznacz przez $P$ punkt przecięcia dwusiecznej kąta $BAD$ z prostą $KL$. Rozważ odległości punktu $P$ od prostych $AB$ i $AD$. Jak warunek $AB + BK = AD + DL$ wpływa na położenie punktów $K$ i $L$ względem dwusiecznej?",
+    "Poprowadź przez punkt $P$ leżący na dwusiecznej proste równoległe do boków równoległoboku. Wykorzystaj równość odległości od ramion kąta, aby pokazać, że $P$ leży na prostej $KL$ w taki sposób, że $KL \\perp AP$."
+  ]
 }

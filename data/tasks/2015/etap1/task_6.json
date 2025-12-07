@@ -1,13 +1,20 @@
 {
   "number": 6,
-  "title": "Liczby pierwsze p,q z p²+p podzielnym przez q²+q",
-  "content": "Różne liczby pierwsze nieparzyste p i q mają tę własność, że liczba p²+p jest podzielna przez q²+q. Udowodnij, że liczba ½(p−q) jest złożona.",
+  "title": "Liczby pierwsze $p$, $q$ z $p^2+p$ podzielnym przez $q^2+q$",
+  "content": "Różne liczby pierwsze nieparzyste $p$ i $q$ mają tę własność, że liczba $p^2+p$ jest podzielna przez $q^2+q$. Udowodnij, że liczba $\\frac{1}{2}(p-q)$ jest złożona.",
   "pdf": {
     "tasks": "tasks/2015/etap1/1etap15.pdf",
     "solutions": "tasks/2015/etap1/1etap15r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Rozłóż wyrażenia $p^2+p$ oraz $q^2+q$ na czynniki. Co zauważasz o ich strukturze?",
+    "Skoro $p$ i $q$ są różnymi liczbami pierwszymi nieparzystymi, zastanów się, które czynniki z rozkładu $q(q+1)$ mogą dzielić $p(p+1)$.",
+    "Zauważ, że $p(p+1)$ jest iloczynem dwóch kolejnych liczb. Zbadaj, jak $q$ i $q+1$ mogą być związane z $p$ lub $p+1$.",
+    "Jeśli $q \\mid p$, to z pierwszości wynika $p = q$, co jest sprzeczne. Rozważ przypadek $q \\mid (p+1)$ i pokaż, że wtedy $\\frac{p-q}{2}$ ma nietrywialny dzielnik."
+  ]
 }

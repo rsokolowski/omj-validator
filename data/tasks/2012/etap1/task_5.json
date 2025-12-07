@@ -1,13 +1,20 @@
 {
   "number": 5,
   "title": "Wysokości trójkąta i kwadraty",
-  "content": "Odcinki AD i BE są wysokościami trójkąta ostrokątnego ABC. Po zewnętrznej stronie trójkąta ABC zbudowano kwadrat ABKL oraz prostokąty BDMN i AEPQ, przy czym BN = BC oraz AQ = AC. Udowodnij, że suma pól prostokątów BDMN i AEPQ jest równa polu kwadratu ABKL.",
+  "content": "Odcinki $AD$ i $BE$ są wysokościami trójkąta ostrokątnego $ABC$. Po zewnętrznej stronie trójkąta $ABC$ zbudowano kwadrat $ABKL$ oraz prostokąty $BDMN$ i $AEPQ$, przy czym $BN = BC$ oraz $AQ = AC$. Udowodnij, że suma pól prostokątów $BDMN$ i $AEPQ$ jest równa polu kwadratu $ABKL$.",
   "pdf": {
     "tasks": "tasks/2012/etap1/1etap12.pdf",
     "solutions": "tasks/2012/etap1/1etap12r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek trójkąta ostrokątnego z wysokościami AD i BE. Zapisz, jakie są wymiary każdego z prostokątów - co jest długością, a co szerokością każdego z nich?",
+    "Przypomnij sobie, że wysokość trójkąta tworzy trójkąty prostokątne. Spróbuj wyrazić pola prostokątów przez boki i odcinki powstałe na bokach trójkąta.",
+    "Zwróć uwagę na trójkąty prostokątne ABD i ABE. Jak można wyrazić odcinki BD i AE używając twierdzenia Pitagorasa lub własności rzutów prostokątnych?",
+    "Zastosuj twierdzenie Pitagorasa do trójkątów ABD i ABE. Zauważ, że $BD \\cdot BC + AE \\cdot AC$ można przekształcić używając zależności $BD = AB \\cdot \\cos(\\angle ABC)$ wyrażonej przez boki trójkąta bez trygonometrii."
+  ]
 }

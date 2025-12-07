@@ -1,13 +1,21 @@
 {
   "number": 6,
-  "title": "Równość m² + n = k² + k",
-  "content": "Dodatnie liczby całkowite k, m, n spełniają równość m² + n = k² + k. Wykaż, że m ≤ n.",
+  "title": "Równość $m^2 + n = k^2 + k$",
+  "content": "Dodatnie liczby całkowite $k$, $m$, $n$ spełniają równość $m^2 + n = k^2 + k$. Wykaż, że $m \\leq n$.",
   "pdf": {
     "tasks": "tasks/2017/etap1/1etap17.pdf",
     "solutions": "tasks/2017/etap1/1etap17r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Przekształć równanie tak, aby wyrazić $n$ przez pozostałe zmienne. Co możesz powiedzieć o znaku wyrażenia $k^2 + k - m^2$?",
+    "Spróbuj dowodu nie wprost: załóż, że $m > n$ i zobacz, jakie ograniczenia to nakłada na relację między $k$ i $m$.",
+    "Zauważ, że funkcja $f(x) = x^2 + x$ jest rosnąca dla dodatnich $x$. Jeśli $m > n$, to porównaj wartości $k^2 + k$ oraz $m^2 + m$.",
+    "Z założenia $m > n$ wyprowadź nierówność $k < m$, czyli $k \\leq m-1$. Podstaw to ograniczenie do wyrażenia na $n$ i sprawdź, czy $n$ może być dodatnie."
+  ]
 }

@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Równości a+b=cd i c+d=ab",
-  "content": "Liczby rzeczywiste a, b, c, d spełniają równości\na+b = cd oraz c+d = ab.\nWykaż, że (a+1)(b+1)(c+1)(d+1) ≥ 0.",
+  "title": "Podzielność $a+b$ przez $d$ i $a \\cdot b$ przez $d^2$",
+  "content": "Dane są dodatnie liczby całkowite $a$, $b$, $d$. Wiadomo, że liczba $a+b$ jest podzielna przez $d$, a liczba $a \\cdot b$ jest podzielna przez $d^2$. Udowodnij, że każda z liczb $a$ i $b$ jest podzielna przez $d$.",
   "pdf": {
     "tasks": "tasks/2016/etap2/2etap17.pdf",
     "solutions": "tasks/2016/etap2/2etap17r.pdf",
     "statistics": "tasks/2016/etap2/2etap17st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza podzielność $a+b$ przez $d$. Jak można zapisać liczbę $a$ w postaci $a = qd + r$, gdzie $r$ to reszta z dzielenia przez $d$? Jaki jest związek między resztami $a$ i $b$?",
+    "Skoro $a + b$ dzieli się przez $d$, to reszty z dzielenia $a$ i $b$ przez $d$ muszą się uzupełniać. Spróbuj wykorzystać ten fakt razem z warunkiem o podzielności iloczynu $a \\cdot b$ przez $d^2$.",
+    "Zapisz $a = qd + r$ i $b = pd + s$, gdzie $r + s$ dzieli się przez $d$. Co możesz powiedzieć o iloczynie $a \\cdot b$ modulo $d^2$? Zwróć uwagę na wyrażenie $r \\cdot s$.",
+    "Pokaż, że iloczyn reszt $r \\cdot s$ musi dzielić się przez $d^2$. Ale skoro $0 \\leq r, s < d$, to $r \\cdot s < d^2$. Jakie wartości mogą przyjmować $r$ i $s$?"
+  ]
 }

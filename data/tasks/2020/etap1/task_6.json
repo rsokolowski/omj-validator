@@ -1,13 +1,21 @@
 {
   "number": 6,
-  "title": "(2n+2)-kąt z n² przekątnymi",
-  "content": "W (2n+2)-kącie wypukłym narysowano n² przekątnych. Udowodnij, że pewna z tych przekątnych rozcina (2n+2)-kąt na dwa wielokąty, z których każdy ma nieparzystą liczbę wierzchołków.",
+  "title": "$(2n+2)$-kąt z $n^2$ przekątnymi",
+  "content": "W $(2n+2)$-kącie wypukłym narysowano $n^2$ przekątnych. Udowodnij, że pewna z tych przekątnych rozcina $(2n+2)$-kąt na dwa wielokąty, z których każdy ma nieparzystą liczbę wierzchołków.",
   "pdf": {
     "tasks": "tasks/2020/etap1/1etap20.pdf",
     "solutions": "tasks/2020/etap1/1etap20r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Ile wszystkich przekątnych ma $(2n+2)$-kąt wypukły? Porównaj tę liczbę z $n^2$ narysowanych przekątnych. Zastanów się, jakie przekątne mogą pozostać nienarysowane.",
+    "Rozważ klasyfikację przekątnych według tego, na ile wierzchołków dzielą wielokąt po każdej stronie. Użyj zasady szufladkowej lub argumentu zliczania.",
+    "Przekątna dzieli $(2n+2)$-kąt na dwa wielokąty. Suma ich wierzchołków to $(2n+2)+2 = 2n+4$. Kiedy oba wielokąty mają nieparzystą liczbę wierzchołków? Zbadaj parzystość.",
+    "Aby oba wielokąty miały nieparzystą liczbę wierzchołków, przekątna musi pozostawiać po każdej stronie parzystą liczbę wierzchołków (poza końcami). Policz, ile jest takich przekątnych i porównaj z liczbą pozostałych."
+  ]
 }

@@ -1,13 +1,20 @@
 {
   "number": 2,
   "title": "Czworokąt z wpisanym okręgiem i prostopadłymi przekątnymi",
-  "content": "Dany jest czworokąt wypukły o następujących własnościach: w czworokąt można wpisać okrąg oraz przekątne czworokąta są prostopadłe. Dowieść, że jedna z przekątnych czworokąta dzieli drugą na połowy.",
+  "content": "Dany jest czworokąt wypukły o następujących własnościach:\n• w czworokąt można wpisać okrąg,\n• przekątne czworokąta są prostopadłe.\nDowieść, że jedna z przekątnych czworokąta dzieli drugą na połowy.",
   "pdf": {
     "tasks": "tasks/2005/etap1/omg01_1.pdf",
     "solutions": "tasks/2005/etap1/omg01_1r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Oznacz punkt przecięcia przekątnych jako $P$. Jakie trójkąty tworzą przekątne? Przypomnij sobie warunek na istnienie okręgu wpisanego w czworokąt.",
+    "Wykorzystaj dwie kluczowe własności: dla czworokąta stycznego sumy przeciwległych boków są równe ($a + c = b + d$), a przy prostopadłych przekątnych możesz łatwo wyrazić długości boków przez odcinki powstałe z podziału przekątnych.",
+    "Niech przekątne dzielą się na odcinki $AP = p$, $CP = q$, $BP = r$, $DP = s$. Zapisz długości boków czworokąta używając twierdzenia Pitagorasa i podstaw do warunku na czworokąt styczny.",
+    "Po podstawieniu do równania $a + c = b + d$ otrzymasz zależność między $p$, $q$, $r$, $s$. Spróbuj ją przekształcić, aby wykazać, że $p = q$ lub $r = s$."
+  ]
 }

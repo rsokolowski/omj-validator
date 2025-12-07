@@ -1,13 +1,21 @@
 {
   "number": 7,
-  "title": "Dzielnik pierwszy a+b+1 liczby 4ab−1",
-  "content": "Dane są takie dodatnie liczby całkowite a i b, że liczba a+b+1 jest dzielnikiem pierwszym liczby 4ab−1. Udowodnij, że a = b.",
+  "title": "Dzielnik pierwszy $a+b+1$ liczby $4ab-1$",
+  "content": "Dane są takie dodatnie liczby całkowite $a$ i $b$, że liczba $a+b+1$ jest dzielnikiem pierwszym liczby $4ab-1$. Udowodnij, że $a = b$.",
   "pdf": {
     "tasks": "tasks/2016/etap1/1etap16.pdf",
     "solutions": "tasks/2016/etap1/1etap16r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Oznaczmy $p = a + b + 1$. Skoro $p$ jest liczbą pierwszą i dzieli $4ab - 1$, zastanów się, jak wyrazić $4ab - 1$ używając zmiennej $p$ i różnicy $a - b$.",
+    "Spróbuj przekształcić wyrażenie $4ab - 1$ tak, aby pojawiła się w nim suma $a + b$ lub wyrażenie $(a + b + 1)$. Pomocne może być dodanie i odjęcie odpowiednich składników.",
+    "Zauważ, że $(a + b + 1)^2 = a^2 + b^2 + 1 + 2ab + 2a + 2b$. Spróbuj wyrazić $4ab$ przez $(a+b+1)^2$ i $(a-b)^2$, korzystając z tożsamości $(a-b)^2 = a^2 - 2ab + b^2$.",
+    "Po przekształceniach otrzymasz, że $p$ dzieli wyrażenie postaci $(a-b)^2 + c$ dla pewnej małej stałej $c$. Skoro $p = a + b + 1 \\geq 3$, zbadaj kiedy liczba pierwsza może dzielić takie wyrażenie."
+  ]
 }

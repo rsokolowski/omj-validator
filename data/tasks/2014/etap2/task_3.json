@@ -1,13 +1,21 @@
 {
   "number": 3,
-  "title": "Tablica 9×9 z kolejnymi sumami",
-  "content": "W każde pole tablicy o wymiarach 9×9 wpisano pewną dodatnią liczbę całkowitą. Następnie obliczono sumy liczb znajdujących się w każdym wierszu i w każdej kolumnie. Czy może się zdarzyć, że 18 obliczonych sum to kolejne liczby naturalne w pewnym porządku? Odpowiedź uzasadnij.",
+  "title": "Sześcian z liczbami na ścianach",
+  "content": "Na każdej ścianie sześcianu napisano pewną liczbę całkowitą. Następnie każdej krawędzi sześcianu przyporządkowano sumę liczb z dwóch ścian, pomiędzy którymi znajduje się dana krawędź. Udowodnij, że wśród dwunastu liczb przyporządkowanych krawędziom są co najmniej cztery liczby parzyste.",
   "pdf": {
     "tasks": "tasks/2014/etap2/2etap15.pdf",
     "solutions": "tasks/2014/etap2/2etap15r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, od czego zależy parzystość sumy dwóch liczb. Kiedy suma dwóch liczb całkowitych jest parzysta, a kiedy nieparzysta?",
+    "Rozważ podział ścian sześcianu ze względu na parzystość liczb na nich zapisanych. Ile ścian jest parzystych, a ile nieparzystych? Przeanalizuj różne przypadki.",
+    "Zwróć uwagę na strukturę sześcianu: każda ściana sąsiaduje z dokładnie czterema innymi ścianami (przez krawędzie). Policz, ile krawędzi tworzy ściana parzysta z innymi parzystymi, a ile z nieparzystymi.",
+    "Rozpatrz przypadki w zależności od liczby ścian nieparzystych (0, 1, 2, ..., 6). Dla każdego przypadku policz krawędzie między ścianami o tej samej parzystości - to właśnie te krawędzie mają sumy parzyste."
+  ]
 }

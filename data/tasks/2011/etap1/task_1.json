@@ -1,13 +1,20 @@
 {
   "number": 1,
-  "title": "Równanie √(x²+1)+√(y²+1)=x+y",
-  "content": "Czy istnieją takie liczby rzeczywiste x, y, dla których √(x²+1)+√(y²+1) = x+y? Odpowiedź uzasadnij.",
+  "title": "Równanie $\\sqrt{x^2+1}+\\sqrt{y^2+1}=x+y$",
+  "content": "Czy istnieją takie liczby rzeczywiste $x$, $y$, dla których\n$$\\sqrt{x^2+1}+\\sqrt{y^2+1}=x+y?$$\nOdpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2011/etap1/1etap11.pdf",
     "solutions": "tasks/2011/etap1/1etap11r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Porównaj osobno $\\sqrt{x^2+1}$ z $x$ oraz $\\sqrt{y^2+1}$ z $y$. Co możesz powiedzieć o tych nierównościach dla dowolnych liczb rzeczywistych?",
+    "Spróbuj pokazać, że lewa strona równania jest zawsze większa od prawej. Użyj prostych nierówności między pierwiastkiem a jego składnikami.",
+    "Zauważ, że $x^2 + 1 > x^2$ dla każdego $x$. Co to oznacza dla wartości $\\sqrt{x^2+1}$ w porównaniu z $|x|$?",
+    "Pokaż, że $\\sqrt{x^2+1} > x$ dla każdego rzeczywistego $x$ (rozważ osobno przypadki $x \\geq 0$ i $x < 0$). Następnie dodaj analogiczną nierówność dla $y$."
+  ]
 }

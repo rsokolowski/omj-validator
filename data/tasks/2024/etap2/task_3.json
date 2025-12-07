@@ -1,7 +1,7 @@
 {
   "number": 3,
-  "title": "Trójkąt ABC z AC=BC i ∠ACB=150°",
-  "content": "Dany jest trójkąt ABC, w którym AC = BC i ∠ACB = 150°. Punkt A' jest symetryczny do punktu A względem prostej BC, punkt B' jest symetryczny do punktu B względem prostej AC, a punkt C' jest symetryczny do punktu C względem prostej AB. Udowodnij, że trójkąt A'B'C' jest równoboczny.",
+  "title": "Trójkąt $ABC$ z $AC = BC$ i $\\angle ACB = 150°$",
+  "content": "Dany jest trójkąt $ABC$, w którym $AC = BC$ i $\\angle ACB = 150°$. Punkt $A'$ jest symetryczny do punktu $A$ względem prostej $BC$, punkt $B'$ jest symetryczny do punktu $B$ względem prostej $AC$, a punkt $C'$ jest symetryczny do punktu $C$ względem prostej $AB$. Udowodnij, że trójkąt $A'B'C'$ jest równoboczny.",
   "pdf": {
     "tasks": "tasks/2024/etap2/20omj-2etap.pdf",
     "solutions": "tasks/2024/etap2/20omj-2r.pdf",

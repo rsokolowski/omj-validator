@@ -1,13 +1,21 @@
 {
   "number": 2,
-  "title": "Działanie 1−2+3−4+...−100",
-  "content": "Kamil napisał na tablicy działanie polegające na naprzemiennym odejmowaniu i dodawaniu liczb naturalnych od 1 do 100: 1−2+3−4+5−6+...−98+99−100. Następnie Kamil starł jeden ze znaków + lub − i wpisał w jego miejsce znak =, uzyskując w ten sposób prawdziwą równość. Którą liczbę poprzedzał starty znak? Podaj wszystkie możliwości. Odpowiedź uzasadnij.",
+  "title": "Działanie $1-2+3-4+\\ldots-100$",
+  "content": "Kamil napisał na tablicy działanie polegające na naprzemiennym odejmowaniu i dodawaniu liczb naturalnych od 1 do 100:\n$$1 - 2 + 3 - 4 + 5 - 6 + \\ldots - 98 + 99 - 100.$$\nNastępnie Kamil starł jeden ze znaków $+$ lub $-$ i wpisał w jego miejsce znak $=$, uzyskując w ten sposób prawdziwą równość. Którą liczbę poprzedzał starty znak? Podaj wszystkie możliwości. Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2022/etap1/18omj-1etap.pdf",
     "solutions": "tasks/2022/etap1/18omj-1r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "arytmetyka",
+    "algebra"
+  ],
+  "hints": [
+    "Oblicz najpierw wartość całego wyrażenia $1-2+3-4+\\ldots-100$. Pogrupuj składniki w pary: $(1-2)+(3-4)+\\ldots$",
+    "Zastanów się, co się stanie gdy w pewnym miejscu wstawisz znak $=$. Lewa strona to suma początkowych wyrazów, prawa to pozostałe. Jak zmiana znaku wpływa na wartość?",
+    "Jeśli przed liczbą $k$ był znak $-$ i zamieniamy go na $=$, to w prawej stronie ta liczba $k$ zmienia znak na $+$. Jak to wpływa na różnicę między stronami?",
+    "Niech $L$ oznacza lewą stronę, $P$ prawą. Zauważ, że $L + P$ (ze starymi znakami) to wartość całego wyrażenia. Szukasz miejsca, gdzie $L = P$. Sprawdź, dla których $k$ jest to możliwe."
+  ]
 }

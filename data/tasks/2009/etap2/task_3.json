@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Równoległobok ABCD z punktem E",
-  "content": "Dany jest równoległobok ABCD oraz punkt E należący do boku BC. Przez punkt D prowadzimy prostą k równoległą do prostej AE. Na prostej k obieramy takie punkty K, L, że czworokąt AEKL jest równoległobokiem. Udowodnij, że równoległoboki ABCD i AEKL mają równe pola.",
+  "title": "Liczby $n^2+n+1$ i $n^2+n+3$ pierwsze",
+  "content": "Wyznacz wszystkie takie dodatnie liczby całkowite $n$, dla których obie liczby $n^2 + n + 1$ oraz $n^2 + n + 3$ są pierwsze.",
   "pdf": {
     "tasks": "tasks/2009/etap2/2etap10.pdf",
     "solutions": "tasks/2009/etap2/omg05_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek pomocniczy. Zaznacz punkt $E$ na boku $BC$ i poprowadź prostą $k$ przez $D$ równoległą do $AE$. Gdzie mogą leżeć punkty $K$ i $L$?",
+    "Przypomnij sobie, że pole równoległoboku można wyrazić jako iloczyn podstawy i wysokości. Zastanów się, czy oba równoległoboki mają jakiś wspólny element - może wspólny bok lub równe wysokości?",
+    "Zauważ, że równoległobok $AEKL$ ma bok $AE$ jako podstawę. Prosta $k$ jest równoległa do $AE$, więc odległość między tymi prostymi to wysokość równoległoboku $AEKL$. Jak ta wysokość ma się do równoległoboku $ABCD$?",
+    "Rozważ trójkąt $AED$ i wykorzystaj fakt, że $E$ leży na $BC \\parallel AD$. Porównaj odległość punktu $D$ od prostej $AE$ z wysokością równoległoboku $ABCD$ opuszczoną na bok $AD$."
+  ]
 }

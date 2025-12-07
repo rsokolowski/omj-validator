@@ -1,13 +1,21 @@
 {
   "number": 7,
-  "title": "Wymierna a przy wymiernych a²+a i a³+a",
-  "content": "Dana jest taka liczba rzeczywista a, że liczby a²+a oraz a³+a są wymierne. Udowodnij, że liczba a jest wymierna.",
+  "title": "Wymierna $a$ przy wymiernych $a^2+a$ i $a^3+a$",
+  "content": "Dana jest taka liczba rzeczywista $a$, że liczby $a^2 + a$ oraz $a^3 + a$ są wymierne. Udowodnij, że liczba $a$ jest wymierna.",
   "pdf": {
     "tasks": "tasks/2009/etap1/omg05_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Oznacz $a^2 + a$ jako $p$ i $a^3 + a$ jako $q$. Co możesz powiedzieć o różnicy, ilorazie lub innych kombinacjach tych wyrażeń?",
+    "Spróbuj wyrazić jedno z wyrażeń przez drugie, używając faktoryzacji. Zauważ, że oba wyrażenia mają wspólny czynnik $a$.",
+    "Rozważ wyrażenie $a^3 + a - a(a^2 + a)$. Co otrzymujesz? Jak możesz wykorzystać fakt, że suma i różnica liczb wymiernych jest wymierna?",
+    "Oblicz $q - a \\cdot p = a^3 + a - a(a^2 + a) = a - a^2$. Teraz masz $a^2 + a$ oraz $a - a^2$ wymierne. Co daje ich suma?"
+  ]
 }

@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Trapez ABCD z dwusieczną kąta BAD",
-  "content": "Dany jest trapez ABCD o podstawach AB i CD, w którym ∠ABC = 90°. Dwusieczna kąta BAD przecina odcinek BC w punkcie P. Wykaż, że jeśli ∠APD = 45°, to pole czworokąta APCD jest równe polu trójkąta ABP.",
+  "title": "Trapez $ABCD$ z dwusieczną kąta $BAD$",
+  "content": "Dany jest trapez $ABCD$ o podstawach $AB$ i $CD$, w którym $\\angle ABC = 90^\\circ$. Dwusieczna kąta $BAD$ przecina odcinek $BC$ w punkcie $P$. Wykaż, że jeśli $\\angle APD = 45^\\circ$, to pole czworokąta $APCD$ jest równe polu trójkąta $ABP$.",
   "pdf": {
     "tasks": "tasks/2018/etap2/2etap19.pdf",
     "solutions": "tasks/2018/etap2/2etap19r.pdf",
     "statistics": "tasks/2018/etap2/2etap19st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek trapezu z kątem prostym przy $B$. Oznacz kąty przy wierzchołku $A$ - co wiesz o dwusiecznej? Jak rozkłada się kąt $\\angle BAD$?",
+    "Zauważ, że równość pól $APCD$ i $ABP$ można przeformułować. Skoro te dwa obszary razem tworzą cały trapez, to każdy z nich stanowi połowę pola trapezu. Jak inaczej można to zapisać używając trójkąta $APD$?",
+    "Zbadaj kąty w trójkącie $ABP$. Skoro $AP$ jest dwusieczną kąta $\\angle BAD$, a $\\angle ABP = 90°$, to czym jest kąt $\\angle APB$? Jak to się ma do kąta $\\angle APD = 45°$?",
+    "Wykaż, że trójkąt $ABP$ jest równoramienny (wykorzystaj sumę kątów i własność dwusiecznej). Następnie porównaj pole trójkąta $ABP$ z polem trójkąta $APD$, szukając związku między ich podstawami i wysokościami."
+  ]
 }

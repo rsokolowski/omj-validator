@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Prostokąt ABCD z trójkątem równobocznym AEF",
-  "content": "Punkty E i F leżą odpowiednio na bokach BC i CD prostokąta ABCD, przy czym trójkąt AEF jest równoboczny. Punkt M jest środkiem odcinka AF. Wykaż, że trójkąt BCM jest równoboczny.",
+  "title": "Prostokąt $ABCD$ z trójkątem równobocznym $AEF$",
+  "content": "Punkty $E$ i $F$ leżą odpowiednio na bokach $BC$ i $CD$ prostokąta $ABCD$, przy czym trójkąt $AEF$ jest równoboczny. Punkt $M$ jest środkiem odcinka $AF$. Wykaż, że trójkąt $BCM$ jest równoboczny.",
   "pdf": {
     "tasks": "tasks/2013/etap1/1etap13.pdf",
     "solutions": "tasks/2013/etap1/1etap13r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek prostokąta $ABCD$ z punktami $E$ na $BC$, $F$ na $CD$ i środkiem $M$ odcinka $AF$. Co wiesz o trójkącie równobocznym $AEF$? Jakie ma boki i kąty?",
+    "Rozważ przystawanie trójkątów. Porównaj trójkąty $ABE$ i $DAF$ - co możesz powiedzieć o ich bokach i kątach? Wykorzystaj fakt, że $ABCD$ jest prostokątem.",
+    "Skoro $M$ jest środkiem $AF$, to $AM = MF$. Zauważ, że $AE = AF$ (boki trójkąta równobocznego). Zbadaj, jak długość $BE$ ma się do długości $AE$ i $AF$.",
+    "Wykaż najpierw, że $BE = CF = AM = MF$. Następnie zbadaj kąty trójkąta $BCM$ - wykorzystaj kąty w trójkątach $ABE$ i $DCF$ oraz fakt, że suma kątów przy wierzchołku $A$ w trójkątach $ABE$, $AEF$, $DAF$ wynosi $90°$."
+  ]
 }

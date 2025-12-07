@@ -1,13 +1,20 @@
 {
   "number": 6,
-  "title": "Suma a+b+c = 10^1001",
-  "content": "Dane są liczby naturalne a, b, c, które w zapisie dziesiętnym są zapisane takimi samymi cyframi (tzn. każda cyfra liczby a występuje w jej zapisie dziesiętnym tyle samo razy co w zapisie każdej z liczb b i c). Czy jest możliwe, aby a+b+c = 10^1001? Odpowiedź uzasadnij.",
+  "title": "Suma $a + b + c = 10^{1001}$",
+  "content": "Dane są liczby naturalne $a$, $b$, $c$, które w zapisie dziesiętnym są zapisane takimi samymi cyframi (tzn. każda cyfra liczby $a$ występuje w jej zapisie dziesiętnym tyle samo razy co w zapisie każdej z liczb $b$ i $c$). Czy jest możliwe, aby $a + b + c = 10^{1001}$? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2019/etap1/1etap19.pdf",
     "solutions": "tasks/2019/etap1/1etap19r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, co łączy liczby mające te same cyfry w różnej kolejności. Jaka własność arytmetyczna jest zachowana przy permutacji cyfr liczby?",
+    "Przypomnij sobie cechę podzielności przez 9 - suma cyfr liczby daje tę samą resztę z dzielenia przez 9 co sama liczba. Zbadaj reszty z dzielenia przez 9.",
+    "Skoro $a$, $b$, $c$ mają te same cyfry, to każda z nich daje tę samą resztę z dzielenia przez 9. Oznacz tę resztę przez $r$ i zapisz, jaką resztę daje suma $a + b + c$.",
+    "Oblicz resztę z dzielenia $10^{1001}$ przez 9 (skorzystaj z tego, że $10 \\equiv 1 \\pmod{9}$). Sprawdź, czy istnieje liczba $r \\in \\{0, 1, ..., 8\\}$ taka, że $3r$ daje tę resztę."
+  ]
 }

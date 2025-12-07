@@ -1,13 +1,21 @@
 {
   "number": 7,
-  "title": "Trójkąt o bokach a, b, c (miary kątów)",
-  "content": "Miary kątów wewnętrznych trójkąta ostrokątnego są równe a°, b°, c°. Wykaż, że istnieje trójkąt o bokach długości a, b, c.",
+  "title": "Trójkąt o bokach $a$, $b$, $c$",
+  "content": "Miary kątów wewnętrznych trójkąta ostrokątnego są równe $a^\\circ$, $b^\\circ$, $c^\\circ$. Wykaż, że istnieje trójkąt o bokach długości $a$, $b$, $c$.",
   "pdf": {
     "tasks": "tasks/2025/etap1/21omj-1etap-zad.pdf",
     "solutions": "tasks/2025/etap1/21omj-1etap-r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria",
+    "algebra"
+  ],
+  "hints": [
+    "Przypomnij sobie, jakie warunki muszą spełniać trzy liczby, aby mogły być długościami boków trójkąta. Zapisz też, co wiesz o kątach trójkąta ostrokątnego.",
+    "Masz do dyspozycji dwa fakty: sumę kątów w trójkącie oraz ograniczenie na każdy kąt z osobna (ostrokątność). Spróbuj połączyć te warunki, aby uzyskać nierówności trójkąta.",
+    "Zauważ, że jeśli $c < 90$ i $a + b + c = 180$, to możesz wywnioskować coś o sumie $a + b$. Jak to się ma do warunku $a + b > c$?",
+    "Z równości $a + b + c = 180$ wyraź $a + b$ przez $c$. Następnie użyj faktu, że $c < 90°$, aby pokazać, że $a + b > c$. Analogicznie uzasadnij pozostałe dwie nierówności trójkąta."
+  ]
 }

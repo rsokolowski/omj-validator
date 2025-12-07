@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Liczby n²+n+1 i n²+n+3 pierwsze",
-  "content": "Wyznacz wszystkie takie dodatnie liczby całkowite n, dla których obie liczby\nn²+n+1 oraz n²+n+3\nsą pierwsze.",
+  "title": "Turniej tenisa stołowego",
+  "content": "W turnieju tenisa stołowego wzięło udział $n$ zawodników ($n \\geq 4$). Każdy zawodnik rozegrał dokładnie jeden mecz z każdym innym zawodnikiem, żaden mecz nie zakończył się remisem. Po turnieju wszyscy zawodnicy usiedli przy okrągłym stole w taki sposób, że każdy zawodnik wygrał z osobą siedzącą obok niego z jego lewej strony. Wykaż, że istnieją tacy trzej zawodnicy $A$, $B$ i $C$, że $A$ wygrał z $B$, $B$ wygrał z $C$ oraz $C$ wygrał z $A$.",
   "pdf": {
     "tasks": "tasks/2010/etap2/2etap11.pdf",
     "solutions": "tasks/2010/etap2/2etap11r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Mamy dwie liczby różniące się o 2. Zastanów się, jak często wśród trzech kolejnych liczb całkowitych występuje liczba podzielna przez 3.",
+    "Zbadaj reszty z dzielenia przez 3. Rozważ trzy kolejne liczby: $n^2+n+1$, $n^2+n+2$, $n^2+n+3$ - która z nich musi dzielić się przez 3?",
+    "Oblicz $n^2+n+2 = n(n+1)+2$. Zauważ, że $n(n+1)$ to iloczyn dwóch kolejnych liczb. Jaką resztę z dzielenia przez 3 daje taki iloczyn?",
+    "Skoro $n^2+n+2$ zawsze dzieli się przez 3, to jedna z liczb $n^2+n+1$ lub $n^2+n+3$ też musi się dzielić przez 3. Kiedy taka liczba podzielna przez 3 może być pierwsza?"
+  ]
 }

@@ -7,7 +7,15 @@
     "solutions": "tasks/2019/etap2/2etap20r.pdf",
     "statistics": "tasks/2019/etap2/2etap20st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Załóżmy przeciwnie, że żadna dziewczynka nie wygrała z żadnym chłopcem. Co to oznacza dla porażek chłopców? Z kim wtedy przegrywali?",
+    "Policz na dwa sposoby: ile łącznie jest porażek wśród samych chłopców w meczach między sobą? Porównaj z tym, ile porażek muszą mieć chłopcy łącznie.",
+    "Jeśli jest $k$ chłopców i każdy ma inną liczbę przegranych (co najmniej 1), to jaka jest minimalna suma ich przegranych? Ile meczów rozegrali między sobą?",
+    "Suma $k$ różnych liczb naturalnych dodatnich to co najmniej $1+2+...+k = \\frac{k(k+1)}{2}$. Porównaj to z liczbą meczów między $k$ chłopcami, czyli $\\frac{k(k-1)}{2}$."
+  ]
 }

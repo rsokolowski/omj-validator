@@ -1,13 +1,21 @@
 {
   "number": 3,
-  "title": "Trójkąt ostrokątny ABC z ∠BAC=45°",
-  "content": "Dany jest trójkąt ostrokątny ABC, w którym ∠BAC = 45°. Wysokości tego trójkąta przecinają się w punkcie H. Wykaż, że |AH| = |BC|.",
+  "title": "6 punktów i 10 odcinków - trójkąt",
+  "content": "W przestrzeni danych jest 6 punktów, z których żadne cztery nie leżą na jednej płaszczyźnie. Łącząc niektóre z tych punktów narysowano 10 odcinków. Wykaż, że w ten sposób uzyskano co najmniej jeden trójkąt.",
   "pdf": {
     "tasks": "tasks/2006/etap2/omg02_2.pdf",
     "solutions": "tasks/2006/etap2/omg02_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Zastanów się, ile maksymalnie odcinków można narysować między 6 punktami. Ile odcinków \"brakuje\" do pełnego połączenia wszystkich punktów?",
+    "Rozważ sytuację odwrotną: zamiast patrzeć na narysowane odcinki, pomyśl o tych, których NIE narysowano. Co by się stało, gdyby trójkąt nie istniał?",
+    "Jeśli nie ma żadnego trójkąta wśród narysowanych odcinków, to dla każdych trzech punktów co najmniej jeden odcinek między nimi nie został narysowany. Ile jest trójek punktów i ile odcinków \"brakuje\"?",
+    "Mamy $\\binom{6}{3} = 20$ trójek punktów. Każdy brakujący odcinek może \"blokować\" co najwyżej 4 trójki (bo łączy 2 punkty, a pozostałe 4 punkty tworzą 4 trójki z tą parą). Sprawdź, czy 5 brakujących odcinków wystarczy, by zablokować wszystkie 20 trójek."
+  ]
 }

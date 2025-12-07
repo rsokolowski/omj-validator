@@ -1,13 +1,20 @@
 {
   "number": 5,
-  "title": "Ułamek (a+n)/(b+n) skracalny",
-  "content": "Dane są dodatnie liczby całkowite a, b o następującej własności: dla każdej liczby naturalnej n ≥ 1 ułamek (a+n)/(b+n) jest skracalny. Wykaż, że a = b.",
+  "title": "Ułamek $\\frac{a+n}{b+n}$ skracalny",
+  "content": "Dane są dodatnie liczby całkowite $a$, $b$ o następującej własności: dla każdej liczby naturalnej $n \\geq 1$ ułamek $\\frac{a+n}{b+n}$ jest skracalny. Wykaż, że $a = b$.",
   "pdf": {
     "tasks": "tasks/2019/etap2/2etap20.pdf",
     "solutions": "tasks/2019/etap2/2etap20r.pdf",
     "statistics": "tasks/2019/etap2/2etap20st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza, że ułamek jest skracalny. Jaki warunek musi spełniać największy wspólny dzielnik licznika i mianownika?",
+    "Spróbuj zbadać, jak zmienia się NWD$(a+n, b+n)$ w zależności od $n$. Czy istnieje związek między NWD$(a+n, b+n)$ a różnicą $a-b$?",
+    "Zauważ, że jeśli liczba $d$ dzieli zarówno $a+n$ jak i $b+n$, to dzieli również ich różnicę. Co to mówi o możliwych dzielnikach wspólnych?",
+    "Rozważ, co się stanie gdy $n$ będzie odpowiednio dużą wielokrotnością liczby $|a-b|$. Czy ułamek nadal będzie skracalny, jeśli $a \\neq b$?"
+  ]
 }

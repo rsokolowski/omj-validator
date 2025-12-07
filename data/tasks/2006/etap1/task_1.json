@@ -1,13 +1,20 @@
 {
   "number": 1,
-  "title": "Suma cyfr a·b równa 2006²",
-  "content": "Czy istnieją takie dodatnie liczby całkowite a, b, że suma cyfr każdej z nich jest równa 2006, a suma cyfr liczby a·b jest równa 2006²? Odpowiedź uzasadnij.",
+  "title": "Suma cyfr $a \\cdot b$ równa $2006^2$",
+  "content": "Czy istnieją takie dodatnie liczby całkowite $a$, $b$, że suma cyfr każdej z nich jest równa $2006$, a suma cyfr liczby $a \\cdot b$ jest równa $2006^2$? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2006/etap1/omg02_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, jak suma cyfr liczby $n$ związana jest z liczbą jej cyfr. Jaka jest maksymalna suma cyfr liczby mającej $k$ cyfr?",
+    "Spróbuj oszacować, ile cyfr może mieć iloczyn $a \\cdot b$. Wykorzystaj fakt, że liczba o sumie cyfr równej $s$ musi mieć co najmniej pewną minimalną liczbę cyfr.",
+    "Zauważ, że jeśli liczba $a$ ma sumę cyfr równą 2006, to $a$ ma co najmniej $\\lceil 2006/9 \\rceil$ cyfr. Podobnie dla $b$. Ile maksymalnie cyfr może mieć iloczyn dwóch takich liczb?",
+    "Porównaj maksymalną możliwą sumę cyfr iloczynu $a \\cdot b$ (równą $9 \\times$ liczba cyfr iloczynu) z wymaganą wartością $2006^2$. Czy da się uzyskać tak dużą sumę cyfr?"
+  ]
 }

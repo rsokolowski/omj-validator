@@ -1,13 +1,22 @@
 {
   "number": 4,
-  "title": "Tabela z liczbami 1 do 17",
-  "content": "W każde pole tabeli należy wpisać inną liczbę całkowitą spośród liczb od 1 do 17 w taki sposób, aby sumy liczb we wszystkich ośmiu kolumnach były równe, a suma liczb w górnym wierszu była dwa razy większa od sumy liczb w dolnym wierszu. Której z liczb od 1 do 17 można nie wpisać do tabeli? Podaj wszystkie takie liczby. Odpowiedź uzasadnij.",
+  "title": "Tabela z liczbami od 1 do 17",
+  "content": "W każde pole poniższej tabeli należy wpisać inną liczbę całkowitą spośród liczb od 1 do 17 w taki sposób, aby sumy liczb we wszystkich ośmiu kolumnach były równe, a suma liczb w górnym wierszu była dwa razy większa od sumy liczb w dolnym wierszu.\n\nKtórej z liczb od 1 do 17 można nie wpisać do tabeli? Podaj wszystkie takie liczby. Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2021/etap1/1etap21.pdf",
     "solutions": "tasks/2021/etap1/1etap21rr.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Oblicz sumę wszystkich liczb od 1 do 17. Zastanów się, jaka będzie suma 16 liczb wpisanych do tabeli w zależności od tego, którą liczbę pominiesz.",
+    "Jeśli suma górnego wiersza jest dwa razy większa od sumy dolnego, to jak można wyrazić sumę wszystkich 16 liczb przez sumę dolnego wiersza? Jakie warunki podzielności musi spełniać suma 16 liczb?",
+    "Suma 16 liczb musi być podzielna zarówno przez 3 (z warunku o wierszach), jak i przez 8 (z warunku o kolumnach). Znajdź liczby od 1 do 17, których odjęcie od 153 daje wielokrotność 24.",
+    "Sprawdź, które liczby od 1 do 17 dają przy odjęciu od 153 wielokrotność 24. Dla każdego kandydata sprawdź, czy da się skonstruować tabelę spełniającą wszystkie warunki (każda kolumna ma sumę będącą liczbą całkowitą)."
+  ]
 }

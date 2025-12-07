@@ -7,7 +7,14 @@
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Przypomnij sobie, gdzie leży środek okręgu opisanego na trójkącie. W jakim szczególnym przypadku środek ten ma specjalne położenie względem trójkąta?",
+    "Rozważ, co oznacza warunek, że odcinek łączący wierzchołek ze środkiem okręgu opisanego na przeciwległej ścianie jest prostopadły do tej ściany. Jak musi być położony środek okręgu?",
+    "Jeśli wysokość czworościanu przechodzi przez środek okręgu opisanego na ścianie, to środek ten musi być punktem szczególnym. Zbadaj, kiedy środek okręgu opisanego na trójkącie pokrywa się ze środkiem ciężkości.",
+    "Wykaż, że każda ściana musi być trójkątem równobocznym. Skorzystaj z faktu, że środek okręgu opisanego pokrywa się ze środkiem ciężkości tylko dla trójkątów równobocznych."
+  ]
 }

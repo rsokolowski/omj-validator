@@ -1,13 +1,21 @@
 {
   "number": 3,
-  "title": "Kwadrat ABCD z prostą przez środek",
-  "content": "Dany jest kwadrat ABCD o boku 1 oraz prosta ℓ przechodząca przez jego środek. Niech a, b, c, d oznaczają odpowiednio odległości punktów A, B, C, D od prostej ℓ. Wykaż, że a²+b²+c²+d² = 1.",
+  "title": "Kwadrat $ABCD$ z prostą przez środek",
+  "content": "Dany jest kwadrat $ABCD$ o boku 1 oraz prosta $\\ell$ przechodząca przez jego środek. Niech $a$, $b$, $c$, $d$ oznaczają odpowiednio odległości punktów $A$, $B$, $C$, $D$ od prostej $\\ell$. Wykaż, że\n$$a^2+b^2+c^2+d^2 = 1.$$",
   "pdf": {
     "tasks": "tasks/2008/etap1/omg04_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria",
+    "algebra"
+  ],
+  "hints": [
+    "Narysuj kwadrat $ABCD$ i kilka różnych prostych przechodzących przez jego środek. Jak zachowują się odległości przeciwległych wierzchołków od prostej?",
+    "Wykorzystaj symetrię środkową kwadratu względem jego środka. Co możesz powiedzieć o parach punktów $A, C$ oraz $B, D$?",
+    "Zauważ, że jeśli środek kwadratu leży na prostej $\\ell$, to punkty symetryczne względem środka mają takie same odległości od tej prostej. Wprowadź układ współrzędnych ze środkiem kwadratu w początku.",
+    "Umieść środek kwadratu w początku układu współrzędnych. Jeśli prosta $\\ell$ przechodzi przez początek, to $a = c$ oraz $b = d$. Wyraź współrzędne wierzchołków i oblicz sumę $a^2 + b^2 + c^2 + d^2 = 2a^2 + 2b^2$."
+  ]
 }

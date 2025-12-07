@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Czworokąt ABCD z kątami 120°",
-  "content": "Dany jest czworokąt wypukły ABCD, w którym ∠DAB = ∠ABC = 120° oraz CD = 3, BC = 2, AB = 1. Oblicz długość odcinka AD.",
+  "title": "Czworokąt $ABCD$ z kątami $120°$",
+  "content": "Dany jest czworokąt wypukły $ABCD$, w którym $\\angle DAB = \\angle ABC = 120°$ oraz $CD = 3$, $BC = 2$, $AB = 1$. Oblicz długość odcinka $AD$.",
   "pdf": {
     "tasks": "tasks/2020/etap1/1etap20.pdf",
     "solutions": "tasks/2020/etap1/1etap20r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek czworokąta $ABCD$ z podanymi kątami i bokami. Co szczególnego mają kąty $120°$? Jak się mają do kąta w trójkącie równobocznym ($60°$)?",
+    "Spróbuj dobudować do czworokąta pomocnicze trójkąty równoboczne. Kąt $120°$ to kąt pełny minus kąt trójkąta równobocznego - może to wykorzystać w konstrukcji.",
+    "Zbuduj trójkąt równoboczny na boku $AB$ (na zewnątrz czworokąta). Oznacz nowy wierzchołek jako $E$. Zbadaj, jakie trójkąty powstają i czy któreś z nich są przystające lub podobne.",
+    "Po dobudowaniu trójkąta równobocznego na $AB$, sprawdź czy punkty $E$, $B$, $C$ oraz $E$, $A$, $D$ tworzą konfigurację, która pozwala znaleźć $ED$. Następnie wykorzystaj własności powstałej figury do wyznaczenia $AD$."
+  ]
 }

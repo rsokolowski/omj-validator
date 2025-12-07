@@ -1,13 +1,20 @@
 {
   "number": 5,
-  "title": "Czworokąt wypukły ABCD z okręgiem opisanym",
-  "content": "Dany jest czworokąt wypukły ABCD, w którym\n∠DAB + ∠BCD = ∠ABC.\nPunkt O jest środkiem okręgu opisanego na trójkącie ABC. Wykaż, że punkt O jest jednakowo odległy od prostych AD i CD.",
+  "title": "Pary liczb pierwszych $(p,q)$ z $p^2+pq+q^2$ kwadratem",
+  "content": "Wyznacz wszystkie pary liczb pierwszych $(p, q)$, dla których liczba\n$$p^2 + pq + q^2$$\njest kwadratem liczby całkowitej.",
   "pdf": {
     "tasks": "tasks/2012/etap2/2etap13.pdf",
     "solutions": "tasks/2012/etap2/2etap13r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Przypomnij sobie, co oznacza, że punkt jest równoodległy od dwóch prostych. Na jakiej szczególnej prostej musi wtedy leżeć? Narysuj dokładny rysunek z punktem $O$ jako środkiem okręgu opisanego na $\\triangle ABC$.",
+    "Zastanów się, jak powiązać warunek kątowy $\\angle DAB + \\angle BCD = \\angle ABC$ z położeniem punktu $O$. Pamiętaj, że $O$ leży na symetralnych boków trójkąta $ABC$ - jakie kąty tworzą promienie $OA$, $OB$, $OC$?",
+    "Zbadaj kąty $\\angle AOB$ i $\\angle BOC$ w trójkącie równoramiennym (promienie okręgu są równe). Jak kąty środkowe przy $O$ związane są z kątami trójkąta $ABC$? Spróbuj wyrazić kąt $\\angle AOC$ przez kąty czworokąta.",
+    "Wykaż, że prosta $OC$ jest dwusieczną kąta $\\angle ACD$. Wykorzystaj fakt, że $\\angle OCA = \\angle OAC$ (trójkąt $OAC$ jest równoramienny) i przekształć warunek kątowy zadania, by pokazać równość odpowiednich kątów."
+  ]
 }

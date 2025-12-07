@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Nierówność x(1−y)² + y(1−x)² < (1−xy)²",
-  "content": "Udowodnij, że dla każdych liczb x, y należących do przedziału (0, 1) spełniona jest nierówność\nx(1−y)² + y(1−x)² < (1−xy)².",
+  "title": "Równanie $a+b+c = ab+bc+ca$",
+  "content": "Wyznacz wszystkie trójki $(a,b,c)$ liczb nieujemnych i nie większych od $1$, dla których spełniona jest równość\n$$a+b+c = ab+bc+ca.$$",
   "pdf": {
     "tasks": "tasks/2011/etap2/2etap12.pdf",
     "solutions": "tasks/2011/etap2/2etap12r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Zacznij od przeniesienia wszystkiego na jedną stronę - chcesz pokazać, że $(1-xy)^2 - x(1-y)^2 - y(1-x)^2 > 0$. Rozwiń wszystkie wyrażenia i uprość.",
+    "Szukaj sposobu na przedstawienie różnicy jako sumy wyrażeń, które są zawsze dodatnie dla $x, y \\in (0,1)$. Grupowanie wyrazów podobnych może pomóc.",
+    "Po rozwinięciu i uporządkowaniu, zwróć uwagę na wyrazy zawierające $x^2$, $y^2$, $xy$ oraz wyrazy liniowe. Spróbuj wyłączyć wspólne czynniki lub znaleźć strukturę iloczynową.",
+    "Zauważ, że różnica stron da się przedstawić jako $(1-x)(1-y)$ pomnożone przez pewne wyrażenie. Sprawdź, jakie czynniki możesz wyciągnąć i czy pozostałe wyrażenie jest dodatnie dla $x, y \\in (0,1)$."
+  ]
 }

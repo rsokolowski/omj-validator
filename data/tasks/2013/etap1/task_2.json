@@ -1,13 +1,21 @@
 {
   "number": 2,
-  "title": "Kolejne liczby a−b, b−c, c−d, d−a",
-  "content": "Czy istnieją takie liczby całkowite a, b, c, d, że liczby a−b, b−c, c−d, d−a, wypisane w podanym porządku, są kolejnymi liczbami całkowitymi? Odpowiedź uzasadnij.",
+  "title": "Kolejne liczby $a-b$, $b-c$, $c-d$, $d-a$",
+  "content": "Czy istnieją takie liczby całkowite $a$, $b$, $c$, $d$, że liczby $$a-b, \\quad b-c, \\quad c-d, \\quad d-a,$$ wypisane w podanym porządku, są kolejnymi liczbami całkowitymi? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2013/etap1/1etap13.pdf",
     "solutions": "tasks/2013/etap1/1etap13r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Oblicz sumę wszystkich czterech wyrażeń: $(a-b) + (b-c) + (c-d) + (d-a)$. Co zauważasz?",
+    "Jeśli cztery liczby są kolejnymi liczbami całkowitymi, możesz je zapisać jako $n$, $n+1$, $n+2$, $n+3$ dla pewnego $n$. Jaka jest ich suma?",
+    "Porównaj sumę czterech kolejnych liczb całkowitych z wartością sumy różnic, którą obliczyłeś w pierwszym kroku.",
+    "Sprawdź, czy równanie $4n + 6 = 0$ ma rozwiązanie w liczbach całkowitych. Co to oznacza dla istnienia szukanych liczb?"
+  ]
 }

@@ -1,13 +1,21 @@
 {
   "number": 5,
   "title": "121 jabłek w 15 wiadrach",
-  "content": "Ogrodnik włożył 121 jabłek do 15 wiader w taki sposób, że w każdym wiadrze znalazło się co najmniej jedno jabłko. Czy jest możliwe, że w każdym wiadrze znajduje się inna liczba jabłek?",
+  "content": "Ogrodnik włożył $121$ jabłek do $15$ wiader w taki sposób, że w każdym wiadrze znalazło się co najmniej jedno jabłko. Czy jest możliwe, że w każdym wiadrze znajduje się inna liczba jabłek?",
   "pdf": {
     "tasks": "tasks/2005/etap1/omg01_1.pdf",
     "solutions": "tasks/2005/etap1/omg01_1r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, jaka jest najmniejsza możliwa liczba jabłek potrzebna, aby w każdym z 15 wiader była inna liczba jabłek (przy założeniu, że każde wiadro ma co najmniej jedno jabłko).",
+    "Aby liczby jabłek w wiadrach były różne i dodatnie, muszą to być co najmniej liczby $1, 2, 3, \\ldots, 15$. Oblicz sumę tych liczb.",
+    "Przypomnij sobie wzór na sumę kolejnych liczb naturalnych: $1 + 2 + \\ldots + n = \\frac{n(n+1)}{2}$. Porównaj wynik z liczbą 121.",
+    "Jeśli minimalna suma to 120, a masz 121 jabłek, to pozostaje ci 1 jabłko \"nadmiarowe\". Zastanów się, czy możesz je dodać do któregoś wiadra, zachowując różne liczby jabłek."
+  ]
 }

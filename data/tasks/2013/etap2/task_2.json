@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Trójkąt ostrokątny z całkowitymi bokami i wysokościami",
-  "content": "Czy istnieje taki trójkąt ostrokątny, w którym długości wszystkich boków i wszystkich wysokości są liczbami całkowitymi? Odpowiedź uzasadnij.",
+  "title": "Równe pola trójkątów $ADP$ i $BCP$ w trapezie",
+  "content": "W trapezie $ABCD$ punkty $M$ i $N$ są środkami odpowiednio podstaw $AB$ i $CD$. Punkt $P$ należy do odcinka $MN$. Udowodnij, że trójkąty $ADP$ i $BCP$ mają równe pola.",
   "pdf": {
     "tasks": "tasks/2013/etap2/2etap14.pdf",
     "solutions": "tasks/2013/etap2/2etap14r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj trapez $ABCD$ z podstawami $AB$ i $CD$, zaznacz środki $M$ i $N$ oraz punkt $P$ na odcinku $MN$. Przypomnij sobie wzór na pole trójkąta: $\\frac{1}{2} \\cdot \\text{podstawa} \\cdot \\text{wysokość}$.",
+    "Zastanów się, jak wyrazić pola trójkątów $ADP$ i $BCP$ przez wspólne elementy. Czy możesz znaleźć taką podstawę dla każdego trójkąta, żeby wysokości były łatwe do porównania?",
+    "Rozważ $AD$ jako podstawę trójkąta $ADP$ i $BC$ jako podstawę trójkąta $BCP$. Zbadaj, jakie są odległości punktu $P$ od prostych $AD$ i $BC$. Wykorzystaj fakt, że $M$ jest środkiem $AB$.",
+    "Poprowadź wysokości z punktu $P$ na proste zawierające boki $AD$ i $BC$. Wykorzystaj własność, że punkt $P$ leży na odcinku łączącym środki podstaw trapezu - jak to wpływa na sumę lub różnicę tych wysokości w stosunku do położenia $P$?"
+  ]
 }

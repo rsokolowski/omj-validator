@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Równoległobok ABCD z punktami X i Y",
-  "content": "Dany jest równoległobok ABCD, w którym AB > AD. Punkty X oraz Y, różne od B, leżą na półprostej BD→, przy czym\nCX = CB oraz AY = AB.\nUdowodnij, że DX = DY.\nUwaga: Zapis BD→ oznacza półprostą o początku w punkcie B przechodzącą przez punkt D.",
+  "title": "Równoległobok $ABCD$ z punktami $X$ i $Y$",
+  "content": "Dany jest równoległobok $ABCD$, w którym $AB > AD$. Punkty $X$ oraz $Y$, różne od $B$, leżą na półprostej $\\overrightarrow{BD}$, przy czym\n$$CX = CB \\quad \\text{oraz} \\quad AY = AB.$$\nUdowodnij, że $DX = DY$.\n\n*Uwaga:* Zapis $\\overrightarrow{BD}$ oznacza półprostą o początku w punkcie $B$ przechodzącą przez punkt $D$.",
   "pdf": {
     "tasks": "tasks/2022/etap2/18omj-2etap.pdf",
     "solutions": "tasks/2022/etap2/18omj-2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek równoległoboku $ABCD$ z przekątną $BD$. Zaznacz punkty $X$ i $Y$ na półprostej $\\overrightarrow{BD}$. Jakie trójkąty są równoramienne z założenia?",
+    "Skoro $CX = CB$ i $AY = AB$, to trójkąty $BCX$ i $ABY$ są równoramienne. Zbadaj kąty przy podstawach tych trójkątów i wykorzystaj własności kątów w równoległoboku.",
+    "Zwróć uwagę na kąty, jakie przekątna $BD$ tworzy z bokami równoległoboku. W równoległoboku $\\angle ABD = \\angle CDB$ (kąty naprzemianległe). Jak to wpływa na kąty w trójkątach $BCX$ i $ABY$?",
+    "Wyznacz kąty $\\angle BXC$ i $\\angle BYA$ korzystając z tego, że suma kątów w trójkącie wynosi $180°$. Porównaj te kąty, pamiętając o zależnościach między kątami w równoległoboku."
+  ]
 }

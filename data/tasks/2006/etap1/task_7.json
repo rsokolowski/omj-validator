@@ -7,7 +7,15 @@
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "geometria"
+  ],
+  "hints": [
+    "Zastanów się, kiedy dwa boki w wielokącie foremnym są równoległe. Narysuj 17-kąt i oznacz wierzchołki numerami od 0 do 16. Jakie pary wierzchołków tworzą odcinki równoległe?",
+    "Spróbuj pogrupować wszystkie możliwe odcinki łączące wierzchołki według kierunków. Ile różnych kierunków (klas równoległości) występuje w 17-kącie foremnym? Użyj zasady szufladkowej.",
+    "W 17-kącie foremnym odcinki są równoległe, gdy różnice numerów ich końców są równe lub sumują się do 17. Mając 10 punktów, ile odcinków można utworzyć? Ile mamy kierunków do rozważenia?",
+    "Mając 10 wybranych wierzchołków, można utworzyć $\\binom{10}{2} = 45$ odcinków. Policz liczbę różnych kierunków w 17-kącie i zastosuj zasadę szufladkową, by znaleźć dwa odcinki równoległe rozłączne."
+  ]
 }

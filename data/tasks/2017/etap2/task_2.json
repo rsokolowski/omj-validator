@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Tablica 4×4 z sumami potęgami 2",
-  "content": "W każde pole tablicy 4×4 należy wpisać pewną liczbę całkowitą w taki sposób, aby sumy liczb w każdej kolumnie i w każdym wierszu były potęgami liczby 2 o wykładniku całkowitym nieujemnym. Czy można to zrobić w taki sposób, aby każde dwie z tych ośmiu sum były różne? Odpowiedź uzasadnij.",
+  "title": "Trójkąt ostrokątny z równymi polami czworokątów",
+  "content": "Dany jest trójkąt ostrokątny $ABC$, w którym $AC \\neq BC$. Punkt $K$ jest spodkiem wysokości tego trójkąta poprowadzonej z wierzchołka $C$. Punkt $O$ jest środkiem okręgu opisanego na trójkącie $ABC$. Udowodnij, że pola czworokątów $AKOC$ oraz $BKOC$ są równe.",
   "pdf": {
     "tasks": "tasks/2017/etap2/2etap18.pdf",
     "solutions": "tasks/2017/etap2/2etap18r.pdf",
     "statistics": "tasks/2017/etap2/2etap18st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek trójkąta ostrokątnego z zaznaczonym punktem $K$ na boku $AB$ oraz środkiem okręgu opisanego $O$. Gdzie leży punkt $O$ względem boku $AB$? Jaką wspólną część mają oba czworokąty?",
+    "Spróbuj rozbić każdy z czworokątów na trójkąty o wspólnym wierzchołku. Zastanów się, jaką szczególną własność ma środek okręgu opisanego względem boków trójkąta - gdzie dokładnie leży $O$ względem odcinka $AB$?",
+    "Zauważ, że $O$ leży na symetralnej odcinka $AB$. Poprowadź prostą przez $O$ równoległą do $AB$ lub rozważ, jak położenie $O$ wpływa na odległości od punktów $A$ i $B$. Porównaj pola trójkątów $AOK$ i $BOK$.",
+    "Rozbij pole czworokąta $AKOC$ na sumę pól $\\triangle AKO$ i $\\triangle KOC$, podobnie $BKOC$ na $\\triangle BKO$ i $\\triangle KOC$. Skoro $\\triangle KOC$ jest wspólny, wystarczy pokazać równość pól $\\triangle AKO$ i $\\triangle BKO$. Wykorzystaj fakt, że $O$ leży na symetralnej $AB$."
+  ]
 }

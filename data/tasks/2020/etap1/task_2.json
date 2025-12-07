@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Trójkąt ABC z AC=BC=5",
-  "content": "Dany jest trójkąt ABC, w którym AC = BC = 5. Wysokość tego trójkąta poprowadzona z wierzchołka A ma długość 4. Oblicz długość wysokości trójkąta ABC poprowadzonej z wierzchołka C.",
+  "title": "Trójkąt $ABC$ z $AC = BC = 5$",
+  "content": "Dany jest trójkąt $ABC$, w którym $AC = BC = 5$. Wysokość tego trójkąta poprowadzona z wierzchołka $A$ ma długość $4$. Oblicz długość wysokości trójkąta $ABC$ poprowadzonej z wierzchołka $C$.",
   "pdf": {
     "tasks": "tasks/2020/etap1/1etap20.pdf",
     "solutions": "tasks/2020/etap1/1etap20r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj trójkąt równoramienny $ABC$ z $AC = BC = 5$ i zaznacz wysokość z wierzchołka $A$ na prostą $BC$ (lub jej przedłużenie). Gdzie może padać podstawa tej wysokości?",
+    "Wykorzystaj twierdzenie Pitagorasa w trójkącie prostokątnym utworzonym przez wysokość z $A$. Pomoże ci to znaleźć brakujące długości.",
+    "Pole trójkąta można obliczyć na dwa sposoby: używając podstawy $BC$ i wysokości z $A$, lub podstawy $AB$ i wysokości z $C$. Czy potrafisz wyznaczyć długość $AB$?",
+    "Oblicz najpierw pole trójkąta korzystając z $BC = 5$ i wysokości $h_A = 4$. Następnie wyznacz $AB$ z twierdzenia Pitagorasa i użyj równości pól, by znaleźć wysokość z $C$."
+  ]
 }

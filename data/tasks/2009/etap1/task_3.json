@@ -1,13 +1,21 @@
 {
   "number": 3,
-  "title": "Układ a+b+c+d=101 i ab+cd=200",
-  "content": "Liczby całkowite a, b, c, d spełniają układ równań: a+b+c+d = 101 oraz ab+cd = 200. Wykaż, że dokładnie jedna z liczb a, b, c, d jest nieparzysta.",
+  "title": "Układ $a+b+c+d=101$ i $ab+cd=200$",
+  "content": "Liczby całkowite $a$, $b$, $c$, $d$ spełniają układ równań\n$$\\begin{cases} a + b + c + d = 101 \\\\ ab + cd = 200. \\end{cases}$$\nWykaż, że dokładnie jedna z liczb $a$, $b$, $c$, $d$ jest nieparzysta.",
   "pdf": {
     "tasks": "tasks/2009/etap1/omg05_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Przypomnij sobie, kiedy suma dwóch liczb jest parzysta, a kiedy nieparzysta. To samo rozważ dla iloczynu dwóch liczb. Ile liczb nieparzystych musi być wśród $a, b, c, d$, skoro ich suma wynosi 101?",
+    "Rozważ wszystkie możliwe przypadki: ile spośród czterech liczb może być nieparzystych? Dla każdego przypadku sprawdź, czy spełnione są oba warunki dotyczące sumy i iloczynu.",
+    "Skoro $a+b+c+d=101$ jest nieparzyste, to nieparzysta musi być liczba nieparzystych składników. Zbadaj teraz, jakie warunki nakłada równanie $ab+cd=200$ na parzystość par $(a,b)$ i $(c,d)$.",
+    "Kiedy iloczyn $ab$ jest nieparzysty? Rozważ przypadek, gdy dokładnie 3 liczby są nieparzyste - co wtedy możesz powiedzieć o parzystości $ab$ i $cd$? Porównaj z przypadkiem dokładnie 1 liczby nieparzystej."
+  ]
 }

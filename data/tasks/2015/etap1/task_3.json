@@ -1,13 +1,21 @@
 {
   "number": 3,
-  "title": "Liczba (n⁴+4)/17 pierwsza",
-  "content": "Wyznacz wszystkie liczby naturalne n, dla których liczba (n⁴+4)/17 jest pierwsza.",
+  "title": "Liczba $\\frac{n^4+4}{17}$ pierwsza",
+  "content": "Wyznacz wszystkie liczby naturalne $n$, dla których liczba $\\frac{n^4+4}{17}$ jest pierwsza.",
   "pdf": {
     "tasks": "tasks/2015/etap1/1etap15.pdf",
     "solutions": "tasks/2015/etap1/1etap15r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zastanów się, dla jakich wartości $n$ wyrażenie $n^4 + 4$ jest podzielne przez 17. Sprawdź kilka małych wartości $n$ i poszukaj wzorca w resztach z dzielenia przez 17.",
+    "Skorzystaj z rozkładu algebraicznego wyrażenia $n^4 + 4$. Znana tożsamość Sophie Germain pozwala zapisać $a^4 + 4b^4$ jako iloczyn dwóch czynników.",
+    "Wyrażenie $n^4 + 4$ można rozłożyć na iloczyn $(n^2 - 2n + 2)(n^2 + 2n + 2)$. Aby iloraz przez 17 był liczbą pierwszą, zastanów się, jakie warunki muszą spełniać te czynniki.",
+    "Zbadaj, kiedy jeden z czynników $(n^2 - 2n + 2)$ lub $(n^2 + 2n + 2)$ może być równy 17, a drugi dawać liczbę pierwszą. Dla jakich $n$ to zachodzi?"
+  ]
 }

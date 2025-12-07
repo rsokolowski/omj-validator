@@ -1,13 +1,21 @@
 {
   "number": 6,
-  "title": "Punkt P na sferze opisanej na sześcianie",
-  "content": "Punkt P leży na sferze opisanej na sześcianie. Wykaż, że suma kwadratów odległości punktu P od wierzchołków sześcianu nie zależy od wyboru punktu P.",
+  "title": "Punkt $P$ na sferze opisanej na sześcianie",
+  "content": "Punkt $P$ leży na sferze opisanej na sześcianie. Wykaż, że suma kwadratów odległości punktu $P$ od wierzchołków sześcianu nie zależy od wyboru punktu $P$.",
   "pdf": {
     "tasks": "tasks/2013/etap1/1etap13.pdf",
     "solutions": "tasks/2013/etap1/1etap13r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "algebra"
+  ],
+  "hints": [
+    "Wyobraź sobie sześcian o wierzchołkach w wygodnych punktach. Gdzie znajduje się środek sfery opisanej na sześcianie i jaki jest jej promień?",
+    "Rozważ użycie układu współrzędnych. Umieść środek sześcianu w początku układu - jak wtedy wyglądają współrzędne wierzchołków?",
+    "Zauważ, że współrzędne każdego wierzchołka sześcianu to kombinacje wartości $\\pm a$ dla pewnego $a$. Jak uprości się suma kwadratów odległości od punktu $P = (x, y, z)$?",
+    "Rozwiń każdy kwadrat odległości $(x \\pm a)^2 + (y \\pm a)^2 + (z \\pm a)^2$ i zsumuj po wszystkich 8 wierzchołkach. Zauważ, które wyrazy się zniosą dzięki symetrii."
+  ]
 }

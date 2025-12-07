@@ -1,13 +1,21 @@
 {
   "number": 2,
-  "title": "Dzielniki a i b liczby n",
-  "content": "Dana jest liczba całkowita n ≥ 1 oraz jej dodatnie dzielniki a i b, które spełniają równość a + b + ab = n. Wykaż, że a = b.",
+  "title": "Dzielniki $a$ i $b$ liczby $n$",
+  "content": "Dana jest liczba całkowita $n \\geq 1$ oraz jej dodatnie dzielniki $a$ i $b$, które spełniają równość $a + b + ab = n$. Wykaż, że $a = b$.",
   "pdf": {
     "tasks": "tasks/2021/etap2/2etap22.pdf",
     "solutions": "tasks/2021/etap2/2etap22r.pdf",
     "statistics": "tasks/2021/etap2/2etap22st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Przyjrzyj się równaniu $a + b + ab = n$. Czy możesz je przekształcić, dodając 1 do obu stron? Spróbuj pogrupować wyrazy tak, aby uzyskać iloczyn.",
+    "Skorzystaj z techniki faktoryzacji. Wyrażenie $a + b + ab + 1$ można zapisać jako iloczyn dwóch nawiasów. Pomyśl, jak rozkłada się $(1+a)(1+b)$.",
+    "Skoro $a$ i $b$ są dzielnikami $n$, to $1+a$ i $1+b$ dzielą $n+1$. Zastanów się, jak powiązać te dzielniki z rozwiązaniem równania.",
+    "Z równania $(1+a)(1+b) = n+1$ oraz faktu, że $a \\mid n$ i $b \\mid n$, wyprowadź zależność między $a$ i $b$. Rozważ, co się stanie, gdy założysz $a < b$."
+  ]
 }

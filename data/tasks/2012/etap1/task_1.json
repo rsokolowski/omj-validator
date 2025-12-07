@@ -1,13 +1,20 @@
 {
   "number": 1,
-  "title": "Cyfry jedności n, n⁵, n⁹, n¹³, n¹⁷,...",
-  "content": "Wykaż, że dla każdej dodatniej liczby całkowitej n, liczby n, n⁵, n⁹, n¹³, n¹⁷,... mają jednakowe cyfry jedności.",
+  "title": "Cyfry jedności $n$, $n^5$, $n^9$, $n^{13}$, $n^{17}$, ...",
+  "content": "Wykaż, że dla każdej dodatniej liczby całkowitej $n$, liczby $n$, $n^5$, $n^9$, $n^{13}$, $n^{17}$, ... mają jednakowe cyfry jedności.",
   "pdf": {
     "tasks": "tasks/2012/etap1/1etap12.pdf",
     "solutions": "tasks/2012/etap1/1etap12r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Cyfra jedności liczby zależy tylko od jej reszty z dzielenia przez 10. Ile różnych przypadków musisz rozważyć?",
+    "Zbadaj, jak zachowują się kolejne potęgi dla każdej możliwej cyfry jedności (0-9). Poszukaj cykliczności.",
+    "Zauważ, że wykładniki w ciągu $1, 5, 9, 13, 17, \\ldots$ różnią się o 4. Sprawdź, jaki jest okres powtarzania cyfr jedności dla potęg dowolnej liczby.",
+    "Dla każdej cyfry $c \\in \\{0,1,\\ldots,9\\}$ oblicz $c^1, c^2, c^3, c^4$ i sprawdź, że cyfry jedności tworzą cykl o długości dzielącej 4."
+  ]
 }

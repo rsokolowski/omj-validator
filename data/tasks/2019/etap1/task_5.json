@@ -7,7 +7,15 @@
     "solutions": "tasks/2019/etap1/1etap19r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Oblicz, ile jest wszystkich meczów w turnieju i jaka jest całkowita pula punktów do zdobycia. Ile punktów musi mieć każdy zawodnik?",
+    "Każdy zawodnik musi zdobyć nieparzystą liczbę punktów. Zastanów się, jakie kombinacje zwycięstw (2 pkt) i remisów (1 pkt) dają taki wynik.",
+    "Zwróć uwagę, że każdy zawodnik musi mieć nieparzystą liczbę remisów. Policz, ile łącznie \"końców remisowych\" muszą mieć wszyscy zawodnicy razem.",
+    "Każdy remis angażuje dwóch zawodników (daje dwa \"końce remisowe\"). Użyj tego, aby znaleźć dolne ograniczenie na liczbę remisów, a następnie skonstruuj przykładowy turniej."
+  ]
 }

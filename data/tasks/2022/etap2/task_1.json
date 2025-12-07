@@ -1,13 +1,20 @@
 {
   "number": 1,
-  "title": "Punkty D i E na bokach trójkąta ABC",
-  "content": "Na bokach AB i BC trójkąta ABC leżą odpowiednio takie punkty D i E, że\n∠ADC = ∠BDE oraz ∠BCD = ∠AED.\nWykaż, że AE = BE.",
+  "title": "Punkty $D$ i $E$ na bokach trójkąta $ABC$",
+  "content": "Na bokach $AB$ i $BC$ trójkąta $ABC$ leżą odpowiednio takie punkty $D$ i $E$, że\n$$\\angle ADC = \\angle BDE \\quad \\text{oraz} \\quad \\angle BCD = \\angle AED.$$\nWykaż, że $AE = BE$.",
   "pdf": {
     "tasks": "tasks/2022/etap2/18omj-2etap.pdf",
     "solutions": "tasks/2022/etap2/18omj-2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek i oznacz wszystkie kąty. Co oznacza warunek $\\angle ADC = \\angle BDE$? Jakie kąty są wspólne w tych trójkątach?",
+    "Poszukaj par trójkątów, które mogą być podobne. Zwróć uwagę na trójkąty $ADE$, $BDE$, $ADC$ i $BCE$ - które z nich mają wspólne kąty?",
+    "Zauważ, że z warunku $\\angle BCD = \\angle AED$ wynika, że czworokąt $CDEA$ jest wpisany w okrąg (kąty wpisane oparte na tym samym łuku). Co to daje dla pozostałych kątów?",
+    "Skoro $CDEA$ jest czworokątem wpisanym, to $\\angle CAE = \\angle CDE$. Połącz to z pierwszym warunkiem, aby wykazać, że trójkąt $ABE$ jest równoramienny."
+  ]
 }

@@ -1,13 +1,21 @@
 {
   "number": 4,
-  "title": "Kolorowanie punktów płaszczyzny",
-  "content": "Każdy punkt płaszczyzny należy pomalować na pewien kolor w taki sposób, aby każda prosta była jednokolorowa lub dwukolorowa. Jaka jest największa możliwa liczba kolorów, których można użyć do pomalowania punktów tej płaszczyzny? Odpowiedź uzasadnij.",
+  "title": "Trójkolorowy trójkąt bez punktów wewnątrz",
+  "content": "Na płaszczyźnie zaznaczono $n$ punktów ($n \\geq 3$), z których żadne trzy nie leżą na jednej prostej. Każdy z tych punktów pomalowano na jeden z trzech kolorów, przy czym każdego koloru użyto przynajmniej raz. Udowodnij, że istnieje taki trójkąt o wierzchołkach w zaznaczonych punktach, którego każde dwa wierzchołki mają różne kolory i do wnętrza którego nie należy żaden zaznaczony punkt.",
   "pdf": {
     "tasks": "tasks/2013/etap2/2etap14.pdf",
     "solutions": "tasks/2013/etap2/2etap14r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "geometria"
+  ],
+  "hints": [
+    "Zastanów się, jak wygląda otoczka wypukła zbioru punktów. Ile kolorów może się pojawić na wierzchołkach otoczki wypukłej?",
+    "Rozważ dwa przypadki: gdy na otoczce wypukłej są punkty wszystkich trzech kolorów oraz gdy są tylko jednego lub dwóch kolorów. W drugim przypadku szukaj trójkolorowego trójkąta używając punktów wewnątrz otoczki.",
+    "Jeśli na otoczce są wszystkie trzy kolory, wybierz po jednym punkcie każdego koloru i zastanów się, czy taki trójkąt może zawierać w środku inne punkty ze zbioru. Jeśli tak, jak go poprawić?",
+    "Gdy trójkąt trójkolorowy zawiera w środku punkty, wybierz jeden z nich i zastąp nim odpowiedni wierzchołek trójkąta - powstanie mniejszy trójkąt trójkolorowy. Powtarzaj aż do uzyskania pustego wnętrza."
+  ]
 }

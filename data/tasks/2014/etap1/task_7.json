@@ -1,13 +1,21 @@
 {
   "number": 7,
-  "title": "Czworościan z ∠ACB=∠ADB=90°",
-  "content": "Dany jest czworościan ABCD, w którym ∠ACB = ∠ADB = 90° oraz AC = CD = DB. Wykaż, że AB < 2·CD.",
+  "title": "Czworościan z $\\angle ACB = \\angle ADB = 90°$",
+  "content": "Dany jest czworościan $ABCD$, w którym $\\angle ACB = \\angle ADB = 90°$ oraz $AC = CD = DB$. Wykaż, że $AB < 2 \\cdot CD$.",
   "pdf": {
     "tasks": "tasks/2014/etap1/1etap14.pdf",
     "solutions": "tasks/2014/etap1/1etap14r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria",
+    "algebra"
+  ],
+  "hints": [
+    "Zidentyfikuj dwa trójkąty prostokątne w czworościanie. Co wiesz o bokach każdego z nich dzięki twierdzeniu Pitagorasa?",
+    "Zastosuj twierdzenie Pitagorasa oddzielnie do trójkątów $ACB$ i $ADB$. Oznacz nieznane boki i wyraź $AB^2$ w każdym z nich.",
+    "Zauważ, że $BC$ i $AD$ to boki, które możesz powiązać. Spróbuj wyrazić $AB^2$ przez $CD$ używając obu równań z twierdzenia Pitagorasa.",
+    "Z trójkąta $ACB$: $AB^2 = AC^2 + BC^2$, z trójkąta $ADB$: $AB^2 = AD^2 + DB^2$. Podstaw $AC = CD = DB$ i zastanów się, jaką nierówność spełniają $BC$ i $AD$, aby uzyskać oszacowanie $AB^2 < 4 \\cdot CD^2$."
+  ]
 }

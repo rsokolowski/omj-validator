@@ -1,13 +1,21 @@
 {
   "number": 6,
-  "title": "Kartka 25×25 z wyciętym kwadratem 5×5",
-  "content": "Od kwadratowej kartki o boku 25 odcięto kwadrat o boku 5. Czy pozostałą część kartki można pociąć na 100 prostokątów, z których każdy ma wymiary 1×6 lub 2×3? Odpowiedź uzasadnij.",
+  "title": "Kartka $25 \\times 25$ z wyciętym kwadratem $5 \\times 5$",
+  "content": "Od kwadratowej kartki o boku 25 odcięto kwadrat o boku 5, jak pokazano na rysunku. Czy pozostałą część kartki można pociąć na 100 prostokątów, z których każdy ma wymiary $1 \\times 6$ lub $2 \\times 3$? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2014/etap1/1etap14.pdf",
     "solutions": "tasks/2014/etap1/1etap14r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Sprawdź najpierw, czy warunek na pole jest spełniony: ile wynosi pole pozostałej figury i ile pól pokrywa każdy prostokąt? Czy to wystarczy do odpowiedzi?",
+    "Sama zgodność pól nie wystarcza do udowodnienia możliwości pokrycia. Poszukaj niezmiennika - spróbuj pokolorować kartkę w specjalny sposób i zbadaj, jak prostokąty pokrywają pola różnych kolorów.",
+    "Pokoloruj kolumny kartki cyklicznie trzema kolorami (1, 2, 3, 1, 2, 3, ...). Policz, ile pól każdego koloru pokrywa prostokąt $1 \\times 6$ oraz $2 \\times 3$.",
+    "Przy kolorowaniu kolumn trzema kolorami każdy prostokąt $1 \\times 6$ i $2 \\times 3$ pokrywa dokładnie 2 pola każdego koloru. Policz, ile pól każdego koloru ma pozostała figura po wycięciu kwadratu $5 \\times 5$."
+  ]
 }

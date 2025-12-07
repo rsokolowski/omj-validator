@@ -1,13 +1,20 @@
 {
   "number": 5,
-  "title": "Trójkąt równoboczny ABC z punktami K, L, M",
-  "content": "Punkty K, L, M leżą odpowiednio na bokach BC, CA, AB trójkąta równobocznego ABC i spełniają warunki KM = LM, ∠KML = 90° oraz AM = BK. Udowodnij, że ∠CKL = 90°.",
+  "title": "Trójkąt równoboczny $ABC$ z punktami $K$, $L$, $M$",
+  "content": "Punkty $K$, $L$, $M$ leżą odpowiednio na bokach $BC$, $CA$, $AB$ trójkąta równobocznego $ABC$ i spełniają warunki\n$$KM = LM, \\quad \\angle KML = 90^\\circ \\quad \\text{oraz} \\quad AM = BK.$$\nUdowodnij, że $\\angle CKL = 90^\\circ$.",
   "pdf": {
     "tasks": "tasks/2021/etap1/1etap21.pdf",
     "solutions": "tasks/2021/etap1/1etap21rr.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Oznacz $AM = BK = x$ i wyraź długości pozostałych odcinków na bokach trójkąta przez $x$ i długość boku $a$. Narysuj dokładny rysunek i zaznacz wszystkie dane warunki.",
+    "Skoro $KM = LM$ i $\\angle KML = 90^\\circ$, to trójkąt $KML$ jest równoramiennym trójkątem prostokątnym. Zastanów się, jak wykorzystać obrót o $90^\\circ$ wokół punktu $M$.",
+    "Rozważ obrót o $90^\\circ$ wokół punktu $M$, który przekształca punkt $K$ na punkt $L$. Gdzie przechodzi punkt $B$ przy tym obrocie? Jak to się ma do punktu $A$?",
+    "Zbadaj trójkąty $BMK$ i $AML$ - sprawdź, czy obrót o $90^\\circ$ wokół $M$ przekształca jeden w drugi. Następnie wykorzystaj kąty w trójkącie $CKL$, pamiętając o kątach trójkąta równobocznego."
+  ]
 }

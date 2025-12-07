@@ -1,13 +1,21 @@
 {
   "number": 7,
   "title": "Sześcian z ostrosłupem",
-  "content": "Dany jest sześcian ABCDA'B'C'D' o krawędzi długości 2. Punkt K jest środkiem krawędzi AB. Płaszczyzna zawierająca punkty B', D', K przecina krawędź AD w punkcie L. Oblicz objętość ostrosłupa o podstawie czworokąta D'B'KL i wierzchołku A.",
+  "content": "Dany jest sześcian $ABCDA'B'C'D'$ o krawędzi długości $2$ i wierzchołkach oznaczonych jak na rysunku. Punkt $K$ jest środkiem krawędzi $AB$. Płaszczyzna zawierająca punkty $B'$, $D'$, $K$ przecina krawędź $AD$ w punkcie $L$. Oblicz objętość ostrosłupa o podstawie czworokąta $D'B'KL$ i wierzchołku $A$.",
   "pdf": {
     "tasks": "tasks/2018/etap1/1etap18.pdf",
     "solutions": "tasks/2018/etap1/1etap18r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria",
+    "algebra"
+  ],
+  "hints": [
+    "Narysuj sześcian i zaznacz wszystkie dane punkty. Zastanów się, jak wygląda płaszczyzna przechodząca przez $B'$, $D'$ i $K$. Jaką własność mają punkty $B'$ i $D'$ względem sześcianu?",
+    "Punkty $B'$, $D'$, $K$, $L$ leżą na jednej płaszczyźnie. Wykorzystaj własności przekątnych i symetrii sześcianu, aby znaleźć położenie punktu $L$ na krawędzi $AD$.",
+    "Zauważ, że prosta $B'D'$ jest przekątną górnej ściany sześcianu. Zbadaj, w jakim stosunku punkt $L$ dzieli krawędź $AD$, korzystając z tego, że punkty $K$ i $L$ muszą leżeć na prostej równoległej do $B'D'$ (lub na płaszczyźnie przez te punkty).",
+    "Aby obliczyć objętość ostrosłupa, wyznacz najpierw pole czworokąta $D'B'KL$ (rozważ podział na trójkąty lub wykorzystaj wzór na pole czworokąta). Następnie znajdź odległość punktu $A$ od płaszczyzny podstawy, korzystając z układu współrzędnych lub własności sześcianu."
+  ]
 }

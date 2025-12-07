@@ -1,13 +1,20 @@
 {
   "number": 1,
-  "title": "Zależność 3a+4b=3c i 4a−3b=4c",
-  "content": "Liczby a, b, c spełniają zależności 3a+4b = 3c oraz 4a−3b = 4c. Wykaż, że a² + b² = c².",
+  "title": "Zależność $3a+4b=3c$ i $4a-3b=4c$",
+  "content": "Liczby $a$, $b$, $c$ spełniają zależności $3a + 4b = 3c$ oraz $4a - 3b = 4c$. Wykaż, że $a^2 + b^2 = c^2$.",
   "pdf": {
     "tasks": "tasks/2017/etap1/1etap17.pdf",
     "solutions": "tasks/2017/etap1/1etap17r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Masz dwa równania z trzema niewiadomymi $a$, $b$, $c$. Spróbuj wyrazić dwie z nich przez trzecią lub poszukaj związku między nimi.",
+    "Zastanów się, jak z dwóch równań liniowych uzyskać wyrażenie kwadratowe. Jakie operacje na równaniach mogą prowadzić do sumy kwadratów?",
+    "Spróbuj podnieść oba równania do kwadratu i zbadaj, co otrzymasz po ich dodaniu. Zwróć uwagę na wyrazy mieszane z $ab$ i $bc$.",
+    "Po podniesieniu równań do kwadratu otrzymasz wyrażenia z $a^2$, $b^2$, $c^2$ oraz wyrazy z iloczynami. Sprawdź, czy wyrazy mieszane się zniosą po dodaniu stronami."
+  ]
 }

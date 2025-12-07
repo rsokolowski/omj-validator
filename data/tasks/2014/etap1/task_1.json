@@ -7,7 +7,15 @@
     "solutions": "tasks/2014/etap1/1etap14r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "algebra",
+    "arytmetyka"
+  ],
+  "hints": [
+    "Oznacz przez $x$, $y$, $z$ liczbę monet odpowiednio jednozłotowych, dwuzłotowych i pięciozłotowych. Jakie dwa równania możesz zapisać na podstawie treści zadania?",
+    "Masz układ dwóch równań z trzema niewiadomymi. Spróbuj wyrazić jedną zmienną przez inną i zastanów się, jakie ograniczenia nakładają warunki zadania na możliwe wartości.",
+    "Po przekształceniu układu równań, zwróć uwagę na to, że $x$, $y$, $z$ muszą być liczbami całkowitymi nieujemnymi. Które z nich jest najbardziej ograniczone?",
+    "Wyznacz $z$ z układu równań i sprawdź, dla jakich wartości $z$ pozostałe zmienne $x$ i $y$ są całkowite nieujemne."
+  ]
 }

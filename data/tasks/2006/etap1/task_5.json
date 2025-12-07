@@ -1,13 +1,21 @@
 {
   "number": 5,
-  "title": "Nierówność xy^n < x⁴+y⁴",
-  "content": "Wyznacz wszystkie dodatnie liczby całkowite n o następującej własności: Dla każdej pary liczb rzeczywistych dodatnich x, y zachodzi nierówność xy^n < x⁴+y⁴.",
+  "title": "Nierówność $xy^n < x^4 + y^4$",
+  "content": "Wyznacz wszystkie dodatnie liczby całkowite $n$ o następującej własności: Dla każdej pary liczb rzeczywistych dodatnich $x$, $y$ zachodzi nierówność\n$$xy^n < x^4 + y^4.$$",
   "pdf": {
     "tasks": "tasks/2006/etap1/omg02_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza \"dla każdej pary liczb dodatnich\". Czy możesz znaleźć szczególne wartości $x$ i $y$, które pozwolą przetestować, czy nierówność może być spełniona lub naruszona?",
+    "Spróbuj podstawiać konkretne proste wartości, np. $x = y$ lub $x = y = 1$. Dla jakich $n$ nierówność będzie spełniona, a dla jakich nie? Rozważ osobno małe i duże wartości $n$.",
+    "Gdy $x = y = 1$, nierówność przyjmuje postać $1 < 2$, co jest prawdą. Ale czy to wystarczy? Sprawdź, co się dzieje dla innych wartości, np. gdy $y$ jest bardzo duże w porównaniu z $x$.",
+    "Przeanalizuj zachowanie obu stron nierówności gdy $y \\to \\infty$ przy ustalonym $x > 0$. Porównaj, jak szybko rosną $xy^n$ oraz $x^4 + y^4$ w zależności od wartości $n$. Dla jakiego $n$ lewa strona rośnie szybciej niż prawa?"
+  ]
 }

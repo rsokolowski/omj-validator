@@ -18,6 +18,7 @@
 <div class="task-detail">
     <div class="task-detail-header">
         <h1>Zadanie {{ task.number }}</h1>
+        <p class="task-title math-content">{{ task.title }}</p>
         <div class="task-meta">
             <span class="meta-item">{{ task.year }}</span>
             <span class="meta-item">{% if task.etap == "etap2" %}Etap II{% else %}{{ task.etap }}{% endif %}</span>

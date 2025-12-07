@@ -1,13 +1,21 @@
 {
   "number": 3,
-  "title": "Trójkąt z polem ¼(ab+bc)",
-  "content": "Czy istnieje taki trójkąt o bokach długości a, b, c, którego pole jest równe ¼(ab+bc)? Odpowiedź uzasadnij.",
+  "title": "Nierówność $a\\sqrt{b} + b\\sqrt{a} + 1 > 3ab$",
+  "content": "Wykaż, że jeśli liczby $a$ i $b$ są dodatnie i mniejsze od $1$, to\n$$a \\cdot \\sqrt{b} + b \\cdot \\sqrt{a} + 1 > 3ab.$$",
   "pdf": {
     "tasks": "tasks/2012/etap2/2etap13.pdf",
     "solutions": "tasks/2012/etap2/2etap13r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "algebra"
+  ],
+  "hints": [
+    "Zapisz wyrażenie $\\frac{1}{4}(ab+bc)$ w prostszej postaci. Jakie znasz wzory na pole trójkąta i jakie jest maksymalne pole trójkąta o danych dwóch bokach?",
+    "Porównaj podane wyrażenie na pole z maksymalnym polem, jakie może mieć trójkąt. Zastanów się, kiedy pole trójkąta o bokach $a$ i $b$ jest największe.",
+    "Zauważ, że $\\frac{1}{4}(ab+bc) = \\frac{1}{4}b(a+c)$. Porównaj to z faktem, że pole trójkąta o bokach zawierających kąt prosty nie przekracza $\\frac{1}{2}$ iloczynu tych boków.",
+    "Wykorzystaj nierówność trójkąta: $a + c > b$. Co to oznacza dla wartości $\\frac{1}{4}b(a+c)$ w porównaniu z $\\frac{1}{4}b \\cdot b = \\frac{1}{4}b^2$? Porównaj z maksymalnym polem trójkąta."
+  ]
 }

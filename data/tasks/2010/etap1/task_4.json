@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Sześciokąt ABCDEF z punktem X",
-  "content": "Dany jest sześciokąt wypukły ABCDEF. Punkt X leży wewnątrz tego sześciokąta. Punkty K, L, M, N, P, Q są odpowiednio środkami boków AB, BC, CD, DE, EF, FA. Wykaż, że suma pól czworokątów QAKX, LCMX, NEPX nie zależy od wyboru punktu X.",
+  "title": "Sześciokąt $ABCDEF$ z punktem $X$",
+  "content": "Dany jest sześciokąt wypukły $ABCDEF$. Punkt $X$ leży wewnątrz tego sześciokąta. Punkty $K$, $L$, $M$, $N$, $P$, $Q$ są odpowiednio środkami boków $AB$, $BC$, $CD$, $DE$, $EF$, $FA$. Wykaż, że suma pól czworokątów $QAKX$, $LCMX$, $NEPX$ nie zależy od wyboru punktu $X$.",
   "pdf": {
     "tasks": "tasks/2010/etap1/omg06_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj sześciokąt z punktem $X$ i zaznacz wszystkie środki boków. Jakie czworokąty powstają? Czy widzisz jakiś wzorzec w tym, jak są rozmieszczone?",
+    "Oprócz trzech czworokątów z zadania (QAKX, LCMX, NEPX) istnieją też trzy pozostałe (KBLX, MDNX, PFQX). Zastanów się, co można powiedzieć o sumie pól wszystkich sześciu czworokątów.",
+    "Zauważ, że sześć czworokątów pokrywa cały sześciokąt, ale z pewnym nakładaniem się w okolicy punktu $X$. Zbadaj, jak pola trójkątów przy wierzchołku $X$ zależą (lub nie zależą) od jego położenia.",
+    "Wykaż najpierw, że suma pól wszystkich sześciu czworokątów jest stała. Następnie pokaż, że suma pól KBLX + MDNX + PFQX też nie zależy od $X$ - wykorzystaj symetrię sytuacji."
+  ]
 }

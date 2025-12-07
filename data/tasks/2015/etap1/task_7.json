@@ -1,13 +1,21 @@
 {
   "number": 7,
-  "title": "Ostrosłup ABCDS z AS+CS=BS+DS",
-  "content": "Czy istnieje taki ostrosłup ABCDS, którego podstawą jest prostokąt ABCD i którego każde dwie krawędzie boczne są różnych długości, a ponadto spełniona jest równość AS + CS = BS + DS? Odpowiedź uzasadnij.",
+  "title": "Ostrosłup $ABCDS$ z $AS+CS=BS+DS$",
+  "content": "Czy istnieje taki ostrosłup $ABCDS$, którego podstawą jest prostokąt $ABCD$ i którego każde dwie krawędzie boczne są różnych długości, a ponadto spełniona jest równość $AS + CS = BS + DS$? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2015/etap1/1etap15.pdf",
     "solutions": "tasks/2015/etap1/1etap15r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria",
+    "algebra"
+  ],
+  "hints": [
+    "Oznacz środek prostokąta przez $O$ (punkt przecięcia przekątnych). Co wiesz o odległościach wierzchołków prostokąta od punktu $O$? Rozważ, jak położenie punktu $S$ wpływa na długości krawędzi bocznych.",
+    "Wprowadź układ współrzędnych ze środkiem w punkcie $O$. Wyraź długości $AS$, $BS$, $CS$, $DS$ za pomocą współrzędnych punktu $S$ i wymiarów prostokąta.",
+    "Zauważ, że $A$ i $C$ to wierzchołki przeciwległe (podobnie $B$ i $D$). Zbadaj, czy suma $AS + CS$ zależy od położenia $S$, czy może jest związana z sumą $BS + DS$ w szczególny sposób.",
+    "Oblicz $AS^2 + CS^2$ oraz $BS^2 + DS^2$ używając wzoru na odległość. Co zauważasz? Czy z równości sum kwadratów wynika coś o sumach odległości?"
+  ]
 }

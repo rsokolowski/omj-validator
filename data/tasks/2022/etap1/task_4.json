@@ -1,13 +1,21 @@
 {
   "number": 4,
-  "title": "Kolorowanie liczb od 1 do n",
-  "content": "Każdą z liczb naturalnych od 1 do n pokolorowano albo na niebiesko, albo na czerwono, przy czym każdego z tych kolorów użyto co najmniej raz. Okazało się, że: każda liczba czerwona jest sumą pewnych dwóch różnych liczb niebieskich; każda liczba niebieska jest różnicą pewnych dwóch liczb czerwonych. Wyznacz najmniejszą liczbę n, dla której takie kolorowanie jest możliwe.",
+  "title": "Kolorowanie liczb od $1$ do $n$",
+  "content": "Każdą z liczb naturalnych od $1$ do $n$ pokolorowano albo na niebiesko, albo na czerwono, przy czym każdego z tych kolorów użyto co najmniej raz. Okazało się, że:\n- każda liczba czerwona jest sumą pewnych dwóch różnych liczb niebieskich;\n- każda liczba niebieska jest różnicą pewnych dwóch liczb czerwonych.\nWyznacz najmniejszą liczbę $n$, dla której takie kolorowanie jest możliwe.",
   "pdf": {
     "tasks": "tasks/2022/etap1/18omj-1etap.pdf",
     "solutions": "tasks/2022/etap1/18omj-1r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zacznij od małych przypadków: co jeśli $n=3$ lub $n=4$? Sprawdź, czy warunki mogą być spełnione. Zastanów się, która liczba musi być niebieska, a która czerwona.",
+    "Zwróć uwagę na ograniczenia: najmniejsza niebieska musi być różnicą dwóch czerwonych, a najmniejsza czerwona musi być sumą dwóch niebieskich. Przeanalizuj, jakie to nakłada warunki na wielkość tych liczb.",
+    "Jeśli $1$ jest niebieska, to jest różnicą dwóch czerwonych - jakie to muszą być liczby? Jeśli $1$ jest czerwona, to jest sumą dwóch różnych niebieskich - czy to możliwe?",
+    "Sprawdź systematycznie wartości $n = 5, 6, 7, ...$. Dla każdego $n$ spróbuj skonstruować podział lub udowodnij, że jest niemożliwy. Kluczowe pytanie: ile minimum liczb niebieskich potrzebujesz?"
+  ]
 }

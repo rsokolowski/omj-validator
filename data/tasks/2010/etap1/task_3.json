@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Nierówność a/√(a+b)+b/√(b+c)+c/√(c+a)>√(a+b+c)",
-  "content": "Udowodnij, że dla każdych dodatnich liczb a, b, c spełniona jest nierówność a/√(a+b) + b/√(b+c) + c/√(c+a) > √(a+b+c).",
+  "title": "Nierówność z pierwiastkami",
+  "content": "Udowodnij, że dla każdych dodatnich liczb $a$, $b$, $c$ spełniona jest nierówność\n$$\\frac{a}{\\sqrt{a+b}} + \\frac{b}{\\sqrt{b+c}} + \\frac{c}{\\sqrt{c+a}} > \\sqrt{a+b+c}.$$",
   "pdf": {
     "tasks": "tasks/2010/etap1/omg06_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Przyjrzyj się każdemu składnikowi lewej strony osobno. Co możesz powiedzieć o mianownikach typu $\\sqrt{a+b}$ w porównaniu z $\\sqrt{a+b+c}$?",
+    "Spróbuj oszacować każdy ułamek z dołu, zamieniając mianownik na coś większego. Pamiętaj, że zwiększenie mianownika zmniejsza wartość ułamka.",
+    "Zauważ, że $\\sqrt{a+b} < \\sqrt{a+b+c}$, więc $\\frac{a}{\\sqrt{a+b}} > \\frac{a}{\\sqrt{a+b+c}}$. Zastosuj podobne oszacowanie do pozostałych składników.",
+    "Po oszacowaniu każdego z trzech składników przez odpowiedni ułamek z $\\sqrt{a+b+c}$ w mianowniku, dodaj te nierówności stronami i uprość licznik."
+  ]
 }

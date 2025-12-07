@@ -7,7 +7,15 @@
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Zastanów się, jak wygląda rzut prostokątny prostych brył (sześcianu, graniastosłupa) na różne płaszczyzny. Narysuj kilka przykładów - ile boków może mieć rzut sześcianu?",
+    "Szukaj wielościanu, który ma wystarczająco wiele krawędzi i wierzchołków, by dawać rzuty o różnej liczbie boków. Rozważ bryły złożone lub graniastosłupy o odpowiedniej podstawie.",
+    "Pomyśl o graniastosłupie o podstawie będącej wielokątem. Jak zmienia się liczba boków rzutu w zależności od tego, czy patrzymy prostopadle do podstawy, wzdłuż osi, czy pod kątem?",
+    "Rozważ graniastosłup o podstawie czworokątnej. Sprawdź, jakie rzuty otrzymasz patrząc: prostopadle do podstawy, wzdłuż krawędzi bocznej, oraz pod odpowiednim kątem do przekątnej podstawy."
+  ]
 }

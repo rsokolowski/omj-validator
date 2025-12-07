@@ -1,13 +1,21 @@
 {
   "number": 5,
-  "title": "Ostrosłup czworokątny z prostopadłymi krawędziami",
-  "content": "Czy istnieje taki ostrosłup czworokątny, którego każda krawędź boczna jest prostopadła do którejś krawędzi podstawy? Odpowiedź uzasadnij.\nUwaga: Proste prostopadłe w przestrzeni nie muszą się przecinać.",
+  "title": "Sześć kul w czworościanie foremnym",
+  "content": "Dany jest czworościan foremny opisany na sferze o promieniu $1$. Udowodnij, że w tym czworościanie można umieścić $6$ kul o promieniu $\\frac{1}{2}$, w taki sposób, aby każde dwie kule miały co najwyżej jeden punkt wspólny.",
   "pdf": {
     "tasks": "tasks/2010/etap2/2etap11.pdf",
     "solutions": "tasks/2010/etap2/2etap11r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "logika"
+  ],
+  "hints": [
+    "Narysuj rzut ostrosłupa z góry (widok na podstawę). Co oznacza warunek prostopadłości krawędzi bocznej do krawędzi podstawy w kontekście tego rzutu? Rozważ prosty przykład: kwadrat jako podstawę.",
+    "Zastanów się, ile różnych kierunków mają krawędzie podstawy czworokąta. Jeśli krawędź boczna ma być prostopadła do krawędzi podstawy, co to mówi o rzucie tej krawędzi bocznej? Spróbuj podejścia konstrukcyjnego.",
+    "Zauważ, że rzut krawędzi bocznej na płaszczyznę podstawy łączy wierzchołek podstawy z rzutem wierzchołka ostrosłupa. Przeanalizuj, jakie warunki musi spełniać położenie tego rzutu, aby wszystkie 4 warunki prostopadłości były spełnione jednocześnie.",
+    "Rozważ konkretny czworokąt - prostokąt o bokach $a$ i $b$. Dla każdego wierzchołka podstawy określ, do której krawędzi ma być prostopadła odpowiadająca krawędź boczna. Znajdź położenie rzutu wierzchołka ostrosłupa, które spełnia wszystkie warunki."
+  ]
 }

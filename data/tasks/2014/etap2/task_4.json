@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Punkty pomalowane na trzy kolory",
-  "content": "Na płaszczyźnie zaznaczono n punktów (n ≥ 3), z których żadne trzy nie leżą na jednej prostej. Każdy z tych punktów pomalowano na jeden z trzech kolorów, przy czym każdego koloru użyto przynajmniej raz. Udowodnij, że istnieje taki trójkąt o wierzchołkach w zaznaczonych punktach, którego każde dwa wierzchołki mają różne kolory i do wnętrza którego nie należy żaden zaznaczony punkt.",
+  "title": "Cztery liczby pierwsze w ciągu arytmetycznym",
+  "content": "Liczby pierwsze $p$, $q$, $r$, $s$ spełniają warunki $p > q > r > s$ oraz $p - q = q - r = r - s$. Udowodnij, że liczba $p - s$ jest podzielna przez 18.",
   "pdf": {
     "tasks": "tasks/2014/etap2/2etap15.pdf",
     "solutions": "tasks/2014/etap2/2etap15r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Oznacz różnicę ciągu arytmetycznego przez $d$. Jak wyrazić $p - s$ przez $d$? Zastanów się, jakie własności musi mieć $d$, skoro wszystkie cztery liczby są pierwsze.",
+    "Rozważ podzielność przez małe liczby. Co możesz powiedzieć o resztach z dzielenia liczb pierwszych (większych od 2 i 3) przez 2 i przez 3?",
+    "Jeśli $p$, $q$, $r$, $s$ są większe od 3, to są nieparzyste. Co to oznacza dla parzystości $d$? Rozważ też reszty tych czterech liczb przy dzieleniu przez 3 - ile jest możliwych reszt i ile masz liczb?",
+    "Skoro $d$ musi być parzyste (aby wszystkie liczby były nieparzyste), to $d$ jest podzielne przez 2. Użyj zasady szufladkowej dla reszt modulo 3: cztery liczby i trzy możliwe reszty - co z tego wynika dla $d$?"
+  ]
 }

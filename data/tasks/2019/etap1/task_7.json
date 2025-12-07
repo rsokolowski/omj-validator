@@ -1,13 +1,21 @@
 {
   "number": 7,
-  "title": "Graniastosłup prosty z rombem",
-  "content": "Dany jest graniastosłup prosty, którego podstawą jest romb o boku długości a i kącie ostrym 60°. Graniastosłup ten przecięto płaszczyzną, przecinając jego krawędzie boczne i uzyskując w przekroju kwadrat. Wyznacz wszystkie możliwe wartości, jakie może przyjąć długość boku tego kwadratu.",
+  "title": "Graniastosłup prosty z rombem - przekrój kwadratowy",
+  "content": "Dany jest graniastosłup prosty, którego podstawą jest romb o boku długości $a$ i kącie ostrym $60^\\circ$. Graniastosłup ten przecięto płaszczyzną, przecinając jego krawędzie boczne i uzyskując w przekroju kwadrat. Wyznacz wszystkie możliwe wartości, jakie może przyjąć długość boku tego kwadratu.",
   "pdf": {
     "tasks": "tasks/2019/etap1/1etap19.pdf",
     "solutions": "tasks/2019/etap1/1etap19r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria",
+    "algebra"
+  ],
+  "hints": [
+    "Narysuj romb o kącie ostrym $60°$ i zastanów się, jakie są długości jego przekątnych w zależności od boku $a$. Jak wygląda przekrój graniastosłupa prostego płaszczyzną przecinającą krawędzie boczne?",
+    "Przekrój graniastosłupa prostego płaszczyzną przecinającą wszystkie krawędzie boczne jest zawsze równoległobokiem. Zastanów się, jakie warunki musi spełniać równoległobok, aby był kwadratem.",
+    "Boki przekroju są równoległe do przekątnych rombu (dlaczego?). Aby powstał kwadrat, potrzebujesz dwóch par równych i prostopadłych boków. Wykorzystaj fakt, że przekątne rombu są prostopadłe.",
+    "Oblicz długości przekątnych rombu o boku $a$ i kącie $60°$ (użyj własności trójkąta równobocznego). Następnie rozważ, jak wysokość \"wycięcia\" na krawędziach bocznych wpływa na długość boków przekroju - kiedy te boki będą równe?"
+  ]
 }

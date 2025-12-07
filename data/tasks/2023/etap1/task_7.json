@@ -1,13 +1,21 @@
 {
   "number": 7,
-  "title": "Diagram z liczbami 11 do 29",
-  "content": "Czy w pola diagramu przedstawionego na rysunku można wpisać liczby całkowite od 11 do 29, każdą dokładnie raz, w taki sposób aby sumy liczb na wszystkich piętnastu odcinkach oznaczonych strzałkami były równe? Odpowiedź uzasadnij.",
+  "title": "Diagram z liczbami od 11 do 29",
+  "content": "Czy w pola diagramu przedstawionego na rysunku obok można wpisać liczby całkowite od 11 do 29, każdą dokładnie raz, w taki sposób aby sumy liczb na wszystkich piętnastu odcinkach oznaczonych strzałkami były równe? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2023/etap1/19omj-1etap.pdf",
     "solutions": "tasks/2023/etap1/19omj-1etap-r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Policz sumę wszystkich liczb od 11 do 29. Zastanów się, ile wynosi suma wszystkich 15 odcinków, jeśli każdy ma mieć tę samą wartość $S$.",
+    "Kluczowe pytanie: ile razy każde pole diagramu jest zliczane, gdy sumujemy wszystkie 15 odcinków? Przyjrzyj się strukturze diagramu i policz, przez ile strzałek przechodzi każde pole.",
+    "Oblicz sumę wszystkich 15 odcinków na dwa sposoby: jako $15 \\cdot S$ oraz jako sumę wszystkich pól pomnożonych przez liczbę strzałek je zawierających. Porównaj te wyrażenia.",
+    "Sprawdź, czy równanie wynikające z podwójnego zliczania ma rozwiązanie w liczbach całkowitych. Zbadaj podzielność obu stron równania."
+  ]
 }

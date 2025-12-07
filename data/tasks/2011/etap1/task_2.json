@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Trójkąt ABC z AC=BC i kąt BCD prosty",
-  "content": "Dany jest trójkąt ABC, w którym AC = BC. Punkt D leży na boku AB, przy czym BD = 2AD, a kąt BCD jest prosty. Wyznacz miarę kąta BAC.",
+  "title": "Trójkąt $ABC$ z $AC=BC$ i kąt $BCD$ prosty",
+  "content": "Dany jest trójkąt $ABC$, w którym $AC = BC$. Punkt $D$ leży na boku $AB$, przy czym $BD = 2AD$, a kąt $BCD$ jest prosty. Wyznacz miarę kąta $BAC$.",
   "pdf": {
     "tasks": "tasks/2011/etap1/1etap11.pdf",
     "solutions": "tasks/2011/etap1/1etap11r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek trójkąta równoramiennego ABC z zaznaczonym punktem D na boku AB. Oznacz kąty przy wierzchołku A jako $\\alpha$. Jakie inne kąty możesz wyrazić przez $\\alpha$?",
+    "Skoro CD jest wysokością w trójkącie BCD (kąt prosty przy D), rozważ wykorzystanie własności trójkątów prostokątnych. Poszukaj podobnych trójkątów w tej konfiguracji.",
+    "Zauważ, że trójkąt ACD dzieli z trójkątem ABC pewne kąty. Wykorzystaj warunek BD = 2AD wraz z podobieństwem trójkątów, aby uzyskać równanie na boki.",
+    "Porównaj stosunki odpowiednich boków w trójkątach podobnych. Wykorzystaj fakt, że w trójkącie równoramiennym AC = BC, a punkt D dzieli AB w znanym stosunku."
+  ]
 }

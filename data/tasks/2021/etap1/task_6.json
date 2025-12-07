@@ -1,13 +1,21 @@
 {
   "number": 6,
-  "title": "Tablica 10×10 ze strzałkami",
-  "content": "W każdym polu tablicy 10×10 znajduje się strzałka skierowana w górę, w dół, w lewo lub w prawo. Wykaż, że można tak usunąć z tablicy 50 strzałek, aby żadne dwie z pozostałych nie wskazywały na siebie nawzajem. Uwaga: Strzałki wskazują na siebie nawzajem także wtedy, gdy ich pola nie sąsiadują lub gdy pomiędzy nimi są inne strzałki.",
+  "title": "Tablica $10 \\times 10$ ze strzałkami",
+  "content": "W każdym polu tablicy $10 \\times 10$ znajduje się strzałka skierowana w górę, w dół, w lewo lub w prawo. Wykaż, że można tak usunąć z tablicy 50 strzałek, aby żadne dwie z pozostałych nie wskazywały na siebie nawzajem.\n\n*Uwaga:* Strzałki wskazują na siebie nawzajem także wtedy, gdy ich pola nie sąsiadują lub gdy pomiędzy nimi są inne strzałki.",
   "pdf": {
     "tasks": "tasks/2021/etap1/1etap21.pdf",
     "solutions": "tasks/2021/etap1/1etap21rr.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Zastanów się, kiedy dwie strzałki mogą na siebie wskazywać. W jakich przypadkach strzałka skierowana w prawo może wskazywać na inną strzałkę?",
+    "Spróbuj podzielić wszystkie pary wzajemnie wskazujących strzałek na rozłączne grupy. Rozważ osobno strzałki poziome (lewo-prawo) i pionowe (góra-dół).",
+    "Dla strzałek poziomych w każdym wierszu, pomyśl o podziale na strzałki skierowane w lewo i w prawo. Ile strzałek z każdego wiersza musisz usunąć, aby żadne dwie nie wskazywały na siebie?",
+    "W każdym wierszu usuń wszystkie strzałki skierowane w lewo LUB wszystkie skierowane w prawo (wybierz mniejszy zbiór). Analogicznie postępuj z kolumnami dla strzałek pionowych. Oszacuj łączną liczbę usuniętych strzałek."
+  ]
 }

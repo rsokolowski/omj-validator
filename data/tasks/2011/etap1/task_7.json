@@ -1,13 +1,20 @@
 {
   "number": 7,
-  "title": "Sześcian z PQ ≥ √2",
-  "content": "Niech ABCDA'B'C'D' będzie sześcianem. Punkty K, L, M, N są odpowiednio środkami krawędzi AD, BC, A'B', C'D'. Punkty P i Q leżą odpowiednio na odcinkach KM i LN. Krawędź sześcianu jest równa 2. Udowodnij, że PQ ≥ √2.",
+  "title": "Sześcian z $PQ \\geq \\sqrt{2}$",
+  "content": "Niech $ABCDA'B'C'D'$ będzie sześcianem, jak na rysunku. Punkty $K$, $L$, $M$, $N$ są odpowiednio środkami krawędzi $AD$, $BC$, $A'B'$, $C'D'$. Punkty $P$ i $Q$ leżą odpowiednio na odcinkach $KM$ i $LN$. Krawędź sześcianu jest równa 2. Udowodnij, że $PQ \\geq \\sqrt{2}$.",
   "pdf": {
     "tasks": "tasks/2011/etap1/1etap11.pdf",
     "solutions": "tasks/2011/etap1/1etap11r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj sześcian i zaznacz wszystkie podane punkty. Gdzie dokładnie leżą odcinki KM i LN? Czy potrafisz opisać ich wzajemne położenie w przestrzeni?",
+    "Zastanów się, jak znaleźć minimalną odległość między dwoma odcinkami w przestrzeni. Pomocne może być rzutowanie na odpowiednio wybraną płaszczyznę lub wykorzystanie symetrii sześcianu.",
+    "Zauważ, że odcinki KM i LN są do siebie równoległe lub skośne. Znajdź płaszczyznę przekroju sześcianu, która zawiera oba te odcinki lub jest do nich prostopadła. Jak wygląda ta płaszczyzna?",
+    "Rozważ przekrój sześcianu płaszczyzną przechodzącą przez środek sześcianu, prostopadłą do obu odcinków KM i LN. Na tej płaszczyźnie zbadaj, jakie są możliwe położenia rzutów punktów P i Q, i kiedy ich odległość jest najmniejsza."
+  ]
 }

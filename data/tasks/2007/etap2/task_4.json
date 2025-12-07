@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Iloczyn (a+b)(b+c)(c+d)(d+a) zakończony cyframi \"10\"",
-  "content": "Czy istnieją takie dodatnie liczby całkowite a, b, c, d, że liczba (a+b)(b+c)(c+d)(d+a) jest w systemie dziesiętnym zakończona cyframi \"10\"? Odpowiedź uzasadnij.",
+  "title": "Potęga $2^n$ jako suma kolejnych liczb",
+  "content": "Czy istnieje taka dodatnia liczba całkowita $n$, dla której liczbę $2^n$ można przedstawić w postaci sumy co najmniej dwóch kolejnych dodatnich liczb całkowitych? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2007/etap2/omg03_2.pdf",
     "solutions": "tasks/2007/etap2/omg03_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Aby liczba kończyła się cyframi '10', musi być podzielna przez 10, ale nie przez 100. Co to oznacza dla podzielności przez 2 i przez 5?",
+    "Zauważ, że mamy cztery czynniki. Pogrupuj je w pary: $(a+b)(c+d)$ oraz $(b+c)(d+a)$. Czy widzisz jakąś zależność między sumami w tych parach?",
+    "Oblicz sumę $(a+b)+(c+d)$ oraz $(b+c)+(d+a)$. Co możesz powiedzieć o parzystości tych sum? Jak to wpływa na podzielność iloczynu przez 4?",
+    "Skoro obie pary czynników mają tę samą sumę $a+b+c+d$, to w każdej parze albo oba czynniki są parzyste, albo oba nieparzyste. Zbadaj, ile razy liczba 2 dzieli cały iloczyn w każdym przypadku."
+  ]
 }

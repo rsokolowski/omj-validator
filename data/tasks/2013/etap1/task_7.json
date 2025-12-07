@@ -1,13 +1,21 @@
 {
   "number": 7,
-  "title": "Kwadrat 2013×2013 z prostokątami 1×3",
-  "content": "Czy kwadrat o wymiarach 2013×2013 można podzielić na prostokąty o wymiarach 1×3 w taki sposób, aby liczba prostokątów ułożonych pionowo różniła się o 1 od liczby prostokątów ułożonych poziomo? Odpowiedź uzasadnij.",
+  "title": "Kwadrat $2013 \\times 2013$ z prostokątami $1 \\times 3$",
+  "content": "Czy kwadrat o wymiarach $2013 \\times 2013$ można podzielić na prostokąty o wymiarach $1 \\times 3$ w taki sposób, aby liczba prostokątów ułożonych pionowo różniła się o $1$ od liczby prostokątów ułożonych poziomo? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2013/etap1/1etap13.pdf",
     "solutions": "tasks/2013/etap1/1etap13r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Zastanów się, ile pól pokrywa jeden prostokąt $1 \\times 3$. Ile prostokątów potrzeba, aby pokryć cały kwadrat $2013 \\times 2013$? Czy ta liczba jest całkowita?",
+    "Policz osobno, ile pól pokrywają prostokąty pionowe, a ile poziome. Jeśli jest $p$ prostokątów pionowych i $z$ poziomych, co możesz powiedzieć o sumie $p + z$?",
+    "Zauważ, że $2013^2 = 3 \\cdot 1350843$, więc pokrycie jest możliwe pod względem liczby pól. Teraz zbadaj warunek $|p - z| = 1$. Jaką parzystość ma suma $p + z$?",
+    "Skoro $p + z$ jest liczbą nieparzystą, to jeden z elementów $p$, $z$ jest parzysty, a drugi nieparzysty. Czy różnica liczby parzystej i nieparzystej może wynosić $1$?"
+  ]
 }

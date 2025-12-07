@@ -1,13 +1,20 @@
 {
   "number": 7,
   "title": "Figura z pięciokątów foremnych",
-  "content": "Figurę złożoną z czterech pięciokątów foremnych o boku długości 1 sklejono w przestrzeni. Najpierw zagięto ją wzdłuż odcinków przerywanych, łącząc pogrubione odcinki, a następnie uformowano w taki sposób, aby kolorowe odcinki utworzyły kwadrat. Wyznacz długość powstałego w ten sposób odcinka AB.",
+  "content": "Poniższą figurę, złożoną z czterech pięciokątów foremnych o boku długości $1$, sklejono w przestrzeni w następujący sposób. Najpierw zagięto ją wzdłuż odcinków przerywanych, łącząc pogrubione odcinki, a następnie uformowano w taki sposób, aby kolorowe odcinki utworzyły kwadrat. Wyznacz długość powstałego w ten sposób odcinka $AB$.",
   "pdf": {
     "tasks": "tasks/2020/etap1/1etap20.pdf",
     "solutions": "tasks/2020/etap1/1etap20r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Zastanów się, jaki jest kąt wewnętrzny pięciokąta foremnego. Spróbuj narysować, jak wygląda figura po złożeniu - gdzie znajdą się punkty $A$ i $B$ względem powstałego kwadratu?",
+    "Po złożeniu figury powstaje bryła przestrzenna. Zastanów się, jakie trójkąty tworzą pięciokąty z bokami kwadratu. Wykorzystaj symetrię konstrukcji.",
+    "Zwróć uwagę na trójkąty równoramienne, które powstają przy wierzchołkach kwadratu. Oblicz, ile wynoszą ich kąty przy podstawie, korzystając z tego, że kąt pięciokąta foremnego wynosi $108°$.",
+    "Punkt $A$ i punkt $B$ leżą na pewnej wysokości nad płaszczyzną kwadratu. Znajdź tę wysokość oraz odległość poziomą między tymi punktami, a następnie użyj twierdzenia Pitagorasa w przestrzeni."
+  ]
 }

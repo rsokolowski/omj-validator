@@ -1,13 +1,20 @@
 {
   "number": 1,
-  "title": "Układ równań x²+x(y−4)=−2",
-  "content": "Rozwiąż układ równań: x²+x(y−4) = −2 oraz y²+y(x−4) = −2.",
+  "title": "Układ równań $x^2 + x(y-4) = -2$",
+  "content": "Rozwiąż układ równań:\n$$\\begin{cases} x^2 + x(y-4) = -2 \\\\ y^2 + y(x-4) = -2 \\end{cases}$$",
   "pdf": {
     "tasks": "tasks/2010/etap1/omg06_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Porównaj oba równania - co zauważasz? Jaką rolę pełnią zmienne $x$ i $y$ w tych równaniach?",
+    "Symetria układu sugeruje dwa podejścia: zbadanie przypadku $x = y$ oraz analizę różnicy równań.",
+    "Odejmij równania stronami i rozłóż otrzymane wyrażenie na iloczyn. Jakie dwa przypadki otrzymujesz?",
+    "Po rozłożeniu $(x-y)(x+y-4) = 0$ rozważ osobno przypadki $x = y$ oraz $x + y = 4$. W każdym przypadku podstaw do jednego z równań."
+  ]
 }

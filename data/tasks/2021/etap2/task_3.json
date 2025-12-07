@@ -1,13 +1,21 @@
 {
   "number": 3,
-  "title": "Kolorowanie liczb 1-100",
-  "content": "Niech n będzie dodatnią liczbą całkowitą. Każdą z liczb 1, 2, 3, ..., 100 pomalowano jednym z n kolorów w taki sposób, że każde dwie różne liczby o sumie podzielnej przez 4 zostały pomalowane różnymi kolorami. Wyznacz najmniejszą liczbę n, dla której taka sytuacja jest możliwa.",
+  "title": "Kolorowanie liczb $1, 2, \\ldots, 100$",
+  "content": "Niech $n$ będzie dodatnią liczbą całkowitą. Każdą z liczb $1, 2, 3, \\ldots, 100$ pomalowano jednym z $n$ kolorów w taki sposób, że każde dwie różne liczby o sumie podzielnej przez $4$ zostały pomalowane różnymi kolorami. Wyznacz najmniejszą liczbę $n$, dla której taka sytuacja jest możliwa.",
   "pdf": {
     "tasks": "tasks/2021/etap2/2etap22.pdf",
     "solutions": "tasks/2021/etap2/2etap22r.pdf",
     "statistics": "tasks/2021/etap2/2etap22st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Pogrupuj liczby od $1$ do $100$ według ich reszt z dzielenia przez $4$. Kiedy suma dwóch liczb jest podzielna przez $4$? Jakie reszty muszą mieć te liczby?",
+    "Zastanów się, które pary reszt dają sumę podzielną przez $4$: czy mogą to być liczby z tej samej grupy, czy z różnych grup? Spróbuj narysować graf, gdzie wierzchołki to liczby, a krawędzie łączą pary wymagające różnych kolorów.",
+    "Zauważ, że w obrębie każdej grupy (tej samej reszty) pewne liczby tworzą kliki - zbiory, gdzie każde dwie muszą mieć różny kolor. Znajdź największą taką klikę. Przeanalizuj też, co dzieje się między grupami o resztach $1$ i $3$.",
+    "Policz, ile jest liczb o każdej reszcie z dzielenia przez $4$. Sprawdź, ile kolorów potrzebujesz dla samych liczb parzystych podzielnych przez $4$, a ile dla nieparzystych. Zastanów się, czy możesz sprytnie połączyć kolorowania różnych grup."
+  ]
 }

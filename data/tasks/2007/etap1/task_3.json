@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Nierówność a/(a+1)+b/((a+1)(b+1))+c/((a+1)(b+1)(c+1))<1",
-  "content": "Liczby a, b, c są dodatnie. Wykaż, że a/(a+1) + b/((a+1)(b+1)) + c/((a+1)(b+1)(c+1)) < 1.",
+  "title": "Nierówność z ułamkami",
+  "content": "Liczby $a$, $b$, $c$ są dodatnie. Wykaż, że $$\\frac{a}{a+1} + \\frac{b}{(a+1)(b+1)} + \\frac{c}{(a+1)(b+1)(c+1)} < 1.$$",
   "pdf": {
     "tasks": "tasks/2007/etap1/omg03_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Przyjrzyj się mianownikom kolejnych ułamków. Czy zauważasz w nich pewien wzorzec? Spróbuj rozpisać każdy ułamek osobno i poszukać wspólnej struktury.",
+    "Pomyśl o przekształceniu każdego ułamka do postaci różnicy dwóch wyrażeń. Może uda się uzyskać sumę teleskopową, w której większość wyrazów się skróci?",
+    "Zauważ, że $\\frac{a}{a+1} = 1 - \\frac{1}{a+1}$. Spróbuj analogicznie przekształcić pozostałe składniki, wyrażając je przez iloczyny postaci $\\frac{1}{(a+1)(b+1)...}$.",
+    "Po przekształceniu każdego składnika do postaci różnicowej, zapisz całą sumę i sprawdź, które wyrazy się redukują. Jaki wyraz pozostaje na końcu i dlaczego jest mniejszy od 1?"
+  ]
 }

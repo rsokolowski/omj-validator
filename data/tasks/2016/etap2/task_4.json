@@ -1,13 +1,21 @@
 {
   "number": 4,
-  "title": "Trójkąt ABC z ∠BAC + ∠MCB = 90°",
-  "content": "Punkt M jest środkiem boku AB trójkąta ABC, przy czym\n∠BAC + ∠MCB = 90°.\nWykaż, że trójkąt ABC jest równoramienny lub prostokątny.",
+  "title": "Liczby $\\sqrt{2}+1$ lub $\\sqrt{2}-1$ z sumą iloczynów $199$",
+  "content": "Czy istnieją liczby $x_1, x_2, \\ldots, x_{99}$, z których każda jest równa $\\sqrt{2}+1$ lub $\\sqrt{2}-1$ i które spełniają równość\n$$x_1 x_2 + x_2 x_3 + x_3 x_4 + \\ldots + x_{98} x_{99} + x_{99} x_1 = 199?$$\nOdpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2016/etap2/2etap17.pdf",
     "solutions": "tasks/2016/etap2/2etap17r.pdf",
     "statistics": "tasks/2016/etap2/2etap17st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Oblicz wszystkie możliwe wartości iloczynu $x_i x_{i+1}$ w zależności od tego, czy sąsiednie liczby są równe czy różne. Ile różnych wartości może przyjąć taki iloczyn?",
+    "Zauważ, że niektóre iloczyny zawierają $\\sqrt{2}$, a niektóre nie. Aby suma była liczbą wymierną (199), współczynnik przy $\\sqrt{2}$ musi się wyzerować. Policz, ile jest par sąsiednich liczb każdego typu.",
+    "Oznacz przez $k$ liczbę par sąsiednich równych liczb, a przez $m$ liczbę par różnych. Zauważ, że $k + m = 99$ (cykl). Zapisz warunek na wymierność sumy i warunek na wartość sumy jako układ równań.",
+    "Przy przejściu cyklicznym przez ciąg, każda zmiana z $\\sqrt{2}+1$ na $\\sqrt{2}-1$ (lub odwrotnie) musi być \"sparowana\" z powrotną zmianą. Zastanów się, czy liczba par różnych sąsiadów może być nieparzysta."
+  ]
 }

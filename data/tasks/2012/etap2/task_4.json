@@ -1,13 +1,21 @@
 {
   "number": 4,
-  "title": "Trójki (a,b,c) z a+b+c = ab+bc+ca",
-  "content": "Wyznacz wszystkie trójki (a, b, c) liczb nieujemnych i nie większych od 1, dla których spełniona jest równość\na+b+c = ab+bc+ca.",
+  "title": "Kolorowanie punktów płaszczyzny",
+  "content": "Każdy punkt płaszczyzny należy pomalować na pewien kolor w taki sposób, aby każda prosta była jednokolorowa lub dwukolorowa. Jaka jest największa możliwa liczba kolorów, których można użyć do pomalowania punktów tej płaszczyzny? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2012/etap2/2etap13.pdf",
     "solutions": "tasks/2012/etap2/2etap13r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "algebra",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Przepisz równanie w postaci $a + b + c - ab - bc - ca = 0$. Co możesz zauważyć, podstawiając wartości brzegowe: $0$ lub $1$ za którąś ze zmiennych?",
+    "Spróbuj pogrupować wyrazy tak, by wyciągnąć wspólne czynniki. Rozważ rozbicie na przypadki w zależności od tego, ile zmiennych przyjmuje wartości skrajne ($0$ lub $1$).",
+    "Zauważ, że równanie można przekształcić do postaci zawierającej iloczyny typu $(1-a)(1-b)$ lub podobne. Zbadaj, kiedy taki iloczyn może być równy odpowiedniemu wyrażeniu przy ograniczeniu na przedział $[0,1]$.",
+    "Przekształć równanie do postaci $a(1-b) + c(1-b) = bc$, czyli $(a+c)(1-b) = bc$. Rozważ osobno przypadki $b = 0$, $b = 1$ oraz $0 < b < 1$, badając jakie warunki muszą spełniać pozostałe zmienne."
+  ]
 }

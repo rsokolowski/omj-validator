@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Minimum wyrażenia a+b³",
-  "content": "Wyznacz najmniejszą możliwą wartość wyrażenia a+b³, gdzie a i b są dodatnimi liczbami o iloczynie równym 1.",
+  "title": "Minimum wyrażenia $a + b^3$",
+  "content": "Wyznacz najmniejszą możliwą wartość wyrażenia $a + b^3$, gdzie $a$ i $b$ są dodatnimi liczbami o iloczynie równym 1.",
   "pdf": {
     "tasks": "tasks/2014/etap1/1etap14.pdf",
     "solutions": "tasks/2014/etap1/1etap14r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Masz dwie niewiadome $a$ i $b$ związane warunkiem $ab = 1$. Czy możesz wyrazić jedną przez drugą i sprowadzić problem do jednej zmiennej?",
+    "Spróbuj użyć nierówności między średnią arytmetyczną a geometryczną (AM-GM). Zastanów się, jak rozbić wyrażenie na składniki, dla których znasz iloczyn.",
+    "Po podstawieniu $a = \\frac{1}{b}$ otrzymujesz wyrażenie zależne tylko od $b$. Spróbuj zapisać $\\frac{1}{b} + b^3$ jako sumę kilku składników, których iloczyn jest stały.",
+    "Rozpisz $b^3 = b \\cdot b \\cdot b$ i zastosuj nierówność AM-GM do czterech składników: $\\frac{1}{b}, b, b, b$. Kiedy zachodzi równość w tej nierówności?"
+  ]
 }

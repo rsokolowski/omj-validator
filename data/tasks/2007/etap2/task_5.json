@@ -1,13 +1,21 @@
 {
   "number": 5,
-  "title": "Ostrosłup ABCS z kątami 20°",
-  "content": "Trójkąt ABC jest podstawą ostrosłupa ABCS, w którym\n∠ASB = ∠BSC = ∠CSA = 20°.\nWykaż, że obwód trójkąta ABC jest nie mniejszy od długości każdej z krawędzi AS, BS i CS.",
+  "title": "Przekrój sześcianu - pięciokąt",
+  "content": "Czy można tak przeciąć sześcian płaskim cięciem na dwie bryły o równych objętościach, aby w przekroju otrzymać pięciokąt? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2007/etap2/omg03_2.pdf",
     "solutions": "tasks/2007/etap2/omg03_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "algebra"
+  ],
+  "hints": [
+    "Narysuj ostrosłup i oznacz krawędzie boczne $SA$, $SB$, $SC$. Co możesz powiedzieć o trzech trójkątach tworzących ściany boczne? Jaką nierówność znasz dla boków dowolnego trójkąta?",
+    "Zastosuj nierówność trójkąta do każdej ze ścian bocznych ostrosłupa. Zapisz trzy nierówności dla krawędzi $AB$, $BC$ i $CA$ wyrażone przez krawędzie boczne.",
+    "Dodaj stronami trzy nierówności uzyskane z nierówności trójkąta. Zauważ, że po lewej stronie otrzymasz obwód podstawy. Co pojawia się po prawej stronie?",
+    "Po dodaniu nierówności uzyskasz $AB + BC + CA > SA + SB + SC - (SA + SB + SC) + ...$. Uprość prawą stronę i pokaż, że obwód jest nie mniejszy od każdej pojedynczej krawędzi bocznej."
+  ]
 }

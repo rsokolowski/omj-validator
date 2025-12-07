@@ -1,13 +1,21 @@
 {
   "number": 1,
-  "title": "Równanie x(y−z)+y(z−x)=6",
-  "content": "Wykaż, że istnieje nieskończenie wiele trójek (x,y,z) dodatnich liczb całkowitych spełniających równanie x(y−z)+y(z−x) = 6.",
+  "title": "Równanie $x(y-z)+y(z-x)=6$",
+  "content": "Wykaż, że istnieje nieskończenie wiele trójek $(x,y,z)$ dodatnich liczb całkowitych spełniających równanie $x(y-z)+y(z-x) = 6$.",
   "pdf": {
     "tasks": "tasks/2015/etap1/1etap15.pdf",
     "solutions": "tasks/2015/etap1/1etap15r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Rozwiń i uprość lewą stronę równania. Jakie wyrazy się redukują?",
+    "Po uproszczeniu otrzymasz iloczyn dwóch wyrażeń równy 6. Zastanów się, jak sparametryzować rozwiązania.",
+    "Zauważ, że 6 można zapisać jako iloczyn dwóch dodatnich liczb całkowitych. Jedna z nich może zależeć od parametru.",
+    "Spróbuj ustalić jeden z czynników (np. $z$) jako stałą, a drugi wyrazić przez wolny parametr $x$. Dla jakich wartości $x$ otrzymasz dodatnie $y$?"
+  ]
 }

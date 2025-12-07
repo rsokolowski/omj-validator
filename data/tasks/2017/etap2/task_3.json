@@ -1,13 +1,21 @@
 {
   "number": 3,
-  "title": "Trapez z prostopadłymi przekątnymi",
-  "content": "Wykaż, że jeżeli przekątne pewnego trapezu są prostopadłe, to suma długości podstaw tego trapezu jest nie większa od sumy długości ramion tego trapezu.",
+  "title": "Układ równań z trzema niewiadomymi całkowitymi",
+  "content": "Wyznacz wszystkie trójki $(x, y, z)$ liczb całkowitych spełniające układ równań\n$$\\begin{cases} x - yz = 1 \\\\ xz + y = 2. \\end{cases}$$",
   "pdf": {
     "tasks": "tasks/2017/etap2/2etap18.pdf",
     "solutions": "tasks/2017/etap2/2etap18r.pdf",
     "statistics": "tasks/2017/etap2/2etap18st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Masz dwa równania i trzy niewiadome. Spróbuj przekształcić układ tak, aby wyeliminować jedną zmienną lub uzyskać wyrażenie, które można rozłożyć na czynniki.",
+    "Rozważ pomnożenie pierwszego równania przez $z$, a drugiego przez odpowiednią wartość, a następnie dodanie lub odjęcie równań. Poszukaj struktury iloczynowej.",
+    "Zauważ, że po odpowiednim przekształceniu możesz uzyskać wyrażenie postaci $(x+y)(1+z)$ lub podobne. Jakie pary liczb całkowitych dają w iloczynie konkretną wartość?",
+    "Dodaj oba równania stronami, aby otrzymać $x + y + z(x - y) = 3$, co można zapisać jako $(x+y)(1+z) - 2z = 3$. Teraz rozważ różne wartości całkowite $z$ i sprawdź, które dają całkowite $x$ i $y$."
+  ]
 }

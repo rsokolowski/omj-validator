@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Trójkąt ABC z ∠ACB=60° i styczna",
-  "content": "Dany jest trójkąt ABC, w którym ∠ACB = 60°. Na trójkącie tym opisano okrąg o. Punkt X jest środkiem tego łuku BC okręgu o, który nie zawiera punktu A, a punkt Y jest środkiem tego łuku CA okręgu o, który nie zawiera punktu B. Udowodnij, że prosta XY jest styczna do okręgu wpisanego w trójkąt ABC.",
+  "title": "Trójkąt $ABC$ z $\\angle ACB=60°$ i styczna",
+  "content": "Dany jest trójkąt $ABC$, w którym $\\angle ACB = 60°$. Na trójkącie tym opisano okrąg $o$. Punkt $X$ jest środkiem tego łuku $BC$ okręgu $o$, który nie zawiera punktu $A$, a punkt $Y$ jest środkiem tego łuku $CA$ okręgu $o$, który nie zawiera punktu $B$. Udowodnij, że prosta $XY$ jest styczna do okręgu wpisanego w trójkąt $ABC$.",
   "pdf": {
     "tasks": "tasks/2015/etap1/1etap15.pdf",
     "solutions": "tasks/2015/etap1/1etap15r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek z okręgiem opisanym, punktami $X$ i $Y$ jako środkami odpowiednich łuków, oraz okręgiem wpisanym. Przypomnij sobie, co oznacza bycie środkiem łuku - jakie odcinki z tego punktu są równe?",
+    "Środek łuku $BC$ niezawierającego $A$ leży na dwusiecznej kąta $\\angle BAC$. Podobnie dla punktu $Y$. Zastanów się, jak dwusieczne kątów trójkąta związane są z okręgiem wpisanym.",
+    "Znajdź środek okręgu wpisanego $I$ i oblicz kąty w czworokącie $AXIY$ lub w trójkącie $XIY$. Wykorzystaj fakt, że $\\angle ACB = 60°$ wpływa na miary łuków $AB$, $BC$, $CA$.",
+    "Aby udowodnić styczność prostej $XY$ do okręgu wpisanego, wyznacz odległość od środka $I$ do prostej $XY$. Sprawdź, czy punkt $I$ leży na okręgu opisanym w szczególnej pozycji względem $X$ i $Y$ - może $IX = IY = r$ dla pewnego promienia?"
+  ]
 }

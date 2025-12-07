@@ -1,13 +1,21 @@
 {
   "number": 1,
-  "title": "Pary (a,b) z a < b < 2013 i a+b = 4020",
-  "content": "Wyznacz wszystkie pary (a, b) liczb całkowitych spełniających warunki\na < b < 2013 oraz a+b = 4020.",
+  "title": "Trójka $(a, b, c)$ nieparzystych z $\\sqrt{a-c} + \\sqrt{b-c} = \\sqrt{a+b}$",
+  "content": "Czy istnieje taka trójka $(a, b, c)$ dodatnich liczb nieparzystych, że\n$$\\sqrt{a-c} + \\sqrt{b-c} = \\sqrt{a+b}$$\nOdpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2013/etap2/2etap14.pdf",
     "solutions": "tasks/2013/etap2/2etap14r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zacznij od podniesienia obu stron równania do kwadratu. Co otrzymasz po uproszczeniu? Pamiętaj o wzorze $(x+y)^2 = x^2 + 2xy + y^2$.",
+    "Po przekształceniach algebraicznych otrzymasz warunek na iloczyn $(a-c)(b-c)$. Zastanów się, jaką postać musi mieć ten iloczyn, aby równanie było spełnione.",
+    "Zbadaj parzystość wyrażeń $a-c$ i $b-c$ gdy $a$, $b$, $c$ są nieparzyste. Jaka jest parzystość różnicy dwóch liczb nieparzystych?",
+    "Skoro $a-c$ i $b-c$ są parzyste, to ich iloczyn jest podzielny przez $4$. Sprawdź, czy $c^2$ dla nieparzystego $c$ może być podzielne przez $4$."
+  ]
 }

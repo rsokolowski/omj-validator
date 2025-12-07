@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Punkty X, Y na bokach trójkąta ABC",
-  "content": "Punkty X oraz Y leżą odpowiednio na bokach AC oraz BC trójkąta ABC. Punkt M jest środkiem odcinka XY. Załóżmy, że AX = MX = MC = MY = BY. Wyznacz miarę kąta AMB.",
+  "title": "Punkty $X$, $Y$ na bokach trójkąta $ABC$",
+  "content": "Punkty $X$ oraz $Y$ leżą odpowiednio na bokach $AC$ oraz $BC$ trójkąta $ABC$. Punkt $M$ jest środkiem odcinka $XY$. Załóżmy, że $$AX = MX = MC = MY = BY.$$ Wyznacz miarę kąta $AMB$.",
   "pdf": {
     "tasks": "tasks/2023/etap1/19omj-1etap.pdf",
     "solutions": "tasks/2023/etap1/19omj-1etap-r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Zaznacz na rysunku wszystkie równe odcinki: $AX = MX = MC = MY = BY$. Jakie trójkąty równoramienne możesz zidentyfikować? Co wynika z tego, że $M$ jest środkiem $XY$ i jednocześnie $MX = MY$?",
+    "Skoro masz wiele trójkątów równoramiennych, wprowadź oznaczenia na kąty przy ich podstawach. Pamiętaj, że w trójkącie równoramiennym kąty przy podstawie są równe. Spróbuj wyrazić wszystkie kąty przez jedną niewiadomą.",
+    "Zwróć uwagę na trójkąt $MXC$ gdzie $MX = MC$ oraz na trójkąt $MYC$ gdzie $MY = MC$. Jakie są kąty w tych trójkątach? Wykorzystaj też fakt, że punkty $X$, $M$, $Y$ są współliniowe.",
+    "Zapisz warunek, że suma kątów przy wierzchołku $C$ w trójkącie $ABC$ musi być równa $\\angle ACB$. Użyj również faktu, że kąty $\\angle XMC$ i $\\angle YMC$ są kątami przyległymi (sumują się do $180°$). Z tych zależności wyznacz miary kątów, a następnie oblicz $\\angle AMB$."
+  ]
 }

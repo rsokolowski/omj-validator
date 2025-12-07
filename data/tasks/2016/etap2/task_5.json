@@ -1,13 +1,21 @@
 {
   "number": 5,
-  "title": "100-kąt foremny z kolorowaniem",
-  "content": "Spośród wierzchołków 100-kąta foremnego wybrano pewne 50 i pokolorowano je na biało. Pozostałe wierzchołki pokolorowano na czerwono. Udowodnij, że wierzchołki tego 100-kąta można tak podzielić na 25 grup po 4 punkty, aby punkty w obrębie każdej grupy były wierzchołkami prostokąta o dwóch białych i dwóch czerwonych wierzchołkach.",
+  "title": "Wielościan wypukły ze $100$ krawędziami",
+  "content": "Czy istnieje taki wielościan wypukły, że każdy kąt wewnętrzny jego każdej ściany jest prosty lub rozwarty i który ma dokładnie $100$ krawędzi? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2016/etap2/2etap17.pdf",
     "solutions": "tasks/2016/etap2/2etap17r.pdf",
     "statistics": "tasks/2016/etap2/2etap17st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "geometria"
+  ],
+  "hints": [
+    "Przypomnij sobie wzór Eulera dla wielościanów: $W - K + S = 2$, gdzie $W$ to wierzchołki, $K$ to krawędzie, $S$ to ściany. Zastanów się też, jakie wielokąty mogą być ścianami, jeśli wszystkie ich kąty wewnętrzne mają być $\\geq 90°$.",
+    "Policz, ile kątów może mieć ściana wielościanu przy zadanym warunku. Każda krawędź należy do dokładnie dwóch ścian - wykorzystaj to do związania liczby krawędzi z liczbą ścian.",
+    "Zauważ, że wielokąt o $n$ bokach ma sumę kątów $(n-2) \\cdot 180°$. Jeśli każdy kąt ma być $\\geq 90°$, to ile boków może mieć taka ściana? Wyprowadź nierówność między liczbą krawędzi $K$ a liczbą ścian $S$.",
+    "Skoro każda ściana ma co najwyżej 4 boki, to $2K \\leq 4S$, czyli $S \\geq \\frac{K}{2}$. Połącz to ze wzorem Eulera i warunkiem, że wielościan ma co najmniej 4 wierzchołki, aby sprawdzić, czy $K = 100$ jest możliwe."
+  ]
 }

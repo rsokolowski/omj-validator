@@ -1,13 +1,21 @@
 {
   "number": 3,
-  "title": "Liczba między √(2n) a √(5n)",
-  "content": "Niech n ≥ 1 będzie liczbą całkowitą. Wykaż, że istnieje taka liczba całkowita, która jest większa od √(2n) i mniejsza od √(5n).",
+  "title": "Liczba całkowita między $\\sqrt{2n}$ a $\\sqrt{5n}$",
+  "content": "Niech $n \\geq 1$ będzie liczbą całkowitą. Wykaż, że istnieje taka liczba całkowita, która jest większa od $\\sqrt{2n}$ i mniejsza od $\\sqrt{5n}$.",
   "pdf": {
     "tasks": "tasks/2021/etap1/1etap21.pdf",
     "solutions": "tasks/2021/etap1/1etap21rr.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza, że między dwiema liczbami istnieje liczba całkowita. Kiedy przedział $(a, b)$ zawiera liczbę całkowitą?",
+    "Przedział zawiera liczbę całkowitą, gdy jego długość jest wystarczająco duża. Spróbuj oszacować długość przedziału $(\\sqrt{2n}, \\sqrt{5n})$.",
+    "Oblicz różnicę $\\sqrt{5n} - \\sqrt{2n}$ i sprawdź, kiedy jest ona większa od 1. Rozważ, jak ta różnica rośnie wraz z $n$.",
+    "Pokaż, że $\\sqrt{5n} - \\sqrt{2n} > 1$ dla $n \\geq 1$. Możesz podnieść nierówność do kwadratu lub użyć faktu, że $\\sqrt{5} - \\sqrt{2} > 0{,}8$."
+  ]
 }

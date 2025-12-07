@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Trapez ABCD z punktem P",
-  "content": "Dany jest trapez ABCD o podstawach AB i CD. Wyznacz wszystkie punkty P leżące wewnątrz tego trapezu i spełniające równość [PAB]+[PCD] = [PBC]+[PDA], gdzie [XYZ] oznacza pole trójkąta XYZ.",
+  "title": "Trapez $ABCD$ z punktem $P$",
+  "content": "Dany jest trapez $ABCD$ o podstawach $AB$ i $CD$. Wyznacz wszystkie punkty $P$ leżące wewnątrz tego trapezu i spełniające równość\n$$[PAB] + [PCD] = [PBC] + [PDA],$$\ngdzie $[XYZ]$ oznacza pole trójkąta $XYZ$.",
   "pdf": {
     "tasks": "tasks/2009/etap1/omg05_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Trapez zostaje podzielony przez punkt $P$ na cztery trójkąty. Jaka jest suma pól tych wszystkich trójkątów? Co wynika z podanego warunku o sumie pól?",
+    "Pole trójkąta to $\\frac{1}{2} \\cdot a \\cdot h$. Zastanów się, jak wysokość trójkąta (np. $[PAB]$) zależy od położenia punktu $P$ względem boku $AB$.",
+    "Rozważ, jak zmienia się suma $[PAB] + [PCD]$ gdy punkt $P$ przesuwa się równolegle do podstaw trapezu. Zbadaj też, co dzieje się gdy $P$ przesuwa się prostopadle do podstaw.",
+    "Znajdź miejsca geometryczne punktów, dla których $[PAB] + [PCD]$ ma stałą wartość. Poszukaj szczególnych punktów trapezu (np. środków boków lub przekątnych), które mogą spełniać warunek."
+  ]
 }

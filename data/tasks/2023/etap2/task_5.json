@@ -1,13 +1,21 @@
 {
   "number": 5,
   "title": "800 liczb na tablicy",
-  "content": "Na tablicy znajduje się osiemset dodatnich liczb całkowitych mniejszych od 21. Czterysta z tych liczb zapisano niebieską kredą, a czterysta — żółtą. Wykaż, że można zmazać pewne liczby z tablicy (co najmniej jedną, ale nie wszystkie) w taki sposób, aby suma pozostałych na tablicy niebieskich liczb była równa sumie pozostałych na tablicy żółtych liczb.\nUwaga. Liczby na tablicy mogą się powtarzać.",
+  "content": "Na tablicy znajduje się osiemset dodatnich liczb całkowitych mniejszych od 21. Czterysta z tych liczb zapisano niebieską kredą, a czterysta — żółtą. Wykaż, że można zmazać pewne liczby z tablicy (co najmniej jedną, ale nie wszystkie) w taki sposób, aby suma pozostałych na tablicy niebieskich liczb była równa sumie pozostałych na tablicy żółtych liczb.\n\n*Uwaga.* Liczby na tablicy mogą się powtarzać.",
   "pdf": {
     "tasks": "tasks/2023/etap2/19omj-2etap.pdf",
     "solutions": "tasks/2023/etap2/19omj-2r.pdf",
     "statistics": "tasks/2023/etap2/19omj-2etap-st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Oznacz przez $N$ sumę wszystkich niebieskich liczb, a przez $Z$ sumę wszystkich żółtych. Rozważ różnicę $N - Z$. Jak zmienia się ta różnica gdy usuwamy pojedyncze liczby?",
+    "Pomyśl o ciągu stanów: zacznij od wszystkich liczb i usuwaj je po kolei (jedną po drugiej). Śledź jak zmienia się różnica sum. Czy możesz użyć zasady szufladkowej lub argumentu o wartościach pośrednich?",
+    "Każda liczba ma wartość od 1 do 20, więc usunięcie jednej liczby zmienia różnicę sum o co najwyżej 20. Rozważ wszystkie możliwe $2^{800}$ podzbiorów — ile różnych wartości może przyjąć różnica sum i ile jest podzbiorów?",
+    "Dla każdego niepustego podzbioru liczb rozważ różnicę (suma niebieskich w podzbiorze) minus (suma żółtych w podzbiorze). Pokaż, że wśród wszystkich możliwych niepustych właściwych podzbiorów dwa muszą dawać tę samą różnicę — ich symetryczna różnica da różnicę równą 0."
+  ]
 }

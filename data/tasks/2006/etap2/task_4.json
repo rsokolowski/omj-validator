@@ -1,13 +1,21 @@
 {
   "number": 4,
-  "title": "Liczba 14ⁿ − 9 pierwsza",
-  "content": "Wyznacz wszystkie dodatnie liczby całkowite n, dla których liczba 14ⁿ − 9 jest pierwsza.",
+  "title": "Iloczyn $(a+b)(b+c)(c+d)(d+a)$ zakończony cyframi \"10\"",
+  "content": "Czy istnieją takie dodatnie liczby całkowite $a$, $b$, $c$, $d$, że liczba $(a+b)(b+c)(c+d)(d+a)$ jest w systemie dziesiętnym zakończona cyframi \"10\"? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2006/etap2/omg02_2.pdf",
     "solutions": "tasks/2006/etap2/omg02_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza, że liczba kończy się cyframi \"10\". Przez jakie potęgi liczb 2 i 5 musi być podzielna, a przez jakie nie może być podzielna?",
+    "Zbadaj parzystość poszczególnych czynników $(a+b)$, $(b+c)$, $(c+d)$, $(d+a)$. Czy wszystkie mogą być nieparzyste? Ile z nich musi być parzystych?",
+    "Zauważ, że suma wszystkich czterech czynników to $2(a+b+c+d)$. Co to mówi o parzystości liczby czynników parzystych? Ile dwójek (jako czynników pierwszych) musi zawierać cały iloczyn?",
+    "Pokaż, że iloczyn zawsze jest podzielny przez $4$ (czyli przez $2^2$). Następnie rozważ, kiedy iloczyn byłby podzielny przez dokładnie jedną piątkę - przeanalizuj, czy to jest możliwe przy jednoczesnej podzielności przez $2^2$ ale nie przez $100$."
+  ]
 }

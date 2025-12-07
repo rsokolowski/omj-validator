@@ -1,13 +1,20 @@
 {
   "number": 4,
   "title": "18-kąt foremny z prostokątem",
-  "content": "Dany jest 18-kąt foremny A₁A₂...A₁₈. Wykaż, że czworokąt ograniczony prostymi A₂A₇, A₃A₁₅, A₆A₁₂ i A₁₀A₁₇ jest prostokątem. Czy ten prostokąt jest kwadratem?",
+  "content": "Dany jest 18-kąt foremny $A_1A_2 \\ldots A_{18}$. Wykaż, że czworokąt ograniczony prostymi $A_2A_7$, $A_3A_{15}$, $A_6A_{12}$ i $A_{10}A_{17}$ jest prostokątem. Czy ten prostokąt jest kwadratem?",
   "pdf": {
     "tasks": "tasks/2009/etap1/omg05_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj 18-kąt foremny wpisany w okrąg i zaznacz podane wierzchołki. Przypomnij sobie, jak obliczać kąt środkowy odpowiadający jednemu bokowi wielokąta foremnego.",
+    "Wykorzystaj własność kąta wpisanego w okrąg - jaki jest związek między kątem wpisanym a kątem środkowym opartym na tym samym łuku?",
+    "Zbadaj, pod jakim kątem przecinają się poszczególne pary prostych. Policz, ile boków wielokąta rozpina każda cięciwa (np. $A_2A_7$ rozpina 5 boków) i wykorzystaj to do wyznaczenia odpowiednich kątów.",
+    "Aby wykazać, że czworokąt jest prostokątem, pokaż że jego kąty są proste. Dla pytania o kwadrat - sprawdź czy sąsiednie boki prostokąta mają równe długości, analizując symetrię figury."
+  ]
 }

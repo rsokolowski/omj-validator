@@ -1,13 +1,21 @@
 {
   "number": 5,
   "title": "55-kąt foremny z liczbami",
-  "content": "Przy każdym wierzchołku 55-kąta foremnego napisano liczbę całkowitą. Żadna z tych liczb nie jest podzielna przez 5. Wykaż, że istnieją takie dwie liczby a i b, napisane przy sąsiednich wierzchołkach tego wielokąta, że liczba a²−b² jest podzielna przez 5.",
+  "content": "Przy każdym wierzchołku 55-kąta foremnego napisano liczbę całkowitą. Żadna z tych liczb nie jest podzielna przez 5. Wykaż, że istnieją takie dwie liczby $a$ i $b$, napisane przy sąsiednich wierzchołkach tego wielokąta, że liczba $a^2 - b^2$ jest podzielna przez 5.",
   "pdf": {
     "tasks": "tasks/2009/etap1/omg05_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Zauważ, że $a^2 - b^2$ jest podzielne przez 5 wtedy, gdy $a^2$ i $b^2$ dają tę samą resztę z dzielenia przez 5. Jakie reszty mogą dawać kwadraty liczb niepodzielnych przez 5?",
+    "Policz, ile różnych reszt z dzielenia przez 5 mogą mieć kwadraty liczb całkowitych niepodzielnych przez 5. Czy przyda się tu zasada szufladkowa?",
+    "Sprawdź reszty z dzielenia przez 5 dla $1^2, 2^2, 3^2, 4^2$. Ile jest różnych możliwych reszt? Porównaj tę liczbę z liczbą wierzchołków wielokąta.",
+    "Skoro kwadraty liczb niepodzielnych przez 5 dają tylko dwie różne reszty modulo 5, a mamy 55 wierzchołków ułożonych w cykl, rozważ ciąg reszt kwadratów przy kolejnych wierzchołkach i użyj zasady szufladkowej dla par sąsiednich."
+  ]
 }

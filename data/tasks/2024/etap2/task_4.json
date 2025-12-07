@@ -1,7 +1,7 @@
 {
   "number": 4,
-  "title": "Pierwiastki sześcienne a + b = ∛2025",
-  "content": "Czy istnieją takie dodatnie liczby całkowite a oraz b, że\n∛a + ∛b = ∛2025?\nUwaga. Symbol ∛x oznacza pierwiastek trzeciego stopnia z x, czyli taką liczbę rzeczywistą y, że y³ = x.",
+  "title": "Pierwiastki sześcienne $\\sqrt[3]{a} + \\sqrt[3]{b} = \\sqrt[3]{2025}$",
+  "content": "Czy istnieją takie dodatnie liczby całkowite $a$ oraz $b$, że\n$$\\sqrt[3]{a} + \\sqrt[3]{b} = \\sqrt[3]{2025}?$$\n*Uwaga.* Symbol $\\sqrt[3]{x}$ oznacza *pierwiastek trzeciego stopnia* z $x$, czyli taką liczbę rzeczywistą $y$, że $y^3 = x$.",
   "pdf": {
     "tasks": "tasks/2024/etap2/20omj-2etap.pdf",
     "solutions": "tasks/2024/etap2/20omj-2r.pdf",

@@ -1,13 +1,20 @@
 {
   "number": 5,
-  "title": "Nierówność a+b+c ≥ (3/4)abc",
-  "content": "Liczby dodatnie a, b, c spełniają nierówności a+b ≥ ab, b+c ≥ bc oraz c+a ≥ ca. Udowodnij, że a+b+c ≥ (3/4)abc.",
+  "title": "Nierówność $a+b+c \\geq \\frac{3}{4}abc$",
+  "content": "Liczby dodatnie $a$, $b$, $c$ spełniają nierówności\n$$a + b \\geq ab, \\quad b + c \\geq bc \\quad \\text{oraz} \\quad c + a \\geq ca.$$\nUdowodnij, że $a + b + c \\geq \\frac{3}{4}abc$.",
   "pdf": {
     "tasks": "tasks/2022/etap1/18omj-1etap.pdf",
     "solutions": "tasks/2022/etap1/18omj-1r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Przyjrzyj się warunkom $a+b \\geq ab$, $b+c \\geq bc$, $c+a \\geq ca$. Spróbuj przekształcić każdą z tych nierówności do postaci, w której po jednej stronie masz 0 lub 1. Co można wywnioskować o wartościach $a$, $b$, $c$?",
+    "Rozważ wprowadzenie nowych zmiennych przez podstawienie. Skoro nierówności dotyczą par zmiennych, może warto zapisać warunki w formie ograniczeń na iloczyny lub sumy. Pomyśl też o dodaniu stronami nierówności.",
+    "Zauważ, że $a+b \\geq ab$ można przekształcić do $\\frac{1}{a} + \\frac{1}{b} \\geq 1$. Wprowadź podstawienie $x = \\frac{1}{a}$, $y = \\frac{1}{b}$, $z = \\frac{1}{c}$ i zapisz wszystkie warunki oraz tezę w nowych zmiennych.",
+    "Po podstawieniu masz warunki $x+y \\geq 1$, $y+z \\geq 1$, $z+x \\geq 1$, czyli $x+y+z \\geq \\frac{3}{2}$. Teza przyjmuje postać $\\frac{1}{x} + \\frac{1}{y} + \\frac{1}{z} \\geq \\frac{3}{4xyz}$. Wykorzystaj nierówność między średnią arytmetyczną a harmoniczną."
+  ]
 }

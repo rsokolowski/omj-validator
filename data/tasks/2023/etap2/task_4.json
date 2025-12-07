@@ -1,13 +1,21 @@
 {
   "number": 4,
-  "title": "Kwadrat ABCD podzielony na figury",
-  "content": "Punkty K, L, M, N leżą odpowiednio na bokach AB, BC, CD, DA kwadratu ABCD. Odcinki KL, MN, LN dzielą ten kwadrat na cztery figury o równych polach. Udowodnij, że odcinki KL, MN, KM również dzielą ten kwadrat na cztery figury o równych polach.",
+  "title": "Kwadrat $ABCD$ podzielony na figury",
+  "content": "Punkty $K$, $L$, $M$, $N$ leżą odpowiednio na bokach $AB$, $BC$, $CD$, $DA$ kwadratu $ABCD$. Odcinki $KL$, $MN$, $LN$ dzielą ten kwadrat na cztery figury o równych polach. Udowodnij, że odcinki $KL$, $MN$, $KM$ również dzielą ten kwadrat na cztery figury o równych polach.",
   "pdf": {
     "tasks": "tasks/2023/etap2/19omj-2etap.pdf",
     "solutions": "tasks/2023/etap2/19omj-2r.pdf",
     "statistics": "tasks/2023/etap2/19omj-2etap-st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "algebra"
+  ],
+  "hints": [
+    "Narysuj kwadrat z punktami $K$, $L$, $M$, $N$ na bokach i zaznacz oba podziały. Ile figur powstaje w każdym przypadku i jakie to figury? Oznacz długości odcinków na bokach kwadratu.",
+    "Wprowadź współrzędne lub oznaczenia dla pozycji punktów na bokach. Wyraź pola powstałych figur przez te wielkości. Szukaj symetrii w układzie punktów.",
+    "Zbadaj jakie warunki na położenie punktów $K$, $L$, $M$, $N$ wynikają z równości pól w pierwszym podziale. Zwróć uwagę na punkty $L$ i $N$ - występują w obu podziałach.",
+    "Porównaj pole trójkąta $KLN$ z polem trójkąta $KMN$. Wykorzystaj fakt, że oba trójkąty mają wspólny bok $KN$ - jakie warunki musi spełniać położenie $L$ względem $M$?"
+  ]
 }

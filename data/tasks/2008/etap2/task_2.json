@@ -1,13 +1,21 @@
 {
   "number": 2,
-  "title": "Tablica 4×4 z sumami",
-  "content": "W każde pole tablicy o wymiarach 4×4 wpisano liczbę 0 lub 1. Następnie obliczono sumy liczb stojących w każdym wierszu, w każdej kolumnie i na obu przekątnych. Wykaż, że co najmniej trzy sumy są jednakowe.",
+  "title": "Ciąg liczb $1$ lub $-1$",
+  "content": "Każda z liczb $x_1, x_2, \\ldots, x_{101}$ jest równa $1$ lub $-1$. Wyznacz najmniejszą możliwą wartość wyrażenia\n$$x_1x_2 + x_2x_3 + x_3x_4 + \\ldots + x_{100}x_{101} + x_{101}x_1.$$",
   "pdf": {
     "tasks": "tasks/2008/etap2/omg04_2.pdf",
     "solutions": "tasks/2008/etap2/omg04_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Ile różnych sum obliczamy łącznie? Jakie wartości mogą przyjmować poszczególne sumy w wierszu, kolumnie lub na przekątnej tablicy 4×4 wypełnionej zerami i jedynkami?",
+    "Zastosuj zasadę szufladkową (Dirichleta). Jeśli masz 10 sum i 5 możliwych wartości (0, 1, 2, 3, 4), co możesz powiedzieć o rozkładzie tych sum? Kiedy każda wartość mogłaby wystąpić dokładnie 2 razy?",
+    "Załóż, że żadna wartość nie występuje więcej niż 2 razy. Oblicz sumę wszystkich wierszy i sumę wszystkich kolumn - jak się ma to do całkowitej sumy elementów tablicy? Jakie wartości sum musiałyby wtedy wystąpić?",
+    "Jeśli każda z wartości 0, 1, 2, 3, 4 występuje dokładnie 2 razy wśród 10 sum, to suma wszystkich tych sum wynosi $2(0+1+2+3+4) = 20$. Porównaj to z faktem, że suma wierszy plus suma kolumn to $2S$, gdzie $S$ to suma wszystkich elementów tablicy."
+  ]
 }

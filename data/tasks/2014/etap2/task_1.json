@@ -1,13 +1,20 @@
 {
   "number": 1,
-  "title": "Trójka (a,b,c) liczb nieparzystych",
-  "content": "Czy istnieje taka trójka (a, b, c) dodatnich liczb nieparzystych, że\n√(a−c) + √(b−c) = √(a+b)?\nOdpowiedź uzasadnij.",
+  "title": "Liczby dodatnie $a$, $b$, $c$, $d$ z warunkami",
+  "content": "Liczby dodatnie $a$, $b$, $c$, $d$ spełniają warunki $a + b = c + d$ oraz $ac = bd$. Udowodnij, że $a = d$ oraz $b = c$.",
   "pdf": {
     "tasks": "tasks/2014/etap2/2etap15.pdf",
     "solutions": "tasks/2014/etap2/2etap15r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Masz dwa równania z czterema niewiadomymi. Spróbuj wyrazić jedną zmienną przez inne, np. z równania $a + b = c + d$ wyznacz $d = a + b - c$.",
+    "Podstaw wyrażenie na $d$ do drugiego równania $ac = bd$ i przekształć otrzymane równanie. Szukaj możliwości faktoryzacji.",
+    "Po podstawieniu i przekształceniu powinieneś otrzymać równanie, które można zapisać jako iloczyn dwóch czynników równy zero. Zastanów się, jakie wnioski można wyciągnąć dla liczb dodatnich.",
+    "Spróbuj doprowadzić do równania postaci $(a-d)(a-c) = 0$ lub podobnej. Pamiętaj, że dla liczb dodatnich spełniających warunek $a + b = c + d$, równość $a = c$ pociągałaby $b = d$."
+  ]
 }

@@ -1,13 +1,21 @@
 {
   "number": 2,
-  "title": "Kwadrat 6×6 rozcięty na prostokąty",
-  "content": "Kwadrat 6×6 rozcięto na osiem prostokątów, z których każdy ma cztery boki o całkowitych długościach. Wykaż, że pewne dwa z tych ośmiu prostokątów mają równe pola.",
+  "title": "Kwadrat $6 \\times 6$ rozcięty na prostokąty",
+  "content": "Kwadrat $6 \\times 6$ rozcięto na osiem prostokątów, z których każdy ma cztery boki o całkowitych długościach. Wykaż, że pewne dwa z tych ośmiu prostokątów mają równe pola.",
   "pdf": {
     "tasks": "tasks/2023/etap2/19omj-2etap.pdf",
     "solutions": "tasks/2023/etap2/19omj-2r.pdf",
     "statistics": "tasks/2023/etap2/19omj-2etap-st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Jakie możliwe pola mogą mieć prostokąty o bokach całkowitych, które mieszczą się w kwadracie $6 \\times 6$? Wypisz wszystkie możliwe wymiary takich prostokątów.",
+    "Rozważ użycie zasady szufladkowej - policz ile jest różnych możliwych wartości pól i porównaj z liczbą prostokątów.",
+    "Zauważ, że suma pól wszystkich prostokątów musi wynosić 36. Które spośród możliwych pól prostokątów są osiągalne dla prostokątów mieszczących się w kwadracie $6 \\times 6$?",
+    "Wypisz wszystkie możliwe pola prostokątów o bokach co najwyżej 6. Następnie sprawdź, czy można wybrać 8 różnych wartości z tej listy, których suma wynosi dokładnie 36."
+  ]
 }

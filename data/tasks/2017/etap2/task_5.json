@@ -1,13 +1,21 @@
 {
   "number": 5,
-  "title": "Liczby √2+1 lub √2−1",
-  "content": "Czy istnieją liczby x₁, x₂, ..., x₉₉, z których każda jest równa √2+1 lub √2−1 i które spełniają równość\nx₁x₂ + x₂x₃ + x₃x₄ + ... + x₉₈x₉₉ + x₉₉x₁ = 199?\nOdpowiedź uzasadnij.",
+  "title": "Kolorowanie liczb całkowitych trzema kolorami",
+  "content": "Każdą liczbę całkowitą pomalowano na jeden z trzech kolorów. Udowodnij, że istnieją dwie różne liczby tego samego koloru, których różnica jest kwadratem liczby całkowitej.",
   "pdf": {
     "tasks": "tasks/2017/etap2/2etap18.pdf",
     "solutions": "tasks/2017/etap2/2etap18r.pdf",
     "statistics": "tasks/2017/etap2/2etap18st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, ile jest kwadratów liczb całkowitych, które mogą być różnicą dwóch liczb. Czy możesz ograniczyć się do pewnego skończonego zbioru liczb całkowitych?",
+    "Użyj zasady szufladkowej. Jeśli masz trzy kolory i odpowiednio dużo liczb, to wiele z nich musi mieć ten sam kolor. Pomyśl o ciągu kolejnych kwadratów.",
+    "Rozważ liczby $0, 1, 4, 9, 16, 25, \\ldots$ (kolejne kwadraty). Jakie różnice występują między nimi? Sprawdź, co się dzieje dla pierwszych kilku kwadratów $0, 1, 4, 9$.",
+    "Przeanalizuj kolorowania liczb $0, 1, 2, 3, 4, 5$. Zauważ, że różnice $1-0$, $4-0$, $4-3$, $5-4$, $5-1$ są kwadratami. Sprawdź, czy każde kolorowanie tych sześciu liczb trzema kolorami daje parę tego samego koloru różniącą się o kwadrat."
+  ]
 }

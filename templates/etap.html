@@ -27,7 +27,7 @@
             <span class="task-badge">{{ task.submission_count }} {% if task.submission_count == 1 %}próba{% elif task.submission_count < 5 %}próby{% else %}prób{% endif %}</span>
             {% endif %}
         </div>
-        <div class="task-title">{{ task.title }}</div>
+        <div class="task-title math-content">{{ task.title }}</div>
         <div class="task-meta-row">
             {% if task.difficulty %}
             <span class="difficulty difficulty-{{ task.difficulty }}"

@@ -1,13 +1,20 @@
 {
   "number": 1,
-  "title": "Liczba 11...199...9 pierwsza",
-  "content": "Wyznacz wszystkie takie liczby naturalne n, że liczba 11...1 (n jedynek) 99...9 (n dziewiątek) jest pierwsza.",
+  "title": "Liczba $\\underbrace{11\\ldots1}_{n}\\underbrace{99\\ldots9}_{n}$ pierwsza",
+  "content": "Wyznacz wszystkie takie liczby naturalne $n$, że liczba $\\underbrace{11\\ldots1}_{n}\\underbrace{99\\ldots9}_{n}$ jest pierwsza.",
   "pdf": {
     "tasks": "tasks/2023/etap1/19omj-1etap.pdf",
     "solutions": "tasks/2023/etap1/19omj-1etap-r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zapisz tę liczbę jako wyrażenie algebraiczne używając potęg liczby $10$. Pamiętaj, że $\\underbrace{99\\ldots9}_{n} = 10^n - 1$ oraz $\\underbrace{11\\ldots1}_{n} = \\frac{10^n - 1}{9}$.",
+    "Spróbuj przedstawić całą liczbę jako iloczyn prostszych wyrażeń. Poszukaj wspólnego czynnika lub zastosuj grupowanie.",
+    "Po zapisaniu liczby w postaci algebraicznej, sprawdź czy da się ją rozłożyć na czynniki. Zwróć uwagę, że dla $n \\geq 2$ jeden z czynników może być większy od $1$ i mniejszy od całej liczby.",
+    "Przekształć liczbę do postaci $\\frac{10^n - 1}{9} \\cdot (10^n + 9)$ i sprawdź, dla jakich $n$ oba czynniki są większe od $1$."
+  ]
 }

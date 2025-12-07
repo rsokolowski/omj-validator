@@ -1,13 +1,20 @@
 {
   "number": 5,
-  "title": "Równoległobok ABCD z AP=BD",
-  "content": "Dany jest równoległobok ABCD. Na przekątnej BD wybrano taki punkt P, że spełniona jest równość AP = BD. Punkt Q jest środkiem odcinka CP. Wykaż, że ∠BQD = 90°.",
+  "title": "Równoległobok $ABCD$ z $AP = BD$",
+  "content": "Dany jest równoległobok $ABCD$. Na przekątnej $BD$ wybrano taki punkt $P$, że spełniona jest równość $AP = BD$. Punkt $Q$ jest środkiem odcinka $CP$. Wykaż, że $\\angle BQD = 90°$.",
   "pdf": {
     "tasks": "tasks/2018/etap1/1etap18.pdf",
     "solutions": "tasks/2018/etap1/1etap18r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek równoległoboku $ABCD$ z przekątnymi. Zaznacz punkt $P$ na $BD$ tak, by $AP = BD$. Gdzie znajduje się środek $Q$ odcinka $CP$? Co wiesz o przekątnych równoległoboku?",
+    "Przypomnij sobie twierdzenie o kącie wpisanym opartym na średnicy okręgu - jeśli punkt leży na okręgu, a \"widzi\" średnicę, to kąt jest prosty. Czy możesz znaleźć odpowiedni okrąg?",
+    "Oznacz przez $O$ środek przekątnej $BD$ (czyli też środek $AC$). Zbadaj, jakie odległości mają punkty $B$, $D$ i $Q$ od punktu $O$. Wykorzystaj fakt, że $Q$ jest środkiem $CP$.",
+    "Rozważ trójkąt $ACP$ i jego środkową z wierzchołka $A$. Skoro $Q$ jest środkiem $CP$, a $O$ środkiem $AC$, to odcinek $OQ$ jest środkową. Oblicz długość $OQ$ i porównaj z $OB$ oraz $OD$."
+  ]
 }

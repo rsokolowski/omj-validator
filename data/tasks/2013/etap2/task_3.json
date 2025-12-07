@@ -1,13 +1,22 @@
 {
   "number": 3,
-  "title": "Nierówność a√b + b√a + 1 > 3ab",
-  "content": "Wykaż, że jeśli liczby a i b są dodatnie i mniejsze od 1, to\na·√b + b·√a + 1 > 3ab.",
+  "title": "Tablica $9 \\times 9$ i 18 kolejnych sum",
+  "content": "W każde pole tablicy o wymiarach $9 \\times 9$ wpisano pewną dodatnią liczbę całkowitą. Następnie obliczono sumy liczb znajdujących się w każdym wierszu i w każdej kolumnie. Czy może się zdarzyć, że 18 obliczonych sum to kolejne liczby naturalne w pewnym porządku? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2013/etap2/2etap14.pdf",
     "solutions": "tasks/2013/etap2/2etap14r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb",
+    "logika"
+  ],
+  "hints": [
+    "Zauważ, że suma wszystkich liczb w tablicy może być obliczona na dwa sposoby: jako suma wszystkich sum wierszowych lub jako suma wszystkich sum kolumnowych. Co z tego wynika?",
+    "Jeśli 18 sum to kolejne liczby naturalne, to możemy je oznaczyć jako $n, n+1, \\ldots, n+17$. Oblicz sumę wszystkich tych 18 liczb i zastanów się, jak musi się ona dzielić między wiersze i kolumny.",
+    "Skoro suma wierszowa musi równać się sumie kolumnowej, to 9 z tych 18 kolejnych liczb musi dawać tę samą sumę co pozostałe 9. Zbadaj, czy suma $n + (n+1) + \\ldots + (n+17)$ jest podzielna przez 2.",
+    "Oblicz sumę 18 kolejnych liczb naturalnych zaczynających się od $n$. Sprawdź parzystość tej sumy i zastanów się, czy można ją podzielić na dwie równe części."
+  ]
 }

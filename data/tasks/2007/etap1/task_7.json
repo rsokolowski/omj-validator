@@ -7,7 +7,14 @@
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Wyobraź sobie ostrosłup czworokątny i zastanów się, jak może wyglądać przekrój płaszczyzną przecinającą wszystkie cztery krawędzie boczne. Jaki kształt ma taki przekrój?",
+    "Spróbuj skonstruować konkretny przykład. Rozważ ostrosłup o specjalnej podstawie (np. kwadrat) i zastanów się, jak pochylić płaszczyzną tnącą, aby przekrój był jak największy.",
+    "Zwróć uwagę, że przekrój płaszczyzną przecinającą wszystkie krawędzie boczne jest czworokątem. Pomyśl, co się dzieje z polem tego przekroju, gdy płaszczyzna jest bardzo pochylona względem podstawy.",
+    "Rozważ ostrosłup o bardzo niskiej wysokości (niemal płaski). Jak wtedy wygląda stosunek pola przekroju do pola podstawy, gdy płaszczyzna tnie krawędzie boczne blisko podstawy i jest silnie nachylona?"
+  ]
 }

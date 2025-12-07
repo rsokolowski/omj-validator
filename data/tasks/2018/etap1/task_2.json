@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Czworokąt ABCD z kątami 45°",
-  "content": "Dany jest czworokąt wypukły ABCD, w którym ∠DAB = ∠ABC = 45° oraz DA = 3, AB = 7√2, BC = 4. Oblicz długość boku CD.",
+  "title": "Czworokąt $ABCD$ z kątami $45°$",
+  "content": "Dany jest czworokąt wypukły $ABCD$, w którym $\\angle DAB = \\angle ABC = 45°$ oraz $DA = 3$, $AB = 7\\sqrt{2}$, $BC = 4$. Oblicz długość boku $CD$.",
   "pdf": {
     "tasks": "tasks/2018/etap1/1etap18.pdf",
     "solutions": "tasks/2018/etap1/1etap18r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek czworokąta $ABCD$ z zaznaczonymi kątami $45°$ przy wierzchołkach $A$ i $B$. Co szczególnego oznacza kąt $45°$ w kontekście trójkątów prostokątnych?",
+    "Spróbuj opuścić wysokości z wierzchołków $A$ i $B$ na odpowiednie boki lub ich przedłużenia. Trójkąt prostokątny z kątem $45°$ ma szczególne własności - jakie?",
+    "Opuść wysokość z $A$ na prostą $BC$ oraz z $B$ na prostą $AD$. W trójkącie równoramiennym prostokątnym przyprostokątne są równe. Jak to pomoże wyznaczyć współrzędne lub odległości punktów?",
+    "Wprowadź układ współrzędnych lub oblicz pozycje spodków wysokości. Skorzystaj z tego, że w trójkącie prostokątnym z kątem $45°$ przyprostokątna równa się przeciwprostokątnej podzielonej przez $\\sqrt{2}$. Na końcu użyj twierdzenia Pitagorasa do obliczenia $CD$."
+  ]
 }

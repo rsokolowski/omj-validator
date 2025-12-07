@@ -1,13 +1,20 @@
 {
   "number": 3,
-  "title": "Liczby pierwsze a,b,c większe od 3",
-  "content": "Liczby pierwsze a, b, c są większe od 3. Udowodnij, że liczba (a−b)(b−c)(c−a) jest podzielna przez 48.",
+  "title": "Liczby pierwsze $a$, $b$, $c$ większe od 3",
+  "content": "Liczby pierwsze $a$, $b$, $c$ są większe od 3. Udowodnij, że liczba $(a-b)(b-c)(c-a)$ jest podzielna przez 48.",
   "pdf": {
     "tasks": "tasks/2017/etap1/1etap17.pdf",
     "solutions": "tasks/2017/etap1/1etap17r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, jakie reszty z dzielenia przez 2 i przez 3 mogą dawać liczby pierwsze większe od 3. Jaką postać mają takie liczby?",
+    "Skoro każda liczba pierwsza większa od 3 jest nieparzysta, to czym są różnice $a-b$, $b-c$, $c-a$? Rozważ też reszty z dzielenia przez 3.",
+    "Zauważ, że każda różnica dwóch liczb nieparzystych jest parzysta. Ponadto liczby pierwsze większe od 3 dają reszty 1 lub 2 z dzielenia przez 3 - ile możliwych reszt mają trzy takie liczby?",
+    "Pokaż, że iloczyn trzech różnic jest podzielny przez $2^4 = 16$ (co najmniej jedna różnica dzieli się przez 4) oraz przez 3. Rozważ, jakie reszty z dzielenia przez 6 mogą mieć liczby $a$, $b$, $c$."
+  ]
 }

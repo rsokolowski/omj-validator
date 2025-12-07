@@ -1,13 +1,21 @@
 {
   "number": 2,
-  "title": "Turniej 6 drużyn z sumą 41 punktów",
-  "content": "W pewnym turnieju uczestniczyło 6 drużyn. Każda drużyna rozegrała z każdą inną dokładnie jeden mecz. Za zwycięstwo w meczu drużyna otrzymywała 3 punkty, za porażkę 0 punktów, a za remis 1 punkt. Po turnieju okazało się, że suma punktów zdobytych przez wszystkie drużyny wynosi 41. Wykaż, że istnieją takie cztery drużyny, z których każda co najmniej jeden raz zremisowała.",
+  "title": "Trójkąt ostrokątny z całkowitymi bokami i wysokościami",
+  "content": "Czy istnieje taki trójkąt ostrokątny, w którym długości wszystkich boków i wszystkich wysokości są liczbami całkowitymi? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2012/etap2/2etap13.pdf",
     "solutions": "tasks/2012/etap2/2etap13r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Ile łącznie meczy rozegrano w turnieju? Ile punktów zostałoby rozdanych, gdyby żaden mecz nie zakończył się remisem?",
+    "Porównaj maksymalną możliwą sumę punktów z faktyczną sumą 41. Każdy remis zmniejsza łączną pulę punktów o określoną wartość.",
+    "Oblicz, ile meczy zakończyło się remisem. Zauważ, że w każdym remisie uczestniczą dokładnie dwie drużyny.",
+    "Zastanów się, ile drużyn musi uczestniczyć w remisach, skoro każdy remis angażuje 2 drużyny. Czy da się rozdzielić wszystkie remisy między mniej niż 4 drużyny?"
+  ]
 }

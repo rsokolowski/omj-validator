@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Podzielność a+b przez d, a·b przez d²",
-  "content": "Dane są dodatnie liczby całkowite a, b, d. Wiadomo, że liczba a+b jest podzielna przez d, a liczba a·b jest podzielna przez d². Udowodnij, że każda z liczb a i b jest podzielna przez d.",
+  "title": "Trapez z punktami na przekątnych",
+  "content": "Dany jest trapez $ABCD$ o podstawach $AB$ i $CD$. Punkty $P$ i $Q$ leżą odpowiednio na przekątnych $AC$ i $BD$, przy czym $\\angle APD = \\angle BQC$.\nWykaż, że $\\angle AQD = \\angle BPC$.",
   "pdf": {
     "tasks": "tasks/2017/etap2/2etap18.pdf",
     "solutions": "tasks/2017/etap2/2etap18r.pdf",
     "statistics": "tasks/2017/etap2/2etap18st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek trapezu z przekątnymi i punktami $P$, $Q$. Oznacz wszystkie kąty, które znasz lub możesz oznaczyć. Co wiesz o kątach przy wierzchołkach trapezu?",
+    "Przypomnij sobie warunek na to, by cztery punkty leżały na jednym okręgu (czworokąt wpisany). Kiedy suma pewnych kątów wynosi $180°$?",
+    "Zbadaj, czy punkty $A$, $P$, $Q$, $B$ lub inna czwórka punktów mogą leżeć na wspólnym okręgu. Wykorzystaj dany warunek $\\angle APD = \\angle BQC$ oraz kąty przyległe.",
+    "Zauważ, że $\\angle APD + \\angle APC = 180°$ oraz $\\angle BQC + \\angle BQA = 180°$. Skoro $\\angle APD = \\angle BQC$, to $\\angle APC = \\angle BQA$. Co to mówi o czworokącie $APQB$?"
+  ]
 }

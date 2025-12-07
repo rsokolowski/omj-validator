@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Trójkąt ABC z ∠ACB=45° i kwadratami",
-  "content": "Dany jest trójkąt ostrokątny ABC, w którym ∠ACB = 45°. Niech BCED oraz ACFG będą kwadratami leżącymi na zewnątrz trójkąta ABC. Udowodnij, że środek odcinka DG pokrywa się ze środkiem okręgu opisanego na trójkącie ABC.",
+  "title": "Trójkąt $ABC$ z $\\angle ACB = 45°$ i kwadratami",
+  "content": "Dany jest trójkąt ostrokątny $ABC$, w którym $\\angle ACB = 45°$. Niech $BCED$ oraz $ACFG$ będą kwadratami leżącymi na zewnątrz trójkąta $ABC$. Udowodnij, że środek odcinka $DG$ pokrywa się ze środkiem okręgu opisanego na trójkącie $ABC$.",
   "pdf": {
     "tasks": "tasks/2016/etap1/1etap16.pdf",
     "solutions": "tasks/2016/etap1/1etap16r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek z trójkątem $ABC$, kwadratami $BCED$ i $ACFG$ oraz zaznacz środek okręgu opisanego $O$. Jak można opisać położenie punktów $D$ i $G$ względem wierzchołków trójkąta?",
+    "Rozważ użycie obrotów - kwadrat można scharakteryzować przez obrót o $90°$. Zastanów się, jak punkty $D$ i $G$ powstają przez obrót odpowiednich wierzchołków trójkąta.",
+    "Zbadaj, jak środek okręgu opisanego $O$ jest równoodległy od wierzchołków. Czy możesz pokazać, że $O$ jest również równoodległy od punktów $D$ i $G$? Wykorzystaj fakt, że $\\angle ACB = 45°$.",
+    "Pokaż, że obrót o $90°$ wokół punktu $B$ przekształca $C$ w $D$, a obrót o $90°$ wokół $C$ przekształca $A$ w $G$. Następnie zbadaj, jak te obroty działają na środek okręgu opisanego i wykorzystaj własność kąta $45°$ jako połowy kąta prostego."
+  ]
 }

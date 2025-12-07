@@ -7,7 +7,15 @@
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Zastanów się, jakie reszty z dzielenia przez 11 mogą dawać poszczególne liczby. Ile jest możliwych reszt? Czy możesz pogrupować liczby według tych reszt?",
+    "Rozważ sumy częściowe ciągu liczb: $S_1 = a_1$, $S_2 = a_1 + a_2$, itd. Ile takich sum możesz utworzyć? Jak zasada szufladkowa może tu pomóc?",
+    "Masz 111 sum częściowych $S_1, S_2, \\ldots, S_{111}$, a każda z nich daje jedną z 11 możliwych reszt przy dzieleniu przez 11. Co wynika z tej dysproporcji?",
+    "Jeśli dwie sumy $S_i$ i $S_j$ (gdzie $i < j$) dają tę samą resztę z dzielenia przez 11, to czym jest $S_j - S_i$? Ile wyrazów zawiera ta różnica i co możesz powiedzieć o jej podzielności?"
+  ]
 }

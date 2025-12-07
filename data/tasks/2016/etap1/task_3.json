@@ -1,13 +1,21 @@
 {
   "number": 3,
-  "title": "Tablica 11×11 z −1, 0, 1",
-  "content": "W każde pole tablicy 11×11 należy wpisać jedną z liczb −1, 0, 1 w taki sposób, aby suma liczb w każdej kolumnie była nieujemna, a suma liczb w każdym wierszu była niedodatnia. Jaką najmniejszą liczbę zer można w ten sposób wpisać w pola tablicy? Odpowiedź uzasadnij.",
+  "title": "Tablica $11 \\times 11$ z liczbami $-1$, $0$, $1$",
+  "content": "W każde pole tablicy $11 \\times 11$ należy wpisać jedną z liczb $-1$, $0$, $1$ w taki sposób, aby suma liczb w każdej kolumnie była nieujemna, a suma liczb w każdym wierszu była niedodatnia. Jaką najmniejszą liczbę zer można w ten sposób wpisać w pola tablicy? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2016/etap1/1etap16.pdf",
     "solutions": "tasks/2016/etap1/1etap16r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Oblicz sumę wszystkich elementów tablicy na dwa sposoby: jako sumę sum wierszy oraz jako sumę sum kolumn. Co możesz wywnioskować o wartości tej sumy?",
+    "Skoro suma całkowita musi spełniać oba warunki jednocześnie, zastanów się, jakie wartości mogą mieć sumy poszczególnych wierszy i kolumn. Czy mogą być różne od zera?",
+    "W każdym wierszu suma wynosi 0, więc liczba jedynek równa się liczbie liczb $-1$. Ile pól pozostaje na zera w wierszu o 11 polach? Rozważ parzystość.",
+    "Skonstruuj przykładową tablicę, w której każdy wiersz i każda kolumna ma dokładnie jedno zero. Spróbuj umieścić zera na przekątnej i odpowiednio rozłożyć jedynki oraz liczby $-1$."
+  ]
 }

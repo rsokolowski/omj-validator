@@ -1,13 +1,21 @@
 {
   "number": 1,
-  "title": "Liczba rozwiązań układu |x|+|y|=1",
-  "content": "Wyznacz w zależności od parametru a liczbę rozwiązań układu równań: |x|+|y| = 1 oraz |x|+a = y.",
+  "title": "Liczba rozwiązań układu $|x|+|y|=1$",
+  "content": "Wyznacz w zależności od parametru $a$ liczbę rozwiązań układu równań\n$$\\begin{cases} |x|+|y| = 1 \\\\ |x|+a = y \\end{cases}$$",
   "pdf": {
     "tasks": "tasks/2008/etap1/omg04_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra",
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj na płaszczyźnie zbiór punktów spełniających równanie $|x| + |y| = 1$. Jaka to figura? Następnie zastanów się, jak wygląda wykres drugiego równania.",
+    "Rozważ przypadki ze względu na znak $x$ (czy $x \\geq 0$ czy $x < 0$). W każdym przypadku uprość wyrażenie $|x|$ i zbadaj, jaką prostą opisuje drugie równanie.",
+    "Zauważ, że z drugiego równania wynika $y = |x| + a \\geq a$. Dla jakich wartości $y$ istnieją punkty na pierwszej figurze? Kiedy prosta może przecinać tę figurę?",
+    "Podstaw $y = |x| + a$ do pierwszego równania, otrzymując $|x| + ||x| + a| = 1$. Przeanalizuj osobno przypadki $a \\geq 0$, $a < 0$ i zbadaj, ile rozwiązań ma równanie w zależności od wartości $a$."
+  ]
 }

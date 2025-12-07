@@ -1,13 +1,20 @@
 {
   "number": 2,
-  "title": "Równoległobok ABCD z AD=DX i AB=BY",
-  "content": "Dany jest równoległobok ABCD. Na bokach AB i AD leżą odpowiednio takie punkty X i Y różne od A, że AD = DX oraz AB = BY. Udowodnij, że CX = CY.",
+  "title": "Trapez z prostopadłymi przekątnymi",
+  "content": "Wykaż, że jeżeli przekątne pewnego trapezu są prostopadłe, to suma długości podstaw tego trapezu jest nie większa od sumy długości ramion tego trapezu.",
   "pdf": {
     "tasks": "tasks/2016/etap2/2etap17.pdf",
     "solutions": "tasks/2016/etap2/2etap17r.pdf",
     "statistics": "tasks/2016/etap2/2etap17st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj trapez $ABCD$ z podstawami $AB$ i $CD$ oraz zaznacz punkt przecięcia przekątnych. Co wiesz o kątach w tym punkcie? Jakie trójkąty powstają?",
+    "Wykorzystaj prostopadłość przekątnych – w punkcie ich przecięcia powstają trójkąty prostokątne. Zastanów się, jak twierdzenie Pitagorasa może pomóc wyrazić długości boków.",
+    "Opuść wysokości z wierzchołków na podstawy lub rozważ rzuty ramion na prostą zawierającą podstawę. Poszukaj związku między sumą podstaw a odcinkami powstałymi z projekcji.",
+    "Oznacz punkt przecięcia przekątnych przez $P$. Wyraź kwadraty długości ramion przez odcinki $AP$, $BP$, $CP$, $DP$ używając twierdzenia Pitagorasa, a następnie porównaj z kwadratami sum odpowiednich odcinków na przekątnych."
+  ]
 }

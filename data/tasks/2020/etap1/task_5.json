@@ -1,13 +1,20 @@
 {
   "number": 5,
-  "title": "Cztery liczby z sumą 2^1002 i iloczynem 5^1002",
-  "content": "Czy istnieją takie cztery dodatnie liczby całkowite, których suma jest równa 2^1002, a iloczyn jest równy 5^1002? Odpowiedź uzasadnij.",
+  "title": "Cztery liczby z sumą $2^{1002}$ i iloczynem $5^{1002}$",
+  "content": "Czy istnieją takie cztery dodatnie liczby całkowite, których suma jest równa $2^{1002}$, a iloczyn jest równy $5^{1002}$? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2020/etap1/1etap20.pdf",
     "solutions": "tasks/2020/etap1/1etap20r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, jaką postać muszą mieć liczby całkowite, których iloczyn jest potęgą liczby $5$. Czy mogą zawierać inne czynniki pierwsze?",
+    "Skoro iloczyn ma być równy $5^{1002}$, każda z czterech liczb musi być potęgą piątki. Zbadaj własności takich liczb pod kątem parzystości.",
+    "Jaka jest parzystość dowolnej potęgi liczby $5$? Co możesz powiedzieć o sumie czterech takich liczb?",
+    "Suma czterech liczb nieparzystych daje liczbę parzystą, ale nie podzielną przez $4$ lub daje liczbę podzielną przez $4$, ale nie przez $8$. Sprawdź, przez jaką najwyższą potęgę dwójki może być podzielna suma czterech potęg piątki."
+  ]
 }

@@ -1,13 +1,21 @@
 {
   "number": 5,
-  "title": "Trójkąt ABC z ∠CAE = ∠BCD",
-  "content": "W trójkącie ABC punkt D jest środkiem boku AB, a punkt E jest środkiem odcinka CD. Wykaż, że jeżeli ∠CAE = ∠BCD, to AC = CD.",
+  "title": "Trójkąt równoboczny z punktem $P$",
+  "content": "Dany jest trójkąt równoboczny $ABC$. Niech $P$ będzie punktem leżącym wewnątrz tego trójkąta. Proste $AP$, $BP$, $CP$ przecinają odcinki $BC$, $CA$, $AB$ odpowiednio w punktach $D$, $E$, $F$. Czy można punkt $P$ wybrać w taki sposób, aby dokładnie cztery spośród trójkątów $AEP$, $AFP$, $BFP$, $BDP$, $CDP$, $CEP$ miały równe pola? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2014/etap2/2etap15.pdf",
     "solutions": "tasks/2014/etap2/2etap15r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Narysuj trójkąt równoboczny $ABC$ z punktem $P$ w środku i oznacz wszystkie sześć małych trójkątów. Jakie pary trójkątów mają wspólne boki lub wierzchołki? Czy widzisz jakieś naturalne symetrie?",
+    "Rozważ, co się dzieje gdy punkt $P$ leży na osi symetrii trójkąta. Które trójkąty wtedy mają równe pola? Jak zmienia się sytuacja gdy przesuwamy $P$?",
+    "Zauważ, że trójkąty $AEP$ i $AFP$ mają wspólny wierzchołek $A$ i punkt $P$. Jak ich pola zależą od odległości $E$ i $F$ od prostej $AP$? Przeanalizuj podobne pary dla wierzchołków $B$ i $C$.",
+    "Zbadaj przypadek, gdy $P$ leży na jednej osi symetrii trójkąta - ile par trójkątów o równych polach wtedy powstaje? Następnie sprawdź, czy przesunięcie $P$ z osi pozwala uzyskać dokładnie cztery równe pola."
+  ]
 }

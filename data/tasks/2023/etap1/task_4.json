@@ -7,7 +7,15 @@
     "solutions": "tasks/2023/etap1/19omj-1etap-r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Przypomnij sobie wzór na różnicę sześcianów $a^3 - b^3$. Jak można rozłożyć to wyrażenie na czynniki?",
+    "Skoro wynik ma być liczbą pierwszą, a mamy iloczyn dwóch czynników, to co musi być prawdą o jednym z tych czynników?",
+    "Zastanów się: czy czynnik $a^2 + ab + b^2$ może być równy 1 dla liczb pierwszych $a > b$? Co to oznacza dla czynnika $(a-b)$?",
+    "Jeśli $a - b = 1$, to szukasz dwóch liczb pierwszych różniących się o 1. Ile jest takich par?"
+  ]
 }

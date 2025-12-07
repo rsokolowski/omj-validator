@@ -1,13 +1,21 @@
 {
   "number": 6,
-  "title": "Szachownica 14×14",
-  "content": "Pola szachownicy o wymiarach 14×14 pokolorowano w sposób przedstawiony na rysunku. Czy można wybrać siedem pól czarnych i siedem pól białych tej szachownicy w taki sposób, aby w każdym wierszu i w każdej kolumnie znalazło się dokładnie jedno wybrane pole? Odpowiedź uzasadnij.",
+  "title": "Szachownica $14 \\times 14$",
+  "content": "Pola szachownicy o wymiarach $14 \\times 14$ pokolorowano w sposób przedstawiony na rysunku. Czy można wybrać siedem pól czarnych i siedem pól białych tej szachownicy w taki sposób, aby w każdym wierszu i w każdej kolumnie znalazło się dokładnie jedno wybrane pole? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2018/etap1/1etap18.pdf",
     "solutions": "tasks/2018/etap1/1etap18r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Zastanów się, ile pól czarnych i białych znajduje się w każdym wierszu i w każdej kolumnie szachownicy $14 \\times 14$. Jak można opisać położenie wybranych pól?",
+    "Wybór jednego pola z każdego wiersza i każdej kolumny to permutacja. Zbadaj, jak kolor pola na pozycji $(i, j)$ zależy od parzystości $i$ i $j$.",
+    "Przeanalizuj parzystość sumy współrzędnych wybranych pól. Jeśli pole jest czarne gdy $i+j$ jest parzyste (lub nieparzyste), co to oznacza dla sumy wszystkich $i+j$?",
+    "Policz sumę $\\sum(i+j)$ dla wszystkich 14 wybranych pól, wiedząc że $i$ i $j$ przebiegają wartości $1, 2, \\ldots, 14$. Sprawdź, czy możliwe jest uzyskanie dokładnie 7 pól o parzystej i 7 o nieparzystej sumie współrzędnych."
+  ]
 }

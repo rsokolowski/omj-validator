@@ -1,13 +1,21 @@
 {
   "number": 4,
   "title": "Przyjęcie z 3 i 4 znajomymi",
-  "content": "Na przyjęcie przyszło n osób. Początkowo każdy miał dokładnie 3 znajomych wśród pozostałych osób obecnych na przyjęciu. W trakcie przyjęcia niektóre osoby poznały się, w wyniku czego pod koniec przyjęcia każdy miał wśród pozostałych obecnych dokładnie 4 znajomych. Wyznacz wszystkie liczby n, dla których opisana sytuacja jest możliwa.",
+  "content": "Na przyjęcie przyszło $n$ osób. Początkowo każdy miał dokładnie 3 znajomych wśród pozostałych osób obecnych na przyjęciu. W trakcie przyjęcia niektóre osoby poznały się, w wyniku czego pod koniec przyjęcia każdy miał wśród pozostałych obecnych dokładnie 4 znajomych. Wyznacz wszystkie liczby $n$, dla których opisana sytuacja jest możliwa. (Przyjmujemy, że jeśli osoba $A$ zna osobę $B$, to osoba $B$ zna osobę $A$.)",
   "pdf": {
     "tasks": "tasks/2014/etap1/1etap14.pdf",
     "solutions": "tasks/2014/etap1/1etap14r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, ile krawędzi (znajomości) ma graf na początku, a ile na końcu przyjęcia. Co oznacza, że każdy ma 3 znajomych w kontekście sumy stopni wierzchołków?",
+    "Policz sumę wszystkich znajomości - każda znajomość jest liczona dwukrotnie. Jakie warunki podzielności musi spełniać $n$, aby liczba krawędzi była całkowita?",
+    "Na początku suma stopni to $3n$, na końcu $4n$. Sprawdź, dla jakich $n$ obie te sumy dają parzystą liczbę krawędzi i czy $n$ musi być parzyste.",
+    "Wykaż, że $n$ musi być parzyste (dlaczego?), a potem skonstruuj przykłady dla małych parzystych wartości $n$. Czy istnieje dolne ograniczenie na $n$?"
+  ]
 }

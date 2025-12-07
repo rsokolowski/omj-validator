@@ -1,13 +1,22 @@
 {
   "number": 1,
-  "title": "Trójki (a,b,c) z sumami pierwszymi",
-  "content": "Wyznacz wszystkie takie trójki (a, b, c) dodatnich liczb całkowitych, że każda z liczb\na+b, b+c, c+a oraz a+b+c\njest pierwsza.",
+  "title": "Tablica $4 \\times 4$ z sumami będącymi potęgami $2$",
+  "content": "W każde pole tablicy $4 \\times 4$ należy wpisać pewną liczbę całkowitą w taki sposób, aby sumy liczb w każdej kolumnie i w każdym wierszu były potęgami liczby $2$ o wykładniku całkowitym nieujemnym. Czy można to zrobić w taki sposób, aby każde dwie z tych ośmiu sum były różne? Odpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2016/etap2/2etap17.pdf",
     "solutions": "tasks/2016/etap2/2etap17r.pdf",
     "statistics": "tasks/2016/etap2/2etap17st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zauważ, że sumę wszystkich liczb w tablicy można obliczyć na dwa sposoby: dodając sumy wierszy lub dodając sumy kolumn. Co z tego wynika?",
+    "Jeśli 8 sum ma być różnymi potęgami liczby $2$, to muszą być to pewne 8 różnych liczb z ciągu $1, 2, 4, 8, 16, \\ldots$ Zastanów się, jak podzielić je na dwie grupy o równych sumach.",
+    "Rozważ własność sum potęg dwójki: jeśli $2^a$ jest największą potęgą w zbiorze, to suma pozostałych potęg (mniejszych od $2^a$) jest mniejsza niż $2^a$. Jak to wpływa na możliwość równego podziału?",
+    "Weź 8 najmniejszych różnych potęg dwójki i sprawdź, czy można je podzielić na dwie grupy po 4 elementy o równych sumach. Porównaj największy element z sumą pozostałych w każdej grupie."
+  ]
 }

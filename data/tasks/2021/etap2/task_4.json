@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Pięciokąt wypukły ABCDE",
-  "content": "W pięciokącie wypukłym ABCDE spełnione są równości\n∠CDE = 90°, AC = AD oraz BD = BE.\nWykaż, że trójkąt ABD i czworokąt ABCE mają równe pola.\nUwaga: Wielokąt nazywamy wypukłym, jeśli wszystkie jego kąty wewnętrzne są mniejsze od 180°.",
+  "title": "Pięciokąt wypukły $ABCDE$",
+  "content": "W pięciokącie wypukłym $ABCDE$ spełnione są równości\n$$\\angle CDE = 90^\\circ, \\quad AC = AD \\quad \\text{oraz} \\quad BD = BE.$$\nWykaż, że trójkąt $ABD$ i czworokąt $ABCE$ mają równe pola.\n\n*Uwaga:* Wielokąt nazywamy *wypukłym*, jeśli wszystkie jego kąty wewnętrzne są mniejsze od $180^\\circ$.",
   "pdf": {
     "tasks": "tasks/2021/etap2/2etap22.pdf",
     "solutions": "tasks/2021/etap2/2etap22r.pdf",
     "statistics": "tasks/2021/etap2/2etap22st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza równość pól $P(ABD) = P(ABCE)$. Spróbuj przeformułować ten warunek, rozbijając czworokąt $ABCE$ na prostsze figury. Narysuj dokładny rysunek pięciokąta.",
+    "Wykorzystaj warunki $AC = AD$ oraz $BD = BE$ - co mówią one o położeniu punktów $A$ i $B$ względem odcinków $CD$ i $DE$? Przypomnij sobie własność symetralnej odcinka.",
+    "Zauważ, że skoro $A$ leży na symetralnej $CD$, a $B$ leży na symetralnej $DE$, to pewne trójkąty mają równe pola (trójkąty o wspólnej podstawie i równych wysokościach). Jak kąt prosty $\\angle CDE$ wpływa na te symetralności?",
+    "Przekształć warunek $P(ABD) = P(ABCE)$ do postaci $P(ABD) - P(ABC) = P(BCE)$, czyli $P(BCD) = P(BCE)$. Wykaż, że trójkąty $BCD$ i $BCE$ mają równe pola, korzystając z tego, że $B$ leży na symetralnej odcinka $DE$."
+  ]
 }

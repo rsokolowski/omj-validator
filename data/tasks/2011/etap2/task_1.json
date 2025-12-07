@@ -1,13 +1,20 @@
 {
   "number": 1,
-  "title": "Pięciokąt wypukły ABCDE z równymi polami",
-  "content": "Dany jest taki pięciokąt wypukły ABCDE, w którym pola trójkątów ABD, BCE, CDA, DEB i EAC są równe. Wykaż, że każda przekątna tego pięciokąta jest równoległa do pewnego jego boku.",
+  "title": "Pary liczb z iloczynem podzielnym przez 175 i sumą 175",
+  "content": "Wyznacz wszystkie pary dodatnich liczb całkowitych $a$, $b$, których iloczyn $ab$ jest podzielny przez $175$, a suma $a+b$ równa się $175$.",
   "pdf": {
     "tasks": "tasks/2011/etap2/2etap12.pdf",
     "solutions": "tasks/2011/etap2/2etap12r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Przyjrzyj się trójkątom, które mają wspólny bok. Co możesz powiedzieć o dwóch trójkątach mających tę samą podstawę i równe pola?",
+    "Przypomnij sobie, że trójkąty o wspólnej podstawie mają równe pola wtedy i tylko wtedy, gdy ich wierzchołki leżą na prostej równoległej do tej podstawy. Spróbuj zastosować tę własność do par trójkątów z zadania.",
+    "Rozważ trójkąty $ABD$ i $CBD$ - mają wspólną podstawę $BD$. Skoro $S_{ABD} = S_{CDA}$, a $S_{CDA}$ i $S_{CBD}$ dzielą wierzchołek $C$, poszukaj zależności między polami, które prowadzą do równoległości.",
+    "Porównaj pola trójkątów $ABD$ i $EBD$ (wspólna podstawa $BD$). Z równości $S_{ABD} = S_{DEB}$ wynika, że punkty $A$ i $E$ leżą w określonej odległości od prostej $BD$. Co to mówi o prostej $AE$ względem $BD$?"
+  ]
 }

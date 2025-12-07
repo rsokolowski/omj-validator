@@ -1,13 +1,21 @@
 {
   "number": 5,
-  "title": "Tabela 4×4 z liczbami 1 i 2",
-  "content": "W każde pole tabeli 4×4 wpisano jedną z liczb 1 lub 2. Dla każdego wiersza obliczono sumę wpisanych w niego liczb, a dla każdej kolumny obliczono iloczyn wpisanych w nią liczb. Wykaż, że pewne dwa z ośmiu uzyskanych wyników są równe.",
+  "title": "Tabela $4 \\times 4$ z liczbami $1$ i $2$",
+  "content": "W każde pole tabeli $4 \\times 4$ wpisano jedną z liczb $1$ lub $2$. Dla każdego wiersza obliczono sumę wpisanych w niego liczb, a dla każdej kolumny obliczono iloczyn wpisanych w nią liczb. Wykaż, że pewne dwa z ośmiu uzyskanych wyników są równe.",
   "pdf": {
     "tasks": "tasks/2022/etap2/18omj-2etap.pdf",
     "solutions": "tasks/2022/etap2/18omj-2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Wypisz wszystkie możliwe wartości sumy wiersza (gdy mamy 4 pola z liczbami 1 lub 2) oraz wszystkie możliwe wartości iloczynu kolumny. Które wartości mogą pojawić się w obu zbiorach?",
+    "Mamy 8 wyników, ale ile jest różnych możliwych wartości? Zastanów się, kiedy suma wiersza może być równa iloczynowi kolumny - rozważ użycie zasady szufladkowej lub analizy przypadków.",
+    "Zauważ, że sumy wierszowe należą do zbioru $\\{4, 5, 6, 7, 8\\}$, a iloczyny kolumnowe do $\\{1, 2, 4, 8, 16\\}$. Wspólne wartości to $4$ i $8$. Jeśli żadne dwa wyniki nie są równe, to jakie wartości muszą przyjąć sumy i iloczyny?",
+    "Jeśli wszystkie 8 wyników ma być różnych, to sumy muszą być z $\\{5, 6, 7\\}$ plus ewentualnie $4$ lub $8$ (ale nie oba, jeśli występują w iloczynach). Policz sumę wszystkich liczb w tabeli na dwa sposoby i sprawdź, czy to możliwe."
+  ]
 }

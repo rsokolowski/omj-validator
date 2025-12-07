@@ -1,13 +1,20 @@
 {
   "number": 5,
-  "title": "Ostrosłup sześciokątny z przekrojem",
-  "content": "Ostrosłup prawidłowy sześciokątny przecięto płaszczyzną, która przecina wszystkie jego krawędzie boczne. W przekroju otrzymano sześciokąt wypukły ABCDEF. Wykaż, że proste AD, BE i CF przecinają się w jednym punkcie.",
+  "title": "Ostrosłup czworokątny z prostopadłymi krawędziami",
+  "content": "Czy istnieje taki ostrosłup czworokątny, którego każda krawędź boczna jest prostopadła do którejś krawędzi podstawy? Odpowiedź uzasadnij.\n\n*Uwaga:* Proste prostopadłe w przestrzeni nie muszą się przecinać.",
   "pdf": {
     "tasks": "tasks/2009/etap2/2etap10.pdf",
     "solutions": "tasks/2009/etap2/omg05_2r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj widok ostrosłupa z góry (rzut na płaszczyznę podstawy). Jak wyglądają krawędzie boczne i ich rzuty? Gdzie leżą punkty $A, B, C, D, E, F$ w tym rzucie?",
+    "Wykorzystaj symetrię ostrosłupa prawidłowego sześciokątnego. Zastanów się, jakie własności mają pary przeciwległych krawędzi bocznych (np. te zawierające punkty $A$ i $D$).",
+    "W rzucie na płaszczyznę podstawy, przeciwległe krawędzie boczne ostrosłupa rzutują się na odcinki przechodzące przez środek sześciokąta podstawy. Co to oznacza dla prostych $AD$, $BE$, $CF$ w tym rzucie?",
+    "Pokaż, że rzuty punktów $A$ i $D$ na płaszczyznę podstawy leżą na jednej prostej przechodzącej przez środek podstawy. To samo dotyczy par $B,E$ oraz $C,F$. Wyciągnij wniosek o przecięciu prostych w przestrzeni."
+  ]
 }

@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Trójkąt ABC z kątem 45°",
-  "content": "Dany jest trójkąt ABC, w którym miara kąta przy wierzchołku A jest równa 45°, a kąt przy wierzchołku C jest rozwarty. Udowodnij, że\nBC + (√2−1)·CA < AB.",
+  "title": "Trójkąt $ABC$ z kątem $45°$",
+  "content": "Dany jest trójkąt $ABC$, w którym miara kąta przy wierzchołku $A$ jest równa $45°$, a kąt przy wierzchołku $C$ jest rozwarty. Udowodnij, że\n$$BC + (\\sqrt{2}-1) \\cdot CA < AB.$$",
   "pdf": {
     "tasks": "tasks/2019/etap2/2etap20.pdf",
     "solutions": "tasks/2019/etap2/2etap20r.pdf",
     "statistics": "tasks/2019/etap2/2etap20st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj trójkąt $ABC$ z kątem $\\angle A = 45°$ i kątem rozwartym przy $C$. Zastanów się, jak skonstruować pomocniczy punkt, który pomoże porównać długości boków.",
+    "Spróbuj dobudować do trójkąta pomocniczą figurę - być może trójkąt równoramienno-prostokątny, który wykorzysta kąt $45°$. Jakie własności ma taki trójkąt?",
+    "Rozważ konstrukcję punktu $D$ na przedłużeniu boku $CA$ tak, aby trójkąt $ABD$ miał szczególne własności. Zwróć uwagę na związek między przekątną a bokiem kwadratu.",
+    "Skonstruuj punkt $D$ taki, że $AD = AB$ i $\\angle DAB = 45°$. Wykorzystaj nierówność trójkąta w trójkącie $BCD$ oraz fakt, że stosunek przekątnej kwadratu do boku wynosi $\\sqrt{2}$."
+  ]
 }

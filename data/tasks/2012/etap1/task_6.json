@@ -1,13 +1,20 @@
 {
   "number": 6,
-  "title": "Ostrosłup SABCD z wpisaną sferą",
-  "content": "W ostrosłup SABCD, którego podstawą jest czworokąt wypukły ABCD, można wpisać sferę. Udowodnij, że ∠ASB + ∠CSD = ∠BSC + ∠DSA.",
+  "title": "Ostrosłup $SABCD$ z wpisaną sferą",
+  "content": "W ostrosłup $SABCD$, którego podstawą jest czworokąt wypukły $ABCD$, można wpisać sferę. Udowodnij, że $\\angle ASB + \\angle CSD = \\angle BSC + \\angle DSA$.",
   "pdf": {
     "tasks": "tasks/2012/etap1/1etap12.pdf",
     "solutions": "tasks/2012/etap1/1etap12r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Przypomnij sobie własności odcinków stycznych poprowadzonych z jednego punktu do sfery (lub okręgu). Co możesz powiedzieć o odcinkach z wierzchołka S do punktów styczności sfery ze ścianami bocznymi?",
+    "Skoro sfera jest styczna do każdej ściany bocznej, to w każdym trójkącie bocznym (np. $\\triangle SAB$) można wpisać okrąg. Wykorzystaj własność okręgu wpisanego w trójkąt i odcinków stycznych.",
+    "Dla trójkąta o bokach $a$, $b$, $c$ z wpisanym okręgiem, odcinki styczne z wierzchołków mają długości wyrażające się przez obwód. Zbadaj, jak sumy odpowiednich odcinków stycznych w przeciwległych ścianach bocznych są ze sobą powiązane.",
+    "Oznacz długości odcinków stycznych z wierzchołka $S$ do punktów styczności na poszczególnych ścianach. Pokaż, że suma pewnych par odcinków jest równa. Następnie wykorzystaj fakt, że w trójkątach równoramiennych o równych ramionach i równych podstawach kąty przy wierzchołku są równe."
+  ]
 }

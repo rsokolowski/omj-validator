@@ -1,7 +1,7 @@
 {
   "number": 5,
-  "title": "Liczby pierwsze a, a+b, a+b+c, b+c, c",
-  "content": "Liczby całkowite a, b, c są większe od 1 i mają tę własność, że liczby a, a+b, a+b+c, b+c, c są pierwsze. Wykaż, że liczba b jest podzielna przez 3.",
+  "title": "Liczby pierwsze $a$, $a+b$, $a+b+c$, $b+c$, $c$",
+  "content": "Liczby całkowite $a$, $b$, $c$ są większe od 1 i mają tę własność, że liczby $a$, $a+b$, $a+b+c$, $b+c$, $c$ są pierwsze. Wykaż, że liczba $b$ jest podzielna przez 3.",
   "pdf": {
     "tasks": "tasks/2024/etap1/20omj-1etap.pdf",
     "solutions": "tasks/2024/etap1/20omj-1etap-r.pdf",

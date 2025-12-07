@@ -1,13 +1,20 @@
 {
   "number": 6,
-  "title": "Liczba n z 2n sześcianem i 3n kwadratem",
-  "content": "Dana jest liczba całkowita n o tej własności, że liczba 2n jest sześcianem liczby całkowitej, a liczba 3n jest kwadratem liczby całkowitej. Udowodnij, że liczba n jest podzielna przez 108.",
+  "title": "Liczba $n$ z $2n$ sześcianem i $3n$ kwadratem",
+  "content": "Dana jest liczba całkowita $n$ o tej własności, że liczba $2n$ jest sześcianem liczby całkowitej, a liczba $3n$ jest kwadratem liczby całkowitej. Udowodnij, że liczba $n$ jest podzielna przez 108.",
   "pdf": {
     "tasks": "tasks/2025/etap1/21omj-1etap-zad.pdf",
     "solutions": "tasks/2025/etap1/21omj-1etap-r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zapisz liczbę $n$ w postaci rozkładu na czynniki pierwsze: $n = 2^a \\cdot 3^b \\cdot m$, gdzie $m$ nie dzieli się przez 2 ani 3. Jakie warunki na wykładniki wynikają z tego, że $2n$ jest sześcianem?",
+    "Liczba jest sześcianem wtedy i tylko wtedy, gdy wszystkie wykładniki w jej rozkładzie na czynniki pierwsze są podzielne przez 3. Analogicznie, liczba jest kwadratem, gdy wszystkie wykładniki są parzyste. Zapisz te warunki dla $2n$ i $3n$.",
+    "Dla $2n = 2^{a+1} \\cdot 3^b \\cdot m$ masz warunki: $a+1 \\equiv 0 \\pmod{3}$, $b \\equiv 0 \\pmod{3}$. Dla $3n = 2^a \\cdot 3^{b+1} \\cdot m$ masz: $a \\equiv 0 \\pmod{2}$, $b+1 \\equiv 0 \\pmod{2}$. Jakie są minimalne wartości $a$ i $b$?",
+    "Znajdź najmniejsze nieujemne $a$ spełniające $a+1 \\equiv 0 \\pmod{3}$ i $a \\equiv 0 \\pmod{2}$ jednocześnie. Podobnie dla $b$. Sprawdź też, jakie warunki musi spełniać $m$, i oblicz $2^a \\cdot 3^b$."
+  ]
 }

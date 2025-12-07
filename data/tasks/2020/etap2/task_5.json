@@ -1,13 +1,21 @@
 {
   "number": 5,
   "title": "Zdalne przyjęcie urodzinowe",
-  "content": "Tomek zaprosił na zdalne przyjęcie urodzinowe 11 swoich znajomych, którzy kolejno będą dołączać do spotkania. Tomek dobrał gości w taki sposób, aby niezależnie od kolejności w jakiej będą dołączać, zawsze nowo przybyła osoba znała co najmniej połowę już obecnych osób, wliczając Tomka. Wykaż, że wśród zaproszonych gości istnieje taki, który zna wszystkich pozostałych 10 znajomych Tomka.\nUwaga: Przyjmujemy, że jeśli osoba A zna osobę B, to również B zna A.",
+  "content": "Tomek zaprosił na zdalne przyjęcie urodzinowe 11 swoich znajomych, którzy kolejno będą dołączać do spotkania. Tomek dobrał gości w taki sposób, aby niezależnie od kolejności w jakiej będą dołączać, zawsze nowo przybyła osoba znała co najmniej połowę już obecnych osób, wliczając Tomka. Wykaż, że wśród zaproszonych gości istnieje taki, który zna wszystkich pozostałych 10 znajomych Tomka.\n\n*Uwaga:* Przyjmujemy, że jeśli osoba $A$ zna osobę $B$, to również $B$ zna $A$.",
   "pdf": {
     "tasks": "tasks/2020/etap2/2etap21.pdf",
     "solutions": "tasks/2020/etap2/2etap21r.pdf",
     "statistics": "tasks/2020/etap2/2etap21st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza warunek 'niezależnie od kolejności dołączania'. Rozważ różne scenariusze - co się dzieje, gdy jako pierwsza dołącza osoba A, a co gdy osoba B?",
+    "Spróbuj rozumowania nie wprost: załóż, że żaden z gości nie zna wszystkich pozostałych. Co to oznacza dla każdego gościa?",
+    "Jeśli każdy gość nie zna co najmniej jednego innego gościa, rozważ co się stanie, gdy taki 'nieznany' gość dołączy jako ostatni. Ile osób już obecnych musi wtedy znać?",
+    "Przeanalizuj sytuację, gdy gość, który nie zna kogoś, dołącza jako ostatni z 11 gości. Musi znać co najmniej połowę z 11 obecnych osób. Sprawdź, czy to prowadzi do sprzeczności z założeniem."
+  ]
 }

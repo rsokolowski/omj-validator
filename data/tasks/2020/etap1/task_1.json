@@ -7,7 +7,15 @@
     "solutions": "tasks/2020/etap1/1etap20r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 2,
+  "categories": [
+    "teoria_liczb",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Wypisz wszystkie dwucyfrowe liczby, które są kwadratami liczb całkowitych. Zastanów się, jak kolejne pary cyfr w szukanej liczbie muszą być ze sobą powiązane.",
+    "Zauważ, że druga cyfra jednej pary musi być pierwszą cyfrą następnej pary. Spróbuj narysować schemat pokazujący, które kwadraty można ze sobą \"połączyć\".",
+    "Zbadaj, od których cyfr mogą zaczynać się dwucyfrowe kwadraty, a na których mogą się kończyć. Czy istnieje cyfra, która pozwala przejść z jednego kwadratu do następnego?",
+    "Sprawdź systematycznie: dla każdego dwucyfrowego kwadratu znajdź wszystkie kwadraty, które mogą po nim następować (tzn. zaczynają się od jego ostatniej cyfry). Czy da się utworzyć łańcuch długości 5 takich połączeń?"
+  ]
 }

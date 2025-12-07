@@ -1,13 +1,20 @@
 {
   "number": 5,
-  "title": "Okrąg wpisany w czworokąt ABCD",
-  "content": "Okrąg o promieniu 1 jest wpisany w czworokąt wypukły ABCD. Okrąg ten jest styczny do boków AB, BC, CD, DA odpowiednio w punktach K, L, M, N. Wiadomo, że ∠KLM = 4∠AKN oraz ∠KNM = 4∠BKL. Oblicz długość odcinka LN.",
+  "title": "Okrąg wpisany w czworokąt $ABCD$",
+  "content": "Okrąg o promieniu $1$ jest wpisany w czworokąt wypukły $ABCD$. Okrąg ten jest styczny do boków $AB$, $BC$, $CD$, $DA$ odpowiednio w punktach $K$, $L$, $M$, $N$. Wiadomo, że $$\\angle KLM = 4\\angle AKN \\quad \\text{oraz} \\quad \\angle KNM = 4\\angle BKL.$$ Oblicz długość odcinka $LN$.",
   "pdf": {
     "tasks": "tasks/2007/etap1/omg03_1.pdf",
     "solutions": null,
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek z okręgiem wpisanym i punktami styczności K, L, M, N. Jakie własności mają odcinki styczne z jednego wierzchołka? Jak promienie do punktów styczności odnoszą się do boków?",
+    "Punkty K, L, M, N leżą na okręgu, więc można rozważać kąty wpisane. Zastanów się, jak kąty $\\angle AKN$, $\\angle BKL$ związane są z łukami okręgu i kątami wpisanymi.",
+    "Zauważ, że $\\angle KLM$ i $\\angle KNM$ to kąty wpisane oparte na tym samym łuku KM. Co to oznacza dla tych kątów? Użyj warunków zadania, by powiązać $\\angle AKN$ i $\\angle BKL$.",
+    "Oznacz $\\angle AKN = \\alpha$ i $\\angle BKL = \\beta$. Z równości kątów wpisanych opartych na łuku KM dostaniesz równanie wiążące $\\alpha$ i $\\beta$. Rozwiąż układ i oblicz długość cięciwy LN z promienia okręgu."
+  ]
 }

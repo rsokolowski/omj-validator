@@ -7,7 +7,15 @@
     "solutions": "tasks/2017/etap1/1etap17r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Zastanów się, co wynika z warunku zadania. Jeśli mamy użyć wszystkich trzech kolorów, to muszą istnieć liczby w kolorze czerwonym, oraz w dwóch innych kolorach (nazwijmy je niebieski i zielony). Co możesz powiedzieć o sumie liczby niebieskiej i zielonej?",
+    "Rozważ, jakie liczby muszą być czerwone. Weź dowolną liczbę niebieską $a$ i dowolną liczbę zieloną $b$ - ich suma musi być czerwona. Co się stanie, gdy do czerwonej liczby dodasz liczbę niebieską lub zieloną?",
+    "Zbadaj, co dzieje się z sumami postaci $a + b + c$, gdzie $a$ jest niebieska, $b$ jest zielona, a $c$ jest niebieska lub zielona. Zauważ, że $(a + b) + c$ to suma liczby czerwonej i liczby innego koloru.",
+    "Pokaż, że prawie wszystkie liczby całkowite muszą być czerwone. Weź ustaloną liczbę niebieską $a$ i zieloną $b$. Dla dowolnej liczby całkowitej $n$ rozważ, czy $n - a - b$ może być niebieska lub zielona, i co z tego wynika dla koloru liczby $n$."
+  ]
 }

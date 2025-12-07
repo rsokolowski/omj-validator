@@ -1,13 +1,21 @@
 {
   "number": 1,
-  "title": "Trójkąt ABC z kątem 45° i wysokościami",
-  "content": "Dany jest trójkąt ostrokątny ABC, w którym ∠BAC = 45°. Wysokości tego trójkąta przecinają się w punkcie H. Wykaż, że |AH| = |BC|.",
+  "title": "Dodatnie liczby rzeczywiste i równania kwadratów",
+  "content": "Czy istnieją dodatnie liczby rzeczywiste $a$, $b$, $c$, $x$ o tej własności, że\n$$a^2 + b^2 = c^2 \\quad \\text{oraz} \\quad (a+x)^2 + (b+x)^2 = (c+x)^2?$$\nOdpowiedź uzasadnij.",
   "pdf": {
     "tasks": "tasks/2017/etap2/2etap18.pdf",
     "solutions": "tasks/2017/etap2/2etap18r.pdf",
     "statistics": "tasks/2017/etap2/2etap18st.pdf"
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "algebra",
+    "geometria"
+  ],
+  "hints": [
+    "Rozważ, co geometrycznie oznacza równanie $a^2 + b^2 = c^2$. Jak interpretować liczby $a$, $b$, $c$ jako boki figury?",
+    "Rozwiń drugie równanie i wykorzystaj fakt, że $a^2 + b^2 = c^2$. Spróbuj uprościć otrzymane wyrażenie, aby znaleźć warunek na $x$.",
+    "Po uproszczeniu powinieneś otrzymać równanie, z którego wyznaczysz $x$ w zależności od $a$, $b$, $c$. Kiedy ta wartość $x$ jest dodatnia?",
+    "Zbadaj, czy w trójkącie prostokątnym o bokach $a$, $b$ i przeciwprostokątnej $c$ może zachodzić nierówność $c > a + b$. Wykorzystaj nierówność trójkąta."
+  ]
 }

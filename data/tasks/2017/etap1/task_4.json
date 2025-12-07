@@ -1,13 +1,20 @@
 {
   "number": 4,
-  "title": "Trapez ABCD z symetralnymi",
-  "content": "Dany jest trapez ABCD o podstawach AB i CD. Symetralne ramion AD i BC przecinają odcinki BC i AD odpowiednio w punktach P i Q. Wykaż, że ∠APD = ∠BQC.",
+  "title": "Trapez $ABCD$ z symetralnymi",
+  "content": "Dany jest trapez $ABCD$ o podstawach $AB$ i $CD$. Symetralne ramion $AD$ i $BC$ przecinają odcinki $BC$ i $AD$ odpowiednio w punktach $P$ i $Q$. Wykaż, że $\\measuredangle APD = \\measuredangle BQC$.",
   "pdf": {
     "tasks": "tasks/2017/etap1/1etap17.pdf",
     "solutions": "tasks/2017/etap1/1etap17r.pdf",
     "statistics": null
   },
-  "difficulty": null,
-  "categories": [],
-  "hints": []
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Przypomnij sobie własność symetralnej odcinka: każdy punkt na symetralnej jest równo odległy od końców tego odcinka. Co to oznacza dla punktów $P$ i $Q$?",
+    "Skoro $P$ leży na symetralnej $AD$, to trójkąt $APD$ jest równoramienny. Analogicznie dla trójkąta $BQC$. Jak wyrażają się kąty przy podstawie trójkąta równoramiennego?",
+    "Wyraź kąty $\\measuredangle APD$ i $\\measuredangle BQC$ przez kąty trapezu. Wykorzystaj fakt, że $AB \\parallel CD$ — jakie zależności między kątami trapezu to daje?",
+    "Oznacz $\\measuredangle DAB = \\alpha$ i $\\measuredangle ABC = \\beta$. Zauważ, że $\\alpha + \\beta = 180°$ (kąty przy tym samym ramieniu trapezu). Wyraź oba szukane kąty przez $\\alpha$ i $\\beta$, korzystając z sumy kątów w trójkącie równoramiennym."
+  ]
 }
