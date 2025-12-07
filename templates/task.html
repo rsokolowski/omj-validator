@@ -83,6 +83,7 @@
 
     <div class="submit-section">
         <h2>Prześlij rozwiązanie</h2>
+        {% if is_authenticated %}
         <p class="submit-info">Prześlij zdjęcia swojego ręcznie napisanego rozwiązania. Możesz przesłać wiele zdjęć.</p>
 
         <form id="submit-form" class="submit-form" enctype="multipart/form-data">
@@ -111,14 +112,17 @@
             </div>
             <div class="result-feedback" id="result-feedback"></div>
         </div>
+        {% else %}
+        <p class="submit-info"><a href="/login">Zaloguj się</a>, aby przesłać rozwiązanie do oceny.</p>
+        {% endif %}
     </div>
 
-    {% if submissions %}
+    {% if is_authenticated and submissions %}
     <div class="history-section">
         <div class="history-header">
             <h2>Ostatnie próby</h2>
             <a href="/task/{{ task.year }}/{{ task.etap }}/{{ task.number }}/history" class="btn btn-secondary btn-small">
-                Zobacz wszystkie ({{ stats.submission_count }})
+                Zobacz wszystkie ({{ stats.submission_count if stats else 0 }})
             </a>
         </div>
 
@@ -133,8 +137,8 @@
                 {% if sub.images %}
                 <div class="submission-images">
                     {% for img in sub.images %}
-                    <a href="/{{ img }}" target="_blank" class="submission-image-link">
-                        <img src="/{{ img }}" alt="Rozwiązanie" class="submission-image-thumb">
+                    <a href="/uploads/{{ img }}" target="_blank" class="submission-image-link">
+                        <img src="/uploads/{{ img }}" alt="Rozwiązanie" class="submission-image-thumb">
                     </a>
                     {% endfor %}
                 </div>

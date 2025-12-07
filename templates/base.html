@@ -16,7 +16,11 @@
             <nav class="nav">
                 {% block nav %}
                 <a href="/years">Zadania</a>
+                {% if is_authenticated %}
                 <a href="/logout" class="nav-logout">Wyloguj</a>
+                {% else %}
+                <a href="/login" class="nav-login">Zaloguj</a>
+                {% endif %}
                 {% endblock %}
             </nav>
         </div>
