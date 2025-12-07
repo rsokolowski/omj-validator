@@ -76,7 +76,7 @@ templates.env.filters["nl2br_safe"] = nl2br_safe
 
 
 @app.get("/login", response_class=HTMLResponse)
-async def login_page(request: Request):
+async def login_page(request: Request, next: str = None):
     """Display login page with Google OAuth option."""
     if verify_auth(request):
         return RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
@@ -94,18 +94,23 @@ async def login_page(request: Request):
             "request": request,
             "error": error_msg,
             "oauth_available": bool(settings.google_client_id),
+            "next_url": next,
         },
     )
 
 
 @app.get("/login/google")
-async def google_login(request: Request):
+async def google_login(request: Request, next: str = None):
     """Initiate Google OAuth flow."""
     if not settings.google_client_id:
         return RedirectResponse(
             url="/login?error=oauth_not_configured",
             status_code=status.HTTP_303_SEE_OTHER,
         )
+
+    # Store the return URL in session for after login
+    if next:
+        request.session["login_next"] = next
 
     redirect_uri = request.url_for("google_auth_callback")
     return await oauth.google.authorize_redirect(request, redirect_uri)
@@ -128,6 +133,9 @@ async def google_auth_callback(request: Request):
         # Check Google Group membership
         is_member = await check_group_membership(user_info["email"])
 
+        # Get the return URL before modifying session
+        next_url = request.session.pop("login_next", None)
+
         # Store user in session
         request.session[SESSION_USER_KEY] = {
             "email": user_info["email"],
@@ -146,7 +154,12 @@ async def google_auth_callback(request: Request):
                 url="/auth/limited", status_code=status.HTTP_303_SEE_OTHER
             )
 
-        return RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
+        # Redirect to the original page or default to /years
+        # Validate that redirect URL is a safe relative path (prevent open redirect)
+        redirect_url = "/years"
+        if next_url and next_url.startswith("/") and not next_url.startswith("//"):
+            redirect_url = next_url
+        return RedirectResponse(url=redirect_url, status_code=status.HTTP_303_SEE_OTHER)
 
     except Exception as e:
         logger.error(f"OAuth callback error: {e}")
@@ -592,7 +605,10 @@ async def task_history(request: Request, year: str, etap: str, num: int):
     """Display submission history for a task (requires group membership)."""
     # Require group membership to view history
     if not verify_auth(request):
-        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+        from urllib.parse import urlencode
+        next_url = str(request.url.path)
+        login_url = f"/login?{urlencode({'next': next_url})}"
+        return RedirectResponse(url=login_url, status_code=status.HTTP_303_SEE_OTHER)
 
     if not is_group_member(request):
         return RedirectResponse(url="/auth/limited", status_code=status.HTTP_303_SEE_OTHER)
