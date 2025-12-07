@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Mapa Postepow - OMJ Validator{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/progress.css">
+{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb">
+    <a href="/years">Lata</a>
+    <span class="separator">/</span>
+    <span class="current">Nauka</span>
+</nav>
+
+<div class="page-header">
+    <h1>Mapa Postepow</h1>
+    <p class="subtitle">Wizualizacja sciezki nauki w Olimpiadzie Matematycznej Juniorow</p>
+</div>
+
+<!-- Stats Dashboard -->
+{% if can_view_progress %}
+<div class="progress-stats" id="progress-stats">
+    <div class="stat-box">
+        <span class="stat-value" id="stat-mastered">-</span>
+        <span class="stat-label">Opanowane</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-value" id="stat-unlocked">-</span>
+        <span class="stat-label">Odblokowane</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-value" id="stat-locked">-</span>
+        <span class="stat-label">Zablokowane</span>
+    </div>
+    <div class="stat-box">
+        <span class="stat-value" id="stat-total">-</span>
+        <span class="stat-label">Wszystkich</span>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-info">
+    <strong>Wskazowka:</strong> Zaloguj sie, aby sledzic swoje postepy i otrzymywac spersonalizowane rekomendacje.
+</div>
+{% endif %}
+
+<!-- Recommended Tasks Section -->
+{% if can_view_progress %}
+<div class="recommended-section" id="recommended-section">
+    <div class="section-header">
+        <h2>Polecane zadania</h2>
+        <span class="badge" id="recommended-count">0</span>
+    </div>
+    <div class="recommended-list" id="recommended-list">
+        <div class="loading-placeholder">Ladowanie rekomendacji...</div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Category Filter -->
+<div class="filter-section">
+    <h3>Filtruj wedlug kategorii</h3>
+    <div class="filter-buttons" id="category-filters">
+        <button class="filter-btn active" data-category="">Wszystkie</button>
+        {% for cat in categories %}
+        <button class="filter-btn" data-category="{{ cat }}">
+            {{ {'algebra': 'Algebra', 'geometria': 'Geometria', 'teoria_liczb': 'Teoria liczb', 'kombinatoryka': 'Kombinatoryka', 'logika': 'Logika', 'arytmetyka': 'Arytmetyka'}[cat] or cat }}
+        </button>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Graph Controls -->
+<div class="graph-controls">
+    <div class="view-controls">
+        <button id="zoom-in" class="control-btn" title="Przybliz">+</button>
+        <button id="zoom-out" class="control-btn" title="Oddal">-</button>
+        <button id="fit-view" class="control-btn" title="Dopasuj widok">&#x26F6;</button>
+        <button id="reset-view" class="control-btn" title="Resetuj">&#x21BB;</button>
+    </div>
+    <div class="layout-controls">
+        <select id="layout-select" class="layout-select">
+            <option value="dagre">Hierarchiczny</option>
+            <option value="cose">Organiczny</option>
+            <option value="grid">Siatka</option>
+            <option value="circle">Kolowy</option>
+        </select>
+    </div>
+</div>
+
+<!-- Graph Container -->
+<div class="graph-wrapper">
+    <div id="graph-container" class="graph-container">
+        <!-- Cytoscape will render here -->
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="graph-loading" class="graph-loading">
+        <div class="spinner"></div>
+        <p>Ladowanie grafu...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div id="graph-empty" class="graph-empty" style="display: none;">
+        <p>Brak zadan do wyswietlenia dla wybranej kategorii.</p>
+    </div>
+</div>
+
+<!-- Legend -->
+<div class="graph-legend">
+    <h4>Legenda</h4>
+    <div class="legend-items">
+        <div class="legend-item">
+            <span class="legend-icon status-mastered"></span>
+            <span>Opanowane (wynik >= prog)</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-icon status-unlocked"></span>
+            <span>Odblokowane (gotowe do rozwiazania)</span>
+        </div>
+        <div class="legend-item">
+            <span class="legend-icon status-locked"></span>
+            <span>Zablokowane (wymagane prereq.)</span>
+        </div>
+    </div>
+    <div class="legend-note">
+        <p><strong>Prog opanowania:</strong> Etap II >= 5 pkt, Etap I >= 2 pkt</p>
+        <p><strong>Interakcja:</strong> Kliknij wezel, aby przejsc do zadania. Przeciagaj, aby przesuwac graf.</p>
+    </div>
+</div>
+
+<!-- Task Detail Tooltip (hidden, populated by JS) -->
+<div id="task-tooltip" class="task-tooltip" style="display: none;">
+    <div class="tooltip-header">
+        <span class="tooltip-title"></span>
+        <span class="tooltip-close">&times;</span>
+    </div>
+    <div class="tooltip-body">
+        <div class="tooltip-meta"></div>
+        <div class="tooltip-categories"></div>
+        <div class="tooltip-status"></div>
+        <a href="#" class="tooltip-link btn btn-primary btn-small">Przejdz do zadania</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Cytoscape.js for graph visualization -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+<!-- Dagre layout for hierarchical graphs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dagre/0.8.5/dagre.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.5.0/cytoscape-dagre.min.js"></script>
+<!-- Our progress graph code -->
+<script src="/static/progress.js"></script>
+<script>
+    // Initialize the progress graph
+    document.addEventListener('DOMContentLoaded', function() {
+        initProgressGraph({
+            canViewProgress: {{ 'true' if can_view_progress else 'false' }}
+        });
+    });
+</script>
+{% endblock %}

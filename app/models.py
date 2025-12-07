@@ -48,6 +48,9 @@ class TaskInfo(BaseModel):
     # [2] kierunek - point to key insight
     # [3] wskazowka - specific guidance (not solution)
     hints: list[str] = []
+    # Prerequisites: list of task keys (e.g., ["2020_etap1_3", "2021_etap2_1"])
+    # Task is "unlocked" when all prerequisites are mastered
+    prerequisites: list[str] = []
 
     @computed_field
     @property
@@ -90,3 +93,39 @@ class SubmitRequest(BaseModel):
     year: str
     etap: str
     task_number: int
+
+
+# Progress tracking models
+class TaskStatus(str, Enum):
+    """Task completion status for progression graph."""
+    LOCKED = "locked"        # Prerequisites not met
+    UNLOCKED = "unlocked"    # Ready to attempt (all prerequisites mastered)
+    MASTERED = "mastered"    # Score meets threshold (etap2: >=5, etap1: >=2)
+
+
+class GraphNode(BaseModel):
+    """Node in the progression graph representing a task."""
+    key: str                    # e.g., "2024_etap1_3"
+    year: str
+    etap: str
+    number: int
+    title: str
+    difficulty: Optional[int] = None
+    categories: list[str] = []
+    prerequisites: list[str] = []
+    status: TaskStatus
+    best_score: int = 0
+
+
+class GraphEdge(BaseModel):
+    """Edge in the progression graph (prerequisite relationship)."""
+    source: str  # Prerequisite task key
+    target: str  # Dependent task key
+
+
+class ProgressData(BaseModel):
+    """Complete progression data for the progress page."""
+    nodes: list[GraphNode]
+    edges: list[GraphEdge]
+    recommendations: list[GraphNode]
+    stats: dict  # {total, mastered, unlocked, locked}

@@ -1,0 +1,540 @@
+/**
+ * OMJ Validator - Progress Page Styles
+ *
+ * Styles for the progression graph visualization page.
+ */
+
+/* === Stats Dashboard === */
+.progress-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-box {
+    background: white;
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-gray-800);
+    line-height: 1.2;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--color-gray-500);
+    margin-top: 0.25rem;
+}
+
+/* Color variations for stat boxes */
+.stat-box:nth-child(1) .stat-value {
+    color: var(--color-success);
+}
+
+.stat-box:nth-child(2) .stat-value {
+    color: var(--color-primary);
+}
+
+.stat-box:nth-child(3) .stat-value {
+    color: var(--color-gray-400);
+}
+
+/* === Alert === */
+.alert {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    margin-bottom: 1.5rem;
+    font-size: 0.9375rem;
+}
+
+.alert-info {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+}
+
+/* === Recommended Tasks Section === */
+.recommended-section {
+    background: white;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+.section-header h2 {
+    margin: 0;
+    font-size: 1.125rem;
+    color: var(--color-gray-700);
+}
+
+.section-header .badge {
+    background: var(--color-primary);
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+}
+
+.recommended-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.recommendations-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-gray-500);
+    font-style: italic;
+}
+
+.loading-placeholder {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 2rem;
+    color: var(--color-gray-400);
+}
+
+.recommendation-card {
+    display: block;
+    background: var(--color-gray-50);
+    border-radius: var(--radius);
+    padding: 1rem;
+    border: 1px solid var(--color-gray-200);
+    text-decoration: none;
+    transition: all 0.15s ease;
+}
+
+.recommendation-card:hover {
+    background: white;
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.rec-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.rec-number {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.rec-difficulty {
+    color: var(--color-warning);
+    font-size: 0.75rem;
+}
+
+.rec-title {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--color-gray-800);
+    margin-bottom: 0.5rem;
+    line-height: 1.4;
+}
+
+.rec-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+
+/* === Filter Section === */
+.filter-section {
+    margin-bottom: 1.5rem;
+}
+
+.filter-section h3 {
+    font-size: 0.9375rem;
+    color: var(--color-gray-600);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+}
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.filter-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius);
+    background: white;
+    color: var(--color-gray-700);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.filter-btn:hover {
+    background: var(--color-gray-50);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.filter-btn.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+
+/* === Graph Controls === */
+.graph-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.view-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.control-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius);
+    background: white;
+    color: var(--color-gray-700);
+    cursor: pointer;
+    font-size: 1.125rem;
+    transition: all 0.15s ease;
+}
+
+.control-btn:hover {
+    background: var(--color-gray-50);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.layout-select {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius);
+    background: white;
+    color: var(--color-gray-700);
+    cursor: pointer;
+}
+
+/* === Graph Container === */
+.graph-wrapper {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.graph-container {
+    width: 100%;
+    height: 600px;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.graph-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--radius);
+    z-index: 10;
+}
+
+.graph-loading p {
+    margin-top: 1rem;
+    color: var(--color-gray-500);
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--color-gray-200);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.graph-empty {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: var(--radius);
+    color: var(--color-gray-500);
+    font-style: italic;
+}
+
+/* === Legend === */
+.graph-legend {
+    background: white;
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+}
+
+.graph-legend h4 {
+    font-size: 1rem;
+    color: var(--color-gray-700);
+    margin: 0 0 1rem;
+}
+
+.legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-gray-600);
+}
+
+.legend-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.legend-icon.status-mastered {
+    background: #059669;
+}
+
+.legend-icon.status-unlocked {
+    background: #2563eb;
+}
+
+.legend-icon.status-locked {
+    background: #9ca3af;
+}
+
+.legend-note {
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-gray-200);
+    font-size: 0.8125rem;
+    color: var(--color-gray-500);
+}
+
+.legend-note p {
+    margin: 0 0 0.5rem;
+}
+
+.legend-note p:last-child {
+    margin-bottom: 0;
+}
+
+/* === Task Tooltip === */
+.task-tooltip {
+    position: fixed;
+    z-index: 1000;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    min-width: 250px;
+    max-width: 320px;
+    pointer-events: auto;
+}
+
+.tooltip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--color-gray-50);
+    border-bottom: 1px solid var(--color-gray-200);
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.tooltip-title {
+    font-weight: 600;
+    color: var(--color-gray-800);
+    font-size: 0.9375rem;
+}
+
+.tooltip-close {
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: var(--color-gray-400);
+    line-height: 1;
+}
+
+.tooltip-close:hover {
+    color: var(--color-gray-600);
+}
+
+.tooltip-body {
+    padding: 1rem;
+}
+
+.tooltip-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+}
+
+.tooltip-meta .difficulty {
+    color: var(--color-warning);
+}
+
+.tooltip-meta .score {
+    color: var(--color-gray-600);
+}
+
+.tooltip-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+}
+
+.tooltip-status {
+    margin-bottom: 1rem;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.status-badge.status-mastered {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-badge.status-unlocked {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-badge.status-locked {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.tooltip-link {
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+    .progress-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+    }
+
+    .graph-container {
+        height: 400px;
+    }
+
+    .legend-items {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .filter-buttons {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 0.5rem;
+    }
+
+    .filter-btn {
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .recommended-list {
+        grid-template-columns: 1fr;
+    }
+
+    .graph-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .view-controls {
+        justify-content: center;
+    }
+
+    .layout-controls {
+        display: flex;
+        justify-content: center;
+    }
+}

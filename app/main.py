@@ -40,7 +40,8 @@ from .storage import (
     create_submission,
 )
 from .ai import create_ai_provider, AIProviderError
-from .models import SubmissionResult
+from .models import SubmissionResult, TaskCategory, TaskStatus
+from .progress import build_progress_data, get_all_categories
 
 app = FastAPI(title="OMJ Validator", description="Walidator rozwiązań OMJ")
 
@@ -224,6 +225,78 @@ async def year_detail(request: Request, year: str):
             "user": user,
         },
     )
+
+
+# --- Progress Routes ---
+
+
+@app.get("/progress", response_class=HTMLResponse)
+async def progress_page(request: Request):
+    """Display progression graph page (public view, progress shown to group members)."""
+    user = get_current_user(request)
+    can_view_progress = is_group_member(request)
+    categories = get_all_categories()
+
+    return templates.TemplateResponse(
+        "progress.html",
+        {
+            "request": request,
+            "is_authenticated": user is not None,
+            "can_view_progress": can_view_progress,
+            "user": user,
+            "categories": categories,
+        },
+    )
+
+
+@app.get("/api/progress/data")
+async def progress_data(request: Request, category: str = None):
+    """Get progression graph data as JSON.
+
+    Query params:
+        category: Optional category filter (algebra, geometria, etc.)
+
+    Returns JSON with nodes, edges, recommendations, and stats.
+    Progress tracking requires group membership; others see all tasks as unlocked.
+    """
+    user = get_current_user(request)
+    can_view_progress = is_group_member(request)
+
+    # Validate category if provided
+    valid_categories = [c.value for c in TaskCategory]
+    if category and category not in valid_categories:
+        return JSONResponse(
+            {"error": f"Nieprawidłowa kategoria. Dozwolone: {', '.join(valid_categories)}"},
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+
+    try:
+        # Build progress data (progress tracking only for group members)
+        if can_view_progress:
+            progress = build_progress_data(category_filter=category)
+        else:
+            # For non-members, show all tasks as unlocked (no personal progress)
+            progress = build_progress_data(category_filter=category)
+            # Override status to unlocked for all nodes (they can browse but not see progress)
+            for node in progress.nodes:
+                node.status = TaskStatus.UNLOCKED
+                node.best_score = 0
+            progress.stats = {
+                "total": len(progress.nodes),
+                "mastered": 0,
+                "unlocked": len(progress.nodes),
+                "locked": 0,
+            }
+            progress.recommendations = []
+
+        return JSONResponse(progress.model_dump(mode="json"))
+
+    except Exception as e:
+        logger.error(f"Error building progress data: {e}")
+        return JSONResponse(
+            {"error": "Błąd podczas ładowania danych postępów"},
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
 
 
 @app.get("/years/{year}/{etap}", response_class=HTMLResponse)
