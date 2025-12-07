@@ -3,6 +3,12 @@ import re
 import uuid
 from pathlib import Path
 
+# Configure logging to show INFO level for app modules
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
+
 from fastapi import FastAPI, Request, UploadFile, File, HTTPException, status
 from PIL import Image
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
