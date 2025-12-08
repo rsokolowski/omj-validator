@@ -9,6 +9,7 @@ from typing import Optional
 from ...config import settings
 from ...models import SubmissionResult
 from ..parsing import parse_ai_response
+from ..factory import AIProviderError
 
 try:
     import google.generativeai as genai
@@ -175,43 +176,60 @@ class GeminiProvider:
             total_time = time.time() - start_time
             logger.info(f"[Gemini] Total request time: {total_time:.1f}s")
 
-            # Extract text from response
-            if not response.text:
+            # Extract text from response safely
+            # response.text accessor raises exception if no parts returned
+            try:
+                response_text = response.text
+            except ValueError as e:
+                # Empty response - model returned no content
+                logger.error(f"[Gemini Error] Empty response: {e}")
+                raise AIProviderError(
+                    "Nie udało się odczytać rozwiązania. Upewnij się, że zdjęcie "
+                    "jest wyraźne, dobrze oświetlone i zawiera całe rozwiązanie."
+                )
+
+            if not response_text:
                 logger.warning("[Gemini] Empty response text received")
-                return SubmissionResult(
-                    score=0,
-                    feedback="Gemini nie zwrócił odpowiedzi. Spróbuj ponownie.",
+                raise AIProviderError(
+                    "Nie udało się odczytać rozwiązania. Spróbuj ponownie."
                 )
 
             # Use shared parsing utility with etap-specific scoring
-            return parse_ai_response(response.text, provider_name="Gemini", etap=etap)
+            return parse_ai_response(response_text, provider_name="Gemini", etap=etap)
 
+        except AIProviderError:
+            # Re-raise our own errors
+            raise
         except asyncio.TimeoutError:
             elapsed = time.time() - start_time
             logger.error(f"[Gemini Error] Timeout after {elapsed:.1f}s (limit: {self.get_timeout()}s)")
-            return SubmissionResult(
-                score=0,
-                feedback="Przekroczono limit czasu analizy Gemini. Spróbuj ponownie.",
+            raise AIProviderError(
+                "Analiza trwa zbyt długo. Spróbuj ponownie za chwilę."
             )
         except Exception as e:
             elapsed = time.time() - start_time
             error_msg = str(e)
             logger.error(f"[Gemini Error] {error_msg} (after {elapsed:.1f}s)")
-            # Handle common Gemini API errors with user-friendly messages
+
+            # Map technical errors to user-friendly messages
             if "quota" in error_msg.lower():
-                return SubmissionResult(
-                    score=0,
-                    feedback="Przekroczono limit zapytań do Gemini API. Spróbuj ponownie później.",
+                raise AIProviderError(
+                    "System jest obecnie przeciążony. Spróbuj ponownie za kilka minut."
                 )
             elif "invalid" in error_msg.lower() and "key" in error_msg.lower():
-                return SubmissionResult(
-                    score=0,
-                    feedback="Nieprawidłowy klucz API Gemini. Sprawdź konfigurację.",
+                raise AIProviderError(
+                    "Przepraszamy, wystąpił problem techniczny. Spróbuj ponownie później."
                 )
-            return SubmissionResult(
-                score=0,
-                feedback=f"Błąd Gemini API: {error_msg}",
-            )
+            elif "safety" in error_msg.lower() or "blocked" in error_msg.lower():
+                raise AIProviderError(
+                    "Nie udało się przetworzyć zdjęcia. Upewnij się, że zdjęcie "
+                    "zawiera tylko rozwiązanie zadania."
+                )
+            else:
+                # Generic error - don't expose technical details
+                raise AIProviderError(
+                    "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
+                )
         finally:
             # Clean up uploaded files from Gemini servers
             await self._cleanup_files(uploaded_files)

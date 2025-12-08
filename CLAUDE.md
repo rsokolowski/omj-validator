@@ -9,12 +9,19 @@ OMJ Validator - a web application for validating solutions to Polish Junior Math
 ## Development Commands
 
 ```bash
-# Start development server (handles port cleanup, activates venv)
+# Start development server (handles port cleanup, starts PostgreSQL, runs migrations)
 ./start.sh
 
 # Or manually:
+docker compose up -d db           # Start PostgreSQL container
 source venv/bin/activate
+alembic upgrade head              # Run database migrations
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+
+# Database management
+docker compose up -d db           # Start PostgreSQL
+docker compose down               # Stop PostgreSQL (data persists)
+docker compose down -v            # Stop and delete data
 
 # Install dependencies
 pip install -r requirements.txt
@@ -43,9 +50,13 @@ app/
 ├── auth.py          # Session-based auth helpers (get_current_user, require_auth, etc.)
 ├── oauth.py         # Google OAuth configuration (Authlib)
 ├── groups.py        # Access control: email allowlist or Google Groups API
-├── storage.py       # Task loading (dir scan + LRU cache), submissions storage
+├── storage.py       # Task loading (dir scan + LRU cache)
 ├── models.py        # Pydantic models (TaskInfo, TaskPdf, Submission, etc.)
 ├── progress.py      # Progression graph: task status, prerequisites, recommendations
+├── db/              # Database layer (PostgreSQL)
+│   ├── session.py   # SQLAlchemy engine, session factory, get_db dependency
+│   ├── models.py    # ORM models (UserDB, SubmissionDB)
+│   └── repositories.py  # Repository pattern for data access
 └── ai/
     ├── protocol.py  # AIProvider Protocol defining analyze_solution interface
     ├── factory.py   # Provider factory based on AI_PROVIDER setting
@@ -75,9 +86,10 @@ app/
    Valid categories: `algebra`, `geometria`, `teoria_liczb`, `kombinatoryka`, `logika`, `arytmetyka`
 
 2. **Submission Flow**:
-   - Images uploaded to `data/uploads/{year}/{etap}/{task_num}/`
+   - Images uploaded to `data/uploads/{user_id}/{year}/{etap}/{task_num}/`
    - AI analyzes task PDF + solution PDF + student images
-   - Results stored as JSON in `data/submissions/{year}/{etap}/{task_num}/`
+   - Results stored in PostgreSQL `submissions` table (per-user isolation)
+   - User progress derived from submissions (best score per task)
 
 3. **AI Integration**: Uses Gemini File API to upload PDFs and images, then generates analysis. Prompt in `prompts/gemini_prompt.txt` defines OMJ scoring criteria (0, 2, 5, 6 points).
 
@@ -96,6 +108,9 @@ Environment variables (`.env`):
 **AI Provider:**
 - `AI_PROVIDER` - currently only "gemini" supported
 - `GEMINI_API_KEY`, `GEMINI_MODEL`, `GEMINI_TIMEOUT`
+
+**Database:**
+- `DATABASE_URL` - PostgreSQL connection string (default: `postgresql://omj:omj@localhost:5433/omj`)
 
 **Other:**
 - `DATA_DIR` - optional external data directory for cloud deployments
@@ -122,4 +137,12 @@ Frontend assets in `static/`:
 
 ## Deployment
 
-Configured for Render (`render.yaml`) using gunicorn with uvicorn workers. Free tier has no persistent disk - submissions are ephemeral.
+**Local/VM:**
+- Uses `docker-compose.yml` for PostgreSQL container
+- Data persisted in Docker volume `postgres_data`
+- Run `./start.sh` to start both database and server
+
+**Render:**
+- Configured in `render.yaml` using gunicorn with uvicorn workers
+- Requires external PostgreSQL database (set `DATABASE_URL`)
+- Migrations run automatically on startup

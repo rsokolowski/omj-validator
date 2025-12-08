@@ -8,8 +8,11 @@ Computes user progress across all tasks, determines task status
 import logging
 from typing import Optional
 
-from .storage import _load_all_tasks, get_task_key, get_task_stats
+from sqlalchemy.orm import Session
+
+from .storage import _load_all_tasks, get_task_key
 from .models import TaskInfo, TaskStatus, GraphNode, GraphEdge, ProgressData
+from .db import SubmissionRepository
 
 logger = logging.getLogger(__name__)
 
@@ -23,23 +26,25 @@ def get_mastery_threshold(etap: str) -> int:
     return 5 if etap == "etap2" else 2
 
 
-def compute_user_progress() -> dict[str, int]:
+def compute_user_progress(user_id: Optional[str] = None, db: Optional[Session] = None) -> dict[str, int]:
     """Compute best scores for all tasks from submissions.
 
-    Uses get_task_stats() which efficiently reads submission files.
+    Uses database query to efficiently get user's best scores.
+
+    Args:
+        user_id: Google sub of the user (required for multi-user)
+        db: Database session (required for multi-user)
 
     Returns:
         Dict mapping task_key -> best_score
     """
-    all_tasks = _load_all_tasks()
-    progress = {}
-
-    for key, task in all_tasks.items():
-        stats = get_task_stats(task.year, task.etap, task.number)
-        if stats.highest_score > 0:
-            progress[key] = stats.highest_score
-
-    return progress
+    if user_id and db:
+        # Use database for user-specific progress
+        submission_repo = SubmissionRepository(db)
+        return submission_repo.get_user_progress(user_id)
+    else:
+        # Return empty progress if no user (non-authenticated)
+        return {}
 
 
 def compute_prerequisites_met(
@@ -321,16 +326,22 @@ def get_recommended_tasks(
     return selected[:limit]
 
 
-def build_progress_data(category_filter: Optional[str] = None) -> ProgressData:
+def build_progress_data(
+    user_id: Optional[str] = None,
+    db: Optional[Session] = None,
+    category_filter: Optional[str] = None
+) -> ProgressData:
     """Build complete progress data for the progress page.
 
     Args:
+        user_id: Google sub of the user (required for multi-user)
+        db: Database session (required for multi-user)
         category_filter: Optional category to filter graph by
 
     Returns:
         ProgressData with nodes, edges, recommendations, and stats
     """
-    progress = compute_user_progress()
+    progress = compute_user_progress(user_id=user_id, db=db)
     all_nodes = build_graph_nodes(progress)
     all_edges = build_graph_edges()
 

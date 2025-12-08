@@ -16,12 +16,13 @@ def get_current_user(request: Request) -> Optional[dict]:
     Get current user from session.
 
     Returns:
-        User dict with keys: email, name, picture, is_group_member
+        User dict with keys: google_sub, email, name, picture, is_group_member
         None if not authenticated
     """
     # Auth disabled = anonymous user with full access
     if settings.auth_disabled:
         return {
+            "google_sub": "anonymous",
             "email": "anonymous@localhost",
             "name": "Anonymous (auth disabled)",
             "picture": None,
@@ -29,6 +30,19 @@ def get_current_user(request: Request) -> Optional[dict]:
         }
 
     return request.session.get(SESSION_USER_KEY)
+
+
+def get_current_user_id(request: Request) -> Optional[str]:
+    """
+    Get the Google sub (user ID) of the current user.
+
+    Returns:
+        Google sub string if authenticated, None otherwise
+    """
+    user = get_current_user(request)
+    if user:
+        return user.get("google_sub")
+    return None
 
 
 def is_group_member(request: Request) -> bool:

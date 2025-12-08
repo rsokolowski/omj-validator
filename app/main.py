@@ -16,16 +16,21 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
+from fastapi import Depends
+from sqlalchemy.orm import Session
+
 from .config import settings
 from .auth import (
     SESSION_USER_KEY,
     verify_auth,
     require_auth_redirect,
     get_current_user,
+    get_current_user_id,
     is_group_member,
 )
 from .oauth import oauth
 from .groups import check_group_membership
+from .db import get_db, UserRepository, SubmissionRepository
 
 logger = logging.getLogger(__name__)
 from .storage import (
@@ -35,9 +40,6 @@ from .storage import (
     get_task,
     get_task_pdf_path,
     get_solution_pdf_path,
-    get_task_stats,
-    load_submissions,
-    create_submission,
 )
 from .ai import create_ai_provider, AIProviderError
 from .models import SubmissionResult, TaskCategory, TaskStatus
@@ -71,6 +73,31 @@ def nl2br_safe(value: str) -> str:
 
 
 templates.env.filters["nl2br_safe"] = nl2br_safe
+
+
+# --- Startup Events ---
+
+@app.on_event("startup")
+def create_anonymous_user_if_needed():
+    """Create anonymous user for local development when auth is disabled."""
+    if not settings.auth_disabled:
+        return
+
+    from .db import SessionLocal, UserRepository
+
+    db = SessionLocal()
+    try:
+        user_repo = UserRepository(db)
+        existing = user_repo.get_by_google_sub("anonymous")
+        if not existing:
+            user_repo.create_or_update(
+                google_sub="anonymous",
+                email="anonymous@localhost",
+                name="Anonymous (auth disabled)",
+            )
+            logger.info("Created anonymous user for local development")
+    finally:
+        db.close()
 
 
 # --- Authentication Routes ---
@@ -118,7 +145,7 @@ async def google_login(request: Request, next: str = None):
 
 
 @app.get("/auth/callback")
-async def google_auth_callback(request: Request):
+async def google_auth_callback(request: Request, db: Session = Depends(get_db)):
     """Handle Google OAuth callback."""
     try:
         token = await oauth.google.authorize_access_token(request)
@@ -131,14 +158,40 @@ async def google_auth_callback(request: Request):
                 status_code=status.HTTP_303_SEE_OTHER,
             )
 
+        # Verify email is verified (defense in depth)
+        if not user_info.get("email_verified", False):
+            logger.error("OAuth callback: email not verified")
+            return RedirectResponse(
+                url="/login?error=oauth_failed",
+                status_code=status.HTTP_303_SEE_OTHER,
+            )
+
+        # Extract Google's unique user identifier
+        google_sub = user_info.get("sub")
+        if not google_sub:
+            logger.error("OAuth callback: missing sub claim")
+            return RedirectResponse(
+                url="/login?error=oauth_failed",
+                status_code=status.HTTP_303_SEE_OTHER,
+            )
+
+        # Create or update user in database
+        user_repo = UserRepository(db)
+        user_repo.create_or_update(
+            google_sub=google_sub,
+            email=user_info["email"],
+            name=user_info.get("name", ""),
+        )
+
         # Check Google Group membership
         is_member = await check_group_membership(user_info["email"])
 
         # Get the return URL before modifying session
         next_url = request.session.pop("login_next", None)
 
-        # Store user in session
+        # Store user in session (including google_sub for user identification)
         request.session[SESSION_USER_KEY] = {
+            "google_sub": google_sub,
             "email": user_info["email"],
             "name": user_info.get("name", ""),
             "picture": user_info.get("picture"),
@@ -264,7 +317,7 @@ async def progress_page(request: Request):
 
 
 @app.get("/api/progress/data")
-async def progress_data(request: Request, category: str = None):
+async def progress_data(request: Request, category: str = None, db: Session = Depends(get_db)):
     """Get progression graph data as JSON.
 
     Query params:
@@ -274,6 +327,7 @@ async def progress_data(request: Request, category: str = None):
     Progress tracking requires group membership; others see all tasks as unlocked.
     """
     user = get_current_user(request)
+    user_id = get_current_user_id(request)
     can_view_progress = is_group_member(request)
 
     # Validate category if provided
@@ -286,11 +340,11 @@ async def progress_data(request: Request, category: str = None):
 
     try:
         # Build progress data (progress tracking only for group members)
-        if can_view_progress:
-            progress = build_progress_data(category_filter=category)
+        if can_view_progress and user_id:
+            progress = build_progress_data(user_id=user_id, db=db, category_filter=category)
         else:
             # For non-members, show all tasks as unlocked (no personal progress)
-            progress = build_progress_data(category_filter=category)
+            progress = build_progress_data(user_id=None, db=db, category_filter=category)
             # Override status to unlocked for all nodes (they can browse but not see progress)
             for node in progress.nodes:
                 node.status = TaskStatus.UNLOCKED
@@ -314,13 +368,14 @@ async def progress_data(request: Request, category: str = None):
 
 
 @app.get("/years/{year}/{etap}", response_class=HTMLResponse)
-async def etap_detail(request: Request, year: str, etap: str):
+async def etap_detail(request: Request, year: str, etap: str, db: Session = Depends(get_db)):
     """Display tasks for a year/etap (public). Stats shown only to group members."""
     etap_tasks = get_tasks_for_etap(year, etap)
     if not etap_tasks:
         raise HTTPException(status_code=404, detail="Etap nie znaleziony")
 
     user = get_current_user(request)
+    user_id = get_current_user_id(request)
     can_see_stats = is_group_member(request)
 
     # Build task list - stats only for group members
@@ -335,10 +390,11 @@ async def etap_detail(request: Request, year: str, etap: str):
             "submission_count": 0,
             "highest_score": None,
         }
-        if can_see_stats:
-            stats = get_task_stats(year, etap, task_info.number)
-            task_data["submission_count"] = stats.submission_count
-            task_data["highest_score"] = stats.highest_score
+        if can_see_stats and user_id:
+            submission_repo = SubmissionRepository(db)
+            count, highest = submission_repo.get_task_stats(user_id, year, etap, task_info.number)
+            task_data["submission_count"] = count
+            task_data["highest_score"] = highest if highest > 0 else None
         tasks.append(task_data)
 
     return templates.TemplateResponse(
@@ -355,21 +411,25 @@ async def etap_detail(request: Request, year: str, etap: str):
 
 
 @app.get("/task/{year}/{etap}/{num}", response_class=HTMLResponse)
-async def task_detail(request: Request, year: str, etap: str, num: int):
+async def task_detail(request: Request, year: str, etap: str, num: int, db: Session = Depends(get_db)):
     """Display task detail (public). Submission form, stats, and history only for group members."""
     task = get_task(year, etap, num)
     if not task:
         raise HTTPException(status_code=404, detail="Zadanie nie znalezione")
 
     user = get_current_user(request)
+    user_id = get_current_user_id(request)
     can_submit = is_group_member(request)
 
     # Stats and submissions only for group members
     stats = None
     submissions = []
-    if can_submit:
-        stats = get_task_stats(year, etap, num)
-        submissions = load_submissions(year, etap, num)[:10]
+    if can_submit and user_id:
+        submission_repo = SubmissionRepository(db)
+        count, highest = submission_repo.get_task_stats(user_id, year, etap, num)
+        stats = {"submission_count": count, "highest_score": highest}
+        db_submissions = submission_repo.get_user_submissions_for_task(user_id, year, etap, num)
+        submissions = submission_repo.to_pydantic_list(db_submissions[:10])
 
     # Get PDF paths for links
     task_pdf = get_task_pdf_path(year, etap)
@@ -387,8 +447,8 @@ async def task_detail(request: Request, year: str, etap: str, num: int):
 
     # Load prerequisite statuses (only for group members who can see progress)
     prerequisite_statuses = []
-    if can_submit and task.prerequisites:
-        progress = compute_user_progress()
+    if can_submit and task.prerequisites and user_id:
+        progress = compute_user_progress(user_id=user_id, db=db)
         prerequisite_statuses = get_prerequisite_statuses(task.prerequisites, progress)
 
     return templates.TemplateResponse(
@@ -469,6 +529,7 @@ async def submit_solution(
     etap: str,
     num: int,
     images: list[UploadFile] = File(...),
+    db: Session = Depends(get_db),
 ):
     """Submit solution images for analysis (requires group membership)."""
     # Check if user is authenticated
@@ -483,6 +544,14 @@ async def submit_solution(
         return JSONResponse(
             {"error": "Dostęp wymaga członkostwa w grupie omj-validator-alpha"},
             status_code=status.HTTP_403_FORBIDDEN,
+        )
+
+    # Get user ID from session
+    user_id = get_current_user_id(request)
+    if not user_id:
+        return JSONResponse(
+            {"error": "Nieautoryzowany dostęp"},
+            status_code=status.HTTP_401_UNAUTHORIZED,
         )
 
     # Validate path parameters to prevent directory traversal
@@ -515,8 +584,8 @@ async def submit_solution(
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
 
-    # Save uploaded images
-    upload_dir = settings.uploads_dir / year / etap / str(num)
+    # Save uploaded images (per-user directory structure)
+    upload_dir = settings.uploads_dir / user_id / year / etap / str(num)
     upload_dir.mkdir(parents=True, exist_ok=True)
 
     saved_paths = []
@@ -574,6 +643,11 @@ async def submit_solution(
         )
 
     # Analyze with AI provider (etap-specific scoring: etap1=0/1/3, etap2=0/2/5/6)
+    from .db.models import SubmissionStatus
+    submission_id = str(uuid.uuid4())[:8]
+    error_message = None
+    scoring_meta = None
+
     try:
         provider = create_ai_provider()
         result = await provider.analyze_solution(
@@ -583,25 +657,37 @@ async def submit_solution(
             task_number=num,
             etap=etap,
         )
+        submission_status = SubmissionStatus.COMPLETED
+        scoring_meta = result.scoring_meta
     except AIProviderError as e:
         result = SubmissionResult(
             score=0,
             feedback=f"Błąd konfiguracji AI: {str(e)}",
         )
+        submission_status = SubmissionStatus.FAILED
+        error_message = str(e)
     except Exception as e:
         result = SubmissionResult(
             score=0,
             feedback=f"Nieoczekiwany błąd: {str(e)}",
         )
+        submission_status = SubmissionStatus.FAILED
+        error_message = str(e)
 
-    # Save submission (store image paths relative to uploads_dir for clean URLs)
-    submission = create_submission(
+    # Save submission to database (store image paths relative to uploads_dir)
+    submission_repo = SubmissionRepository(db)
+    submission = submission_repo.create(
+        id=submission_id,
+        user_id=user_id,
         year=year,
         etap=etap,
         task_number=num,
         images=[str(p.relative_to(settings.uploads_dir)) for p in saved_paths],
         score=result.score,
         feedback=result.feedback,
+        status=submission_status,
+        error_message=error_message,
+        scoring_meta=scoring_meta,
     )
 
     return JSONResponse(
@@ -615,7 +701,7 @@ async def submit_solution(
 
 
 @app.get("/task/{year}/{etap}/{num}/history", response_class=HTMLResponse)
-async def task_history(request: Request, year: str, etap: str, num: int):
+async def task_history(request: Request, year: str, etap: str, num: int, db: Session = Depends(get_db)):
     """Display submission history for a task (requires group membership)."""
     # Require group membership to view history
     if not verify_auth(request):
@@ -627,9 +713,17 @@ async def task_history(request: Request, year: str, etap: str, num: int):
     if not is_group_member(request):
         return RedirectResponse(url="/auth/limited", status_code=status.HTTP_303_SEE_OTHER)
 
+    user_id = get_current_user_id(request)
+    if not user_id:
+        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
+
     task = get_task(year, etap, num)
-    submissions = load_submissions(year, etap, num)
     user = get_current_user(request)
+
+    # Load submissions for current user only
+    submission_repo = SubmissionRepository(db)
+    db_submissions = submission_repo.get_user_submissions_for_task(user_id, year, etap, num)
+    submissions = submission_repo.to_pydantic_list(db_submissions)
 
     return templates.TemplateResponse(
         "history.html",
@@ -680,14 +774,24 @@ async def serve_pdf(request: Request, year: str, etap: str, filename: str):
 
 @app.get("/uploads/{path:path}")
 async def serve_upload(request: Request, path: str):
-    """Serve uploaded files (with auth check)."""
+    """Serve uploaded files (with auth check and user ownership verification)."""
     redirect = require_auth_redirect(request)
     if redirect:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    user_id = get_current_user_id(request)
+    if not user_id:
         raise HTTPException(status_code=401, detail="Unauthorized")
 
     # Handle legacy paths that include 'uploads/' prefix (from old submissions)
     if path.startswith("uploads/"):
         path = path[8:]  # Strip 'uploads/' prefix
+
+    # Verify path starts with user's ID (user can only access their own uploads)
+    # Path format: {user_id}/{year}/{etap}/{task_num}/{filename}
+    path_parts = path.split("/")
+    if len(path_parts) < 1 or path_parts[0] != user_id:
+        raise HTTPException(status_code=403, detail="Forbidden")
 
     file_path = settings.uploads_dir / path
     if not file_path.exists() or not file_path.is_file():

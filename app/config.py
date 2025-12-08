@@ -55,6 +55,9 @@ class Settings(BaseSettings):
     # App Configuration
     upload_max_size_mb: int = 10
 
+    # Database
+    database_url: Optional[str] = None  # Override with DATABASE_URL env var
+
     # Paths - can be overridden via environment
     data_dir: Optional[str] = None  # External data dir (e.g., /data on Render)
 
@@ -99,6 +102,14 @@ class Settings(BaseSettings):
     def gemini_prompt_path(self, etap: str = "etap2") -> Path:
         """Get Gemini prompt path for specific etap (etap1 or etap2)."""
         return self.prompts_dir / f"gemini_prompt_{etap}.txt"
+
+    @property
+    def db_url(self) -> str:
+        """Get database URL, defaulting to local PostgreSQL."""
+        if self.database_url:
+            return self.database_url
+        # Default to local PostgreSQL (via Docker on port 5433)
+        return "postgresql://omj:omj@localhost:5433/omj"
 
 
 settings = Settings()
