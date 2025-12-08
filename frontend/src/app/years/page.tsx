@@ -12,8 +12,23 @@ async function getYears(): Promise<YearsResponse> {
 export default async function YearsPage() {
   const data = await getYears();
 
-  // Calculate edition number (OMJ started in 2019 as first edition)
-  const getEdition = (year: string) => parseInt(year) - 2018;
+  // Calculate edition number (OMG/OMJ started in 2005 as first edition)
+  const toRoman = (num: number): string => {
+    const romanNumerals: [number, string][] = [
+      [1000, "M"], [900, "CM"], [500, "D"], [400, "CD"],
+      [100, "C"], [90, "XC"], [50, "L"], [40, "XL"],
+      [10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]
+    ];
+    let result = "";
+    for (const [value, symbol] of romanNumerals) {
+      while (num >= value) {
+        result += symbol;
+        num -= value;
+      }
+    }
+    return result;
+  };
+  const getEdition = (year: string) => toRoman(parseInt(year) - 2004);
 
   return (
     <Box>

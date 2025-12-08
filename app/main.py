@@ -91,6 +91,28 @@ def nl2br_safe(value: str) -> str:
 templates.env.filters["nl2br_safe"] = nl2br_safe
 
 
+# Custom template filter: convert number to Roman numerals
+def to_roman(num: int) -> str:
+    """Convert an integer to Roman numerals."""
+    if not isinstance(num, int) or num < 1:
+        return str(num)
+
+    roman_numerals = [
+        (1000, "M"), (900, "CM"), (500, "D"), (400, "CD"),
+        (100, "C"), (90, "XC"), (50, "L"), (40, "XL"),
+        (10, "X"), (9, "IX"), (5, "V"), (4, "IV"), (1, "I")
+    ]
+
+    result = ""
+    for arabic, roman in roman_numerals:
+        count, num = divmod(num, arabic)
+        result += roman * count
+    return result
+
+
+templates.env.filters["roman"] = to_roman
+
+
 # --- Startup Events ---
 
 @app.on_event("startup")
