@@ -27,6 +27,9 @@ class Settings(BaseSettings):
     # Session - MUST be set explicitly in production for multi-worker consistency
     session_secret_key: Optional[str] = None
 
+    # Frontend URL for OAuth redirects (when behind a proxy/separate frontend)
+    frontend_url: Optional[str] = None  # e.g., "https://omj-frontend.onrender.com"
+
     @model_validator(mode="after")
     def validate_session_secret(self):
         """Ensure session_secret_key is set in production (when auth is enabled)."""

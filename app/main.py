@@ -140,7 +140,11 @@ async def google_login(request: Request, next: str = None):
     if next:
         request.session["login_next"] = next
 
-    redirect_uri = request.url_for("google_auth_callback")
+    # Use frontend URL for callback if configured (for separate frontend deployment)
+    if settings.frontend_url:
+        redirect_uri = f"{settings.frontend_url}/auth/callback"
+    else:
+        redirect_uri = request.url_for("google_auth_callback")
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 
