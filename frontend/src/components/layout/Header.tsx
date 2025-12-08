@@ -122,14 +122,15 @@ export function Header() {
                         />
                       )}
                     </Box>
-                    <Link
+                    {/* Use regular anchor to avoid Next.js prefetch triggering logout */}
+                    <a
                       href="/logout"
                       style={{ textDecoration: "none", color: "#9ca3af" }}
                     >
                       <Typography sx={{ fontSize: "0.875rem" }}>
                         Wyloguj
                       </Typography>
-                    </Link>
+                    </a>
                   </Box>
                 ) : (
                   <Link href="/login" style={{ textDecoration: "none" }}>
