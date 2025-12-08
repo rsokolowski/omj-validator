@@ -815,3 +815,178 @@ async def serve_upload(request: Request, path: str):
 async def health_check():
     """Health check endpoint for deployment platforms."""
     return {"status": "ok"}
+
+
+# --- JSON API Endpoints for Next.js Frontend ---
+
+
+@app.get("/api/auth/me")
+async def get_current_user_api(request: Request):
+    """Get current user from session (for Next.js frontend)."""
+    user = get_current_user(request)
+    return {"user": user, "is_authenticated": user is not None}
+
+
+@app.get("/api/years")
+async def years_api(request: Request):
+    """Get available years (JSON)."""
+    years = get_available_years()
+    user = get_current_user(request)
+    return {
+        "years": years,
+        "user": user,
+        "is_authenticated": user is not None,
+    }
+
+
+@app.get("/api/years/{year}")
+async def year_detail_api(request: Request, year: str):
+    """Get etaps for a year (JSON)."""
+    etaps = get_etaps_for_year(year)
+    if not etaps:
+        raise HTTPException(status_code=404, detail="Year not found")
+
+    user = get_current_user(request)
+    return {
+        "year": year,
+        "etaps": etaps,
+        "user": user,
+        "is_authenticated": user is not None,
+    }
+
+
+@app.get("/api/years/{year}/{etap}")
+async def etap_detail_api(
+    request: Request,
+    year: str,
+    etap: str,
+    db: Session = Depends(get_db)
+):
+    """Get tasks for an etap (JSON)."""
+    etap_tasks = get_tasks_for_etap(year, etap)
+    if not etap_tasks:
+        raise HTTPException(status_code=404, detail="Etap not found")
+
+    user = get_current_user(request)
+    user_id = get_current_user_id(request)
+    can_see_stats = is_group_member(request)
+
+    tasks = []
+    for task_info in etap_tasks:
+        task_data = {
+            "year": task_info.year,
+            "etap": task_info.etap,
+            "number": task_info.number,
+            "title": task_info.title,
+            "content": task_info.content,
+            "pdf": task_info.pdf.model_dump() if task_info.pdf else None,
+            "difficulty": task_info.difficulty,
+            "categories": task_info.categories,
+            "hints": task_info.hints,
+            "prerequisites": task_info.prerequisites,
+            "skills_required": task_info.skills_required,
+            "skills_gained": task_info.skills_gained,
+            "submission_count": 0,
+            "highest_score": None,
+        }
+        if can_see_stats and user_id:
+            submission_repo = SubmissionRepository(db)
+            count, highest = submission_repo.get_task_stats(user_id, year, etap, task_info.number)
+            task_data["submission_count"] = count
+            task_data["highest_score"] = highest if highest > 0 else None
+        tasks.append(task_data)
+
+    return {
+        "year": year,
+        "etap": etap,
+        "tasks": tasks,
+        "user": user,
+        "is_authenticated": user is not None,
+    }
+
+
+@app.get("/api/task/{year}/{etap}/{num}")
+async def task_detail_api(
+    request: Request,
+    year: str,
+    etap: str,
+    num: int,
+    db: Session = Depends(get_db)
+):
+    """Get task detail (JSON)."""
+    task = get_task(year, etap, num)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    user = get_current_user(request)
+    user_id = get_current_user_id(request)
+    can_submit = is_group_member(request)
+
+    stats = None
+    submissions = []
+    if can_submit and user_id:
+        submission_repo = SubmissionRepository(db)
+        count, highest = submission_repo.get_task_stats(user_id, year, etap, num)
+        stats = {"submission_count": count, "highest_score": highest}
+        db_submissions = submission_repo.get_user_submissions_for_task(user_id, year, etap, num)
+        submissions = submission_repo.to_pydantic_list(db_submissions[:10])
+
+    task_pdf = get_task_pdf_path(year, etap)
+    solution_pdf = get_solution_pdf_path(year, etap)
+
+    pdf_links = {}
+    if task_pdf and task_pdf.exists():
+        pdf_links["tasks"] = f"/pdf/{year}/{etap}/{task_pdf.name}"
+    if solution_pdf and solution_pdf.exists():
+        pdf_links["solutions"] = f"/pdf/{year}/{etap}/{solution_pdf.name}"
+
+    skills_required = get_skills_by_ids(task.skills_required)
+    skills_gained = get_skills_by_ids(task.skills_gained)
+
+    prerequisite_statuses = []
+    if can_submit and task.prerequisites and user_id:
+        progress = compute_user_progress(user_id=user_id, db=db)
+        prerequisite_statuses = get_prerequisite_statuses(task.prerequisites, progress)
+
+    return {
+        "task": task.model_dump(mode="json"),
+        "stats": stats,
+        "submissions": [s.model_dump(mode="json") for s in submissions],
+        "pdf_links": pdf_links,
+        "user": user,
+        "is_authenticated": user is not None,
+        "can_submit": can_submit,
+        "skills_required": [s.model_dump(mode="json") for s in skills_required],
+        "skills_gained": [s.model_dump(mode="json") for s in skills_gained],
+        "prerequisite_statuses": [p.model_dump(mode="json") for p in prerequisite_statuses],
+    }
+
+
+@app.get("/api/task/{year}/{etap}/{num}/history")
+async def task_history_api(
+    request: Request,
+    year: str,
+    etap: str,
+    num: int,
+    db: Session = Depends(get_db)
+):
+    """Get submission history for a task (JSON)."""
+    if not is_group_member(request):
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    user_id = get_current_user_id(request)
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    task = get_task(year, etap, num)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    submission_repo = SubmissionRepository(db)
+    db_submissions = submission_repo.get_user_submissions_for_task(user_id, year, etap, num)
+    submissions = submission_repo.to_pydantic_list(db_submissions)
+
+    return {
+        "task": task.model_dump(mode="json"),
+        "submissions": [s.model_dump(mode="json") for s in submissions],
+    }
