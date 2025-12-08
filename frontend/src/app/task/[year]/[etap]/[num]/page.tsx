@@ -8,7 +8,7 @@ import { HintsSection } from "@/components/task/HintsSection";
 import { SkillsSection } from "@/components/task/SkillsSection";
 import { SubmitSection } from "@/components/task/SubmitSection";
 import { SubmissionHistory } from "@/components/task/SubmissionHistory";
-import { serverFetch } from "@/lib/api/client";
+import { serverFetch } from "@/lib/api/server";
 import { TaskDetailResponse } from "@/lib/types";
 import { ETAP_NAMES } from "@/lib/utils/constants";
 

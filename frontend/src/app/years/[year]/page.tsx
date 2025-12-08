@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Box, Card, CardContent, Typography, Grid } from "@mui/material";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
-import { serverFetch } from "@/lib/api/client";
+import { serverFetch } from "@/lib/api/server";
 import { EtapsResponse } from "@/lib/types";
 import { ETAP_NAMES } from "@/lib/utils/constants";
 

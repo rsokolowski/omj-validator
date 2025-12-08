@@ -1,7 +1,7 @@
 import { Box, Typography, Stack } from "@mui/material";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { TaskCard } from "@/components/task/TaskCard";
-import { serverFetch } from "@/lib/api/client";
+import { serverFetch } from "@/lib/api/server";
 import { TasksResponse } from "@/lib/types";
 import { ETAP_NAMES } from "@/lib/utils/constants";
 
