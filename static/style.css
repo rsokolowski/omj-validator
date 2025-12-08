@@ -967,6 +967,41 @@ h1, h2, h3, h4 {
     visibility: visible;
 }
 
+/* Math tooltips - handled by JavaScript for KaTeX rendering */
+[data-math-tooltip] {
+    position: relative;
+    cursor: help;
+}
+
+.math-tooltip-popup {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 0.5rem 0.75rem;
+    background: var(--color-gray-800);
+    color: white;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.4;
+    border-radius: var(--radius-sm);
+    z-index: 200;
+    pointer-events: none;
+    max-width: 320px;
+    white-space: normal;
+    text-align: center;
+}
+
+.math-tooltip-popup::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-bottom-color: var(--color-gray-800);
+}
+
 /* === Difficulty Stars === */
 .difficulty {
     font-size: 0.875rem;

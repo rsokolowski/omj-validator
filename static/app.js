@@ -212,6 +212,46 @@ function renderFeedback(text, element) {
 }
 
 /**
+ * Initialize math tooltips with KaTeX rendering.
+ * Creates DOM-based tooltips for elements with data-math-tooltip attribute.
+ */
+function initMathTooltips() {
+    document.querySelectorAll('[data-math-tooltip]').forEach(el => {
+        let tooltipEl = null;
+
+        el.addEventListener('mouseenter', function() {
+            const tooltipText = this.getAttribute('data-math-tooltip');
+            if (!tooltipText) return;
+
+            tooltipEl = document.createElement('div');
+            tooltipEl.className = 'math-tooltip-popup';
+            tooltipEl.textContent = tooltipText;
+            this.appendChild(tooltipEl);
+
+            // Render KaTeX in the tooltip
+            if (typeof renderMathInElement !== 'undefined') {
+                renderMathInElement(tooltipEl, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ],
+                    throwOnError: false
+                });
+            }
+        });
+
+        el.addEventListener('mouseleave', function() {
+            if (tooltipEl && tooltipEl.parentNode) {
+                tooltipEl.parentNode.removeChild(tooltipEl);
+                tooltipEl = null;
+            }
+        });
+    });
+}
+
+/**
  * Initialize Markdown and math rendering for all feedback elements on page load.
  */
 function initFeedbackRendering() {
