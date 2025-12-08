@@ -28,6 +28,7 @@ from .auth import (
     get_current_user,
     get_current_user_id,
     is_group_member,
+    is_group_member_async,
 )
 from .oauth import oauth
 from .groups import check_group_membership
@@ -232,12 +233,14 @@ async def google_auth_callback(request: Request, db: Session = Depends(get_db)):
         next_url = request.session.pop("login_next", None)
 
         # Store user in session (including google_sub for user identification)
+        import time
         request.session[SESSION_USER_KEY] = {
             "google_sub": google_sub,
             "email": user_info["email"],
             "name": user_info.get("name", ""),
             "picture": user_info.get("picture"),
             "is_group_member": is_member,
+            "membership_checked_at": time.time(),  # Track when we last checked membership
         }
 
         logger.info(
@@ -343,7 +346,8 @@ async def year_detail(request: Request, year: str):
 async def progress_page(request: Request):
     """Display progression graph page (public view, progress shown to group members)."""
     user = get_current_user(request)
-    can_view_progress = is_group_member(request)
+    # Use async version to refresh membership status if needed
+    can_view_progress = await is_group_member_async(request)
     categories = get_all_categories()
 
     return templates.TemplateResponse(
@@ -370,7 +374,8 @@ async def progress_data(request: Request, category: str = None, db: Session = De
     """
     user = get_current_user(request)
     user_id = get_current_user_id(request)
-    can_view_progress = is_group_member(request)
+    # Use async version to refresh membership status if needed
+    can_view_progress = await is_group_member_async(request)
 
     # Validate category if provided
     valid_categories = [c.value for c in TaskCategory]
@@ -418,7 +423,8 @@ async def etap_detail(request: Request, year: str, etap: str, db: Session = Depe
 
     user = get_current_user(request)
     user_id = get_current_user_id(request)
-    can_see_stats = is_group_member(request)
+    # Use async version to refresh membership status if needed
+    can_see_stats = await is_group_member_async(request)
 
     # Build task list - stats only for group members
     tasks = []
@@ -461,7 +467,8 @@ async def task_detail(request: Request, year: str, etap: str, num: int, db: Sess
 
     user = get_current_user(request)
     user_id = get_current_user_id(request)
-    can_submit = is_group_member(request)
+    # Use async version to refresh membership status if needed
+    can_submit = await is_group_member_async(request)
 
     # Stats and submissions only for group members
     stats = None
@@ -581,8 +588,8 @@ async def submit_solution(
             status_code=status.HTTP_401_UNAUTHORIZED,
         )
 
-    # Check if user is a group member
-    if not is_group_member(request):
+    # Check if user is a group member (with refresh)
+    if not await is_group_member_async(request):
         return JSONResponse(
             {"error": "Dostęp wymaga członkostwa w grupie omj-validator-alpha"},
             status_code=status.HTTP_403_FORBIDDEN,
@@ -752,7 +759,7 @@ async def task_history(request: Request, year: str, etap: str, num: int, db: Ses
         login_url = f"/login?{urlencode({'next': next_url})}"
         return RedirectResponse(url=login_url, status_code=status.HTTP_303_SEE_OTHER)
 
-    if not is_group_member(request):
+    if not await is_group_member_async(request):
         return RedirectResponse(url="/auth/limited", status_code=status.HTTP_303_SEE_OTHER)
 
     user_id = get_current_user_id(request)
@@ -911,7 +918,7 @@ async def etap_detail_api(
 
     user = get_current_user(request)
     user_id = get_current_user_id(request)
-    can_see_stats = is_group_member(request)
+    can_see_stats = await is_group_member_async(request)
 
     tasks = []
     for task_info in etap_tasks:
@@ -962,7 +969,7 @@ async def task_detail_api(
 
     user = get_current_user(request)
     user_id = get_current_user_id(request)
-    can_submit = is_group_member(request)
+    can_submit = await is_group_member_async(request)
 
     stats = None
     submissions = []
@@ -1013,7 +1020,7 @@ async def task_history_api(
     db: Session = Depends(get_db)
 ):
     """Get submission history for a task (JSON)."""
-    if not is_group_member(request):
+    if not await is_group_member_async(request):
         raise HTTPException(status_code=403, detail="Forbidden")
 
     user_id = get_current_user_id(request)
