@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 const backendUrl = process.env.FASTAPI_URL || "http://localhost:8000";
 
 // Increase timeout for AI processing (Gemini can take 60+ seconds)
-export const maxDuration = 120;
+export const maxDuration = 180;
 
 interface RouteParams {
   params: Promise<{
