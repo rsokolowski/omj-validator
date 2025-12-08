@@ -19,8 +19,10 @@ export async function serverFetch<T>(
   const url = `${backendUrl}${endpoint}`;
 
   // Forward cookies from the incoming request for authentication
+  // Use getAll() and manually build header to avoid double URL-encoding
   const cookieStore = await cookies();
-  const cookieHeader = cookieStore.toString();
+  const allCookies = cookieStore.getAll();
+  const cookieHeader = allCookies.map(c => `${c.name}=${c.value}`).join("; ");
 
   const res = await fetch(url, {
     ...options,
