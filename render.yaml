@@ -33,6 +33,12 @@ services:
         value: gemini-3-pro-preview
       - key: GEMINI_TIMEOUT
         value: "90"
+      # Frontend URL for OAuth redirects
+      - key: FRONTEND_URL
+        fromService:
+          name: omj-validator
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
       - key: UPLOAD_MAX_SIZE_MB
         value: "10"
       # Note: Free tier has no persistent disk - uploaded images lost on restart
@@ -40,7 +46,7 @@ services:
 
   # Next.js Frontend
   - type: web
-    name: omj-frontend
+    name: omj-validator
     runtime: node
     region: frankfurt
     plan: free

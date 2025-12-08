@@ -5,10 +5,10 @@ const backendUrl = process.env.FASTAPI_URL || "http://localhost:8000";
 
 const nextConfig: NextConfig = {
   // Proxy API requests to FastAPI backend
-  // Use afterFiles so Next.js API routes are checked first
+  // Use fallback so Next.js API routes and pages are checked first
   async rewrites() {
     return {
-      afterFiles: [
+      fallback: [
         {
           source: "/api/:path*",
           destination: `${backendUrl}/api/:path*`,
