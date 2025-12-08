@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 """
 Script to download OMJ/OMG competition tasks from https://omj.edu.pl/zadania
-Focuses on etap 2 (second stage) tasks and organizes them by year.
+Downloads all three stages (etap1, etap2, etap3/finals) and organizes them by year.
 
 Directory structure: <year>/<etap>/<file>.pdf
 Example: 2024/etap2/20omj-2etap.pdf
+
+Usage:
+    python download_tasks.py              # Download etap2 only (default)
+    python download_tasks.py --etap 3     # Download etap3 only
+    python download_tasks.py --all-etaps  # Download all etaps
 """
 
-import json
+import argparse
 import requests
 from pathlib import Path
 from typing import NamedTuple
@@ -124,6 +129,140 @@ def get_etap2_filenames(edition: Edition) -> list[str]:
     return filenames
 
 
+def get_etap3_filenames(edition: Edition) -> list[str]:
+    """
+    Generate possible filenames for etap 3 (finals) files based on edition.
+    Returns list of potential filenames to try.
+    """
+    filenames = []
+    num = edition.number
+    # Year when etap 3 takes place (second half of school year)
+    etap3_year = edition.year_start + 1
+    etap3_year_suffix = str(etap3_year)[-2:]
+
+    if edition.is_omj:
+        prefix = f"{num}omj"
+
+        if num >= 18:
+            # Modern OMJ naming (editions XVIII-XXI, 2022+)
+            filenames.extend([
+                f"{prefix}-3etap.pdf",
+                f"{prefix}-3etap-zad.pdf",
+            ])
+            filenames.extend([
+                f"{prefix}-3r.pdf",
+                f"{prefix}-3etap-r.pdf",
+                f"{prefix}-3etap-rr.pdf",
+            ])
+            filenames.extend([
+                f"{prefix}-3etap-st.pdf",
+                f"{prefix}-3st.pdf",
+            ])
+        else:
+            # Earlier OMJ naming (editions XII-XVII, 2016-2021)
+            filenames.extend([
+                f"3etap{etap3_year_suffix}.pdf",
+            ])
+            filenames.extend([
+                f"3etap{etap3_year_suffix}r.pdf",
+                f"3etap{etap3_year_suffix}-r.pdf",
+            ])
+            filenames.extend([
+                f"3etap{etap3_year_suffix}st.pdf",
+                f"3etap{etap3_year_suffix}-st.pdf",
+            ])
+    else:
+        # OMG naming conventions (editions I-XI, 2005-2015)
+        edition_num_padded = f"{num:02d}"
+
+        # Different patterns used across OMG editions
+        filenames.extend([
+            f"3etap{etap3_year_suffix}.pdf",       # e.g., 3etap16.pdf
+            f"omg{edition_num_padded}_3.pdf",       # e.g., omg02_3.pdf
+        ])
+
+        # Solutions
+        filenames.extend([
+            f"3etap{etap3_year_suffix}r.pdf",
+            f"3etap{etap3_year_suffix}-r.pdf",
+            f"omg{edition_num_padded}_3r.pdf",
+        ])
+
+        # Statistics (various naming across years)
+        filenames.extend([
+            f"3etap{etap3_year_suffix}st.pdf",
+            f"3etap{etap3_year_suffix}-st.pdf",
+            f"final_{etap3_year}_staty.pdf",
+            f"final_{etap3_year - 1}-3.pdf",
+            f"staty_3etap.pdf",
+            f"staty_3etap_viii.pdf",
+        ])
+
+    return filenames
+
+
+def get_etap1_filenames(edition: Edition) -> list[str]:
+    """
+    Generate possible filenames for etap 1 files based on edition.
+    Returns list of potential filenames to try.
+    """
+    filenames = []
+    num = edition.number
+    # Year when etap 1 takes place (first half of school year)
+    etap1_year = edition.year_start
+    etap1_year_suffix = str(etap1_year)[-2:]
+
+    if edition.is_omj:
+        prefix = f"{num}omj"
+
+        if num >= 18:
+            # Modern OMJ naming
+            filenames.extend([
+                f"{prefix}-1etap.pdf",
+                f"{prefix}-1etap-zad.pdf",
+            ])
+            filenames.extend([
+                f"{prefix}-1r.pdf",
+                f"{prefix}-1etap-r.pdf",
+            ])
+            filenames.extend([
+                f"{prefix}-1etap-st.pdf",
+                f"{prefix}-1st.pdf",
+            ])
+        else:
+            # Earlier OMJ naming
+            filenames.extend([
+                f"1etap{etap1_year_suffix}.pdf",
+            ])
+            filenames.extend([
+                f"1etap{etap1_year_suffix}r.pdf",
+                f"1etap{etap1_year_suffix}-r.pdf",
+            ])
+            filenames.extend([
+                f"1etap{etap1_year_suffix}st.pdf",
+                f"1etap{etap1_year_suffix}-st.pdf",
+            ])
+    else:
+        # OMG naming
+        edition_num_padded = f"{num:02d}"
+
+        filenames.extend([
+            f"1etap{etap1_year_suffix}.pdf",
+            f"omg{edition_num_padded}_1.pdf",
+        ])
+        filenames.extend([
+            f"1etap{etap1_year_suffix}r.pdf",
+            f"1etap{etap1_year_suffix}-r.pdf",
+            f"omg{edition_num_padded}_1r.pdf",
+        ])
+        filenames.extend([
+            f"1etap{etap1_year_suffix}st.pdf",
+            f"1etap{etap1_year_suffix}-st.pdf",
+        ])
+
+    return filenames
+
+
 def download_file(url: str, output_path: Path) -> bool:
     """
     Download a file from URL to the specified path.
@@ -143,25 +282,22 @@ def download_file(url: str, output_path: Path) -> bool:
         return False
 
 
-def classify_file(filename: str) -> str:
-    """Classify a file as tasks, solutions, or statistics based on filename."""
-    lower = filename.lower()
-    if lower.endswith("st.pdf") or "-st." in lower:
-        return "statistics"
-    if "r.pdf" in lower or "-r." in lower or "rr.pdf" in lower:
-        return "solutions"
-    return "tasks"
-
-
-def download_etap2_for_edition(edition: Edition, output_dir: Path) -> list[str]:
+def download_etap_for_edition(edition: Edition, output_dir: Path, etap: int) -> list[str]:
     """
-    Download all etap 2 files for a given edition.
+    Download all files for a given edition and etap.
     Returns list of successfully downloaded files.
     """
-    year_dir = output_dir / str(edition.year_start) / "etap2"
+    year_dir = output_dir / str(edition.year_start) / f"etap{etap}"
     downloaded = []
 
-    filenames = get_etap2_filenames(edition)
+    if etap == 1:
+        filenames = get_etap1_filenames(edition)
+    elif etap == 2:
+        filenames = get_etap2_filenames(edition)
+    elif etap == 3:
+        filenames = get_etap3_filenames(edition)
+    else:
+        return []
 
     for filename in filenames:
         url = f"{BASE_URL}/{filename}"
@@ -180,40 +316,35 @@ def download_etap2_for_edition(edition: Edition, output_dir: Path) -> list[str]:
     return downloaded
 
 
-def generate_index(output_dir: Path) -> dict:
-    """Generate index mapping years to their PDF files."""
-    index = {}
-
-    for year_dir in sorted(output_dir.iterdir()):
-        if not year_dir.is_dir():
-            continue
-        year = year_dir.name
-
-        for etap_dir in sorted(year_dir.iterdir()):
-            if not etap_dir.is_dir():
-                continue
-            etap = etap_dir.name
-
-            files = {"tasks": None, "solutions": None, "statistics": None}
-            for pdf in sorted(etap_dir.glob("*.pdf")):
-                file_type = classify_file(pdf.name)
-                if files[file_type] is None:
-                    files[file_type] = str(pdf)
-
-            # Remove None values
-            files = {k: v for k, v in files.items() if v is not None}
-
-            if files:
-                if year not in index:
-                    index[year] = {}
-                index[year][etap] = files
-
-    return index
+def download_etap2_for_edition(edition: Edition, output_dir: Path) -> list[str]:
+    """
+    Download all etap 2 files for a given edition.
+    Returns list of successfully downloaded files.
+    """
+    return download_etap_for_edition(edition, output_dir, 2)
 
 
 def main():
-    """Main function to download all etap 2 tasks."""
-    print("OMJ/OMG Task Downloader - Etap 2")
+    """Main function to download OMJ/OMG tasks."""
+    parser = argparse.ArgumentParser(description="Download OMJ/OMG competition tasks")
+    parser.add_argument("--etap", type=int, choices=[1, 2, 3],
+                        help="Download specific etap (1, 2, or 3)")
+    parser.add_argument("--all-etaps", action="store_true",
+                        help="Download all etaps (1, 2, and 3)")
+    parser.add_argument("--year", type=int,
+                        help="Download only specific year")
+    args = parser.parse_args()
+
+    # Default to etap 2 if no option specified
+    if args.all_etaps:
+        etaps = [1, 2, 3]
+    elif args.etap:
+        etaps = [args.etap]
+    else:
+        etaps = [2]
+
+    etap_names = ", ".join([f"Etap {e}" for e in etaps])
+    print(f"OMJ/OMG Task Downloader - {etap_names}")
     print("=" * 40)
 
     output_dir = OUTPUT_DIR
@@ -221,26 +352,29 @@ def main():
 
     total_downloaded = 0
 
-    for edition in EDITIONS:
+    # Filter editions by year if specified
+    editions_to_process = EDITIONS
+    if args.year:
+        editions_to_process = [e for e in EDITIONS if e.year_start == args.year]
+        if not editions_to_process:
+            print(f"No edition found for year {args.year}")
+            return
+
+    for edition in editions_to_process:
         comp_type = "OMJ" if edition.is_omj else "OMG"
         print(f"\n{comp_type} Edition {edition.number} ({edition.year_start}/{edition.year_start + 1 - 2000}):")
 
-        downloaded = download_etap2_for_edition(edition, output_dir)
-        total_downloaded += len(downloaded)
+        for etap in etaps:
+            print(f"  Etap {etap}:")
+            downloaded = download_etap_for_edition(edition, output_dir, etap)
+            total_downloaded += len(downloaded)
 
-        if not downloaded:
-            print("  No files found for this edition")
-
-    # Generate index JSON
-    index = generate_index(output_dir)
-    index_path = Path("tasks_index.json")
-    with open(index_path, "w", encoding="utf-8") as f:
-        json.dump(index, f, indent=2, ensure_ascii=False)
+            if not downloaded:
+                print(f"    No files found")
 
     print(f"\n{'=' * 40}")
     print(f"Total files downloaded: {total_downloaded}")
     print(f"Files saved to: {output_dir.absolute()}")
-    print(f"Index saved to: {index_path.absolute()}")
 
 
 if __name__ == "__main__":

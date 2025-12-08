@@ -1,0 +1,32 @@
+{
+  "number": 5,
+  "pdf": {
+    "tasks": "tasks/2016/etap3/3etap17.pdf",
+    "solutions": "tasks/2016/etap3/3etap17r.pdf",
+    "statistics": "tasks/2016/etap3/3etap17st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "algebra"
+  ],
+  "hints": [
+    "Spróbuj policzyć liczbę cukierków dla małych wartości $n$ (np. $n = 2, 3, 4$) przy różnych kolejnościach łączenia stosów. Co zauważasz?",
+    "Zastanów się, ile razy dana para zapałek \"spotyka się\" podczas całego procesu. Czy kolejność łączenia ma wpływ na końcowy wynik?",
+    "Rozważ dowolną parę zapałek. Kiedy dokładnie ta para przyczynia się do liczby cukierków? Co się dzieje, gdy dwie zapałki po raz pierwszy trafiają do tego samego stosu?",
+    "Policz, ile jest wszystkich par zapałek i ile każda para dokłada do sumy cukierków. Użyj wzoru na liczbę par w zbiorze $n$-elementowym."
+  ],
+  "skills_required": [
+    "counting_techniques",
+    "invariants",
+    "double_counting"
+  ],
+  "skills_gained": [
+    "double_counting",
+    "invariants"
+  ],
+  "prerequisites": [
+    "2008_etap2_4",
+    "2021_etap3_5"
+  ]
+}

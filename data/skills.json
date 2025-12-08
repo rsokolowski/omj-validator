@@ -257,6 +257,28 @@
         "Rozpoznawanie trójkątów równoramiennych"
       ]
     },
+    "midsegment_properties": {
+      "id": "midsegment_properties",
+      "name": "Własności odcinka środkowego",
+      "category": "geometry",
+      "description": "Odcinek łączący środki dwóch boków trójkąta jest równoległy do trzeciego boku i ma połowę jego długości. Ta własność pozwala przenosić informacje między różnymi poziomami trójkąta.",
+      "examples": [
+        "Wykazanie, że czworokąt utworzony przez środki boków dowolnego czworokąta jest równoległobokiem",
+        "Znajdowanie długości odcinka środkowego gdy znamy długość podstawy",
+        "Wykorzystanie równoległości do przenoszenia kątów i proporcji"
+      ]
+    },
+    "perpendicular_bisector": {
+      "id": "perpendicular_bisector",
+      "name": "Symetralna odcinka",
+      "category": "geometry",
+      "description": "Symetralna odcinka to prosta prostopadła do odcinka i przechodząca przez jego środek. Każdy punkt symetralnej jest równoodległy od końców odcinka. Symetralne boków trójkąta przecinają się w środku okręgu opisanego.",
+      "examples": [
+        "Znajdowanie punktów równoodległych od dwóch danych punktów",
+        "Konstrukcja okręgu opisanego na trójkącie",
+        "Dowodzenie, że punkt leży na symetralnej przez wykazanie równości odległości"
+      ]
+    },
     "trapezoid_parallelogram": {
       "id": "trapezoid_parallelogram",
       "name": "Trapezy i równoległoboki",

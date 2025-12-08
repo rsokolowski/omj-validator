@@ -1,0 +1,32 @@
+{
+  "number": 2,
+  "pdf": {
+    "tasks": "tasks/2017/etap3/3etap18.pdf",
+    "solutions": "tasks/2017/etap3/3etap18r.pdf",
+    "statistics": "tasks/2017/etap3/3etap18st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek trapezu z zaznaczonymi wszystkimi punktami. Zastanów się, jaką własność ma punkt E (przecięcie przekątnych) i jak dzieli on przekątne trapezu. Co wiesz o proporcjach w trapezach?",
+    "Wykorzystaj fakt, że prosta przez E równoległa do podstaw dzieli ramiona trapezu w określonym stosunku. Przypomnij sobie, w jakim stosunku przekątne trapezu dzielą się wzajemnie. Spróbuj wyrazić długość AF przez AB i CD.",
+    "Warunek AB + CD = AD jest kluczowy! Sprawdź, czy punkt F ma szczególne położenie na boku AD. Rozważ konstrukcję pomocniczą - na przykład odłożenie odcinków równych AB i CD na prostej zawierającej AD.",
+    "Skonstruuj punkt P na przedłużeniu DA za A tak, że AP = AB, oraz zauważ, że DF = CD (wynika to z własności proporcji w trapezie). Zbadaj trójkąty PBF i DCF - jakie mają własności? Czy są równoramienne?"
+  ],
+  "skills_required": [
+    "trapezoid_parallelogram",
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "trapezoid_parallelogram",
+    "angle_chasing"
+  ],
+  "prerequisites": [
+    "2009_etap2_2",
+    "2012_etap1_2",
+    "2018_etap3_2"
+  ]
+}
