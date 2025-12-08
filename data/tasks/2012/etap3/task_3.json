@@ -1,0 +1,33 @@
+{
+  "number": 3,
+  "title": "Trójkąt z kątem $120°$",
+  "content": "Dany jest trójkąt $ABC$, w którym $\\angle ACB = 120°$. Punkt $M$ jest środkiem boku $AB$. Na odcinkach $AC$ i $BC$ wybrano odpowiednio takie punkty $P$ i $Q$, że $AP = PQ = QB$. Wykaż, że $\\angle PMQ = 90°$.",
+  "pdf": {
+    "tasks": "tasks/2012/etap3/3etap13.pdf",
+    "solutions": "tasks/2012/etap3/3etap13r.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek i oznacz wszystkie dane. Skoro $AP = PQ = QB$, jakie trójkąty równoramienne powstają? Jakie kąty możesz z tego wywnioskować?",
+    "Zastanów się, jak wykorzystać kąt $120°$ przy $C$. Jeśli $PQ$ jest bokiem trójkąta równoramiennego z wierzchołkiem $C$, co możesz powiedzieć o kątach tego trójkąta?",
+    "Rozważ okrąg przechodzący przez punkty $P$, $M$, $Q$. Co by oznaczało, gdyby kąt $\\angle PMQ = 90°$? Jaki warunek musiałby być spełniony dla położenia punktu $M$?",
+    "Zbadaj trójkąt $CPQ$ - jest równoramienny z kątem $120°$ przy wierzchołku. Znajdź jego pozostałe kąty. Następnie sprawdź, czy punkt $M$ leży na okręgu o średnicy $PQ$."
+  ],
+  "skills_required": [
+    "angle_chasing",
+    "isosceles_triangle",
+    "circle_theorems"
+  ],
+  "skills_gained": [
+    "circle_theorems",
+    "angle_chasing"
+  ],
+  "prerequisites": [
+    "2006_etap1_4",
+    "2019_etap1_2",
+    "2012_etap1_2"
+  ]
+}

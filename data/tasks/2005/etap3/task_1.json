@@ -1,0 +1,33 @@
+{
+  "number": 1,
+  "title": "Czwórki liczb całkowitych",
+  "content": "Ile jest czwórek $(a, b, c, d)$ dodatnich liczb całkowitych, które spełniają równanie: $ab + bc + cd + da = 55$? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2005/etap3/omg01_3.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Przyjrzyj się lewej stronie równania. Czy możesz pogrupować składniki tak, aby wyciągnąć wspólny czynnik? Spróbuj pogrupować: $(ab + da) + (bc + cd)$.",
+    "Po faktoryzacji otrzymasz iloczyn dwóch wyrażeń równy 55. Zastanów się, na ile sposobów można przedstawić 55 jako iloczyn dwóch dodatnich liczb całkowitych.",
+    "Dla każdego rozkładu $55 = m \\cdot n$ musisz policzyć, na ile sposobów można przedstawić $m$ jako sumę dwóch dodatnich liczb całkowitych $(a+c = m)$ oraz podobnie dla $n$.",
+    "Sumę $k$ można przedstawić jako sumę dwóch dodatnich liczb całkowitych na dokładnie $k-1$ sposobów. Rozważ wszystkie możliwe rozkłady 55 na iloczyn i dla każdego oblicz liczbę czwórek."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "divisibility_arguments",
+    "counting_techniques"
+  ],
+  "skills_gained": [
+    "diophantine_equations",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2021_etap2_2",
+    "2011_etap2_1",
+    "2006_etap3_1"
+  ]
+}

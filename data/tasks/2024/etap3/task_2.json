@@ -1,0 +1,35 @@
+{
+  "number": 2,
+  "title": "Impreza chłopców i dziewcząt",
+  "content": "W pewnej imprezie biorą udział chłopcy i dziewczęta. Każda z osób uczestniczących w tej imprezie zna wśród pozostałych osób dokładnie $3$ chłopców i dokładnie $7$ dziewcząt. Udowodnij, że liczba wszystkich osób uczestniczących w tej imprezie jest podzielna przez $20$.\n\n*Uwaga.* Zakładamy, że jeśli osoba $A$ zna osobę $B$, to osoba $B$ zna osobę $A$.",
+  "pdf": {
+    "tasks": "tasks/2024/etap3/20omj-3etap.pdf",
+    "solutions": "tasks/2024/etap3/20omj-3r.pdf",
+    "statistics": "tasks/2024/etap3/20omj-3st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Oznacz liczbę chłopców przez $c$, a dziewcząt przez $d$. Zastanów się, ile jest par (chłopiec, dziewczyna), które się znają - policz to na dwa sposoby.",
+    "Użyj podwójnego zliczania: policz krawędzie łączące chłopców z dziewczętami raz z perspektywy chłopców, raz z perspektywy dziewcząt. Co to daje?",
+    "Z równości $7c = 3d$ wynika pewna proporcja między $c$ i $d$. Dodatkowo rozważ, ile jest par znajomych tej samej płci - czy liczba takich par musi być całkowita?",
+    "Pokaż, że $c$ dzieli się przez $3$, a $d$ przez $7$. Następnie użyj warunku, że liczba krawędzi chłopiec-chłopiec (czyli $\\frac{3c}{2}$) musi być całkowita."
+  ],
+  "skills_required": [
+    "double_counting",
+    "divisibility_arguments",
+    "graph_theory"
+  ],
+  "skills_gained": [
+    "double_counting",
+    "divisibility_arguments"
+  ],
+  "prerequisites": [
+    "2014_etap1_4",
+    "2008_etap2_4",
+    "2008_etap3_2"
+  ]
+}

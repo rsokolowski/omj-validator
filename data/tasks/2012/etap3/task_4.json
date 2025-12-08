@@ -1,0 +1,34 @@
+{
+  "number": 4,
+  "title": "Ułamki większe od 2",
+  "content": "Liczby $a$, $b$, $c$, $d$ są większe od $2$. Wykaż, że co najmniej dwie spośród liczb\n$$\\frac{ab}{c}, \\quad \\frac{bc}{d}, \\quad \\frac{cd}{a}, \\quad \\frac{da}{b}$$\nsą większe od $2$.",
+  "pdf": {
+    "tasks": "tasks/2012/etap3/3etap13.pdf",
+    "solutions": "tasks/2012/etap3/3etap13r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "algebra",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza warunek $\\frac{ab}{c} > 2$. Przekształć tę nierówność do postaci bez ułamka. Co możesz powiedzieć o iloczynie wszystkich czterech wyrażeń?",
+    "Spróbuj podejścia nie wprost: załóż, że co najwyżej jedna z tych liczb jest większa od $2$. Co to oznacza dla pozostałych trzech wyrażeń?",
+    "Pomnóż wszystkie cztery wyrażenia przez siebie. Zauważ, że wiele czynników się skróci. Jaki jest wynik tego iloczynu?",
+    "Iloczyn wszystkich czterech wyrażeń wynosi $(abcd)^2 / (abcd) = abcd > 16$. Jeśli trzy z nich są $\\leq 2$, to ich iloczyn jest $\\leq 8$. Jakie ograniczenie daje to na czwarte wyrażenie?"
+  ],
+  "skills_required": [
+    "inequality_manipulation",
+    "contradiction",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "inequality_manipulation",
+    "contradiction"
+  ],
+  "prerequisites": [
+    "2009_etap2_1",
+    "2010_etap2_4",
+    "2013_etap3_1"
+  ]
+}

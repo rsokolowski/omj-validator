@@ -1,0 +1,33 @@
+{
+  "number": 3,
+  "title": "Turniej badmintona",
+  "content": "W turnieju badmintona uczestniczyło 16 zawodników. Każdy zawodnik rozegrał co najwyżej jeden mecz z każdym innym zawodnikiem, żaden mecz nie zakończył się remisem. Po turnieju okazało się, że każdy z zawodników wygrał inną liczbę meczów. Wykaż, że każdy z zawodników przegrał inną liczbę meczów.",
+  "pdf": {
+    "tasks": "tasks/2020/etap3/3etap21.pdf",
+    "solutions": "tasks/2020/etap3/3etap21r.pdf",
+    "statistics": "tasks/2020/etap3/3etap21st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Zauważ, że każdy zawodnik wygrał inną liczbę meczów. Ile jest zawodników i jakie wartości mogą przyjmować liczby wygranych meczów? Czy wszystkie te wartości muszą wystąpić?",
+    "Zastanów się, ile meczów mógł maksymalnie rozegrać każdy zawodnik. Jeśli 16 zawodników ma 16 różnych liczb wygranych, to jakie to muszą być liczby? Co to mówi o liczbie rozegranych meczów?",
+    "Skoro wygrane przyjmują wartości $0, 1, 2, \\ldots, 15$, to każdy zawodnik musiał rozegrać wszystkie 15 możliwych meczów. Jaki jest związek między liczbą wygranych a przegranych dla każdego zawodnika?",
+    "Jeśli każdy rozegrał dokładnie 15 meczów, to dla każdego zawodnika: wygrane + przegrane = 15. Użyj tego, by pokazać, że jeśli wygrane są parami różne, to przegrane też muszą być parami różne."
+  ],
+  "skills_required": [
+    "counting_techniques",
+    "contradiction",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "counting_techniques",
+    "graph_theory"
+  ],
+  "prerequisites": [
+    "2008_etap2_4"
+  ]
+}

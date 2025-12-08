@@ -1,0 +1,33 @@
+{
+  "number": 5,
+  "title": "Wielościan wypukły",
+  "content": "Czy istnieje wielościan wypukły mający dokładnie 100 ścian, z których przynajmniej jedna jest 99-kątem i taki, że w każdym jego wierzchołku zbiegają się dokładnie trzy krawędzie? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2009/etap3/3etap10.pdf",
+    "solutions": "tasks/2009/etap3/3etap10r.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Przypomnij sobie wzór Eulera dla wielościanów: $W - K + S = 2$, gdzie $W$ to liczba wierzchołków, $K$ to liczba krawędzi, a $S$ to liczba ścian. Jak wykorzystać informację, że w każdym wierzchołku zbiegają się dokładnie 3 krawędzie?",
+    "Spróbuj policzyć liczbę krawędzi na dwa sposoby: raz sumując boki wszystkich ścian (każda krawędź należy do 2 ścian), a raz przez wierzchołki (każda krawędź ma 2 końce, w każdym wierzchołku 3 krawędzie).",
+    "Oznacz przez $n_1, n_2, \\ldots, n_{100}$ liczby boków kolejnych ścian. Jedna z nich to 99. Zapisz zależności: $n_1 + n_2 + \\ldots + n_{100} = 2K$ oraz $3W = 2K$. Podstaw do wzoru Eulera.",
+    "Z otrzymanych równań wyznacz sumę $n_1 + n_2 + \\ldots + n_{100}$. Pamiętaj, że każda ściana wielościanu wypukłego ma co najmniej 3 boki. Sprawdź, czy pozostałe 99 ścian może mieć wystarczającą liczbę boków."
+  ],
+  "skills_required": [
+    "polyhedra",
+    "double_counting",
+    "contradiction"
+  ],
+  "skills_gained": [
+    "polyhedra",
+    "double_counting"
+  ],
+  "prerequisites": [
+    "2008_etap3_5",
+    "2012_etap3_5"
+  ]
+}

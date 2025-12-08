@@ -1,0 +1,32 @@
+{
+  "number": 5,
+  "title": "Nierówność z liczbami pierwszymi",
+  "content": "Dane są różne liczby pierwsze $p$, $q$ oraz takie dodatnie liczby całkowite $a$, $b$, że liczba $a^q$ daje resztę $1$ przy dzieleniu przez $p$, a liczba $b^p$ daje resztę $1$ przy dzieleniu przez $q$. Wykaż, że $\\frac{a}{p} + \\frac{b}{q} > 1$.",
+  "pdf": {
+    "tasks": "tasks/2005/etap3/omg01_3.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zacznij od prostego pytania: skoro $a^q$ daje resztę 1 przy dzieleniu przez $p$, to co możesz powiedzieć o najmniejszej dodatniej potędze $a$, która daje resztę 1? Jak to się ma do $p-1$?",
+    "Szukaj związku między $p$, $q$ a tą najmniejszą potęgą. Pamiętaj, że $q$ jest liczbą pierwszą - więc ta najmniejsza potęga może być równa 1 lub $q$. Rozważ oba przypadki osobno.",
+    "W przypadku gdy najmniejsza potęga to $q$: wynika stąd, że $q$ dzieli $p-1$, czyli $p \\geq q+1$. Co to oznacza dla $a$? W przypadku gdy najmniejsza potęga to 1: co to mówi o $a$?",
+    "Gdy $a$ daje resztę 1 przy dzieleniu przez $p$, mamy $a \\geq p+1$ (bo $a > 1$). Gdy najmniejsza potęga to $q$, sprawdź że $a \\geq q$. Podobnie przeanalizuj $b$ i $q$. Połącz te oszacowania."
+  ],
+  "skills_required": [
+    "modular_arithmetic",
+    "divisibility_arguments",
+    "primality_testing"
+  ],
+  "skills_gained": [
+    "modular_arithmetic",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2010_etap2_2",
+    "2005_etap2_2",
+    "2009_etap3_1"
+  ]
+}

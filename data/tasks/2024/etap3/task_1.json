@@ -1,0 +1,35 @@
+{
+  "number": 1,
+  "title": "Czworościan o krawędziach sumujących się do 25",
+  "content": "Czy istnieje czworościan, w którym długości krawędzi są sześcioma różnymi liczbami całkowitymi, a ich suma jest równa $25$? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2024/etap3/20omj-3etap.pdf",
+    "solutions": "tasks/2024/etap3/20omj-3r.pdf",
+    "statistics": "tasks/2024/etap3/20omj-3st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Czworościan ma 6 krawędzi i 4 ściany. Każda ściana to trójkąt. Jaki warunek musi spełniać każdy trójkąt? Jakie są możliwe zestawy 6 różnych liczb całkowitych sumujących się do 25?",
+    "Rozważ nierówność trójkąta: suma dwóch boków musi być większa od trzeciego. Spróbuj wypisać wszystkie możliwe zestawy 6 różnych liczb naturalnych o sumie 25 (zacznij od minimalnego zestawu $\\{1,2,3,4,5,6\\}$ o sumie 21).",
+    "Zwróć uwagę, że każdy wierzchołek czworościanu należy do dokładnie 3 krawędzi. Jeśli masz bardzo długą krawędź w zestawie, do jakich trójkątów będzie należeć i czy spełnią one nierówność trójkąta?",
+    "Dla każdego znalezionego zestawu 6 liczb sprawdź, czy istnieje przypisanie tych liczb do krawędzi czworościanu takie, że wszystkie 4 ściany spełniają nierówność trójkąta. Analizuj przypadki systematycznie."
+  ],
+  "skills_required": [
+    "spatial_3d",
+    "case_analysis",
+    "constructive_proof"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2006_etap1_6",
+    "2014_etap1_7",
+    "2005_etap3_4"
+  ]
+}

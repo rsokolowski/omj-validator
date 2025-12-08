@@ -1,0 +1,35 @@
+{
+  "number": 5,
+  "title": "Wielościan wypukły",
+  "content": "Czy istnieje taki wielościan wypukły, że w każdym jego wierzchołku schodzą się co najmniej cztery krawędzie i który można przeciąć pewną płaszczyzną, otrzymując w przekroju trójkąt? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2013/etap3/3etap14.pdf",
+    "solutions": "tasks/2013/etap3/3etap14r.pdf",
+    "statistics": "tasks/2013/etap3/final_2013-3.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "geometria"
+  ],
+  "hints": [
+    "Przypomnij sobie wzór Eulera dla wielościanów: W - K + Ś = 2. Zastanów się, jak zliczać krawędzie przez wierzchołki - każda krawędź łączy dokładnie dwa wierzchołki.",
+    "Jeśli w każdym wierzchołku schodzą się co najmniej 4 krawędzie, to suma stopni wszystkich wierzchołków wynosi co najmniej $4W$. Jak to się ma do liczby krawędzi?",
+    "Płaszczyzna dająca trójkątny przekrój musi przecinać wielościan tak, by po jednej stronie zostały tylko 3 krawędzie wychodzące do jednej \"części\". Pomyśl o wierzchołkach \"odciętych\" przez tę płaszczyznę.",
+    "Rozważ najmniejszy możliwy przypadek: jeden wierzchołek po jednej stronie płaszczyzny. Z tego wierzchołka wychodzą krawędzie przecinane przez płaszczyznę - ile ich musi być, by powstał trójkąt? Czy to jest zgodne z warunkiem o stopniu wierzchołka?"
+  ],
+  "skills_required": [
+    "polyhedra",
+    "double_counting",
+    "contradiction"
+  ],
+  "skills_gained": [
+    "polyhedra",
+    "double_counting"
+  ],
+  "prerequisites": [
+    "2008_etap3_5",
+    "2012_etap3_5",
+    "2005_etap2_1"
+  ]
+}

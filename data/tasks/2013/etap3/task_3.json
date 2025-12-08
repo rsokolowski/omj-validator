@@ -1,0 +1,34 @@
+{
+  "number": 3,
+  "title": "Podzielność $4ab$ przez $a^2 + b^2$",
+  "content": "Dodatnie liczby całkowite $a$, $b$ mają tę własność, że liczba $4ab$ jest podzielna przez liczbę $a^2 + b^2$. Udowodnij, że $a = b$.",
+  "pdf": {
+    "tasks": "tasks/2013/etap3/3etap14.pdf",
+    "solutions": "tasks/2013/etap3/3etap14r.pdf",
+    "statistics": "tasks/2013/etap3/final_2013-3.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Rozważ, co oznacza warunek podzielności: $a^2 + b^2 \\mid 4ab$. Czy możesz zapisać to jako nierówność lub zbadać stosunek tych liczb?",
+    "Spróbuj podejścia przez sprzeczność: załóż, że $a \\neq b$. Bez straty ogólności możesz przyjąć $a > b$. Wprowadź podstawienie $a = kb$ dla pewnego $k > 1$.",
+    "Po podstawieniu $a = kb$ zbadaj, kiedy wyrażenie $\\frac{4kb^2}{k^2b^2 + b^2} = \\frac{4k}{k^2 + 1}$ może być liczbą całkowitą. Przeanalizuj wartość tego ułamka dla różnych $k$.",
+    "Pokaż, że dla $k > 1$ zachodzi $\\frac{4k}{k^2+1} < 2$, więc jedyną możliwą wartością całkowitą jest $1$. Sprawdź, dla jakich $k$ to zachodzi i czy prowadzi to do sprzeczności."
+  ],
+  "skills_required": [
+    "divisibility_arguments",
+    "contradiction",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "divisibility_arguments",
+    "contradiction"
+  ],
+  "prerequisites": [
+    "2010_etap2_2",
+    "2010_etap3_4",
+    "2020_etap2_3"
+  ]
+}

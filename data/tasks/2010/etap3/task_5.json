@@ -1,0 +1,33 @@
+{
+  "number": 5,
+  "title": "Punkty wewnątrz koła",
+  "content": "Wewnątrz koła o promieniu 1 znajdują się punkty $A_1$, $A_2$, $A_3$, ..., $A_{100}$. Udowodnij, że na brzegu tego koła istnieje taki punkt $P$, dla którego $PA_1 + PA_2 + \\ldots + PA_{100} \\geqslant 100$.",
+  "pdf": {
+    "tasks": "tasks/2010/etap3/3etap11.pdf",
+    "solutions": "tasks/2010/etap3/3etap11r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Zastanów się: czy musisz wskazać konkretny punkt $P$, czy wystarczy udowodnić, że taki istnieje? Co by było, gdybyś rozważył wiele punktów na brzegu koła naraz?",
+    "Pomyśl o punktach leżących na przeciwnych końcach średnicy. Jaką własność ma suma odległości $PA + P'A$ dla dowolnego punktu $A$ wewnątrz koła, gdy $P$ i $P'$ są końcami średnicy?",
+    "Skorzystaj z nierówności trójkąta: dla każdego punktu $A_i$ wewnątrz koła i każdej średnicy $PP'$ zachodzi $PA_i + P'A_i \\geqslant PP'$. Ile wynosi długość średnicy?",
+    "Zsumuj nierówności dla wszystkich 100 punktów: $(PA_1 + P'A_1) + \\ldots + (PA_{100} + P'A_{100}) \\geqslant ?$ Co to mówi o sumie odległości od $P$ lub od $P'$?"
+  ],
+  "skills_required": [
+    "pigeonhole",
+    "circle_theorems",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "pigeonhole",
+    "extremal_principle"
+  ],
+  "prerequisites": [
+    "2005_etap1_3",
+    "2009_etap3_4"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "number": 3,
+  "title": "Suma ułamków przy $x+y+z=0$",
+  "content": "Dane są liczby rzeczywiste $x$, $y$, $z$, różne od zera, dla których $x + y + z = 0$. Wiedząc, że liczby $\\frac{x}{y} + \\frac{y}{z} + \\frac{z}{x}$ oraz $\\frac{x}{z} + \\frac{z}{y} + \\frac{y}{x} + 1$ są równe, wyznacz ich wspólną wartość.",
+  "pdf": {
+    "tasks": "tasks/2018/etap3/3etap19.pdf",
+    "solutions": "tasks/2018/etap3/3etap19r.pdf",
+    "statistics": "tasks/2018/etap3/3etap19st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Oznacz pierwsze wyrażenie przez $S_1$, a drugie przez $S_2$. Skoro $S_1 = S_2$, co możesz powiedzieć o różnicy $S_1 - S_2$?",
+    "Sprowadź ułamki do wspólnego mianownika $xyz$. Wykorzystaj fakt, że $z = -(x+y)$, aby uprościć licznik.",
+    "Rozpisz $S_1 - S_2$ i uprość. Zauważ, że $\\frac{x}{y} - \\frac{y}{x} = \\frac{x^2 - y^2}{xy}$. Jakie podobne różnice pojawiają się w wyrażeniu?",
+    "Po sprowadzeniu do wspólnego mianownika, w liczniku pojawi się wyrażenie z $x^3 + y^3 + z^3$. Przypomnij sobie tożsamość: jeśli $x+y+z=0$, to $x^3+y^3+z^3 = 3xyz$."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "symmetric_systems"
+  ],
+  "skills_gained": [
+    "algebraic_identities",
+    "symmetric_systems"
+  ],
+  "prerequisites": [
+    "2006_etap3_1",
+    "2017_etap3_4",
+    "2019_etap1_3"
+  ]
+}

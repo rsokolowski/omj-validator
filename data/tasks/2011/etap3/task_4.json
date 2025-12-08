@@ -1,0 +1,33 @@
+{
+  "number": 4,
+  "title": "Cyfra w rozwinięciu $\\sqrt{100^n + 2}$",
+  "content": "Dana jest dodatnia liczba całkowita $n$. Wykaż, że w zapisie dziesiętnym liczby $$\\sqrt{100^n + 2}$$ na $n$-tym miejscu po przecinku jest cyfra 0.",
+  "pdf": {
+    "tasks": "tasks/2011/etap3/3etap12.pdf",
+    "solutions": "tasks/2011/etap3/3etap12r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zauważ, że $100^n = (10^n)^2$. Jak można zapisać $\\sqrt{100^n + 2}$ w relacji do liczby $10^n$? Spróbuj oszacować tę wartość.",
+    "Poszukaj oszacowania: między jakimi dwiema liczbami leży $\\sqrt{100^n + 2}$? Pomyśl o nierównościach postaci $a < \\sqrt{100^n + 2} < b$.",
+    "Rozważ, ile wynosi część ułamkowa liczby $\\sqrt{100^n + 2}$. Jeśli oznaczysz $\\sqrt{100^n + 2} = 10^n + x$, to czym jest $x$? Oszacuj $x$ z góry i z dołu.",
+    "Pokaż, że część ułamkowa jest mniejsza niż $10^{-n}$. Wykorzystaj fakt, że $(10^n + 10^{-n})^2 = 100^n + 2 + 10^{-2n} > 100^n + 2$."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "inequality_manipulation",
+    "digit_manipulation"
+  ],
+  "skills_gained": [
+    "inequality_manipulation",
+    "digit_manipulation"
+  ],
+  "prerequisites": [
+    "2012_etap1_3",
+    "2008_etap3_1"
+  ]
+}

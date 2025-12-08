@@ -1,0 +1,35 @@
+{
+  "number": 4,
+  "title": "Układanie klocków",
+  "content": "Czy z $32$ prostopadłościennych klocków o wymiarach $2 \\times 3 \\times 3$ można ułożyć prostopadłościan o wymiarach $8 \\times 8 \\times 9$? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2015/etap3/3etap16.pdf",
+    "solutions": "tasks/2015/etap3/3etap16r.pdf",
+    "statistics": "tasks/2015/etap3/3etap16st.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Objętość klocków i prostopadłościanu się zgadza (sprawdź!). Ale czy to wystarczy, żeby ułożenie było możliwe? Pomyśl, jakie inne przeszkody mogą istnieć.",
+    "Spróbuj pokolorować kostki jednostkowe prostopadłościanu w pewien regularny sposób. Czy możesz znaleźć kolorowanie, które ujawni problem z układaniem klocków?",
+    "Rozważ podział prostopadłościanu na małe kostki $2 \\times 2 \\times 2$. Ile takich kostek mieści prostopadłościan $8 \\times 8 \\times 9$? A ile kostek $2 \\times 2 \\times 2$ pokrywa każdy klocek $2 \\times 3 \\times 3$?",
+    "Pokoloruj kostki $2 \\times 2 \\times 2$ na przemian dwoma kolorami (jak szachownicę 3D). Policz, ile kostek każdego koloru pokrywa pojedynczy klocek $2 \\times 3 \\times 3$, a ile jest w całym prostopadłościanie."
+  ],
+  "skills_required": [
+    "tiling",
+    "invariants",
+    "spatial_3d"
+  ],
+  "skills_gained": [
+    "tiling",
+    "invariants"
+  ],
+  "prerequisites": [
+    "2014_etap1_6",
+    "2010_etap1_5",
+    "2013_etap1_7"
+  ]
+}

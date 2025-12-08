@@ -1,0 +1,34 @@
+{
+  "number": 5,
+  "title": "Podzielność przez $19$",
+  "content": "Niech $S = \\underbrace{111\\ldots1}_{19}\\underbrace{999\\ldots9}_{19}$. Wykaż, że liczba $2S$-cyfrowa\n$$\\underbrace{11111\\ldots111}_{S}\\underbrace{99999\\ldots999}_{S}$$\njest podzielna przez $19$.",
+  "pdf": {
+    "tasks": "tasks/2023/etap3/19omj-3etap.pdf",
+    "solutions": "tasks/2023/etap3/19omj-3r.pdf",
+    "statistics": "tasks/2023/etap3/19omj-3st.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, jak zapisać liczbę złożoną z samych jedynek (repunit) za pomocą wzoru. Na przykład $\\underbrace{11\\ldots1}_{n} = \\frac{10^n - 1}{9}$. Jak wyrazić liczbę z jedynkami i dziewiątkami?",
+    "Spróbuj wykorzystać własności podzielności przez $19$. Zauważ, że $10^{18} \\equiv 1 \\pmod{19}$ (małe twierdzenie Fermata). Jak to się ma do liczby $S$?",
+    "Oblicz najpierw wartość $S$ modulo $19$. Liczba $\\underbrace{11\\ldots1}_{19}$ to $\\frac{10^{19}-1}{9}$. Jak uprościć $10^{19} \\pmod{19}$? Czy $S$ ma jakąś szczególną własność przy dzieleniu przez $19$?",
+    "Zapisz dużą liczbę jako $\\underbrace{11\\ldots1}_{S} \\cdot 10^S + \\underbrace{99\\ldots9}_{S}$. Jeśli wykażesz, że $S \\equiv 0 \\pmod{19}$, to zarówno liczba jedynek jak i dziewiątek będzie wielokrotnością $19$. Wykorzystaj to!"
+  ],
+  "skills_required": [
+    "modular_arithmetic",
+    "divisibility_arguments",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "modular_arithmetic",
+    "divisibility_arguments"
+  ],
+  "prerequisites": [
+    "2023_etap1_1",
+    "2021_etap1_7",
+    "2012_etap1_1"
+  ]
+}

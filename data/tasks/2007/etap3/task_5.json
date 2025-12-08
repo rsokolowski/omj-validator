@@ -1,0 +1,33 @@
+{
+  "number": 5,
+  "title": "Przekrój ostrosłupa prawidłowego",
+  "content": "Dany jest ostrosłup prawidłowy czworokątny, którego każda krawędź ma długość 1. Ostrosłup ten przecięto płaszczyzną przecinającą jego wszystkie krawędzie boczne i uzyskano w przekroju czworokąt wypukły $ABCD$ nie będący trapezem. Proste $AB$ i $CD$ przecinają się w punkcie $P$. Wyznacz wszystkie wartości, jakie może przyjąć odległość punktu $P$ od płaszczyzny podstawy ostrosłupa.",
+  "pdf": {
+    "tasks": "tasks/2007/etap3/omg03_3.pdf",
+    "solutions": "tasks/2007/etap3/omg03_3r.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj ostrosłup prawidłowy czworokątny i zaznacz przekrój płaszczyzną. Gdzie leżą punkty $A$, $B$, $C$, $D$ na krawędziach bocznych? Kiedy przekrój nie jest trapezem?",
+    "Wykorzystaj podobieństwo trójkątów. Zastanów się, jak położenie punktów przekroju na krawędziach bocznych wpływa na własności czworokąta $ABCD$ i położenie punktu $P$.",
+    "Oznacz odległości punktów $A$, $B$, $C$, $D$ od wierzchołka ostrosłupa. Zbadaj, kiedy proste $AB$ i $CD$ się przecinają (a nie są równoległe). Jak te odległości determinują wysokość punktu $P$?",
+    "Rozważ przekrój ostrosłupa płaszczyzną przechodzącą przez oś symetrii i dwie przeciwległe krawędzie boczne. W tym przekroju znajdź zależność między położeniem punktów na krawędziach a wysokością punktu $P$. Jakie wartości może przyjąć ta wysokość?"
+  ],
+  "skills_required": [
+    "spatial_3d",
+    "pythagorean_theorem",
+    "trapezoid_parallelogram"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2007_etap1_7",
+    "2008_etap2_5",
+    "2009_etap1_6"
+  ]
+}

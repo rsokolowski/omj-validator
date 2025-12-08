@@ -1,0 +1,34 @@
+{
+  "number": 4,
+  "title": "Równość kątów w trójkącie nierównoramiennym",
+  "content": "Na boku $AB$ nierównoramiennego trójkąta $ABC$ leżą takie punkty $M$ i $N$, że $AN = AC$ oraz $BM = BC$. Prosta równoległa do $BC$ przechodząca przez punkt $M$ i prosta równoległa do $AC$ przechodząca przez punkt $N$ przecinają się w punkcie $S$. Wykaż, że $\\angle CSM = \\angle CSN$.",
+  "pdf": {
+    "tasks": "tasks/2020/etap3/3etap21.pdf",
+    "solutions": "tasks/2020/etap3/3etap21r.pdf",
+    "statistics": "tasks/2020/etap3/3etap21st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Zacznij od narysowania dokładnego rysunku. Zaznacz trójkąty równoramienne $ANC$ (bo $AN = AC$) i $BMC$ (bo $BM = BC$). Jakie kąty w tych trójkątach są równe?",
+    "Czworokąt $MSNC$ ma dwa boki równoległe do boków trójkąta $ABC$. Zastanów się, jaki to czworokąt i jakie ma własności. Czy możesz wyrazić jego kąty przez kąty trójkąta $ABC$?",
+    "Zbadaj położenie punktu $C$ względem czworokąta $MSNC$. Jak kąty przy wierzchołku $C$ w trójkątach równoramiennych $ANC$ i $BMC$ wiążą się z kątami tego czworokąta?",
+    "Wyraź kąty $\\angle CSM$ i $\\angle CSN$ przez kąty trójkąta $ABC$. Wykorzystaj, że w trójkącie równoramiennym kąty przy podstawie są równe, oraz własności kątów przy równoległych prostych."
+  ],
+  "skills_required": [
+    "angle_chasing",
+    "isosceles_triangle",
+    "trapezoid_parallelogram"
+  ],
+  "skills_gained": [
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "prerequisites": [
+    "2012_etap1_2",
+    "2018_etap3_2",
+    "2009_etap2_2"
+  ]
+}

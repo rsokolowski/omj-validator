@@ -1,0 +1,33 @@
+{
+  "number": 4,
+  "title": "Numerowanie wierzchołków 20-kąta",
+  "content": "Czy wierzchołki 20-kąta foremnego można tak ponumerować liczbami $1, 2, \\ldots, 20$, aby użyć wszystkich tych liczb oraz aby dla każdych czterech kolejnych wierzchołków suma ich numerów była mniejsza od 43? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2007/etap3/omg03_3.pdf",
+    "solutions": "tasks/2007/etap3/omg03_3r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Mamy 20 wierzchołków i każdy należy do dokładnie czterech czwórek kolejnych wierzchołków. Ile jest takich czwórek w 20-kącie? Co to oznacza dla sum?",
+    "Spróbuj zsumować wszystkie ograniczenia. Jeśli każda czwórka ma sumę mniejszą od 43, to jaka jest maksymalna suma wszystkich czwórek razem?",
+    "Każda liczba od 1 do 20 pojawia się w dokładnie czterech czwórkach (bo każdy wierzchołek ma czterech sąsiadów w każdą stronę). Oblicz sumę wszystkich liczb pomnożoną przez 4.",
+    "Porównaj sumę $4 \\cdot (1 + 2 + \\ldots + 20)$ z maksymalną możliwą sumą ze wszystkich 20 czwórek. Czy te wartości są ze sobą zgodne?"
+  ],
+  "skills_required": [
+    "double_counting",
+    "inequality_manipulation",
+    "contradiction"
+  ],
+  "skills_gained": [
+    "double_counting",
+    "contradiction"
+  ],
+  "prerequisites": [
+    "2008_etap2_4",
+    "2006_etap3_2"
+  ]
+}

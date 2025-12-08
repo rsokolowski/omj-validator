@@ -1,0 +1,35 @@
+{
+  "number": 3,
+  "title": "Kwadraty liczb całkowitych",
+  "content": "Dane są takie dodatnie liczby całkowite $a$ i $b$, że każda z liczb $$ab \\quad \\text{oraz} \\quad (a+1)(b+1)$$ jest kwadratem liczby całkowitej. Udowodnij, że istnieje taka liczba całkowita $n > 1$, dla której liczba $(a+n)(b+n)$ jest kwadratem liczby całkowitej.",
+  "pdf": {
+    "tasks": "tasks/2016/etap3/3etap17.pdf",
+    "solutions": "tasks/2016/etap3/3etap17r.pdf",
+    "statistics": "tasks/2016/etap3/3etap17st.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zapisz warunki zadania algebraicznie: $ab = k^2$ oraz $(a+1)(b+1) = m^2$ dla pewnych liczb całkowitych $k$ i $m$. Co możesz powiedzieć o różnicy $(a+1)(b+1) - ab$?",
+    "Rozwiń $(a+1)(b+1)$ i porównaj z $ab$. Otrzymasz związek między $a$, $b$, $k$ i $m$. Spróbuj znaleźć wzorzec - czy możesz zgadnąć postać liczby $n$, dla której $(a+n)(b+n)$ też będzie kwadratem?",
+    "Zauważ, że $(a+1)(b+1) - ab = a + b + 1$. Skoro $ab = k^2$ i $(a+1)(b+1) = m^2$, to $m^2 - k^2 = a + b + 1$. Rozłóż lewą stronę na iloczyn i zastanów się, jaką postać może mieć $n$.",
+    "Sprawdź, czy $n = k^2$ (lub $n = m^2$) daje kwadrat. Rozważ wyrażenie $(a + k^2)(b + k^2)$ i spróbuj je przekształcić, korzystając z faktu że $ab = k^2$."
+  ],
+  "skills_required": [
+    "diophantine_equations",
+    "algebraic_identities",
+    "constructive_proof"
+  ],
+  "skills_gained": [
+    "diophantine_equations",
+    "algebraic_identities"
+  ],
+  "prerequisites": [
+    "2007_etap3_2",
+    "2014_etap3_4",
+    "2012_etap2_5"
+  ]
+}

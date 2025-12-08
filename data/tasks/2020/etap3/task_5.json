@@ -1,0 +1,33 @@
+{
+  "number": 5,
+  "title": "Suma liczb o tych samych cyfrach",
+  "content": "Dane są liczby naturalne $a$, $b$, które w zapisie dziesiętnym są zapisane takimi samymi cyframi (tzn. każda z cyfr od 0 do 9 występuje tyle samo razy w zapisie $a$ co w zapisie $b$). Wykaż, że jeżeli $a + b = 10^{1000}$, to liczby $a$ i $b$ są podzielne przez 10.",
+  "pdf": {
+    "tasks": "tasks/2020/etap3/3etap21.pdf",
+    "solutions": "tasks/2020/etap3/3etap21r.pdf",
+    "statistics": "tasks/2020/etap3/3etap21st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, co wiesz o sumie cyfr liczby. Jeśli $a$ i $b$ mają te same cyfry, to jaka jest suma cyfr $a$ i suma cyfr $b$? A jaka jest suma cyfr liczby $10^{1000}$?",
+    "Przypomnij sobie, że suma cyfr liczby daje tę samą resztę z dzielenia przez 9, co sama liczba. Zbadaj reszty z dzielenia przez 9 obu stron równania $a + b = 10^{1000}$.",
+    "Skoro $a$ i $b$ mają identyczne cyfry, to $a \\equiv b \\pmod{9}$. Jaką resztę z dzielenia przez 9 daje $10^{1000}$? Co to mówi o $a$ i $b$?",
+    "Z analizy reszt wynika, że $a$ i $b$ są podzielne przez 9. Teraz zbadaj ostatnie cyfry: jeśli $a$ kończy się cyfrą $c$, a $b$ cyfrą $d$, to $c + d$ musi dawać 0 na końcu sumy. Rozważ, czy $c$ i $d$ mogą być niezerowe, pamiętając o tym, że $a$ i $b$ mają te same cyfry."
+  ],
+  "skills_required": [
+    "modular_arithmetic",
+    "digit_manipulation",
+    "divisibility_arguments"
+  ],
+  "skills_gained": [
+    "modular_arithmetic",
+    "digit_manipulation"
+  ],
+  "prerequisites": [
+    "2019_etap1_6",
+    "2007_etap1_4"
+  ]
+}

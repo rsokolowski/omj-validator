@@ -1,0 +1,33 @@
+{
+  "number": 5,
+  "title": "Wielościan wypukły",
+  "content": "Czy istnieje taki wielościan wypukły, który ma nieparzystą liczbę krawędzi i którego każda ściana ma parzystą liczbę boków? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2008/etap3/omg04_3.pdf",
+    "solutions": "tasks/2008/etap3/omg04_3r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "geometria"
+  ],
+  "hints": [
+    "Zastanów się, jak policzyć łączną liczbę boków wszystkich ścian wielościanu. Każda krawędź wielościanu jest bokiem ilu ścian?",
+    "Użyj techniki podwójnego zliczania: policz sumę boków wszystkich ścian na dwa sposoby - raz przez ściany, raz przez krawędzie.",
+    "Jeśli każda ściana ma parzystą liczbę boków, to jaka jest parzystość sumy boków wszystkich ścian? Jak to się ma do liczby krawędzi?",
+    "Zauważ, że suma boków wszystkich ścian równa się $2k$, gdzie $k$ to liczba krawędzi. Porównaj parzystość obu stron tego równania."
+  ],
+  "skills_required": [
+    "double_counting",
+    "polyhedra",
+    "parity_arguments"
+  ],
+  "skills_gained": [
+    "double_counting",
+    "polyhedra"
+  ],
+  "prerequisites": [
+    "2012_etap3_5",
+    "2008_etap2_4"
+  ]
+}

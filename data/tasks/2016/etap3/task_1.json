@@ -1,0 +1,35 @@
+{
+  "number": 1,
+  "title": "Wymierność ułamka z $\\sqrt{2}$",
+  "content": "Dane są dodatnie liczby całkowite $a$, $b$, $c$, dla których liczba $$\\frac{a\\sqrt{2}+b}{b\\sqrt{2}+c}$$ jest wymierna. Wykaż, że liczba $ab + bc + ca$ jest podzielna przez liczbę $a+b+c$.",
+  "pdf": {
+    "tasks": "tasks/2016/etap3/3etap17.pdf",
+    "solutions": "tasks/2016/etap3/3etap17r.pdf",
+    "statistics": "tasks/2016/etap3/3etap17st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Jeśli liczba jest wymierna, to można ją zapisać jako $\\frac{p}{q}$ dla pewnych liczb całkowitych. Co to oznacza dla wyrażenia z $\\sqrt{2}$?",
+    "Spróbuj pomnożyć licznik i mianownik przez wyrażenie sprzężone $(b\\sqrt{2}-c)$, aby pozbyć się $\\sqrt{2}$ z mianownika. Następnie wykorzystaj fakt, że $\\sqrt{2}$ jest niewymierną.",
+    "Po przekształceniu otrzymasz wyrażenie postaci $A + B\\sqrt{2}$. Aby było wymierne, współczynnik $B$ przy $\\sqrt{2}$ musi być równy zero. Jaki warunek to daje?",
+    "Z warunku wymierności wyprowadź równość $ac = b^2$. Następnie zbadaj, jak można wykorzystać tę zależność do pokazania, że $(a+b+c)$ dzieli $(ab+bc+ca)$."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "nested_radicals",
+    "divisibility_arguments"
+  ],
+  "skills_gained": [
+    "algebraic_identities",
+    "divisibility_arguments"
+  ],
+  "prerequisites": [
+    "2005_etap1_1",
+    "2009_etap1_7",
+    "2011_etap1_6"
+  ]
+}

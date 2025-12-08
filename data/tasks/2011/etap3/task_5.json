@@ -1,0 +1,34 @@
+{
+  "number": 5,
+  "title": "Kwadrat na czworościanie",
+  "content": "Czy na powierzchni każdego czworościanu można wskazać takie cztery punkty, które są wierzchołkami kwadratu i z których żadne dwa nie leżą na jednej ścianie tego czworościanu? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2011/etap3/3etap12.pdf",
+    "solutions": "tasks/2011/etap3/3etap12r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Czworościan ma 4 ściany, a kwadrat ma 4 wierzchołki. Jeśli żadne dwa wierzchołki kwadratu nie leżą na jednej ścianie, to ile wierzchołków kwadratu musi być na każdej ścianie?",
+    "Zastanów się, gdzie na krawędziach czworościanu mogłyby leżeć wierzchołki kwadratu. Czy istnieje szczególny typ czworościanu, dla którego łatwiej byłoby znaleźć taki kwadrat?",
+    "Rozważ czworościan foremny i środki jego krawędzi. Ile jest krawędzi w czworościanie? Które pary środków krawędzi są jednakowo oddalone od siebie?",
+    "Zbadaj sześć środków krawędzi czworościanu foremnego. Sprawdź, które czwórki tych punktów tworzą kwadrat i czy spełniają warunek zadania dotyczący ścian."
+  ],
+  "skills_required": [
+    "spatial_3d",
+    "constructive_proof",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "constructive_proof"
+  ],
+  "prerequisites": [
+    "2005_etap3_4",
+    "2009_etap1_6",
+    "2006_etap1_6"
+  ]
+}

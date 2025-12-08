@@ -1,0 +1,34 @@
+{
+  "number": 4,
+  "title": "Romb $ABCD$ z punktem $P$ na boku",
+  "content": "Dany jest romb $ABCD$, w którym $\\measuredangle ABC = 100^\\circ$. Punkt $P$ leży na boku $CD$, przy czym $\\measuredangle PBC = 20^\\circ$. Prosta równoległa do boku $AD$ przechodząca przez punkt $P$ przecina przekątną $AC$ w punkcie $Q$. Wykaż, że $BP = AQ$.",
+  "pdf": {
+    "tasks": "tasks/2024/etap3/20omj-3etap.pdf",
+    "solutions": "tasks/2024/etap3/20omj-3r.pdf",
+    "statistics": "tasks/2024/etap3/20omj-3st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek rombu z zaznaczonym punktem $P$ i prostą przez $P$ równoległą do $AD$. Jakie kąty rombu znasz? Pamiętaj, że przekątna rombu dzieli kąty wierzchołkowe na połowy.",
+    "Wykorzystaj własności rombu i kątów naprzemianległych przy równoległych prostych. Spróbuj obliczyć wszystkie kąty w trójkątach $BPC$ i $APQ$ - szukaj trójkątów równoramiennych.",
+    "Zwróć uwagę na kąty przy przekątnej $AC$ i kąty powstające z równoległości $PQ \\parallel AD$. Czy widzisz trójkąt równoramienny z wierzchołkiem w $B$? A może w $A$?",
+    "Wykaż, że trójkąt $BPC$ jest równoramienny (z równymi bokami $BP$ i $PC$). Następnie, korzystając z równoległości i własności rombu, wykaż że $AQ = PC$."
+  ],
+  "skills_required": [
+    "angle_chasing",
+    "isosceles_triangle",
+    "trapezoid_parallelogram"
+  ],
+  "skills_gained": [
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "prerequisites": [
+    "2009_etap2_2",
+    "2012_etap1_2",
+    "2018_etap3_2"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "number": 1,
+  "title": "Układ równań z odwrotnościami",
+  "content": "Czy istnieją takie niezerowe liczby rzeczywiste $x$, $y$, $z$, że\n$$x + \\frac{1}{y} = z, \\quad y + \\frac{1}{z} = x, \\quad z + \\frac{1}{x} = y?$$\nOdpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2022/etap3/18omj-3etap.pdf",
+    "solutions": "tasks/2022/etap3/18omj-3r.pdf",
+    "statistics": "tasks/2022/etap3/18omj-3st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Spróbuj dodać wszystkie trzy równania stronami. Co otrzymujesz po lewej, a co po prawej stronie?",
+    "Zauważ symetrię układu - może istnieć rozwiązanie, gdzie $x = y = z$? Sprawdź tę możliwość osobno.",
+    "Po dodaniu równań porównaj wyrażenie $x + y + z$ z wyrażeniem $\\frac{1}{x} + \\frac{1}{y} + \\frac{1}{z}$. Czy możesz je ze sobą powiązać?",
+    "Odejmij równania parami, np. pierwsze od drugiego. Otrzymasz zależności między różnicami zmiennych. Zbadaj przypadek $x = y$ i przypadek $x \\neq y$."
+  ],
+  "skills_required": [
+    "symmetric_systems",
+    "algebraic_identities",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "symmetric_systems",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2006_etap3_1",
+    "2019_etap1_3",
+    "2010_etap1_1"
+  ]
+}

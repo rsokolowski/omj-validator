@@ -1,0 +1,34 @@
+{
+  "number": 4,
+  "title": "Punkt na boku trójkąta",
+  "content": "Punkt $D$ leży na boku $AB$ trójkąta $ABC$. Załóżmy, że na odcinku $CD$ istnieje taki punkt $E$, że $\\angle EAD = \\angle AED$ oraz $\\angle ECB = \\angle CEB$. Wykaż, że $AC + BC > AB + CE$.",
+  "pdf": {
+    "tasks": "tasks/2018/etap3/3etap19.pdf",
+    "solutions": "tasks/2018/etap3/3etap19r.pdf",
+    "statistics": "tasks/2018/etap3/3etap19st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek i oznacz kąty. Jakie wnioski płyną z równości kątów $\\angle EAD = \\angle AED$ oraz $\\angle ECB = \\angle CEB$? Co to mówi o bokach odpowiednich trójkątów?",
+    "Skoro w trójkącie dwa kąty są równe, to trójkąt jest równoramienny. Zidentyfikuj trójkąty równoramienne na rysunku i zapisz równości boków, które z tego wynikają.",
+    "Wyraź długości $AC$ i $BC$ przez inne odcinki, korzystając z własności trójkątów równoramiennych. Zauważ, że $AD = AE$ oraz $BC = BE$. Jak teraz przedstawić lewą stronę nierówności?",
+    "Po podstawieniu $AC = AD + DC$ (z nierówności trójkąta w $\\triangle ACD$) i $BC = BE$, sprowadź problem do wykazania nierówności $DC > CE$. Dlaczego punkt $E$ leży między $C$ a $D$?"
+  ],
+  "skills_required": [
+    "isosceles_triangle",
+    "angle_chasing",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "isosceles_triangle",
+    "inequality_manipulation"
+  ],
+  "prerequisites": [
+    "2012_etap1_2",
+    "2019_etap1_2",
+    "2008_etap3_3"
+  ]
+}

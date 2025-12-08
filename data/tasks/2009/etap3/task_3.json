@@ -1,0 +1,33 @@
+{
+  "number": 3,
+  "title": "Trójkąt równoboczny $DEF$",
+  "content": "Punkt $P$ leży wewnątrz trójkąta $ABC$. Punkty $D$, $E$, $F$ to punkty symetryczne do punktu $P$ odpowiednio względem prostych $BC$, $CA$, $AB$. Wykaż, że jeśli trójkąt $DEF$ jest równoboczny, to proste $AD$, $BE$ i $CF$ przecinają się w jednym punkcie.",
+  "pdf": {
+    "tasks": "tasks/2009/etap3/3etap10.pdf",
+    "solutions": "tasks/2009/etap3/3etap10r.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładnie sytuację z zadania. Co wiesz o odległościach od punktu $P$ do boków trójkąta $ABC$? Jak te odległości mają się do boków trójkąta $DEF$?",
+    "Zastanów się, jakie własności ma punkt symetryczny względem prostej. Czy możesz wyrazić boki trójkąta $DEF$ przez odległości punktu $P$ od boków trójkąta $ABC$?",
+    "Skoro $DEF$ jest równoboczny, to punkt $P$ musi mieć szczególną własność - jego odległości od boków $ABC$ spełniają pewien warunek. Pomyśl o twierdzeniu Cevy - kiedy trzy proste przechodzące przez wierzchołki trójkąta przecinają się w jednym punkcie?",
+    "Znajdź, w jakim stosunku proste $AD$, $BE$, $CF$ dzielą przeciwległe boki trójkąta $ABC$. Wykorzystaj fakt, że trójkąt $DEF$ jest równoboczny, aby pokazać, że iloczyn stosunków z twierdzenia Cevy równa się 1."
+  ],
+  "skills_required": [
+    "transformations",
+    "triangle_centers",
+    "area_methods"
+  ],
+  "skills_gained": [
+    "transformations",
+    "triangle_centers"
+  ],
+  "prerequisites": [
+    "2007_etap1_2",
+    "2014_etap1_2",
+    "2005_etap2_3"
+  ]
+}

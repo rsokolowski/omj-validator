@@ -1,0 +1,34 @@
+{
+  "number": 2,
+  "title": "Trójkąt prostokątny z punktami na przeciwprostokątnej",
+  "content": "W trójkącie prostokątnym $ABC$ punkt $M$ jest środkiem przeciwprostokątnej $AB$. Punkty $P$ i $Q$ leżą odpowiednio na odcinkach $AM$ i $MB$, przy czym $PQ = CQ$. Udowodnij, że $AP \\leqslant 2 \\cdot MQ$.",
+  "pdf": {
+    "tasks": "tasks/2020/etap3/3etap21.pdf",
+    "solutions": "tasks/2020/etap3/3etap21r.pdf",
+    "statistics": "tasks/2020/etap3/3etap21st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek i zastanów się, jakie własności ma punkt $M$ jako środek przeciwprostokątnej trójkąta prostokątnego. Czy znasz zależność między odległością $CM$ a bokami trójkąta?",
+    "Wykorzystaj fakt, że w trójkącie prostokątnym środek przeciwprostokątnej jest równoodległy od wszystkich trzech wierzchołków: $CM = MA = MB$. Co to oznacza dla punktu $C$?",
+    "Skoro $PQ = CQ$, to punkt $Q$ leży na pewnym okręgu o środku $C$. Rozważ, jak położenie punktu $Q$ na odcinku $MB$ wpływa na długość $AP$. Kiedy $AP$ jest największe?",
+    "Wyrażaj długości przez odległość $MQ$. Zauważ, że $AP = AM - PM = AM - (PQ - MQ)$. Wykorzystaj warunek $PQ = CQ$ i nierówność trójkąta w trójkącie $CMQ$."
+  ],
+  "skills_required": [
+    "circle_theorems",
+    "pythagorean_theorem",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "circle_theorems",
+    "inequality_manipulation"
+  ],
+  "prerequisites": [
+    "2008_etap3_3",
+    "2011_etap1_5",
+    "2013_etap3_2"
+  ]
+}

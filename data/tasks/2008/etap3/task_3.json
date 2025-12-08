@@ -1,0 +1,32 @@
+{
+  "number": 3,
+  "title": "Cięciwa i odcinek $SD$",
+  "content": "Dany jest okrąg o środku $S$ oraz punkt $D$ leżący na tym okręgu. Cięciwa $AB$ przecina odcinek $SD$ w punkcie $C$, różnym od punktu $S$. Wykaż, że $AB > 2CD$.",
+  "pdf": {
+    "tasks": "tasks/2008/etap3/omg04_3.pdf",
+    "solutions": "tasks/2008/etap3/omg04_3r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek. Gdzie leży środek cięciwy $AB$? Jak nazywa się odcinek łączący środek okręgu ze środkiem cięciwy?",
+    "Przypomnij sobie własność: odcinek łączący środek okręgu ze środkiem cięciwy jest prostopadły do tej cięciwy. Jak to może pomóc w porównaniu długości?",
+    "Oznacz środek cięciwy $AB$ jako $M$. Zastanów się, jaka jest relacja między $SM$, $SC$ i $CD$. Co możesz powiedzieć o położeniu punktu $M$ względem $C$?",
+    "Rozważ trójkąt prostokątny $SAM$. Z twierdzenia Pitagorasa: $SA^2 = SM^2 + AM^2$, więc $AM > SM$. Pokaż, że $SM \\geq CD$ i wyprowadź stąd żądaną nierówność."
+  ],
+  "skills_required": [
+    "circle_theorems",
+    "pythagorean_theorem",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "circle_theorems",
+    "inequality_manipulation"
+  ],
+  "prerequisites": [
+    "2011_etap1_5",
+    "2010_etap1_6"
+  ]
+}

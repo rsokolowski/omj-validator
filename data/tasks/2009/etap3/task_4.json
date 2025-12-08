@@ -1,0 +1,33 @@
+{
+  "number": 4,
+  "title": "Wybór dwóch liczb",
+  "content": "Danych jest pięć dodatnich liczb rzeczywistych. Wykaż, że spośród tych liczb można wybrać takie dwie liczby $a$, $b$, dla których\n$$0 \\leqslant \\frac{1}{1+a} - \\frac{1}{1+b} < \\frac{1}{4}.$$",
+  "pdf": {
+    "tasks": "tasks/2009/etap3/3etap10.pdf",
+    "solutions": "tasks/2009/etap3/3etap10r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "algebra"
+  ],
+  "hints": [
+    "Przyjrzyj się wyrażeniu $\\frac{1}{1+x}$. Jakie wartości przyjmuje ta funkcja dla dodatnich $x$? Czy możesz określić przedział, w którym leżą wszystkie takie wartości?",
+    "Masz 5 liczb i musisz znaleźć dwie \"bliskie\" w pewnym sensie. Czy przypomina ci to zasadę szufladkową? Zastanów się, co byłoby \"szufladkami\" w tym zadaniu.",
+    "Przedział $(0, 1)$ możesz podzielić na 4 równe części. Ile wartości postaci $\\frac{1}{1+a_i}$ masz do rozmieszczenia? Co z tego wynika?",
+    "Podziel przedział $(0, 1)$ na przedziały $[0, \\frac{1}{4})$, $[\\frac{1}{4}, \\frac{1}{2})$, $[\\frac{1}{2}, \\frac{3}{4})$, $[\\frac{3}{4}, 1)$. Rozważ, które z wartości $\\frac{1}{1+a_i}$ wpadają do którego przedziału."
+  ],
+  "skills_required": [
+    "pigeonhole",
+    "inequality_manipulation",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "pigeonhole",
+    "inequality_manipulation"
+  ],
+  "prerequisites": [
+    "2005_etap1_3",
+    "2007_etap1_3"
+  ]
+}

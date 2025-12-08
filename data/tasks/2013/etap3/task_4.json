@@ -1,0 +1,34 @@
+{
+  "number": 4,
+  "title": "Wierzchołki 100-kąta",
+  "content": "Spośród wierzchołków $100$-kąta foremnego wybrano $51$ punktów. Wykaż, że wśród wybranych punktów istnieją trzy będące wierzchołkami trójkąta prostokątnego równoramiennego.",
+  "pdf": {
+    "tasks": "tasks/2013/etap3/3etap14.pdf",
+    "solutions": "tasks/2013/etap3/3etap14r.pdf",
+    "statistics": "tasks/2013/etap3/final_2013-3.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Przypomnij sobie, jaki warunek musi spełniać trójkąt wpisany w okrąg, aby był prostokątny. Co jest wtedy jego przeciwprostokątną?",
+    "W 100-kącie foremnym ile jest par wierzchołków, które są końcami średnicy okręgu opisanego? Wybieramy 51 wierzchołków - czy możemy uniknąć wybrania obu końców jakiejś średnicy?",
+    "Zastosuj zasadę szufladkową: potraktuj pary przeciwległych wierzchołków jako 'szufladki'. Ile mamy szufladek, a ile wkładamy wierzchołków?",
+    "Gdy mamy już dwa wierzchołki będące końcami średnicy, zastanów się gdzie musi leżeć trzeci wierzchołek, aby trójkąt był nie tylko prostokątny, ale też równoramienny. Ile takich pozycji jest w 100-kącie?"
+  ],
+  "skills_required": [
+    "pigeonhole",
+    "circle_theorems",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "pigeonhole",
+    "circle_theorems"
+  ],
+  "prerequisites": [
+    "2008_etap1_6",
+    "2006_etap1_7"
+  ]
+}

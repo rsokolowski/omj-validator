@@ -1,0 +1,30 @@
+{
+  "number": 4,
+  "title": "Wymierność ułamków",
+  "content": "Dodatnie liczby rzeczywiste $a$, $b$ mają tę własność, że liczba $\\frac{a-b}{a+b}$ jest wymierna. Udowodnij, że liczba $\\frac{2a-b}{2a+b}$ jest także wymierna.",
+  "pdf": {
+    "tasks": "tasks/2008/etap3/omg04_3.pdf",
+    "solutions": "tasks/2008/etap3/omg04_3r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Co to znaczy, że ułamek jest wymierny? Jeśli $\\frac{a-b}{a+b} = \\frac{p}{q}$ dla liczb całkowitych $p$, $q$, to co możesz wywnioskować o stosunku $\\frac{a}{b}$?",
+    "Spróbuj wyrazić stosunek $\\frac{a}{b}$ jako funkcję wymierną liczby wymiernej. Czy stosunek dwóch dodatnich liczb, których iloraz pewnych kombinacji jest wymierny, sam musi być wymierny?",
+    "Z równości $\\frac{a-b}{a+b} = r$ (gdzie $r$ jest wymierne) wyznacz $\\frac{a}{b}$. Podziel licznik i mianownik przez $b$ i rozwiąż równanie.",
+    "Po wyznaczeniu $\\frac{a}{b} = \\frac{1+r}{1-r}$ (gdzie $r$ jest wymierne), podstaw ten stosunek do wyrażenia $\\frac{2a-b}{2a+b}$ dzieląc przez $b$. Sprawdź, że wynik jest wymierny jako złożenie operacji arytmetycznych na liczbach wymiernych."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "word_problems"
+  ],
+  "skills_gained": [
+    "algebraic_identities"
+  ],
+  "prerequisites": [
+    "2009_etap1_7"
+  ]
+}

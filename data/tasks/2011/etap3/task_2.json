@@ -1,0 +1,32 @@
+{
+  "number": 2,
+  "title": "Czworokąt i symetralne",
+  "content": "Dany jest czworokąt wypukły $ABCD$. Punkty $K$ i $L$ są odpowiednio środkami boków $BC$ i $AD$. Symetralne odcinków $AB$ i $CD$ przecinają odcinek $KL$ odpowiednio w punktach $P$ i $Q$. Wykaż, że jeżeli $KP = LQ$, to proste $AB$ i $CD$ są równoległe.",
+  "pdf": {
+    "tasks": "tasks/2011/etap3/3etap12.pdf",
+    "solutions": "tasks/2011/etap3/3etap12r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Przypomnij sobie, czym jest symetralna odcinka. Jaką własność ma każdy punkt leżący na symetralnej? Co to oznacza dla punktów $P$ i $Q$?",
+    "Rozważ długości odcinków łączących punkty $P$ i $Q$ z wierzchołkami czworokąta. Skoro $P$ leży na symetralnej $AB$, to $PA = PB$. Podobnie dla $Q$. Spróbuj wykorzystać te równości.",
+    "Połącz punkty $K$ i $L$ z wierzchołkami czworokąta. Zauważ, że $K$ jest środkiem $BC$, więc możesz wyrazić pewne odległości przez inne. Zastanów się, jak warunek $KP = LQ$ ogranicza położenie prostych $AB$ i $CD$.",
+    "Załóż nie wprost, że proste $AB$ i $CD$ nie są równoległe. Rozważ, jak symetralne tych odcinków przecinają odcinek $KL$ i czy w tej sytuacji równość $KP = LQ$ może zachodzić. Wykorzystaj własności środkowych trójkątów lub trapezów."
+  ],
+  "skills_required": [
+    "angle_chasing",
+    "trapezoid_parallelogram",
+    "contradiction"
+  ],
+  "skills_gained": [
+    "contradiction",
+    "trapezoid_parallelogram"
+  ],
+  "prerequisites": [
+    "2013_etap1_5",
+    "2006_etap3_3"
+  ]
+}

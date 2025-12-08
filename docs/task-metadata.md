@@ -39,7 +39,9 @@ data/tasks/
     "Hint 3: Key direction",
     "Hint 4: Specific guidance"
   ],
-  "prerequisites": ["2023_etap1_5", "2022_etap2_3"]
+  "prerequisites": ["2023_etap1_5", "2022_etap2_3"],
+  "skills_required": ["angle_chasing", "isosceles_triangle"],
+  "skills_gained": ["angle_chasing"]
 }
 ```
 
@@ -72,6 +74,8 @@ PDF paths are relative to the project root (e.g., `tasks/2024/etap2/20omj-2etap.
 | `categories` | `list[str]` | `[]` | Mathematical categories |
 | `hints` | `list[str]` | `[]` | Progressive hints (4 levels) |
 | `prerequisites` | `list[str]` | `[]` | Task keys that must be mastered first |
+| `skills_required` | `list[str]` | `[]` | Skills needed to solve the task (1-3 IDs from `data/skills.json`) |
+| `skills_gained` | `list[str]` | `[]` | Skills practiced by solving the task (1-2 IDs from `data/skills.json`) |
 
 ## Field Details
 
@@ -116,6 +120,34 @@ Hints follow a progressive revelation system based on Polya's problem-solving me
 - Use appropriate LaTeX notation for math
 - Keep each hint to 1-2 sentences
 - Remember target audience is ages 10-14 (no trigonometry)
+
+### Skills (Required and Gained)
+
+Skills connect tasks to the skill taxonomy defined in `data/skills.json`. They enable skill-based filtering and learning path recommendations.
+
+**skills_required:** Skills the student MUST know to solve the task (1-3 IDs).
+
+**skills_gained:** Skills the student practices/develops by solving the task (1-2 IDs).
+
+**Skill Categories:**
+| Category | Polish Name | Description |
+|----------|-------------|-------------|
+| `algebra` | Algebra | Equations, identities, inequalities |
+| `geometry` | Geometria | Shapes, angles, triangles, circles |
+| `number_theory` | Teoria liczb | Divisibility, primes, modular arithmetic |
+| `combinatorics` | Kombinatoryka | Counting, arrangements, pigeonhole |
+| `logic` | Logika | Reasoning, proofs, game theory |
+| `arithmetic` | Arytmetyka | Basic calculations, fractions, ratios |
+
+**Example:**
+```json
+{
+  "skills_required": ["angle_chasing", "isosceles_triangle"],
+  "skills_gained": ["angle_chasing"]
+}
+```
+
+Skills are automatically populated by `populate_metadata.py`. If a task requires a skill not in `data/skills.json`, the script suggests adding it and reports which tasks need re-analysis.
 
 ### Prerequisites (Progression Graph)
 
@@ -180,7 +212,9 @@ This task requires mastering 2023 Etap II Task 1 (score >= 5), plus any tasks th
     "Sprawdz, czy $\\angle AEB = \\angle ABE$. Jesli tak, to trojkat $ABE$ jest rownoramienny - ktore boki sa rowne?",
     "Skoro $AB = AE$, porownaj $AE$ z $AD$ w trojkacie prostokatnym $ADE$. Przeciwprostokatna jest zawsze nie mniejsza od przyprostokatnej."
   ],
-  "prerequisites": []
+  "prerequisites": [],
+  "skills_required": ["angle_chasing", "isosceles_triangle", "right_triangle"],
+  "skills_gained": ["angle_chasing"]
 }
 ```
 
@@ -219,3 +253,5 @@ The Pydantic model `TaskInfo` in `app/models.py` defines the schema with:
 - `categories`: List of strings (not validated against enum on load)
 - `hints`: List of strings
 - `prerequisites`: List of strings in `year_etap_number` format
+- `skills_required`: List of skill IDs (validated against `data/skills.json` during population)
+- `skills_gained`: List of skill IDs (validated against `data/skills.json` during population)

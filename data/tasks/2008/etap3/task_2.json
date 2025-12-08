@@ -1,0 +1,33 @@
+{
+  "number": 2,
+  "title": "Turniej tenisa stołowego",
+  "content": "W turnieju tenisa stołowego uczestniczyło $2n$ zawodników. Każdy zawodnik rozegrał z każdym innym zawodnikiem co najwyżej jeden mecz. Po turnieju okazało się, że dokładnie $n$ zawodników rozegrało po dwa mecze, a pozostałych $n$ zawodników po trzy mecze. Wyznacz wszystkie liczby całkowite dodatnie $n$, dla których taka sytuacja jest możliwa.",
+  "pdf": {
+    "tasks": "tasks/2008/etap3/omg04_3.pdf",
+    "solutions": "tasks/2008/etap3/omg04_3r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Wyobraź sobie zawodników jako punkty, a mecze jako odcinki łączące pary punktów. Ile łącznie odcinków wychodzi ze wszystkich punktów? Jak to się ma do liczby meczy?",
+    "Policz sumę wszystkich rozegranych meczy na dwa sposoby: raz sumując po zawodnikach, raz licząc wszystkie mecze. Każdy mecz jest liczony dwukrotnie przy sumowaniu po zawodnikach.",
+    "Z warunku na liczbę meczy wynika, że $n$ musi spełniać pewien warunek parzystości. Znajdź ten warunek, a następnie sprawdź, czy da się faktycznie zorganizować turniej dla małych wartości $n$.",
+    "Dla znalezionych kandydatów na $n$ spróbuj narysować konkretny przykład turnieju. Podziel zawodników na dwie grupy i zastanów się, jak połączyć je meczami, żeby uzyskać właściwe liczby meczy."
+  ],
+  "skills_required": [
+    "graph_theory",
+    "double_counting",
+    "constructive_proof"
+  ],
+  "skills_gained": [
+    "graph_theory",
+    "double_counting"
+  ],
+  "prerequisites": [
+    "2008_etap2_4",
+    "2014_etap1_4"
+  ]
+}

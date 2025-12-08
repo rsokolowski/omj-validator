@@ -1,0 +1,34 @@
+{
+  "number": 3,
+  "title": "Kolorowanie liczb",
+  "content": "Niech $n$ będzie dodatnią liczbą całkowitą. Każdą z liczb $1, 2, 3, \\ldots, 1000$ pomalowano jednym z $n$ kolorów. Okazało się, że każde dwie liczby, z których jedna jest dzielnikiem drugiej są pomalowane różnymi kolorami. Wyznacz najmniejszą liczbę $n$, dla której taka sytuacja jest możliwa.",
+  "pdf": {
+    "tasks": "tasks/2017/etap3/3etap18.pdf",
+    "solutions": "tasks/2017/etap3/3etap18r.pdf",
+    "statistics": "tasks/2017/etap3/3etap18st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza warunek 'jedna jest dzielnikiem drugiej'. Jakie ciągi liczb tworzą łańcuchy, w których każda kolejna jest wielokrotnością poprzedniej?",
+    "Szukaj najdłuższego łańcucha liczb $a_1 | a_2 | a_3 | \\ldots | a_k$, gdzie wszystkie liczby są w przedziale $1$ do $1000$. Ten łańcuch wymaga co najmniej $k$ kolorów.",
+    "Zbadaj ciąg potęg liczby $2$: ile takich potęg mieści się w przedziale od $1$ do $1000$? Każde dwie kolejne potęgi muszą mieć różne kolory.",
+    "Pokaż, że znaleziona liczba kolorów wystarcza. Przypisz każdej liczbie kolor równy wykładnikowi największej potęgi $2$, która ją dzieli."
+  ],
+  "skills_required": [
+    "divisibility_arguments",
+    "extremal_principle",
+    "constructive_proof"
+  ],
+  "skills_gained": [
+    "divisibility_arguments",
+    "constructive_proof"
+  ],
+  "prerequisites": [
+    "2021_etap2_3",
+    "2006_etap3_2"
+  ]
+}

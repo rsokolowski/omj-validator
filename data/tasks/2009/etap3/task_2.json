@@ -1,0 +1,33 @@
+{
+  "number": 2,
+  "title": "Liczby na tablicy",
+  "content": "Na tablicy napisano skończenie wiele (i więcej niż jedną) różnych liczb rzeczywistych. Okazało się, że dla każdych dwóch napisanych liczb została napisana także ich suma. Jakie liczby napisano na tablicy? Podaj wszystkie możliwości. Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2009/etap3/3etap10.pdf",
+    "solutions": "tasks/2009/etap3/3etap10r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zacznij od zbadania prostych przykładów: czy zbiór {1, 2} spełnia warunki? A {-1, 0, 1}? Co musi należeć do zbioru, jeśli zawiera on liczbę $a$?",
+    "Rozważ największy lub najmniejszy element zbioru. Co możesz powiedzieć o jego podwojeniu? Czy zbiór musi zawierać liczbę $0$?",
+    "Jeśli $m$ jest największą liczbą w zbiorze, to $m + m = 2m$ też musi należeć do zbioru. Kiedy to możliwe przy skończonej liczbie elementów?",
+    "Pokaż, że zbiór musi mieć postać $\\{-na, ..., -a, 0, a, ..., na\\}$ dla pewnej liczby rzeczywistej $a \\neq 0$. Uzasadnij, dlaczego żadna inna konfiguracja nie jest możliwa."
+  ],
+  "skills_required": [
+    "extremal_principle",
+    "contradiction",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "extremal_principle",
+    "contradiction"
+  ],
+  "prerequisites": [
+    "2006_etap3_2",
+    "2007_etap3_1"
+  ]
+}

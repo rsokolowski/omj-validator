@@ -1,0 +1,33 @@
+{
+  "number": 1,
+  "title": "Kolejne liczby całkowite",
+  "content": "Czy istnieją takie liczby całkowite $a$ i $b$, że liczby $a^2 + b$ oraz $a + b^2$ są kolejnymi liczbami całkowitymi? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2010/etap3/3etap11.pdf",
+    "solutions": "tasks/2010/etap3/3etap11r.pdf"
+  },
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zastanów się, co to znaczy, że dwie liczby są kolejne. Jak możesz zapisać warunek \"liczby są kolejne\" jako równanie?",
+    "Oblicz różnicę $(a^2 + b) - (a + b^2)$ lub $(a + b^2) - (a^2 + b)$. Spróbuj ją rozłożyć na czynniki.",
+    "Zauważ, że różnicę $a^2 - b^2 + b - a$ można zapisać jako $(a-b)(a+b) - (a-b) = (a-b)(a+b-1)$. Kiedy iloczyn dwóch czynników równa się $1$ lub $-1$?",
+    "Rozważ wszystkie możliwe przypadki: $(a-b) = 1$ i $(a+b-1) = 1$, lub $(a-b) = -1$ i $(a+b-1) = -1$, itd. Dla każdego przypadku wyznacz $a$ i $b$, a następnie sprawdź, czy warunek jest spełniony."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "diophantine_equations",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "algebraic_identities",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2009_etap1_1",
+    "2013_etap1_2"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "number": 2,
+  "title": "Liczby w wierzchołkach 100-kąta",
+  "content": "Każdemu wierzchołkowi 100-kąta foremnego trzeba przyporządkować pewną dodatnią liczbę rzeczywistą. Czy możliwe jest takie przyporządkowanie, w którym każda liczba jest równa wartości bezwzględnej różnicy liczb, które z nią sąsiadują? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2006/etap3/omg02_3.pdf",
+    "solutions": "tasks/2006/etap3/omg02_3r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "algebra"
+  ],
+  "hints": [
+    "Spróbuj najpierw rozważyć mniejsze wielokąty: trójkąt, czworokąt, pięciokąt. Czy dla któregoś z nich takie przyporządkowanie jest możliwe? Co zauważasz?",
+    "Pomyśl o tym, jak zachowuje się ciąg liczb, gdy każda jest różnicą sąsiadów. Czy taki ciąg może być stały? Co się dzieje z największą liczbą w przyporządkowaniu?",
+    "Zwróć uwagę na wierzchołek z największą przypisaną liczbą. Skoro jest ona równa wartości bezwzględnej różnicy sąsiadów, co to mówi o tych sąsiadach? Czy mogą być oba mniejsze?",
+    "Jeśli $M$ jest największą liczbą w przyporządkowaniu, to $M = |a - b|$ dla pewnych sąsiadów $a, b \\leq M$. Przeanalizuj, kiedy różnica dwóch liczb nie większych niż $M$ może być równa $M$."
+  ],
+  "skills_required": [
+    "extremal_principle",
+    "invariants",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "extremal_principle",
+    "contradiction"
+  ],
+  "prerequisites": [
+    "2009_etap3_2",
+    "2008_etap2_2"
+  ]
+}

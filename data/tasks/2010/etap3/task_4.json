@@ -1,0 +1,33 @@
+{
+  "number": 4,
+  "title": "Podzielność przez sumę liczb pierwszych",
+  "content": "Liczby $p$ i $q$ są różnymi liczbami pierwszymi. Udowodnij, że liczba $p^2 + q^2$ nie jest podzielna przez liczbę $p + q$.",
+  "pdf": {
+    "tasks": "tasks/2010/etap3/3etap11.pdf",
+    "solutions": "tasks/2010/etap3/3etap11r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zastanów się, jak można przekształcić wyrażenie $p^2 + q^2$ tak, aby pojawiła się w nim suma $p + q$. Przypomnij sobie wzory skróconego mnożenia.",
+    "Spróbuj zastosować dowód nie wprost: załóż, że $(p + q) | (p^2 + q^2)$ i pokaż, że prowadzi to do sprzeczności z założeniem, że $p$ i $q$ są różnymi liczbami pierwszymi.",
+    "Skorzystaj z tożsamości $p^2 + q^2 = (p+q)^2 - 2pq$. Jeśli $(p+q)$ dzieli lewą stronę i $(p+q)^2$, to co musi dzielić?",
+    "Z faktu, że $(p+q) | 2pq$, przeanalizuj osobno przypadki: czy $p+q$ może dzielić $2$, $p$ lub $q$? Wykorzystaj, że $p$ i $q$ są różnymi liczbami pierwszymi większymi od $1$."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "divisibility_arguments",
+    "primality_testing"
+  ],
+  "skills_gained": [
+    "contradiction",
+    "divisibility_arguments"
+  ],
+  "prerequisites": [
+    "2010_etap2_2",
+    "2013_etap3_3"
+  ]
+}

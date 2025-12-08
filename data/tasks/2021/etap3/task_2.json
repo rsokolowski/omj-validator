@@ -1,0 +1,33 @@
+{
+  "number": 2,
+  "title": "Liczby pierwsze z siódemkami",
+  "content": "Wyznacz wszystkie dodatnie liczby całkowite $n$, dla których obie liczby\n$$1\\underbrace{77\\ldots7}_{n \\text{ siódemek}} \\quad \\text{oraz} \\quad 3\\underbrace{77\\ldots7}_{n \\text{ siódemek}}$$\nsą pierwsze.",
+  "pdf": {
+    "tasks": "tasks/2021/etap3/3etap22.pdf",
+    "solutions": "tasks/2021/etap3/3etap22r.pdf",
+    "statistics": "tasks/2021/etap3/3etap22st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zapisz obie liczby w postaci algebraicznej. Co to znaczy $1\\underbrace{77\\ldots7}_{n}$? Jak wyrazić taką liczbę za pomocą potęg liczby 10?",
+    "Sprawdź małe przypadki: dla $n=1, 2, 3$ oblicz obie liczby i zbadaj ich podzielność. Poszukaj wzorca - czy któraś z tych liczb dzieli się przez małą liczbę pierwszą?",
+    "Zbadaj reszty z dzielenia obu liczb przez 3. Jak zachowuje się suma cyfr każdej z tych liczb w zależności od $n$? Kiedy liczba dzieli się przez 3?",
+    "Oblicz sumę cyfr obu liczb dla różnych wartości $n$. Dla jakiego $n$ suma cyfr nie dzieli się przez 3 w obu przypadkach jednocześnie? Sprawdź, czy dla tego $n$ obie liczby są rzeczywiście pierwsze."
+  ],
+  "skills_required": [
+    "divisibility_arguments",
+    "primality_testing",
+    "digit_manipulation"
+  ],
+  "skills_gained": [
+    "primality_testing",
+    "divisibility_arguments"
+  ],
+  "prerequisites": [
+    "2009_etap2_3",
+    "2005_etap2_4"
+  ]
+}

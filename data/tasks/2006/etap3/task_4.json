@@ -1,0 +1,32 @@
+{
+  "number": 4,
+  "title": "Podzielność $n^4 - 1$ przez 9",
+  "content": "Ile jest takich liczb $n$ należących do zbioru $\\{1, 2, \\ldots, 2007\\}$, dla których liczba $n^4 - 1$ jest podzielna przez $9$? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2006/etap3/omg02_3.pdf",
+    "solutions": "tasks/2006/etap3/omg02_3r.pdf"
+  },
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zauważ, że $n^4 - 1$ można rozłożyć na czynniki. Jakie znane wzory skróconego mnożenia mogą tu pomóc?",
+    "Zbadaj reszty z dzielenia $n$ przez $3$. Ile różnych reszt może dawać liczba całkowita przy dzieleniu przez $3$?",
+    "Sprawdź, dla jakich reszt $n$ modulo $3$ wyrażenie $n^4 - 1$ jest podzielne przez $9$. Rozważ każdy przypadek osobno.",
+    "Rozłóż $n^4 - 1 = (n^2-1)(n^2+1) = (n-1)(n+1)(n^2+1)$. Dla $n \\equiv 0 \\pmod{3}$ zbadaj podzielność każdego czynnika przez $3$."
+  ],
+  "skills_required": [
+    "modular_arithmetic",
+    "algebraic_identities",
+    "divisibility_arguments"
+  ],
+  "skills_gained": [
+    "modular_arithmetic",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2012_etap1_1",
+    "2008_etap1_4"
+  ]
+}

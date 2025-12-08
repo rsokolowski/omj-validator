@@ -1,0 +1,34 @@
+{
+  "number": 5,
+  "title": "Liczba $\\underbrace{33\\ldots3}_{m}\\underbrace{66\\ldots6}_{n}$ jako kwadrat",
+  "content": "Wyznacz wszystkie pary dodatnich liczb całkowitych $m$, $n$ o tej własności, że liczba $(m + n)$-cyfrowa\n$$\\underbrace{33\\ldots3}_{m}\\underbrace{66\\ldots6}_{n}$$\njest kwadratem liczby całkowitej.",
+  "pdf": {
+    "tasks": "tasks/2022/etap3/18omj-3etap.pdf",
+    "solutions": "tasks/2022/etap3/18omj-3r.pdf",
+    "statistics": "tasks/2022/etap3/18omj-3st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Jak zapisać liczbę $\\underbrace{33\\ldots3}_{m}$ algebraicznie? Przypomnij sobie, że $\\underbrace{11\\ldots1}_{k} = \\frac{10^k - 1}{9}$. Spróbuj wyrazić daną liczbę przez potęgi 10.",
+    "Zapisz całą liczbę jako wyrażenie algebraiczne i spróbuj je uprościć. Zwróć uwagę na wspólny czynnik, który można wyciągnąć przed nawias.",
+    "Po uproszczeniu powinieneś otrzymać wyrażenie postaci $\\frac{a \\cdot (10^n \\cdot b + c)}{d}$ gdzie $a, b, c, d$ to małe liczby. Zastanów się, jakie warunki musi spełniać wyrażenie w nawiasie, żeby cała liczba była kwadratem.",
+    "Zbadaj wyrażenie $10^n \\cdot k + l$ dla małych wartości $n$. Kiedy takie wyrażenie może być kwadratem? Sprawdź przypadki $n = 1, 2, 3$ i poszukaj regularności lub argumentu, dlaczego rozwiązań jest skończenie wiele."
+  ],
+  "skills_required": [
+    "digit_manipulation",
+    "divisibility_arguments",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "digit_manipulation",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2008_etap3_1",
+    "2012_etap1_3",
+    "2022_etap2_3"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "number": 5,
+  "title": "Wielościan wypukły",
+  "content": "Czy istnieje taki wielościan wypukły, który ma nieparzystą liczbę ścian i w którego każdym wierzchołku schodzi się parzysta liczba krawędzi? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2012/etap3/3etap13.pdf",
+    "solutions": "tasks/2012/etap3/3etap13r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "geometria"
+  ],
+  "hints": [
+    "Przypomnij sobie wzór Eulera dla wielościanów: $W - K + S = 2$, gdzie $W$ to liczba wierzchołków, $K$ krawędzi, $S$ ścian. Zastanów się też, jak policzyć sumę stopni wszystkich wierzchołków (stopień wierzchołka to liczba krawędzi w nim schodzących).",
+    "Użyj techniki podwójnego zliczania. Każda krawędź łączy dokładnie dwa wierzchołki. Co to oznacza dla sumy stopni wszystkich wierzchołków? Jaką parzystość ma ta suma, jeśli każdy stopień jest parzysty?",
+    "Zbadaj parzystość liczby krawędzi $K$ w dwóch przypadkach. Z jednej strony - co wynika z sumy stopni wierzchołków? Z drugiej strony - każda krawędź należy do dokładnie dwóch ścian. Co to oznacza dla sumy liczby krawędzi wszystkich ścian?",
+    "Policz sumę krawędzi po wszystkich ścianach na dwa sposoby i porównaj parzystości. Pamiętaj, że każda ściana ma co najmniej 3 krawędzie. Jeśli ścian jest nieparzyście wiele, co możesz powiedzieć o parzystości tej sumy?"
+  ],
+  "skills_required": [
+    "polyhedra",
+    "double_counting",
+    "parity_arguments"
+  ],
+  "skills_gained": [
+    "double_counting",
+    "parity_arguments"
+  ],
+  "prerequisites": [
+    "2008_etap3_5"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "number": 2,
+  "title": "Trójkąt i okrąg",
+  "content": "Dany jest trójkąt $ABC$, w którym $AC = 8$ oraz $BC = 10$. Punkt $M$ jest środkiem boku $AB$. Okrąg o środku w punkcie $M$ ma promień długości $1$. Wykaż, że na tym okręgu istnieje dokładnie jeden taki punkt $P$, dla którego $\\angle APC = 90^\\circ$.",
+  "pdf": {
+    "tasks": "tasks/2013/etap3/3etap14.pdf",
+    "solutions": "tasks/2013/etap3/3etap14r.pdf",
+    "statistics": "tasks/2013/etap3/final_2013-3.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Przypomnij sobie: z jakich punktów płaszczyzny dany odcinek widać pod kątem prostym? Pomyśl o twierdzeniu Talesa i kącie wpisanym opartym na średnicy.",
+    "Zadanie sprowadza się do zbadania przecięcia dwóch okręgów. Skonstruuj okrąg wszystkich punktów, z których odcinek $AC$ widać pod kątem $90°$. Jaki jest jego środek i promień?",
+    "Oblicz odległość między środkami obu okręgów. Wykorzystaj fakt, że $M$ jest środkiem $AB$ oraz znajdź położenie środka okręgu o średnicy $AC$. Rozważ trójkąt $ABC$ i jego środkowe.",
+    "Aby pokazać, że okręgi mają dokładnie jeden punkt wspólny, porównaj odległość ich środków z sumą i różnicą promieni. Użyj twierdzenia Pitagorasa do obliczenia potrzebnych odległości w trójkącie."
+  ],
+  "skills_required": [
+    "circle_theorems",
+    "pythagorean_theorem",
+    "coordinate_geometry"
+  ],
+  "skills_gained": [
+    "circle_theorems",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2008_etap3_3",
+    "2010_etap1_6"
+  ]
+}

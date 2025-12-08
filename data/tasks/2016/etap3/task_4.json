@@ -1,0 +1,34 @@
+{
+  "number": 4,
+  "title": "Sześciokąt wypukły i symetralne",
+  "content": "W sześciokącie wypukłym $ABCDEF$ kąty wewnętrzne przy wierzchołkach $B$, $C$, $E$, $F$ są równe. Ponadto spełniona jest równość $$AB + DE = AF + CD.$$ Wykaż, że prosta $AD$ oraz symetralne odcinków $BC$ i $EF$ mają punkt wspólny.",
+  "pdf": {
+    "tasks": "tasks/2016/etap3/3etap17.pdf",
+    "solutions": "tasks/2016/etap3/3etap17r.pdf",
+    "statistics": "tasks/2016/etap3/3etap17st.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj sześciokąt $ABCDEF$ z zaznaczonymi równymi kątami przy $B$, $C$, $E$, $F$. Co wiesz o punktach leżących na symetralnej odcinka? Każdy taki punkt jest równoodległy od końców tego odcinka.",
+    "Zastanów się, gdzie mogą się przecinać symetralne odcinków $BC$ i $EF$. Oznacz ten punkt przez $P$. Jakie odległości od wierzchołków sześciokąta ma punkt $P$? Wykorzystaj własność symetralnej.",
+    "Skoro $P$ leży na symetralnej $BC$, to $PB = PC$. Podobnie z symetralnej $EF$ wynika $PE = PF$. Spróbuj pokazać, że z warunku na kąty i boki wynika również $PA = PD$. Co to oznacza dla położenia $P$ względem odcinka $AD$?",
+    "Rozważ trójkąty $PAB$, $PCD$, $PDE$, $PAF$. Wykorzystaj równość kątów przy $B$, $C$, $E$, $F$ oraz warunek $AB + DE = AF + CD$, aby pokazać że $PA = PD$. Punkt równoodległy od końców odcinka leży na jego symetralnej, a symetralna $AD$ przechodzi przez..."
+  ],
+  "skills_required": [
+    "perpendicular_bisector",
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "perpendicular_bisector",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2006_etap2_2",
+    "2006_etap3_3",
+    "2012_etap1_2"
+  ]
+}

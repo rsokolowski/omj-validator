@@ -1,0 +1,34 @@
+{
+  "number": 5,
+  "title": "Ostrosłup czworokątny",
+  "content": "Czy istnieje taki ostrosłup czworokątny, którego każda ściana boczna jest trójkątem prostokątnym? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2006/etap3/omg02_3.pdf",
+    "solutions": "tasks/2006/etap3/omg02_3r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Zastanów się, gdzie w każdym trójkącie bocznym może znajdować się kąt prosty. Jakie są możliwości: przy wierzchołku ostrosłupa, przy wierzchołku podstawy, czy może gdzie indziej?",
+    "Rozważ przypadki osobno. Co by oznaczało, gdyby kąt prosty był przy wierzchołku ostrosłupa? A co, gdyby był przy podstawie? Spróbuj narysować rzut ostrosłupa z góry.",
+    "Jeśli kąt prosty jest przy wierzchołku podstawy, to krawędź boczna jest prostopadła do krawędzi podstawy w tym punkcie. Co to oznacza dla położenia wierzchołka ostrosłupa względem podstawy?",
+    "Zbadaj, gdzie musi znajdować się rzut wierzchołka ostrosłupa na płaszczyznę podstawy, jeśli wszystkie kąty proste są przy wierzchołkach podstawy. Czy taki punkt może istnieć dla czworokąta?"
+  ],
+  "skills_required": [
+    "spatial_3d",
+    "case_analysis",
+    "pythagorean_theorem"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "constructive_proof"
+  ],
+  "prerequisites": [
+    "2006_etap1_6",
+    "2005_etap3_4",
+    "2009_etap2_5"
+  ]
+}

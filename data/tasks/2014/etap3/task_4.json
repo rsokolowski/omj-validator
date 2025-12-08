@@ -1,0 +1,35 @@
+{
+  "number": 4,
+  "title": "Kwadraty liczb naturalnych",
+  "content": "Dane są takie dodatnie liczby całkowite $a$ i $b$, że liczby\n$$a^2 + 2b + 1 \\quad \\text{oraz} \\quad b^2 + 2a + 1$$\nsą kwadratami pewnych liczb naturalnych. Wykaż, że $a = b$.",
+  "pdf": {
+    "tasks": "tasks/2014/etap3/3etap15.pdf",
+    "solutions": "tasks/2014/etap3/3etap15r.pdf",
+    "statistics": "tasks/2014/etap3/final_2015_staty.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zauważ, że $a^2 + 2b + 1$ jest bliskie $(a+1)^2 = a^2 + 2a + 1$. Jaka jest różnica między tymi wyrażeniami? Podobnie zbadaj drugie wyrażenie.",
+    "Jeśli $a^2 + 2b + 1$ jest kwadratem, to musi być równe $(a+k)^2$ dla pewnego $k \\geq 1$. Między jakimi kolejnymi kwadratami może leżeć to wyrażenie?",
+    "Rozważ przypadek $a > b$. Wtedy $a^2 + 2b + 1 < (a+1)^2$. Co to oznacza dla możliwości bycia kwadratem? A co z drugim wyrażeniem?",
+    "Pokaż, że jeśli $a \\neq b$, to jedno z wyrażeń leży ściśle między dwoma kolejnymi kwadratami (więc nie może być kwadratem). Wykorzystaj fakt, że $(n+1)^2 - n^2 = 2n + 1$."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "inequality_manipulation",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "contradiction",
+    "inequality_manipulation"
+  ],
+  "prerequisites": [
+    "2013_etap3_3",
+    "2020_etap2_3",
+    "2010_etap3_4"
+  ]
+}

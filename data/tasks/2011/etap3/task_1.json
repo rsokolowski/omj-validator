@@ -1,0 +1,34 @@
+{
+  "number": 1,
+  "title": "Liczby wymierne z $\\sqrt{3}$",
+  "content": "Wyznacz wszystkie takie liczby rzeczywiste $x$, dla których liczby $x + \\sqrt{3}$ oraz $x^2 + \\sqrt{3}$ są wymierne.",
+  "pdf": {
+    "tasks": "tasks/2011/etap3/3etap12.pdf",
+    "solutions": "tasks/2011/etap3/3etap12r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Jeśli $x + \\sqrt{3}$ jest wymierne, to co możesz powiedzieć o $x$? Rozważ, czy $x$ może zawierać $\\sqrt{3}$ w jakiejś postaci.",
+    "Zapisz $x$ w postaci $a + b\\sqrt{3}$, gdzie $a$ i $b$ są wymierne. Podstaw tę postać do obu warunków i zbadaj, kiedy wyniki są wymierne.",
+    "Liczba wymierna nie może zawierać niezerowej części przy $\\sqrt{3}$. Jakie warunki na $a$ i $b$ wynikają z tego, że $x + \\sqrt{3}$ i $x^2 + \\sqrt{3}$ są wymierne?",
+    "Z pierwszego warunku dostaniesz równanie na $b$. Oblicz $(a + b\\sqrt{3})^2 + \\sqrt{3}$ i zbadaj, przy jakim warunku współczynnik przy $\\sqrt{3}$ znika."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "nested_radicals",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "nested_radicals",
+    "algebraic_identities"
+  ],
+  "prerequisites": [
+    "2009_etap1_7",
+    "2011_etap1_6",
+    "2005_etap1_1"
+  ]
+}

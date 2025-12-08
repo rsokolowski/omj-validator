@@ -1,0 +1,32 @@
+{
+  "number": 1,
+  "title": "Podzielność przez $m+n$",
+  "content": "Dane są takie dodatnie liczby całkowite $m$ i $n$, że liczba $m + n^2$ jest podzielna przez $m + n$. Wykaż, że liczba $m + n^3$ jest podzielna przez $m + n$.",
+  "pdf": {
+    "tasks": "tasks/2015/etap3/3etap16.pdf",
+    "solutions": "tasks/2015/etap3/3etap16r.pdf",
+    "statistics": "tasks/2015/etap3/3etap16st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zapisz warunek podzielności formalnie: $(m+n) | (m + n^2)$ oznacza, że istnieje liczba całkowita $k$ taka, że $m + n^2 = k(m+n)$. Co możesz powiedzieć o różnicy $n^2 - n$?",
+    "Spróbuj wyrazić $m + n^3$ przez wyrażenia, o których wiesz, że są podzielne przez $m + n$. Pamiętaj, że jeśli $(m+n) | a$ i $(m+n) | b$, to $(m+n) | (a \\pm b)$ oraz $(m+n) | (ka)$ dla dowolnej liczby całkowitej $k$.",
+    "Zauważ, że $n^3 - n^2 = n^2(n-1)$. Zbadaj, jak powiązać $m + n^3$ z wyrażeniem $m + n^2$, które jest podzielne przez $m + n$. Rozważ też, czy $(m+n) | n(m+n)$.",
+    "Zapisz $m + n^3 = (m + n^2) + n^2(n-1)$. Pierwszy składnik jest podzielny przez $m+n$ z założenia. Dla drugiego składnika wykorzystaj fakt, że skoro $(m+n) | (m+n^2)$ i $(m+n) | (m+n)$, to $(m+n) | (n^2 - n)$."
+  ],
+  "skills_required": [
+    "divisibility_arguments",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "divisibility_arguments"
+  ],
+  "prerequisites": [
+    "2010_etap2_2",
+    "2020_etap2_3"
+  ]
+}

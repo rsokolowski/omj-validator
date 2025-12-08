@@ -1,0 +1,34 @@
+{
+  "number": 3,
+  "title": "Kąt $\\angle DEC$ w trójkącie",
+  "content": "Dany jest trójkąt $ABC$, w którym $AC < BC$ oraz $\\angle ACB = 60°$. Punkt $D$, różny od $A$, leży na odcinku $AC$, przy czym $AB = BD$, a punkt $E$, różny od $B$, leży na prostej $BC$, przy czym $AB = AE$. Wykaż, że $\\angle DEC = 30°$.",
+  "pdf": {
+    "tasks": "tasks/2022/etap3/18omj-3etap.pdf",
+    "solutions": "tasks/2022/etap3/18omj-3r.pdf",
+    "statistics": "tasks/2022/etap3/18omj-3st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek. Oznacz kąty w trójkącie $ABC$: jeśli $\\angle ACB = 60°$, to $\\angle CAB + \\angle ABC = 120°$. Gdzie może leżeć punkt $E$ na prostej $BC$?",
+    "Skorzystaj z własności trójkątów równoramiennych. W trójkącie $ABD$ mamy $AB = BD$ - jakie kąty są równe? W trójkącie $ABE$ mamy $AB = AE$ - jakie kąty są równe?",
+    "Oznacz $\\angle CAB = \\alpha$ i $\\angle ABC = \\beta$ (gdzie $\\alpha + \\beta = 120°$). Wyraź kąty przy podstawach obu trójkątów równoramiennych przez $\\alpha$ i $\\beta$. Zastanów się, jak wyznaczyć $\\angle AEB$.",
+    "Znajdź kąt $\\angle AEC$ (jako kąt przyległy lub ten sam co $\\angle AEB$, zależnie od położenia $E$). Następnie w trójkącie $AEC$ wyznacz $\\angle EAC$ i oblicz $\\angle AEC$. Kąt $\\angle DEC$ jest częścią tego kąta."
+  ],
+  "skills_required": [
+    "angle_chasing",
+    "isosceles_triangle",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "prerequisites": [
+    "2012_etap1_2",
+    "2019_etap1_2",
+    "2011_etap1_2"
+  ]
+}

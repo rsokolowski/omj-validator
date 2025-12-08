@@ -1,0 +1,34 @@
+{
+  "number": 3,
+  "title": "Kąt w równoległoboku",
+  "content": "Dany jest równoległobok $ABCD$, w którym $\\measuredangle ABD = 90^\\circ$ oraz $\\measuredangle CBD = 45^\\circ$. Punkt $E$ leży na odcinku $AD$, przy czym $BC = CE$. Wyznacz miarę kąta $BCE$.",
+  "pdf": {
+    "tasks": "tasks/2021/etap3/3etap22.pdf",
+    "solutions": "tasks/2021/etap3/3etap22r.pdf",
+    "statistics": "tasks/2021/etap3/3etap22st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek równoległoboku ABCD i zaznacz wszystkie dane kąty. Zauważ, że kąt ABC = 90° + 45° = 135°. Jakie są pozostałe kąty równoległoboku?",
+    "Skoro BC = CE, to trójkąt BCE jest równoramienny. Które kąty w tym trójkącie są równe? Spróbuj wyrazić kąt CBE przez znane już kąty.",
+    "Wykorzystaj własność równoległoboku: AB || CD, więc kąty ABD i BDC są naprzemianległe. Znajdź kąt BDC, a potem zastanów się, jak położony jest punkt E względem przekątnej BD.",
+    "W trójkącie równoramiennym BCE znasz już kąt przy wierzchołku B (wyrażony przez kąty równoległoboku). Użyj faktu, że suma kątów w trójkącie wynosi 180°, aby wyznaczyć kąt BCE."
+  ],
+  "skills_required": [
+    "angle_chasing",
+    "trapezoid_parallelogram",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "prerequisites": [
+    "2012_etap1_2",
+    "2009_etap2_2",
+    "2018_etap3_2"
+  ]
+}

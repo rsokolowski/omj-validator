@@ -1,0 +1,34 @@
+{
+  "number": 2,
+  "title": "Trapez z równością kątów",
+  "content": "Dany jest trapez $ABCD$ o podstawach $AB$ i $CD$, w którym $AC = BC$. Punkt $M$ jest środkiem ramienia $AD$. Wykaż, że $\\angle ACM = \\angle CBD$.",
+  "pdf": {
+    "tasks": "tasks/2018/etap3/3etap19.pdf",
+    "solutions": "tasks/2018/etap3/3etap19r.pdf",
+    "statistics": "tasks/2018/etap3/3etap19st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek trapezu z zaznaczonym punktem $M$. Co wiesz o trójkącie $ABC$, skoro $AC = BC$? Jakie kąty są równe?",
+    "Poszukaj konstrukcji pomocniczej. Spróbuj znaleźć punkt, który pomoże powiązać kąt $\\angle ACM$ z kątem $\\angle CBD$. Czy symetria może pomóc?",
+    "Rozważ środek $N$ odcinka $BC$. Jakie własności ma odcinek $MN$? Sprawdź, czy jest równoległy do któregoś boku trapezu.",
+    "Wykorzystaj twierdzenie o odcinku łączącym środki boków trójkąta. Jeśli $MN \\parallel DC$, to jak możesz powiązać kąty $\\angle ACM$ i $\\angle NCA$? A następnie $\\angle NCA$ z $\\angle CBD$?"
+  ],
+  "skills_required": [
+    "angle_chasing",
+    "isosceles_triangle",
+    "trapezoid_parallelogram"
+  ],
+  "skills_gained": [
+    "angle_chasing",
+    "trapezoid_parallelogram"
+  ],
+  "prerequisites": [
+    "2012_etap1_2",
+    "2009_etap2_2",
+    "2017_etap3_2"
+  ]
+}

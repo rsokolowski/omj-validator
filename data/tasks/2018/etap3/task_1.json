@@ -1,0 +1,35 @@
+{
+  "number": 1,
+  "title": "Ułamki $\\frac{a}{b}$ i $\\frac{a-1}{b-1}$",
+  "content": "Liczby całkowite $a$ i $b$ są większe od $1$. Udowodnij, że jeżeli jedna z liczb $\\frac{a}{b}$, $\\frac{a-1}{b-1}$ jest o $1$ większa od drugiej, to obie są liczbami całkowitymi.",
+  "pdf": {
+    "tasks": "tasks/2018/etap3/3etap19.pdf",
+    "solutions": "tasks/2018/etap3/3etap19r.pdf",
+    "statistics": "tasks/2018/etap3/3etap19st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Rozważ dwa przypadki: kiedy $\\frac{a}{b}$ jest większe od $\\frac{a-1}{b-1}$ o $1$, a kiedy odwrotnie. Zapisz każdy przypadek jako równanie.",
+    "Sprowadź ułamki do wspólnego mianownika i uprość otrzymane równanie. Jakie wyrażenie algebraiczne otrzymasz po przekształceniach?",
+    "Po uproszczeniu powinieneś otrzymać zależność między $a$, $b$ i ich różnicą. Zastanów się, jakie wartości może przyjmować wyrażenie $a - b$.",
+    "Zbadaj warunki podzielności: kiedy $b$ dzieli $a$? Wykorzystaj fakt, że $|a - b|$ musi dzielić $b(b-1)$, a jednocześnie być niewielką liczbą."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "divisibility_arguments",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "divisibility_arguments",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2020_etap2_3",
+    "2013_etap3_3",
+    "2016_etap2_3"
+  ]
+}

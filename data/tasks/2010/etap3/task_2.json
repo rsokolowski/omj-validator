@@ -1,0 +1,34 @@
+{
+  "number": 2,
+  "title": "Trójkąty równoramienne w 99-kącie foremnym",
+  "content": "Dany jest 99-kąt foremny. Wyznacz liczbę trójkątów równoramiennych, których wierzchołki pokrywają się z wierzchołkami danego wielokąta.",
+  "pdf": {
+    "tasks": "tasks/2010/etap3/3etap11.pdf",
+    "solutions": "tasks/2010/etap3/3etap11r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "geometria"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza 'równoramienny' w kontekście wielokąta foremnego. Jakie odległości między wierzchołkami wielokąta foremnego są równe? Narysuj mały przykład, np. 9-kąt foremny.",
+    "Spróbuj ustalić jeden wierzchołek jako 'główny' (wierzchołek przy którym ramiona się spotykają) i policz, ile trójkątów równoramiennych można zbudować z tym wierzchołkiem. Jak wykorzystać symetrię wielokąta?",
+    "Zauważ, że każdy trójkąt równoramienny ma oś symetrii przechodzącą przez wierzchołek główny i środek podstawy. W 99-kącie dla ustalonego wierzchołka głównego, podstawa musi być symetryczna względem tego wierzchołka. Ile jest możliwych długości podstawy?",
+    "Dla każdego z 99 wierzchołków jako wierzchołka głównego, policz ile jest symetrycznych par pozostałych wierzchołków tworzących podstawę. Uważaj na podwójne zliczenie - kiedy ten sam trójkąt może być policzony wielokrotnie?"
+  ],
+  "skills_required": [
+    "counting_techniques",
+    "isosceles_triangle",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "counting_techniques",
+    "double_counting"
+  ],
+  "prerequisites": [
+    "2013_etap3_4",
+    "2006_etap1_7",
+    "2008_etap1_6"
+  ]
+}

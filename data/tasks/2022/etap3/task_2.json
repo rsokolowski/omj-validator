@@ -1,0 +1,33 @@
+{
+  "number": 2,
+  "title": "Suma $a + b$ a potęga dwójki",
+  "content": "Dane są liczby całkowite $a$ i $b$, przy czym $a > b > 1$ oraz liczba $b$ jest największym z tych dzielników liczby $a$, które są różne od $a$. Udowodnij, że liczba $a + b$ nie jest potęgą liczby $2$ o wykładniku całkowitym.",
+  "pdf": {
+    "tasks": "tasks/2022/etap3/18omj-3etap.pdf",
+    "solutions": "tasks/2022/etap3/18omj-3r.pdf",
+    "statistics": "tasks/2022/etap3/18omj-3st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, jak wygląda największy dzielnik liczby $a$ różny od $a$. Jaką postać musi mieć liczba $a$, żeby jej największy właściwy dzielnik był równy $b$?",
+    "Rozważ dwa przypadki: gdy $a$ jest potęgą liczby pierwszej i gdy $a$ ma co najmniej dwa różne dzielniki pierwsze. Jak wtedy wygląda największy właściwy dzielnik?",
+    "Zauważ, że jeśli $a = p^k$ dla liczby pierwszej $p$, to $b = p^{k-1}$ i suma $a + b = p^{k-1}(p+1)$. Jeśli zaś $a$ ma dzielnik pierwszy $p$ i inny dzielnik $q > p$, to $b = \\frac{a}{p}$.",
+    "Przeanalizuj, czy suma $a + b$ może być potęgą dwójki w każdym przypadku. Dla $a = p^k$ zbadaj czynnik $p + 1$. Dla $a$ z wieloma dzielnikami pierwszymi zbadaj, jakie czynniki ma $a + b = a(1 + \\frac{1}{p})$."
+  ],
+  "skills_required": [
+    "prime_factorization",
+    "divisibility_arguments",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "prime_factorization",
+    "divisibility_arguments"
+  ],
+  "prerequisites": [
+    "2010_etap2_2",
+    "2011_etap1_4"
+  ]
+}

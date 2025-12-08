@@ -1,0 +1,32 @@
+{
+  "number": 3,
+  "title": "Kolorowanie odcinków w przestrzeni",
+  "content": "W przestrzeni danych jest takich $n$ punktów ($n \\geq 4$), że żadne cztery nie leżą na jednej płaszczyźnie. Każde dwa z tych punktów połączono odcinkiem niebieskim lub czerwonym. Udowodnij, że można tak wybrać jeden z tych kolorów, aby każde dwa punkty były połączone odcinkiem lub łamaną wybranego koloru.",
+  "pdf": {
+    "tasks": "tasks/2005/etap3/omg01_3.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Wyobraź sobie punkty jako wierzchołki grafu, a kolorowe odcinki jako krawędzie. Co oznacza, że dwa punkty są 'połączone odcinkiem lub łamaną' tego samego koloru? Jak to się ma do pojęcia spójności grafu?",
+    "Zastosuj dowód nie wprost: załóż, że ani niebieski, ani czerwony kolor nie spełnia warunku. Co to oznacza dla obu kolorów? Każdy z nich musi mieć 'dziurę' w połączeniach.",
+    "Jeśli graf niebieski nie jest spójny, istnieją punkty $A$ i $B$, które nie są połączone żadną niebieską drogą. Jakiego koloru musi być odcinek $AB$? A co z innymi punktami - jak są połączone z $A$ i z $B$?",
+    "Rozważ dowolny punkt $C$ różny od $A$ i $B$. Odcinki $AC$ i $BC$ muszą być czerwone (dlaczego?). Powtórz to rozumowanie dla wszystkich punktów i zastanów się, co to mówi o grafie czerwonym."
+  ],
+  "skills_required": [
+    "graph_theory",
+    "contradiction",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "graph_theory",
+    "contradiction"
+  ],
+  "prerequisites": [
+    "2006_etap2_3",
+    "2012_etap3_2"
+  ]
+}

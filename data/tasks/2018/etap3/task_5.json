@@ -1,0 +1,35 @@
+{
+  "number": 5,
+  "title": "Tablica $5 \\times 5$",
+  "content": "W każde pole tablicy o wymiarach $5 \\times 5$ wpisano jedną z liczb $-1$, $0$ lub $1$. Okazało się, że w każdym kwadracie $2 \\times 2$ złożonym z pól tablicy suma pewnych trzech spośród czterech wpisanych liczb jest równa zero. Jaka jest największa możliwa suma wszystkich liczb wpisanych w pola tablicy? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2018/etap3/3etap19.pdf",
+    "solutions": "tasks/2018/etap3/3etap19r.pdf",
+    "statistics": "tasks/2018/etap3/3etap19st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Rozważ mały przykład: jak może wyglądać jeden kwadrat $2 \\times 2$, w którym suma pewnych trzech liczb wynosi zero? Jakie kombinacje trzech liczb z zestawu $\\{-1, 0, 1\\}$ dają sumę zero?",
+    "Zastanów się, jakie ograniczenia nakładają na siebie sąsiednie kwadraty $2 \\times 2$. Czy da się wypełnić całą tablicę samymi jedynkami? Poszukaj górnego ograniczenia na sumę wszystkich pól.",
+    "Zbadaj, co dzieje się w wierszu lub kolumnie tablicy. Jeśli w kwadracie $2 \\times 2$ trzy liczby sumują się do zera, to co można powiedzieć o czwartej liczbie? Ile może być co najwyżej jedynek w jednym wierszu?",
+    "Spróbuj skonstruować wypełnienie tablicy z jak największą liczbą jedynek, spełniające warunek zadania. Rozważ układ, w którym jedynki tworzą regularny wzór (np. szachownicowy lub paskowy)."
+  ],
+  "skills_required": [
+    "case_analysis",
+    "constructive_proof",
+    "extremal_principle"
+  ],
+  "skills_gained": [
+    "invariants",
+    "constructive_proof"
+  ],
+  "prerequisites": [
+    "2016_etap1_3",
+    "2007_etap2_2",
+    "2006_etap3_2"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "number": 2,
+  "title": "Przyjęcie 99 osób",
+  "content": "Na przyjęciu spotkało się $99$ osób. Wiadomo, że wśród każdych trzech osób można wskazać taką, która zna dwie pozostałe osoby z tej trójki. Wykaż, że pewna osoba zna wszystkie inne osoby obecne na przyjęciu.\n\n*Uwaga.* Przyjmujemy, że jeśli osoba $A$ zna osobę $B$, to osoba $B$ zna osobę $A$.",
+  "pdf": {
+    "tasks": "tasks/2012/etap3/3etap13.pdf",
+    "solutions": "tasks/2012/etap3/3etap13r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Przyjęcie można przedstawić jako graf, gdzie wierzchołki to osoby, a krawędzie łączą osoby, które się znają. Jak przeformułować warunek zadania w języku grafów?",
+    "Rozważ osobę, która ma najwięcej znajomych na przyjęciu. Co by się stało, gdyby nie znała wszystkich? Użyj zasady ekstremalnej.",
+    "Załóż, że osoba z maksymalną liczbą znajomych nie zna kogoś. Rozpatrz trójkę: ta osoba, ktoś kogo nie zna, oraz dowolny znajomy pierwszej osoby. Jaki wniosek płynie z warunku zadania?",
+    "Jeśli osoba $A$ ma najwięcej znajomych i nie zna osoby $B$, to w trójce $\\{A, B, C\\}$ (gdzie $C$ zna $A$) kto może znać obie pozostałe osoby? Sprawdź, czy to nie prowadzi do sprzeczności z maksymalnością $A$."
+  ],
+  "skills_required": [
+    "extremal_principle",
+    "graph_theory",
+    "contradiction"
+  ],
+  "skills_gained": [
+    "extremal_principle",
+    "graph_theory"
+  ],
+  "prerequisites": [
+    "2009_etap3_2",
+    "2006_etap3_2",
+    "2006_etap2_3"
+  ]
+}

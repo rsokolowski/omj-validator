@@ -1,0 +1,35 @@
+{
+  "number": 5,
+  "title": "Wielościan wypukły",
+  "content": "Czy istnieje wielościan wypukły, którego dokładnie jedna ściana nie jest wielokątem foremnym? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2014/etap3/3etap15.pdf",
+    "solutions": "tasks/2014/etap3/3etap15r.pdf",
+    "statistics": "tasks/2014/etap3/final_2015_staty.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Zastanów się, jakie wielościany znasz, których wszystkie ściany są wielokątami foremnymi. Jakie warunki muszą spełniać kąty przy każdym wierzchołku wielościanu wypukłego?",
+    "Spróbuj wyjść od znanego wielościanu o ścianach foremnych i zastanów się, jak można by go zmodyfikować, aby jedna ściana przestała być foremna, zachowując wypukłość.",
+    "Rozważ wielościany, które mają ściany kwadratowe. Czy można \"rozciągnąć\" taki wielościan wzdłuż jednej osi, zamieniając kwadraty na prostokąty? Ile ścian się wtedy zmieni?",
+    "Poszukaj wielościanu, w którym tylko jedna ściana jest kwadratem (pozostałe to np. trójkąty równoboczne). Jeśli ten kwadrat zamienisz na prostokąt przez lekkie rozciągnięcie, czy reszta wielościanu może pozostać bez zmian?"
+  ],
+  "skills_required": [
+    "spatial_3d",
+    "polyhedra",
+    "constructive_proof"
+  ],
+  "skills_gained": [
+    "polyhedra",
+    "constructive_proof"
+  ],
+  "prerequisites": [
+    "2005_etap2_1",
+    "2008_etap3_5",
+    "2012_etap3_5"
+  ]
+}

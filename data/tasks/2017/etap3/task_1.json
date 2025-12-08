@@ -1,0 +1,34 @@
+{
+  "number": 1,
+  "title": "Kwadraty liczb nieparzystych",
+  "content": "Dodatnie liczby nieparzyste $a$, $b$ mają tę własność, że liczba $a^b b^a$ jest kwadratem liczby naturalnej. Wykaż, że liczba $ab$ jest kwadratem liczby naturalnej.",
+  "pdf": {
+    "tasks": "tasks/2017/etap3/3etap18.pdf",
+    "solutions": "tasks/2017/etap3/3etap18r.pdf",
+    "statistics": "tasks/2017/etap3/3etap18st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza, że liczba jest kwadratem liczby naturalnej w kontekście rozkładu na czynniki pierwsze. Jak wyglądają wykładniki przy liczbach pierwszych w takim rozkładzie?",
+    "Rozłóż $a$ i $b$ na czynniki pierwsze i zapisz $a^b b^a$ w tej postaci. Skoro $a$ i $b$ są nieparzyste, żaden czynnik pierwszy nie jest równy 2.",
+    "Przyjrzyj się wykładnikowi przy dowolnej liczbie pierwszej $p$ w rozkładzie $a^b b^a$. Jeśli $p^\\alpha \\| a$ i $p^\\beta \\| b$ (czyli $p^\\alpha$ dzieli $a$, ale $p^{\\alpha+1}$ nie), to jaki jest wykładnik przy $p$ w iloczynie $a^b b^a$?",
+    "Wykładnik przy $p$ w $a^b b^a$ wynosi $\\alpha b + \\beta a$ i musi być parzysty. Zbadaj, co to implikuje dla $\\alpha$ i $\\beta$, pamiętając że $a$ i $b$ są nieparzyste. Sprawdź, czy $\\alpha + \\beta$ jest parzyste."
+  ],
+  "skills_required": [
+    "prime_factorization",
+    "parity_arguments",
+    "divisibility_arguments"
+  ],
+  "skills_gained": [
+    "prime_factorization",
+    "parity_arguments"
+  ],
+  "prerequisites": [
+    "2012_etap1_7",
+    "2025_etap1_6",
+    "2011_etap1_4"
+  ]
+}

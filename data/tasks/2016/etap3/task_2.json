@@ -1,0 +1,34 @@
+{
+  "number": 2,
+  "title": "Punkt na boku i odcinku w trójkącie",
+  "content": "Punkt $D$ leży na boku $AB$ trójkąta $ABC$. Punkt $E$ leży na odcinku $CD$. Wykaż, że jeżeli suma pól trójkątów $ACE$ i $BDE$ jest równa połowie pola trójkąta $ABC$, to punkt $D$ jest środkiem boku $AB$ lub punkt $E$ jest środkiem odcinka $CD$.",
+  "pdf": {
+    "tasks": "tasks/2016/etap3/3etap17.pdf",
+    "solutions": "tasks/2016/etap3/3etap17r.pdf",
+    "statistics": "tasks/2016/etap3/3etap17st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "algebra"
+  ],
+  "hints": [
+    "Oznacz stosunek, w jakim punkt $D$ dzieli bok $AB$, oraz stosunek, w jakim punkt $E$ dzieli odcinek $CD$. Jak wyrazić pola trójkątów $ACE$, $BDE$ i całego trójkąta $ABC$ przez te stosunki?",
+    "Wykorzystaj fakt, że trójkąty o wspólnej wysokości mają pola proporcjonalne do podstaw. Spróbuj wyrazić wszystkie pola przez pole trójkąta $ABC$ i wprowadzone parametry.",
+    "Zapisz warunek z zadania jako równanie algebraiczne z dwoma parametrami. Przekształć je tak, aby otrzymać iloczyn dwóch czynników równy zeru.",
+    "Jeśli oznaczyłeś $\\frac{AD}{AB} = t$ oraz $\\frac{CE}{CD} = s$, to warunek na pola powinien dać równanie, które po przekształceniu ma postać iloczynu. Kiedy iloczyn jest równy zero?"
+  ],
+  "skills_required": [
+    "area_methods",
+    "algebraic_identities",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "area_methods",
+    "algebraic_identities"
+  ],
+  "prerequisites": [
+    "2007_etap2_3",
+    "2013_etap1_5"
+  ]
+}

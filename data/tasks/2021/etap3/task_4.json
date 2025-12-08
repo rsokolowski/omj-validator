@@ -1,0 +1,35 @@
+{
+  "number": 4,
+  "title": "Trójki liczb całkowitych",
+  "content": "Wyznacz wszystkie trójki $(a, b, c)$ liczb całkowitych różnych od $0$, dla których\n$$(1-a)(1-b)(1-c) = (1+a)(1+b)(1+c).$$",
+  "pdf": {
+    "tasks": "tasks/2021/etap3/3etap22.pdf",
+    "solutions": "tasks/2021/etap3/3etap22r.pdf",
+    "statistics": "tasks/2021/etap3/3etap22st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Rozwiń obie strony równania i uprość. Co możesz powiedzieć o wyrazach, które się pojawią?",
+    "Po rozwinięciu i uproszczeniu otrzymasz równanie liniowe względem pewnych wyrażeń. Spróbuj je pogrupować.",
+    "Zauważ, że po uproszczeniu dostaniesz równanie postaci $ab + bc + ca + 1 = 0$. Jak można je przekształcić?",
+    "Zapisz równanie jako $(a+1)(b+c) = -(bc+1)$. Przeanalizuj możliwe wartości całkowite, pamiętając że żadna zmienna nie może być równa $0$."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "diophantine_equations",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "diophantine_equations",
+    "algebraic_identities"
+  ],
+  "prerequisites": [
+    "2006_etap3_1",
+    "2010_etap3_1",
+    "2007_etap3_2"
+  ]
+}

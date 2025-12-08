@@ -1,0 +1,32 @@
+{
+  "number": 1,
+  "title": "Znak liczb $a$, $b$, $c$",
+  "content": "Dane są takie liczby rzeczywiste $a$, $b$, $c$, że liczby\n$$ab + bc, \\quad bc + ca, \\quad ca + ab$$\nsą dodatnie. Udowodnij, że liczby $a$, $b$, $c$ mają jednakowy znak, tzn. wszystkie są dodatnie lub wszystkie są ujemne.",
+  "pdf": {
+    "tasks": "tasks/2007/etap3/omg03_3.pdf",
+    "solutions": "tasks/2007/etap3/omg03_3r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Zauważ, że każde z wyrażeń $ab + bc$, $bc + ca$, $ca + ab$ można przekształcić, wyciągając wspólny czynnik przed nawias. Co łączy te wyrażenia?",
+    "Spróbuj dodać do siebie wszystkie trzy wyrażenia. Co otrzymasz? Rozważ też, co by się stało, gdyby dwie z liczb $a$, $b$, $c$ miały różne znaki.",
+    "Załóż nie wprost, że nie wszystkie liczby mają ten sam znak. Rozpatrz przypadek, gdy dokładnie jedna z nich ma inny znak niż pozostałe dwie. Jakie znaki będą miały wtedy poszczególne sumy?",
+    "Jeśli np. $a > 0$, $b > 0$, $c < 0$, zbadaj znak wyrażenia $bc + ca = c(a+b)$. Pamiętaj, że wszystkie trzy sumy mają być dodatnie - czy to możliwe?"
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "case_analysis",
+    "contradiction"
+  ],
+  "skills_gained": [
+    "contradiction",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2009_etap2_1",
+    "2006_etap3_1"
+  ]
+}

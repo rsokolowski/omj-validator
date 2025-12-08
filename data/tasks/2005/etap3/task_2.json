@@ -1,0 +1,29 @@
+{
+  "number": 2,
+  "title": "Równoległobok i pola trójkątów",
+  "content": "Dany jest równoległobok $ABCD$. Punkt $E$ należy do boku $AB$, a punkt $F$ do boku $AD$. Prosta $EF$ przecina prostą $CB$ w punkcie $P$, a prostą $CD$ w punkcie $Q$. Wykaż, że pole trójkąta $CEF$ jest równe polu trójkąta $APQ$.",
+  "pdf": {
+    "tasks": "tasks/2005/etap3/omg01_3.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek z równoległobokiem $ABCD$, punktami $E$ na $AB$, $F$ na $AD$, oraz punktami $P$ i $Q$ na przedłużeniach boków. Jakie figury powstają? Czy widzisz jakieś trójkąty o tym samym polu?",
+    "Spróbuj wyrazić pola obu trójkątów przez pola innych figur. Pomyśl o dodawaniu i odejmowaniu pól - może pole większej figury minus pole mniejszej da ci coś użytecznego?",
+    "Zwróć uwagę na trójkąty o wspólnej podstawie lub wspólnej wysokości. Które trójkąty na rysunku mają równe pola? Poszukaj par trójkątów między równoległymi prostymi.",
+    "Rozważ pole trójkąta $EPQ$ i pole równoległoboku $ABCD$. Spróbuj wyrazić pole $CEF$ i pole $APQ$ jako różnicę większych obszarów i porównaj otrzymane wyrażenia."
+  ],
+  "skills_required": [
+    "area_methods",
+    "trapezoid_parallelogram"
+  ],
+  "skills_gained": [
+    "area_methods"
+  ],
+  "prerequisites": [
+    "2008_etap2_3",
+    "2013_etap2_2"
+  ]
+}

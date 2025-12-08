@@ -1,0 +1,33 @@
+{
+  "number": 3,
+  "title": "Środek okręgu wpisanego",
+  "content": "Punkt $I$ jest środkiem okręgu wpisanego w trójkąt $ABC$. Okrąg styczny do prostej $AI$ w punkcie $I$ i przechodzący przez punkt $B$ przecina bok $BC$ w punkcie $P$ (różnym od $B$). Proste $IP$ i $AC$ przecinają się w punkcie $Q$. Wykaż, że punkt $I$ jest środkiem odcinka $PQ$.",
+  "pdf": {
+    "tasks": "tasks/2010/etap3/3etap11.pdf",
+    "solutions": "tasks/2010/etap3/3etap11r.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek zaznaczając wszystkie punkty. Zastanów się, jakie własności ma środek okręgu wpisanego $I$ - przez jakie punkty przechodzą dwusieczne kątów trójkąta?",
+    "Wykorzystaj kluczową własność: gdy okrąg jest styczny do prostej, to kąt między styczną a cięciwą równa się kątowi wpisanemu opartemu na tej cięciwie. Jakie kąty możesz w ten sposób powiązać?",
+    "Zbadaj trójkąt $BIP$ - jakie ma własności? Zwróć uwagę na kąty przy wierzchołkach $B$ i $P$. Czy prosta $AI$ jako styczna do okręgu daje ci informację o kącie $\\angle BIP$?",
+    "Pokaż, że trójkąt $BIP$ jest równoramienny z $IB = IP$. Następnie wykorzystaj własności dwusiecznej i podobieństwo trójkątów, aby wykazać, że $I$ leży w połowie odcinka $PQ$."
+  ],
+  "skills_required": [
+    "circle_theorems",
+    "angle_chasing",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "circle_theorems",
+    "angle_chasing"
+  ],
+  "prerequisites": [
+    "2010_etap1_6",
+    "2012_etap1_2",
+    "2007_etap1_5"
+  ]
+}

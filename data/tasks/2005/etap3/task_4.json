@@ -1,0 +1,30 @@
+{
+  "number": 4,
+  "title": "Czworościan i sfera opisana",
+  "content": "Dany jest taki czworościan, że każdy kąt dwuścienny wyznaczony przez jego sąsiednie ściany jest ostry lub prosty. Wierzchołki tego czworościanu leżą na sferze o środku $S$. Czy punkt $S$ może leżeć na zewnątrz tego wielościanu? Odpowiedź uzasadnij.",
+  "pdf": {
+    "tasks": "tasks/2005/etap3/omg01_3.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Przypomnij sobie, gdzie leży środek okręgu opisanego na trójkącie. Co decyduje o tym, czy jest on wewnątrz, czy na zewnątrz trójkąta? Jak to się uogólnia na czworościan?",
+    "Rozważ szczególne przypadki czworościanów - na przykład czworościan prostokątny (taki, gdzie trzy krawędzie wychodzące z jednego wierzchołka są parami prostopadłe). Zbadaj, jakie są wtedy kąty dwuścienne.",
+    "Środek sfery opisanej na czworościanie leży na przecięciu płaszczyzn symetralnych krawędzi. Dla czworościanu prostokątnego zastanów się, gdzie leży ten punkt względem ścian.",
+    "Rozważ czworościan ABCD, gdzie krawędzie AB, AC, AD są parami prostopadłe. Znajdź środek sfery opisanej i sprawdź, czy spełnia warunki zadania dotyczące kątów dwuściennych."
+  ],
+  "skills_required": [
+    "spatial_3d",
+    "constructive_proof",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "constructive_proof"
+  ],
+  "prerequisites": [
+    "2006_etap1_6"
+  ]
+}

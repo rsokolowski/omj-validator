@@ -1,0 +1,34 @@
+{
+  "number": 1,
+  "title": "Podzielność przez 4",
+  "content": "Liczby całkowite $a$, $b$, $c$ spełniają warunek $a + b + c = bc$. Udowodnij, że liczba $(a + b)(a + c)$ jest podzielna przez $4$.",
+  "pdf": {
+    "tasks": "tasks/2012/etap3/3etap13.pdf",
+    "solutions": "tasks/2012/etap3/3etap13r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Przyjrzyj się warunkom: masz równanie $a + b + c = bc$. Spróbuj wyrazić jedną zmienną przez pozostałe. Co otrzymasz gdy wyznaczysz $a$?",
+    "Przekształć wyrażenie $(a+b)(a+c)$ podstawiając to, co wiesz o $a$. Rozważ analizę parzystości zmiennych $b$ i $c$.",
+    "Zauważ, że parzystość $b$ i $c$ determinuje parzystość całego wyrażenia. Ile przypadków musisz rozważyć? Sprawdź osobno gdy obie są parzyste, obie nieparzyste, lub różnej parzystości.",
+    "Po podstawieniu $a = bc - b - c$ otrzymasz $(a+b)(a+c) = c(b-1) \\cdot b(c-1)$. Zbadaj iloczyn $(b-1) \\cdot b \\cdot (c-1) \\cdot c$ - jaką podzielność ma iloczyn dwóch kolejnych liczb całkowitych?"
+  ],
+  "skills_required": [
+    "divisibility_arguments",
+    "algebraic_identities",
+    "parity_arguments"
+  ],
+  "skills_gained": [
+    "divisibility_arguments",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2009_etap1_3",
+    "2016_etap2_3",
+    "2010_etap2_2"
+  ]
+}

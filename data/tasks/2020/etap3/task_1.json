@@ -1,0 +1,34 @@
+{
+  "number": 1,
+  "title": "Równość ułamków z $a$, $b$ i $n$",
+  "content": "Dodatnie liczby całkowite $a$, $b$ oraz $n$ spełniają równość\n$$\\frac{a}{b} = \\frac{a^2 + n^2}{b^2 + n^2}.$$\nWykaż, że liczba $\\sqrt{ab}$ jest całkowita.",
+  "pdf": {
+    "tasks": "tasks/2020/etap3/3etap21.pdf",
+    "solutions": "tasks/2020/etap3/3etap21r.pdf",
+    "statistics": "tasks/2020/etap3/3etap21st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "algebra",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zacznij od przekształcenia równości ułamków - pomnóż obie strony krzyżowo i uprość. Co otrzymujesz?",
+    "Spróbuj wyrazić powstałe równanie w postaci, która pokazuje związek między $a$, $b$ i $n$. Poszukaj faktoryzacji lub wyrażenia jako iloczyn.",
+    "Zauważ, że po przekształceniach otrzymasz równanie łączące $n^2$ z wyrażeniem zawierającym $a$ i $b$. Spróbuj zapisać je w postaci $n^2 = (\\text{coś})$, gdzie 'coś' zależy od $a$ i $b$.",
+    "Przekształć równanie do postaci $n^2(a - b) = ab(b - a)$, czyli $n^2 = ab$ (przy założeniu $a \\neq b$). Rozważ też przypadek $a = b$ osobno."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "divisibility_arguments",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "algebraic_identities",
+    "diophantine_equations"
+  ],
+  "prerequisites": [
+    "2013_etap3_3",
+    "2010_etap2_2"
+  ]
+}

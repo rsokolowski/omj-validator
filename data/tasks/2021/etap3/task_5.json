@@ -1,0 +1,35 @@
+{
+  "number": 5,
+  "title": "Suma liczb w tabeli",
+  "content": "W tabeli przedstawionej na rysunku Zosia poprzedziła osiem liczb znakami minus, zmieniając je na liczby przeciwne. Okazało się, że w każdym wierszu i w każdej kolumnie znalazły się dokładnie dwie liczby ujemne. Udowodnij, że po tej zmianie suma wszystkich szesnastu liczb w tabeli jest równa $0$.\n\n$$\\begin{array}{|c|c|c|c|}\\hline 1 & 2 & 3 & 4 \\\\ \\hline 5 & 6 & 7 & 8 \\\\ \\hline 9 & 10 & 11 & 12 \\\\ \\hline 13 & 14 & 15 & 16 \\\\ \\hline\\end{array}$$",
+  "pdf": {
+    "tasks": "tasks/2021/etap3/3etap22.pdf",
+    "solutions": "tasks/2021/etap3/3etap22r.pdf",
+    "statistics": "tasks/2021/etap3/3etap22st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "algebra"
+  ],
+  "hints": [
+    "Policz oryginalną sumę wszystkich liczb w tabeli. Jak zmienia się suma, gdy zmieniamy znak jednej liczby $a$ na $-a$?",
+    "Zauważ symetrię tabeli: liczba $k$ i liczba $17-k$ leżą w pozycjach symetrycznych względem środka tabeli. Zbadaj, jak warunek '2 minusy w każdym wierszu i kolumnie' wpływa na parowanie liczb.",
+    "Pokoloruj pola tabeli w szachownicę. Ile minusów musi być na polach białych, a ile na czarnych? Jak to się ma do sum liczb na polach każdego koloru?",
+    "Udowodnij, że jeśli w każdym wierszu i kolumnie są dokładnie 2 minusy, to suma zaznaczonych liczb musi być równa sumie niezaznaczonych. Wykorzystaj fakt, że $k + (17-k) = 17$ dla liczb w pozycjach symetrycznych."
+  ],
+  "skills_required": [
+    "double_counting",
+    "invariants",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "double_counting",
+    "invariants"
+  ],
+  "prerequisites": [
+    "2008_etap2_4",
+    "2007_etap3_4",
+    "2022_etap3_4"
+  ]
+}

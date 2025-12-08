@@ -1,0 +1,32 @@
+{
+  "number": 1,
+  "title": "Liczba 11 razy większa od sumy cyfr",
+  "content": "Wyznacz wszystkie liczby całkowite dodatnie, które są $11$ razy większe od sumy swoich cyfr.",
+  "pdf": {
+    "tasks": "tasks/2008/etap3/omg04_3.pdf",
+    "solutions": "tasks/2008/etap3/omg04_3r.pdf"
+  },
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Oznacz szukaną liczbę przez $n$, a sumę jej cyfr przez $S(n)$. Zapisz warunek z zadania jako równanie. Zastanów się, jak duża może być suma cyfr liczby w porównaniu do samej liczby.",
+    "Zauważ, że suma cyfr liczby $k$-cyfrowej jest co najwyżej $9k$. Wykorzystaj to, by ograniczyć liczbę cyfr szukanej liczby - ile cyfr może mieć liczba spełniająca warunek?",
+    "Skoro $n = 11 \\cdot S(n)$, to $n$ musi dzielić się przez $11$. Ponadto dla liczby dwucyfrowej $n = 10a + b$ mamy $S(n) = a + b$. Podstaw to do równania.",
+    "Dla liczby dwucyfrowej $\\overline{ab}$ dostaniesz równanie $10a + b = 11(a+b)$. Uprość je i zbadaj, jakie wartości cyfr $a$ i $b$ są możliwe (pamiętaj: $a \\geq 1$, $0 \\leq b \\leq 9$)."
+  ],
+  "skills_required": [
+    "digit_manipulation",
+    "divisibility_arguments",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "digit_manipulation",
+    "diophantine_equations"
+  ],
+  "prerequisites": [
+    "2019_etap1_1",
+    "2025_etap1_2"
+  ]
+}

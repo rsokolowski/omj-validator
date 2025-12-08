@@ -1,0 +1,35 @@
+{
+  "number": 4,
+  "title": "Strzałki wskazujące w lewo i prawo",
+  "content": "Dana jest liczba nieparzysta $n \\geq 1$ oraz $n$ strzałek ułożonych kolejno od lewej do prawej, przy czym każda strzałka wskazuje albo w lewo, albo w prawo. Udowodnij, że pewna strzałka jest wskazywana przez dokładnie tyle strzałek, na ile sama wskazuje.\n\n*Uwaga:* Przykładowo dla $n = 5$ i ułożenia →→←←→ kolejne strzałki (od lewej) wskazują odpowiednio na $4$, $3$, $2$, $3$, $0$ strzałek.",
+  "pdf": {
+    "tasks": "tasks/2022/etap3/18omj-3etap.pdf",
+    "solutions": "tasks/2022/etap3/18omj-3r.pdf",
+    "statistics": "tasks/2022/etap3/18omj-3st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Dla każdej strzałki określ dwie liczby: ile strzałek ona wskazuje oraz ile strzałek wskazuje na nią. Spróbuj zapisać te wartości dla małego przypadku, np. $n = 3$ lub $n = 5$.",
+    "Pomyśl o różnicy między liczbą strzałek wskazywanych a liczbą strzałek wskazujących na daną strzałkę. Co się dzieje, gdy przechodzimy od strzałki do strzałki? Rozważ sumę wszystkich tych różnic.",
+    "Zauważ, że suma po wszystkich strzałkach liczby 'wskazuje na' równa się sumie liczby 'jest wskazywana przez'. Zbadaj jak zmienia się różnica tych wartości dla kolejnych strzałek i wykorzystaj fakt, że $n$ jest nieparzyste.",
+    "Dla skrajnych strzałek (pierwszej i ostatniej) różnica ma określony znak. Pokaż, że przechodząc od lewej do prawej, różnica zmienia się o co najwyżej pewną wartość. Skoro $n$ jest nieparzyste, gdzieś różnica musi wynieść zero."
+  ],
+  "skills_required": [
+    "parity_arguments",
+    "double_counting",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "double_counting",
+    "invariants"
+  ],
+  "prerequisites": [
+    "2008_etap2_2",
+    "2007_etap3_4",
+    "2021_etap3_5"
+  ]
+}

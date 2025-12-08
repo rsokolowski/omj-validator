@@ -1,0 +1,34 @@
+{
+  "number": 3,
+  "title": "Czworokąt wypukły i pole trójkątów",
+  "content": "Dany jest czworokąt wypukły $ABCD$, w którym\n$$\\sphericalangle DAB + \\sphericalangle ABC = 90^\\circ.$$\nPunkt $M$ jest środkiem boku $CD$. Znając długości odcinków $AD$ oraz $BC$, które wynoszą odpowiednio $a$ oraz $b$, oblicz wartość wyrażenia $[ABM] - [DAM] - [BCM]$.\n\n*Uwaga.* Symbol $[\\mathcal{F}]$ oznacza pole figury $\\mathcal{F}$.",
+  "pdf": {
+    "tasks": "tasks/2014/etap3/3etap15.pdf",
+    "solutions": "tasks/2014/etap3/3etap15r.pdf",
+    "statistics": "tasks/2014/etap3/final_2015_staty.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Rozpisz pole całego czworokąta $ABCD$ jako sumę pól trójkątów zawierających punkt $M$. Jakie trójkąty możesz wyróżnić? Jak wykorzystać fakt, że $M$ jest środkiem $CD$?",
+    "Skoro $M$ jest środkiem $CD$, to $[DAM] + [BCM]$ można wyrazić przez pola innych trójkątów. Zastanów się, jak pole trójkąta zmienia się, gdy dzielisz jego bok na pół.",
+    "Warunek $\\sphericalangle DAB + \\sphericalangle ABC = 90^\\circ$ jest kluczowy. Rozważ wprowadzenie układu współrzędnych lub przedłużenie boków $AD$ i $BC$ - co się stanie, gdy się przetną?",
+    "Jeśli przedłużysz $AD$ i $BC$ aż do przecięcia w punkcie $P$, to trójkąt $PAB$ będzie prostokątny. Wykorzystaj to, aby wyrazić szukane pola przez $a$ i $b$."
+  ],
+  "skills_required": [
+    "area_methods",
+    "angle_chasing",
+    "coordinate_geometry"
+  ],
+  "skills_gained": [
+    "area_methods",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2009_etap1_2",
+    "2007_etap1_2",
+    "2013_etap1_5"
+  ]
+}

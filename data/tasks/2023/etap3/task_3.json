@@ -1,0 +1,34 @@
+{
+  "number": 3,
+  "title": "Nierówność z iloczynem sum",
+  "content": "Liczby rzeczywiste $a$, $b$, $c$ spełniają warunki $a + b \\neq 0$, $b + c \\neq 0$ oraz $c + a \\neq 0$. Wykaż, że\n$$\\left( \\frac{a^2 c}{a+b} + \\frac{b^2 a}{b+c} + \\frac{c^2 b}{c+a} \\right) \\cdot \\left( \\frac{b^2 c}{a+b} + \\frac{c^2 a}{b+c} + \\frac{a^2 b}{c+a} \\right) \\geqslant 0.$$",
+  "pdf": {
+    "tasks": "tasks/2023/etap3/19omj-3etap.pdf",
+    "solutions": "tasks/2023/etap3/19omj-3r.pdf",
+    "statistics": "tasks/2023/etap3/19omj-3st.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Przyjrzyj się strukturze obu nawiasów - jakie podobieństwa i różnice widzisz między odpowiadającymi sobie ułamkami? Co mają wspólnego mianowniki?",
+    "Iloczyn dwóch liczb jest nieujemny, gdy obie mają ten sam znak lub co najmniej jedna jest zerem. Spróbuj wykazać, że oba nawiasy mają zawsze ten sam znak.",
+    "Wyciągnij przed nawias wspólne czynniki z każdego ułamka. Rozważ grupowanie składników według mianowników i poszukaj faktoryzacji całego wyrażenia.",
+    "Spróbuj pokazać, że każdy nawias można zapisać w postaci iloczynu lub sumy, która pozwoli określić jego znak. Rozważ, czy oba nawiasy mogą być równe lub czy ich iloczyn jest kwadratem pewnego wyrażenia."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "inequality_manipulation",
+    "symmetric_systems"
+  ],
+  "skills_gained": [
+    "inequality_manipulation",
+    "algebraic_identities"
+  ],
+  "prerequisites": [
+    "2018_etap3_3",
+    "2015_etap2_3",
+    "2006_etap3_1"
+  ]
+}

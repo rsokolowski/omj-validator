@@ -1,0 +1,33 @@
+{
+  "number": 3,
+  "title": "Długość odcinka $PM$",
+  "content": "Dany jest trójkąt $ABC$, w którym $AC > BC$. Punkt $P$ jest rzutem prostokątnym punktu $B$ na dwusieczną kąta $ACB$. Punkt $M$ jest środkiem odcinka $AB$. Wiedząc, że\n$$BC = a, \\quad CA = b, \\quad AB = c,$$\noblicz długość odcinka $PM$.",
+  "pdf": {
+    "tasks": "tasks/2007/etap3/omg03_3.pdf",
+    "solutions": "tasks/2007/etap3/omg03_3r.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek z dwusieczną kąta $C$ i zaznacz punkt $P$ jako rzut prostokątny punktu $B$ na tę dwusieczną. Gdzie leży odbicie punktu $B$ względem tej dwusiecznej?",
+    "Skorzystaj z własności symetrii względem dwusiecznej kąta. Jeśli odbijemy punkt $B$ względem dwusiecznej kąta $ACB$, to gdzie trafi ten punkt? Jaką rolę pełni punkt $P$ w tym odbiciu?",
+    "Zauważ, że odbicie punktu $B$ względem dwusiecznej kąta $C$ leży na prostej $CA$ (bo dwusieczna jest osią symetrii między ramionami kąta). Punkt $P$ jest środkiem odcinka łączącego $B$ z jego odbiciem.",
+    "Jeśli $B'$ jest odbiciem $B$ względem dwusiecznej i leży na $CA$, to $CB' = CB = a$. Znajdź położenie $B'$ na półprostej $CA$ i wykorzystaj fakt, że $P$ jest środkiem $BB'$. Jak $PM$ ma się do odcinka $AB'$?"
+  ],
+  "skills_required": [
+    "transformations",
+    "isosceles_triangle",
+    "trapezoid_parallelogram"
+  ],
+  "skills_gained": [
+    "transformations",
+    "area_methods"
+  ],
+  "prerequisites": [
+    "2007_etap1_2",
+    "2006_etap1_2",
+    "2015_etap3_3"
+  ]
+}

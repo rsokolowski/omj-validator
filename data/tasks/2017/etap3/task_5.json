@@ -1,0 +1,33 @@
+{
+  "number": 5,
+  "title": "Trójkąt równoboczny i kąt $60^\\circ$",
+  "content": "Punkt $M$ jest środkiem boku $AB$ trójkąta równobocznego $ABC$. Punkty $D$ i $E$ leżą odpowiednio na odcinkach $AC$ i $BC$, przy czym $\\angle DME = 60^\\circ$. Wykaż, że $AD + BE = DE + \\frac{1}{2}AB$.",
+  "pdf": {
+    "tasks": "tasks/2017/etap3/3etap18.pdf",
+    "solutions": "tasks/2017/etap3/3etap18r.pdf",
+    "statistics": "tasks/2017/etap3/3etap18st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek. Zastanów się, co szczególnego wynika z tego, że trójkąt jest równoboczny i że kąt DME ma dokładnie 60°. Czy ta wartość kąta przypomina Ci coś z trójkąta równobocznego?",
+    "Rozważ użycie przekształcenia geometrycznego - obrotu. Wokół którego punktu i o jaki kąt warto obrócić część figury, aby wykorzystać warunek $\\angle DME = 60°$?",
+    "Wykonaj obrót o 60° wokół punktu M. Gdzie przejdzie punkt D przy takim obrocie? Jakie trójkąty równoboczne możesz wskazać na rysunku po wykonaniu obrotu?",
+    "Po obrocie o 60° wokół M, punkt D przechodzi na pewien punkt D'. Zbadaj trójkąt MDD' - jaki to trójkąt? Następnie sprawdź, gdzie leży obraz pewnych punktów i jak długości odcinków po obrocie pozwalają wyrazić DE w terminach innych odcinków."
+  ],
+  "skills_required": [
+    "transformations",
+    "isosceles_triangle",
+    "angle_chasing"
+  ],
+  "skills_gained": [
+    "transformations",
+    "constructive_proof"
+  ],
+  "prerequisites": [
+    "2015_etap3_3",
+    "2021_etap1_5"
+  ]
+}

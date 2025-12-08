@@ -1,0 +1,32 @@
+{
+  "number": 1,
+  "title": "Układ równań z iloczynami",
+  "content": "Wyznacz wszystkie trójki $(a, b, c)$ liczb rzeczywistych spełniające układ równań:\n$$\\begin{cases} ab = a + b \\\\ bc = b + c \\\\ ca = c + a \\end{cases}$$",
+  "pdf": {
+    "tasks": "tasks/2006/etap3/omg02_3.pdf",
+    "solutions": "tasks/2006/etap3/omg02_3r.pdf"
+  },
+  "difficulty": 3,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Przyjrzyj się strukturze każdego równania. Co łączy lewą i prawą stronę? Spróbuj przenieść wszystkie wyrazy na jedną stronę i wyłączyć wspólny czynnik.",
+    "Każde równanie można przekształcić do postaci z nawiasem. Pomyśl o wyciągnięciu wspólnego czynnika - co otrzymasz dla równania $ab = a + b$?",
+    "Po przekształceniu każdego równania do postaci $(a-1)(b-1) = 1$ i podobnych, zastanów się jakie wartości mogą przyjmować wyrażenia $(a-1)$, $(b-1)$, $(c-1)$. Co się dzieje gdy któraś z tych wartości wynosi 0?",
+    "Rozważ dwa przypadki: gdy $a = b = c$ oraz gdy zmienne są różne. W pierwszym przypadku rozwiąż jedno równanie. W drugim przemnóż przez siebie trzy przekształcone równania i wykorzystaj symetrię."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "symmetric_systems",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "symmetric_systems",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2005_etap1_4",
+    "2010_etap1_1"
+  ]
+}

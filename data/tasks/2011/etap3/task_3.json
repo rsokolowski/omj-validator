@@ -1,0 +1,31 @@
+{
+  "number": 3,
+  "title": "Największy wspólny dzielnik",
+  "content": "Dane są takie dodatnie liczby całkowite $a$, $b$, że iloczyn $ab$ jest podzielny przez sumę $a + b$. Niech $d$ będzie największym wspólnym dzielnikiem liczb $a$ i $b$. Udowodnij, że $$d \\geqslant \\sqrt{a+b}.$$",
+  "pdf": {
+    "tasks": "tasks/2011/etap3/3etap12.pdf",
+    "solutions": "tasks/2011/etap3/3etap12r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Spróbuj zapisać liczby $a$ i $b$ za pomocą ich największego wspólnego dzielnika $d$. Jeśli $d = \\text{NWD}(a, b)$, to $a = d \\cdot m$ i $b = d \\cdot n$ dla pewnych liczb całkowitych $m$, $n$. Jaką własność mają $m$ i $n$?",
+    "Podstaw $a = dm$ i $b = dn$ (gdzie $\\text{NWD}(m, n) = 1$) do warunku podzielności $ab$ przez $a + b$. Przekształć wyrażenie i zastanów się, co wynika z tego, że $(a+b) \\mid ab$.",
+    "Po podstawieniu otrzymasz, że $(m + n) \\mid d \\cdot m \\cdot n$. Wykorzystaj fakt, że $\\text{NWD}(m, n) = 1$, aby pokazać, że $(m+n) \\mid d$. Jaki wniosek możesz wyciągnąć o wielkości $d$?",
+    "Skoro $(m + n) \\mid d$, to $d \\geq m + n$. Teraz zauważ, że $a + b = d(m + n)$, więc $d \\geq m + n$ oznacza $d^2 \\geq d(m+n) = a + b$. Stąd wyprowadź końcową nierówność."
+  ],
+  "skills_required": [
+    "divisibility_arguments",
+    "prime_factorization"
+  ],
+  "skills_gained": [
+    "divisibility_arguments"
+  ],
+  "prerequisites": [
+    "2010_etap2_2",
+    "2016_etap2_3",
+    "2011_etap2_1"
+  ]
+}

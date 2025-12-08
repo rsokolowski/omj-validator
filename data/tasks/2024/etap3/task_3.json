@@ -1,0 +1,34 @@
+{
+  "number": 3,
+  "title": "Pary liczb pierwszych $(p, q)$",
+  "content": "Wyznacz wszystkie pary liczb pierwszych $(p, q)$, dla których liczba $pq + 4$ jest czwartą potęgą liczby pierwszej.",
+  "pdf": {
+    "tasks": "tasks/2024/etap3/20omj-3etap.pdf",
+    "solutions": "tasks/2024/etap3/20omj-3r.pdf",
+    "statistics": "tasks/2024/etap3/20omj-3st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Oznacz czwartą potęgę liczby pierwszej jako $r^4$. Co wiesz o rozkładzie liczby $r^4 - 4$ na czynniki? Przypomnij sobie wzór na różnicę kwadratów.",
+    "Skoro $pq = r^4 - 4$, to możesz wykorzystać rozkład $r^4 - 4 = (r^2-2)(r^2+2)$. Zastanów się, jak dwa czynniki pierwsze $p$ i $q$ mogą odpowiadać tym dwóm czynnikom.",
+    "Jeśli $p$ i $q$ są różne, to jeden z nich musi być równy $r^2 - 2$, a drugi $r^2 + 2$. Kiedy oba te wyrażenia mogą być liczbami pierwszymi? Rozważ małe wartości $r$.",
+    "Sprawdź systematycznie małe liczby pierwsze $r = 2, 3, 5, ...$. Dla każdego $r$ oblicz $r^2 - 2$ i $r^2 + 2$, a następnie sprawdź, czy obie są pierwsze. Nie zapomnij o przypadku $p = q$."
+  ],
+  "skills_required": [
+    "prime_factorization",
+    "algebraic_identities",
+    "primality_testing"
+  ],
+  "skills_gained": [
+    "diophantine_equations",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2012_etap2_5",
+    "2010_etap3_4",
+    "2009_etap1_1"
+  ]
+}

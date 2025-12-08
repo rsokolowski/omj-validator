@@ -1,0 +1,32 @@
+{
+  "number": 1,
+  "title": "Liczba złożona $abc - 1$",
+  "content": "Dane są takie liczby całkowite $a, b, c > 1$, że największy wspólny dzielnik liczb $a - 1$, $b - 1$, $c - 1$ jest większy od 1. Udowodnij, że liczba $abc - 1$ jest złożona.",
+  "pdf": {
+    "tasks": "tasks/2009/etap3/3etap10.pdf",
+    "solutions": "tasks/2009/etap3/3etap10r.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zastanów się, co oznacza, że NWD$(a-1, b-1, c-1) > 1$. Jaką liczbę $d > 1$ możesz wybrać, która dzieli wszystkie trzy różnice?",
+    "Skoro $d$ dzieli $a-1$, $b-1$ i $c-1$, to jak możesz zapisać $a$, $b$, $c$ w języku reszt z dzielenia przez $d$? Co to mówi o reszcie z dzielenia $abc$ przez $d$?",
+    "Pokaż, że $d | (abc - 1)$. Aby liczba była złożona, musisz jeszcze pokazać, że $abc - 1$ jest większa od $d$ (nie jest równa $d$).",
+    "Skorzystaj z faktu, że $a, b, c > 1$. Oszacuj $abc - 1$ z dołu i porównaj z $d$. Pamiętaj, że $d \\leq a - 1 < a$."
+  ],
+  "skills_required": [
+    "modular_arithmetic",
+    "divisibility_arguments"
+  ],
+  "skills_gained": [
+    "modular_arithmetic",
+    "divisibility_arguments"
+  ],
+  "prerequisites": [
+    "2010_etap2_2",
+    "2016_etap2_3",
+    "2005_etap2_2"
+  ]
+}

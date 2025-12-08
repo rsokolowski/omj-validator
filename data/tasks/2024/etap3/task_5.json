@@ -1,0 +1,33 @@
+{
+  "number": 5,
+  "title": "Strzałki na tablicy $5 \\times 5$",
+  "content": "W każdym polu tablicy $5 \\times 5$ znajduje się strzałka skierowana w górę, w dół, w lewo lub w prawo. Wykaż, że można usunąć z tej tablicy dokładnie dwadzieścia strzałek, tak aby żadne dwie z pozostałych pięciu strzałek nie wskazywały na to samo pole.\n\n*Uwaga.* Przyjmujemy, że każda strzałka wskazuje na wszystkie pola znajdujące się w tym kierunku, w którym jest skierowana. Żadna strzałka nie wskazuje na pole, w którym się znajduje.",
+  "pdf": {
+    "tasks": "tasks/2024/etap3/20omj-3etap.pdf",
+    "solutions": "tasks/2024/etap3/20omj-3r.pdf",
+    "statistics": "tasks/2024/etap3/20omj-3st.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Zastanów się, kiedy dwie strzałki wskazują na to samo pole. Czy zależy to od ich kierunków? Rozważ osobno przypadki: dwie strzałki poziome, dwie pionowe, jedna pozioma i jedna pionowa.",
+    "Spróbuj wybrać po jednej strzałce z każdego wiersza. Ile strzałek wtedy zostawiasz? Teraz pomyśl, jak unikać konfliktów między wybranymi strzałkami.",
+    "Dwie strzałki poziome w tym samym wierszu zawsze konfliktują. Dwie strzałki pionowe w tej samej kolumnie zawsze konfliktują. A co ze strzałkami w różnych wierszach i kolumnach - kiedy mogą konfliktować?",
+    "Rozważ wybór strzałek z różnych wierszy I różnych kolumn (jak rozmieszczenie wież na szachownicy). Zbadaj, w jakich przypadkach para strzałka pozioma + strzałka pionowa może wskazywać na to samo pole i jak tego uniknąć przy wyborze."
+  ],
+  "skills_required": [
+    "counting_techniques",
+    "case_analysis",
+    "constructive_proof"
+  ],
+  "skills_gained": [
+    "constructive_proof",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2021_etap1_6"
+  ]
+}

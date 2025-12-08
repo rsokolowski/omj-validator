@@ -1,0 +1,33 @@
+{
+  "number": 2,
+  "title": "Nierówność z trzema liczbami",
+  "content": "Dodatnie liczby $a$, $b$, $c$ są nie większe od $2$. Udowodnij, że $a + b + c + 2 \\geqslant abc$.",
+  "pdf": {
+    "tasks": "tasks/2015/etap3/3etap16.pdf",
+    "solutions": "tasks/2015/etap3/3etap16r.pdf",
+    "statistics": "tasks/2015/etap3/3etap16st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Zastanów się, kiedy może zachodzić równość w tej nierówności. Spróbuj podstawić $a = b = c = 2$ i zobacz, co się dzieje.",
+    "Wykorzystaj fakt, że $a, b, c \\leq 2$ oznacza, że wyrażenia $(2-a)$, $(2-b)$, $(2-c)$ są nieujemne. Iloczyn nieujemnych czynników jest nieujemny.",
+    "Rozwiń iloczyn $(2-a)(2-b)(2-c) \\geq 0$ i sprawdź, jaką nierówność otrzymasz po przekształceniach.",
+    "Po rozwinięciu $(2-a)(2-b)(2-c)$ pogrupuj wyrazy i przekształć nierówność tak, aby po jednej stronie pojawiło się $a+b+c+2$, a po drugiej $abc$ plus dodatkowe składniki."
+  ],
+  "skills_required": [
+    "inequality_manipulation",
+    "algebraic_identities",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "inequality_manipulation",
+    "algebraic_identities"
+  ],
+  "prerequisites": [
+    "2010_etap2_4",
+    "2012_etap2_3"
+  ]
+}

@@ -32,6 +32,8 @@ data/uploads/*
 data/submissions/*
 !data/submissions/.gitkeep
 
+# Task index (generated)
+data/task_index/
 
 # OS
 .DS_Store
