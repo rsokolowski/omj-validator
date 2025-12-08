@@ -1,6 +1,7 @@
 services:
+  # FastAPI Backend (API only)
   - type: web
-    name: omj-validator
+    name: omj-api
     runtime: python
     region: frankfurt  # Closest to Poland
     plan: free
@@ -36,3 +37,25 @@ services:
         value: "10"
       # Note: Free tier has no persistent disk - uploaded images lost on restart
       # For full persistence, attach persistent disk or use cloud storage for uploads
+
+  # Next.js Frontend
+  - type: web
+    name: omj-frontend
+    runtime: node
+    region: frankfurt
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # Backend API URL for server-side fetches
+      - key: FASTAPI_URL
+        fromService:
+          name: omj-api
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      # Public API URL for client-side fetches (same as frontend URL, proxied)
+      - key: NEXT_PUBLIC_API_URL
+        value: ""  # Empty means relative URLs, proxied through Next.js

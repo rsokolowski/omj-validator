@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+/* OMJ Validator - Custom CSS Variables (from original design) */
+:root {
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-light: #3b82f6;
+  --color-success: #059669;
+  --color-warning: #d97706;
+  --color-error: #dc2626;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, monospace;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --radius: 8px;
+  --radius-sm: 4px;
+  --radius-lg: 12px;
+}
+
+@theme inline {
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-light: #3b82f6;
+  --color-success: #059669;
+  --color-warning: #d97706;
+  --color-error: #dc2626;
+}
+
+body {
+  background: var(--color-gray-50);
+  color: var(--color-gray-800);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+}
+
+/* Score Colors */
+.score-0 { color: var(--color-gray-500); }
+.score-2 { color: var(--color-warning); }
+.score-5 { color: var(--color-primary); }
+.score-6 { color: var(--color-success); }
+
+/* Difficulty Colors */
+.difficulty-1 { color: #22c55e; }
+.difficulty-2 { color: #84cc16; }
+.difficulty-3 { color: #eab308; }
+.difficulty-4 { color: #f97316; }
+.difficulty-5 { color: #ef4444; }
+
+/* Category Badge Colors */
+.category-algebra { background: #dbeafe; color: #1e40af; }
+.category-geometria { background: #dcfce7; color: #166534; }
+.category-teoria_liczb { background: #fef3c7; color: #92400e; }
+.category-kombinatoryka { background: #f3e8ff; color: #7c3aed; }
+.category-logika { background: #ffe4e6; color: #be123c; }
+.category-arytmetyka { background: #e0f2fe; color: #0369a1; }
+
+/* Math content styling */
+.math-content {
+  line-height: 1.8;
+}
+
+.math-content .katex {
+  font-size: 1.05em;
+}
+
+/* KaTeX fixes */
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
