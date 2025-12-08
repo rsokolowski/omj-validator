@@ -287,6 +287,12 @@ h1, h2, h3, h4 {
     border: 1px solid #bbf7d0;
 }
 
+.alert-info {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #93c5fd;
+}
+
 /* === Login Page === */
 .login-page {
     display: flex;

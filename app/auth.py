@@ -1,5 +1,6 @@
 """Authentication module using Google OAuth sessions."""
 
+import time
 from typing import Optional
 
 from fastapi import Request, HTTPException, status
@@ -9,6 +10,44 @@ from .config import settings
 
 # Session key for storing user info
 SESSION_USER_KEY = "user"
+
+# Re-check group membership every 5 minutes (in seconds)
+MEMBERSHIP_RECHECK_INTERVAL = 5 * 60
+
+
+async def _refresh_group_membership_if_needed(request: Request) -> None:
+    """
+    Re-check group membership if the last check was too long ago.
+    Updates the session with the new membership status.
+    """
+    user = request.session.get(SESSION_USER_KEY)
+    if not user:
+        return
+
+    # Check when we last verified membership
+    last_check = user.get("membership_checked_at", 0)
+    now = time.time()
+
+    if now - last_check < MEMBERSHIP_RECHECK_INTERVAL:
+        return  # Recent check, no need to re-verify
+
+    # Re-check group membership
+    from .groups import check_group_membership
+    email = user.get("email")
+    if not email:
+        return
+
+    import logging
+    logger = logging.getLogger(__name__)
+    try:
+        is_member = await check_group_membership(email)
+        user["is_group_member"] = is_member
+        user["membership_checked_at"] = now
+        request.session[SESSION_USER_KEY] = user
+    except Exception as e:
+        # On error, keep existing membership status but don't update timestamp
+        # This will cause a retry on the next request
+        logger.debug(f"Group membership refresh failed, will retry: {e}")
 
 
 def get_current_user(request: Request) -> Optional[dict]:
@@ -49,10 +88,34 @@ def is_group_member(request: Request) -> bool:
     """
     Check if the current user is a member of the required group.
 
+    Note: This is the sync version - use is_group_member_async for routes
+    that can refresh membership status.
+
     Returns:
         True if user is authenticated AND is a group member
         False otherwise
     """
+    user = get_current_user(request)
+    if not user:
+        return False
+    return user.get("is_group_member", False)
+
+
+async def is_group_member_async(request: Request) -> bool:
+    """
+    Check if the current user is a member of the required group.
+
+    This async version will refresh membership status if needed (every 5 min).
+    Use this in async route handlers for up-to-date membership checking.
+
+    Returns:
+        True if user is authenticated AND is a group member
+        False otherwise
+    """
+    # First refresh membership if needed
+    await _refresh_group_membership_if_needed(request)
+
+    # Then check the (possibly updated) membership status
     user = get_current_user(request)
     if not user:
         return False

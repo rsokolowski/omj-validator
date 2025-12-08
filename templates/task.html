@@ -137,9 +137,9 @@
     {% endif %}
 
     <div class="submit-section">
-        <h2>Przeslij rozwiazanie</h2>
+        <h2>Prześlij rozwiązanie</h2>
         {% if can_submit %}
-        <p class="submit-info">Przeslij zdjecia swojego recznie napisanego rozwiazania. Mozesz przeslac wiele zdjec.</p>
+        <p class="submit-info">Prześlij zdjęcia swojego ręcznie napisanego rozwiązania. Możesz przesłać wiele zdjęć.</p>
 
         <form id="submit-form" class="submit-form" enctype="multipart/form-data">
             <div class="form-group">
@@ -170,9 +170,14 @@
             <div class="result-feedback" id="result-feedback"></div>
         </div>
         {% elif is_authenticated %}
-        <p class="submit-info">Przesylanie rozwiazan wymaga czlonkostwa w grupie <strong>omj-validator-alpha</strong>.</p>
+        <div class="alert alert-info">
+            <strong>ℹ</strong> Przesyłanie rozwiązań wymaga członkostwa w grupie <strong>omj-validator-alpha</strong>.
+            Status członkostwa jest odświeżany automatycznie.
+        </div>
         {% else %}
-        <p class="submit-info"><a href="/login">Zaloguj sie</a>, aby przeslac rozwiazanie do oceny.</p>
+        <div class="alert alert-info">
+            <strong>ℹ</strong> <a href="/login">Zaloguj się</a>, aby przesłać swoje rozwiązanie do oceny.
+        </div>
         {% endif %}
     </div>
 

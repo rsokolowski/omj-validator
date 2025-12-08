@@ -14,7 +14,7 @@
 
 <!-- Category Filter -->
 <div class="filter-section">
-    <h3>Filtruj wedlug kategorii</h3>
+    <h3>Filtruj według kategorii</h3>
     <div class="filter-buttons" id="category-filters">
         <button class="filter-btn active" data-category="">Wszystkie</button>
         {% for cat in categories %}
@@ -29,12 +29,12 @@
 {% if can_view_progress %}
 <div class="recommended-section" id="recommended-section">
     <div class="recommended-list" id="recommended-list">
-        <div class="loading-placeholder">Ladowanie rekomendacji...</div>
+        <div class="loading-placeholder">Ładowanie rekomendacji...</div>
     </div>
 </div>
 {% else %}
 <div class="alert alert-info">
-    <strong>Wskazowka:</strong> <a href="/login">Zaloguj sie</a>, aby sledzic swoje postepy i otrzymywac spersonalizowane rekomendacje.
+    <strong>ℹ Wskazówka:</strong> <a href="/login">Zaloguj się</a>, aby śledzić swoje postępy i otrzymywać spersonalizowane rekomendacje.
 </div>
 {% endif %}
 {% endblock %}
