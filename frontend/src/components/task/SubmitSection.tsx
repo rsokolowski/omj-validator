@@ -5,6 +5,7 @@ import { Paper, Typography, Box, Button, Alert, LinearProgress } from "@mui/mate
 import { uploadFiles } from "@/lib/api/client";
 import { SubmitResponse } from "@/lib/types";
 import { getMaxScore } from "@/lib/utils/constants";
+import { LoginPrompt } from "@/components/common/LoginPrompt";
 
 interface SubmitSectionProps {
   year: string;
@@ -120,20 +121,13 @@ export function SubmitSection({ year, etap, num, canSubmit, isAuthenticated }: S
   };
 
   if (!isAuthenticated) {
+    const currentUrl = `/task/${year}/${etap}/${num}`;
     return (
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" sx={{ color: "grey.700", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}>
-          Prześlij rozwiązanie
-        </Typography>
-        <Alert severity="info">
-          <Typography variant="body2">
-            Zaloguj się, aby przesłać swoje rozwiązanie.{" "}
-            <a href="/login" style={{ color: "inherit", fontWeight: 600 }}>
-              Zaloguj się
-            </a>
-          </Typography>
-        </Alert>
-      </Paper>
+      <LoginPrompt
+        title="Prześlij rozwiązanie"
+        message="Zaloguj się, aby przesłać swoje rozwiązanie"
+        redirectUrl={currentUrl}
+      />
     );
   }
 

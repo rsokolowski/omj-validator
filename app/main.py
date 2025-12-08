@@ -404,7 +404,11 @@ async def progress_data(request: Request, category: str = None, db: Session = De
             }
             progress.recommendations = []
 
-        return JSONResponse(progress.model_dump(mode="json"))
+        return JSONResponse({
+            **progress.model_dump(mode="json"),
+            "user": user,
+            "is_authenticated": user is not None,
+        })
 
     except Exception as e:
         logger.error(f"Error building progress data: {e}")
@@ -494,11 +498,15 @@ async def task_detail(request: Request, year: str, etap: str, num: int, db: Sess
     skills_required = get_skills_by_ids(task.skills_required)
     skills_gained = get_skills_by_ids(task.skills_gained)
 
-    # Load prerequisite statuses (only for group members who can see progress)
+    # Load prerequisite statuses
     prerequisite_statuses = []
-    if can_submit and task.prerequisites and user_id:
-        progress = compute_user_progress(user_id=user_id, db=db)
-        prerequisite_statuses = get_prerequisite_statuses(task.prerequisites, progress)
+    if task.prerequisites:
+        if can_submit and user_id:
+            progress = compute_user_progress(user_id=user_id, db=db)
+            prerequisite_statuses = get_prerequisite_statuses(task.prerequisites, progress)
+        else:
+            # Show prerequisites without status for unauthenticated users
+            prerequisite_statuses = get_prerequisite_statuses(task.prerequisites, None)
 
     return templates.TemplateResponse(
         "task.html",
@@ -993,9 +1001,13 @@ async def task_detail_api(
     skills_gained = get_skills_by_ids(task.skills_gained)
 
     prerequisite_statuses = []
-    if can_submit and task.prerequisites and user_id:
-        progress = compute_user_progress(user_id=user_id, db=db)
-        prerequisite_statuses = get_prerequisite_statuses(task.prerequisites, progress)
+    if task.prerequisites:
+        if can_submit and user_id:
+            progress = compute_user_progress(user_id=user_id, db=db)
+            prerequisite_statuses = get_prerequisite_statuses(task.prerequisites, progress)
+        else:
+            # Show prerequisites without status for unauthenticated users
+            prerequisite_statuses = get_prerequisite_statuses(task.prerequisites, None)
 
     return {
         "task": task.model_dump(mode="json"),

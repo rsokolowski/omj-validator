@@ -172,5 +172,5 @@ class PrerequisiteStatus(BaseModel):
     etap: str
     number: int
     title: str
-    status: Literal["mastered", "in_progress"]  # mastered or not yet mastered
+    status: Literal["mastered", "in_progress"] | None = None  # None for unauthenticated users
     url: str  # e.g., "/task/2023/etap1/2"

@@ -1,8 +1,17 @@
-import { Box, Typography, Paper, Button, Stack } from "@mui/material";
+import { Box, Typography, Paper, Button } from "@mui/material";
 
 export const dynamic = "force-dynamic";
 
-export default function LoginPage() {
+interface LoginPageProps {
+  searchParams: Promise<{ next?: string }>;
+}
+
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const { next } = await searchParams;
+  const googleLoginUrl = next
+    ? `/login/google?next=${encodeURIComponent(next)}`
+    : "/login/google";
+
   return (
     <Box
       sx={{
@@ -35,7 +44,7 @@ export default function LoginPage() {
           variant="contained"
           size="large"
           fullWidth
-          href="/login/google"
+          href={googleLoginUrl}
           sx={{
             py: 1.5,
             bgcolor: "#4285f4",

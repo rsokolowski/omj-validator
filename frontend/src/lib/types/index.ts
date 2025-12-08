@@ -108,7 +108,7 @@ export interface PrerequisiteStatus {
   etap: string;
   number: number;
   title: string;
-  status: "mastered" | "in_progress";
+  status: "mastered" | "in_progress" | null;
   url: string;
 }
 
