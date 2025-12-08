@@ -82,7 +82,7 @@ export function SubmitSection({ year, etap, num, canSubmit, isAuthenticated }: S
       }, 500);
 
       const result = await uploadFiles<SubmitResponse>(
-        `/task/${year}/${etap}/${num}/submit`,
+        `/api/task/${year}/${etap}/${num}/submit`,
         files
       );
 

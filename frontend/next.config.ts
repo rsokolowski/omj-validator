@@ -31,10 +31,6 @@ const nextConfig: NextConfig = {
         source: "/uploads/:path*",
         destination: `${backendUrl}/uploads/:path*`,
       },
-      {
-        source: "/task/:year/:etap/:num/submit",
-        destination: `${backendUrl}/task/:year/:etap/:num/submit`,
-      },
     ];
   },
 };
