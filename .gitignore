@@ -32,6 +32,7 @@ data/uploads/*
 data/submissions/*
 !data/submissions/.gitkeep
 
+
 # OS
 .DS_Store
 Thumbs.db

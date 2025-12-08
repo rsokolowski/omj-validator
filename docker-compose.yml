@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: omj-postgres
+    # WARNING: Change credentials in production environments
+    environment:
+      POSTGRES_USER: omj
+      POSTGRES_PASSWORD: omj
+      POSTGRES_DB: omj
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U omj -d omj"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

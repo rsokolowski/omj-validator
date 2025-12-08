@@ -75,17 +75,31 @@ class TaskStats(BaseModel):
 class SubmissionResult(BaseModel):
     score: int
     feedback: str
+    scoring_meta: Optional[dict] = None  # LLM metadata (model, tokens, cost, timing)
+
+
+class SubmissionStatus(str, Enum):
+    """Status of a submission through the processing pipeline."""
+    PENDING = "pending"          # Uploaded, awaiting processing
+    PROCESSING = "processing"    # Being analyzed by AI
+    COMPLETED = "completed"      # Successfully scored
+    FAILED = "failed"            # Processing failed
 
 
 class Submission(BaseModel):
+    """Student solution submission with AI scoring."""
     id: str
+    user_id: str  # Google sub of the user who submitted
     year: str
     etap: str
     task_number: int
     timestamp: datetime
-    images: list[str]  # paths to uploaded images
-    score: int
-    feedback: str
+    status: SubmissionStatus = SubmissionStatus.COMPLETED
+    images: list[str]  # paths to uploaded images (relative to uploads_dir)
+    score: Optional[int] = None  # Null if failed
+    feedback: Optional[str] = None  # Null if failed
+    error_message: Optional[str] = None  # Set if status is FAILED
+    scoring_meta: Optional[dict] = None  # LLM metadata (model, tokens, cost, timing)
 
 
 class LoginRequest(BaseModel):
