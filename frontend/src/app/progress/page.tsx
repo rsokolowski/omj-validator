@@ -5,6 +5,7 @@ import { ProgressData, User } from "@/lib/types";
 import { ProgressStats } from "@/components/progress/ProgressStats";
 import { CategoryFilter } from "@/components/progress/CategoryFilter";
 import { RecommendationsList } from "@/components/progress/RecommendationsList";
+import { LoginPrompt } from "@/components/common/LoginPrompt";
 
 export const dynamic = "force-dynamic";
 
@@ -50,9 +51,13 @@ export default async function ProgressPage({ searchParams }: ProgressPageProps) 
       {/* Category Filter */}
       <CategoryFilter currentCategory={category} />
 
-      {/* Recommendations */}
-      {data.recommendations.length > 0 && (
-        <RecommendationsList recommendations={data.recommendations} />
+      {/* Recommendations or Login Prompt */}
+      {data.is_authenticated ? (
+        data.recommendations.length > 0 && (
+          <RecommendationsList recommendations={data.recommendations} />
+        )
+      ) : (
+        <LoginPrompt redirectUrl="/progress" />
       )}
     </Box>
   );

@@ -65,32 +65,36 @@ export default async function TaskPage({ params }: TaskPageProps) {
             <Typography variant="body2" sx={{ fontWeight: 600, color: "grey.600" }}>
               Powiązane zadania:
             </Typography>
-            {prerequisite_statuses.map((prereq) => (
-              <Tooltip
-                key={prereq.key}
-                title={<MathContent content={prereq.title} />}
-                arrow
-              >
-                <Link
-                  href={prereq.url}
-                  style={{ textDecoration: "none" }}
+            {prerequisite_statuses.map((prereq) => {
+              const isMastered = prereq.status === "mastered";
+              const hasStatus = prereq.status !== null;
+              return (
+                <Tooltip
+                  key={prereq.key}
+                  title={<MathContent content={prereq.title} />}
+                  arrow
                 >
-                  <Chip
-                    icon={<span>{prereq.status === "mastered" ? "✓" : "○"}</span>}
-                    label={`Zad. ${prereq.number} (${prereq.year})`}
-                    size="small"
-                    sx={{
-                      bgcolor: prereq.status === "mastered" ? "#dcfce7" : "#fef3c7",
-                      color: prereq.status === "mastered" ? "#166534" : "#92400e",
-                      border: `1px solid ${prereq.status === "mastered" ? "#86efac" : "#fcd34d"}`,
-                      "&:hover": {
-                        bgcolor: prereq.status === "mastered" ? "#bbf7d0" : "#fde68a",
-                      },
-                    }}
-                  />
-                </Link>
-              </Tooltip>
-            ))}
+                  <Link
+                    href={prereq.url}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <Chip
+                      icon={hasStatus ? <span>{isMastered ? "✓" : "○"}</span> : undefined}
+                      label={`Zad. ${prereq.number} (${prereq.year})`}
+                      size="small"
+                      sx={{
+                        bgcolor: !hasStatus ? "#f3f4f6" : isMastered ? "#dcfce7" : "#fef3c7",
+                        color: !hasStatus ? "#4b5563" : isMastered ? "#166534" : "#92400e",
+                        border: `1px solid ${!hasStatus ? "#d1d5db" : isMastered ? "#86efac" : "#fcd34d"}`,
+                        "&:hover": {
+                          bgcolor: !hasStatus ? "#e5e7eb" : isMastered ? "#bbf7d0" : "#fde68a",
+                        },
+                      }}
+                    />
+                  </Link>
+                </Tooltip>
+              );
+            })}
           </Box>
         )}
       </Box>
