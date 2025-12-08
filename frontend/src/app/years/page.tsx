@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Box, Card, CardContent, Typography, Grid } from "@mui/material";
-import { serverFetch } from "@/lib/api/client";
+import { serverFetch } from "@/lib/api/server";
 import { YearsResponse } from "@/lib/types";
 
 export const dynamic = "force-dynamic";

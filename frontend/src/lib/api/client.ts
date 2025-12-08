@@ -1,4 +1,4 @@
-// API client for communicating with FastAPI backend
+// API client for communicating with FastAPI backend (client-side)
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
@@ -32,31 +32,6 @@ export async function fetchAPI<T>(
   return res.json();
 }
 
-// Server-side fetch (for use in Server Components)
-export async function serverFetch<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
-  // When running on server, we need to use the full backend URL
-  const backendUrl = process.env.FASTAPI_URL || "http://localhost:8000";
-  const url = `${backendUrl}${endpoint}`;
-
-  const res = await fetch(url, {
-    ...options,
-    cache: "no-store", // Don't cache by default for dynamic data
-    headers: {
-      "Content-Type": "application/json",
-      ...options.headers,
-    },
-  });
-
-  if (!res.ok) {
-    const error = await res.json().catch(() => ({ detail: "Unknown error" }));
-    throw new APIError(res.status, error.detail || res.statusText);
-  }
-
-  return res.json();
-}
 
 // File upload helper
 export async function uploadFiles<T>(

@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
-import { serverFetch } from "@/lib/api/client";
+import { serverFetch } from "@/lib/api/server";
 import { ProgressData, User } from "@/lib/types";
 import { ProgressStats } from "@/components/progress/ProgressStats";
 import { CategoryFilter } from "@/components/progress/CategoryFilter";
