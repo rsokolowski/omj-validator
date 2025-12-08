@@ -9,7 +9,7 @@
     <a href="/years/{{ year }}">{{ year }}</a>
     <span class="separator">/</span>
     <a href="/years/{{ year }}/{{ etap }}">
-        {% if etap == "etap2" %}Etap II{% else %}{{ etap }}{% endif %}
+        {% if etap == "etap1" %}Etap I{% elif etap == "etap2" %}Etap II{% elif etap == "etap3" %}Finał{% else %}{{ etap }}{% endif %}
     </a>
     <span class="separator">/</span>
     <a href="/task/{{ year }}/{{ etap }}/{{ num }}">Zadanie {{ num }}</a>
@@ -19,7 +19,7 @@
 
 <div class="page-header">
     <h1>Historia prób - Zadanie {{ num }}</h1>
-    <p class="subtitle">{{ year }} {% if etap == "etap2" %}Etap II{% else %}{{ etap }}{% endif %}</p>
+    <p class="subtitle">{{ year }} {% if etap == "etap1" %}Etap I{% elif etap == "etap2" %}Etap II{% elif etap == "etap3" %}Finał{% else %}{{ etap }}{% endif %}</p>
 </div>
 
 {% if submissions %}

@@ -9,12 +9,12 @@
     <a href="/years/{{ year }}">{{ year }}</a>
     <span class="separator">/</span>
     <span class="current">
-        {% if etap == "etap2" %}Etap II{% else %}{{ etap }}{% endif %}
+        {% if etap == "etap1" %}Etap I{% elif etap == "etap2" %}Etap II{% elif etap == "etap3" %}Finał{% else %}{{ etap }}{% endif %}
     </span>
 </nav>
 
 <div class="page-header">
-    <h1>{{ year }} - {% if etap == "etap2" %}Etap II (okręgowy){% else %}{{ etap }}{% endif %}</h1>
+    <h1>{{ year }} - {% if etap == "etap1" %}Etap I (szkolny){% elif etap == "etap2" %}Etap II (okręgowy){% elif etap == "etap3" %}Finał{% else %}{{ etap }}{% endif %}</h1>
     <p class="subtitle">Wybierz zadanie do rozwiązania</p>
 </div>
 

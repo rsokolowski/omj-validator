@@ -100,8 +100,8 @@ class GeminiProvider:
             task_pdf_path: Path to the task PDF
             solution_pdf_path: Path to the official solution PDF (for reference)
             image_paths: Paths to uploaded images of student's solution
-            task_number: The task number (1-7 for etap1, 1-5 for etap2)
-            etap: The competition stage ("etap1" or "etap2")
+            task_number: The task number (1-7 for etap1, 1-5 for etap2/etap3)
+            etap: The competition stage ("etap1", "etap2", or "etap3")
 
         Returns:
             SubmissionResult with score and feedback

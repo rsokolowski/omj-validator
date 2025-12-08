@@ -9,6 +9,7 @@ from ..models import SubmissionResult
 # Valid OMJ scores by etap
 VALID_SCORES_ETAP1 = {0, 1, 3}  # Etap 1: 0, 1, 3 points
 VALID_SCORES_ETAP2 = {0, 2, 5, 6}  # Etap 2: 0, 2, 5, 6 points
+VALID_SCORES_ETAP3 = {0, 2, 5, 6}  # Etap 3 (finał): 0, 2, 5, 6 points (same as etap2)
 
 
 def normalize_omj_score(score: int, etap: str = "etap2") -> int:
@@ -16,11 +17,11 @@ def normalize_omj_score(score: int, etap: str = "etap2") -> int:
     Normalize any score to valid OMJ scores for the given etap.
 
     Etap 1: 0, 1, 3 points
-    Etap 2: 0, 2, 5, 6 points
+    Etap 2/3: 0, 2, 5, 6 points
 
     Args:
         score: Raw score from AI provider
-        etap: Competition stage ("etap1" or "etap2")
+        etap: Competition stage ("etap1", "etap2", or "etap3")
 
     Returns:
         Normalized score matching OMJ criteria for the etap
@@ -64,7 +65,7 @@ def parse_ai_response(
     Args:
         response_text: Raw text response from AI provider
         provider_name: Optional provider name for error messages (e.g., "Gemini")
-        etap: Competition stage for score normalization ("etap1" or "etap2")
+        etap: Competition stage for score normalization ("etap1", "etap2", or "etap3")
 
     Returns:
         SubmissionResult with score and feedback

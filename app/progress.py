@@ -20,10 +20,10 @@ logger = logging.getLogger(__name__)
 def get_mastery_threshold(etap: str) -> int:
     """Get the score threshold for mastery based on etap.
 
-    - etap2: score >= 5 (max is 6)
+    - etap2/etap3: score >= 5 (max is 6)
     - etap1: score >= 2 (max is 3)
     """
-    return 5 if etap == "etap2" else 2
+    return 5 if etap in ("etap2", "etap3") else 2
 
 
 def compute_user_progress(user_id: Optional[str] = None, db: Optional[Session] = None) -> dict[str, int]:
@@ -102,7 +102,7 @@ def compute_prerequisites_met(
         for prereq_key in task.prerequisites:
             # Validate prerequisite key format
             parts = prereq_key.split("_")
-            if len(parts) < 3 or parts[1] not in ("etap1", "etap2"):
+            if len(parts) < 3 or parts[1] not in ("etap1", "etap2", "etap3"):
                 logger.warning(f"Invalid prerequisite key format: {prereq_key} in task {task_key}")
                 continue
 

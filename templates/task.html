@@ -9,7 +9,7 @@
     <a href="/years/{{ task.year }}">{{ task.year }}</a>
     <span class="separator">/</span>
     <a href="/years/{{ task.year }}/{{ task.etap }}">
-        {% if task.etap == "etap2" %}Etap II{% else %}{{ task.etap }}{% endif %}
+        {% if task.etap == "etap1" %}Etap I{% elif task.etap == "etap2" %}Etap II{% elif task.etap == "etap3" %}Finał{% else %}{{ task.etap }}{% endif %}
     </a>
     <span class="separator">/</span>
     <span class="current">Zadanie {{ task.number }}</span>
@@ -21,7 +21,7 @@
         <p class="task-title math-content">{{ task.title }}</p>
         <div class="task-meta">
             <span class="meta-item">{{ task.year }}</span>
-            <span class="meta-item">{% if task.etap == "etap2" %}Etap II{% else %}{{ task.etap }}{% endif %}</span>
+            <span class="meta-item">{% if task.etap == "etap1" %}Etap I{% elif task.etap == "etap2" %}Etap II{% elif task.etap == "etap3" %}Finał{% else %}{{ task.etap }}{% endif %}</span>
             {% if task.difficulty %}
             <span class="meta-item difficulty difficulty-{{ task.difficulty }}"
                   data-tooltip="{{ {1: 'Bardzo łatwe - podstawowe zastosowanie wzorów', 2: 'Łatwe - wymaga prostego wglądu', 3: 'Średnie - kilka kroków rozumowania', 4: 'Trudne - wymaga znacznego wglądu', 5: 'Bardzo trudne - kreatywne podejście'}[task.difficulty] }}">
