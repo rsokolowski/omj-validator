@@ -10,6 +10,7 @@ logging.basicConfig(
 )
 
 from fastapi import FastAPI, Request, UploadFile, File, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -48,13 +49,28 @@ from .skills import get_skills_by_ids
 
 app = FastAPI(title="OMJ Validator", description="Walidator rozwiązań OMJ")
 
+# Determine if we're in split deployment mode (frontend on different domain)
+is_split_deployment = bool(settings.frontend_url)
+
+# Add CORS middleware for split deployment (frontend on different domain)
+if is_split_deployment:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[settings.frontend_url],
+        allow_credentials=True,
+        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allow_headers=["*"],
+    )
+
 # Add session middleware for OAuth
+# In split deployment, we need SameSite=None to allow cross-domain cookies
+# SameSite=None requires Secure=True (https_only), which is enforced here
 app.add_middleware(
     SessionMiddleware,
     secret_key=settings.session_secret_key,
     max_age=30 * 24 * 60 * 60,  # 30 days
-    https_only=not settings.auth_disabled,  # Require HTTPS in production
-    same_site="lax",  # CSRF protection
+    https_only=is_split_deployment or not settings.auth_disabled,  # HTTPS required for SameSite=None
+    same_site="none" if is_split_deployment else "lax",  # Cross-domain requires "none"
 )
 
 # Mount static files
