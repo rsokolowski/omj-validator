@@ -59,9 +59,12 @@
     <!-- App JS -->
     <script src="/static/app.js"></script>
     <script>
-        // Initialize feedback rendering after all scripts are loaded
+        // Initialize feedback rendering and math tooltips after all scripts are loaded
         if (typeof initFeedbackRendering === 'function') {
             initFeedbackRendering();
+        }
+        if (typeof initMathTooltips === 'function') {
+            initMathTooltips();
         }
     </script>
     {% block scripts %}{% endblock %}

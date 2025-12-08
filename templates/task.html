@@ -43,7 +43,7 @@
             {% for prereq in prerequisite_statuses %}
             <a href="{{ prereq.url }}"
                class="prerequisite-link prerequisite-{{ prereq.status }}"
-               data-tooltip="{{ prereq.title }}">
+               data-math-tooltip="{{ prereq.title }}">
                 <span class="prerequisite-icon">{% if prereq.status == 'mastered' %}✓{% else %}○{% endif %}</span>
                 Zad. {{ prereq.number }} ({{ prereq.year }})
             </a>
