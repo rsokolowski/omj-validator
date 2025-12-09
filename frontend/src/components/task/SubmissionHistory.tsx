@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Paper, Typography, Box, Chip, Button, Collapse, Divider } from "@mui/material";
+import { Paper, Typography, Box, Chip, Button, Collapse, Divider, CircularProgress } from "@mui/material";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import { Submission } from "@/lib/types";
 import { getMaxScore } from "@/lib/utils/constants";
 
@@ -31,6 +33,92 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
     }).format(date);
   };
 
+  const renderStatusChip = (submission: Submission, maxScore: number) => {
+    // Failed submission
+    if (submission.status === "failed") {
+      return (
+        <Chip
+          icon={<ErrorOutlineIcon sx={{ fontSize: 16 }} />}
+          label="Błąd"
+          size="small"
+          sx={{
+            bgcolor: "#fef2f2",
+            color: "#991b1b",
+            border: "1px solid #fecaca",
+            fontWeight: 600,
+            "& .MuiChip-icon": { color: "#991b1b" },
+          }}
+        />
+      );
+    }
+
+    // Pending or processing
+    if (submission.status === "pending" || submission.status === "processing") {
+      return (
+        <Chip
+          icon={<HourglassEmptyIcon sx={{ fontSize: 16 }} />}
+          label="W trakcie..."
+          size="small"
+          sx={{
+            bgcolor: "#f0f9ff",
+            color: "#0369a1",
+            border: "1px solid #bae6fd",
+            fontWeight: 600,
+            "& .MuiChip-icon": { color: "#0369a1" },
+          }}
+        />
+      );
+    }
+
+    // Completed - show score
+    const score = submission.score ?? 0;
+    const scoreColors = getScoreColor(score, maxScore);
+    return (
+      <Chip
+        label={`${score}/${maxScore}`}
+        size="small"
+        sx={{
+          bgcolor: scoreColors.bg,
+          color: scoreColors.color,
+          border: `1px solid ${scoreColors.border}`,
+          fontWeight: 600,
+        }}
+      />
+    );
+  };
+
+  const renderFeedback = (submission: Submission) => {
+    if (submission.status === "failed") {
+      return (
+        <Box sx={{ color: "#991b1b", bgcolor: "#fef2f2", p: 2, borderRadius: 1 }}>
+          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+            Wystąpił błąd podczas przetwarzania:
+          </Typography>
+          <Typography variant="body2">
+            {submission.error_message || "Nieznany błąd. Spróbuj przesłać rozwiązanie ponownie."}
+          </Typography>
+        </Box>
+      );
+    }
+
+    if (submission.status === "pending" || submission.status === "processing") {
+      return (
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, color: "#0369a1" }}>
+          <CircularProgress size={20} />
+          <Typography variant="body2">
+            Rozwiązanie jest przetwarzane. Odśwież stronę, aby zobaczyć wynik.
+          </Typography>
+        </Box>
+      );
+    }
+
+    return (
+      <Typography variant="body2" sx={{ color: "grey.700", whiteSpace: "pre-wrap" }}>
+        {submission.feedback || "Brak feedbacku"}
+      </Typography>
+    );
+  };
+
   return (
     <Paper sx={{ p: 3, mb: 3 }}>
       <Typography variant="h6" sx={{ color: "grey.700", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}>
@@ -40,8 +128,6 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
         {submissions.map((submission, index) => {
           const maxScore = getMaxScore(submission.etap);
-          const score = submission.score ?? 0;
-          const scoreColors = getScoreColor(score, maxScore);
           const isExpanded = expandedId === submission.id;
 
           return (
@@ -66,16 +152,7 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
                   <Typography variant="body2" sx={{ color: "grey.500", minWidth: 24 }}>
                     #{totalCount - index}
                   </Typography>
-                  <Chip
-                    label={`${score}/${maxScore}`}
-                    size="small"
-                    sx={{
-                      bgcolor: scoreColors.bg,
-                      color: scoreColors.color,
-                      border: `1px solid ${scoreColors.border}`,
-                      fontWeight: 600,
-                    }}
-                  />
+                  {renderStatusChip(submission, maxScore)}
                   <Typography variant="body2" sx={{ color: "grey.600" }}>
                     {formatDate(submission.timestamp)}
                   </Typography>
@@ -89,14 +166,9 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
                 <Box sx={{ p: 2, pt: 1, bgcolor: "grey.50", borderRadius: "0 0 8px 8px", mt: -0.5 }}>
                   <Divider sx={{ mb: 2 }} />
                   <Typography variant="subtitle2" sx={{ color: "grey.600", mb: 1 }}>
-                    Ocena:
+                    {submission.status === "failed" ? "Szczegóły błędu:" : "Ocena:"}
                   </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: "grey.700", whiteSpace: "pre-wrap" }}
-                  >
-                    {submission.feedback || "Brak feedbacku"}
-                  </Typography>
+                  {renderFeedback(submission)}
 
                   {submission.images && submission.images.length > 0 && (
                     <Box sx={{ mt: 2 }}>

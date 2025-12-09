@@ -29,13 +29,24 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       headers: cookie ? { cookie } : {},
     });
 
+    // Handle non-JSON error responses (e.g., 500 Internal Server Error)
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await response.text();
+      console.error("Submit proxy error: non-JSON response", response.status, text);
+      return NextResponse.json(
+        { success: false, error: "Wystąpił błąd serwera. Spróbuj ponownie." },
+        { status: response.status }
+      );
+    }
+
     const data = await response.json();
 
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
     console.error("Submit proxy error:", error);
     return NextResponse.json(
-      { error: "Failed to submit solution" },
+      { success: false, error: "Nie udało się przesłać rozwiązania. Spróbuj ponownie." },
       { status: 500 }
     );
   }

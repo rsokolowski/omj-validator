@@ -1,9 +1,15 @@
 "use client";
 
-import { useState, useRef, DragEvent } from "react";
-import { Paper, Typography, Box, Button, Alert, LinearProgress } from "@mui/material";
+import { useState, useRef, DragEvent, useEffect, useCallback } from "react";
+import {
+  Paper,
+  Typography,
+  Box,
+  Button,
+  Alert,
+  CircularProgress,
+} from "@mui/material";
 import { uploadFiles } from "@/lib/api/client";
-import { SubmitResponse } from "@/lib/types";
 import { getMaxScore } from "@/lib/utils/constants";
 import { LoginPrompt } from "@/components/common/LoginPrompt";
 
@@ -15,22 +21,156 @@ interface SubmitSectionProps {
   isAuthenticated: boolean;
 }
 
+interface SubmitResponse {
+  success: boolean;
+  submission_id: string;
+  status: string;
+  message: string;
+  ws_path: string;
+}
+
+type SubmitStatus = "idle" | "processing" | "completed" | "failed";
+
 interface UploadState {
-  status: "idle" | "uploading" | "success" | "error";
-  progress: number;
-  message?: string;
+  status: SubmitStatus;
+  statusMessage: string;
   result?: {
     score: number;
     max_score: number;
     feedback: string;
   };
+  error?: string;
 }
 
-export function SubmitSection({ year, etap, num, canSubmit, isAuthenticated }: SubmitSectionProps) {
+// WebSocket message types
+interface StatusMessage {
+  type: "status";
+  submission_id: string;
+  message: string;
+}
+
+interface CompletedMessage {
+  type: "completed";
+  submission_id: string;
+  score: number;
+  feedback: string;
+}
+
+interface ErrorMessage {
+  type: "error";
+  submission_id: string;
+  error: string;
+}
+
+type WebSocketMessage = StatusMessage | CompletedMessage | ErrorMessage;
+
+export function SubmitSection({
+  year,
+  etap,
+  num,
+  canSubmit,
+  isAuthenticated,
+}: SubmitSectionProps) {
   const [files, setFiles] = useState<File[]>([]);
-  const [uploadState, setUploadState] = useState<UploadState>({ status: "idle", progress: 0 });
+  const [uploadState, setUploadState] = useState<UploadState>({
+    status: "idle",
+    statusMessage: "",
+  });
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const wsRef = useRef<WebSocket | null>(null);
+
+  // Cleanup WebSocket on unmount
+  useEffect(() => {
+    return () => {
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
+    };
+  }, []);
+
+  const connectWebSocket = useCallback(
+    (wsPath: string) => {
+      // Determine WebSocket URL
+      // In production on Render, use NEXT_PUBLIC_WS_URL env var pointing to backend
+      // In development, connect directly to backend on localhost:8000
+      let wsUrl: string;
+      if (process.env.NEXT_PUBLIC_WS_URL) {
+        // Production: use configured WebSocket URL
+        wsUrl = `${process.env.NEXT_PUBLIC_WS_URL}${wsPath}`;
+      } else if (process.env.NODE_ENV === "development") {
+        // Development: connect directly to backend
+        wsUrl = `ws://localhost:8000${wsPath}`;
+      } else {
+        // Fallback: try same host (works if backend serves frontend)
+        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+        wsUrl = `${protocol}//${window.location.host}${wsPath}`;
+      }
+
+      const ws = new WebSocket(wsUrl);
+      wsRef.current = ws;
+
+      ws.onopen = () => {
+        console.log("[WebSocket] Connected:", wsPath);
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const msg: WebSocketMessage = JSON.parse(event.data);
+          console.log("[WebSocket] Message:", msg.type, msg);
+
+          switch (msg.type) {
+            case "status":
+              setUploadState((prev) => ({
+                ...prev,
+                statusMessage: msg.message,
+              }));
+              break;
+
+            case "completed":
+              const maxScore = getMaxScore(etap);
+              setUploadState({
+                status: "completed",
+                statusMessage: "",
+                result: {
+                  score: msg.score,
+                  max_score: maxScore,
+                  feedback: msg.feedback,
+                },
+              });
+              setFiles([]);
+              if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+              }
+              ws.close();
+              break;
+
+            case "error":
+              setUploadState({
+                status: "failed",
+                statusMessage: "",
+                error: msg.error,
+              });
+              ws.close();
+              break;
+          }
+        } catch (e) {
+          console.error("[WebSocket] Failed to parse message:", e);
+        }
+      };
+
+      ws.onerror = (error) => {
+        console.error("[WebSocket] Error:", error);
+      };
+
+      ws.onclose = () => {
+        console.log("[WebSocket] Closed");
+        wsRef.current = null;
+      };
+    },
+    [etap]
+  );
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -39,10 +179,12 @@ export function SubmitSection({ year, etap, num, canSubmit, isAuthenticated }: S
   };
 
   const addFiles = (newFiles: File[]) => {
-    // Filter to only image files
-    const imageFiles = newFiles.filter(file => file.type.startsWith("image/"));
-    setFiles(prev => [...prev, ...imageFiles]);
-    setUploadState({ status: "idle", progress: 0 });
+    const imageFiles = newFiles.filter((file) => file.type.startsWith("image/"));
+    setFiles((prev) => [...prev, ...imageFiles]);
+    setUploadState({
+      status: "idle",
+      statusMessage: "",
+    });
   };
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
@@ -58,7 +200,6 @@ export function SubmitSection({ year, etap, num, canSubmit, isAuthenticated }: S
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
-
     if (e.dataTransfer.files) {
       addFiles(Array.from(e.dataTransfer.files));
     }
@@ -71,44 +212,30 @@ export function SubmitSection({ year, etap, num, canSubmit, isAuthenticated }: S
   const handleSubmit = async () => {
     if (files.length === 0) return;
 
-    setUploadState({ status: "uploading", progress: 10 });
+    // Reset state
+    setUploadState({
+      status: "processing",
+      statusMessage: "Przesyłanie zdjęć...",
+    });
 
     try {
-      // Simulate progress during upload
-      const progressInterval = setInterval(() => {
-        setUploadState((prev) => ({
-          ...prev,
-          progress: Math.min(prev.progress + 5, 90),
-        }));
-      }, 500);
-
+      // Step 1: Upload files via POST
       const result = await uploadFiles<SubmitResponse>(
         `/api/task/${year}/${etap}/${num}/submit`,
         files
       );
 
-      clearInterval(progressInterval);
-
-      const maxScore = getMaxScore(etap);
-      setUploadState({
-        status: "success",
-        progress: 100,
-        result: {
-          score: result.score,
-          max_score: maxScore,
-          feedback: result.feedback,
-        },
-      });
-
-      setFiles([]);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+      if (!result.success || !result.submission_id) {
+        throw new Error("Nie udało się przesłać rozwiązania");
       }
+
+      // Step 2: Connect WebSocket for progress
+      connectWebSocket(result.ws_path);
     } catch (error) {
       setUploadState({
-        status: "error",
-        progress: 0,
-        message: error instanceof Error ? error.message : "Wystąpił błąd podczas przesyłania",
+        status: "failed",
+        statusMessage: "",
+        error: error instanceof Error ? error.message : "Wystąpił błąd podczas przesyłania",
       });
     }
   };
@@ -134,7 +261,10 @@ export function SubmitSection({ year, etap, num, canSubmit, isAuthenticated }: S
   if (!canSubmit) {
     return (
       <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" sx={{ color: "grey.700", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}>
+        <Typography
+          variant="h6"
+          sx={{ color: "grey.700", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}
+        >
           Prześlij rozwiązanie
         </Typography>
         <Alert severity="warning">
@@ -146,9 +276,14 @@ export function SubmitSection({ year, etap, num, canSubmit, isAuthenticated }: S
     );
   }
 
+  const isProcessing = uploadState.status === "processing";
+
   return (
     <Paper sx={{ p: 3, mb: 3 }}>
-      <Typography variant="h6" sx={{ color: "grey.700", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}>
+      <Typography
+        variant="h6"
+        sx={{ color: "grey.700", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}
+      >
         Prześlij rozwiązanie
       </Typography>
 
@@ -163,17 +298,20 @@ export function SubmitSection({ year, etap, num, canSubmit, isAuthenticated }: S
           borderRadius: 2,
           bgcolor: isDragging ? "primary.50" : "grey.50",
           textAlign: "center",
-          cursor: "pointer",
+          cursor: isProcessing ? "not-allowed" : "pointer",
           transition: "all 0.2s ease",
-          "&:hover": {
-            borderColor: "primary.main",
-            bgcolor: "grey.100",
-          },
+          opacity: isProcessing ? 0.6 : 1,
+          "&:hover": isProcessing
+            ? {}
+            : {
+                borderColor: "primary.main",
+                bgcolor: "grey.100",
+              },
         }}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={() => fileInputRef.current?.click()}
+        onDragOver={isProcessing ? undefined : handleDragOver}
+        onDragLeave={isProcessing ? undefined : handleDragLeave}
+        onDrop={isProcessing ? undefined : handleDrop}
+        onClick={isProcessing ? undefined : () => fileInputRef.current?.click()}
       >
         <input
           ref={fileInputRef}
@@ -182,8 +320,12 @@ export function SubmitSection({ year, etap, num, canSubmit, isAuthenticated }: S
           multiple
           onChange={handleFileSelect}
           style={{ display: "none" }}
+          disabled={isProcessing}
         />
-        <Typography variant="body1" sx={{ color: isDragging ? "primary.main" : "grey.600", mb: 0.5 }}>
+        <Typography
+          variant="body1"
+          sx={{ color: isDragging ? "primary.main" : "grey.600", mb: 0.5 }}
+        >
           {isDragging ? "Upuść zdjęcia tutaj" : "Przeciągnij zdjęcia lub kliknij, aby wybrać"}
         </Typography>
         <Typography variant="caption" sx={{ color: "grey.500" }}>
@@ -213,7 +355,12 @@ export function SubmitSection({ year, etap, num, canSubmit, isAuthenticated }: S
               <Typography variant="body2" sx={{ color: "grey.700" }}>
                 {file.name}
               </Typography>
-              <Button size="small" color="error" onClick={() => handleRemoveFile(index)}>
+              <Button
+                size="small"
+                color="error"
+                onClick={() => handleRemoveFile(index)}
+                disabled={isProcessing}
+              >
                 Usuń
               </Button>
             </Box>
@@ -221,18 +368,28 @@ export function SubmitSection({ year, etap, num, canSubmit, isAuthenticated }: S
         </Box>
       )}
 
-      {/* Upload Progress */}
-      {uploadState.status === "uploading" && (
-        <Box sx={{ mb: 2 }}>
-          <LinearProgress variant="determinate" value={uploadState.progress} sx={{ mb: 1 }} />
-          <Typography variant="body2" sx={{ color: "grey.600", textAlign: "center" }}>
-            Analizowanie rozwiązania... ({uploadState.progress}%)
+      {/* Processing Status */}
+      {isProcessing && (
+        <Box
+          sx={{
+            mb: 2,
+            p: 2,
+            bgcolor: "grey.50",
+            borderRadius: 1,
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
+          <CircularProgress size={24} />
+          <Typography variant="body2" sx={{ color: "grey.700" }}>
+            {uploadState.statusMessage || "Przetwarzanie..."}
           </Typography>
         </Box>
       )}
 
       {/* Result */}
-      {uploadState.status === "success" && uploadState.result && (
+      {uploadState.status === "completed" && uploadState.result && (
         <Alert
           severity={getScoreColor(uploadState.result.score, uploadState.result.max_score)}
           sx={{ mb: 2 }}
@@ -247,9 +404,9 @@ export function SubmitSection({ year, etap, num, canSubmit, isAuthenticated }: S
       )}
 
       {/* Error */}
-      {uploadState.status === "error" && (
+      {uploadState.status === "failed" && uploadState.error && (
         <Alert severity="error" sx={{ mb: 2 }}>
-          {uploadState.message}
+          {uploadState.error}
         </Alert>
       )}
 
@@ -257,11 +414,11 @@ export function SubmitSection({ year, etap, num, canSubmit, isAuthenticated }: S
       <Button
         variant="contained"
         fullWidth
-        disabled={files.length === 0 || uploadState.status === "uploading"}
+        disabled={files.length === 0 || isProcessing}
         onClick={handleSubmit}
         sx={{ py: 1.5 }}
       >
-        {uploadState.status === "uploading" ? "Przesyłanie..." : "Prześlij rozwiązanie"}
+        {isProcessing ? "Przetwarzanie..." : "Prześlij rozwiązanie"}
       </Button>
     </Paper>
   );

@@ -9,7 +9,13 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 
-from fastapi import FastAPI, Request, UploadFile, File, HTTPException, status
+# Suppress noisy third-party loggers
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+logging.getLogger("google_genai").setLevel(logging.WARNING)
+
+import asyncio
+from fastapi import FastAPI, Request, UploadFile, File, HTTPException, status, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
@@ -35,6 +41,9 @@ from .groups import check_group_membership
 from .db import get_db, UserRepository, SubmissionRepository
 
 logger = logging.getLogger(__name__)
+
+# Track background tasks for proper lifecycle management
+_background_tasks: set[asyncio.Task] = set()
 from .storage import (
     get_available_years,
     get_etaps_for_year,
@@ -137,6 +146,24 @@ def create_anonymous_user_if_needed():
             logger.info("Created anonymous user for local development")
     finally:
         db.close()
+
+
+@app.on_event("startup")
+async def start_cleanup_task():
+    """Start periodic cleanup of stale progress entries."""
+    from .websocket.progress import progress_manager
+
+    async def cleanup_loop():
+        while True:
+            await asyncio.sleep(300)  # Run every 5 minutes
+            try:
+                await progress_manager.cleanup_stale()
+            except Exception as e:
+                logger.warning(f"Progress cleanup error: {e}")
+
+    task = asyncio.create_task(cleanup_loop())
+    _background_tasks.add(task)
+    task.add_done_callback(_background_tasks.discard)
 
 
 # --- Authentication Routes ---
@@ -588,7 +615,12 @@ async def submit_solution(
     images: list[UploadFile] = File(...),
     db: Session = Depends(get_db),
 ):
-    """Submit solution images for analysis (requires group membership)."""
+    """
+    Submit solution images for analysis (requires group membership).
+
+    Returns immediately with submission_id. Client should connect to
+    WebSocket at /ws/submissions/{submission_id} for progress updates.
+    """
     # Check if user is authenticated
     if not verify_auth(request):
         return JSONResponse(
@@ -689,49 +721,21 @@ async def submit_solution(
 
         saved_paths.append(file_path)
 
-    # Get PDF paths
+    # Get PDF paths - validate early
     task_pdf = get_task_pdf_path(year, etap)
-    solution_pdf = get_solution_pdf_path(year, etap)
-
     if not task_pdf or not task_pdf.exists():
         return JSONResponse(
             {"error": "Nie znaleziono pliku z zadaniami"},
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
-    # Analyze with AI provider (etap-specific scoring: etap1=0/1/3, etap2=0/2/5/6)
+    # Create submission record with PENDING status
     from .db.models import SubmissionStatus
+    from .websocket.progress import progress_manager
+    from .websocket.handler import process_submission_background
+
     submission_id = str(uuid.uuid4())[:8]
-    error_message = None
-    scoring_meta = None
 
-    try:
-        provider = create_ai_provider()
-        result = await provider.analyze_solution(
-            task_pdf_path=task_pdf,
-            solution_pdf_path=solution_pdf,
-            image_paths=saved_paths,
-            task_number=num,
-            etap=etap,
-        )
-        submission_status = SubmissionStatus.COMPLETED
-        scoring_meta = result.scoring_meta
-    except AIProviderError as e:
-        result = SubmissionResult(
-            score=0,
-            feedback=f"Błąd konfiguracji AI: {str(e)}",
-        )
-        submission_status = SubmissionStatus.FAILED
-        error_message = str(e)
-    except Exception as e:
-        result = SubmissionResult(
-            score=0,
-            feedback=f"Nieoczekiwany błąd: {str(e)}",
-        )
-        submission_status = SubmissionStatus.FAILED
-        error_message = str(e)
-
-    # Save submission to database (store image paths relative to uploads_dir)
     submission_repo = SubmissionRepository(db)
     submission = submission_repo.create(
         id=submission_id,
@@ -740,20 +744,97 @@ async def submit_solution(
         etap=etap,
         task_number=num,
         images=[str(p.relative_to(settings.uploads_dir)) for p in saved_paths],
-        score=result.score,
-        feedback=result.feedback,
-        status=submission_status,
-        error_message=error_message,
-        scoring_meta=scoring_meta,
+        status=SubmissionStatus.PENDING,
     )
 
+    # Initialize progress tracking (handler.py will set first status)
+    await progress_manager.create_submission(submission_id)
+
+    # Start background task for AI processing with proper lifecycle tracking
+    task = asyncio.create_task(
+        process_submission_background(
+            submission_id=submission_id,
+            user_id=user_id,
+            year=year,
+            etap=etap,
+            task_number=num,
+            image_paths=saved_paths,
+        )
+    )
+    _background_tasks.add(task)
+    task.add_done_callback(_background_tasks.discard)
+
+    # Return immediately with submission_id and WebSocket URL
+    # Include ws_url so frontend knows where to connect
+    ws_path = f"/ws/submissions/{submission.id}"
     return JSONResponse(
         {
             "success": True,
             "submission_id": submission.id,
-            "score": result.score,
-            "feedback": result.feedback,
+            "status": "processing",
+            "message": "Rozwiązanie przesłane. Połącz się z WebSocket, aby śledzić postęp.",
+            "ws_path": ws_path,
         }
+    )
+
+
+@app.websocket("/ws/submissions/{submission_id}")
+async def websocket_submission_progress(
+    websocket: WebSocket,
+    submission_id: str,
+    db: Session = Depends(get_db),
+):
+    """
+    WebSocket endpoint for real-time submission progress.
+
+    Connect after calling POST /task/{year}/{etap}/{num}/submit.
+    Receives progress updates as JSON messages.
+    """
+    from itsdangerous import URLSafeTimedSerializer
+    import json
+    from .websocket.handler import websocket_submission_handler
+    from .websocket.progress import progress_manager
+
+    # Get user from session cookie
+    # WebSocket connections include cookies automatically
+    user_id = None
+
+    if settings.auth_disabled:
+        user_id = "anonymous"
+    else:
+        try:
+            # Decode session cookie using same method as SessionMiddleware
+            session_cookie = websocket.cookies.get("session")
+            if session_cookie:
+                # Starlette SessionMiddleware uses itsdangerous URLSafeTimedSerializer
+                signer = URLSafeTimedSerializer(settings.session_secret_key)
+                # max_age matches the middleware config (30 days)
+                session_data = signer.loads(session_cookie, max_age=30 * 24 * 60 * 60)
+                user = session_data.get(SESSION_USER_KEY)
+                if user:
+                    user_id = user.get("google_sub")
+        except Exception as e:
+            logger.debug(f"[WebSocket] Session decode failed: {e}")
+
+    # Verify submission exists
+    submission_repo = SubmissionRepository(db)
+    submission = submission_repo.get_by_id(submission_id)
+
+    if not submission:
+        await websocket.close(code=4004, reason="Submission not found")
+        return
+
+    # Verify user owns this submission (unless auth disabled)
+    if not settings.auth_disabled:
+        if not user_id or user_id != submission.user_id:
+            await websocket.close(code=4003, reason="Not authorized")
+            return
+
+    # Handle the WebSocket connection
+    await websocket_submission_handler(
+        websocket=websocket,
+        submission_id=submission_id,
+        user_id=submission.user_id,
     )
 
 
