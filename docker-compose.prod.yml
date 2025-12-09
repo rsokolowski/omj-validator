@@ -41,6 +41,9 @@ services:
       # Database
       DATABASE_URL: postgresql://${POSTGRES_USER:-omj}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-omj}
 
+      # Public URL for OAuth callbacks (required for Docker deployment)
+      FRONTEND_URL: ${FRONTEND_URL:-https://omj-validator.duckdns.org}
+
       # Authentication
       AUTH_DISABLED: ${AUTH_DISABLED:-false}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
