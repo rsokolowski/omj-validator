@@ -37,7 +37,7 @@ from .auth import (
     is_group_member_async,
 )
 from .oauth import oauth
-from .groups import check_group_membership
+from .groups import check_group_membership, _get_allowed_emails
 from .db import get_db, UserRepository, SubmissionRepository
 
 logger = logging.getLogger(__name__)
@@ -181,6 +181,8 @@ async def login_page(request: Request, next: str = None):
         error_msg = "Wystąpił błąd podczas logowania przez Google. Spróbuj ponownie."
     elif error_code == "oauth_not_configured":
         error_msg = "Logowanie przez Google nie jest skonfigurowane."
+    elif error_code == "rate_limit_new_users":
+        error_msg = "Osiągnięto dzienny limit nowych użytkowników. Spróbuj ponownie później."
 
     return templates.TemplateResponse(
         "login.html",
@@ -245,8 +247,30 @@ async def google_auth_callback(request: Request, db: Session = Depends(get_db)):
                 status_code=status.HTTP_303_SEE_OTHER,
             )
 
-        # Create or update user in database
+        # Check rate limit for NEW user registrations
         user_repo = UserRepository(db)
+        existing_user = user_repo.get_by_google_sub(google_sub)
+
+        if not existing_user:
+            # New user - check if they're in the allowlist (bypass rate limit)
+            allowed_emails = _get_allowed_emails()
+            user_email_lower = user_info["email"].lower()
+            is_allowlisted = allowed_emails and user_email_lower in allowed_emails
+
+            if not is_allowlisted:
+                # Check rate limit for new users
+                recent_users = user_repo.count_recent_users(hours=24)
+                if recent_users >= settings.rate_limit_new_users_per_day:
+                    logger.warning(
+                        f"New user rate limit exceeded: {recent_users}/{settings.rate_limit_new_users_per_day} "
+                        f"(blocked: {user_info['email'][:3]}***@***)"
+                    )
+                    return RedirectResponse(
+                        url="/login?error=rate_limit_new_users",
+                        status_code=status.HTTP_303_SEE_OTHER,
+                    )
+
+        # Create or update user in database
         user_repo.create_or_update(
             google_sub=google_sub,
             email=user_info["email"],
@@ -271,14 +295,8 @@ async def google_auth_callback(request: Request, db: Session = Depends(get_db)):
         }
 
         logger.info(
-            f"User logged in: {user_info['email']} (group member: {is_member})"
+            f"User logged in: {user_info['email']} (allowlisted: {is_member})"
         )
-
-        # Redirect to limited access page if not a group member
-        if not is_member:
-            return RedirectResponse(
-                url="/auth/limited", status_code=status.HTTP_303_SEE_OTHER
-            )
 
         # Redirect to the original page or default to /years
         # Validate that redirect URL is a safe relative path (prevent open redirect)
@@ -628,13 +646,6 @@ async def submit_solution(
             status_code=status.HTTP_401_UNAUTHORIZED,
         )
 
-    # Check if user is a group member (with refresh)
-    if not await is_group_member_async(request):
-        return JSONResponse(
-            {"error": "Dostęp wymaga członkostwa w grupie omj-validator-alpha"},
-            status_code=status.HTTP_403_FORBIDDEN,
-        )
-
     # Get user ID from session
     user_id = get_current_user_id(request)
     if not user_id:
@@ -642,6 +653,42 @@ async def submit_solution(
             {"error": "Nieautoryzowany dostęp"},
             status_code=status.HTTP_401_UNAUTHORIZED,
         )
+
+    # Check rate limits (skip for allowlisted users)
+    allowed_emails = _get_allowed_emails()
+    user = get_current_user(request)
+    user_email_lower = user.get("email", "").lower() if user else ""
+    is_allowlisted = allowed_emails and user_email_lower in allowed_emails
+
+    # Create repository once for rate limit checks and later submission creation
+    submission_repo = SubmissionRepository(db)
+
+    if not is_allowlisted:
+        # Check per-user submission limit
+        user_submissions = submission_repo.count_user_recent_submissions(user_id, hours=24)
+        if user_submissions >= settings.rate_limit_submissions_per_user_per_day:
+            logger.warning(
+                f"User submission rate limit exceeded: {user_id[:8]}... "
+                f"{user_submissions}/{settings.rate_limit_submissions_per_user_per_day}"
+            )
+            return JSONResponse(
+                {
+                    "error": f"Osiągnięto dzienny limit zgłoszeń ({settings.rate_limit_submissions_per_user_per_day}). "
+                    "Możesz przesłać więcej rozwiązań jutro."
+                },
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            )
+
+        # Check global submission limit
+        global_submissions = submission_repo.count_recent_submissions(hours=24)
+        if global_submissions >= settings.rate_limit_submissions_global_per_day:
+            logger.warning(
+                f"Global submission rate limit exceeded: {global_submissions}/{settings.rate_limit_submissions_global_per_day}"
+            )
+            return JSONResponse(
+                {"error": "System osiągnął dzienny limit zgłoszeń. Spróbuj ponownie później."},
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            )
 
     # Validate path parameters to prevent directory traversal
     if not _validate_path_params(year, etap):
@@ -736,7 +783,6 @@ async def submit_solution(
 
     submission_id = str(uuid.uuid4())[:8]
 
-    submission_repo = SubmissionRepository(db)
     submission = submission_repo.create(
         id=submission_id,
         user_id=user_id,

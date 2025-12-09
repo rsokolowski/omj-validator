@@ -79,6 +79,15 @@ class UserRepository:
             return True
         return False
 
+    def count_recent_users(self, hours: int = 24) -> int:
+        """Count users created in the last N hours (for rate limiting)."""
+        threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
+        return (
+            self.db.query(func.count(UserDB.google_sub))
+            .filter(UserDB.created_at >= threshold)
+            .scalar()
+        ) or 0
+
 
 class SubmissionRepository:
     """Repository for submission data access."""
@@ -283,3 +292,24 @@ class SubmissionRepository:
         self.db.commit()
         self.db.refresh(submission)
         return submission
+
+    def count_user_recent_submissions(self, user_id: str, hours: int = 24) -> int:
+        """Count submissions by user in the last N hours (for rate limiting)."""
+        threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
+        return (
+            self.db.query(func.count(SubmissionDB.id))
+            .filter(
+                SubmissionDB.user_id == user_id,
+                SubmissionDB.timestamp >= threshold,
+            )
+            .scalar()
+        ) or 0
+
+    def count_recent_submissions(self, hours: int = 24) -> int:
+        """Count all submissions in the last N hours (for rate limiting)."""
+        threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
+        return (
+            self.db.query(func.count(SubmissionDB.id))
+            .filter(SubmissionDB.timestamp >= threshold)
+            .scalar()
+        ) or 0
