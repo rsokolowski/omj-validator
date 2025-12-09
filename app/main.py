@@ -790,7 +790,8 @@ async def websocket_submission_progress(
     Connect after calling POST /task/{year}/{etap}/{num}/submit.
     Receives progress updates as JSON messages.
     """
-    from itsdangerous import URLSafeTimedSerializer
+    from itsdangerous import TimestampSigner
+    import base64
     import json
     from .websocket.handler import websocket_submission_handler
     from .websocket.progress import progress_manager
@@ -806,10 +807,11 @@ async def websocket_submission_progress(
             # Decode session cookie using same method as SessionMiddleware
             session_cookie = websocket.cookies.get("session")
             if session_cookie:
-                # Starlette SessionMiddleware uses itsdangerous URLSafeTimedSerializer
-                signer = URLSafeTimedSerializer(settings.session_secret_key)
+                # Starlette SessionMiddleware uses TimestampSigner + base64 + JSON
+                signer = TimestampSigner(settings.session_secret_key)
                 # max_age matches the middleware config (30 days)
-                session_data = signer.loads(session_cookie, max_age=30 * 24 * 60 * 60)
+                data = signer.unsign(session_cookie, max_age=30 * 24 * 60 * 60)
+                session_data = json.loads(base64.b64decode(data))
                 user = session_data.get(SESSION_USER_KEY)
                 if user:
                     user_id = user.get("google_sub")
