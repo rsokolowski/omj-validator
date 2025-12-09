@@ -99,7 +99,7 @@ Set `DATABASE_URL` environment variable:
 # Local development (Docker)
 DATABASE_URL=postgresql://omj:omj@localhost:5433/omj
 
-# Production (Render, etc.)
+# Production
 DATABASE_URL=postgresql://user:pass@host:5432/dbname
 ```
 

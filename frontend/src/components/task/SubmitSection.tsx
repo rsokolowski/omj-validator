@@ -93,7 +93,7 @@ export function SubmitSection({
   const connectWebSocket = useCallback(
     (wsPath: string) => {
       // Determine WebSocket URL
-      // In production on Render, use NEXT_PUBLIC_WS_URL env var pointing to backend
+      // In production, use NEXT_PUBLIC_WS_URL env var pointing to backend
       // In development, connect directly to backend on localhost:8000
       let wsUrl: string;
       if (process.env.NEXT_PUBLIC_WS_URL) {

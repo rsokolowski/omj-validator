@@ -1,0 +1,97 @@
+# Production Docker Compose for GCP VM deployment
+# Use with Nginx reverse proxy in front
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: omj-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-omj}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:-omj}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-omj} -d ${POSTGRES_DB:-omj}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Not exposed to host - only accessible within Docker network
+    networks:
+      - omj-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: omj-api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8100/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    environment:
+      # Database
+      DATABASE_URL: postgresql://${POSTGRES_USER:-omj}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-omj}
+
+      # Authentication
+      AUTH_DISABLED: ${AUTH_DISABLED:-false}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      SESSION_SECRET_KEY: ${SESSION_SECRET_KEY:?SESSION_SECRET_KEY is required}
+
+      # Access control (use one or the other)
+      ALLOWED_EMAILS: ${ALLOWED_EMAILS:-}
+      GOOGLE_GROUP_EMAIL: ${GOOGLE_GROUP_EMAIL:-}
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${GOOGLE_SERVICE_ACCOUNT_JSON:-}
+
+      # AI Provider
+      AI_PROVIDER: ${AI_PROVIDER:-gemini}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:?GEMINI_API_KEY is required}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash}
+      GEMINI_TIMEOUT: ${GEMINI_TIMEOUT:-90}
+    volumes:
+      # Persist uploads and submissions
+      - uploads_data:/app/data/uploads
+      - submissions_data:/app/data/submissions
+    ports:
+      # Non-standard port for Nginx proxy
+      - "127.0.0.1:8100:8100"
+    networks:
+      - omj-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # Backend URL for Next.js server-side requests (internal Docker network)
+        FASTAPI_URL: http://api:8100
+    container_name: omj-frontend
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      # Runtime backend URL (must match build-time for rewrites)
+      FASTAPI_URL: http://api:8100
+    ports:
+      # Non-standard port for Nginx proxy
+      - "127.0.0.1:3100:3100"
+    networks:
+      - omj-network
+
+networks:
+  omj-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  uploads_data:
+  submissions_data:
