@@ -1,12 +1,15 @@
-"""Gemini API provider implementation."""
+"""Gemini API provider implementation using google-genai SDK."""
 
 import asyncio
+import concurrent.futures
 import hashlib
 import logging
+import queue
+import threading
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import AsyncIterator, Optional, Callable, Any
 
 from ...config import settings
 from ...models import SubmissionResult
@@ -14,12 +17,14 @@ from ..parsing import parse_ai_response
 from ..factory import AIProviderError
 
 try:
-    import google.generativeai as genai
+    from google import genai
+    from google.genai import types
 
     GEMINI_AVAILABLE = True
 except ImportError:
     GEMINI_AVAILABLE = False
     genai = None
+    types = None
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +35,16 @@ class CachedFile:
     gemini_name: str  # e.g., "files/abc123"
     file_hash: str    # MD5 hash of file content
     cached_at: float  # time.time() when cached
+
+
+@dataclass
+class StreamChunk:
+    """A chunk from streaming response."""
+    type: str  # "thinking", "feedback", or "done"
+    text: str = ""
+    score: int = 0
+    feedback: str = ""
+    meta: Optional[dict] = None
 
 
 # In-memory cache: local file path -> CachedFile
@@ -46,6 +61,8 @@ GEMINI_PRICING = {
     "gemini-2.5-pro": {"input": 1.25, "output": 10.00},
     "gemini-2.5-flash": {"input": 0.30, "output": 2.50},
     "gemini-2.5-flash-lite": {"input": 0.10, "output": 0.40},
+    # Legacy models
+    "gemini-2.0-flash": {"input": 0.10, "output": 0.40},
     # Default fallback (gemini-2.5-flash-lite pricing)
     "default": {"input": 0.10, "output": 0.40},
 }
@@ -58,15 +75,14 @@ class GeminiProvider:
         """Initialize Gemini provider with API key."""
         if not GEMINI_AVAILABLE:
             raise ImportError(
-                "google-generativeai package not installed. "
-                "Install with: pip install google-generativeai"
+                "google-genai package not installed. "
+                "Install with: pip install google-genai"
             )
 
         if not settings.gemini_api_key:
             raise ValueError("GEMINI_API_KEY is required. Set it in your .env file.")
 
-        genai.configure(api_key=settings.gemini_api_key)
-        self._model = genai.GenerativeModel(settings.gemini_model)
+        self._client = genai.Client(api_key=settings.gemini_api_key)
         self._model_name = settings.gemini_model
 
     def _calculate_cost(self, input_tokens: int, output_tokens: int) -> float:
@@ -85,6 +101,96 @@ class GeminiProvider:
         """Return timeout in seconds for Gemini API."""
         return settings.gemini_timeout
 
+    def _build_content_parts(
+        self,
+        prompt_text: str,
+        uploaded_files: list,
+        task_number: int,
+        has_solution_pdf: bool,
+        num_images: int,
+    ) -> list:
+        """Build content parts list for API request."""
+        content_parts = []
+        result_idx = 0
+
+        # Start with system prompt
+        full_prompt = prompt_text
+        full_prompt += f"\n\n## Zadanie {task_number}\n"
+        full_prompt += "Przeanalizuj poniższe pliki.\n\n"
+
+        # Task PDF
+        full_prompt += "### Treść zadania (PDF):\n"
+        task_file = uploaded_files[result_idx]
+        result_idx += 1
+        content_parts.append(task_file)
+        full_prompt += f"Znajdź 'Zadanie {task_number}.' w dokumencie powyżej.\n\n"
+
+        # Solution PDF if exists
+        if has_solution_pdf:
+            full_prompt += "### Oficjalne rozwiązanie (TYLKO do weryfikacji, NIE pokazuj uczniowi):\n"
+            solution_file = uploaded_files[result_idx]
+            result_idx += 1
+            content_parts.append(solution_file)
+            full_prompt += "\n"
+
+        # Student images
+        full_prompt += "### Rozwiązanie ucznia:\n"
+        for i in range(num_images):
+            full_prompt += f"Zdjęcie {i + 1}:\n"
+            img_file = uploaded_files[result_idx]
+            result_idx += 1
+            content_parts.append(img_file)
+
+        full_prompt += "\n\nOceń rozwiązanie i odpowiedz WYŁĄCZNIE w formacie JSON."
+
+        # Prepend prompt text to content
+        content_parts.insert(0, full_prompt)
+
+        return content_parts
+
+    async def _upload_files(
+        self,
+        task_pdf_path: Path,
+        solution_pdf_path: Optional[Path],
+        image_paths: list[Path],
+    ) -> tuple[list, bool]:
+        """Upload all files to Gemini in parallel. Returns (files, has_solution_pdf)."""
+        upload_tasks = []
+        upload_labels = []
+
+        # Task PDF (cached)
+        logger.debug(f"[Gemini] Queueing task PDF: {task_pdf_path}")
+        upload_tasks.append(self._upload_file(task_pdf_path, use_cache=True))
+        upload_labels.append(("task_pdf", task_pdf_path.name))
+
+        # Solution PDF if exists (cached)
+        has_solution_pdf = solution_pdf_path and solution_pdf_path.exists()
+        if has_solution_pdf:
+            logger.debug(f"[Gemini] Queueing solution PDF: {solution_pdf_path}")
+            upload_tasks.append(self._upload_file(solution_pdf_path, use_cache=True))
+            upload_labels.append(("solution_pdf", solution_pdf_path.name))
+
+        # Student images (NOT cached)
+        for i, img_path in enumerate(image_paths, 1):
+            logger.debug(f"[Gemini] Queueing image {i}: {img_path.name}")
+            upload_tasks.append(self._upload_file(img_path, use_cache=False))
+            upload_labels.append((f"image_{i}", img_path.name))
+
+        # Upload all files in parallel
+        logger.info(f"[Gemini] Uploading {len(upload_tasks)} files in parallel...")
+        upload_results = await asyncio.gather(*upload_tasks)
+
+        # Log cache status
+        for (label, name), _ in zip(upload_labels, upload_results):
+            cache_key = str(task_pdf_path) if label == "task_pdf" else (
+                str(solution_pdf_path) if label == "solution_pdf" else None
+            )
+            was_cached = cache_key and cache_key in _file_cache
+            status = "cached" if was_cached else "uploaded"
+            logger.debug(f"[Gemini] {label}: {name} ({status})")
+
+        return upload_results, has_solution_pdf
+
     async def analyze_solution(
         self,
         task_pdf_path: Path,
@@ -94,7 +200,7 @@ class GeminiProvider:
         etap: str = "etap2",
     ) -> SubmissionResult:
         """
-        Analyze a student's solution using Gemini API.
+        Analyze a student's solution using Gemini API (non-streaming).
 
         Args:
             task_pdf_path: Path to the task PDF
@@ -119,93 +225,48 @@ class GeminiProvider:
         )
 
         try:
-            # Prepare all upload tasks in parallel
-            upload_tasks = []
-            upload_labels = []  # For logging
-
-            # Task PDF (cached - static file)
-            logger.debug(f"[Gemini] Queueing task PDF: {task_pdf_path}")
-            upload_tasks.append(self._upload_file(task_pdf_path, use_cache=True))
-            upload_labels.append(("task_pdf", task_pdf_path.name))
-
-            # Solution PDF if exists (cached - static file)
-            has_solution_pdf = solution_pdf_path and solution_pdf_path.exists()
-            if has_solution_pdf:
-                logger.debug(f"[Gemini] Queueing solution PDF: {solution_pdf_path}")
-                upload_tasks.append(self._upload_file(solution_pdf_path, use_cache=True))
-                upload_labels.append(("solution_pdf", solution_pdf_path.name))
-
-            # Student images (NOT cached - unique per submission)
-            for i, img_path in enumerate(image_paths, 1):
-                logger.debug(f"[Gemini] Queueing image {i}: {img_path.name}")
-                upload_tasks.append(self._upload_file(img_path, use_cache=False))
-                upload_labels.append((f"image_{i}", img_path.name))
-
-            # Upload all files in parallel
-            logger.info(f"[Gemini] Uploading {len(upload_tasks)} files in parallel...")
-            upload_results = await asyncio.gather(*upload_tasks)
-
-            # Log which files were cached vs uploaded
-            for (label, name), result in zip(upload_labels, upload_results):
-                # Check if it was a cache hit by looking at the cache
-                cache_key = str(task_pdf_path) if label == "task_pdf" else (
-                    str(solution_pdf_path) if label == "solution_pdf" else None
-                )
-                was_cached = cache_key and cache_key in _file_cache
-                status = "cached" if was_cached else "uploaded"
-                logger.debug(f"[Gemini] {label}: {name} ({status})")
-
-            # Build content parts in correct order
-            content_parts = []
-            result_idx = 0
-
-            # Add system prompt (etap-specific scoring criteria)
-            prompt_text = self._load_prompt(etap)
-            prompt_text += f"\n\n## Zadanie {task_number}\n"
-            prompt_text += "Przeanalizuj poniższe pliki.\n\n"
-
-            # Task PDF
-            prompt_text += "### Treść zadania (PDF):\n"
-            task_file = upload_results[result_idx]
-            result_idx += 1
-            uploaded_files.append(task_file)
-            content_parts.append(task_file)
-            prompt_text += (
-                f"Znajdź 'Zadanie {task_number}.' w dokumencie powyżej.\n\n"
+            # Upload files
+            uploaded_files, has_solution_pdf = await self._upload_files(
+                task_pdf_path, solution_pdf_path, image_paths
             )
 
-            # Solution PDF if exists
-            if has_solution_pdf:
-                prompt_text += "### Oficjalne rozwiązanie (TYLKO do weryfikacji, NIE pokazuj uczniowi):\n"
-                solution_file = upload_results[result_idx]
-                result_idx += 1
-                uploaded_files.append(solution_file)
-                content_parts.append(solution_file)
-                prompt_text += "\n"
-
-            # Student images
-            prompt_text += "### Rozwiązanie ucznia:\n"
-            for i in range(len(image_paths)):
-                prompt_text += f"Zdjęcie {i + 1}:\n"
-                img_file = upload_results[result_idx]
-                result_idx += 1
-                uploaded_files.append(img_file)
-                content_parts.append(img_file)
-
-            prompt_text += "\n\nOceń rozwiązanie i odpowiedz WYŁĄCZNIE w formacie JSON."
-
-            # Prepend prompt text to content
-            content_parts.insert(0, prompt_text)
+            # Build content
+            prompt_text = self._load_prompt(etap)
+            content_parts = self._build_content_parts(
+                prompt_text, uploaded_files, task_number, has_solution_pdf, len(image_paths)
+            )
 
             upload_time = time.time() - start_time
             logger.info(f"[Gemini] Files uploaded in {upload_time:.1f}s, sending to API...")
 
             # Generate response with timeout
             api_start_time = time.time()
+
+            # Configure thinking mode based on model version
+            # Gemini 3.x uses thinking_level, Gemini 2.x uses thinking_budget
+            is_gemini_3 = "gemini-3" in self._model_name.lower()
+
+            if is_gemini_3:
+                thinking_config = types.ThinkingConfig(
+                    include_thoughts=True,
+                    thinking_level="high",
+                )
+            else:
+                thinking_config = types.ThinkingConfig(
+                    include_thoughts=True,
+                    thinking_budget=8192,
+                )
+
+            config = types.GenerateContentConfig(
+                thinking_config=thinking_config,
+            )
+
             response = await asyncio.wait_for(
                 asyncio.to_thread(
-                    self._model.generate_content,
-                    content_parts,
+                    self._client.models.generate_content,
+                    model=self._model_name,
+                    contents=content_parts,
+                    config=config,
                 ),
                 timeout=self.get_timeout(),
             )
@@ -215,8 +276,8 @@ class GeminiProvider:
             input_tokens = 0
             output_tokens = 0
             if hasattr(response, "usage_metadata") and response.usage_metadata:
-                input_tokens = response.usage_metadata.prompt_token_count or 0
-                output_tokens = response.usage_metadata.candidates_token_count or 0
+                input_tokens = getattr(response.usage_metadata, "prompt_token_count", 0) or 0
+                output_tokens = getattr(response.usage_metadata, "candidates_token_count", 0) or 0
                 estimated_cost = self._calculate_cost(input_tokens, output_tokens)
                 logger.info(
                     f"[Gemini Response] api_time={api_time:.1f}s, "
@@ -229,18 +290,8 @@ class GeminiProvider:
             total_time = time.time() - start_time
             logger.info(f"[Gemini] Total request time: {total_time:.1f}s")
 
-            # Extract text from response safely
-            # response.text accessor raises exception if no parts returned
-            try:
-                response_text = response.text
-            except ValueError as e:
-                # Empty response - model returned no content
-                logger.error(f"[Gemini Error] Empty response: {e}")
-                raise AIProviderError(
-                    "Nie udało się odczytać rozwiązania. Upewnij się, że zdjęcie "
-                    "jest wyraźne, dobrze oświetlone i zawiera całe rozwiązanie."
-                )
-
+            # Extract text from response
+            response_text = response.text if hasattr(response, "text") else ""
             if not response_text:
                 logger.warning("[Gemini] Empty response text received")
                 raise AIProviderError(
@@ -251,7 +302,6 @@ class GeminiProvider:
             return parse_ai_response(response_text, provider_name="Gemini", etap=etap)
 
         except AIProviderError:
-            # Re-raise our own errors
             raise
         except asyncio.TimeoutError:
             elapsed = time.time() - start_time
@@ -279,12 +329,271 @@ class GeminiProvider:
                     "zawiera tylko rozwiązanie zadania."
                 )
             else:
-                # Generic error - don't expose technical details
                 raise AIProviderError(
                     "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
                 )
         finally:
-            # Clean up uploaded files from Gemini servers
+            await self._cleanup_files(uploaded_files)
+
+    async def analyze_solution_stream(
+        self,
+        task_pdf_path: Path,
+        solution_pdf_path: Optional[Path],
+        image_paths: list[Path],
+        task_number: int,
+        etap: str = "etap2",
+        on_thinking: Optional[Callable[[str], Any]] = None,
+        on_feedback: Optional[Callable[[str], Any]] = None,
+        on_upload_complete: Optional[Callable[[], Any]] = None,
+    ) -> SubmissionResult:
+        """
+        Analyze a student's solution with streaming response.
+
+        Calls on_thinking and on_feedback callbacks as chunks arrive.
+
+        Args:
+            task_pdf_path: Path to the task PDF
+            solution_pdf_path: Path to the official solution PDF (for reference)
+            image_paths: Paths to uploaded images of student's solution
+            task_number: The task number (1-7 for etap1, 1-5 for etap2/etap3)
+            etap: The competition stage ("etap1", "etap2", or "etap3")
+            on_thinking: Callback for thinking text chunks
+            on_feedback: Callback for feedback text chunks
+            on_upload_complete: Callback when file upload is complete (before AI analysis)
+
+        Returns:
+            SubmissionResult with score and feedback
+        """
+        uploaded_files = []
+        start_time = time.time()
+
+        # Log request metadata
+        image_sizes = [p.stat().st_size for p in image_paths if p.exists()]
+        total_image_size_kb = sum(image_sizes) / 1024
+        logger.info(
+            f"[Gemini Stream Request] model={self._model_name}, etap={etap}, "
+            f"task={task_number}, images={len(image_paths)}, "
+            f"total_image_size={total_image_size_kb:.1f}KB"
+        )
+
+        try:
+            # Upload files
+            uploaded_files, has_solution_pdf = await self._upload_files(
+                task_pdf_path, solution_pdf_path, image_paths
+            )
+
+            # Build content
+            prompt_text = self._load_prompt(etap)
+            content_parts = self._build_content_parts(
+                prompt_text, uploaded_files, task_number, has_solution_pdf, len(image_paths)
+            )
+
+            upload_time = time.time() - start_time
+            logger.info(f"[Gemini] Files uploaded in {upload_time:.1f}s, starting stream...")
+
+            # Notify caller that upload is complete
+            if on_upload_complete:
+                if asyncio.iscoroutinefunction(on_upload_complete):
+                    await on_upload_complete()
+                else:
+                    on_upload_complete()
+
+            # Configure thinking mode based on model version
+            # Gemini 3.x uses thinking_level, Gemini 2.x uses thinking_budget
+            is_gemini_3 = "gemini-3" in self._model_name.lower()
+
+            if is_gemini_3:
+                # Gemini 3: use thinking_level (cannot disable thinking)
+                thinking_config = types.ThinkingConfig(
+                    include_thoughts=True,
+                    thinking_level="high",  # "low" or "high"
+                )
+            else:
+                # Gemini 2.5: use thinking_budget to enable thinking
+                thinking_config = types.ThinkingConfig(
+                    include_thoughts=True,
+                    thinking_budget=8192,  # Enable thinking with reasonable budget
+                )
+
+            config = types.GenerateContentConfig(
+                thinking_config=thinking_config,
+            )
+
+            # Stream the response with timeout
+            api_start_time = time.time()
+            thinking_text = ""
+            feedback_text = ""
+            timeout = self.get_timeout()
+            usage_metadata = None  # Will be populated from final chunk
+
+            # Use thread-safe queue and event for cross-thread communication
+            chunk_queue: queue.Queue = queue.Queue()
+            stream_done_event = threading.Event()
+            stream_error: Optional[Exception] = None
+
+            def stream_to_queue():
+                """Run streaming in thread and push chunks to queue."""
+                nonlocal stream_error
+                try:
+                    response_stream = self._client.models.generate_content_stream(
+                        model=self._model_name,
+                        contents=content_parts,
+                        config=config,
+                    )
+                    for chunk in response_stream:
+                        chunk_queue.put(chunk)
+                except Exception as e:
+                    logger.error(f"[Gemini] Stream error: {type(e).__name__}: {e}")
+                    stream_error = e
+                finally:
+                    stream_done_event.set()
+
+            # Start streaming in background thread
+            executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+            stream_future = executor.submit(stream_to_queue)
+
+            # Process chunks with simple polling
+            chunks_processed = 0
+            start_wait = time.time()
+
+            try:
+                while True:
+                    # Check for timeout
+                    if time.time() - start_wait > timeout:
+                        logger.error(f"[Gemini] Timeout after {chunks_processed} chunks")
+                        raise AIProviderError(
+                            "Analiza trwa zbyt długo. Spróbuj ponownie za chwilę."
+                        )
+
+                    # Check for stream error
+                    if stream_error:
+                        raise stream_error
+
+                    # Try to get a chunk (non-blocking)
+                    try:
+                        chunk = chunk_queue.get_nowait()
+                        chunks_processed += 1
+
+                        # Capture usage metadata (typically in final chunk)
+                        if hasattr(chunk, "usage_metadata") and chunk.usage_metadata:
+                            usage_metadata = chunk.usage_metadata
+
+                        # Process the chunk
+                        if hasattr(chunk, "candidates") and chunk.candidates:
+                            for candidate in chunk.candidates:
+                                if hasattr(candidate, "content") and candidate.content:
+                                    for part in candidate.content.parts:
+                                        text = getattr(part, "text", "") or ""
+                                        if not text:
+                                            continue
+
+                                        # Check if this is a thought part
+                                        is_thought = getattr(part, "thought", False)
+
+                                        if is_thought:
+                                            thinking_text += text
+                                            if on_thinking:
+                                                if asyncio.iscoroutinefunction(on_thinking):
+                                                    await on_thinking(text)
+                                                else:
+                                                    on_thinking(text)
+                                        else:
+                                            feedback_text += text
+                                            if on_feedback:
+                                                if asyncio.iscoroutinefunction(on_feedback):
+                                                    await on_feedback(text)
+                                                else:
+                                                    on_feedback(text)
+
+                    except queue.Empty:
+                        # No chunk available - check if stream is done
+                        if stream_done_event.is_set() and chunk_queue.empty():
+                            break
+                        # Wait a bit before polling again
+                        await asyncio.sleep(0.05)
+
+            finally:
+                # Clean up executor
+                try:
+                    stream_future.result(timeout=5)
+                except Exception as e:
+                    logger.warning(f"[Gemini] Error waiting for stream thread: {e}")
+                executor.shutdown(wait=False)
+
+            api_time = time.time() - api_start_time
+            total_time = time.time() - start_time
+
+            # Log response with usage stats
+            input_tokens = 0
+            output_tokens = 0
+            if usage_metadata:
+                input_tokens = getattr(usage_metadata, "prompt_token_count", 0) or 0
+                output_tokens = getattr(usage_metadata, "candidates_token_count", 0) or 0
+                estimated_cost = self._calculate_cost(input_tokens, output_tokens)
+                logger.info(
+                    f"[Gemini Stream Response] api_time={api_time:.1f}s, "
+                    f"total_time={total_time:.1f}s, "
+                    f"input_tokens={input_tokens:,}, output_tokens={output_tokens:,}, "
+                    f"estimated_cost=${estimated_cost:.4f}, "
+                    f"thinking_chars={len(thinking_text)}, feedback_chars={len(feedback_text)}"
+                )
+            else:
+                logger.info(
+                    f"[Gemini Stream Response] api_time={api_time:.1f}s, "
+                    f"total_time={total_time:.1f}s, "
+                    f"thinking_chars={len(thinking_text)}, feedback_chars={len(feedback_text)} "
+                    f"(no usage metadata)"
+                )
+
+            if not feedback_text:
+                logger.warning("[Gemini] Empty feedback text from stream")
+                raise AIProviderError(
+                    "Nie udało się odczytać rozwiązania. Spróbuj ponownie."
+                )
+
+            # Parse the response
+            result = parse_ai_response(feedback_text, provider_name="Gemini", etap=etap)
+
+            # Add thinking to scoring_meta
+            if result.scoring_meta is None:
+                result.scoring_meta = {}
+            result.scoring_meta["thinking"] = thinking_text
+            result.scoring_meta["api_time"] = api_time
+            result.scoring_meta["total_time"] = total_time
+
+            return result
+
+        except AIProviderError:
+            raise
+        except asyncio.TimeoutError:
+            elapsed = time.time() - start_time
+            logger.error(f"[Gemini Error] Timeout after {elapsed:.1f}s (limit: {self.get_timeout()}s)")
+            raise AIProviderError(
+                "Analiza trwa zbyt długo. Spróbuj ponownie za chwilę."
+            )
+        except Exception as e:
+            elapsed = time.time() - start_time
+            error_msg = str(e)
+            logger.error(f"[Gemini Error] {error_msg} (after {elapsed:.1f}s)")
+
+            if "quota" in error_msg.lower():
+                raise AIProviderError(
+                    "System jest obecnie przeciążony. Spróbuj ponownie za kilka minut."
+                )
+            elif "invalid" in error_msg.lower() and "key" in error_msg.lower():
+                raise AIProviderError(
+                    "Przepraszamy, wystąpił problem techniczny. Spróbuj ponownie później."
+                )
+            elif "safety" in error_msg.lower() or "blocked" in error_msg.lower():
+                raise AIProviderError(
+                    "Nie udało się przetworzyć zdjęcia. Upewnij się, że zdjęcie "
+                    "zawiera tylko rozwiązanie zadania."
+                )
+            else:
+                raise AIProviderError(
+                    "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
+                )
+        finally:
             await self._cleanup_files(uploaded_files)
 
     def _get_file_hash(self, file_path: Path) -> str:
@@ -295,7 +604,7 @@ class GeminiProvider:
                 hasher.update(chunk)
         return hasher.hexdigest()
 
-    async def _check_cached_file(self, file_path: Path) -> Optional["genai.File"]:
+    async def _check_cached_file(self, file_path: Path):
         """
         Check if file is cached and still valid on Gemini.
 
@@ -323,7 +632,10 @@ class GeminiProvider:
 
         # Verify file still exists on Gemini
         try:
-            gemini_file = await asyncio.to_thread(genai.get_file, cached.gemini_name)
+            gemini_file = await asyncio.to_thread(
+                self._client.files.get,
+                name=cached.gemini_name,
+            )
             logger.info(f"[Gemini Cache] HIT for {file_path.name}")
             return gemini_file
         except Exception as e:
@@ -331,7 +643,7 @@ class GeminiProvider:
             del _file_cache[cache_key]
             return None
 
-    async def _upload_file(self, file_path: Path, use_cache: bool = True) -> "genai.File":
+    async def _upload_file(self, file_path: Path, use_cache: bool = True):
         """
         Upload a file to Gemini File API with optional caching.
 
@@ -348,10 +660,10 @@ class GeminiProvider:
             if cached_file:
                 return cached_file
 
-        # Upload to Gemini
+        # Upload to Gemini using new SDK
         gemini_file = await asyncio.to_thread(
-            genai.upload_file,
-            str(file_path),
+            self._client.files.upload,
+            file=str(file_path),
         )
 
         # Cache the reference for static files
@@ -377,12 +689,18 @@ class GeminiProvider:
         cached_names = {c.gemini_name for c in _file_cache.values()} if skip_cached else set()
 
         for file in files:
-            if file.name in cached_names:
-                logger.debug(f"[Gemini Cleanup] Skipping cached file: {file.name}")
+            file_name = getattr(file, "name", None)
+            if not file_name:
+                continue
+            if file_name in cached_names:
+                logger.debug(f"[Gemini Cleanup] Skipping cached file: {file_name}")
                 continue
             try:
-                await asyncio.to_thread(genai.delete_file, file.name)
-                logger.debug(f"[Gemini Cleanup] Deleted: {file.name}")
+                await asyncio.to_thread(
+                    self._client.files.delete,
+                    name=file_name,
+                )
+                logger.debug(f"[Gemini Cleanup] Deleted: {file_name}")
             except Exception:
                 # Log but don't fail if cleanup fails
                 pass

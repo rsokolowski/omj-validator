@@ -6,7 +6,7 @@ SQLAlchemy models and Pydantic models.
 
 import json
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import Optional
 
 from sqlalchemy import func
@@ -14,8 +14,12 @@ from sqlalchemy.orm import Session
 
 from .models import UserDB, SubmissionDB, SubmissionStatus
 from ..models import Submission, SubmissionStatus as PydanticSubmissionStatus
+from ..config import settings
 
 logger = logging.getLogger(__name__)
+
+# Submissions older than this are considered stale and marked as failed
+SUBMISSION_TIMEOUT_SECONDS = settings.gemini_timeout + 60  # AI timeout + buffer
 
 
 class UserRepository:
@@ -130,8 +134,9 @@ class SubmissionRepository:
         """Get all submissions by a user for a specific task.
 
         Returns submissions ordered by timestamp descending (most recent first).
+        Also marks stale pending/processing submissions as failed.
         """
-        return (
+        submissions = (
             self.db.query(SubmissionDB)
             .filter(
                 SubmissionDB.user_id == user_id,
@@ -142,6 +147,33 @@ class SubmissionRepository:
             .order_by(SubmissionDB.timestamp.desc())
             .all()
         )
+
+        # Mark stale submissions as failed
+        self._mark_stale_submissions_failed(submissions)
+
+        return submissions
+
+    def _mark_stale_submissions_failed(self, submissions: list[SubmissionDB]) -> None:
+        """Mark pending/processing submissions that are past timeout as failed."""
+        now = datetime.now(timezone.utc)
+        timeout_threshold = now - timedelta(seconds=SUBMISSION_TIMEOUT_SECONDS)
+        updated = False
+
+        for submission in submissions:
+            if submission.status in (SubmissionStatus.PENDING, SubmissionStatus.PROCESSING):
+                # Handle timezone-naive timestamps from DB
+                submission_time = submission.timestamp
+                if submission_time.tzinfo is None:
+                    submission_time = submission_time.replace(tzinfo=timezone.utc)
+
+                if submission_time < timeout_threshold:
+                    submission.status = SubmissionStatus.FAILED
+                    submission.error_message = "Przekroczono limit czasu przetwarzania. Spróbuj ponownie."
+                    updated = True
+                    logger.info(f"Marked stale submission {submission.id} as failed")
+
+        if updated:
+            self.db.commit()
 
     def get_user_progress(self, user_id: str) -> dict[str, int]:
         """Get best scores for all tasks by user.
@@ -213,3 +245,41 @@ class SubmissionRepository:
     def to_pydantic_list(self, db_submissions: list[SubmissionDB]) -> list[Submission]:
         """Convert list of SQLAlchemy models to Pydantic models."""
         return [self.to_pydantic(s) for s in db_submissions]
+
+    def update_status(
+        self,
+        submission_id: str,
+        status: SubmissionStatus,
+        error_message: Optional[str] = None,
+    ) -> Optional[SubmissionDB]:
+        """Update submission status."""
+        submission = self.get_by_id(submission_id)
+        if not submission:
+            return None
+        submission.status = status
+        if error_message is not None:
+            submission.error_message = error_message
+        self.db.commit()
+        self.db.refresh(submission)
+        return submission
+
+    def update_result(
+        self,
+        submission_id: str,
+        score: int,
+        feedback: str,
+        status: SubmissionStatus = SubmissionStatus.COMPLETED,
+        scoring_meta: Optional[dict] = None,
+    ) -> Optional[SubmissionDB]:
+        """Update submission with final results."""
+        submission = self.get_by_id(submission_id)
+        if not submission:
+            return None
+        submission.status = status
+        submission.score = score
+        submission.feedback = feedback
+        if scoring_meta is not None:
+            submission.scoring_meta = scoring_meta
+        self.db.commit()
+        self.db.refresh(submission)
+        return submission
