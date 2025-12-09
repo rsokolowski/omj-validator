@@ -21,6 +21,7 @@ COPY alembic.ini .
 COPY prompts/ ./prompts/
 COPY tasks/ ./tasks/
 COPY data/tasks/ ./data/tasks/
+COPY data/skills.json ./data/skills.json
 COPY static/ ./static/
 COPY templates/ ./templates/
 
