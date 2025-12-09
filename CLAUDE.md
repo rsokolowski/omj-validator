@@ -236,23 +236,20 @@ NEXT_PUBLIC_API_URL=                 # Empty = use proxy rewrites
 - Backend: http://localhost:8000
 - Database: localhost:5433
 
-### Docker Compose (Production)
+### Production (GCP VM)
 
-Configured in `docker-compose.prod.yml` with three services:
+Deployed on GCP Compute Engine VM with Docker Compose and Nginx reverse proxy.
 
+**Domain**: https://omj-validator.duckdns.org
+
+**Quick deploy** (from local machine):
 ```bash
-# Setup
-cp .env.prod.example .env.prod  # Configure environment variables
-
-# Build and run
-docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+gcloud compute ssh omj-validator --command="cd ~/omj-validator && git pull && sudo docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build"
 ```
 
-**Services:**
-- `db` - PostgreSQL 16 (internal network only)
-- `api` - FastAPI backend on port 8100
-- `frontend` - Next.js frontend on port 3100
+**View logs**:
+```bash
+gcloud compute ssh omj-validator --command="sudo docker logs omj-api --tail=100"
+```
 
-**Nginx reverse proxy:** See `nginx.conf.example` for sample configuration with SSL and WebSocket support.
-
-Frontend proxies all API requests to backend via Next.js rewrites, enabling same-origin session cookies.
+See **[docs/production-deployment.md](docs/production-deployment.md)** for complete setup guide, operations, and troubleshooting.
