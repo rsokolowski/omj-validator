@@ -55,6 +55,7 @@ class Settings(BaseSettings):
     gemini_api_key: Optional[str] = None
     gemini_model: str = "gemini-3-pro-preview"
     gemini_timeout: int = 90
+    gemini_api_base_url: Optional[str] = None  # Custom API endpoint for testing
 
     # App Configuration
     upload_max_size_mb: int = 10

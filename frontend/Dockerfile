@@ -15,9 +15,13 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Set build-time environment variable for backend URL
+# Set build-time environment variables
 ARG FASTAPI_URL=http://api:8100
 ENV FASTAPI_URL=${FASTAPI_URL}
+
+# WebSocket URL for client-side connections (NEXT_PUBLIC_ vars are embedded at build time)
+ARG NEXT_PUBLIC_WS_URL
+ENV NEXT_PUBLIC_WS_URL=${NEXT_PUBLIC_WS_URL}
 
 RUN npm run build
 

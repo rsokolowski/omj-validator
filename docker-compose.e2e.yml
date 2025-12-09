@@ -1,0 +1,146 @@
+# E2E Testing Docker Compose
+#
+# WARNING: DO NOT use this configuration in production - secrets are exposed in plain text!
+# This file is intended ONLY for local E2E testing.
+#
+# Spins up the entire stack with:
+# - Ephemeral PostgreSQL database (no persistence)
+# - Backend API (with session-based auth for test user injection)
+# - Frontend (Next.js)
+# - Fake Gemini API server
+#
+# Usage:
+#   docker compose -f docker-compose.e2e.yml up -d --build
+#   npx playwright test
+#   docker compose -f docker-compose.e2e.yml down -v
+
+services:
+  # ============================================================================
+  # Ephemeral PostgreSQL - no data persistence
+  # ============================================================================
+  e2e-db:
+    image: postgres:16-alpine
+    container_name: omj-e2e-db
+    environment:
+      POSTGRES_USER: e2e
+      POSTGRES_PASSWORD: e2e
+      POSTGRES_DB: omj_e2e
+    # Use tmpfs for ephemeral storage - data is lost on container stop
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U e2e -d omj_e2e"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+    networks:
+      - e2e-network
+
+  # ============================================================================
+  # Fake Gemini API Server
+  # ============================================================================
+  fake-gemini:
+    build:
+      context: ./e2e/fake-gemini
+      dockerfile: Dockerfile
+    container_name: omj-e2e-fake-gemini
+    environment:
+      PORT: "8080"
+      # Default scenario - can be overridden via API
+      FAKE_GEMINI_SCENARIO: success_score_6
+      FAKE_GEMINI_DELAY_MS: "100"
+      FAKE_GEMINI_STREAM_DELAY_MS: "50"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/health')"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+    ports:
+      # Exposed for test scenario configuration from host
+      - "127.0.0.1:8080:8080"
+    networks:
+      - e2e-network
+
+  # ============================================================================
+  # Backend API
+  # ============================================================================
+  e2e-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.e2e
+    container_name: omj-e2e-api
+    depends_on:
+      e2e-db:
+        condition: service_healthy
+      fake-gemini:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8100/health"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+    environment:
+      # Database - ephemeral test database
+      DATABASE_URL: postgresql://e2e:e2e@e2e-db:5432/omj_e2e
+
+      # Authentication - NOT disabled, we inject test users via session cookies
+      AUTH_DISABLED: "false"
+      SESSION_SECRET_KEY: "e2e-test-secret-key-for-session-signing-32bytes"
+
+      # Access control - allow specific test emails
+      # Note: restricted@example.com is included but has is_group_member=false in session
+      ALLOWED_EMAILS: "test-user@example.com,test-user-2@example.com,test-admin@example.com,restricted@example.com"
+
+      # AI Provider - point to fake Gemini
+      AI_PROVIDER: gemini
+      GEMINI_API_KEY: "fake-api-key-for-testing"
+      GEMINI_API_BASE_URL: "http://fake-gemini:8080"
+      GEMINI_MODEL: "gemini-test-model"
+      GEMINI_TIMEOUT: "60"
+
+      # Frontend URL (for OAuth, not used in e2e)
+      FRONTEND_URL: "http://localhost:3200"
+    volumes:
+      # Ephemeral uploads - use tmpfs
+      - e2e-uploads:/app/data/uploads
+    ports:
+      # Exposed for direct API testing
+      - "127.0.0.1:8200:8100"
+    networks:
+      - e2e-network
+
+  # ============================================================================
+  # Frontend
+  # ============================================================================
+  e2e-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # Backend URL for Next.js server-side requests
+        FASTAPI_URL: http://e2e-api:8100
+        # WebSocket URL for browser connections (browser connects to host port)
+        NEXT_PUBLIC_WS_URL: ws://localhost:8200
+    container_name: omj-e2e-frontend
+    depends_on:
+      e2e-api:
+        condition: service_healthy
+    environment:
+      FASTAPI_URL: http://e2e-api:8100
+    ports:
+      # Main e2e test access point (internal 3100 -> external 3200)
+      - "127.0.0.1:3200:3100"
+    networks:
+      - e2e-network
+
+networks:
+  e2e-network:
+    driver: bridge
+
+volumes:
+  e2e-uploads:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs

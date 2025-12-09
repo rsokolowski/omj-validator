@@ -1,0 +1,20 @@
+{
+  "name": "omj-validator-e2e",
+  "version": "1.0.0",
+  "description": "E2E tests for OMJ Validator using Playwright",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report",
+    "docker:up": "docker compose -f ../docker-compose.e2e.yml up -d --build",
+    "docker:down": "docker compose -f ../docker-compose.e2e.yml down -v",
+    "docker:logs": "docker compose -f ../docker-compose.e2e.yml logs -f",
+    "docker:restart": "npm run docker:down && npm run docker:up"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.10.2"
+  }
+}
