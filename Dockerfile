@@ -21,6 +21,8 @@ COPY alembic.ini .
 COPY prompts/ ./prompts/
 COPY tasks/ ./tasks/
 COPY data/tasks/ ./data/tasks/
+COPY static/ ./static/
+COPY templates/ ./templates/
 
 # Create data directories
 RUN mkdir -p /app/data/uploads /app/data/submissions

@@ -11,7 +11,8 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
       POSTGRES_DB: ${POSTGRES_DB:-omj}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      # Bind mount for direct access on VM
+      - ./data/postgres:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-omj} -d ${POSTGRES_DB:-omj}"]
       interval: 10s
@@ -57,9 +58,8 @@ services:
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash}
       GEMINI_TIMEOUT: ${GEMINI_TIMEOUT:-90}
     volumes:
-      # Persist uploads and submissions
-      - uploads_data:/app/data/uploads
-      - submissions_data:/app/data/submissions
+      # Persist uploads - bind mount for direct access on VM
+      - ./data/uploads:/app/data/uploads
     ports:
       # Non-standard port for Nginx proxy
       - "127.0.0.1:8100:8100"
@@ -90,8 +90,3 @@ services:
 networks:
   omj-network:
     driver: bridge
-
-volumes:
-  postgres_data:
-  uploads_data:
-  submissions_data:
