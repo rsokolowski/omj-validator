@@ -813,8 +813,13 @@ async def websocket_submission_progress(
                 user = session_data.get(SESSION_USER_KEY)
                 if user:
                     user_id = user.get("google_sub")
+                    logger.info(f"[WebSocket] Session decoded, user_id={user_id[:8]}...")
+                else:
+                    logger.warning(f"[WebSocket] No user in session data")
+            else:
+                logger.warning(f"[WebSocket] No session cookie found. Cookies: {list(websocket.cookies.keys())}")
         except Exception as e:
-            logger.debug(f"[WebSocket] Session decode failed: {e}")
+            logger.warning(f"[WebSocket] Session decode failed: {e}")
 
     # Verify submission exists
     submission_repo = SubmissionRepository(db)
@@ -827,6 +832,7 @@ async def websocket_submission_progress(
     # Verify user owns this submission (unless auth disabled)
     if not settings.auth_disabled:
         if not user_id or user_id != submission.user_id:
+            logger.warning(f"[WebSocket] Auth failed: user_id={user_id}, submission.user_id={submission.user_id[:8] if submission.user_id else None}...")
             await websocket.close(code=4003, reason="Not authorized")
             return
 
