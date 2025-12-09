@@ -58,7 +58,15 @@ export async function uploadFiles<T>(
       if (xhr.status >= 200 && xhr.status < 300) {
         resolve(JSON.parse(xhr.responseText));
       } else {
-        reject(new APIError(xhr.status, xhr.statusText));
+        // Parse JSON error response to get the actual error message
+        let errorMessage = xhr.statusText;
+        try {
+          const errorData = JSON.parse(xhr.responseText);
+          errorMessage = errorData.error || errorData.detail || xhr.statusText;
+        } catch {
+          // If response isn't JSON, use status text
+        }
+        reject(new APIError(xhr.status, errorMessage));
       }
     });
 

@@ -59,6 +59,11 @@ class Settings(BaseSettings):
     # App Configuration
     upload_max_size_mb: int = 10
 
+    # Rate Limiting (rolling 24h windows)
+    rate_limit_new_users_per_day: int = 50           # Max new user registrations per 24h
+    rate_limit_submissions_per_user_per_day: int = 30  # Max submissions per user per 24h
+    rate_limit_submissions_global_per_day: int = 500   # Max total submissions per 24h
+
     # Database
     database_url: Optional[str] = None  # Override with DATABASE_URL env var
 
