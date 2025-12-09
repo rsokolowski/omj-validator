@@ -27,8 +27,9 @@ class Settings(BaseSettings):
     # Session - MUST be set explicitly in production for multi-worker consistency
     session_secret_key: Optional[str] = None
 
-    # Frontend URL for OAuth redirects (when behind a proxy/separate frontend)
-    frontend_url: Optional[str] = None  # e.g., "https://omj-frontend.onrender.com"
+    # Frontend URL for OAuth redirects (only needed if frontend/backend on different domains)
+    # Not required for co-hosted deployment behind Nginx
+    frontend_url: Optional[str] = None
 
     @model_validator(mode="after")
     def validate_session_secret(self):
@@ -62,7 +63,7 @@ class Settings(BaseSettings):
     database_url: Optional[str] = None  # Override with DATABASE_URL env var
 
     # Paths - can be overridden via environment
-    data_dir: Optional[str] = None  # External data dir (e.g., /data on Render)
+    data_dir: Optional[str] = None  # External data dir for cloud deployments
 
     # Paths (derived)
     base_dir: Path = Path(__file__).parent.parent

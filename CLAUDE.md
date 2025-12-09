@@ -88,7 +88,7 @@ omj-validator/
 ├── alembic/                # Database migrations
 ├── prompts/                # AI prompts for analysis
 ├── docker-compose.yml      # PostgreSQL container
-├── render.yaml             # Render deployment (2 services)
+├── docker-compose.prod.yml # Production Docker Compose
 └── start.sh                # Development startup script
 ```
 
@@ -197,7 +197,6 @@ AUTH_DISABLED=false                  # Set true for local dev without auth
 GOOGLE_CLIENT_ID=...
 GOOGLE_CLIENT_SECRET=...
 SESSION_SECRET_KEY=...               # Generate: openssl rand -hex 32
-FRONTEND_URL=https://...             # Frontend URL (for CORS, redirects)
 
 # Access control (choose one)
 ALLOWED_EMAILS=user1@gmail.com,user2@example.com
@@ -237,19 +236,23 @@ NEXT_PUBLIC_API_URL=                 # Empty = use proxy rewrites
 - Backend: http://localhost:8000
 - Database: localhost:5433
 
-### Render (Production)
+### Docker Compose (Production)
 
-Configured in `render.yaml` as two separate services:
+Configured in `docker-compose.prod.yml` with three services:
 
-**omj-api** (FastAPI backend):
-- Runtime: Python
-- Start: `alembic upgrade head && gunicorn app.main:app --workers 2 --worker-class uvicorn.workers.UvicornWorker`
-- Requires: PostgreSQL database, Google OAuth credentials, Gemini API key
+```bash
+# Setup
+cp .env.prod.example .env.prod  # Configure environment variables
 
-**omj-validator** (Next.js frontend):
-- Runtime: Node
-- Root directory: `frontend`
-- Start: `npm start`
-- Requires: `FASTAPI_URL` pointing to backend service
+# Build and run
+docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+```
+
+**Services:**
+- `db` - PostgreSQL 16 (internal network only)
+- `api` - FastAPI backend on port 8100
+- `frontend` - Next.js frontend on port 3100
+
+**Nginx reverse proxy:** See `nginx.conf.example` for sample configuration with SSL and WebSocket support.
 
 Frontend proxies all API requests to backend via Next.js rewrites, enabling same-origin session cookies.

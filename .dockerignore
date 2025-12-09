@@ -1,0 +1,53 @@
+# Backend .dockerignore
+
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+.env
+.env.*
+*.egg-info/
+.eggs/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Frontend (built separately)
+frontend/
+
+# Local data (will use volumes)
+data/uploads/
+data/submissions/
+
+# Documentation
+*.md
+!prompts/*.md
+
+# Docker files for other builds
+docker-compose.yml
+docker-compose.prod.yml
+Dockerfile
+
+# Scripts
+*.sh
+
+# Misc
+.DS_Store
+*.log

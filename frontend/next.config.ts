@@ -4,6 +4,8 @@ import type { NextConfig } from "next";
 const backendUrl = process.env.FASTAPI_URL || "http://localhost:8000";
 
 const nextConfig: NextConfig = {
+  // Enable standalone output for Docker deployment
+  output: "standalone",
   // Proxy API requests to FastAPI backend
   // Use fallback so Next.js API routes and pages are checked first
   async rewrites() {
