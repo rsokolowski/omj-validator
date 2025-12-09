@@ -82,7 +82,17 @@ class GeminiProvider:
         if not settings.gemini_api_key:
             raise ValueError("GEMINI_API_KEY is required. Set it in your .env file.")
 
-        self._client = genai.Client(api_key=settings.gemini_api_key)
+        # Support custom API endpoint for testing
+        if settings.gemini_api_base_url:
+            http_options = types.HttpOptions(base_url=settings.gemini_api_base_url)
+            self._client = genai.Client(
+                api_key=settings.gemini_api_key,
+                http_options=http_options,
+            )
+            logger.info(f"[Gemini] Using custom API endpoint: {settings.gemini_api_base_url}")
+        else:
+            self._client = genai.Client(api_key=settings.gemini_api_key)
+
         self._model_name = settings.gemini_model
 
     def _calculate_cost(self, input_tokens: int, output_tokens: int) -> float:

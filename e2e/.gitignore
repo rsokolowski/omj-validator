@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
