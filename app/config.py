@@ -61,6 +61,7 @@ class Settings(BaseSettings):
     gemini_model: str = "gemini-3-pro-preview"
     gemini_timeout: int = 90
     gemini_api_base_url: Optional[str] = None  # Custom API endpoint for testing
+    gemini_debug_logs: bool = False  # Enable verbose debug logging for Gemini API
 
     # App Configuration
     upload_max_size_mb: int = 10
