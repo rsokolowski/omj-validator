@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { serverFetch } from "@/lib/api/server";
 import { ProgressData, User } from "@/lib/types";
 import { ProgressStats } from "@/components/progress/ProgressStats";
@@ -27,15 +26,8 @@ export default async function ProgressPage({ searchParams }: ProgressPageProps) 
   const { category } = await searchParams;
   const data = await getProgressData(category);
 
-  const breadcrumbItems = [
-    { label: "Lata", href: "/years" },
-    { label: "Nauka" },
-  ];
-
   return (
     <Box>
-      <Breadcrumb items={breadcrumbItems} />
-
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" component="h1" sx={{ fontWeight: 700, color: "grey.900", mb: 1 }}>
           Nauka
