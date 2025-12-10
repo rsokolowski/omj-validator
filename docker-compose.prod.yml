@@ -31,6 +31,11 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    # Security hardening
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8100/health"]
       interval: 30s
@@ -94,6 +99,11 @@ services:
     depends_on:
       api:
         condition: service_healthy
+    # Security hardening
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
     environment:
       # Runtime backend URL (must match build-time for rewrites)
       FASTAPI_URL: http://api:8100
