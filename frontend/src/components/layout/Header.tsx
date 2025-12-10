@@ -12,6 +12,7 @@ import {
   Container,
 } from "@mui/material";
 import { useAuth } from "@/lib/hooks/useAuth";
+import { APP_NAME } from "@/lib/utils/constants";
 
 export function Header() {
   const { user, isAuthenticated, isGroupMember, isLoading } = useAuth();
@@ -29,7 +30,7 @@ export function Header() {
       <Container maxWidth="lg">
         <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
           {/* Logo */}
-          <Link href="/years" style={{ textDecoration: "none" }}>
+          <Link href="/" style={{ textDecoration: "none" }}>
             <Typography
               variant="h6"
               sx={{
@@ -38,7 +39,7 @@ export function Header() {
                 "&:hover": { color: "primary.main" },
               }}
             >
-              OMJ Validator
+              {APP_NAME}
             </Typography>
           </Link>
 
