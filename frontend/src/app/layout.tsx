@@ -3,11 +3,12 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { APP_TITLE, APP_DESCRIPTION } from "@/lib/utils/constants";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "OMJ Validator - Olimpiada Matematyczna Juniorów",
-  description: "Walidator rozwiązań zadań Olimpiady Matematycznej Juniorów",
+  title: APP_TITLE,
+  description: APP_DESCRIPTION,
 };
 
 export default function RootLayout({

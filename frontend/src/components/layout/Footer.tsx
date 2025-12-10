@@ -1,4 +1,5 @@
 import { Box, Container, Typography, Link as MuiLink } from "@mui/material";
+import { APP_NAME } from "@/lib/utils/constants";
 
 export function Footer() {
   return (
@@ -15,7 +16,7 @@ export function Footer() {
       <Container maxWidth="lg">
         <Box sx={{ textAlign: "center" }}>
           <Typography variant="body2" color="text.secondary">
-            Olimpiada Matematyczna Juniorów - Walidator rozwiązań
+            {APP_NAME} - Olimpiada Matematyczna Juniorów
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
             <MuiLink
