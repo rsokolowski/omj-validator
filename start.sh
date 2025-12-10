@@ -1,9 +1,15 @@
 #!/bin/bash
+# Development startup script using Docker Compose
+# Starts PostgreSQL, FastAPI backend, and Next.js frontend
+
+set -e
 cd "$(dirname "$0")"
 
 # Parse arguments
 BACKEND_ONLY=false
 FRONTEND_ONLY=false
+BUILD=false
+
 for arg in "$@"; do
     case $arg in
         --backend-only)
@@ -12,89 +18,78 @@ for arg in "$@"; do
         --frontend-only)
             FRONTEND_ONLY=true
             ;;
+        --build)
+            BUILD=true
+            ;;
+        --help|-h)
+            echo "Usage: ./start.sh [OPTIONS]"
+            echo ""
+            echo "Options:"
+            echo "  --backend-only   Start only PostgreSQL and FastAPI backend"
+            echo "  --frontend-only  Start only Next.js frontend (requires backend running)"
+            echo "  --build          Force rebuild of Docker images"
+            echo "  --help, -h       Show this help message"
+            echo ""
+            echo "Examples:"
+            echo "  ./start.sh                    # Start full stack"
+            echo "  ./start.sh --build            # Rebuild and start full stack"
+            echo "  ./start.sh --backend-only     # Start DB + API only"
+            echo ""
+            echo "To stop: docker compose down"
+            echo "To stop and remove data: docker compose down -v"
+            exit 0
+            ;;
     esac
 done
 
-# Kill any existing process on port 8000
-if [ "$FRONTEND_ONLY" = false ]; then
-    PID=$(lsof -ti:8000 2>/dev/null)
-    if [ -n "$PID" ]; then
-        echo "Stopping existing backend server (PID: $PID)..."
-        kill $PID 2>/dev/null
-        sleep 1
-    fi
+# Check for .env file
+if [ ! -f .env ]; then
+    echo "ERROR: .env file not found."
+    echo "Create one based on .env.example or copy the existing .env file."
+    exit 1
 fi
 
-# Kill any existing process on port 3000
-if [ "$BACKEND_ONLY" = false ]; then
-    PID=$(lsof -ti:3000 2>/dev/null)
-    if [ -n "$PID" ]; then
-        echo "Stopping existing frontend server (PID: $PID)..."
-        kill $PID 2>/dev/null
-        sleep 1
-    fi
+# Check for required GEMINI_API_KEY (must be non-empty and not commented)
+if ! grep -qE "^GEMINI_API_KEY=.+" .env 2>/dev/null; then
+    echo "ERROR: GEMINI_API_KEY is not set in .env file."
+    exit 1
 fi
 
-# Backend setup
-if [ "$FRONTEND_ONLY" = false ]; then
-    source venv/bin/activate
+# Create data directories and files if they don't exist
+mkdir -p data/uploads data/tasks
+touch data/skills.json 2>/dev/null || true
 
-    # Create data directory if it doesn't exist
-    mkdir -p data
-
-    # Start PostgreSQL if not running
-    if ! docker ps --format '{{.Names}}' | grep -q '^omj-postgres$'; then
-        echo "Starting PostgreSQL container..."
-        docker compose up -d db
-        echo "Waiting for PostgreSQL to be ready..."
-        TIMEOUT=30
-        COUNT=0
-        until docker compose exec -T db pg_isready -U omj -d omj > /dev/null 2>&1; do
-            sleep 1
-            ((COUNT++))
-            if [ $COUNT -ge $TIMEOUT ]; then
-                echo "ERROR: PostgreSQL failed to start within ${TIMEOUT} seconds."
-                exit 1
-            fi
-        done
-        echo "PostgreSQL is ready."
-    fi
-
-    # Run database migrations
-    echo "Running database migrations..."
-    alembic upgrade head
-    if [ $? -ne 0 ]; then
-        echo "ERROR: Database migration failed. Please check the logs."
-        exit 1
-    fi
+# Build arguments
+BUILD_ARG=""
+if [ "$BUILD" = true ]; then
+    BUILD_ARG="--build"
 fi
 
-# Start frontend
-if [ "$BACKEND_ONLY" = false ]; then
-    echo "Starting Next.js frontend on http://localhost:3000"
-    cd frontend
-    if [ ! -d "node_modules" ]; then
-        echo "Installing frontend dependencies..."
-        npm install
-    fi
-    if [ "$FRONTEND_ONLY" = true ]; then
-        npm run dev
-        exit 0
-    else
-        npm run dev &
-        FRONTEND_PID=$!
-        cd ..
-    fi
+# Determine which services to start
+if [ "$FRONTEND_ONLY" = true ]; then
+    SERVICES="frontend"
+elif [ "$BACKEND_ONLY" = true ]; then
+    SERVICES="db api"
+else
+    SERVICES=""  # Empty means all services
 fi
 
-# Start backend
-if [ "$FRONTEND_ONLY" = false ]; then
-    echo "Starting FastAPI backend on http://localhost:8000"
+echo "=== OMJ Validator Development ==="
+echo ""
+
+# Start services
+if [ -n "$SERVICES" ]; then
+    echo "Starting services: $SERVICES"
+    docker compose up $BUILD_ARG $SERVICES
+else
+    echo "Starting all services..."
     echo ""
-    echo "=== OMJ Validator ==="
     echo "Frontend: http://localhost:3000"
     echo "Backend:  http://localhost:8000"
-    echo "====================="
+    echo "Database: localhost:5433"
     echo ""
-    uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+    echo "Press Ctrl+C to stop all services"
+    echo "================================"
+    echo ""
+    docker compose up $BUILD_ARG
 fi

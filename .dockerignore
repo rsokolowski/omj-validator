@@ -40,10 +40,11 @@ data/submissions/
 *.md
 !prompts/*.md
 
-# Docker files for other builds
+# Docker files (not needed in build context)
 docker-compose.yml
 docker-compose.prod.yml
 Dockerfile
+Dockerfile.dev
 
 # Scripts
 *.sh
