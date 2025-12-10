@@ -193,9 +193,9 @@ test.describe('Submission Flow', () => {
       const submitButton = page.getByRole('button', { name: /prześlij/i });
       await submitButton.click();
 
-      // Should show quota/overload error
+      // Should show quota/overload error - add .first() to handle multiple error messages
       await expect(
-        page.getByText(/przeciążony/i).or(page.getByText(/quota/i)).or(page.getByText(/spróbuj ponownie/i))
+        page.getByText(/przeciążony/i).or(page.getByText(/quota/i)).or(page.getByText(/spróbuj ponownie/i)).first()
       ).toBeVisible({ timeout: 30000 });
     });
 
