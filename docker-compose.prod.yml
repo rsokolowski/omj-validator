@@ -68,6 +68,11 @@ services:
       TRANSLATE_ENABLED: ${TRANSLATE_ENABLED:-false}
       TRANSLATE_API_KEY: ${TRANSLATE_API_KEY:-}
       TRANSLATE_TIMEOUT: ${TRANSLATE_TIMEOUT:-2.0}
+
+      # Rate Limiting (rolling 24h windows)
+      RATE_LIMIT_NEW_USERS_PER_DAY: ${RATE_LIMIT_NEW_USERS_PER_DAY:-50}
+      RATE_LIMIT_SUBMISSIONS_PER_USER_PER_DAY: ${RATE_LIMIT_SUBMISSIONS_PER_USER_PER_DAY:-30}
+      RATE_LIMIT_SUBMISSIONS_GLOBAL_PER_DAY: ${RATE_LIMIT_SUBMISSIONS_GLOBAL_PER_DAY:-500}
     volumes:
       # Persist uploads - bind mount for direct access on VM
       - ./data/uploads:/app/data/uploads
