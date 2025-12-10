@@ -19,9 +19,7 @@ export function Footer() {
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
             <MuiLink
-              href="https://groups.google.com/g/omj-validator-alpha"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:omj.validator@gmail.com"
               sx={{ color: "primary.main" }}
             >
               Kontakt / Zgłoś błąd

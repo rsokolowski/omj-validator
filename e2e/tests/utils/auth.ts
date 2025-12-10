@@ -58,6 +58,58 @@ export const TEST_USERS = {
     picture: null,
     is_group_member: false,
   } as TestUser,
+
+  // User subject to rate limits (NOT in ALLOWED_EMAILS)
+  // Use for testing rate limiting behavior
+  rateLimited: {
+    google_sub: 'test-ratelimit-sub-111',
+    email: 'ratelimited@example.com',
+    name: 'Rate Limited User',
+    picture: null,
+    is_group_member: true,
+  } as TestUser,
+
+  // Second rate-limited user for cross-user rate limit tests
+  rateLimited2: {
+    google_sub: 'test-ratelimit-sub-222',
+    email: 'ratelimited2@example.com',
+    name: 'Rate Limited User 2',
+    picture: null,
+    is_group_member: true,
+  } as TestUser,
+
+  // Additional rate-limited users for isolated tests
+  rateLimited3: {
+    google_sub: 'test-ratelimit-sub-333',
+    email: 'ratelimited3@example.com',
+    name: 'Rate Limited User 3',
+    picture: null,
+    is_group_member: true,
+  } as TestUser,
+
+  rateLimited4: {
+    google_sub: 'test-ratelimit-sub-444',
+    email: 'ratelimited4@example.com',
+    name: 'Rate Limited User 4',
+    picture: null,
+    is_group_member: true,
+  } as TestUser,
+
+  rateLimited5: {
+    google_sub: 'test-ratelimit-sub-555',
+    email: 'ratelimited5@example.com',
+    name: 'Rate Limited User 5',
+    picture: null,
+    is_group_member: true,
+  } as TestUser,
+
+  rateLimited6: {
+    google_sub: 'test-ratelimit-sub-666',
+    email: 'ratelimited6@example.com',
+    name: 'Rate Limited User 6',
+    picture: null,
+    is_group_member: true,
+  } as TestUser,
 };
 
 /**

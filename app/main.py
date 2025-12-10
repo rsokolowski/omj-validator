@@ -123,6 +123,88 @@ def to_roman(num: int) -> str:
 templates.env.filters["roman"] = to_roman
 
 
+# --- Rate Limit Headers ---
+
+from datetime import datetime as dt_datetime, timezone as dt_timezone, timedelta as dt_timedelta
+from typing import Optional as OptionalType
+
+
+def _ensure_timezone_aware(timestamp: OptionalType[dt_datetime]) -> OptionalType[dt_datetime]:
+    """Ensure datetime is timezone-aware (UTC)."""
+    if timestamp is None:
+        return None
+    if timestamp.tzinfo is None:
+        # Naive datetime - assume it's UTC
+        return timestamp.replace(tzinfo=dt_timezone.utc)
+    return timestamp
+
+
+def _calculate_rate_limit_headers(
+    limit: int,
+    current_count: int,
+    oldest_timestamp: OptionalType[dt_datetime],
+    window_hours: int = 24,
+) -> dict[str, str]:
+    """Calculate standard rate limit headers.
+
+    Args:
+        limit: Maximum allowed requests in the window
+        current_count: Current number of requests in the window
+        oldest_timestamp: Timestamp of the oldest request in the window (for reset calculation)
+        window_hours: Duration of the rolling window in hours
+
+    Returns:
+        Dict with standard rate limit headers:
+        - X-RateLimit-Limit: Maximum requests allowed
+        - X-RateLimit-Remaining: Remaining requests in current window
+        - X-RateLimit-Reset: Unix timestamp when oldest request expires from window
+    """
+    remaining = max(0, limit - current_count)
+
+    # Ensure timestamp is timezone-aware
+    oldest_timestamp = _ensure_timezone_aware(oldest_timestamp)
+
+    # Calculate reset time: when the oldest item in the window ages out
+    if oldest_timestamp:
+        # If we have items in window, reset when oldest expires
+        reset_time = oldest_timestamp + dt_timedelta(hours=window_hours)
+    else:
+        # No items in window, reset is 24h from now (window is empty)
+        reset_time = dt_datetime.now(dt_timezone.utc) + dt_timedelta(hours=window_hours)
+
+    reset_unix = int(reset_time.timestamp())
+
+    return {
+        "X-RateLimit-Limit": str(limit),
+        "X-RateLimit-Remaining": str(remaining),
+        "X-RateLimit-Reset": str(reset_unix),
+    }
+
+
+def _calculate_retry_after(
+    oldest_timestamp: OptionalType[dt_datetime], window_hours: int = 24
+) -> int:
+    """Calculate Retry-After header value in seconds.
+
+    Args:
+        oldest_timestamp: Timestamp of the oldest request in the window
+        window_hours: Duration of the rolling window in hours
+
+    Returns:
+        Seconds until the rate limit resets (minimum 1 second)
+    """
+    # Ensure timestamp is timezone-aware
+    oldest_timestamp = _ensure_timezone_aware(oldest_timestamp)
+
+    if oldest_timestamp:
+        reset_time = oldest_timestamp + dt_timedelta(hours=window_hours)
+    else:
+        reset_time = dt_datetime.now(dt_timezone.utc) + dt_timedelta(hours=window_hours)
+
+    retry_after = int((reset_time - dt_datetime.now(dt_timezone.utc)).total_seconds())
+    return max(1, retry_after)
+
+
 # --- Startup Events ---
 
 @app.on_event("startup")
@@ -164,6 +246,16 @@ async def start_cleanup_task():
     task = asyncio.create_task(cleanup_loop())
     _background_tasks.add(task)
     task.add_done_callback(_background_tasks.discard)
+
+
+@app.on_event("startup")
+def warm_ai_provider():
+    """Initialize AI provider at startup to avoid latency on first request."""
+    try:
+        provider = create_ai_provider()
+        logger.info(f"AI provider warmed up: {type(provider).__name__}")
+    except Exception as e:
+        logger.warning(f"Failed to warm AI provider: {e}")
 
 
 # --- Authentication Routes ---
@@ -667,31 +759,53 @@ async def submit_solution(
     # Create repository once for rate limit checks and later submission creation
     submission_repo = SubmissionRepository(db)
 
+    # Track rate limit info for headers (even if allowlisted, for informational purposes)
+    user_submission_count, user_oldest_submission = submission_repo.get_user_rate_limit_info(
+        user_id, hours=24
+    )
+    rate_limit_headers = _calculate_rate_limit_headers(
+        limit=settings.rate_limit_submissions_per_user_per_day,
+        current_count=user_submission_count,
+        oldest_timestamp=user_oldest_submission,
+        window_hours=24,
+    )
+
     if not is_allowlisted:
         # Check per-user submission limit
-        user_submissions = submission_repo.count_user_recent_submissions(user_id, hours=24)
-        if user_submissions >= settings.rate_limit_submissions_per_user_per_day:
+        if user_submission_count >= settings.rate_limit_submissions_per_user_per_day:
             logger.warning(
                 f"User submission rate limit exceeded: {user_id[:8]}... "
-                f"{user_submissions}/{settings.rate_limit_submissions_per_user_per_day}"
+                f"{user_submission_count}/{settings.rate_limit_submissions_per_user_per_day}"
             )
+            retry_after = _calculate_retry_after(user_oldest_submission, window_hours=24)
             return JSONResponse(
                 {
                     "error": f"Osiągnięto dzienny limit zgłoszeń ({settings.rate_limit_submissions_per_user_per_day}). "
                     "Możesz przesłać więcej rozwiązań jutro."
                 },
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                headers={**rate_limit_headers, "Retry-After": str(retry_after)},
             )
 
         # Check global submission limit
-        global_submissions = submission_repo.count_recent_submissions(hours=24)
-        if global_submissions >= settings.rate_limit_submissions_global_per_day:
+        global_submission_count, global_oldest_submission = submission_repo.get_global_rate_limit_info(
+            hours=24
+        )
+        if global_submission_count >= settings.rate_limit_submissions_global_per_day:
             logger.warning(
-                f"Global submission rate limit exceeded: {global_submissions}/{settings.rate_limit_submissions_global_per_day}"
+                f"Global submission rate limit exceeded: {global_submission_count}/{settings.rate_limit_submissions_global_per_day}"
             )
+            global_rate_headers = _calculate_rate_limit_headers(
+                limit=settings.rate_limit_submissions_global_per_day,
+                current_count=global_submission_count,
+                oldest_timestamp=global_oldest_submission,
+                window_hours=24,
+            )
+            retry_after = _calculate_retry_after(global_oldest_submission, window_hours=24)
             return JSONResponse(
                 {"error": "System osiągnął dzienny limit zgłoszeń. Spróbuj ponownie później."},
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                headers={**global_rate_headers, "Retry-After": str(retry_after)},
             )
 
     # Validate path parameters to prevent directory traversal
@@ -817,6 +931,16 @@ async def submit_solution(
     # Return immediately with submission_id and WebSocket URL
     # Include ws_url so frontend knows where to connect
     ws_path = f"/ws/submissions/{submission.id}"
+
+    # Update rate limit headers to reflect this new submission
+    # (increment count by 1 since we just created a submission)
+    updated_rate_limit_headers = _calculate_rate_limit_headers(
+        limit=settings.rate_limit_submissions_per_user_per_day,
+        current_count=user_submission_count + 1,
+        oldest_timestamp=user_oldest_submission,
+        window_hours=24,
+    )
+
     return JSONResponse(
         {
             "success": True,
@@ -824,7 +948,8 @@ async def submit_solution(
             "status": "processing",
             "message": "Rozwiązanie przesłane. Połącz się z WebSocket, aby śledzić postęp.",
             "ws_path": ws_path,
-        }
+        },
+        headers=updated_rate_limit_headers,
     )
 
 
@@ -1011,6 +1136,88 @@ async def serve_upload(request: Request, path: str):
 async def health_check():
     """Health check endpoint for deployment platforms."""
     return {"status": "ok"}
+
+
+# --- E2E Test Utility Endpoints ---
+# These endpoints are only available when E2E_MODE=true
+
+
+@app.post("/api/test/reset-user-submissions")
+async def reset_user_submissions(
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """
+    Reset (delete) all submissions for the current user.
+    Only available in E2E testing mode.
+    """
+    if not settings.e2e_mode:
+        raise HTTPException(
+            status_code=404,
+            detail="Not found",
+        )
+
+    user = get_current_user(request)
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required",
+        )
+
+    user_id = user.get("google_sub")
+    if not user_id:
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid user session",
+        )
+
+    # Delete all submissions for this user
+    submission_repo = SubmissionRepository(db)
+    deleted_count = submission_repo.delete_all_user_submissions(user_id)
+
+    logger.info(f"E2E: Reset {deleted_count} submissions for user {user.get('email')}")
+
+    return {
+        "success": True,
+        "deleted_count": deleted_count,
+        "user_email": user.get("email"),
+    }
+
+
+@app.post("/api/test/reset-all-submissions")
+async def reset_all_submissions(
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """
+    Reset (delete) all submissions in the database.
+    Only available in E2E testing mode.
+    Used to reset the global rate limit between test suites.
+    """
+    if not settings.e2e_mode:
+        raise HTTPException(
+            status_code=404,
+            detail="Not found",
+        )
+
+    # Require authentication for defense in depth
+    user = get_current_user(request)
+    if not user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required",
+        )
+
+    # Delete all submissions
+    submission_repo = SubmissionRepository(db)
+    deleted_count = submission_repo.delete_all_submissions()
+
+    logger.info(f"E2E: Reset all {deleted_count} submissions")
+
+    return {
+        "success": True,
+        "deleted_count": deleted_count,
+    }
 
 
 # --- JSON API Endpoints for Next.js Frontend ---

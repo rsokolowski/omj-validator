@@ -8,6 +8,9 @@ from typing import Optional
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
+    # E2E Testing Mode - enables test utility endpoints
+    e2e_mode: bool = False
+
     # Authentication
     auth_disabled: bool = False  # Set to True to disable all auth (local dev)
     auth_key: str = ""  # Deprecated, kept for backward compatibility

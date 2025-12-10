@@ -88,6 +88,26 @@ class UserRepository:
             .scalar()
         ) or 0
 
+    def get_rate_limit_info(self, hours: int = 24) -> tuple[int, Optional[datetime]]:
+        """Get rate limit info: (count, oldest_timestamp) for new users.
+
+        Returns:
+            Tuple of (count of recent users, timestamp of oldest user in window).
+            The oldest timestamp can be used to calculate when the rate limit resets.
+        """
+        threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
+        result = (
+            self.db.query(
+                func.count(UserDB.google_sub),
+                func.min(UserDB.created_at),
+            )
+            .filter(UserDB.created_at >= threshold)
+            .first()
+        )
+        count = result[0] or 0
+        oldest = result[1]
+        return count, oldest
+
 
 class SubmissionRepository:
     """Repository for submission data access."""
@@ -305,6 +325,31 @@ class SubmissionRepository:
             .scalar()
         ) or 0
 
+    def get_user_rate_limit_info(
+        self, user_id: str, hours: int = 24
+    ) -> tuple[int, Optional[datetime]]:
+        """Get rate limit info: (count, oldest_timestamp) for user submissions.
+
+        Returns:
+            Tuple of (count of recent submissions, timestamp of oldest submission in window).
+            The oldest timestamp can be used to calculate when the rate limit resets.
+        """
+        threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
+        result = (
+            self.db.query(
+                func.count(SubmissionDB.id),
+                func.min(SubmissionDB.timestamp),
+            )
+            .filter(
+                SubmissionDB.user_id == user_id,
+                SubmissionDB.timestamp >= threshold,
+            )
+            .first()
+        )
+        count = result[0] or 0
+        oldest = result[1]
+        return count, oldest
+
     def count_recent_submissions(self, hours: int = 24) -> int:
         """Count all submissions in the last N hours (for rate limiting)."""
         threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
@@ -313,3 +358,53 @@ class SubmissionRepository:
             .filter(SubmissionDB.timestamp >= threshold)
             .scalar()
         ) or 0
+
+    def get_global_rate_limit_info(self, hours: int = 24) -> tuple[int, Optional[datetime]]:
+        """Get rate limit info: (count, oldest_timestamp) for all submissions.
+
+        Returns:
+            Tuple of (count of recent submissions, timestamp of oldest submission in window).
+            The oldest timestamp can be used to calculate when the rate limit resets.
+        """
+        threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
+        result = (
+            self.db.query(
+                func.count(SubmissionDB.id),
+                func.min(SubmissionDB.timestamp),
+            )
+            .filter(SubmissionDB.timestamp >= threshold)
+            .first()
+        )
+        count = result[0] or 0
+        oldest = result[1]
+        return count, oldest
+
+    def delete_all_user_submissions(self, user_id: str) -> int:
+        """Delete all submissions for a user.
+
+        Used for E2E testing to reset rate limits.
+
+        Returns:
+            Number of submissions deleted.
+        """
+        count = (
+            self.db.query(SubmissionDB)
+            .filter(SubmissionDB.user_id == user_id)
+            .delete()
+        )
+        self.db.commit()
+        logger.info(f"Deleted {count} submissions for user {user_id}")
+        return count
+
+    def delete_all_submissions(self) -> int:
+        """Delete all submissions.
+
+        Used for E2E testing to reset the global rate limit.
+
+        Returns:
+            Number of submissions deleted.
+        """
+        count = self.db.query(SubmissionDB).delete()
+        self.db.commit()
+        logger.info(f"Deleted all {count} submissions")
+        return count
