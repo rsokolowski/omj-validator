@@ -289,13 +289,15 @@ class GeminiProvider:
             if is_gemini_3:
                 thinking_config = types.ThinkingConfig(
                     include_thoughts=True,
-                    thinking_level="high",
+                    thinking_level=settings.gemini_thinking_level,  # "low" or "high"
                 )
             else:
                 thinking_config = types.ThinkingConfig(
                     include_thoughts=True,
                     thinking_budget=8192,
                 )
+
+            logger.debug(f"[Gemini] Using thinking config: {thinking_config}")
 
             config = types.GenerateContentConfig(
                 thinking_config=thinking_config,
@@ -446,7 +448,7 @@ class GeminiProvider:
                 # Gemini 3: use thinking_level (cannot disable thinking)
                 thinking_config = types.ThinkingConfig(
                     include_thoughts=True,
-                    thinking_level="high",  # "low" or "high"
+                    thinking_level=settings.gemini_thinking_level,  # "low" or "high"
                 )
             else:
                 # Gemini 2.5: use thinking_budget to enable thinking
@@ -454,6 +456,8 @@ class GeminiProvider:
                     include_thoughts=True,
                     thinking_budget=8192,  # Enable thinking with reasonable budget
                 )
+
+            logger.debug(f"[Gemini Stream] Using thinking config: {thinking_config}")
 
             config = types.GenerateContentConfig(
                 thinking_config=thinking_config,

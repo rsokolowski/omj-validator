@@ -62,6 +62,7 @@ class Settings(BaseSettings):
     gemini_timeout: int = 90
     gemini_api_base_url: Optional[str] = None  # Custom API endpoint for testing
     gemini_debug_logs: bool = False  # Enable verbose debug logging for Gemini API
+    gemini_thinking_level: str = "low"  # Thinking effort: "low" (fast) or "high" (thorough)
 
     # App Configuration
     upload_max_size_mb: int = 10
