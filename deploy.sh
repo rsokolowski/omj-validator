@@ -93,7 +93,7 @@ fi
 
 if [ "$STATUS" = true ]; then
     echo "Checking container status..."
-    gcloud compute ssh "$VM_NAME" --command="cd $REMOTE_DIR && sudo docker compose -f $COMPOSE_FILE ps"
+    gcloud compute ssh "$VM_NAME" --command="cd $REMOTE_DIR && sudo docker compose -f $COMPOSE_FILE --env-file $ENV_FILE ps"
     exit 0
 fi
 
@@ -103,7 +103,7 @@ if [ "$LOGS" = true ]; then
         gcloud compute ssh "$VM_NAME" --command="sudo docker logs omj-$SERVICE --tail=100 -f"
     else
         echo "Streaming all logs..."
-        gcloud compute ssh "$VM_NAME" --command="cd $REMOTE_DIR && sudo docker compose -f $COMPOSE_FILE logs -f --tail=100"
+        gcloud compute ssh "$VM_NAME" --command="cd $REMOTE_DIR && sudo docker compose -f $COMPOSE_FILE --env-file $ENV_FILE logs -f --tail=100"
     fi
     exit 0
 fi
