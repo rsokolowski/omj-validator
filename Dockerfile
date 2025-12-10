@@ -37,4 +37,6 @@ USER appuser
 EXPOSE 8100
 
 # Run with gunicorn
-CMD ["sh", "-c", "alembic upgrade head && gunicorn app.main:app --workers 2 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8100"]
+# Single worker required - progress_manager uses in-memory state (see app/websocket/progress.py)
+# Scale horizontally via container replicas with sticky sessions instead
+CMD ["sh", "-c", "alembic upgrade head && gunicorn app.main:app --workers 1 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8100"]
