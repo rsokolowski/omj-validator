@@ -1,8 +1,10 @@
+# Development Docker Compose - starts full stack locally
+# Usage: ./start.sh or docker compose up
+
 services:
   db:
     image: postgres:16-alpine
     container_name: omj-postgres
-    # WARNING: Change credentials in production environments
     environment:
       POSTGRES_USER: omj
       POSTGRES_PASSWORD: omj
@@ -16,6 +18,91 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - omj-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: omj-api
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    environment:
+      # Database (use internal Docker network)
+      DATABASE_URL: postgresql://omj:omj@db:5432/omj
+
+      # Authentication disabled for local dev (no external OAuth URL)
+      AUTH_DISABLED: ${AUTH_DISABLED:-true}
+      SESSION_SECRET_KEY: ${SESSION_SECRET_KEY:-dev-secret-key-change-in-production}
+
+      # Google OAuth (optional for local dev)
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+
+      # Access control
+      ALLOWED_EMAILS: ${ALLOWED_EMAILS:-}
+      GOOGLE_GROUP_EMAIL: ${GOOGLE_GROUP_EMAIL:-}
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${GOOGLE_SERVICE_ACCOUNT_JSON:-}
+
+      # AI Provider
+      AI_PROVIDER: ${AI_PROVIDER:-gemini}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:?GEMINI_API_KEY is required}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.0-flash}
+      GEMINI_TIMEOUT: ${GEMINI_TIMEOUT:-90}
+
+      # App Configuration
+      UPLOAD_MAX_SIZE_MB: ${UPLOAD_MAX_SIZE_MB:-10}
+    volumes:
+      # Mount code for hot-reload
+      - ./app:/app/app
+      - ./alembic:/app/alembic
+      - ./prompts:/app/prompts
+      - ./tasks:/app/tasks
+      - ./data/tasks:/app/data/tasks
+      - ./data/skills.json:/app/data/skills.json
+      - ./static:/app/static
+      - ./templates:/app/templates
+      # Persist uploads
+      - ./data/uploads:/app/data/uploads
+    ports:
+      - "8000:8000"
+    networks:
+      - omj-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: omj-frontend
+    depends_on:
+      api:
+        condition: service_healthy
+    environment:
+      # Backend URL for Next.js server-side requests
+      FASTAPI_URL: http://api:8000
+    volumes:
+      # Mount code for hot-reload
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      # Don't mount node_modules (use container's)
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "3000:3000"
+    networks:
+      - omj-network
+
+networks:
+  omj-network:
+    driver: bridge
 
 volumes:
   postgres_data:

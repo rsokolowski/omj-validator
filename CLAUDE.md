@@ -11,7 +11,7 @@ OMJ Validator - a web application for validating solutions to Polish Junior Math
 ## Development Commands
 
 ```bash
-# Start full development environment (PostgreSQL + backend + frontend)
+# Start full development environment (PostgreSQL + backend + frontend via Docker)
 ./start.sh
 
 # Start only backend (PostgreSQL + FastAPI on port 8000)
@@ -20,23 +20,21 @@ OMJ Validator - a web application for validating solutions to Polish Junior Math
 # Start only frontend (Next.js on port 3000, requires backend running)
 ./start.sh --frontend-only
 
-# Or manually:
-docker compose up -d db           # Start PostgreSQL container
-source venv/bin/activate
-alembic upgrade head              # Run database migrations
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000  # Backend
-cd frontend && npm run dev        # Frontend (separate terminal)
+# Force rebuild of Docker images
+./start.sh --build
 
-# Database management
-docker compose up -d db           # Start PostgreSQL
-docker compose down               # Stop PostgreSQL (data persists)
-docker compose down -v            # Stop and delete data
+# Stop all services
+docker compose down
 
-# Install dependencies
-pip install -r requirements.txt   # Backend
-cd frontend && npm install        # Frontend
+# Stop and delete all data (including database)
+docker compose down -v
 
-# Download task PDFs from omj.edu.pl
+# View logs
+docker compose logs -f            # All services
+docker compose logs -f api        # Backend only
+docker compose logs -f frontend   # Frontend only
+
+# Download task PDFs from omj.edu.pl (run outside Docker)
 python download_tasks.py
 
 # Update task content with LaTeX from PDFs (uses Claude CLI)
@@ -48,6 +46,8 @@ python populate_metadata.py                    # Uses Claude CLI
 python populate_metadata.py --year 2024 --force
 python populate_metadata_gemini.py             # Alternative using Gemini API
 ```
+
+**Note**: Development uses Docker Compose for the full stack. Google OAuth is disabled by default (`AUTH_DISABLED=true`) since it requires an external URL for callbacks.
 
 ## Architecture
 
@@ -87,8 +87,10 @@ omj-validator/
 ├── tasks/                   # Downloaded task PDFs (2005-2025)
 ├── alembic/                # Database migrations
 ├── prompts/                # AI prompts for analysis
-├── docker-compose.yml      # PostgreSQL container
+├── docker-compose.yml      # Development Docker Compose (full stack)
 ├── docker-compose.prod.yml # Production Docker Compose
+├── Dockerfile              # Production backend Dockerfile
+├── Dockerfile.dev          # Development backend Dockerfile (hot-reload)
 └── start.sh                # Development startup script
 ```
 
@@ -192,49 +194,44 @@ GET  /uploads/{path}                 # Serve uploaded images
 **Backend environment variables** (`.env`):
 
 ```bash
-# Authentication
-AUTH_DISABLED=false                  # Set true for local dev without auth
-GOOGLE_CLIENT_ID=...
-GOOGLE_CLIENT_SECRET=...
-SESSION_SECRET_KEY=...               # Generate: openssl rand -hex 32
+# Authentication (disabled by default for local dev)
+AUTH_DISABLED=true
+SESSION_SECRET_KEY=dev-secret-key-change-in-production
+
+# Google OAuth (optional for local dev, required for production)
+# GOOGLE_CLIENT_ID=...
+# GOOGLE_CLIENT_SECRET=...
 
 # Access control (choose one)
-ALLOWED_EMAILS=user1@gmail.com,user2@example.com
+# ALLOWED_EMAILS=user1@gmail.com,user2@example.com
 # OR
-GOOGLE_GROUP_EMAIL=your-group@googlegroups.com
-GOOGLE_SERVICE_ACCOUNT_JSON={...}
+# GOOGLE_GROUP_EMAIL=your-group@googlegroups.com
+# GOOGLE_SERVICE_ACCOUNT_JSON={...}
 
 # AI
 AI_PROVIDER=gemini
-GEMINI_API_KEY=...
+GEMINI_API_KEY=...                   # Required
 GEMINI_MODEL=gemini-2.0-flash
 GEMINI_TIMEOUT=90
 
-# Database
-DATABASE_URL=postgresql://omj:omj@localhost:5433/omj
-
-# Storage
-DATA_DIR=/data                       # Optional, for cloud deployments
+# Note: DATABASE_URL is set in docker-compose.yml for container networking
 ```
 
-**Frontend environment variables** (`frontend/.env.local`):
-
-```bash
-FASTAPI_URL=http://localhost:8000    # Backend URL (server-side only)
-NEXT_PUBLIC_API_URL=                 # Empty = use proxy rewrites
-```
+**Frontend environment**: Set in `docker-compose.yml` (`FASTAPI_URL=http://api:8000`).
 
 ## Deployment
 
 ### Local Development
 
 ```bash
-./start.sh  # Starts PostgreSQL, runs migrations, starts backend + frontend
+./start.sh  # Starts all services via Docker Compose
 ```
 
 - Frontend: http://localhost:3000
 - Backend: http://localhost:8000
 - Database: localhost:5433
+
+All services run in Docker with hot-reload enabled. Code changes in `app/` and `frontend/src/` are automatically picked up.
 
 ### Production (GCP VM)
 

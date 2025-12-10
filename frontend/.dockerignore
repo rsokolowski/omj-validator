@@ -29,6 +29,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Docker files (not needed in build context)
+Dockerfile
+Dockerfile.dev
+
 # Misc
 .DS_Store
 *.log
