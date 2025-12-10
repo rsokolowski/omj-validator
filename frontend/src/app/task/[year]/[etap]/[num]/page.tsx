@@ -36,7 +36,7 @@ export default async function TaskPage({ params }: TaskPageProps) {
   ];
 
   return (
-    <Box sx={{ maxWidth: 900, mx: "auto" }}>
+    <Box>
       <Breadcrumb items={breadcrumbItems} />
 
       {/* Task Header */}

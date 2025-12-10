@@ -38,6 +38,11 @@
   --color-error: #dc2626;
 }
 
+html {
+  /* Prevent layout shift when scrollbar appears/disappears */
+  scrollbar-gutter: stable;
+}
+
 body {
   background: var(--color-gray-50);
   color: var(--color-gray-800);

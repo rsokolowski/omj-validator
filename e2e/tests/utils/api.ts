@@ -182,3 +182,31 @@ export async function getTask(
   }
   return response.json();
 }
+
+/**
+ * Reset (delete) all submissions for the current user.
+ * Only works when E2E_MODE=true on the backend.
+ * Used to reset rate limits between tests.
+ */
+export async function resetUserSubmissions(request: APIRequestContext): Promise<number> {
+  const response = await request.post(`${API_BASE_URL}/api/test/reset-user-submissions`);
+  if (!response.ok()) {
+    throw new Error(`Failed to reset user submissions: ${await response.text()}`);
+  }
+  const data = await response.json();
+  return data.deleted_count || 0;
+}
+
+/**
+ * Reset (delete) ALL submissions in the database.
+ * Only works when E2E_MODE=true on the backend.
+ * Used to reset the global rate limit before running rate-limiting tests.
+ */
+export async function resetAllSubmissions(request: APIRequestContext): Promise<number> {
+  const response = await request.post(`${API_BASE_URL}/api/test/reset-all-submissions`);
+  if (!response.ok()) {
+    throw new Error(`Failed to reset all submissions: ${await response.text()}`);
+  }
+  const data = await response.json();
+  return data.deleted_count || 0;
+}

@@ -87,12 +87,18 @@ services:
       # Database - ephemeral test database
       DATABASE_URL: postgresql://e2e:e2e@e2e-db:5432/omj_e2e
 
+      # E2E testing mode - enables test utility endpoints
+      E2E_MODE: "true"
+
       # Authentication - NOT disabled, we inject test users via session cookies
       AUTH_DISABLED: "false"
       SESSION_SECRET_KEY: "e2e-test-secret-key-for-session-signing-32bytes"
 
-      # Access control - allow specific test emails
+      # Access control - allow specific test emails (these bypass rate limits)
       # Note: restricted@example.com is included but has is_group_member=false in session
+      # Note: ratelimited@example.com and ratelimited2@example.com are NOT in this list
+      #       so they are subject to rate limits when PUBLIC_ACCESS=true
+      PUBLIC_ACCESS: "true"
       ALLOWED_EMAILS: "test-user@example.com,test-user-2@example.com,test-admin@example.com,restricted@example.com"
 
       # AI Provider - point to fake Gemini
@@ -101,6 +107,11 @@ services:
       GEMINI_API_BASE_URL: "http://fake-gemini:8080"
       GEMINI_MODEL: "gemini-test-model"
       GEMINI_TIMEOUT: "60"
+
+      # Rate limits - low values for e2e testing
+      RATE_LIMIT_NEW_USERS_PER_DAY: "3"
+      RATE_LIMIT_SUBMISSIONS_PER_USER_PER_DAY: "3"
+      RATE_LIMIT_SUBMISSIONS_GLOBAL_PER_DAY: "10"
 
       # Frontend URL (for OAuth, not used in e2e)
       FRONTEND_URL: "http://localhost:3200"

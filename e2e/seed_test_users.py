@@ -42,6 +42,37 @@ TEST_USERS = [
         "email": "restricted@example.com",
         "name": "Restricted User",
     },
+    # Rate-limited users (NOT in ALLOWED_EMAILS, subject to rate limits)
+    {
+        "google_sub": "test-ratelimit-sub-111",
+        "email": "ratelimited@example.com",
+        "name": "Rate Limited User",
+    },
+    {
+        "google_sub": "test-ratelimit-sub-222",
+        "email": "ratelimited2@example.com",
+        "name": "Rate Limited User 2",
+    },
+    {
+        "google_sub": "test-ratelimit-sub-333",
+        "email": "ratelimited3@example.com",
+        "name": "Rate Limited User 3",
+    },
+    {
+        "google_sub": "test-ratelimit-sub-444",
+        "email": "ratelimited4@example.com",
+        "name": "Rate Limited User 4",
+    },
+    {
+        "google_sub": "test-ratelimit-sub-555",
+        "email": "ratelimited5@example.com",
+        "name": "Rate Limited User 5",
+    },
+    {
+        "google_sub": "test-ratelimit-sub-666",
+        "email": "ratelimited6@example.com",
+        "name": "Rate Limited User 6",
+    },
 ]
 
 
