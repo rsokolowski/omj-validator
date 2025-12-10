@@ -277,8 +277,12 @@ async def google_auth_callback(request: Request, db: Session = Depends(get_db)):
             name=user_info.get("name", ""),
         )
 
-        # Check Google Group membership
-        is_member = await check_group_membership(user_info["email"])
+        # Check if user has full access (via public access, allowlist, or Google Groups)
+        has_access = await check_group_membership(user_info["email"])
+
+        # Check allowlist separately for logging (used for rate limit bypass)
+        allowed_emails = _get_allowed_emails()
+        is_allowlisted = allowed_emails and user_info["email"].lower() in allowed_emails
 
         # Get the return URL before modifying session
         next_url = request.session.pop("login_next", None)
@@ -290,12 +294,12 @@ async def google_auth_callback(request: Request, db: Session = Depends(get_db)):
             "email": user_info["email"],
             "name": user_info.get("name", ""),
             "picture": user_info.get("picture"),
-            "is_group_member": is_member,
+            "is_group_member": has_access,
             "membership_checked_at": time.time(),  # Track when we last checked membership
         }
 
         logger.info(
-            f"User logged in: {user_info['email']} (allowlisted: {is_member})"
+            f"User logged in: {user_info['email']} (has_access: {has_access}, allowlisted: {is_allowlisted})"
         )
 
         # Redirect to the original page or default to /years
