@@ -67,6 +67,12 @@ class Settings(BaseSettings):
     gemini_debug_logs: bool = False  # Enable verbose debug logging for Gemini API
     gemini_thinking_level: str = "low"  # Thinking effort: "low" (fast) or "high" (thorough)
 
+    # Google Cloud Translation v2 (for status message translation EN->PL)
+    translate_enabled: bool = False  # Enable status message translation
+    translate_api_key: Optional[str] = None  # API key for Translation v2 Basic
+    translate_timeout: float = 2.0  # Translation timeout in seconds
+    translate_api_endpoint: Optional[str] = None  # Custom endpoint for e2e testing
+
     # App Configuration
     upload_max_size_mb: int = 10
 

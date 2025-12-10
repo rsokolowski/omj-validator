@@ -14,6 +14,7 @@ from .messages import (
     CompletedMessage,
     ErrorMessage,
 )
+from ..translate import translate_to_polish
 
 logger = logging.getLogger(__name__)
 
@@ -141,6 +142,7 @@ class ProgressManager:
         Process thinking text chunk and extract status heading.
 
         Only sends a status update if a new heading is found.
+        Headings are translated from English to Polish before broadcasting.
         """
         new_heading = None
         should_broadcast = False
@@ -154,12 +156,19 @@ class ProgressManager:
 
                 # Only update and broadcast if heading changed
                 if new_heading and new_heading != old_heading:
-                    progress.current_status = new_heading
                     should_broadcast = True
 
-        # Send status update outside the lock to avoid deadlock
+        # Translate and broadcast outside the lock to avoid blocking
         if should_broadcast and new_heading:
-            msg = StatusMessage(submission_id=submission_id, message=new_heading)
+            # Translate heading from English to Polish (falls back to original on error)
+            translated_heading = await translate_to_polish(new_heading)
+
+            # Update stored status with translated heading
+            async with self._lock:
+                if submission_id in self._submissions:
+                    self._submissions[submission_id].current_status = translated_heading
+
+            msg = StatusMessage(submission_id=submission_id, message=translated_heading)
             await self._broadcast(submission_id, msg)
 
     async def send_completed(

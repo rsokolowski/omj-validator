@@ -65,6 +65,27 @@ services:
       - e2e-network
 
   # ============================================================================
+  # Fake Translation API Server
+  # ============================================================================
+  fake-translate:
+    build:
+      context: ./e2e/fake-translate
+      dockerfile: Dockerfile
+    container_name: omj-e2e-fake-translate
+    environment:
+      PORT: "8081"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8081/health')"]
+      interval: 2s
+      timeout: 5s
+      retries: 10
+    ports:
+      # Exposed for test debugging from host
+      - "127.0.0.1:8081:8081"
+    networks:
+      - e2e-network
+
+  # ============================================================================
   # Backend API
   # ============================================================================
   e2e-api:
@@ -76,6 +97,8 @@ services:
       e2e-db:
         condition: service_healthy
       fake-gemini:
+        condition: service_healthy
+      fake-translate:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8100/health"]
@@ -107,6 +130,12 @@ services:
       GEMINI_API_BASE_URL: "http://fake-gemini:8080"
       GEMINI_MODEL: "gemini-test-model"
       GEMINI_TIMEOUT: "60"
+
+      # Translation - point to fake translate server (v2 API)
+      TRANSLATE_ENABLED: "true"
+      TRANSLATE_API_KEY: "fake-api-key"
+      TRANSLATE_TIMEOUT: "2.0"
+      TRANSLATE_API_ENDPOINT: "fake-translate:8081"
 
       # Rate limits - low values for e2e testing
       RATE_LIMIT_NEW_USERS_PER_DAY: "3"

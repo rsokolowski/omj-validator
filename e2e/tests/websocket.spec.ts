@@ -6,7 +6,7 @@
 
 import { test, expect } from '@playwright/test';
 import { loginAs, TEST_USERS } from './utils/auth';
-import { setGeminiScenario, resetGemini } from './utils/api';
+import { setGeminiScenario, resetGemini, getTranslations } from './utils/api';
 import * as path from 'path';
 
 const FIXTURES_DIR = path.join(__dirname, '..', 'fixtures');
@@ -205,5 +205,53 @@ test.describe('WebSocket Progress', () => {
 
     // The WebSocket handler on client side typically sends pings
     // If not, the server sends pings on timeout - we mainly verify no errors
+  });
+
+  test('status messages are translated to Polish', async ({ page, request }) => {
+    // Get the translation dictionary to know expected Polish messages
+    const translations = await getTranslations(request);
+
+    await page.goto('/task/2024/etap2/1');
+
+    const statusMessages: string[] = [];
+
+    page.on('websocket', (ws) => {
+      ws.on('framereceived', (frame) => {
+        try {
+          const data = JSON.parse(frame.payload as string);
+          if (data.type === 'status' && data.message) {
+            statusMessages.push(data.message);
+          }
+        } catch {
+          // Ignore non-JSON frames
+        }
+      });
+    });
+
+    // Submit solution
+    const fileInput = page.locator('input[type="file"]');
+    await fileInput.setInputFiles(TEST_IMAGE);
+    await page.getByRole('button', { name: /prześlij/i }).click();
+
+    // Wait for completion
+    await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
+
+    // Should have received status messages
+    expect(statusMessages.length).toBeGreaterThan(0);
+
+    // Check that at least some status messages are Polish translations
+    // The fake translate server returns Polish for known English phrases
+    const polishTranslations = Object.values(translations);
+    const translatedMessages = statusMessages.filter((msg) =>
+      polishTranslations.includes(msg)
+    );
+
+    // At least one message should be a translated Polish phrase
+    // (e.g., "Rozumienie problemu", "Analiza rozwiązania ucznia")
+    expect(translatedMessages.length).toBeGreaterThan(0);
+
+    // Log for debugging
+    console.log('Status messages received:', statusMessages);
+    console.log('Translated messages:', translatedMessages);
   });
 });
