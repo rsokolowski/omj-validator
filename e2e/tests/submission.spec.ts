@@ -176,9 +176,10 @@ test.describe('Submission Flow', () => {
       const submitButton = page.getByRole('button', { name: /prześlij/i });
       await submitButton.click();
 
-      // Should eventually show timeout error
+      // Should eventually show timeout error message
+      // Note: use first() to handle multiple error messages appearing simultaneously
       await expect(
-        page.getByText(/zbyt długo/i).or(page.getByText(/timeout/i)).or(page.getByText(/błąd/i))
+        page.getByText(/zbyt długo/i).or(page.getByText(/timeout/i)).or(page.getByText(/Wystąpił błąd/i)).first()
       ).toBeVisible({ timeout: 90000 });
     });
 

@@ -3,6 +3,7 @@
 export const APP_NAME = "Trener OMJ";
 export const APP_TITLE = "Trener OMJ - Olimpiada Matematyczna Juniorów";
 export const APP_DESCRIPTION = "Przygotuj się do Olimpiady Matematycznej Juniorów z pomocą AI";
+export const CONTACT_EMAIL = "omj.validator@gmail.com";
 
 export const CATEGORY_NAMES: Record<string, string> = {
   algebra: "Algebra",
