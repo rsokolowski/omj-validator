@@ -29,6 +29,16 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
+def _configure_debug_logging():
+    """Configure debug logging for Gemini if enabled."""
+    from ...config import settings
+    if settings.gemini_debug_logs:
+        logger.setLevel(logging.DEBUG)
+        # Also enable debug for the handler module
+        handler_logger = logging.getLogger("app.websocket.handler")
+        handler_logger.setLevel(logging.DEBUG)
+
+
 @dataclass
 class CachedFile:
     """Cached Gemini file reference."""
@@ -81,6 +91,9 @@ class GeminiProvider:
 
         if not settings.gemini_api_key:
             raise ValueError("GEMINI_API_KEY is required. Set it in your .env file.")
+
+        # Configure debug logging if enabled
+        _configure_debug_logging()
 
         # Support custom API endpoint for testing
         if settings.gemini_api_base_url:
@@ -165,39 +178,56 @@ class GeminiProvider:
         image_paths: list[Path],
     ) -> tuple[list, bool]:
         """Upload all files to Gemini in parallel. Returns (files, has_solution_pdf)."""
+        upload_start = time.time()
         upload_tasks = []
         upload_labels = []
 
         # Task PDF (cached)
-        logger.debug(f"[Gemini] Queueing task PDF: {task_pdf_path}")
+        logger.debug(f"[Gemini Upload] Queueing task PDF: {task_pdf_path}")
         upload_tasks.append(self._upload_file(task_pdf_path, use_cache=True))
         upload_labels.append(("task_pdf", task_pdf_path.name))
 
         # Solution PDF if exists (cached)
         has_solution_pdf = solution_pdf_path and solution_pdf_path.exists()
         if has_solution_pdf:
-            logger.debug(f"[Gemini] Queueing solution PDF: {solution_pdf_path}")
+            logger.debug(f"[Gemini Upload] Queueing solution PDF: {solution_pdf_path}")
             upload_tasks.append(self._upload_file(solution_pdf_path, use_cache=True))
             upload_labels.append(("solution_pdf", solution_pdf_path.name))
 
         # Student images (NOT cached)
         for i, img_path in enumerate(image_paths, 1):
-            logger.debug(f"[Gemini] Queueing image {i}: {img_path.name}")
+            size_kb = img_path.stat().st_size // 1024 if img_path.exists() else 0
+            logger.debug(f"[Gemini Upload] Queueing image {i}: {img_path.name} ({size_kb}KB)")
             upload_tasks.append(self._upload_file(img_path, use_cache=False))
             upload_labels.append((f"image_{i}", img_path.name))
 
         # Upload all files in parallel
-        logger.info(f"[Gemini] Uploading {len(upload_tasks)} files in parallel...")
-        upload_results = await asyncio.gather(*upload_tasks)
+        logger.info(f"[Gemini Upload] Starting parallel upload of {len(upload_tasks)} files...")
+        try:
+            upload_results = await asyncio.gather(*upload_tasks)
+        except Exception as e:
+            upload_elapsed = time.time() - upload_start
+            logger.error(f"[Gemini Upload] FAILED after {upload_elapsed:.1f}s: {type(e).__name__}: {e}")
+            raise
+
+        upload_elapsed = time.time() - upload_start
 
         # Log cache status
+        cache_hits = 0
         for (label, name), _ in zip(upload_labels, upload_results):
             cache_key = str(task_pdf_path) if label == "task_pdf" else (
                 str(solution_pdf_path) if label == "solution_pdf" else None
             )
             was_cached = cache_key and cache_key in _file_cache
+            if was_cached:
+                cache_hits += 1
             status = "cached" if was_cached else "uploaded"
-            logger.debug(f"[Gemini] {label}: {name} ({status})")
+            logger.debug(f"[Gemini Upload] {label}: {name} ({status})")
+
+        logger.info(
+            f"[Gemini Upload] Complete in {upload_elapsed:.1f}s - "
+            f"{len(upload_tasks)} files, {cache_hits} cache hits"
+        )
 
         return upload_results, has_solution_pdf
 
@@ -440,49 +470,89 @@ class GeminiProvider:
             chunk_queue: queue.Queue = queue.Queue()
             stream_done_event = threading.Event()
             stream_error: Optional[Exception] = None
+            stream_started = threading.Event()
 
             def stream_to_queue():
                 """Run streaming in thread and push chunks to queue."""
                 nonlocal stream_error
                 try:
+                    logger.debug("[Gemini Stream] Thread: Calling generate_content_stream...")
                     response_stream = self._client.models.generate_content_stream(
                         model=self._model_name,
                         contents=content_parts,
                         config=config,
                     )
+                    logger.debug("[Gemini Stream] Thread: Got response_stream iterator")
+                    stream_started.set()
+
+                    chunk_count = 0
                     for chunk in response_stream:
+                        chunk_count += 1
+                        if chunk_count == 1:
+                            logger.debug("[Gemini Stream] Thread: First chunk received from API")
                         chunk_queue.put(chunk)
+
+                    logger.debug(f"[Gemini Stream] Thread: Stream complete, {chunk_count} chunks received")
                 except Exception as e:
-                    logger.error(f"[Gemini] Stream error: {type(e).__name__}: {e}")
+                    logger.error(f"[Gemini Stream] Thread error: {type(e).__name__}: {e}")
                     stream_error = e
+                    stream_started.set()  # Unblock main thread if waiting
                 finally:
                     stream_done_event.set()
 
             # Start streaming in background thread
+            logger.debug("[Gemini Stream] Starting background thread for streaming")
             executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
             stream_future = executor.submit(stream_to_queue)
 
             # Process chunks with simple polling
             chunks_processed = 0
             start_wait = time.time()
+            last_chunk_time = start_wait
+            last_log_time = start_wait
 
             try:
+                logger.debug("[Gemini Stream] Starting chunk processing loop")
                 while True:
+                    elapsed = time.time() - start_wait
+                    since_last_chunk = time.time() - last_chunk_time
+
                     # Check for timeout
-                    if time.time() - start_wait > timeout:
-                        logger.error(f"[Gemini] Timeout after {chunks_processed} chunks")
+                    if elapsed > timeout:
+                        logger.error(
+                            f"[Gemini Stream] TIMEOUT - elapsed={elapsed:.1f}s, "
+                            f"timeout={timeout}s, chunks_processed={chunks_processed}, "
+                            f"since_last_chunk={since_last_chunk:.1f}s, "
+                            f"stream_done={stream_done_event.is_set()}, "
+                            f"stream_started={stream_started.is_set()}"
+                        )
                         raise AIProviderError(
                             "Analiza trwa zbyt długo. Spróbuj ponownie za chwilę."
                         )
 
+                    # Log progress every 30 seconds for stuck detection
+                    if time.time() - last_log_time > 30:
+                        logger.debug(
+                            f"[Gemini Stream] Progress - elapsed={elapsed:.1f}s, "
+                            f"chunks={chunks_processed}, since_last_chunk={since_last_chunk:.1f}s, "
+                            f"thinking_len={len(thinking_text)}, feedback_len={len(feedback_text)}"
+                        )
+                        last_log_time = time.time()
+
                     # Check for stream error
                     if stream_error:
+                        logger.error(f"[Gemini Stream] Stream error detected: {stream_error}")
                         raise stream_error
 
                     # Try to get a chunk (non-blocking)
                     try:
                         chunk = chunk_queue.get_nowait()
                         chunks_processed += 1
+                        last_chunk_time = time.time()
+
+                        # Log first chunk
+                        if chunks_processed == 1:
+                            logger.debug(f"[Gemini Stream] Processing first chunk (waited {elapsed:.1f}s)")
 
                         # Capture usage metadata (typically in final chunk)
                         if hasattr(chunk, "usage_metadata") and chunk.usage_metadata:
@@ -518,16 +588,18 @@ class GeminiProvider:
                     except queue.Empty:
                         # No chunk available - check if stream is done
                         if stream_done_event.is_set() and chunk_queue.empty():
+                            logger.debug(f"[Gemini Stream] Stream done, processed {chunks_processed} chunks")
                             break
                         # Wait a bit before polling again
                         await asyncio.sleep(0.05)
 
             finally:
                 # Clean up executor
+                logger.debug("[Gemini Stream] Cleaning up executor thread")
                 try:
                     stream_future.result(timeout=5)
                 except Exception as e:
-                    logger.warning(f"[Gemini] Error waiting for stream thread: {e}")
+                    logger.warning(f"[Gemini Stream] Error waiting for stream thread: {e}")
                 executor.shutdown(wait=False)
 
             api_time = time.time() - api_start_time
@@ -664,6 +736,9 @@ class GeminiProvider:
         Returns:
             Gemini File object reference
         """
+        file_name = file_path.name
+        file_size_kb = file_path.stat().st_size // 1024 if file_path.exists() else 0
+
         # Check cache first for static files (PDFs)
         if use_cache:
             cached_file = await self._check_cached_file(file_path)
@@ -671,10 +746,19 @@ class GeminiProvider:
                 return cached_file
 
         # Upload to Gemini using new SDK
-        gemini_file = await asyncio.to_thread(
-            self._client.files.upload,
-            file=str(file_path),
-        )
+        upload_start = time.time()
+        logger.debug(f"[Gemini Upload] Uploading {file_name} ({file_size_kb}KB)...")
+        try:
+            gemini_file = await asyncio.to_thread(
+                self._client.files.upload,
+                file=str(file_path),
+            )
+            upload_time = time.time() - upload_start
+            logger.debug(f"[Gemini Upload] {file_name} uploaded in {upload_time:.1f}s -> {gemini_file.name}")
+        except Exception as e:
+            upload_time = time.time() - upload_start
+            logger.error(f"[Gemini Upload] {file_name} FAILED after {upload_time:.1f}s: {type(e).__name__}: {e}")
+            raise
 
         # Cache the reference for static files
         if use_cache:
@@ -683,7 +767,7 @@ class GeminiProvider:
                 file_hash=self._get_file_hash(file_path),
                 cached_at=time.time(),
             )
-            logger.info(f"[Gemini Cache] STORED {file_path.name} -> {gemini_file.name}")
+            logger.info(f"[Gemini Cache] STORED {file_name} -> {gemini_file.name}")
 
         return gemini_file
 
