@@ -1,4 +1,5 @@
-import { Box, Typography, Paper, Button, Chip, Tooltip } from "@mui/material";
+import { Box, Typography, Paper, Button, Chip, Tooltip, Link as MuiLink } from "@mui/material";
+import { BugReport } from "@mui/icons-material";
 import Link from "next/link";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { MathContent } from "@/components/ui/MathContent";
@@ -10,7 +11,7 @@ import { SubmitSection } from "@/components/task/SubmitSection";
 import { SubmissionHistory } from "@/components/task/SubmissionHistory";
 import { serverFetch } from "@/lib/api/server";
 import { TaskDetailResponse } from "@/lib/types";
-import { ETAP_NAMES } from "@/lib/utils/constants";
+import { ETAP_NAMES, CONTACT_EMAIL } from "@/lib/utils/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -106,9 +107,9 @@ export default async function TaskPage({ params }: TaskPageProps) {
         </Typography>
         <MathContent content={task.content} className="text-gray-800" />
 
-        {/* PDF Links */}
-        {(pdf_links.tasks || pdf_links.solutions) && (
-          <Box sx={{ mt: 3, pt: 2, borderTop: 1, borderColor: "grey.200", display: "flex", gap: 1.5, flexWrap: "wrap" }}>
+        {/* PDF Links and Report Error */}
+        <Box sx={{ mt: 3, pt: 2, borderTop: 1, borderColor: "grey.200", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 1.5 }}>
+          <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>
             {pdf_links.tasks && (
               <Button
                 variant="outlined"
@@ -132,7 +133,22 @@ export default async function TaskPage({ params }: TaskPageProps) {
               </Button>
             )}
           </Box>
-        )}
+          <MuiLink
+            href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`Błąd w zadaniu ${num} (${year} ${etapName})`)}&body=${encodeURIComponent(`Zgłaszam błąd w zadaniu:\n\nZadanie: ${num}\nRok: ${year}\nEtap: ${etapName}\n\nOpis błędu:\n\n`)}`}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 0.5,
+              color: "grey.500",
+              fontSize: "0.8125rem",
+              textDecoration: "none",
+              "&:hover": { color: "error.main" },
+            }}
+          >
+            <BugReport sx={{ fontSize: 18 }} />
+            Zgłoś błąd
+          </MuiLink>
+        </Box>
       </Paper>
 
       {/* Skills Section */}
