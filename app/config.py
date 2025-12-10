@@ -16,8 +16,13 @@ class Settings(BaseSettings):
     google_client_id: Optional[str] = None
     google_client_secret: Optional[str] = None
 
-    # Access control for alpha users
-    # Option 1: Email allowlist (comma-separated, simplest approach)
+    # Access control
+    # Public access: when True, all authenticated users can submit (with rate limits)
+    # Allowlisted users still bypass rate limits
+    public_access: bool = False
+
+    # Email allowlist (comma-separated) - used for rate limit bypass when public_access=True
+    # When public_access=False, only allowlisted users get full access
     allowed_emails: Optional[str] = None  # e.g., "user1@gmail.com,user2@gmail.com"
 
     # Option 2: Google Groups API (requires Workspace Admin + Domain-Wide Delegation)

@@ -98,11 +98,12 @@ def _check_membership_cached(user_email: str, group_email: str) -> bool:
 
 async def check_group_membership(user_email: str, group_email: Optional[str] = None) -> bool:
     """
-    Check if user has access (via allowlist or Google Group membership).
+    Check if user has access (via public access, allowlist, or Google Group membership).
 
     Checks in order:
-    1. Email allowlist (ALLOWED_EMAILS env var) - instant, no API call
-    2. Google Groups API (if service account configured) - requires Domain-Wide Delegation
+    1. Public access mode (PUBLIC_ACCESS=true) - grants access to all authenticated users
+    2. Email allowlist (ALLOWED_EMAILS env var) - instant, no API call
+    3. Google Groups API (if service account configured) - requires Domain-Wide Delegation
 
     Args:
         user_email: The user's email address
@@ -112,6 +113,17 @@ async def check_group_membership(user_email: str, group_email: Optional[str] = N
         True if user is allowed, False otherwise
     """
     email_lower = user_email.lower()
+
+    # Method 0: Public access mode - all authenticated users have access
+    # (rate limits still apply to non-allowlisted users)
+    if settings.public_access:
+        # Check allowlist for logging purposes
+        allowed_emails = _get_allowed_emails()
+        if allowed_emails and email_lower in allowed_emails:
+            logger.info(f"Access granted (public + allowlisted): {email_lower[:3]}***@***")
+        else:
+            logger.info(f"Access granted (public access): {email_lower[:3]}***@***")
+        return True
 
     # Method 1: Check email allowlist (fastest, no API needed)
     allowed_emails = _get_allowed_emails()
@@ -140,8 +152,8 @@ async def check_group_membership(user_email: str, group_email: Optional[str] = N
 
     # No access control configured - deny by default for security
     logger.warning(
-        "No access control configured (neither ALLOWED_EMAILS nor service account). "
-        "Set ALLOWED_EMAILS or configure Google Groups API."
+        "No access control configured (neither PUBLIC_ACCESS, ALLOWED_EMAILS, nor service account). "
+        "Set PUBLIC_ACCESS=true, ALLOWED_EMAILS, or configure Google Groups API."
     )
     return False
 

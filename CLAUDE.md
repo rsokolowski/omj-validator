@@ -202,9 +202,10 @@ SESSION_SECRET_KEY=dev-secret-key-change-in-production
 # GOOGLE_CLIENT_ID=...
 # GOOGLE_CLIENT_SECRET=...
 
-# Access control (choose one)
-# ALLOWED_EMAILS=user1@gmail.com,user2@example.com
-# OR
+# Access control
+# PUBLIC_ACCESS=true  # Allow all authenticated users to submit (with rate limits)
+# ALLOWED_EMAILS=user1@gmail.com,user2@example.com  # Rate limit bypass when PUBLIC_ACCESS=true
+# OR (when PUBLIC_ACCESS=false, only these users get full access)
 # GOOGLE_GROUP_EMAIL=your-group@googlegroups.com
 # GOOGLE_SERVICE_ACCOUNT_JSON={...}
 
