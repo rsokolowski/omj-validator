@@ -44,37 +44,29 @@ if ! npx playwright --version > /dev/null 2>&1; then
     npx playwright install chromium
 fi
 
-# Check if e2e services are already running
-E2E_RUNNING=false
-if docker compose -f "$PROJECT_ROOT/docker-compose.e2e.yml" ps --status running 2>/dev/null | grep -q "omj-e2e"; then
-    E2E_RUNNING=true
-    echo -e "${GREEN}E2E services already running${NC}"
-fi
+# Always rebuild and restart services to ensure we test latest code
+# Docker layer caching makes this cheap when nothing changed
+echo -e "${YELLOW}Building and starting E2E services...${NC}"
+docker compose -f "$PROJECT_ROOT/docker-compose.e2e.yml" up -d --build
 
-# Start services if not running
-if [ "$E2E_RUNNING" = false ]; then
-    echo -e "${YELLOW}Starting E2E services...${NC}"
-    docker compose -f "$PROJECT_ROOT/docker-compose.e2e.yml" up -d --build
+echo -e "${YELLOW}Waiting for services to be healthy...${NC}"
 
-    echo -e "${YELLOW}Waiting for services to be healthy...${NC}"
+# Wait for frontend to be ready (with timeout)
+TIMEOUT=120
+ELAPSED=0
+while ! curl -s http://localhost:3200 > /dev/null 2>&1; do
+    if [ $ELAPSED -ge $TIMEOUT ]; then
+        echo -e "${RED}Timeout waiting for services${NC}"
+        docker compose -f "$PROJECT_ROOT/docker-compose.e2e.yml" logs
+        exit 1
+    fi
+    sleep 2
+    ELAPSED=$((ELAPSED + 2))
+    echo -n "."
+done
+echo ""
 
-    # Wait for frontend to be ready (with timeout)
-    TIMEOUT=120
-    ELAPSED=0
-    while ! curl -s http://localhost:3200 > /dev/null 2>&1; do
-        if [ $ELAPSED -ge $TIMEOUT ]; then
-            echo -e "${RED}Timeout waiting for services${NC}"
-            docker compose -f "$PROJECT_ROOT/docker-compose.e2e.yml" logs
-            exit 1
-        fi
-        sleep 2
-        ELAPSED=$((ELAPSED + 2))
-        echo -n "."
-    done
-    echo ""
-
-    echo -e "${GREEN}Services ready!${NC}"
-fi
+echo -e "${GREEN}Services ready!${NC}"
 
 # Run tests
 echo -e "${YELLOW}Running Playwright tests...${NC}"
