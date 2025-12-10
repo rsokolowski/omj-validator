@@ -63,6 +63,11 @@ services:
       GEMINI_TIMEOUT: ${GEMINI_TIMEOUT:-90}
       GEMINI_THINKING_LEVEL: ${GEMINI_THINKING_LEVEL:-low}
       GEMINI_DEBUG_LOGS: ${GEMINI_DEBUG_LOGS:-false}
+
+      # Translation (EN->PL for status messages)
+      TRANSLATE_ENABLED: ${TRANSLATE_ENABLED:-false}
+      TRANSLATE_API_KEY: ${TRANSLATE_API_KEY:-}
+      TRANSLATE_TIMEOUT: ${TRANSLATE_TIMEOUT:-2.0}
     volumes:
       # Persist uploads - bind mount for direct access on VM
       - ./data/uploads:/app/data/uploads

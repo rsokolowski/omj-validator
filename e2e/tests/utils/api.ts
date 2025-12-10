@@ -9,6 +9,7 @@ import { APIRequestContext } from '@playwright/test';
 // API endpoints
 const API_BASE_URL = process.env.E2E_API_URL || 'http://localhost:8200';
 const FAKE_GEMINI_URL = process.env.E2E_FAKE_GEMINI_URL || 'http://localhost:8080';
+const FAKE_TRANSLATE_URL = process.env.E2E_FAKE_TRANSLATE_URL || 'http://localhost:8081';
 
 export type GeminiScenario =
   | 'success_score_6'
@@ -209,4 +210,62 @@ export async function resetAllSubmissions(request: APIRequestContext): Promise<n
   }
   const data = await response.json();
   return data.deleted_count || 0;
+}
+
+// ============================================================================
+// Fake Translate Server Utilities
+// ============================================================================
+
+/**
+ * Get all registered translations from the fake translate server.
+ */
+export async function getTranslations(
+  request: APIRequestContext
+): Promise<Record<string, string>> {
+  const response = await request.get(`${FAKE_TRANSLATE_URL}/config/translations`);
+  if (!response.ok()) {
+    throw new Error(`Failed to get translations: ${await response.text()}`);
+  }
+  const data = await response.json();
+  return data.translations || {};
+}
+
+/**
+ * Add a custom translation to the fake translate server.
+ */
+export async function addTranslation(
+  request: APIRequestContext,
+  source: string,
+  target: string
+): Promise<void> {
+  const response = await request.post(`${FAKE_TRANSLATE_URL}/config/add-translation`, {
+    data: { source, target },
+  });
+  if (!response.ok()) {
+    throw new Error(`Failed to add translation: ${await response.text()}`);
+  }
+}
+
+/**
+ * Wait for the fake translate server to be healthy.
+ */
+export async function waitForFakeTranslate(
+  request: APIRequestContext,
+  timeoutMs: number = 30000
+): Promise<boolean> {
+  const startTime = Date.now();
+
+  while (Date.now() - startTime < timeoutMs) {
+    try {
+      const response = await request.get(`${FAKE_TRANSLATE_URL}/health`);
+      if (response.ok()) {
+        return true;
+      }
+    } catch {
+      // Continue waiting
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+
+  return false;
 }
