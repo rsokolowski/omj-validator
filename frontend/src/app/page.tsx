@@ -212,6 +212,7 @@ function HowItWorksSection() {
       title: "1. Wybierz zadanie",
       description:
         "Przeglądaj archiwum ponad 340 zadań z wielu lat olimpiady. Filtruj po kategorii i poziomie trudności.",
+      href: "/years",
     },
     {
       icon: <Psychology sx={{ fontSize: 40 }} />,
@@ -226,6 +227,77 @@ function HowItWorksSection() {
         "AI oceni Twoje rozwiązanie zgodnie z oficjalnymi kryteriami i wskaże błędy do poprawy.",
     },
   ];
+
+  const StepCard = ({ step }: { step: (typeof steps)[number] }) => (
+    <Card
+      elevation={0}
+      sx={{
+        textAlign: "center",
+        border: "1px solid",
+        borderColor: "grey.200",
+        borderRadius: 3,
+        transition: "all 0.2s ease",
+        height: "100%",
+        ...(step.href && {
+          cursor: "pointer",
+          "&:hover": {
+            borderColor: "primary.main",
+            transform: "translateY(-4px)",
+            boxShadow: "0 12px 24px -8px rgba(37, 99, 235, 0.15)",
+          },
+        }),
+      }}
+    >
+      <CardContent sx={{ p: 4 }}>
+        <Box
+          sx={{
+            width: 80,
+            height: 80,
+            borderRadius: "50%",
+            bgcolor: "primary.main",
+            color: "white",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            mx: "auto",
+            mb: 3,
+          }}
+        >
+          {step.icon}
+        </Box>
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 700,
+            mb: 1.5,
+            color: "grey.900",
+          }}
+        >
+          {step.title}
+        </Typography>
+        <Typography
+          sx={{
+            color: "grey.600",
+            lineHeight: 1.7,
+          }}
+        >
+          {step.description}
+        </Typography>
+        {step.href && (
+          <Typography
+            sx={{
+              color: "primary.main",
+              fontWeight: 600,
+              mt: 2,
+              fontSize: "0.9rem",
+            }}
+          >
+            Przeglądaj zadania →
+          </Typography>
+        )}
+      </CardContent>
+    </Card>
+  );
 
   return (
     <Box>
@@ -263,61 +335,58 @@ function HowItWorksSection() {
           gap: 4,
         }}
       >
-        {steps.map((step) => (
-          <Card
-            key={step.title}
-            elevation={0}
-            sx={{
-              textAlign: "center",
-              border: "1px solid",
-              borderColor: "grey.200",
-              borderRadius: 3,
-              transition: "all 0.2s ease",
-              "&:hover": {
-                borderColor: "primary.main",
-                transform: "translateY(-4px)",
-                boxShadow: "0 12px 24px -8px rgba(37, 99, 235, 0.15)",
-              },
+        {steps.map((step) =>
+          step.href ? (
+            <Link
+              key={step.title}
+              href={step.href}
+              style={{ textDecoration: "none" }}
+            >
+              <StepCard step={step} />
+            </Link>
+          ) : (
+            <StepCard key={step.title} step={step} />
+          )
+        )}
+      </Box>
+
+      {/* Demo GIF */}
+      <Box
+        sx={{
+          mt: 6,
+          textAlign: "center",
+        }}
+      >
+        <Typography
+          sx={{
+            color: "grey.600",
+            mb: 3,
+            fontWeight: 500,
+          }}
+        >
+          Zobacz jak to wygląda w praktyce:
+        </Typography>
+        <Box
+          sx={{
+            borderRadius: 3,
+            overflow: "hidden",
+            boxShadow: "0 8px 32px -8px rgba(0, 0, 0, 0.2)",
+            display: "inline-block",
+            border: "1px solid",
+            borderColor: "grey.200",
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/omj-demo.gif"
+            alt="Demo pokazujący jak korzystać z aplikacji"
+            style={{
+              display: "block",
+              maxWidth: "100%",
+              height: "auto",
             }}
-          >
-            <CardContent sx={{ p: 4 }}>
-              <Box
-                sx={{
-                  width: 80,
-                  height: 80,
-                  borderRadius: "50%",
-                  bgcolor: "primary.main",
-                  color: "white",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  mx: "auto",
-                  mb: 3,
-                }}
-              >
-                {step.icon}
-              </Box>
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 700,
-                  mb: 1.5,
-                  color: "grey.900",
-                }}
-              >
-                {step.title}
-              </Typography>
-              <Typography
-                sx={{
-                  color: "grey.600",
-                  lineHeight: 1.7,
-                }}
-              >
-                {step.description}
-              </Typography>
-            </CardContent>
-          </Card>
-        ))}
+          />
+        </Box>
       </Box>
     </Box>
   );
