@@ -1109,9 +1109,11 @@ async def serve_upload(request: Request, path: str):
         path = path[8:]  # Strip 'uploads/' prefix
 
     # Verify path starts with user's ID (user can only access their own uploads)
+    # Admin users can access any user's uploads
     # Path format: {user_id}/{year}/{etap}/{task_num}/{filename}
     path_parts = path.split("/")
-    if len(path_parts) < 1 or path_parts[0] != user_id:
+    is_admin = _is_admin(request)
+    if len(path_parts) < 1 or (path_parts[0] != user_id and not is_admin):
         raise HTTPException(status_code=403, detail="Forbidden")
 
     file_path = settings.uploads_dir / path
@@ -1227,7 +1229,11 @@ async def reset_all_submissions(
 async def get_current_user_api(request: Request):
     """Get current user from session (for Next.js frontend)."""
     user = get_current_user(request)
-    return {"user": user, "is_authenticated": user is not None}
+    return {
+        "user": user,
+        "is_authenticated": user is not None,
+        "is_admin": _is_admin(request),
+    }
 
 
 @app.get("/api/years")
@@ -1396,4 +1402,128 @@ async def task_history_api(
     return {
         "task": task.model_dump(mode="json"),
         "submissions": [s.model_dump(mode="json") for s in submissions],
+    }
+
+
+# ==================== Admin API Endpoints ====================
+
+
+def _is_admin(request: Request) -> bool:
+    """Check if the current user is an admin."""
+    user = get_current_user(request)
+    if not user:
+        return False
+
+    admin_emails_str = settings.admin_emails
+    if not admin_emails_str:
+        return False
+
+    admin_emails = {e.strip().lower() for e in admin_emails_str.split(",") if e.strip()}
+    user_email = user.get("email", "").lower()
+    return user_email in admin_emails
+
+
+def _require_admin(request: Request) -> None:
+    """Raise 401/403 if not admin."""
+    if not verify_auth(request):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    if not _is_admin(request):
+        raise HTTPException(status_code=403, detail="Admin access required")
+
+
+@app.get("/api/admin/submissions")
+async def admin_submissions(
+    request: Request,
+    offset: int = 0,
+    limit: int = 20,
+    user_id: OptionalType[str] = None,
+    status: OptionalType[str] = None,
+    db: Session = Depends(get_db)
+):
+    """Get all submissions with pagination and filters (admin only)."""
+    _require_admin(request)
+
+    # Cap limit to prevent abuse
+    limit = min(limit, 100)
+
+    submission_repo = SubmissionRepository(db)
+    user_repo = UserRepository(db)
+
+    # Get paginated submissions
+    db_submissions, total_count = submission_repo.get_all_submissions_paginated(
+        offset=offset,
+        limit=limit,
+        user_id_filter=user_id,
+        status_filter=status,
+    )
+
+    # Batch fetch all users in a single query to avoid N+1
+    user_ids = list(set(sub.user_id for sub in db_submissions))
+    users_by_id = user_repo.get_by_google_subs(user_ids)
+
+    # Convert to response format with user info
+    submissions = []
+    for sub in db_submissions:
+        user = users_by_id.get(sub.user_id)
+        submissions.append({
+            "id": sub.id,
+            "user_id": sub.user_id,
+            "user_email": user.email if user else None,
+            "user_name": user.name if user else None,
+            "year": sub.year,
+            "etap": sub.etap,
+            "task_number": sub.task_number,
+            "timestamp": sub.timestamp.isoformat(),
+            "status": sub.status.value,
+            "images": sub.images,
+            "score": sub.score,
+            "feedback": sub.feedback,
+            "error_message": sub.error_message,
+        })
+
+    return {
+        "submissions": submissions,
+        "total_count": total_count,
+        "offset": offset,
+        "limit": limit,
+        "has_more": offset + len(submissions) < total_count,
+    }
+
+
+@app.get("/api/admin/users/search")
+async def admin_users_search(
+    request: Request,
+    q: str = "",
+    limit: int = 10,
+    db: Session = Depends(get_db)
+):
+    """Search users by email for autocomplete (admin only)."""
+    _require_admin(request)
+
+    # Cap limit to prevent abuse
+    limit = min(limit, 50)
+
+    user_repo = UserRepository(db)
+    users = user_repo.search_by_email(q, limit=limit)
+
+    return {
+        "users": [
+            {
+                "google_sub": user.google_sub,
+                "email": user.email,
+                "name": user.name,
+            }
+            for user in users
+        ]
+    }
+
+
+@app.get("/api/admin/me")
+async def admin_me(request: Request):
+    """Check if current user is admin."""
+    user = get_current_user(request)
+    return {
+        "user": user,
+        "is_authenticated": user is not None,
+        "is_admin": _is_admin(request),
     }

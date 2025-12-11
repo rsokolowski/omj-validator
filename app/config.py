@@ -28,6 +28,9 @@ class Settings(BaseSettings):
     # When public_access=False, only allowlisted users get full access
     allowed_emails: Optional[str] = None  # e.g., "user1@gmail.com,user2@gmail.com"
 
+    # Admin emails (comma-separated) - users with access to admin panel
+    admin_emails: Optional[str] = None  # e.g., "admin1@gmail.com,admin2@gmail.com"
+
     # Option 2: Google Groups API (requires Workspace Admin + Domain-Wide Delegation)
     google_group_email: str = "omj-validator-alpha@googlegroups.com"
     google_service_account_json: Optional[str] = None  # JSON string or file path

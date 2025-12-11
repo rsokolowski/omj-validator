@@ -15,7 +15,7 @@ import { useAuth } from "@/lib/hooks/useAuth";
 import { APP_NAME } from "@/lib/utils/constants";
 
 export function Header() {
-  const { user, isAuthenticated, isGroupMember, isLoading } = useAuth();
+  const { user, isAuthenticated, isGroupMember, isAdmin, isLoading } = useAuth();
 
   return (
     <AppBar
@@ -71,6 +71,26 @@ export function Header() {
                 Nauka
               </Typography>
             </Link>
+
+            {/* Admin link - only visible to admins */}
+            {isAdmin && (
+              <Link
+                href="/admin/submissions"
+                style={{ textDecoration: "none", color: "#4b5563" }}
+              >
+                <Chip
+                  label="Admin"
+                  size="small"
+                  sx={{
+                    bgcolor: "#7c3aed",
+                    color: "white",
+                    fontWeight: 600,
+                    "&:hover": { bgcolor: "#6d28d9" },
+                    cursor: "pointer",
+                  }}
+                />
+              </Link>
+            )}
 
             {/* User info / Auth */}
             {!isLoading && (

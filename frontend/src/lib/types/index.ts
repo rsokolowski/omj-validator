@@ -146,3 +146,44 @@ export interface TasksResponse {
   user: User | null;
   is_authenticated: boolean;
 }
+
+// Admin types
+export interface AdminSubmission {
+  id: string;
+  user_id: string;
+  user_email: string | null;
+  user_name: string | null;
+  year: string;
+  etap: string;
+  task_number: number;
+  timestamp: string;
+  status: "pending" | "processing" | "completed" | "failed";
+  images: string[];
+  score: number | null;
+  feedback: string | null;
+  error_message?: string | null;
+}
+
+export interface AdminSubmissionsResponse {
+  submissions: AdminSubmission[];
+  total_count: number;
+  offset: number;
+  limit: number;
+  has_more: boolean;
+}
+
+export interface AdminUser {
+  google_sub: string;
+  email: string;
+  name: string | null;
+}
+
+export interface AdminUsersSearchResponse {
+  users: AdminUser[];
+}
+
+export interface AdminMeResponse {
+  user: User | null;
+  is_authenticated: boolean;
+  is_admin: boolean;
+}
