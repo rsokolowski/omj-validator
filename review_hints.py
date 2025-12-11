@@ -450,7 +450,6 @@ def call_claude(prompt: str, model: str = "opus") -> str:
                 "claude", "-p", prompt,
                 "--output-format", "json",
                 "--json-schema", JSON_SCHEMA,
-                "--tools", "",  # Disable tools
                 "--model", model,
                 "--no-session-persistence"
             ],
@@ -460,7 +459,11 @@ def call_claude(prompt: str, model: str = "opus") -> str:
             env=env
         )
         if result.returncode != 0:
-            print(f"  Claude CLI error: {result.stderr}", file=sys.stderr)
+            print(f"  Claude CLI error (code {result.returncode}):", file=sys.stderr)
+            if result.stderr:
+                print(f"    stderr: {result.stderr[:500]}", file=sys.stderr)
+            if result.stdout:
+                print(f"    stdout: {result.stdout[:500]}", file=sys.stderr)
             return ""
         return result.stdout.strip()
     except subprocess.TimeoutExpired:
