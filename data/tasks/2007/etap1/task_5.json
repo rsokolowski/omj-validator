@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zauważ, że punkty K, L, M, N leżą na okręgu. Jakie twierdzenie łączy kąt między styczną a cięciwą (np. ∠AKN) z miarą odpowiedniego łuku tego okręgu?",
-    "Oznaczmy ∠AKN = α oraz ∠BKL = β. Wyraź miary wszystkich czterech łuków $\\widehat{KL}, \\widehat{LM}, \\widehat{MN}, \\widehat{NK}$ w zależności od α i β, korzystając z danych w zadaniu i własności kątów wpisanych oraz kątów między styczną a cięciwą.",
-    "Użyj twierdzenia o kącie między styczną a cięciwą, aby powiązać α z łukiem $\\widehat{NK}$ i β z łukiem $\\widehat{KL}$. Następnie, używając danych z zadania, znajdź zależności dla łuków $\\widehat{MN}$ i $\\widehat{LM}$.",
-    "Suma miar czterech łuków tworzących okrąg jest stała. Ułóż równanie pozwalające obliczyć sumę α+β. Długość odcinka LN zależy od kąta środkowego ∠LON. Wyraź ten kąt przez α i β, a następnie oblicz jego miarę."
+    "Przypomnij sobie twierdzenie o kącie między styczną a cięciwą. Jak miara łuku $KN$ zależy od kąta $\\angle AKN$, a miara łuku $KL$ od kąta $\\angle BKL$?",
+    "Oznacz $\\angle AKN = \\alpha$ oraz $\\angle BKL = \\beta$. Korzystając z podanych w treści zależności między kątami, wyraź miary wszystkich czterech łuków okręgu ($\\widehat{KL}, \\widehat{LM}, \\widehat{MN}, \\widehat{NK}$) w zależności od $\\alpha$ i $\\beta$.",
+    "Suma miar łuków tworzących cały okrąg wynosi $360^\\circ$. Wykorzystaj to, aby ułożyć równanie i obliczyć wartość sumy kątów $\\alpha + \\beta$. Zauważ, że nie musisz wyznaczać $\\alpha$ i $\\beta$ osobno.",
+    "Aby obliczyć długość cięciwy $LN$, znajdź miarę kąta środkowego $\\angle LON$. Zauważ, że opiera się on na sumie łuków $\\widehat{LK}$ i $\\widehat{KN}$. Jaki trójkąt tworzą punkty $L, O, N$?"
   ],
   "skills_required": [
     "tangential_quadrilateral",

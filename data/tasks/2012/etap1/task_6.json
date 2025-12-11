@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Kąty w zadaniu to kąty płaskie przy wierzchołku $S$. Wyobraź sobie, że przecinamy ostrosłup małą sferą o środku w $S$. Jaki ślad zostawią na tej sferze krawędzie i ściany boczne?",
-    "Warunek, że w ostrosłup można wpisać sferę, oznacza, że płaszczyzny dwusieczne jego kątów dwuściennych przecinają się w jednym punkcie. Zastanów się, co to oznacza dla figury powstałej na sferze.",
-    "Płaszczyzny dwusieczne kątów dwuściennych wzdłuż krawędzi bocznych ($SA, SB, SC, SD$) stają się na sferze dwusiecznymi kątów pewnego czworokąta. Co oznacza fakt, że te dwusieczne przecinają się w jednym punkcie?",
-    "Wykorzystaj fakt, że w czworokąt sferyczny, w który można wpisać okrąg, sumy długości przeciwległych boków są równe. Jak długości boków tego czworokąta mają się do kątów z tezy zadania?"
+    "Zauważ, że sfera wpisana styka się z każdą ścianą boczną w jednym punkcie. Co wiesz o długościach odcinków łączących wierzchołek $S$ z tymi punktami styczności?",
+    "Przypomnij sobie twierdzenie o odcinkach stycznych do sfery wychodzących z jednego punktu. Zastosuj je do wierzchołka $A$ i punktów styczności na przyległych do niego ścianach $SAB$ i $SDA$.",
+    "Spójrz na trójkąty na ścianach bocznych utworzone przez wierzchołki $S, A$ oraz punkty styczności. Czy trójkąty przylegające do krawędzi $SA$ są przystające?",
+    "Przystawanie trójkątów oznacza równość odpowiednich kątów przy wierzchołku $S$. Podziel kąty ścian (np. $\\angle ASB$) na mniejsze części i sprawdź sumy przeciwległych kątów."
   ],
   "skills_required": [
     "spatial_3d",

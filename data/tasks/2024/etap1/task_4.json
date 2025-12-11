@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Warunek w zadaniu oznacza, że pozostałe 50 kamieni musi tworzyć dwa jednokolorowe bloki, np. wszystkie czerwone, a po nich wszystkie niebieskie. Jakie kamienie z pierwotnego rzędu należałoby wybrać, aby to osiągnąć?",
-    "Spróbujmy znaleźć w rzędzie 'punkt podziału'. Rozważmy na przykład pierwszych 50 kamieni i policzmy, ile jest wśród nich kamieni każdego koloru. Zastanów się nad dwoma możliwymi przypadkami.",
-    "Załóżmy, że w pierwszej połowie rzędu (pozycje 1-50) jest co najmniej 25 kamieni czerwonych. Czy możemy wtedy wybrać 25 'najwcześniejszych' czerwonych kamieni i 25 'najpóźniejszych' niebieskich, tak aby były rozdzielone?",
-    "Jeśli w pierwszej połowie jest $\\ge 25$ czerwonych, to 25-ty czerwony kamień jest na pozycji $\\le 50$, a 26-ty niebieski na pozycji $> 50$. Co z tego wynika? Przeanalizuj przypadek, gdy w pierwszej połowie jest mniej niż 25 czerwonych."
+    "Zauważ, że aby spełnić warunki zadania, wystarczy znaleźć punkt podziału rzędu na dwie części: w lewej wybierzemy 25 kamieni jednego koloru, a w prawej 25 drugiego.",
+    "Sprawdź najprostszy możliwy podział: dokładnie w połowie rzędu (po 50. kamieniu). Zastosuj Zasadę Szufladkową: co możesz powiedzieć o liczbie kamieni czerwonych i niebieskich w pierwszej pięćdziesiątce?",
+    "Załóżmy, że w pierwszej połowie jest co najmniej 25 kamieni czerwonych (jeśli nie, to jest $\\ge 25$ niebieskich). Wybieramy te czerwone z lewej strony. Co musimy teraz znaleźć w drugiej połowie?",
+    "Skorzystaj z bilansu: łącznie jest 50 kamieni niebieskich. Skoro w pierwszej połowie dominują czerwone (jest ich $\\ge 25$), to niebieskich jest tam co najwyżej 25. Ile zatem niebieskich kamieni musi znajdować się w drugiej połowie?"
   ],
   "prerequisites": [],
   "skills_required": [

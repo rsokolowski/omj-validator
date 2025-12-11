@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Nazwijmy stałą sumę liczb na każdym odcinku literą S. Przyjrzyj się uważnie budowie diagramu. Które pole, ze względu na swoje położenie, jest najważniejsze?",
-    "Skup się na wszystkich odcinkach, które przechodzą przez centralne pole. Zauważ, że można je podzielić na dwie grupy w zależności od tego, przez jakie inne pola przechodzą.",
-    "Zapisz równania dla sum na odcinkach z obu tych grup. Każde z nich można przekształcić tak, aby po jednej stronie zostało S-c, gdzie c to liczba w środku. Co znajduje się po drugiej stronie w każdym przypadku?",
-    "Jedna grupa odcinków pokazuje, że suma liczb w dwóch przeciwległych polach sześciokąta jest stała. Druga, że ta sama stała jest sumą liczby z sześciokąta i pewnej liczby z brzegu. Co z tego wynika?"
+    "Oblicz sumę wszystkich liczb, które należy wpisać w diagram (od 11 do 29). Wiedząc, że w każdym z trzech kierunków jest 5 linii pokrywających wszystkie pola, oblicz wymaganą sumę liczb na jednej linii.",
+    "Skup się na trzech najdłuższych liniach (przekątnych), które przecinają się w środkowym polu. Jaka musiałaby być łączna suma liczb na tych trzech liniach, biorąc pod uwagę wynik z poprzedniej wskazówki?",
+    "Zauważ, że te trzy linie składają się łącznie z 13 pól, przy czym pole środkowe jest uwzględnione w sumie aż trzy razy. Zapisz wyrażenie na tę sumę jako: 'suma 13 różnych liczb' plus 'podwojona liczba ze środka'.",
+    "Sprawdź, czy uzyskanie wymaganej sumy jest w ogóle możliwe. Oszacuj najmniejszą możliwą wartość tego wyrażenia, wstawiając w nie najmniejsze dostępne liczby (od 11 w górę) i porównaj wynik z obliczoną wcześniej sumą przekątnych."
   ],
   "skills_required": [
     "double_counting",

@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Przedstaw sytuację za pomocą grafu: osoby to wierzchołki, a znajomości to krawędzie. Jaki jest stopień każdego wierzchołka na początku, a jaki na końcu przyjęcia?",
-    "Zamiast analizować osobno stan początkowy i końcowy, pomyśl o grafie, który zawiera tylko *nowe* znajomości.",
-    "Ile nowych znajomości zyskała każda osoba? Jaki jest więc stopień każdego wierzchołka w grafie *nowych* znajomości i jaką musi on mieć strukturę?",
-    "Graf nowych znajomości narzuca warunek parzystości na $n$. Graf początkowy również ma swoje wymagania. Sprawdź, czy dla najmniejszej liczby $n$ spełniającej te warunki opisana sytuacja jest możliwa."
+    "Zamiast analizować cały układ, zastanów się: ile dokładnie *nowych* znajomości zyskała każda osoba w trakcie przyjęcia?",
+    "Rozważ graf złożony wyłącznie z tych nowych znajomości. Skoro każdy zyskał dokładnie 1 znajomego, to jak muszą wyglądać krawędzie w tym grafie?",
+    "Struktura nowych znajomości (rozłączne pary) wymusza, aby liczba $n$ była parzysta. Czy jednak każde parzyste $n$ jest dopuszczalne? Pamiętaj o ograniczeniu na maksymalną liczbę znajomych.",
+    "Aby każdy mógł mieć 4 znajomych, na przyjęciu musi być co najmniej 5 osób. Sprawdź, czy dla najmniejszej parzystej liczby spełniającej ten warunek (czyli $n=6$) potrafisz skonstruować odpowiedni przykład."
   ],
   "skills_required": [
     "graph_theory",

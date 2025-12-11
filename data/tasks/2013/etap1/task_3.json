@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie figurę i zaznacz wszystkie dane. Aby wykazać, że trójkąt $BCM$ jest równoboczny, co musisz udowodnić o jego bokach lub kątach?",
-    "Zacznij od wykazania, że prostokąt $ABCD$ musi być kwadratem. W tym celu spróbuj udowodnić, że trójkąty prostokątne $\triangle ABE$ i $\triangle ADF$ są przystające.",
-    "Aby udowodnić przystawanie, zbadaj kąty. Obróć $\triangle ADF$ o $90^\\circ$ wokół punktu $A$. Wykorzystaj własności trójkąta równobocznego $AEF$, aby pokazać, że $\\angle BAE = \\angle DAF$.",
-    "Zbuduj wewnątrz kwadratu trójkąt równoboczny $\\triangle KBC$. Wykaż, że $K$ leży na odcinku $AF$. Aby udowodnić, że $K=M$, skorzystaj z własności środkowej w trójkącie prostokątnym $\\triangle ADF$ i porównaj kąty w trójkątach $\\triangle ADM$ i $\\triangle ADK$."
+    "Skup się na trójkącie równobocznym $AEF$. Skoro $M$ jest środkiem boku $AF$, to jaki kąt tworzy odcinek $EM$ z bokiem $AF$? Wyznacz miarę kąta $\\angle AME$.",
+    "Zauważ, że kąt $\\angle ABE$ jest prosty (z własności prostokąta) oraz kąt $\\angle AME$ też jest prosty. Co to oznacza dla punktów $A, B, E, M$? Czy można na nich opisać okrąg?",
+    "Wykorzystaj fakt, że czworokąt $ABEM$ jest wpisany w okrąg. Znajdź miarę kąta $\\angle ABM$, korzystając z tego, że $EM$ jest dwusieczną kąta w trójkącie równobocznym.",
+    "Powinieneś otrzymać $\\angle MBC = 60^\\circ$. Aby zakończyć dowód, wykaż, że $MB = MC$. W tym celu zauważ, że punkt $M$ leży dokładnie w połowie odległości między prostymi $AB$ i $CD$ (dlaczego?)."
   ],
   "skills_required": [
     "angle_chasing",

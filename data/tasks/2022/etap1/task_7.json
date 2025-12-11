@@ -22,9 +22,9 @@
     "spatial_3d"
   ],
   "hints": [
-    "Wierzchołkami powstałego czworościanu są punkty $B, M, D$ oraz $P$ (powstały ze złączenia $A, C, E$). Zastanów się, które odcinki z płaskiej figury stają się krawędziami czworościanu $PBMD$.",
-    "Korzystając z własności sześciokąta foremnego o boku 2, oblicz długości wszystkich sześciu krawędzi czworościanu $PBMD$.",
-    "Sprawdź, czy któraś ze ścian czworościanu jest trójkątem prostokątnym. Użyj twierdzenia odwrotnego do twierdzenia Pitagorasa dla obliczonych długości krawędzi.",
-    "Odkrycie trójkątów prostokątnych pozwala sprytnie wybrać podstawę czworościanu. Wybierz taką ścianę na podstawę, aby wysokość opuszczona na nią była jedną z krawędzi."
+    "Zauważ, że ścianami bocznymi czworościanu są trójkąty $ABM$, $BCD$ i $DEM$ wycięte z sześciokąta. Pamiętaj, że zagięcie kartki zmienia położenie trójkątów w przestrzeni, ale nie zmienia ich wymiarów ani kątów wewnętrznych.",
+    "Zamiast żmudnie obliczać długości wszystkich krawędzi, przeanalizuj miary kątów w trójkątach $ABM$ i $DEM$ na płaszczyźnie. Ile wynosi kąt $\\angle BAM$, wiedząc, że $AE$ jest przekątną sześciokąta?",
+    "Fakt, że $\\angle BAM = 90^\\circ$ (oraz $\\angle DEM = 90^\\circ$) oznacza, że w czworościanie krawędź $PM$ jest prostopadła do krawędzi $PB$ i $PD$. Skoro $PM$ jest prostopadła do dwóch krawędzi podstawy $PBD$, to czym jest ona dla tego czworościanu?",
+    "Oblicz objętość czworościanu, traktując trójkąt $PBD$ jako podstawę, a odcinek $PM$ jako wysokość. Zauważ, że pole podstawy $PBD$ jest równe polu trójkąta $BCD$ z wyjściowego sześciokąta."
   ]
 }

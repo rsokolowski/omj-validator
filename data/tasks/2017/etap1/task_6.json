@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Przekształć podaną równość, aby wyznaczyć $n$. Skoro $n$ jest dodatnią liczbą całkowitą, to co to oznacza dla wartości wyrażenia $k^2+k-m^2$?",
-    "Rozważ dowód nie wprost. Załóż, że teza zadania jest fałszywa, czyli $m > n$, i spróbuj doprowadzić to założenie do sprzeczności.",
-    "Połącz założenie $m>n$ z wyjściową równością. Jaką nierówność uzyskasz, porównując ze sobą wyrażenia $m^2+m$ oraz $k^2+k$?",
-    "Zauważ, że nierówność między $m^2+m$ a $k^2+k$ implikuje nierówność między $m$ a $k$. Wykorzystaj ją w wyrażeniu na $n$, aby pokazać, że $n$ nie może być dodatnie."
+    "Przekształć równość tak, aby wyznaczyć $n$. Skoro $n$ jest liczbą dodatnią, to jaką nierówność otrzymujesz między $m^2$ a $k^2+k$?",
+    "Zauważ, że dla dodatniego $k$ liczba $k^2+k$ znajduje się pomiędzy dwoma kolejnymi kwadratami liczb całkowitych: $k^2$ oraz $(k+1)^2$.",
+    "Skoro $m^2$ jest kwadratem mniejszym od $k^2+k$, a $k^2+k$ jest mniejsze od $(k+1)^2$, to jaka nierówność zachodzi między $m$ a $k$?",
+    "Skoro $m \\leq k$, to $m^2+m \\leq k^2+k$. Wstaw do tej nierówności wyrażenie $m^2+n$ w miejsce $k^2+k$ i uprość wynik."
   ],
   "skills_required": [
     "algebraic_identities",

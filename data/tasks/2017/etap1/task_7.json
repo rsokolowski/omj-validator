@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj prostopadłościan i zaznacz punkty K, L, M. Płaszczyzna KLM przecina też krawędź DD' w pewnym punkcie N. Zastanów się, jaką figurą jest czworokąt KLMN.",
-    "Przeciwległe ściany prostopadłościanu są do siebie równoległe. Co to oznacza dla odcinków, wzdłuż których płaszczyzna KLMN przecina te ściany?",
-    "Czworokąt KLMN jest równoległobokiem. Jego przekątne przecinają się w połowie. Jaki związek między wysokościami AK, BL, CM i DN z tego wynika?",
-    "Objętość bryły można obliczyć, dzieląc ją na dwie części o podstawach trójkątnych (np. wzdłuż przekątnej AC). Objętość graniastosłupa ściętego o podstawie trójkątnej to iloczyn pola podstawy i średniej arytmetycznej wysokości w wierzchołkach."
+    "Narysuj prostopadłościan i punkt $N$ na krawędzi $DD'$. Pamiętaj, że płaszczyzna przecina równoległe ściany bryły wzdłuż odcinków równoległych, więc czworokąt $KLMN$ jest równoległobokiem.",
+    "Zauważ, że środek symetrii przekroju $KLMN$ leży dokładnie nad środkiem podstawy $ABCD$. Jaka jest zależność między sumami długości przeciwległych krawędzi bocznych: $AK + CM$ oraz $BL + DN$?",
+    "Zastanów się nad wysokością bryły w punkcie będącym środkiem podstawy. Zauważ, że jest ona średnią arytmetyczną długości wszystkich krawędzi bocznych ($AK, BL, CM, DN$).",
+    "Skorzystaj z faktu, że objętość takiej bryły jest równa objętości prostopadłościanu o tej samej podstawie i wysokości równej obliczonej średniej (zasada 'wyrównywania' poziomu)."
   ],
   "skills_required": [
     "spatial_3d",

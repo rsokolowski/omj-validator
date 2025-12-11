@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zaznacz na rysunku wszystkie równe odcinki i znajdź powstałe w ten sposób trójkąty równoramienne.",
-    "Skup się na warunku $MX = MC = MY$. Co on oznacza dla punktu $M$ i trójkąta $XCY$? Poszukaj tu głębszej własności geometrycznej, zanim zaczniesz liczyć kąty.",
-    "Punkt $M$ jest środkiem okręgu opisanego na trójkącie $XCY$. Co wynika dla kąta $\\angle XCY$ z faktu, że środek tego okręgu leży na boku $XY$?",
-    "Wiedząc, jaką miarę ma kąt $\\angle ACB$, oznacz równe kąty w trójkątach równoramiennych $AXM$ i $BYM$. Znajdź sumę tych kątów, a następnie wykorzystaj ją w trójkącie $AMB$."
+    "Zaznacz na rysunku wszystkie równe odcinki. Zauważ, że w trójkącie $XCY$ punkt $M$ jest środkiem boku $XY$, a jego odległość od wierzchołka $C$ jest taka sama jak od $X$ i $Y$.",
+    "Skoro $MX = MY = MC$, to punkt $M$ jest środkiem okręgu opisanego na trójkącie $XCY$, a odcinek $XY$ jest jego średnicą. Jaka jest miara kąta wpisanego $\\angle XCY$ opartego na średnicy?",
+    "Wiedząc już, jaką miarę ma kąt $\\angle ACB$, oblicz sumę kątów $\\angle A$ i $\\angle B$ w trójkącie $ABC$. Następnie zauważ, że trójkąty $AXM$ i $BYM$ są równoramienne i wyznacz za ich pomocą kąty $\\angle AMX$ oraz $\\angle BMY$.",
+    "Zauważ, że kąty $\\angle AMX$, $\\angle AMB$ i $\\angle BMY$ tworzą razem kąt półpełny ($180^\\circ$), ponieważ $M$ leży na odcinku $XY$. Wykorzystaj sumę kątów $\\angle A + \\angle B$ do obliczenia szukanego kąta."
   ],
   "skills_required": [
     "isosceles_triangle",

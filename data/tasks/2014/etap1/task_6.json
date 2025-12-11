@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Oblicz pole figury, która pozostała po wycięciu kwadratu. Czy fakt, że jest ono wielokrotnością pola każdego z prostokątów, gwarantuje możliwość ułożenia parkietażu?",
-    "Aby udowodnić, że pokrycie jest niemożliwe, spróbuj pokolorować planszę. Celem jest znalezienie takiego kolorowania, w którym każdy prostokąt pokrywa taką samą liczbę pól każdego koloru.",
-    "Użyj trzech kolorów. Zauważ, że proste kolorowanie wierszy lub kolumn nie działa dla wszystkich obrotów prostokątów. Poszukaj wzoru, w którym kolor pola zależy od obu jego współrzędnych.",
-    "Pokoloruj pole $(i, j)$ w zależności od sumy jego współrzędnych $i+j$. Policz, ile pól każdego koloru pokrywa dowolny prostokąt, a następnie zlicz pola każdego koloru w całej figurze."
+    "Oblicz pole figury. Zwróć uwagę, że zarówno prostokąt $1 \\times 6$, jak i $2 \\times 3$ można podzielić na dwa takie same mniejsze prostokąty. Jakie mają one wymiary?",
+    "Skoro każdy duży klocek składa się z prostokątów $1 \\times 3$, to całą figurę musi dać się pokryć takimi właśnie elementami. Spróbuj wykazać, że ułożenie samych kostek $1 \\times 3$ jest niemożliwe.",
+    "Użyj 3 kolorów. Aby każdy prostokąt $1 \\times 3$ (niezależnie czy leży pionowo, czy poziomo) przykrywał dokładnie jedno pole każdego koloru, zastosuj kolorowanie diagonalne (pasy po skosie).",
+    "Przypisz każdemu polu $(i, j)$ kolor odpowiadający reszcie z dzielenia sumy $i+j$ przez 3. Zlicz pola każdego koloru w otrzymanej figurze i sprawdź, czy ich liczby są równe."
   ],
   "skills_required": [
     "tiling",

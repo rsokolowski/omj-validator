@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dowolny wypukły sześciokąt, zaznacz w nim punkt $X$ oraz środki boków. Połącz wierzchołki sześciokąta oraz punkt $X$ ze środkami odpowiednich boków, aby zobaczyć wszystkie sześć czworokątów.",
-    "Zauważ, że trzy czworokąty wymienione w zadaniu oraz trzy pozostałe (KBLX, MDNX, PFQX) razem w całości pokrywają sześciokąt $ABCDEF$. Co to oznacza dla sumy ich pól?",
-    "Pole każdego czworokąta można przedstawić jako sumę pól dwóch trójkątów o wspólnym wierzchołku $X$. Porównaj pole trójkąta $\\triangle AKX$ z polem trójkąta $\\triangle BKX$. Co możesz zauważyć?",
-    "Wykorzystaj fakt, że środkowa dzieli trójkąt na dwa trójkąty o równych polach. Pokaż, że suma pól czworokątów $QAKX, LCMX, NEPX$ jest równa sumie pól pozostałych trzech czworokątów."
+    "Wykonaj duży, dokładny rysunek. Połącz punkt $X$ ze wszystkimi wierzchołkami sześciokąta ($A, B, \\dots$) oraz ze wszystkimi środkami jego boków ($K, L, \\dots$).",
+    "Zauważ, że trzy czworokąty wymienione w treści zadania oraz trzy 'uzupełniające' czworokąty ($KBLX, MDNX, PFQX$) razem wypełniają całe wnętrze sześciokąta.",
+    "Odcinek $XA$ dzieli czworokąt $QAKX$ na dwa trójkąty. Porównaj pole trójkąta $\\triangle AKX$ z polem sąsiedniego trójkąta $\\triangle BKX$.",
+    "Wykorzystaj własność środkowej w trójkącie (np. $\\triangle ABX$). Wykaż, że suma pól czworokątów z zadania jest równa sumie pól czworokątów uzupełniających."
   ],
   "skills_required": [
     "area_methods",

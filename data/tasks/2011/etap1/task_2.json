@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj trójkąt równoramienny $ABC$ i zaznacz na boku $AB$ punkt $D$ tak, aby $BD=2AD$. Oznacz szukany kąt $\\angle BAC$ jako $\\alpha$. Jakie inne kąty w trójkącie $ABC$ możesz wyrazić za pomocą $\\alpha$?",
-    "Problem łączy informację o kątach ($\\angle BCD=90^\\circ$) z informacją o długościach ($BD=2AD$). Spróbuj użyć twierdzenia Pitagorasa w odpowiednich trójkątach prostokątnych, aby powiązać te informacje.",
-    "W trójkącie równoramiennym $ABC$ warto dorysować wysokość z wierzchołka $C$. Niech $H$ będzie jej spodkiem na podstawie $AB$. Jakie własności ma ten punkt? Wyraź długości odcinków $AD, DH, HB$ za pomocą jednej zmiennej.",
-    "Zastosuj tw. Pitagorasa w $\\triangle CHD$ i $\\triangle CHB$, by powiązać $BC^2$ i $CD^2$. Połącz wynik z tw. Pitagorasa w $\\triangle BCD$, by obliczyć $CD$ w zależności od $AD$. Co to mówi o trójkącie $\\triangle ACD$?"
+    "Narysuj wysokość $CH$ trójkąta $ABC$. Oznacz $AD=x$ i oblicz długości odcinków $DH$ oraz $HB$ w zależności od $x$.",
+    "Znajdź na boku $AB$ punkt symetryczny do $D$ względem wysokości $CH$. Zauważ, że punkt ten jest środkiem odcinka $BD$.",
+    "Skorzystaj z symetrii oraz własności środkowej w trójkącie prostokątnym $BCD$, aby wykazać, że $CD = AD$.",
+    "Zauważ, że trójkąt $ACD$ jest równoramienny. Uzależnij jego kąty od $\beta$ (lub $\\alpha$) i oblicz miarę szukanego kąta."
   ],
   "prerequisites": [],
   "skills_required": [

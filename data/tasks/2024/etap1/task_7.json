@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Oznacz długości krawędzi prostopadłościanu jako $a=AB$, $b=AD$ i $c=AA'$. Zapisz podane w zadaniu zależności, używając tych oznaczeń. Gdzie dokładnie na przekątnej $AC'$ leży punkt $P$?",
-    "Aby udowodnić, że kąt $\\angle BPB'$ jest prosty, najwygodniej będzie skorzystać z twierdzenia odwrotnego do twierdzenia Pitagorasa dla trójkąta $\\triangle BPB'$. Musisz więc obliczyć kwadraty długości jego boków.",
-    "Wykorzystaj wzór na długość przekątnej prostopadłościanu, aby połączyć daną równość $AC' = a+b$ z długościami krawędzi. Odkryjesz w ten sposób kluczową zależność między $a, b$ i $c$.",
-    "Aby obliczyć $BP^2$ i $B'P^2$, rozważ rzut prostokątny punktu $P$ na prostą zawierającą krawędź $BB'$. Nazwij ten rzut $H$. Wykorzystaj trójkąty prostokątne $\\triangle BPH$ i $\\triangle B'PH$."
+    "Oznacz krawędzie $AB=a$, $AD=b$, $AA'=c$. Przekształć podany warunek $AC'=a+b$ korzystając ze wzoru na długość przekątnej prostopadłościanu. Powinieneś otrzymać kluczową zależność $c^2=2ab$.",
+    "Aby udowodnić tezę, skorzystaj z twierdzenia odwrotnego do twierdzenia Pitagorasa w trójkącie $BPB'$. Twoim celem jest obliczenie $BP^2$ i $B'P^2$ i sprawdzenie, czy ich suma wynosi $BB'^2$.",
+    "Zauważ, że krawędź $AB$ jest prostopadła do ściany $BCC'B'$, a krawędź $B'C'$ do ściany $ABB'A'$. Co to oznacza dla kątów $\\angle ABC'$ i $\\angle AB'C'$? Zwróć uwagę, że $P$ leży na wspólnej przeciwprostokątnej tych trójkątów.",
+    "Oblicz $BP^2$ rozważając płaski trójkąt prostokątny $ABC'$ (np. rzutując $P$ na bok $AB$ i korzystając z podobieństwa). Analogicznie oblicz $B'P^2$ z trójkąta $AB'C'$. Pamiętaj, że $AP=a$ i $C'P=b$."
   ],
   "prerequisites": [
     "2020_etap1_2"

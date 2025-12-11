@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Zastanów się, kiedy dwie strzałki mogą na siebie wskazywać. W jakich przypadkach strzałka skierowana w prawo może wskazywać na inną strzałkę?",
-    "Spróbuj podzielić wszystkie pary wzajemnie wskazujących strzałek na rozłączne grupy. Rozważ osobno strzałki poziome (lewo-prawo) i pionowe (góra-dół).",
-    "Dla strzałek poziomych w każdym wierszu, pomyśl o podziale na strzałki skierowane w lewo i w prawo. Ile strzałek z każdego wiersza musisz usunąć, aby żadne dwie nie wskazywały na siebie?",
-    "W każdym wierszu usuń wszystkie strzałki skierowane w lewo LUB wszystkie skierowane w prawo (wybierz mniejszy zbiór). Analogicznie postępuj z kolumnami dla strzałek pionowych. Oszacuj łączną liczbę usuniętych strzałek."
+    "Zastanów się, czy strzałka pozioma może kiedykolwiek 'wskazywać' na strzałkę pionową? Zauważ, że konflikty (wzajemne wskazanie) mogą zdarzyć się tylko między strzałkami leżącymi w tym samym wierszu lub w tej samej kolumnie.",
+    "Skoro strzałki poziome nie wchodzą w konflikt z pionowymi, możesz podzielić problem na dwie niezależne części. Rozważ osobno zbiór wszystkich strzałek w wierszach (lewo/prawo) i osobno zbiór strzałek w kolumnach (góra/dół).",
+    "Skup się na pojedynczym wierszu. Konflikt powstaje, gdy strzałka w prawo 'patrzy' na strzałkę w lewo. Jak w najprostszy sposób wyeliminować WSZYSTKIE konflikty w tym wierszu, decydując się na zachowanie tylko jednego rodzaju strzałek?",
+    "W każdym wierszu zostaw tylko te strzałki, których jest więcej (np. same w lewo). Zrób to samo niezależnie dla każdej kolumny. Wykaż, że sumując te wybory, zachowasz łącznie co najmniej połowę wszystkich strzałek."
   ],
   "prerequisites": [],
   "skills_required": [

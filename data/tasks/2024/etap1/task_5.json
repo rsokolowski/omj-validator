@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się nad parzystością liczb $a, b, c$. Suma $a+b+c$ musi być liczbą pierwszą. Co by się stało, gdyby liczby pierwsze $a$ i $c$ były obie nieparzyste? Co to oznacza dla jednej z nich?",
-    "Wiesz już, że jedna z liczb, powiedzmy $a$, musi być równa 2. Aby pokazać, że $b$ jest podzielne przez 3, spróbuj założyć, że tak nie jest (czyli $b$ daje resztę 1 lub 2 z dzielenia przez 3) i poszukaj sprzeczności.",
-    "Rozważ dwa przypadki dla liczby pierwszej $c$: gdy $c=3$ oraz gdy $c>3$. W każdym z nich zbadaj, jakie reszty z dzielenia przez 3 dają liczby z zadania, pamiętając o założeniu na temat $b$.",
-    "Gdy $c>3$, jakie reszty może dawać przy dzieleniu przez 3? Sprawdź wszystkie kombinacje reszt dla $b$ i $c$. W każdej z nich zbadaj, czy któraś z liczb $b+c$ lub $a+b+c$ nie staje się podzielna przez 3 i większa od 3."
+    "Zbadaj parzystość liczb $a, b, c$. Pamiętaj, że jedyną parzystą liczbą pierwszą jest 2. Co by wynikło z założenia, że $a$ i $c$ są obie nieparzyste? Przeanalizuj parzystość sum $a+b$, $b+c$ oraz $a+b+c$.",
+    "Analiza parzystości powinna doprowadzić Cię do wniosku, że jedna z liczb, np. $a$, musi być równa 2. Sprawdź, czy $c$ może być wtedy nieparzyste. W tym celu ustal najpierw, jaka musiałaby być parzystość $b$, aby $b+c$ było pierwsze, a potem zbadaj liczbę $a+b$.",
+    "Powinieneś wywnioskować, że koniecznie $a=2$ oraz $c=2$. Wstaw te wartości do wyrażeń z treści zadania. Zauważ, że teraz liczby $b+2$ oraz $b+4$ muszą być liczbami pierwszymi.",
+    "Aby wykazać tezę, zbadaj reszty z dzielenia przez 3. Gdyby $b$ nie dzieliło się przez 3, to czy liczby $b+2$ i $b+4$ mogłyby być jednocześnie liczbami pierwszymi większymi od 2? Pamiętaj, że $b>1$."
   ],
   "prerequisites": [],
   "skills_required": [

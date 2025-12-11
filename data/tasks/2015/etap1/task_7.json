@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Narysuj rzut wierzchołka $S$ na płaszczyznę podstawy i oznacz go $P$. Kwadrat długości każdej krawędzi bocznej (np. $AS^2$) zależy od wysokości ostrosłupa i kwadratu odległości $AP^2$. Zapisz te zależności, korzystając z twierdzenia Pitagorasa.",
-    "Równość $AS+CS=BS+DS$ jest trudna do analizy. Zbadaj, czy istnieje prostsza zależność, porównując sumy kwadratów przeciwległych krawędzi bocznych: $AS^2+CS^2$ oraz $BS^2+DS^2$.",
-    "Zauważ, że związek między sumami kwadratów krawędzi bocznych zależy od sum kwadratów odległości w podstawie: $AP^2+CP^2$ i $BP^2+DP^2$. Jaka jest uniwersalna zależność między tymi sumami dla dowolnego punktu $P$ i prostokąta $ABCD$?",
-    "Posiadasz dwie równości: $AS+CS=BS+DS$ oraz $AS^2+CS^2=BS^2+DS^2$. Wykaż za pomocą algebry, że te dwa warunki oznaczają, iż para długości $(AS, CS)$ jest permutacją pary $(BS, DS)$, co prowadzi do sprzeczności z treścią zadania."
+    "Oznacz rzut wierzchołka $S$ na podstawę jako $P$. Wyraź kwadraty długości krawędzi bocznych (np. $AS^2$), korzystając z twierdzenia Pitagorasa w trójkątach prostokątnych o przyprostokątnej będącej wysokością ostrosłupa.",
+    "Sama suma długości $AS+CS$ jest trudna do geometrycznej interpretacji. Spróbuj zamiast tego zbadać relację między sumami kwadratów przeciwległych krawędzi: $AS^2+CS^2$ oraz $BS^2+DS^2$.",
+    "Skorzystaj z własności prostokąta: dla dowolnego punktu $P$ suma kwadratów odległości do przeciwległych wierzchołków jest stała ($PA^2+PC^2 = PB^2+PD^2$). Jak ta własność przenosi się na krawędzie boczne ostrosłupa?",
+    "Dysponujesz teraz dwoma warunkami: $AS+CS = BS+DS$ oraz $AS^2+CS^2 = BS^2+DS^2$. Co z tego wynika dla zbiorów liczb $\\{AS, CS\\}$ i $\\{BS, DS\\}$? Sprawdź, czy taki wniosek jest zgodny z informacją, że wszystkie krawędzie mają różne długości."
   ],
   "skills_required": [
     "coordinate_geometry",

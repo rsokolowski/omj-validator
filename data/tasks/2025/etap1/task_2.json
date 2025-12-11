@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Oznacz sumę cyfr liczby $n$ przez $S(n)$. Z treści zadania masz równanie $n = 21 \\cdot S(n)$. Czy znasz jakąś zależność między liczbą a sumą jej cyfr?",
-    "Przypomnij sobie kryterium podzielności przez 9: liczba jest podzielna przez 9 wtedy i tylko wtedy, gdy suma jej cyfr jest podzielna przez 9. Jak możesz to wykorzystać?",
-    "Skoro $n = 21 \\cdot S(n)$, to zastanów się, jaką resztę z dzielenia przez 9 daje liczba $21$. Następnie pomyśl, co to oznacza dla reszty z dzielenia $n$ przez 9.",
-    "Zauważ, że $21 = 2 \\cdot 9 + 3$, więc $21 \\equiv 3 \\pmod{9}$. Zapisz zależność między $n$ a $S(n)$ modulo 9 i wykorzystaj fakt, że $n \\equiv S(n) \\pmod{9}$."
+    "Zapisz równanie wynikające z treści zadania: $n = 21 \\cdot S(n)$. Przypomnij sobie cechy podzielności przez 3 i przez 9 – jaki jest związek między liczbą a sumą jej cyfr?",
+    "Przyjrzyj się czynnikowi 21. Przez jaką cyfrę na pewno dzieli się prawa strona równania? Co to oznacza dla liczby $n$, a w konsekwencji dla sumy jej cyfr $S(n)$?",
+    "Skoro ustaliłeś, że suma cyfr $S(n)$ musi być podzielna przez 3, zapisz ją w postaci $S(n) = 3k$ (gdzie $k$ jest liczbą całkowitą). Podstaw to wyrażenie do wyjściowego równania na $n$.",
+    "Po podstawieniu otrzymasz $n = 21 \\cdot 3k$. Wykonaj mnożenie i zastanów się, dlaczego otrzymany wynik gwarantuje podzielność liczby $n$ przez 9."
   ],
   "skills_required": [
     "digit_manipulation",

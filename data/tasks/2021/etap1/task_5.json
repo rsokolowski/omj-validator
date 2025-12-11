@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie figurę. Oznacz długość boku trójkąta $ABC$ przez $a$, a równe odcinki $AM$ i $BK$ przez $x$. Wyraź długości $MB$ i $KC$ w zależności od $a$ i $x$.",
-    "Warunki $KM=LM$ i $\\angle KML=90^\\circ$ silnie sugerują, aby wykorzystać obrót o $90^\\circ$ wokół punktu $M$.",
-    "Niech obrót wokół $M$ o $90^\\circ$ przekształca $K$ na $L$, a $B$ na $B'$. Jakie własności (długości boków, miary kątów) ma trójkąt $B'ML$ w porównaniu z trójkątem $BMK$?",
-    "Porównaj trójkąt $AML$ z trójkątem $B'ML$. Użyj równości $AM=BK$, aby znaleźć zależność między $AL$ i $BM$. Następnie oblicz stosunek długości $CL$ do $CK$ i wyciągnij wniosek."
+    "Narysuj rysunek i oznacz długości odcinków, np. $AM=BK=x$. Zastanów się, jaką zależność między bokami $CL$ i $CK$ musisz udowodnić, aby kąt $CKL$ był prosty.",
+    "Aby wykorzystać równość $KM=LM$, poprowadź z punktu $M$ odcinki prostopadłe do boków $BC$ i $AC$. Utworzą one trójkąty o kątach $30^\\circ$, $60^\\circ$, $90^\\circ$.",
+    "Użyj twierdzenia Pitagorasa w powstałych trójkątach, aby wyrazić kwadraty długości $KM$ i $LM$ w zależności od $x$, boku trójkąta $a$ oraz szukanego odcinka $AL$.",
+    "Przyrównaj wyznaczone wyrażenia ($MK^2 = ML^2$) i uprość równanie, aby obliczyć długość $AL$. Porównaj wynik z długością $CK$ i wyciągnij wniosek."
   ],
   "prerequisites": [
     "2021_etap1_2"

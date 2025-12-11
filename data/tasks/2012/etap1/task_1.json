@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zauważ, że wykładniki potęg $1, 5, 9, 13, \\dots$ tworzą ciąg arytmetyczny. Aby wykazać, że wszystkie liczby w zadaniu mają tę samą cyfrę jedności, wystarczy pokazać, że każda z nich ma taką samą cyfrę jedności jak $n$.",
-    "Problem sprowadza się do wykazania, że różnica $n^{4k-3} - n$ jest podzielna przez 10 dla każdej dodatniej liczby całkowitej $k$. Spróbuj najpierw udowodnić to dla $k=2$, czyli dla liczby $n^5$.",
-    "Aby udowodnić, że $n^5-n$ jest podzielne przez 10, pokaż podzielność przez 2 i 5. Kluczowy jest rozkład na czynniki $n^5-n = n(n^4-1)$. Zastanów się, jak ten sam czynnik pojawia się w ogólnym wyrażeniu $n^{4k-3}-n$.",
-    "Wykaż, że $n(n^4-1)$ jest podzielne przez 10. Następnie zauważ, że $n^{4k-3}-n = n((n^4)^{k-1}-1)$. Wykorzystaj fakt, że wyrażenie $a^m-1$ jest zawsze podzielne przez $a-1$, aby zakończyć dowód."
+    "Zauważ, że aby wszystkie liczby w ciągu miały tę samą cyfrę jedności, wystarczy pokazać, że każda z nich kończy się tą samą cyfrą co pierwsza liczba $n$. Oznacza to, że różnica między dowolnym wyrazem ciągu a liczbą $n$ musi być podzielna przez 10.",
+    "Zacznij od najprostszego przypadku: udowodnij, że liczba $n^5$ ma tę samą cyfrę jedności co $n$. Sprowadza się to do wykazania, że różnica $n^5 - n$ jest podzielna przez 10.",
+    "Aby udowodnić podzielność $n^5 - n$ przez 10, wykaż, że liczba ta dzieli się przez 2 i przez 5. Warto zapisać tę różnicę w postaci iloczynu $n(n^4 - 1)$ i przeanalizować jego czynniki dla różnych wartości $n$.",
+    "Gdy już wiesz, że $n^5$ ma tę samą cyfrę jedności co $n$, zbadaj kolejną liczbę $n^9$. Zapisz ją jako $n^4 \\cdot n^5$. Skoro $n^5$ i $n$ mają tę samą końcówkę, czy możesz w tym iloczynie 'podmienić' $n^5$ na $n$, aby otrzymać wynik dla $n^9$?"
   ],
   "skills_required": [
     "modular_arithmetic"

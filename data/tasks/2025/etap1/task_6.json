@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zapisz liczbę $n$ w postaci rozkładu na czynniki pierwsze: $n = 2^a \\cdot 3^b \\cdot m$, gdzie $m$ nie dzieli się przez 2 ani 3. Jakie warunki na wykładniki wynikają z tego, że $2n$ jest sześcianem?",
-    "Liczba jest sześcianem wtedy i tylko wtedy, gdy wszystkie wykładniki w jej rozkładzie na czynniki pierwsze są podzielne przez 3. Analogicznie, liczba jest kwadratem, gdy wszystkie wykładniki są parzyste. Zapisz te warunki dla $2n$ i $3n$.",
-    "Dla $2n = 2^{a+1} \\cdot 3^b \\cdot m$ masz warunki: $a+1 \\equiv 0 \\pmod{3}$, $b \\equiv 0 \\pmod{3}$. Dla $3n = 2^a \\cdot 3^{b+1} \\cdot m$ masz: $a \\equiv 0 \\pmod{2}$, $b+1 \\equiv 0 \\pmod{2}$. Jakie są minimalne wartości $a$ i $b$?",
-    "Znajdź najmniejsze nieujemne $a$ spełniające $a+1 \\equiv 0 \\pmod{3}$ i $a \\equiv 0 \\pmod{2}$ jednocześnie. Podobnie dla $b$. Sprawdź też, jakie warunki musi spełniać $m$, i oblicz $2^a \\cdot 3^b$."
+    "Zapisz liczbę $n$ w postaci $n = 2^a \tcdot 3^b \tcdot k$. Rozłóż 108 na czynniki pierwsze i ustal, jakie nierówności muszą spełniać wykładniki $a$ i $b$, aby $n$ dzieliło się przez 108.",
+    "Skorzystaj z faktu, że w rozkładzie na czynniki pierwsze sześcianu wszystkie wykładniki są podzielne przez 3, a w kwadracie – przez 2. Zastosuj to do liczb $2n$ i $3n$.",
+    "Przeanalizuj wykładnik $a$ przy liczbie 2. Skoro $3n$ jest kwadratem, to $a$ musi być parzyste. Skoro $2n$ jest sześcianem, to $a+1$ musi dzielić się przez 3. Znajdź najmniejsze takie $a$.",
+    "Przeprowadź analogiczne rozumowanie dla wykładnika $b$ przy liczbie 3. Sprawdź, czy wyznaczone minimalne wartości $a$ i $b$ gwarantują podzielność $n$ przez 108."
   ],
   "skills_required": [
     "prime_factorization"

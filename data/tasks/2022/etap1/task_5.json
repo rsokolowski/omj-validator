@@ -19,9 +19,9 @@
     "inequality_manipulation"
   ],
   "hints": [
-    "Przyjrzyj się warunkom $a+b \\geq ab$. Dzieląc obie strony przez $ab$ (co wolno, bo $a,b>0$), otrzymasz nierówność wiążącą odwrotności liczb. Jak wyglądają wszystkie trzy warunki po takim przekształceniu?",
-    "Przekształcone nierówności mają prostszą strukturę. Wprowadź nowe zmienne, np. $x=1/a, y=1/b, z=1/c$, aby uprościć zarówno warunki, jak i tezę do udowodnienia.",
-    "Po podstawieniu masz warunki $x+y \\geq 1$, $y+z \\geq 1$, $z+x \\geq 1$ oraz tezę $xy+yz+zx \\geq 3/4$. Spróbuj uzyskać dwa pomocnicze wyniki: dolne oszacowanie na sumę $x+y+z$ oraz nierówność wiążącą sumę $x+y+z$ z sumą $xy+yz+zx$.",
-    "Dodaj stronami trzy nierówności z warunku, aby oszacować $x+y+z$. Następnie pomnóż każdą z nich ($x+y \\geq 1$, itd.) przez trzecią zmienną ($z$, itd.) i dodaj otrzymane wyniki, aby powiązać $x+y+z$ z $xy+yz+zx$."
+    "Zauważ, że dzieląc nierówność $a+b \\geq ab$ przez $ab$, otrzymasz warunek wiążący odwrotności liczb. Wprowadź zmienne pomocnicze $x=1/a, y=1/b, z=1/c$.",
+    "Po podstawieniu otrzymasz warunki typu $x+y \\geq 1$. Twoim celem jest oszacowanie wyrażenia $xy+yz+zx$. Zacznij od znalezienia dolnego ograniczenia na sumę $x+y+z$.",
+    "Aby powiązać sumę $x+y+z$ z iloczynami $xy, yz, zx$, spróbuj 'uzupełnić' każdą nierówność z założenia, mnożąc ją przez brakującą w niej zmienną (np. $x+y \\geq 1$ przez $z$).",
+    "Dodaj otrzymane po mnożeniu trzy nierówności stronami. Wynik pozwoli Ci uzależnić szukaną sumę iloczynów od sumy $x+y+z$, którą oszacowałeś wcześniej."
   ]
 }

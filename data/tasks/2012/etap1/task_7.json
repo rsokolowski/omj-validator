@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Rozłóż wyrażenie $n^3 - 7n$ na czynniki. Sprawdź kilka początkowych dodatnich liczb całkowitych $n$, aby zobaczyć, kiedy wynik jest kwadratem.",
-    "Aby iloczyn $n(n^2-7)$ był kwadratem, jego czynniki $n$ i $n^2-7$ muszą spełniać pewne warunki. Kluczowe jest zbadanie ich największego wspólnego dzielnika.",
-    "Pokaż, że $\\text{NWD}(n, n^2-7)$ jest dzielnikiem liczby 7. To pozwala rozważyć dwa przypadki w zależności od tego, czy $n$ jest podzielne przez 7.",
-    "Gdy $n$ nie jest podzielne przez 7, czynniki $n$ i $n^2-7$ muszą być kwadratami. Gdy $n$ jest podzielne przez 7, analiza prowadzi do równania postaci $7k-1=m^2$. Zbadaj możliwe reszty z dzielenia przez 7."
+    "Rozłóż wyrażenie $n^3 - 7n$ na czynniki. Sprawdź kilka początkowych liczb całkowitych $n$, aby znaleźć takie, dla których wynik jest kwadratem.",
+    "Aby iloczyn $n(n^2-7)$ był kwadratem, zbadaj największy wspólny dzielnik czynników $n$ i $n^2-7$. Wykaż, że ten NWD może wynosić tylko 1 lub 7.",
+    "Rozważ dwa przypadki. Gdy $\\text{NWD}=1$, czynniki są względnie pierwsze, więc oba muszą być kwadratami. Gdy $\\text{NWD}=7$, podstaw $n=7k$ i wywnioskuj, że wtedy liczba $7k^2-1$ musiałaby być kwadratem.",
+    "W pierwszym przypadku rozwiąż otrzymane równanie $a^4 - b^2 = 7$. W drugim przypadku wykaż sprzeczność, sprawdzając jakie reszty z dzielenia przez 7 mogą dawać kwadraty liczb całkowitych."
   ],
   "skills_required": [
     "prime_factorization",

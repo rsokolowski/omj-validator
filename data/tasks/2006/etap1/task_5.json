@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Nierówność ma zachodzić dla *każdej* pary liczb dodatnich. Czy istnieje jakaś szczególna relacja między $x$ i $y$ (np. $y=x$), która uprości problem i pozwoli zawęzić poszukiwania $n$?",
-    "Podstawiając $y=x$, otrzymujemy $x^{n+1} < 2x^4$. Przeanalizuj tę nierówność. Zauważ, że potęga $x$ po lewej stronie zależy od $n$. Co się dzieje, gdy ta potęga jest większa, równa lub mniejsza od 4?",
-    "Analiza przypadku $y=x$ powinna wyeliminować prawie wszystkie wartości $n$. Pozostaje sprawdzić, czy dla jedynej kandydującej wartości nierówność jest zawsze prawdziwa. Przekształć ją do postaci, która zależy tylko od ilorazu $t = x/y$.",
-    "Aby udowodnić otrzymaną nierówność dla zmiennej $t>0$, rozważ dwa przypadki. Co możesz powiedzieć o znakach wyrażeń, gdy $t \\ge 1$, a co, gdy $0 < t < 1$?"
+    "Aby znaleźć możliwe wartości $n$, sprawdź przypadek $y=x$. Otrzymasz $x^{n+1} < 2x^4$. Zbadaj, co dzieje się dla bardzo dużych i bardzo małych $x$, gdyby wykładniki po obu stronach były różne.",
+    "Analiza powinna doprowadzić Cię do jedynego kandydata $n=3$. Aby udowodnić nierówność $xy^3 < x^4 + y^4$, nie musisz przekształcać całego wyrażenia. Rozbij problem na dwa przypadki: $x \\ge y$ oraz $x < y$.",
+    "W każdym z przypadków spróbuj pokazać, że lewa strona $xy^3$ jest mniejsza od JEDNEGO ze składników sumy po prawej stronie ($x^4$ lub $y^4$). To wystarczy, bo drugi składnik jest dodatni.",
+    "Gdy $x \\ge y$, wykorzystaj fakt, że $x^3 \\ge y^3$. Pomnóż tę nierówność stronami przez $x$ - otrzymasz oszacowanie $xy^3$ przez $x^4$. Przeprowadź analogiczne rozumowanie dla $y > x$."
   ],
   "skills_required": [
     "inequality_manipulation",

@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Gdzie, względem swojego okręgu opisanego, leży trójkąt rozwartokątny? Czy można go zmieścić w pewnym półkolu?",
-    "Rozważ płaszczyznę prostopadłą do ściany rozwartokątnej, przechodzącą przez średnicę półkola, w którym mieści się ta ściana. Jaki ważny punkt czworościanu musi leżeć na tej płaszczyźnie?",
-    "Płaszczyzna ta przechodzi przez środek sfery opisanej. Skoro środek leży wewnątrz czworościanu, to jak muszą być rozmieszczone wierzchołki czworościanu względem tej płaszczyzny?",
-    "Wykazałeś, że trzy wierzchołki leżą po jednej stronie płaszczyzny przechodzącej przez środek sfery, a czwarty po drugiej. Czy środek sfery może wtedy należeć do wnętrza czworościanu?"
+    "Przypomnij sobie, gdzie względem trójkąta rozwartokątnego leży środek opisanego na nim okręgu. Wykonaj rysunek pomocniczy.",
+    "Zauważ, że środek sfery opisanej na czworościanie rzutuje się prostopadle na płaszczyznę dowolnej ściany dokładnie w środek okręgu opisanego na tej ścianie.",
+    "Aby środek sfery znalazł się we wnętrzu czworościanu, jego rzut musi trafić w 'cień' rzucany przez cały czworościan na płaszczyznę ściany rozwartokątnej.",
+    "Ten 'cień' to trójkąt powiększony o rzut czwartego wierzchołka. Czy potrafisz tak dobrać położenie czwartego wierzchołka, aby ten powiększony obszar przykrył środek okręgu?"
   ],
   "skills_required": [
     "spatial_3d",

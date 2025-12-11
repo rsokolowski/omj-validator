@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Niech $k$ będzie szukaną liczbą całkowitą. Warunek $\\sqrt{2n} < k < \\sqrt{5n}$ jest równoważny pewnej nierówności dla $k^2$. Jakiej?",
-    "Zadanie sprowadza się do wykazania, że w przedziale $(2n, 5n)$ zawsze znajduje się kwadrat liczby całkowitej. Rozważ, co by się stało, gdyby tak nie było – czyli gdyby cały ten przedział mieścił się między dwoma kolejnymi kwadratami.",
-    "Załóżmy, że dla pewnego $n$ w przedziale $(2n, 5n)$ nie ma kwadratu liczby całkowitej. Wtedy musi istnieć taka liczba całkowita $m$, że $m^2 \\le 2n$ oraz $5n \\le (m+1)^2$.",
-    "Z nierówności $m^2 \\le 2n$ i $5n \\le (m+1)^2$ wywnioskuj, że $3n \\le 2m+1$. Połącz ten wynik z pierwszą nierównością, aby uzyskać sprzeczność dla prawie wszystkich $n$. Pozostałe przypadki sprawdź ręcznie."
+    "Przekształć warunek $\\sqrt{2n} < k < \\sqrt{5n}$ podnosząc go do kwadratu. Zadanie sprowadza się do pytania: czy w przedziale $(2n, 5n)$ zawsze znajduje się kwadrat liczby całkowitej?",
+    "Przeprowadź dowód nie wprost. Załóż, że w przedziale $(2n, 5n)$ nie ma żadnego kwadratu. Oznacza to, że cały ten przedział musi zmieścić się w 'luce' pomiędzy dwoma kolejnymi kwadratami $m^2$ i $(m+1)^2$.",
+    "Porównaj długości tych przedziałów. Przedział $(2n, 5n)$ ma długość $3n$. Luka między $m^2$ a $(m+1)^2$ ma długość $2m+1$. Jeśli pierwszy przedział mieści się w drugim, to musi zachodzić nierówność $3n \\le 2m+1$.",
+    "Wykorzystaj fakt, że $m^2 \\le 2n$ (czyli $m \\le \\sqrt{2n}$). Podstaw to oszacowanie do nierówności $3n \\le 2m+1$. Czy ta nierówność może być prawdziwa dla dużych $n$, skoro lewa strona rośnie znacznie szybciej niż prawa? Małe przypadki sprawdź ręcznie."
   ],
   "prerequisites": [],
   "skills_required": [

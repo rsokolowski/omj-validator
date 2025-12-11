@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Zauważ, że znając łączną wagę 48 g, możesz określić, ile jest fałszywych monet. Ile gramów \"brakuje\" w porównaniu do wagi 5 prawdziwych monet?",
-    "Musisz odróżnić 10 możliwych par fałszywych monet. Pomyśl o każdym ważeniu jako o teście, który daje pewien wynik. Trzy testy muszą dać łącznie wystarczająco dużo informacji, by wskazać jedną z 10 par.",
-    "Zamiast podejmować decyzje po każdym ważeniu, spróbuj ustalić wszystkie trzy ważenia z góry. Każda z 10 par da wtedy unikalną sekwencję trzech wyników, tworząc coś w rodzaju \"kodu\".",
-    "Oznacz monety numerami 1-5. Spróbuj tak dobrać trzy ważone grupy monet, aby żadne dwie różne pary fałszywych monet nie dawały identycznych wyników dla wszystkich trzech ważeń. Zacznij od zważenia np. trzech monet."
+    "Gdyby wszystkie 5 monet było prawdziwych, ważyłyby 50 g. Brakuje 2 g, a każda fałszywa moneta jest lżejsza o 1 g. Ile dokładnie jest fałszywych monet?",
+    "Masz do rozróżnienia 10 możliwych par fałszywych monet. Zaplanuj trzy ważenia tak, aby każda para dawała unikalną sekwencję trzech wyników (swój własny 'kod').",
+    "Zacznij od zważenia trójki $\\{1, 2, 3\\}$. Zastanów się nad przypadkiem, gdy wynik wskaże obecność dokładnie jednej fałszywej monety w tej grupie (co oznacza, że druga jest w parze $\\{4, 5\\}$).",
+    "Aby rozróżnić kandydatów z poprzedniego kroku, kolejne ważenia muszą sprawdzać konkretne monety z obu grup. Spróbuj w drugim ważeniu użyć pary mieszanej, np. $\\{1, 4\\}$. Dobierz trzecie ważenie analogicznie."
   ],
   "skills_required": [
     "weighing_problems",

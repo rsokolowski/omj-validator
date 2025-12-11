@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Przyjrzyj się mianownikom kolejnych ułamków. Czy zauważasz w nich pewien wzorzec? Spróbuj rozpisać każdy ułamek osobno i poszukać wspólnej struktury.",
-    "Pomyśl o przekształceniu każdego ułamka do postaci różnicy dwóch wyrażeń. Może uda się uzyskać sumę teleskopową, w której większość wyrazów się skróci?",
-    "Zauważ, że $\\frac{a}{a+1} = 1 - \\frac{1}{a+1}$. Spróbuj analogicznie przekształcić pozostałe składniki, wyrażając je przez iloczyny postaci $\\frac{1}{(a+1)(b+1)...}$.",
-    "Po przekształceniu każdego składnika do postaci różnicowej, zapisz całą sumę i sprawdź, które wyrazy się redukują. Jaki wyraz pozostaje na końcu i dlaczego jest mniejszy od 1?"
+    "Przyjrzyj się mianownikom. Zauważ, że mianownik drugiego ułamka zawiera mianownik pierwszego, a trzeciego zawiera mianownik drugiego. Sugeruje to powtarzalną strukturę.",
+    "Zamiast sprowadzać do wspólnego mianownika, spróbuj przedstawić każdy ułamek jako różnicę dwóch wyrażeń. Taki zabieg często pozwala na redukcję sąsiednich wyrazów po dodaniu ich do siebie.",
+    "Zauważ, że $\\frac{a}{a+1} = 1 - \\frac{1}{a+1}$. Aby zastosować to do kolejnych ułamków, wyłącz wspólny czynnik przed nawias, np. zapisz $\\frac{b}{(a+1)(b+1)}$ jako $\\frac{1}{a+1} \\cdot \\frac{b}{b+1}$.",
+    "Zapisz całą sumę, zastępując ułamki otrzymanymi różnicami. Zauważ, że wyrazy redukują się 'kaskadowo'. Spójrz na to co zostało i uzasadnij, dlaczego wynik jest mniejszy od 1."
   ],
   "skills_required": [
     "telescoping",

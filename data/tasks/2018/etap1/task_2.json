@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie czworokąt, zaznaczając podane kąty i długości boków. Zastanów się, co można powiedzieć o prostych zawierających boki $AD$ i $BC$. Czy są one równoległe?",
-    "Skoro proste zawierające boki $AD$ i $BC$ nie są równoległe, to muszą się gdzieś przeciąć. Przedłuż te boki aż do ich przecięcia w punkcie, który nazwiemy $P$. Jaki szczególny trójkąt $\triangle PAB$ w ten sposób powstał?",
-    "Określ miary kątów w trójkącie $\triangle PAB$. Wykorzystaj jego własności oraz długość boku $AB$, aby obliczyć długości odcinków $PA$ i $PB$.",
-    "Wiesz już, jakie są długości odcinków $PA$ i $PB$. Użyj danych z zadania, aby obliczyć długości $PD$ i $PC$. Teraz spójrz na trójkąt $\triangle PDC$ i znajdź długość boku $CD$."
+    "Zwróć uwagę na miary kątów $\\angle DAB$ i $\\angle ABC$. Ich suma wynosi $90^\\circ$. Co to mówi o wzajemnym położeniu prostych zawierających boki $AD$ i $BC$?",
+    "Skoro proste $AD$ i $BC$ są do siebie prostopadłe, przedłuż je do przecięcia w punkcie $P$. Zauważ, że powstały trójkąt $ABP$ jest prostokątny i równoramienny.",
+    "Wykorzystaj długość przeciwprostokątnej $AB = 7\\sqrt{2}$ oraz własności trójkąta o kątach $45^\\circ, 45^\\circ, 90^\\circ$, aby obliczyć długości przyprostokątnych $PA$ i $PB$.",
+    "Odejmij dane z treści zadania od długości $PA$ i $PB$, aby wyznaczyć przyprostokątne trójkąta $PDC$. Następnie oblicz długość boku $CD$ z twierdzenia Pitagorasa."
   ],
   "skills_required": [
     "coordinate_geometry",

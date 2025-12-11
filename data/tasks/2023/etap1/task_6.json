@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Załóżmy bez straty ogólności, że $ab+b+1=0$ i $bc+c+1=0$. Przekształć lewą stronę każdego z tych równań, wyłączając z pierwszego $b$, a z drugiego $c$ przed nawias.",
-    "Zauważ, że w przekształconym drugim równaniu, $c(b+1)=-1$, pojawia się wyrażenie $b+1$. Spróbuj powiązać je z pierwszym równaniem, $b(a+1)=-1$.",
-    "Z pierwszego równania wynika, że $b=\\frac{-1}{a+1}$. Wykorzystaj to, aby wyrazić $b+1$ w zależności od $a$. Uprość otrzymane wyrażenie.",
-    "Podstaw znalezione wyrażenie na $b+1$ do drugiego równania, $c(b+1)=-1$. Po uproszczeniu otrzymasz zależność, która jest równoważna tezie, że trzecie wyrażenie jest równe zeru."
+    "Przekształć równania $ab+b+1=0$ i $bc+c+1=0$ do postaci iloczynowej: $b(a+1)=-1$ oraz $c(b+1)=-1$.",
+    "Zauważ, że zmienna $b$ występuje w obu równaniach. Wyznacz $a$ z pierwszego równania oraz $c$ z drugiego, uzależniając obie te liczby wyłącznie od $b$.",
+    "Podstaw otrzymane wzory na $a$ i $c$ do badanego wyrażenia $ca+a+1$. Zacznij od obliczenia i uproszczenia samego iloczynu $ca$.",
+    "Dodaj do uproszczonego iloczynu $ca$ wyznaczone wcześniej wyrażenie na $a$ oraz jedynkę. Po wykonaniu działań suma powinna zredukować się do zera."
   ],
   "skills_required": [
     "algebraic_identities",

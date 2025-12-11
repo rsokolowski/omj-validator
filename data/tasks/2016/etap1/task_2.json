@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Co warunek $\\angle ACB = 45°$ mówi o kącie środkowym $\\angle AOB$, gdzie $O$ jest środkiem okręgu opisanego na $\\triangle ABC$? Jaki jest w takim razie kształt trójkąta $AOB$?",
-    "Rozważmy obroty o $\\pm 90°$ wokół punktu $C$. Niech $O'$ będzie obrazem $O$ w obrocie o $90°$, a $O''$ w obrocie o $-90°$. Jakie trójkąty przystające otrzymamy, obracając $\\triangle OAC$ i $\\triangle OBC$?",
-    "Obrót o $90°$ wokół $C$ przekształca $\\triangle OBC$ na $\\triangle O'DC$, a obrót o $-90°$ przekształca $\\triangle OAC$ na $\\triangle O''GC$. Co to mówi o odległościach $O'D$ i $O''G$ od punktów $A, B, C$? Jaki jest związek między punktami $O', C, O''$?",
-    "Niech $M$ będzie środkiem odcinka $DG$. Rozważ czworokąt $O'DGO''$. Wyraź wektor $\\vec{CM}$ za pomocą wektorów $\\vec{O'D}$ i $\\vec{O''G}$. Pokaż, że ta zależność prowadzi do wniosku, że $M$ i $O$ to ten sam punkt."
+    "Zauważ, że warunek $\\angle ACB = 45^\\circ$ oznacza, że trójkąt $AOB$ (gdzie $O$ to środek okręgu opisanego) jest prostokątny i równoramienny. Jakie położenie ma punkt $O$ względem środka boku $AB$?",
+    "Niech $K$ będzie środkiem odcinka $AB$. Zastanów się, jak położenie punktu $M$ (środka $DG$) zależy od położenia punktów $D$ i $G$. Spróbuj wyrazić 'przesunięcie' od $K$ do $M$ za pomocą przesunięć $\\vec{BD}$ i $\\vec{AG}$.",
+    "Zauważ, że odcinek $BD$ to bok $BC$ obrócony o $90^\\circ$, a $AG$ to bok $AC$ obrócony o $90^\\circ$ (zwróć uwagę na kierunki). Co otrzymasz, gdy 'dodasz' do siebie te dwa obroty?",
+    "Wykaż, że wektor $\\vec{KM}$ jest połową sumy wektorów $\\vec{BD}$ i $\\vec{AG}$. Wynik tego dodawania powinien pokazać, że odcinek $KM$ jest prostopadły do $AB$ i ma długość połowy $AB$, co dowodzi, że $M$ pokrywa się z $O$."
   ],
   "skills_required": [
     "circle_theorems",

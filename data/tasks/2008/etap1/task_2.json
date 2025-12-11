@@ -13,12 +13,19 @@
     "algebra"
   ],
   "hints": [
-    "Narysuj prostopadłościan i oznacz krawędź podstawy jako $a$, a wysokość jako $h$. Zapisz wzory na przekątną bryły i pole powierzchni w tych oznaczeniach.",
-    "Zapisz, ile wynosi suma wszystkich krawędzi prostopadłościanu przez $a$ i $h$. Zastanów się, jak połączyć dane równania, by uzyskać to wyrażenie.",
-    "Oblicz $d^2 + b$ i sprawdź, czy wynik da się zapisać jako kwadrat pewnego wyrażenia zawierającego $a$ i $h$.",
-    "Zauważ, że suma krawędzi to $4(2a + h)$. Sprawdź, czy wyrażenie $d^2 + b$ nie jest przypadkiem równe $(2a + h)^2$."
+    "Narysuj prostopadłościan o krawędzi podstawy $a$ i wysokości $h$. Zapisz wzory na kwadrat przekątnej $d^2$ oraz pole powierzchni całkowitej $b$.",
+    "Zapisz wzór na sumę długości wszystkich krawędzi. Zauważ, że aby ją obliczyć, wystarczy znać wartość wyrażenia $2a+h$.",
+    "Szukamy wartości $2a+h$, a mamy dane wyrażenia kwadratowe ($d^2$, pole). Oblicz $(2a+h)^2$ i rozpisz wynik ze wzorów skróconego mnożenia.",
+    "Porównaj otrzymane wyrażenie $4a^2 + 4ah + h^2$ ze wzorami na $d^2$ i $b$. Zauważ, że jest ono sumą tych dwóch wielkości."
   ],
   "prerequisites": [],
-  "skills_required": ["spatial_3d", "pythagorean_theorem", "algebraic_identities"],
-  "skills_gained": ["spatial_3d", "algebraic_identities"]
+  "skills_required": [
+    "spatial_3d",
+    "pythagorean_theorem",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "algebraic_identities"
+  ]
 }

@@ -13,10 +13,10 @@
     "arytmetyka"
   ],
   "hints": [
-    "Oznacz krótszy bok prostokąta przez $a$. Jak wyrazisz dłuższy bok, obwód i pole za pomocą $a$?",
-    "Zapisz dwa równania: jedno dla obwodu równego $x$, drugie dla pola równego $x$. Oba wyrażenia są równe tej samej wartości $x$.",
-    "Skoro obwód i pole są sobie równe (oba wynoszą $x$), możesz przyrównać do siebie wyrażenia na obwód i pole zapisane za pomocą $a$.",
-    "Z równania $6a = 2a^2$ wyznacz wartość $a$, a następnie oblicz $x$ podstawiając do jednego ze wzorów."
+    "Oznacz długość krótszego boku literą $a$. Skoro stosunek boków wynosi $1:2$, to drugi bok ma długość $2a$. Zapisz wyrażenia opisujące obwód i pole tego prostokąta w zależności od $a$.",
+    "Z treści zadania wynika, że wartość obwodu i pola jest taka sama (równa $x$). Ułóż równanie, przyrównując do siebie wyznaczone wcześniej wyrażenia na obwód i pole.",
+    "Rozwiąż otrzymane równanie, aby wyznaczyć długość boku $a$. Pamiętaj, że $a$ jest długością odcinka (liczbą dodatnią), więc możesz podzielić równanie stronami przez $a$, aby je uprościć.",
+    "Mając obliczoną wartość $a$, podstaw ją do jednego ze wzorów (na obwód lub pole), aby znaleźć szukaną liczbę $x$."
   ],
   "prerequisites": [],
   "skills_required": [

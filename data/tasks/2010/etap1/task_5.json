@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Zastanów się, co oznacza warunek o L-tetraminach dla sąsiednich pól tablicy. Rozważ najpierw małą tablicę, np. $3 \\times 3$, i sprawdź jakie zależności między polami wymusza ten warunek.",
-    "Porównaj sumy dla dwóch różnych L-tetramin, które mają wspólne pola. Czy możesz wywnioskować, że pewne pola muszą mieć równe wartości?",
-    "Spróbuj pokazać, że dowolne dwa sąsiednie pola (mające wspólny bok) muszą zawierać tę samą liczbę. Co to oznacza dla całej tablicy?",
-    "Skoro wszystkie pola tablicy mają tę samą wartość $a$, a suma czterech takich pól w L-tetraminie wynosi $4a = 0$, wyznacz $a$ i oblicz sumę pól na przekątnych."
+    "Narysuj prostokąt o wymiarach $2 \\times 3$ i wpisz w niego liczby. Znajdź dwa różne L-tetramina, które pokrywają te same trzy pola. Co wynika z porównania ich sum?",
+    "Wykorzystaj obserwację z poprzedniego kroku, aby pokazać, że wartości w każdym wierszu i kolumnie powtarzają się co dwa pola. Oznacza to, że cała tablica powstaje przez powielanie jednego fragmentu $2 \\times 2$.",
+    "Oznacz liczby w tym powtarzalnym bloku $2 \\times 2$ jako $a, b, c, d$. Wyraź sumę liczb w kilku różnych L-tetraminach za pomocą tych czterech zmiennych i przyrównaj je do zera.",
+    "Rozwiąż otrzymany układ równań, aby wyznaczyć wartości $a, b, c, d$. Jaka liczba znajduje się w każdym polu tablicy? Oblicz sumę liczb na obu przekątnych."
   ],
   "skills_required": [
     "invariants",

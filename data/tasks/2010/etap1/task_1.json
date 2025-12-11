@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Zwróć uwagę na symetrię równań – zamiana $x$ z $y$ nie zmienia układu. Co to sugeruje na temat możliwych operacji na równaniach?",
-    "W symetrycznych układach równań warto spróbować dodać lub odjąć równania stronami, aby uzyskać prostszą zależność między zmiennymi.",
-    "Dodaj oba równania stronami i uporządkuj wyrazy. Czy dostrzegasz w otrzymanym wyrażeniu wzór skróconego mnożenia na kwadrat sumy?",
-    "Po dodaniu równań powinieneś dojść do postaci $(x+y-2)^2=0$. Wyznacz stąd sumę $x+y$ i podstaw uzyskaną zależność do jednego z początkowych równań."
+    "Zauważ, że układ jest symetryczny – zamiana $x$ z $y$ nie zmienia jego postaci. W takich zadaniach warto dodać równania stronami, aby znaleźć wartość sumy $x+y$.",
+    "Po dodaniu równań i uporządkowaniu wyrazów, zauważ że fragment $x^2+2xy+y^2$ to $(x+y)^2$. Spróbuj zapisać całe nowe równanie używając tylko jednej zmiennej $S = x+y$.",
+    "Otrzymane równanie dla zmiennej $S$ to wzór skróconego mnożenia przyrównany do zera. Rozwiąż je, aby znaleźć konkretną wartość liczbową sumy $x+y$.",
+    "Skoro znasz już wartość sumy $x+y$, wyznacz z niej jedną niewiadomą (np. $y$) i podstaw do dowolnego równania z początku zadania, aby dokończyć obliczenia."
   ],
   "skills_required": [
     "symmetric_systems",

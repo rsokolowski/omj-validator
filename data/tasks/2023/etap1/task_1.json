@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zapisz daną liczbę w postaci $\\underbrace{11\\ldots1}_{n}00\\ldots0 + \\underbrace{99\\ldots9}_{n}$. Następnie przedstaw oba składniki za pomocą wyrażeń algebraicznych z potęgami liczby 10.",
-    "Po zapisaniu liczby w postaci sumy algebraicznej, poszukaj wspólnego czynnika, który można wyłączyć przed nawias.",
-    "Zauważ, że zarówno liczba złożona z samych jedynek, jak i liczba złożona z samych dziewiątek, są powiązane z wyrażeniem $10^n-1$. Wykorzystaj to do znalezienia wspólnego czynnika.",
-    "Gdy przedstawisz liczbę jako iloczyn, zastanów się, jakie warunki muszą spełniać czynniki, aby ich iloczyn był liczbą pierwszą. Sprawdź, dla jakich $n$ jeden z otrzymanych czynników jest równy 1."
+    "Zapisz daną liczbę jako sumę dwóch składników: części z jedynkami (pomnożonej przez odpowiednią potęgę 10) i części z dziewiątkami.",
+    "Przyjrzyj się obu składnikom sumy. Czy widzisz prosty związek między liczbą $\\underbrace{99\\ldots9}_{n}$ a liczbą $\\underbrace{11\\ldots1}_{n}$?",
+    "Wykorzystaj fakt, że $\\underbrace{99\\ldots9}_{n} = 9 \\cdot \\underbrace{11\\ldots1}_{n}$, aby wyłączyć wspólny czynnik przed nawias i przedstawić liczbę w postaci iloczynu.",
+    "Liczba pierwsza ma tylko dwa dzielniki: 1 i samą siebie. Sprawdź, dla jakiego $n$ jeden z otrzymanych czynników jest równy 1."
   ],
   "skills_required": [
     "divisibility_arguments",

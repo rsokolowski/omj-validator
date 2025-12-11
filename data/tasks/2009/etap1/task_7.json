@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Oznaczmy $p = a^2+a$ i $q = a^3+a$. Z założenia $p$ i $q$ są liczbami wymiernymi. Celem jest wyrażenie $a$ za pomocą $p$ i $q$.",
-    "Spróbuj pozbyć się wyższych potęg $a$. Zauważ, że z pierwszego równania możesz wyznaczyć $a^2$ w zależności od $a$ i wymiernej liczby $p$.",
-    "Skoro umiesz wyrazić $a^2$ za pomocą $a$ i $p$, to czy potrafisz zrobić to samo dla $a^3$? Podstaw uzyskane wyrażenie na $a^3$ do drugiego równania, $q=a^3+a$.",
-    "Wykorzystaj fakt, że $a^3 = a \\cdot a^2 = a(p-a)$. Po podstawieniu tego do równania $q=a^3+a$ i dalszych przekształceniach otrzymasz równanie liniowe względem $a$. Wyznacz z niego $a$."
+    "Oznaczmy $p = a^2+a$ i $q = a^3+a$. Naszym celem jest znalezienie równania liniowego dla $a$, w którym współczynniki zależą tylko od liczb wymiernych $p$ i $q$.",
+    "Spróbuj połączyć informacje o $p$ i $q$ w jedno równanie. Zbadaj, jaką postać ma suma liczb $p$ i $q$ i czy można ją zapisać w prostszej formie.",
+    "Oblicz sumę $p+q = a^3+a^2+2a$ i wyłącz czynnik $a$ przed nawias. Przyjrzyj się uważnie wyrażeniu, które pozostało w nawiasie.",
+    "Zauważ, że wyrażenie w nawiasie to $a^2+a+2$. Wykorzystaj równość $p=a^2+a$, aby zastąpić to wyrażenie przez $p+2$, co doprowadzi Cię bezpośrednio do równania liniowego względem $a$."
   ],
   "prerequisites": [
     "2007_etap2_1"

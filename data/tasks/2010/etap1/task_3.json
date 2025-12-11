@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Przyjrzyj się każdemu składnikowi lewej strony osobno. Co możesz powiedzieć o mianownikach typu $\\sqrt{a+b}$ w porównaniu z $\\sqrt{a+b+c}$?",
-    "Spróbuj oszacować każdy ułamek z dołu, zamieniając mianownik na coś większego. Pamiętaj, że zwiększenie mianownika zmniejsza wartość ułamka.",
-    "Zauważ, że $\\sqrt{a+b} < \\sqrt{a+b+c}$, więc $\\frac{a}{\\sqrt{a+b}} > \\frac{a}{\\sqrt{a+b+c}}$. Zastosuj podobne oszacowanie do pozostałych składników.",
-    "Po oszacowaniu każdego z trzech składników przez odpowiedni ułamek z $\\sqrt{a+b+c}$ w mianowniku, dodaj te nierówności stronami i uprość licznik."
+    "Porównaj mianowniki ułamków występujących po lewej stronie z wyrażeniem $\\sqrt{a+b+c}$. Które z tych wielkości są większe, a które mniejsze?",
+    "Spróbuj oszacować lewą stronę nierówności z dołu. W tym celu zastanów się, jak można zmienić mianowniki ułamków na wspólne wyrażenie $\\sqrt{a+b+c}$, aby ułatwić ich dodawanie.",
+    "Pamiętaj, że zwiększenie mianownika ułamka dodatniego zmniejsza jego wartość. Jaką nierówność możesz zapisać, wiążąc ułamek $\\frac{a}{\\sqrt{a+b}}$ z ułamkiem o mianowniku $\\sqrt{a+b+c}$?",
+    "Zapisz analogiczne oszacowania dla wszystkich trzech składników, dodaj otrzymane nierówności stronami i uprość licznik powstałego ułamka."
   ],
   "skills_required": [
     "inequality_manipulation",

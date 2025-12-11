@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Użyj wzoru na sumę sześcianów, aby rozłożyć wyrażenie $a^3+b^3$ na czynniki. Skoro ich iloczyn jest podzielny przez 3, co to oznacza dla poszczególnych czynników?",
-    "Rozważ dwa przypadki. Pierwszy, prostszy: 3 dzieli czynnik $a+b$. Jaka jest wtedy jedyna możliwa wartość $a+b$, skoro jest to liczba pierwsza?",
-    "Zastanów się nad drugim przypadkiem: 3 dzieli $a^2 - ab + b^2$. Spróbuj powiązać to wyrażenie z $(a+b)^2$. Czym się różnią?",
-    "Skoro $a^2 - ab + b^2$ i $(a+b)^2$ różnią się o wielokrotność 3, to co można powiedzieć o ich resztach z dzielenia przez 3? Co to oznacza dla warunku $3 | (a^2 - ab + b^2)$?"
+    "Zamiast od razu używać wzorów, sprawdź na małych liczbach ($n=1, 2, 3$), jakie reszty z dzielenia przez 3 dają ich sześciany ($n^3$). Porównaj to z resztami samych liczb $n$.",
+    "Powinieneś zauważyć, że liczba $n^3$ zawsze daje taką samą resztę z dzielenia przez 3, co liczba $n$. Wykorzystaj to, aby powiązać podzielność sumy $a^3+b^3$ z sumą $a+b$.",
+    "Skoro $a^3+b^3$ i $a+b$ dają tę samą resztę z dzielenia przez 3, a wiemy z treści, że $3 | (a^3+b^3)$, to przez co musi dzielić się $a+b$?",
+    "Wiemy, że $a+b$ jest liczbą pierwszą i dzieli się przez 3. Jaka jest jedyna taka liczba? Wyznacz wszystkie pary $(a,b)$ dodatnich liczb całkowitych, które się do niej sumują."
   ],
   "prerequisites": [
     "2006_etap1_3"

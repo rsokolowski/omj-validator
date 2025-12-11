@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Czworokątny przekrój tworzy na powierzchni czworościanu zamkniętą pętlę. Wyobraź sobie, że rozcinasz i rozkładasz tę powierzchnię na płasko. Jak można 'wyprostować' taką pętlę?",
-    "Obwód czworokąta to długość tej pętli. Najkrótsza droga między dwoma punktami na płaskiej siatce to linia prosta. Spróbuj rozwinąć ściany czworościanu tak, aby cała pętla stała się jedną ścieżką.",
-    "Rozłóż na płaszczyźnie w jednej linii cztery ściany, na których leżą kolejne boki czworokąta. Obwód stanie się ścieżką łączącą pewien punkt $S$ na pierwszej ścianie z jego odpowiednikiem $S'$ na ostatniej.",
-    "Jaka jest odległość między wierzchołkiem $A$ na pierwszej ścianie rozwiniętej siatki a jego odpowiednikiem $A'$ na ostatniej? Zauważ, że wektor $\\vec{SS'}$ jest taki sam jak wektor $\\vec{AA'}$. Jaka jest więc minimalna długość tej ścieżki?"
+    "Obwód przekroju to zamknięta pętla na powierzchni czworościanu. Aby łatwiej ją zmierzyć, wyobraź sobie, że rozcinasz bryłę i rozkładasz jej ściany na płasko.",
+    "Ponieważ przekrój jest czworokątem, pętla biegnie przez wszystkie cztery ściany. Ułóż te cztery trójkąty równoboczne na płaszczyźnie w jednym rzędzie, jeden za drugim.",
+    "Zauważ, że powstała figura to równoległobok złożony z czterech trójkątów. Spójrz na położenie wierzchołka startowego siatki i jego kopii na samym końcu.",
+    "Obwód to odcinek łączący punkt na pierwszym boku z jego odpowiednikiem na ostatnim boku równoległoboku. Oblicz długość tego odcinka – czy zależy ona od miejsca cięcia?"
   ],
   "prerequisites": [],
   "skills_required": [

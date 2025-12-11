@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Zauważ, że wybrane pola mają współrzędne $(i, p_i)$, gdzie ciąg $(p_1, ..., p_{14})$ jest permutacją liczb od 1 do 14. Od czego zależy kolor pola o współrzędnych $(i, j)$? Zwróć uwagę na parzystość sumy $i+j$.",
-    "Zgodnie z treścią zadania, musimy wybrać 7 pól o parzystej sumie współrzędnych (białe) i 7 pól o nieparzystej sumie współrzędnych (czarne). Rozważ sumę $S$ wszystkich 28 współrzędnych wybranych pól.",
-    "Spróbuj obliczyć parzystość sumy $S$ na dwa sposoby. Po pierwsze, wykorzystaj fakt, że współrzędne są permutacją. Jaka jest parzystość sumy $\\sum_{i=1}^{14} (i+p_i)$?",
-    "Po drugie, jaka musiałaby być parzystość sumy $S$, gdyby była ona sumą 7 liczb parzystych i 7 liczb nieparzystych? Porównanie wyników z obu sposobów powinno doprowadzić do sprzeczności."
+    "Zauważ, że kolor pola zależy od parzystości sumy jego numeru wiersza i kolumny. Skoro wybieramy po jednym polu z każdego wiersza i kolumny, to jakie liczby tworzą zbiór wszystkich numerów wierszy i kolumn wybranych pól?",
+    "Rozważ sumę $S$ wszystkich 28 współrzędnych (14 numerów wierszy i 14 numerów kolumn) wybranych pól. Wiedząc, że wykorzystujemy każdy numer od 1 do 14 dokładnie raz jako wiersz i raz jako kolumnę, ustal, czy suma $S$ jest parzysta czy nieparzysta.",
+    "Z drugiej strony spójrz na sumę $S$ przez pryzmat kolorów. Zadanie wymaga wyboru 7 pól o parzystej sumie współrzędnych i 7 o nieparzystej. Jaka musiałaby być parzystość sumy $S$, gdybyśmy dodali do siebie te 14 sum?",
+    "Porównaj parzystość sumy $S$ wyznaczoną na podstawie dostępnych wierszy i kolumn z parzystością wynikającą z wyboru kolorów. Czy taki wybór pól jest możliwy?"
   ],
   "skills_required": [
     "parity_arguments",

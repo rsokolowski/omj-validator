@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Przypomnij sobie, ile patyczków potrzeba na każdą cyfrę (jak na wyświetlaczu kalkulatora). Która cyfra wymaga najmniej patyczków? Jak to wykorzystać, by liczba miała jak najwięcej cyfr?",
-    "Aby ułożyć największą liczbę, chcemy mieć jak najwięcej cyfr. Rozważ osobno przypadki gdy $n$ jest parzyste i gdy jest nieparzyste. Jakie cyfry warto wtedy używać?",
-    "Dla parzystego $n$ sprawdź, jaka jest maksymalna liczba i jaka jest suma jej cyfr. Dla nieparzystego $n$ zastanów się, jaką cyfrę wstawić na początku zamiast jednej z jedynek.",
-    "Dla nieparzystego $n$, np. $n=2k+1$, największa liczba ma $k$ cyfr. Oblicz, ile patyczków musi kosztować cyfra zastępująca jedną z jedynek. Zapisz sumę cyfr tej liczby i przyrównaj ją do $n$."
+    "Aby liczba była największa, musi mieć jak najwięcej cyfr. Najmniej patyczków (2) zużywa jedynka. Zastanów się, jak wyglądałaby największa liczba ułożona z $n$ patyczków, gdybyśmy używali głównie jedynek.",
+    "Rozważ parzystość $n$. Jeśli $n$ jest parzyste, mamy same jedynki. Jeśli $n$ jest nieparzyste, zostaje jeden patyczek – dołóż go do pierwszej jedynki. Jaką cyfrę otrzymasz z $2+1=3$ patyczków?",
+    "Zauważ, że dla parzystego $n$ suma cyfr to $n/2$, więc równość $n/2=n$ jest niemożliwa. Szukaj rozwiązania tylko dla nieparzystego $n$, gdzie liczba zaczyna się od siódemki, a dalej ma same jedynki.",
+    "Mamy liczbę postaci $711...1$. Niech $x$ oznacza liczbę jedynek. Zapisz za pomocą $x$ liczbę zużytych patyczków ($n$) oraz sumę cyfr tej liczby. Przyrównaj te wartości do siebie."
   ],
   "skills_required": [
     "counting_techniques",

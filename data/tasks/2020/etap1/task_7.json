@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zastanów się, jaki jest kąt wewnętrzny pięciokąta foremnego. Spróbuj narysować, jak wygląda figura po złożeniu - gdzie znajdą się punkty $A$ i $B$ względem powstałego kwadratu?",
-    "Po złożeniu figury powstaje bryła przestrzenna. Zastanów się, jakie trójkąty tworzą pięciokąty z bokami kwadratu. Wykorzystaj symetrię konstrukcji.",
-    "Zwróć uwagę na trójkąty równoramienne, które powstają przy wierzchołkach kwadratu. Oblicz, ile wynoszą ich kąty przy podstawie, korzystając z tego, że kąt pięciokąta foremnego wynosi $108°$.",
-    "Punkt $A$ i punkt $B$ leżą na pewnej wysokości nad płaszczyzną kwadratu. Znajdź tę wysokość oraz odległość poziomą między tymi punktami, a następnie użyj twierdzenia Pitagorasa w przestrzeni."
+    "Wyobraź sobie przestrzenną formę tej figury: cztery pięciokąty wyrastają z boków kwadratu i odchylają się symetrycznie na zewnątrz. Zastanów się, gdzie w tej strukturze znajdują się szukane punkty A i B.",
+    "Zamiast liczyć wszystkie długości, rozważ rzut jednego pięciokąta na płaszczyznę kwadratowej podstawy. Kluczem jest znalezienie kąta nachylenia ściany pięciokąta do poziomu.",
+    "Zauważ, że krawędź łącząca dwa sąsiednie pięciokąty rzutuje się na przekątną kwadratu. Wykorzystaj fakt, że rzeczywisty kąt między krawędziami pięciokąta to $108^\\circ$, a ich rzuty tworzą kąt prosty narożnika.",
+    "Oblicz długość rzutu wysokości pięciokąta na płaszczyznę podstawy. Wynik jest zaskakująco prosty (związany z połową boku kwadratu) i pozwala błyskawicznie wyznaczyć odległość między wierzchołkami."
   ],
   "skills_required": [
     "angle_chasing",

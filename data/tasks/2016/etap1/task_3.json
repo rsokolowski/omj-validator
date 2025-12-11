@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Oblicz sumę wszystkich elementów tablicy na dwa sposoby: jako sumę sum wierszy oraz jako sumę sum kolumn. Co możesz wywnioskować o wartości tej sumy?",
-    "Skoro suma całkowita musi spełniać oba warunki jednocześnie, zastanów się, jakie wartości mogą mieć sumy poszczególnych wierszy i kolumn. Czy mogą być różne od zera?",
-    "W każdym wierszu suma wynosi 0, więc liczba jedynek równa się liczbie liczb $-1$. Ile pól pozostaje na zera w wierszu o 11 polach? Rozważ parzystość.",
-    "Skonstruuj przykładową tablicę, w której każdy wiersz i każda kolumna ma dokładnie jedno zero. Spróbuj umieścić zera na przekątnej i odpowiednio rozłożyć jedynki oraz liczby $-1$."
+    "Zauważ, że suma wszystkich liczb w tablicy jest sumą sum wierszy, ale też sumą sum kolumn. Jakie ograniczenie na tę całkowitą sumę wynika z faktu, że sumy wierszy są niedodatnie, a kolumn nieujemne?",
+    "Skoro całkowita suma liczb w tablicy musi wynosić 0, to jakie muszą być sumy poszczególnych wierszy i kolumn, biorąc pod uwagę warunki z treści zadania?",
+    "Rozważ dowolny wiersz o sumie 0. Jeśli jest w nim $k$ jedynek, to ile musi być minus jedynek? Pamiętaj, że wiersz ma długość 11 (liczba nieparzysta) – co z tego wynika dla minimalnej liczby zer w tym wierszu?",
+    "Wiesz już, że w każdym wierszu musi wystąpić co najmniej jedno zero, więc zer jest minimum 11. Spróbuj skonstruować przykład takiej tablicy, umieszczając zera na przekątnej i odpowiednio dobierając $1$ oraz $-1$."
   ],
   "skills_required": [
     "extremal_principle",

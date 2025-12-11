@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zagięcie kartki wzdłuż odcinka $PQ$ to symetria osiowa. Co ta informacja mówi o odległościach punktów $P$ i $Q$ od wierzchołków $C$ i $C'$?",
-    "Suma $AP+AQ$ jest trudna do bezpośredniej analizy. Spróbuj przenieść odcinek $AP$ na prostą $AD$ za pomocą obrotu wokół punktu $A$, aby przekształcić sumę w długość jednego odcinka.",
-    "Obróć trójkąt $ABP$ wokół $A$ o kąt $\\angle DAB$. Niech $P'$ będzie obrazem punktu $P$. Wykaż, że trójkąty $PBC$ i $P'DC$ są przystające, a stąd $PC = P'C$.",
-    "Wykorzystaj równości $PC=P'C$ oraz $QC=QC'$, aby pokazać, że prosta $AD$ jest dwusieczną kąta $\\angle CQC'$. Co to oznacza dla obrazu punktu $C$ w symetrii względem prostej $AD$?"
+    "Przeanalizuj pierwsze zagięcie: skoro boki $CB$ i $CD$ pokrywają się na przekątnej $CA$, to kartka została zagięta wzdłuż dwusiecznych kątów przy wierzchołku $C$. Jaką figurę tworzy teraz papier?",
+    "Skoro punkt $A$ jest równoodległy od wszystkich wierzchołków otrzymanego trójkąta, to jest on środkiem okręgu opisanego na tym trójkącie. Pomyśl, gdzie musi leżeć środek okręgu względem osi symetrii figury.",
+    "Wykorzystaj symetrię rombu względem przekątnej $AC$. Dwa wierzchołki poszukiwanego trójkąta muszą być do siebie symetryczne, a trzeci musi leżeć na osi symetrii.",
+    "Oznacz punkty przecięcia zagięć z bokami rombu jako $P$ i $Q$. Zauważ, że $AP=AQ$. Zastanów się, jak musi wyglądać drugie zagięcie, aby trzeci wierzchołek trójkąta był w tej samej odległości od $A$ co $P$ i $Q$."
   ],
   "prerequisites": [
     "2020_etap1_7"

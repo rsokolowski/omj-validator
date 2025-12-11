@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Narysuj graniastosłup i jego podstawę – romb o kącie 60°. Oblicz długości jego przekątnych. Przekrój jest czworokątem. Jaki jest jego ogólny kształt?",
-    "Przekrój jest równoległobokiem. Aby był kwadratem, jego przekątne muszą być równe i prostopadłe. Zastanów się, jak przekątne przekroju są powiązane z przekątnymi rombu w podstawie.",
-    "Przekątne rombu są prostopadłe. Przekątne przekroju leżą w pionowych, prostopadłych do siebie płaszczyznach. Kiedy dwie proste, leżące w takich płaszczyznach, są do siebie prostopadłe?",
-    "Aby przekątne przekroju były prostopadłe, jedna z nich musi być pozioma. Rozważ oba przypadki (pozioma krótsza lub dłuższa przekątna podstawy). W którym z nich przekątne przekroju mogą mieć równe długości?"
+    "Oblicz długości przekątnych rombu w podstawie ($a$ i $a\\sqrt{3}$). Zauważ, że wierzchołki kwadratu leżą dokładnie nad wierzchołkami rombu, więc przekątne kwadratu rzutują się na przekątne rombu.",
+    "Przekątne kwadratu mają tę samą długość, ale ich rzuty (przekątne rombu) są różne. Przypomnij sobie kluczową własność: długość rzutu prostokątnego odcinka nigdy nie jest większa od długości samego odcinka.",
+    "Aby rzutem kwadratu był romb, jedna z przekątnych kwadratu musi być pozioma (zachowuje długość), a druga nachylona (jej rzut jest krótszy od niej).",
+    "Skoro przekątne kwadratu są równe, to ich długość musi być równa długości dłuższej przekątnej rombu (dlaczego nie krótszej?). Wyznacz bok kwadratu z jego przekątnej."
   ],
   "prerequisites": [
     "2017_etap1_7"

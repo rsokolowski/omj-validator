@@ -13,10 +13,10 @@
     "arytmetyka"
   ],
   "hints": [
-    "Oznacz przez $x$, $y$, $z$ liczbę monet odpowiednio jednozłotowych, dwuzłotowych i pięciozłotowych. Jakie dwa równania możesz zapisać na podstawie treści zadania?",
-    "Masz układ dwóch równań z trzema niewiadomymi. Spróbuj wyrazić jedną zmienną przez inną i zastanów się, jakie ograniczenia nakładają warunki zadania na możliwe wartości.",
-    "Po przekształceniu układu równań, zwróć uwagę na to, że $x$, $y$, $z$ muszą być liczbami całkowitymi nieujemnymi. Które z nich jest najbardziej ograniczone?",
-    "Wyznacz $z$ z układu równań i sprawdź, dla jakich wartości $z$ pozostałe zmienne $x$ i $y$ są całkowite nieujemne."
+    "Zapisz warunki zadania jako układ dwóch równań z trzema niewiadomymi $x, y, z$, oznaczającymi liczbę monet o nominałach odpowiednio 1 zł, 2 zł i 5 zł.",
+    "Zauważ, że w obu równaniach niewiadoma $x$ występuje z tym samym współczynnikiem. Odejmij równania stronami, aby wyeliminować $x$ i otrzymać prosty związek między $y$ i $z$.",
+    "Wyznacz $y$ z otrzymanego równania, a następnie znajdź postać $x$ zależną tylko od $z$ (korzystając z sumy monet).",
+    "Skorzystaj z warunku, że liczby monet muszą być nieujemne ($x \\ge 0, y \\ge 0$). Podstaw wyznaczone wyrażenia do tych nierówności i sprawdź, jakie całkowite $z$ je spełniają."
   ],
   "skills_required": [
     "basic_operations",
