@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Nazwijmy kolory: czerwony (C), niebieski (N) i zielony (Z). Zgodnie z treścią, muszą istnieć liczby w każdym z tych kolorów. Co warunek zadania mówi o sumie liczby niebieskiej i zielonej? A o sumie czerwonej i niebieskiej?",
-    "Załóż, że takie kolorowanie istnieje, aby znaleźć sprzeczność. Wybierz ustalone liczby: niebieską $n_0$ i zieloną $z_0$. Pomyśl, jak można ich użyć do badania kolorów innych liczb przez dodawanie lub odejmowanie.",
-    "Przypuśćmy, że istnieje liczba $k$, która nie jest czerwona (np. jest zielona). Jaki kolor musi mieć liczba $k - n_0$? Przeanalizuj, co by się stało z kolorem sumy $(k - n_0) + n_0$, gdyby $k - n_0$ było czerwone lub zielone.",
-    "Wiesz już, że odjęcie $n_0$ od zielonej liczby daje liczbę niebieską. Jaka jest analogiczna reguła dla odejmowania $z_0$? Rozważ dowolną zieloną liczbę $k$ i zbadaj kolor liczby $k - n_0 - z_0$ na dwa sposoby."
+    "Nazwijmy kolory: czerwony (C), niebieski (N) i zielony (Z). Zgodnie z treścią, muszą istnieć liczby w każdym z tych kolorów. Jaki kolor musi mieć suma dwóch liczb o różnych kolorach, np. niebieskiej i zielonej?",
+    "Załóż, że takie kolorowanie istnieje, aby znaleźć sprzeczność. Jest jedna szczególna liczba całkowita, która ma unikalną własność w dodawaniu. Zastanów się, jaki może mieć kolor.",
+    "Jaki kolor może mieć liczba 0? Rozważmy przypadek, gdy 0 jest czerwone. Weź dowolną liczbę $k$, która nie jest czerwona. Jaki kolor, zgodnie z warunkami zadania, musi mieć suma $k+0$?",
+    "Pozostał do zbadania przypadek, gdy 0 nie jest czerwone (np. jest niebieskie). Skoro muszą istnieć liczby we wszystkich trzech kolorach, to weź liczbę w trzecim kolorze (zielonym) i zbadaj jej sumę z zerem."
   ],
   "skills_required": [
     "case_analysis",

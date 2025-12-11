@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Aby w przekroju czworościanu otrzymać czworokąt, płaszczyzna musi przeciąć cztery z sześciu krawędzi. Wyobraź sobie, jak można ułożyć taką płaszczyznę względem całej bryły.",
-    "Czworościan foremny jest bardzo symetryczną bryłą. Rozważ przekroje płaszczyznami, które są równoległe do dwóch przeciwległych (nieprzecinających się) krawędzi.",
-    "Niech płaszczyzna tnąca będzie równoległa do krawędzi $AB$ i $CD$. Przetnie ona pozostałe cztery krawędzie: $AC, AD, BC, BD$. Jaki czworokąt powstanie w przekroju i dlaczego?",
-    "Boki otrzymanego prostokąta zależą od położenia płaszczyzny. Wyraź ich długości w zależności od stosunku, w jakim dzielą one krawędzie, a następnie oblicz obwód. Co zauważasz?"
+    "Czworokątny przekrój tworzy na powierzchni czworościanu zamkniętą pętlę. Wyobraź sobie, że rozcinasz i rozkładasz tę powierzchnię na płasko. Jak można 'wyprostować' taką pętlę?",
+    "Obwód czworokąta to długość tej pętli. Najkrótsza droga między dwoma punktami na płaskiej siatce to linia prosta. Spróbuj rozwinąć ściany czworościanu tak, aby cała pętla stała się jedną ścieżką.",
+    "Rozłóż na płaszczyźnie w jednej linii cztery ściany, na których leżą kolejne boki czworokąta. Obwód stanie się ścieżką łączącą pewien punkt $S$ na pierwszej ścianie z jego odpowiednikiem $S'$ na ostatniej.",
+    "Jaka jest odległość między wierzchołkiem $A$ na pierwszej ścianie rozwiniętej siatki a jego odpowiednikiem $A'$ na ostatniej? Zauważ, że wektor $\\vec{SS'}$ jest taki sam jak wektor $\\vec{AA'}$. Jaka jest więc minimalna długość tej ścieżki?"
   ],
   "prerequisites": [],
   "skills_required": [

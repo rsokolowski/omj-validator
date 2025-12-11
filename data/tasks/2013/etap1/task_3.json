@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie figurę. Zaznacz równe boki i kąty wynikające z tego, że $\\triangle AEF$ jest równoboczny, a $ABCD$ to prostokąt. Co musisz udowodnić o bokach i kątach $\\triangle BCM$?",
-    "Porównaj trójkąty prostokątne $\\triangle ABE$ i $\\triangle ADF$. Mają równe przeciwprostokątne. Aby pokazać, że są przystające, rozważ obrót $\\triangle ABE$ o $90^\\circ$ wokół punktu $A$.",
-    "Gdy już wiesz, że $ABCD$ jest kwadratem, spójrz na trójkąt prostokątny $\\triangle ADF$. Punkt $M$ jest środkiem przeciwprostokątnej $AF$. Jaka jest długość środkowej $DM$ w stosunku do długości $AF$?",
-    "Wykorzystaj kluczową równość $AM=DM$, aby udowodnić, że $\\triangle ABM \\cong \\triangle CDM$. To pokaże, że $BM=CM$. Na koniec wykaż, że również $BM=BC$, badając własności $\\triangle ABM$."
+    "Narysuj starannie figurę i zaznacz wszystkie równe boki i kąty. Co musisz udowodnić o bokach lub kątach trójkąta $BCM$, aby był on równoboczny?",
+    "Zastanów się, czy prostokąt $ABCD$ musi być kwadratem. Aby to sprawdzić, spróbuj udowodnić, że trójkąty prostokątne $\\triangle ABE$ i $\\triangle ADF$ są przystające.",
+    "Wykaż, że $\\angle BAE = \\angle DAF = 15^\\circ$. Możesz to zrobić, obracając $\\triangle ADF$ o $90^\\circ$ wokół $A$ i badając własności powstałego trójkąta równoramiennego.",
+    "Zbuduj wewnątrz kwadratu trójkąt równoboczny $\\triangle KBC$. Wykaż, że punkty $A, K, F$ leżą na jednej prostej, a następnie, że punkt $K$ jest środkiem odcinka $AF$, co oznacza, że $K=M$."
   ],
   "skills_required": [
     "angle_chasing",

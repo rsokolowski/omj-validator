@@ -11,10 +11,10 @@
     "geometria"
   ],
   "hints": [
-    "Przypomnij sobie, czym jest symetralna odcinka. Jaką własność ma każdy punkt leżący na symetralnej? Co to oznacza dla punktów P i Q?",
-    "Aby powiązać ze sobą warunki dotyczące boków AB i CD, rozważ wprowadzenie punktu pomocniczego. Dobrym kandydatem jest środek jednej z przekątnych, na przykład AC.",
-    "Niech M będzie środkiem przekątnej AC. Zastosuj twierdzenie o medianie do trójkątów $\\triangle PAC$ i $\\triangle PBC$, aby powiązać ze sobą kwadraty długości $PA, PB, PC, PM, PK$. Wykorzystaj fakt, że $PA=PB$.",
-    "Zależność, którą otrzymałeś dla punktu P, oznacza, że prosta KL jest prostopadła do odcinka MK. Jaki wniosek płynie z analogicznej analizy dla punktu Q i odcinka ML? Co to razem oznacza dla położenia punktu M?"
+    "Punkt leżący na symetralnej odcinka jest równoodległy od jego końców. Zapisz, co to oznacza dla punktów P i Q oraz odpowiednich wierzchołków czworokąta.",
+    "Aby powiązać ze sobą warunki dotyczące różnych boków, wprowadź punkty pomocnicze. Dobrym pomysłem jest rozważenie środków obu przekątnych czworokąta – niech M będzie środkiem AC, a N środkiem BD.",
+    "Wykorzystaj twierdzenie o środkowej w trójkącie (można je wyprowadzić z tw. Pitagorasa), aby powiązać kwadraty odległości. Z faktu $PA=PB$ wyprowadź zależność między $PM^2$ a $PK^2$. Zrób to samo dla Q, M, L oraz dla N.",
+    "Użyj założenia $KP=LQ$. Pokaż, że prowadzi ono do równości $PM^2+PN^2 = QM^2+QN^2$. Zastanów się, co ta równość oznacza dla położenia środka ciężkości czworokąta względem odcinka PQ."
   ],
   "skills_required": [
     "angle_chasing",

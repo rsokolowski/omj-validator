@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Cyfra jedności liczby zależy tylko od jej reszty z dzielenia przez 10. Ile różnych przypadków musisz rozważyć?",
-    "Zbadaj, jak zachowują się kolejne potęgi dla każdej możliwej cyfry jedności (0-9). Poszukaj cykliczności.",
-    "Zauważ, że wykładniki w ciągu $1, 5, 9, 13, 17, \\ldots$ różnią się o 4. Sprawdź, jaki jest okres powtarzania cyfr jedności dla potęg dowolnej liczby.",
-    "Dla każdej cyfry $c \\in \\{0,1,\\ldots,9\\}$ oblicz $c^1, c^2, c^3, c^4$ i sprawdź, że cyfry jedności tworzą cykl o długości dzielącej 4."
+    "Co to znaczy, że liczby mają jednakowe cyfry jedności? Jaką własność musi mieć ich różnica? Skup się na dwóch pierwszych różnych liczbach z ciągu: $n$ i $n^5$.",
+    "Aby udowodnić, że różnica $n^5-n$ jest podzielna przez 10, wystarczy pokazać, że jest podzielna przez 2 i przez 5. Dlaczego to wystarczy?",
+    "Podzielność przez 2 jest prosta do uzasadnienia. Aby pokazać podzielność przez 5, spróbuj algebraicznie przekształcić wyrażenie $n^5-n$, rozkładając je na czynniki.",
+    "Wyrażenie $n^5-n$ jest równe iloczynowi $(n-1)n(n+1)(n^2+1)$. Rozważ pięć możliwych reszt z dzielenia liczby $n$ przez 5 i w każdym przypadku znajdź czynnik podzielny przez 5."
   ],
   "skills_required": [
     "modular_arithmetic"

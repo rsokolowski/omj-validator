@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Aby porównać pola figur, nie zawsze trzeba używać skomplikowanych przekształceń. Czasem najprościej jest je obliczyć. Pomyśl o metodzie, która pozwala na obliczenie pola dowolnego wielokąta.",
-    "Wprowadź układ współrzędnych. Jego sprytne umiejscowienie znacznie uprości obliczenia. Gdzie warto umieścić początek układu (punkt (0,0)) i jedną z osi, mając do dyspozycji punkty A, B, C, K?",
-    "Umieść punkt K w początku układu współrzędnych, a prostą AB na osi OX. Zapisz współrzędne A, B i C używając np. odległości a=AK, b=BK, c=CK. Jaka własność punktu O pozwoli Ci wyznaczyć jego pierwszą współrzędną?",
-    "Punkt O musi leżeć na symetralnej odcinka AB. Jeśli A=(-a,0) i B=(b,0), to pierwsza współrzędna środka AB i punktu O wynosi (b-a)/2. Oblicz pola czworokątów AKOC i BKOC, używając wzoru na pole wielokąta o danych wierzchołkach."
+    "Pola czworokątów $AKOC$ i $BKOC$ można przedstawić jako sumy lub różnice pól prostszych figur, na przykład trójkątów. Zauważ, że oba czworokąty zawierają wspólny trójkąt $\\triangle KOC$.",
+    "Równość pól czworokątów sprowadza się do porównania pól trójkątów $\\triangle AKO$ i $\\triangle BKO$. Jaka jest podstawowa własność środka okręgu opisanego $O$ związana z bokiem $AB$?",
+    "Niech $M$ będzie środkiem boku $AB$. Punkt $O$ leży na symetralnej $AB$, więc jego rzutem na prostą $AB$ jest właśnie punkt $M$. Wyraź pole $\\triangle AKO$ i $\\triangle BKO$ za pomocą pól trójkątów opartych na odcinkach $AM$, $BM$ i $KM$.",
+    "Pola trójkątów $\\triangle AMO$ i $\\triangle BMO$ są równe, ponieważ mają równe podstawy ($AM=BM$) i wspólną wysokość z wierzchołka $O$. Wykorzystaj tę równość, aby pokazać, że pola $\\triangle AKO$ i $\\triangle BKO$ również muszą być równe."
   ],
   "skills_required": [
     "triangle_centers",

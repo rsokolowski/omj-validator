@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Przedstaw relacje znajomości jako graf, w którym goście są wierzchołkami. Co pozwala Ci zrobić warunek 'niezależnie od kolejności', gdy chcesz przetestować jakieś założenie?",
-    "Załóż nie wprost, że każdy gość kogoś nie zna. Rozważ wtedy gościa, który ma *minimalną* liczbę nieznajomych. Oznaczmy tę minimalną, dodatnią liczbę przez $m$.",
-    "Niech $A$ będzie gościem z $m$ nieznajomymi, a $B$ jednym z nich. Skonstruuj kolejkę, gdzie najpierw dołączają wszyscy znajomi $A$, a tuż po nich $B$. Jaki warunek musi spełnić $B$?",
-    "Użyj warunku dla $B$, aby oszacować od dołu liczbę jego nieznajomych. Porównaj tę liczbę z $m$. Czy to nie przeczy założeniu, że $m$ było minimalną liczbą nieznajomych?"
+    "Zinterpretuj znajomości jako graf. Warunek 'niezależnie od kolejności' oznacza, że możesz testować dowolną, nawet bardzo nietypową kolejność dołączania gości, aby znaleźć sprzeczność.",
+    "Załóż nie wprost, że każdy gość kogoś nie zna. Spróbuj doprowadzić to założenie do sprzeczności, konstruując sprytną kolejność dołączania gości.",
+    "Wybierz dowolnego gościa, nazwijmy go C. Rozważ kolejkę, w której najpierw dołączają wszyscy jego nieznajomi, a zaraz po nich dołącza sam C. Jaki warunek musi wtedy spełnić C?",
+    "Z warunku dla C wynika, że każdy gość ma co najwyżej jednego nieznajomego. Co to oznacza dla grafu nieznajomości i dlaczego jest to niemożliwe dla 11 gości?"
   ],
   "skills_required": [
     "graph_theory"

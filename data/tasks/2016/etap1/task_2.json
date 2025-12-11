@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj figurę. Zauważ, że warunek $\\angle ACB=45°$ mówi coś bardzo ważnego o środku okręgu opisanego $O$ i wierzchołkach $A, B$. Jaki jest kąt $\\angle AOB$ i co to oznacza dla $\\triangle AOB$?",
-    "Aby udowodnić, że $O$ jest środkiem $DG$, możemy pokazać, że suma wektorów $\\vec{OD}$ i $\\vec{OG}$ jest wektorem zerowym. Umieśćmy $O$ w początku układu współrzędnych.",
-    "Wykorzystaj wniosek z pierwszej wskazówki. Jeśli $O=(0,0)$, a $\\triangle AOB$ jest prostokątny i równoramienny, to gdzie na osiach współrzędnych najwygodniej jest umieścić punkty $A$ i $B$?",
-    "Wyraź wektory $\\vec{D}$ i $\\vec{G}$ za pomocą wektorów $\\vec{A}$, $\\vec{B}$, $\\vec{C}$ i operacji obrotu o $\\pm 90^\\circ$. Sprawdź, czy $\\vec{D} + \\vec{G}$ jest równe wektorowi zerowemu."
+    "Narysuj figurę. Aby udowodnić, że środek okręgu opisanego $O$ jest środkiem odcinka $DG$, możemy pokazać, że wektory $\\vec{CD}+\\vec{CG} = 2\\vec{CO}$. Najwygodniej będzie umieścić punkt $C$ w początku układu współrzędnych.",
+    "Wyraź wektory $\\vec{CD}$ i $\\vec{CG}$ za pomocą obrotów wektorów $\\vec{CB}$ i $\\vec{CA}$ o $\\pm 90^\\circ$. Wyznacz wektor $\\vec{CM}$ do środka $M$ odcinka $DG$ i zauważ, jak jest on powiązany z wektorem $\\vec{AB}$.",
+    "Teraz musimy pokazać, że wektor $\\vec{CO}$ ma tę samą własność. Wykorzystaj fakt, że $O$ leży na symetralnej boku $AB$. Niech $S$ będzie środkiem $AB$. Co wiemy o trójkącie $AOB$ i odcinku $OS$?",
+    "Warunek $\\angle ACB=45^\\circ$ implikuje, że $\\triangle AOB$ jest prostokątny równoramienny. W takim razie $OS = AS = AB/2$ oraz $OS \\perp AB$. Pokaż, że ta własność jednoznacznie określa wektor $\\vec{CO}$ w zależności od wektorów $\\vec{CA}$ i $\\vec{CB}$ i że jest on równy $\\vec{CM}$."
   ],
   "skills_required": [
     "circle_theorems",

@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Oznacz wspólną wartość wyrażenia przez $k$, czyli $|a-b| = 2|b-c| = 3|c-a| = k$. Co możesz powiedzieć o każdej z różnic $|a-b|$, $|b-c|$, $|c-a|$ wyrażonej przez $k$?",
-    "Spróbuj wykorzystać własność wartości bezwzględnej: jeśli $|x| = d$, to $x = d$ lub $x = -d$. Rozważ także, co się stanie, gdy dodasz do siebie różnice $(a-b) + (b-c) + (c-a)$.",
-    "Zauważ, że suma $(a-b) + (b-c) + (c-a) = 0$ niezależnie od wartości $a$, $b$, $c$. Czy istnieje kombinacja znaków dla trzech składników o różnych wartościach bezwzględnych, która daje w sumie zero?",
-    "Sprawdź wszystkie możliwe kombinacje znaków dla równania $\\pm|a-b| \\pm|b-c| \\pm|c-a| = 0$. Podstaw wyrażenia przez $k$ i sprawdź, czy którakolwiek kombinacja (poza $k=0$) może spełnić to równanie."
+    "Aby uniknąć ułamków, oznacz wspólną wartość wyrażeń przez $6k$, gdzie $k \\ge 0$. Wyraź wartości $|a-b|$, $|b-c|$ oraz $|c-a|$ za pomocą $k$.",
+    "Zauważ, że trzy różnice $a-b$, $b-c$ oraz $c-a$ nie są od siebie niezależne. Jaka jest wartość ich sumy?",
+    "Suma $(a-b) + (b-c) + (c-a)$ jest zawsze równa zero. Zastanów się, co to oznacza dla wartości bezwzględnych tych trzech liczb. Czy największa z nich może być większa od sumy dwóch pozostałych?",
+    "Jeśli $x+y+z=0$, to musi zachodzić nierówność $|x| \\le |y|+|z|$. Zastosuj tę zasadę do różnic $a-b$, $b-c$, $c-a$ i sprawdź, czy dla $k>0$ jest ona spełniona."
   ],
   "skills_required": [
     "absolute_value"

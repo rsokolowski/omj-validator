@@ -12,12 +12,17 @@
     "algebra"
   ],
   "hints": [
-    "Mamy dwa równania z trzema niewiadomymi. Jaką relację widzisz między współczynnikami $1, 2, 4$ w drugim równaniu? Czy przypominają ci jakiś ciąg?",
-    "Spróbuj przekształcić lewą stronę pierwszego równania, dodając i odejmując odpowiednie wyrazy, tak aby powstały pełne kwadraty. Współczynniki z drugiego równania mogą ci podpowiedzieć, jakie wyrazy dodać.",
-    "Zauważ, że $1^2 + 2^2 + 4^2 = 21$. Co by się stało, gdybyś rozważył wyrażenie $(a-1)^2 + (b-2)^2 + (c-4)^2$? Rozwiń je i porównaj z danymi równaniami.",
-    "Po rozwinięciu $(a-1)^2 + (b-2)^2 + (c-4)^2$ otrzymasz sumę kwadratów minus podwojone wyrażenie liniowe plus stałą. Podstaw wartości z obu równań układu i sprawdź, ile wynosi ta suma kwadratów."
+    "Przyjrzyj się uważnie obu równaniom. Zwróć uwagę na współczynniki $1, 2, 4$ w drugim równaniu i na sumę kwadratów w pierwszym. Czy widzisz między nimi jakiś związek?",
+    "Spróbuj połączyć oba równania w jedno wyrażenie. Pomyśl o stworzeniu wyrażenia, które z definicji jest zawsze nieujemne (większe lub równe zero), na przykład sumy kwadratów.",
+    "Rozważ wyrażenie $(a-k)^2 + (b-2k)^2 + (c-4k)^2$ dla dowolnej liczby rzeczywistej $k$. Rozwiń je i użyj danych z zadania, aby wyrazić jego wartość w zależności od $k$.",
+    "Otrzymane wyrażenie kwadratowe zmiennej $k$ musi być zawsze nieujemne. Jaki warunek musi spełniać trójmian kwadratowy, aby nigdy nie przyjmował wartości ujemnych? Sprawdź, czy ten warunek jest tu spełniony."
   ],
-  "skills_required": ["inequality_manipulation", "algebraic_identities"],
-  "skills_gained": ["inequality_manipulation"],
+  "skills_required": [
+    "inequality_manipulation",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "inequality_manipulation"
+  ],
   "prerequisites": []
 }

@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Oznaczmy przez $A$ średnią arytmetyczną wyników 16 uczniów (wszystkich oprócz Marka). Jak za pomocą $A$ można zapisać wynik Marka?",
-    "Twoim celem jest znalezienie różnicy między wynikiem Marka a średnią całej klasy. Spróbuj wyrazić średnią całej klasy również za pomocą $A$.",
-    "Suma wyników całej klasy to wynik Marka plus suma wyników pozostałych 16 uczniów. Wyraź sumę wyników tych 16 uczniów za pomocą $A$, a następnie oblicz sumę dla całej klasy.",
-    "Gdy masz już wynik Marka i średnią całej klasy wyrażone w zależności od $A$, oblicz różnicę między nimi. Wynik nie powinien zależeć od wartości $A$."
+    "Oznaczmy przez $A$ średnią arytmetyczną wyników 16 uczniów (bez Marka). Wynik Marka jest o 17 punktów wyższy. Potraktuj te 17 punktów jako jego 'nadwyżkę' ponad średnią grupy.",
+    "Gdy obliczamy średnią dla całej klasy, 'nadwyżka' punktów Marka zostaje w pewnym sensie rozdzielona pomiędzy wszystkich uczniów. Zastanów się, jak to wpłynie na nową średnią.",
+    "Nadwyżka 17 punktów jest rozdzielana na 17 osób. O ile w takim razie średnia arytmetyczna całej klasy będzie wyższa od średniej arytmetycznej pozostałych 16 uczniów?",
+    "Wiesz już, jak średnia całej klasy ma się do średniej 16 uczniów. Wiesz też, jak wynik Marka ma się do średniej 16 uczniów. Oblicz teraz szukaną różnicę."
   ],
   "prerequisites": [],
   "skills_required": [

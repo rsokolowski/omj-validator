@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Niech $\frac{a-b}{a+b} = r$, gdzie $r$ jest liczbą wymierną. Co możesz wywnioskować o stosunku $\frac{a}{b}$ na podstawie tej informacji?",
-    "Pokaż, że jeśli $\frac{a-b}{a+b}$ jest liczbą wymierną, to stosunek $\frac{a}{b}$ również musi być liczbą wymierną. Następnie zbadaj, jak ten fakt wpływa na wymierność docelowego wyrażenia.",
-    "Aby z równości $\frac{a-b}{a+b} = r$ wyznaczyć stosunek $\frac{a}{b}$, spróbuj podzielić licznik i mianownik po lewej stronie przez $b$. Otrzymasz równanie, z którego obliczysz $\frac{a}{b}$.",
-    "Przekształć wyrażenie $\frac{2a-b}{2a+b}$ w podobny sposób, dzieląc licznik i mianownik przez $b$. Wykorzystaj wymierność stosunku $\frac{a}{b}$, aby zakończyć dowód."
+    "Oznaczmy daną liczbę wymierną jako $r = \\frac{a-b}{a+b}$. Twoim celem jest pokazać, że $\\frac{2a-b}{2a+b}$ jest wymierne. Czy potrafisz wyrazić docelowy ułamek bezpośrednio za pomocą $r$?",
+    "Spróbuj wyrazić licznik docelowego ułamka, czyli $2a-b$, oraz jego mianownik, $2a+b$, za pomocą wyrażeń z danego ułamka: $(a-b)$ oraz $(a+b)$.",
+    "Poszukaj takich liczb $x$ i $y$, aby zachodziła równość: $2a-b = x(a-b) + y(a+b)$. Zrób to samo dla wyrażenia $2a+b$.",
+    "Gdy już wyrazisz $2a-b$ i $2a+b$ za pomocą $(a-b)$ i $(a+b)$, wstaw te wyrażenia do ułamka $\\frac{2a-b}{2a+b}$. Jak możesz go przekształcić, aby pojawiło się w nim wyrażenie $r$?"
   ],
   "skills_required": [
     "algebraic_identities",

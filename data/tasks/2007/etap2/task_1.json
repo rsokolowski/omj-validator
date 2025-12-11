@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Spróbuj przekształcić podane równanie. Przenieś wszystkie wyrazy na jedną stronę i zobacz, czy przypominają one wzór skróconego mnożenia.",
-    "Równanie można sprowadzić do postaci, w której kwadrat pewnego wyrażenia jest równy stałej. Użyj tej postaci do przeprowadzenia dowodu nie wprost.",
-    "Pokaż, że podane równanie jest równoważne równaniu $(\\sqrt{a}-\\sqrt{b})^2=6$. Co z tego wynika na temat wartości wyrażenia $\\sqrt{a}-\\sqrt{b}$?",
-    "Załóż, że $a$ i $b$ są wymierne. Czy w takiej sytuacji różnica $\\sqrt{a}-\\sqrt{b}$ musi być liczbą wymierną? Porównaj to z wynikiem z poprzedniego kroku."
+    "W jaki sposób można pozbyć się pierwiastka z podanego równania? Spróbuj podnieść obie strony do kwadratu i uprościć otrzymane wyrażenie.",
+    "Po uproszczeniu równania, przeprowadź dowód nie wprost. Załóż, że obie liczby $a$ i $b$ są wymierne i poszukaj sprzeczności.",
+    "Pokaż, że podane równanie jest równoważne równaniu $(a-b)^2=12$. Co z tego wynika na temat wartości wyrażenia $a-b$?",
+    "Zgodnie z Twoim założeniem, liczby $a$ i $b$ są wymierne. Jaka musi być w takim razie ich różnica $a-b$? Porównaj ten wniosek z wynikiem z poprzedniego kroku."
   ],
   "skills_required": [
     "inequality_manipulation",

@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Nazwijmy stałą sumę liczb na każdym odcinku literą $S$. Przyjrzyj się uważnie budowie diagramu. Które pola wydają się odgrywać w nim szczególną rolę?",
-    "Zamiast analizować wszystkie 15 odcinków naraz, skup się na jednej, szczególnej grupie odcinków, która może narzucić najsilniejsze warunki na wpisane liczby.",
-    "Zwróć uwagę na pole w samym środku diagramu. Jest ono połączone z sześcioma innymi polami. Co wynika z faktu, że suma na każdym z tych sześciu odcinków musi być taka sama?",
-    "Niech $c$ będzie liczbą w polu centralnym, a $h_1, ..., h_6$ liczbami w otaczającym je sześciokącie. Zapisz równania dla sum na odcinkach łączących środek z sześciokątem. Co możesz stąd wywnioskować o liczbach $h_1, ..., h_6$?"
+    "Nazwijmy stałą sumę liczb na każdym odcinku literą S. Przyjrzyj się uważnie budowie diagramu. Które pole, ze względu na swoje położenie, jest najważniejsze?",
+    "Skup się na wszystkich odcinkach, które przechodzą przez centralne pole. Zauważ, że można je podzielić na dwie grupy w zależności od tego, przez jakie inne pola przechodzą.",
+    "Zapisz równania dla sum na odcinkach z obu tych grup. Każde z nich można przekształcić tak, aby po jednej stronie zostało S-c, gdzie c to liczba w środku. Co znajduje się po drugiej stronie w każdym przypadku?",
+    "Jedna grupa odcinków pokazuje, że suma liczb w dwóch przeciwległych polach sześciokąta jest stała. Druga, że ta sama stała jest sumą liczby z sześciokąta i pewnej liczby z brzegu. Co z tego wynika?"
   ],
   "skills_required": [
     "double_counting",

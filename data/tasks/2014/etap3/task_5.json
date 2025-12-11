@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Wyobraź sobie taki wielościan. Jedna jego ściana ($F_0$) jest nieforemna, a wszystkie pozostałe ($F_1, F_2, ...$) są foremne. Co możesz powiedzieć o długościach krawędzi ściany $F_0$, skoro każda z nich jest też krawędzią jakiejś ściany foremnej?",
-    "Z poprzedniej wskazówki wynika, że ściana nieforemna musi mieć wszystkie boki równe. Jest więc wielokątem równobocznym, ale nie równokątnym. Najprostszym przykładem jest romb. Spróbuj skonstruować wielościan, którego jedna ściana jest rombem, a pozostałe są trójkątami równobocznymi.",
-    "Rozważ dwa czworościany foremne o tej samej długości krawędzi. Czy można je połączyć w taki sposób, aby powstał nowy, wypukły wielościan? Pomyśl o łączeniu ich wzdłuż jednej krawędzi, a nie całej ściany.",
-    "Weź dwa czworościany foremne $ABCS$ i $ABCD$ o wspólnej krawędzi $AB$. Złóż je wzdłuż tej krawędzi. Powstanie pięciościan. Zastanów się, jakie są jego ściany. Czy któraś z nich jest rombem, a pozostałe trójkątami równobocznymi?"
+    "Wyobraź sobie taki wielościan. Jedna jego ściana ($F_0$) jest nieforemna, a wszystkie pozostałe są foremne. Co możesz powiedzieć o długościach krawędzi ściany $F_0$, jeśli wszystkie ściany foremne to trójkąty równoboczne o tym samym boku?",
+    "Ściana nieforemna musi być wielokątem równobocznym. Najprostszym przykładem jest romb (który nie jest kwadratem). Zauważ, że taki romb można zbudować z dwóch przystających trójkątów równobocznych połączonych wzdłuż jednego boku.",
+    "Spróbujmy skonstruować szukany wielościan z dwóch czworościanów foremnych. Pomyśl o ułożeniu ich tak, aby dwie z ich ścian (po jednej z każdego czworościanu) znalazły się w tej samej płaszczyźnie i utworzyły razem romb.",
+    "Weź dwa czworościany foremne $ABCD$ i $EBCD$. Ustaw je tak, aby ich ściany $\\triangle ABC$ i $\\triangle EBC$ leżały w jednej płaszczyźnie, tworząc romb $ABEC$. Pozostałe ściany obu czworościanów utworzą wypukłą bryłę. Sprawdź, jakie ma ona ściany."
   ],
   "skills_required": [
     "spatial_3d",

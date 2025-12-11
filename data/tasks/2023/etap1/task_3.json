@@ -16,7 +16,7 @@
     "Przypomnij sobie, ile patyczków potrzeba na każdą cyfrę (jak na wyświetlaczu kalkulatora). Która cyfra wymaga najmniej patyczków? Jak to wykorzystać, by liczba miała jak najwięcej cyfr?",
     "Aby ułożyć największą liczbę, chcemy mieć jak najwięcej cyfr. Rozważ osobno przypadki gdy $n$ jest parzyste i gdy jest nieparzyste. Jakie cyfry warto wtedy używać?",
     "Dla parzystego $n$ sprawdź, jaka jest maksymalna liczba i jaka jest suma jej cyfr. Dla nieparzystego $n$ zastanów się, jaką cyfrę wstawić na początku zamiast jednej z jedynek.",
-    "Zapisz równanie: suma cyfr optymalnej liczby = $n$. Dla nieparzystego $n$ twoja liczba ma postać 711...1. Oblicz sumę cyfr w zależności od $n$ i rozwiąż otrzymane równanie."
+    "Dla nieparzystego $n$, np. $n=2k+1$, największa liczba ma $k$ cyfr. Oblicz, ile patyczków musi kosztować cyfra zastępująca jedną z jedynek. Zapisz sumę cyfr tej liczby i przyrównaj ją do $n$."
   ],
   "skills_required": [
     "counting_techniques",

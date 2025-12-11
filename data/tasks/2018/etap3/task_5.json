@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Rozważ kwadrat 2x2. Jakie zestawy czterech liczb ze zbioru $\\{-1, 0, 1\\}$ spełniają warunek zadania? Co można powiedzieć o sumie wszystkich czterech liczb w takim kwadracie?",
-    "Problem wymaga znalezienia maksimum. Znajdź górne ograniczenie na sumę, a potem skonstruuj przykład, który je osiąga. Zacznij od znalezienia maksymalnej liczby jedynek w dowolnym kwadracie 2x2.",
-    "Suma liczb w każdym z 16 kwadratów 2x2 jest niewielka. Co otrzymasz, jeśli zsumujesz te 16 sum? Zauważ, że pola w środku tablicy są wliczane do tej sumy więcej razy niż te na brzegu.",
-    "Wykorzystaj uzyskaną nierówność, aby powiązać sumę całkowitą z sumą liczb na brzegu tablicy. Pokaż, że liczby na brzegu podlegają pewnym ograniczeniom, co pozwoli oszacować sumę całkowitą. Na koniec poszukaj tablicy o naprzemiennych wierszach."
+    "Rozważ dowolny kwadrat 2x2. Zgodnie z warunkiem zadania, suma trzech z jego czterech liczb wynosi 0. Co to mówi o sumie wszystkich czterech liczb w tym kwadracie?",
+    "Aby znaleźć największą możliwą sumę, ustal jej górne ograniczenie, a następnie podaj przykład tablicy, która je osiąga. Warto dążyć do tego, by sumy w poszczególnych kwadratach 2x2 były jak największe.",
+    "Zastanów się nad sumą liczb w dwóch sąsiednich wierszach. Sumując wszystkie kwadraty 2x2 zawarte w tych dwóch wierszach, możesz uzyskać nierówność wiążącą sumy liczb w tych wierszach.",
+    "Spróbuj zmaksymalizować sumę w jednym wierszu, wpisując same jedynki. Jakie ograniczenie narzuca to na sumy w sąsiednich wierszach? Rozważ ułożenie wierszy o maksymalnej sumie na przemian z wierszami o niskiej sumie."
   ],
   "skills_required": [
     "case_analysis",

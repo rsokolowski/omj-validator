@@ -14,8 +14,8 @@
   "hints": [
     "Narysuj czworokąt $ABCD$ i punkty $K, L, M, N$. Zastanów się, co definicja symetrii mówi o położeniu punktu $A$ względem $K$ i $B$, punktu $B$ względem $L$ i $C$ itd. Jakie odcinki mają równe długości?",
     "Pole czworokąta $KLMN$ można wyrazić jako sumę pola czworokąta $ABCD$ i pól czterech trójkątów znajdujących się na zewnątrz niego. Spróbuj powiązać pola tych zewnętrznych trójkątów z polem $ABCD$.",
-    "Rozważ jeden z zewnętrznych trójkątów, na przykład $\\triangle KBL$. Porównaj jego podstawę i wysokość z podstawą i wysokością trójkąta $\\triangle ABC$. Jaki jest stosunek ich pól?",
-    "Pokaż, że pole trójkąta $\\triangle KBL$ jest dwukrotnie większe od pola trójkąta $\\triangle ABC$. Użyj podobnego rozumowania dla pozostałych trzech zewnętrznych trójkątów, a następnie zsumuj wszystkie pola."
+    "Rozważ trójkąt $\\triangle KBL$ i porównaj jego pole z polem $\\triangle ABC$. Wybierając podstawy na prostej $KB$, zauważysz, że jedna jest dwa razy dłuższa od drugiej. Co możesz powiedzieć o wysokościach opuszczonych na tę prostą?",
+    "Aby porównać wysokości z wierzchołków $L$ i $C$ na prostą $KB$, wykorzystaj fakt, że $B$ jest środkiem odcinka $LC$. Poszukaj przystających trójkątów prostokątnych, które powstaną po narysowaniu tych wysokości."
   ],
   "skills_required": [
     "transformations",

@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zapisz warunki zadania w postaci równań, używając zmiennych na oznaczenie pierwiastków: niech $ab = k^2$ i $(a+1)(b+1) = m^2$. Twoim celem jest znalezienie konkretnej liczby $n>1$.",
-    "Dowód jest konstruktywny – polega na wskazaniu działającej wartości $n$. Pomyśl, jakie proste wyrażenie algebraiczne, zależne od $a$ i $b$, mogłoby być dobrym kandydatem na $n$.",
-    "Rozwiń wyrażenie, które ma być kwadratem: $(a+n)(b+n) = ab + n(a+b) + n^2$. Pierwszy składnik, $ab$, jest już kwadratem. Czy możesz dobrać $n$ tak, aby uprościć to wyrażenie?",
-    "Sprawdź, co się stanie, gdy wybierzesz $n=ab$. Podstaw tę wartość do wyrażenia $(a+n)(b+n)$ i użyj założeń z zadania, by pokazać, że jest ono kwadratem. Pamiętaj, by uzasadnić, że można znaleźć $n>1$."
+    "Zapisz warunki zadania w postaci równań: $ab = k^2$ i $(a+1)(b+1) = m^2$ dla pewnych dodatnich liczb całkowitych $k, m$. Musisz znaleźć $n>1$.",
+    "Dowód jest konstruktywny. Spróbuj znaleźć konkretną wartość $n$, wyrażoną za pomocą $a$ i $b$, która sprawi, że $(a+n)(b+n)$ będzie kwadratem liczby całkowitej.",
+    "Zamiast wymnażać nawiasy w wyrażeniu $(a+n)(b+n)$, zastanów się, jak można by je przekształcić. Czy da się dobrać $n$ tak, aby z czynników $(a+n)$ i $(b+n)$ wyłączyć coś użytecznego?",
+    "Aby z czynnika $(a+n)$ dało się wyłączyć $a$, liczba $n$ musi być wielokrotnością $a$. Podobnie dla $b$. Jaki jest najprostszy kandydat na $n$ o tej własności? Sprawdź go i pamiętaj o warunku $n>1$."
   ],
   "skills_required": [
     "diophantine_equations",

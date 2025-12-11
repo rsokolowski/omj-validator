@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Zastanów się, jak muszą być ułożone kamienie, które pozostaną. Jeśli między dwoma kamieniami tego samego koloru nie ma kamienia innego koloru, to co to oznacza dla całego pozostałego ciągu?",
-    "Pozostałe kamienie muszą tworzyć dwa bloki jednokolorowe. Oznacza to, że wszystkie wybrane kamienie jednego koloru muszą pochodzić z początkowej części rzędu, a drugiego koloru - z końcowej. Poszukaj takiego punktu podziału.",
-    "Rozważmy dwie możliwości. Skupmy się na jednej: chcemy wybrać 25 czerwonych kamieni z początku rzędu i 25 niebieskich z jego końca. Co musiałoby być prawdą o położeniu 25-tego czerwonego kamienia, aby to było możliwe?",
-    "Oznaczmy pozycję 25-tego czerwonego kamienia jako $p_C$, a 25-tego niebieskiego jako $p_N$. Załóżmy, że nie da się ułożyć bloku czerwonego przed niebieskim. Co to mówi o relacji między $p_C$ a $p_N$? A co, jeśli nie da się ułożyć bloku niebieskiego przed czerwonym?"
+    "Warunek w zadaniu oznacza, że pozostałe 50 kamieni musi tworzyć dwa jednokolorowe bloki, np. wszystkie czerwone, a po nich wszystkie niebieskie. Jakie kamienie z pierwotnego rzędu należałoby wybrać, aby to osiągnąć?",
+    "Spróbujmy znaleźć w rzędzie 'punkt podziału'. Rozważmy na przykład pierwszych 50 kamieni i policzmy, ile jest wśród nich kamieni każdego koloru. Zastanów się nad dwoma możliwymi przypadkami.",
+    "Załóżmy, że w pierwszej połowie rzędu (pozycje 1-50) jest co najmniej 25 kamieni czerwonych. Czy możemy wtedy wybrać 25 'najwcześniejszych' czerwonych kamieni i 25 'najpóźniejszych' niebieskich, tak aby były rozdzielone?",
+    "Jeśli w pierwszej połowie jest $\\ge 25$ czerwonych, to 25-ty czerwony kamień jest na pozycji $\\le 50$, a 26-ty niebieski na pozycji $> 50$. Co z tego wynika? Przeanalizuj przypadek, gdy w pierwszej połowie jest mniej niż 25 czerwonych."
   ],
   "prerequisites": [],
   "skills_required": [

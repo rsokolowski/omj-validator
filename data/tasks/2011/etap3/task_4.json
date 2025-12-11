@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Zauważ, że $100^n = (10^n)^2$. Jak można zapisać $\\sqrt{100^n + 2}$ w relacji do liczby $10^n$? Spróbuj oszacować tę wartość.",
-    "Poszukaj oszacowania: między jakimi dwiema liczbami leży $\\sqrt{100^n + 2}$? Pomyśl o nierównościach postaci $a < \\sqrt{100^n + 2} < b$.",
-    "Rozważ, ile wynosi część ułamkowa liczby $\\sqrt{100^n + 2}$. Jeśli oznaczysz $\\sqrt{100^n + 2} = 10^n + x$, to czym jest $x$? Oszacuj $x$ z góry i z dołu.",
-    "Pokaż, że część ułamkowa jest mniejsza niż $10^{-n}$. Wykorzystaj fakt, że $(10^n + 10^{-n})^2 = 100^n + 2 + 10^{-2n} > 100^n + 2$."
+    "Zauważ, że $100^n = (10^n)^2$. Liczba $\\sqrt{100^n + 2}$ jest więc bardzo bliska liczbie całkowitej $10^n$. Twoim celem jest dokładne oszacowanie, o ile jest od niej większa.",
+    "Aby pokazać, że $n$-ta cyfra po przecinku jest zerem, musisz udowodnić, że część ułamkowa tej liczby jest mniejsza od $10^{-n}$. Zapisz $\\sqrt{100^n + 2} = 10^n + x$ i spróbuj to wykazać.",
+    "Pracuj z równością $\\sqrt{100^n + 2} = 10^n + x$. Podnieś ją obustronnie do kwadratu, aby pozbyć się pierwiastka, a następnie uprość otrzymane wyrażenie.",
+    "Z uproszczonego równania $2 = 2 \\cdot 10^n x + x^2$ wyznacz $x$. Pamiętając, że $x > 0$, użyj tej informacji do oszacowania mianownika w wyrażeniu na $x$, a w konsekwencji samego $x$ z góry."
   ],
   "skills_required": [
     "algebraic_identities",

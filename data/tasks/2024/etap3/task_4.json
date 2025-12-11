@@ -13,9 +13,9 @@
   ],
   "hints": [
     "Narysuj duży i dokładny rysunek. Oblicz miary kątów wewnętrznych rombu oraz kątów, na które dzieli je przekątna $AC$.",
-    "Oblicz miary wszystkich kątów w trójkącie $BPC$. Jaki wniosek dotyczący długości odcinka $BP$ możesz z tego wyciągnąć w odniesieniu do boku rombu?",
-    "Wykorzystaj równość odcinków z poprzedniego kroku, aby obliczyć miary kątów w trójkącie $ABP$. Następnie, korzystając z warunku $PQ \\parallel AD$, oblicz miary kątów w trójkącie $APQ$.",
-    "Teza $BP=AQ$ jest równoważna pewnej równości boków w trójkącie $ABQ$. Oblicz wszystkie kąty w tym trójkącie i sprawdź, czy ta równość może zachodzić."
+    "Skup się na trójkącie $BPC$. Oblicz wszystkie jego kąty i wykaż, że odcinek $BP$ ma taką samą długość jak bok rombu.",
+    "Teraz zbadaj trójkąt $CQP$. Wykorzystaj warunek $PQ \\parallel AD$, aby znaleźć miary jego kątów. Jaki wniosek dotyczący długości odcinka $PQ$ można stąd wyciągnąć?",
+    "Wykorzystaj równości $BP=AB$ i $PQ=PC$. Rozważ trójkąt $APC$ i oblicz miary jego kątów. Teza $BP=AQ$ jest równoważna pewnej własności trójkąta $AQC$. Spróbuj ją udowodnić."
   ],
   "skills_required": [
     "angle_chasing",

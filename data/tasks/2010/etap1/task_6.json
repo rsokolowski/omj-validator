@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie całą konfigurację. Z definicji punktu $F$ wynikają dwa kąty proste. Zaznacz je na rysunku. Gdzie one się znajdują?",
+    "Narysuj starannie całą konfigurację. Z definicji punktu F wynikają dwa kąty proste. Zaznacz je na rysunku. Gdzie one się znajdują?",
     "Kąty proste często sugerują istnienie okręgów. Poszukaj czworokąta, którego wierzchołki leżą na jednym okręgu, wykorzystując kąty proste z konstrukcji.",
-    "Zauważ, że z punktów $B$ i $C$ widać pewien odcinek pod kątem prostym. Który to odcinek? Co to oznacza dla punktów $B, C, E, F$?",
-    "Wykorzystaj kąty wpisane w nowo znalezionym okręgu, aby powiązać kąt z wierzchołkiem $F$ z kątem przy wierzchołku $B$. Następnie użyj kątów wpisanych w okręgu opisanym na $ABCD$."
+    "Kąty $\\angle FBE$ i $\\angle FCE$ są proste. Na jakim wspólnym odcinku są one oparte? Co to oznacza dla punktów $B, C, E, F$?",
+    "Aby wykazać, że $EF \\perp AD$, rozważ sumę kątów w trójkącie utworzonym przez te proste i przekątną $AC$. Wykorzystaj kąty wpisane w nowym okręgu, a następnie w okręgu z zadania, by powiązać te kąty."
   ],
   "skills_required": [
     "circle_theorems",

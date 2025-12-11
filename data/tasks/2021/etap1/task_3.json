@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zastanów się, co oznacza, że między dwiema liczbami istnieje liczba całkowita. Jaki warunek musi spełniać długość przedziału $(a, b)$, aby na pewno zawierał on liczbę całkowitą?",
-    "Zbadaj długość przedziału $(\\sqrt{2n}, \\sqrt{5n})$. Jeśli jest ona większa od 1, to teza jest udowodniona. Sprawdź, dla jakich liczb całkowitych $n \\geq 1$ ten warunek jest spełniony.",
-    "Aby zbadać nierówność $\\sqrt{5n} - \\sqrt{2n} > 1$, przenieś jeden z pierwiastków na drugą stronę i podnieś obie strony do kwadratu. Pamiętaj, że można to zrobić tylko wtedy, gdy obie strony są nieujemne.",
-    "Po przekształceniach powinieneś otrzymać nierówność kwadratową względem $n$. Zbadaj, dla jakich liczb naturalnych $n$ jest ona prawdziwa. Co z przypadkami, dla których nierówność nie zachodzi?"
+    "Niech $k$ będzie szukaną liczbą całkowitą. Warunek $\\sqrt{2n} < k < \\sqrt{5n}$ jest równoważny pewnej nierówności dla $k^2$. Jakiej?",
+    "Zadanie sprowadza się do wykazania, że w przedziale $(2n, 5n)$ zawsze znajduje się kwadrat liczby całkowitej. Rozważ, co by się stało, gdyby tak nie było – czyli gdyby cały ten przedział mieścił się między dwoma kolejnymi kwadratami.",
+    "Załóżmy, że dla pewnego $n$ w przedziale $(2n, 5n)$ nie ma kwadratu liczby całkowitej. Wtedy musi istnieć taka liczba całkowita $m$, że $m^2 \\le 2n$ oraz $5n \\le (m+1)^2$.",
+    "Z nierówności $m^2 \\le 2n$ i $5n \\le (m+1)^2$ wywnioskuj, że $3n \\le 2m+1$. Połącz ten wynik z pierwszą nierównością, aby uzyskać sprzeczność dla prawie wszystkich $n$. Pozostałe przypadki sprawdź ręcznie."
   ],
   "prerequisites": [],
   "skills_required": [

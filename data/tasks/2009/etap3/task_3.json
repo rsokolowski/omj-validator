@@ -11,10 +11,10 @@
     "geometria"
   ],
   "hints": [
-    "Punkt $D$ jest odbiciem $P$ względem prostej $BC$. Jeśli $P_a$ jest rzutem prostokątnym $P$ na prostą $BC$, to jakie jest wzajemne położenie punktów $P, P_a, D$?",
-    "Niech $P_a, P_b, P_c$ będą rzutami $P$ na boki trójkąta. Zauważ, że $P_a$ jest środkiem odcinka $PD$. Jaka jest zatem relacja między trójkątem $DEF$ a trójkątem $P_aP_bP_c$?",
-    "Skoro $\\triangle DEF$ jest równoboczny, to trójkąt spodkowy $P_aP_bP_c$ też. Wyraź długości boków trójkąta spodkowego za pomocą odległości $AP, BP, CP$ i kątów $\\triangle ABC$, a znajdziesz kluczowy warunek, jaki musi spełniać punkt $P$.",
-    "Aby wykazać, że proste $AD, BE, CF$ przecinają się w jednym punkcie, udowodnij, że iloczyn stosunków $\\frac{AZ}{ZB} \\cdot \\frac{BX}{XC} \\cdot \\frac{CY}{YA}$ jest równy 1. Stosunek $\\frac{AZ}{ZB}$ można wyrazić jako stosunek pól $\\frac{P(\\triangle ACF)}{P(\\triangle BCF)}$."
+    "Zauważ, że A jest środkiem okręgu przechodzącego przez P, F, E. Podobnie dla B i C. Co możesz powiedzieć o trójkątach $\\triangle AFE$, $\\triangle BFD$ i $\\triangle CDE$ oraz o ich kątach przy wierzchołkach A, B, C?",
+    "Skoro $\\triangle DEF$ jest równoboczny, to podstawy trójkątów $\\triangle AFE$, $\\triangle BFD$, $\\triangle CDE$ są równe. Porównaj długość podstawy $EF$ z długością boku $BC$ przez podobieństwo do trójkąta o wierzchołkach B, C i środku okręgu opisanego na $\\triangle ABC$.",
+    "Powyższe rozumowanie prowadzi do warunku $AP \\cdot BC = BP \\cdot CA = CP \\cdot AB$. Aby wykazać współpękowość prostych $AD, BE, CF$, udowodnij, że prosta $AD$ jest symetryczna do $AP$ względem dwusiecznej kąta $\\angle BAC$.",
+    "Symetria, o której mowa, jest równoważna równości kątów $\\angle DAB = \\angle PAC$. Aby jej dowieść, porównaj trójkąty $\\triangle ABD$ i $\\triangle CPA$. Wykorzystaj warunek z poprzedniej wskazówki, aby znaleźć pary proporcjonalnych boków."
   ],
   "skills_required": [
     "transformations",

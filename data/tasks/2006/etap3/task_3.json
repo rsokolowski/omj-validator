@@ -11,10 +11,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj figurę. Zaznacz, że $M$ i $N$ są środkami boków. Jaka jest kluczowa własność odcinka $MN$ łączącego środki boków w trójkącie $ABC$?",
-    "Zwróć uwagę na dwie kluczowe proste: wysokość z $C$ i symetralną boku $AB$. Obie są prostopadłe do $AB$. Jak można wykorzystać tę własność, aby porównywać odcinki na równoległych prostych $MN$ i $AB$?",
-    "Teza $MD=NE$ jest równoważna temu, że środek odcinka $MN$ jest jednocześnie środkiem odcinka $DE$. Spróbuj udowodnić, że te dwa środki się pokrywają.",
-    "Rozważ rzuty prostokątne punktów $M, N, D, E$ na prostą $AB$. Pokaż, że rzut środka odcinka $MN$ pokrywa się z rzutem środka odcinka $DE$."
+    "Narysuj starannie figurę. Zaznacz, że $M$ i $N$ są środkami boków. Jaka jest kluczowa własność odcinka $MN$ łączącego środki boków w trójkącie $ABC$?",
+    "Zauważ, że wysokość z wierzchołka $C$ i symetralna boku $AB$ są do siebie równoległe. Ponieważ prosta $MN$ jest równoległa do $AB$, problem można uprościć, rozważając rzuty wszystkich punktów na prostą $AB$.",
+    "Niech $M', N', D', E'$ będą rzutami punktów $M, N, D, E$ na prostą $AB$. Pokaż, że równość $MD=NE$ jest równoważna równości długości odcinków $M'D'$ i $N'E'$.",
+    "Określ, czym są punkty $M', N', D', E'$ na prostej $AB$. Zauważ, że $D'$ to spodek wysokości z $C$, a $E'$ to środek boku $AB$. Gdzie leżą $M'$ i $N'$? Porównaj długości odcinków $M'D'$ i $N'E'$."
   ],
   "skills_required": [
     "midsegment_properties",

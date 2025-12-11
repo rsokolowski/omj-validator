@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Pierwsze zagięcie daje trójkąt $ADC$. Drugie zagięcie przenosi wierzchołek $D$ na punkt $D'$ leżący na $AC$. Aby powstał trójkąt $APQ$, linia zagięcia $PQ$ musi przejść przez wierzchołek $C$. Co to oznacza dla położenia punktu $P$?",
-    "Linia zagięcia $CQ$ (gdzie $Q$ leży na $AD$) jest symetralną odcinka $DD'$. Zastanów się, co z tego wynika dla trójkąta $CDD'$. Jaki jest związek między odcinkami $CD$ i $CD'$ oraz $QD$ i $QD'$?",
-    "W trójkącie równoramiennym $CDD'$ linia zagięcia $CQ$ jest nie tylko symetralną podstawy, ale także dwusieczną kąta przy wierzchołku $C$. Wyraź miarę kąta $\\angle DCQ$ za pomocą miary kąta $\\angle DCA$.",
-    "Oznacz $\\angle DCA = \\alpha$. Oblicz miary wszystkich kątów w trójkącie $DQC$. Następnie, korzystając z nich, wyznacz miary kątów w trójkącie $AQC$ i wykaż, że jest on równoramienny."
+    "Zagięcie papieru wzdłuż linii $PQ$ jest symetrią osiową. Co jest symetralną jakiego odcinka? Co ta obserwacja mówi o trójkątach $QDD'$ oraz $PDD'$?",
+    "Aby udowodnić tezę $AP=AQ=AD'$, spróbuj wykazać każdą z równości osobno. Zacznij od $AQ=AD'$, co jest równoważne pokazaniu, że trójkąt $AD'Q$ jest równoramienny.",
+    "W trójkącie $AD'Q$ znasz już jeden kąt. Aby pokazać, że jest równoramienny, wykaż, że jego kąty przy podstawie $QD'$ są równe. Oznacz $\\angle DAC = \\alpha$ i spróbuj wyznaczyć miarę kąta $\\angle AD'Q$.",
+    "Wykorzystaj fakt, że trójkąt $QDD'$ jest równoramienny ($QD=QD'$). Pokaż, że prowadzi to do wniosku, że również trójkąt $ADD'$ jest równoramienny ($AD=AD'$). To pozwoli Ci obliczyć wszystkie kąty w trójkącie $AD'Q$ i udowodnić tezę."
   ],
   "prerequisites": [
     "2020_etap1_7"

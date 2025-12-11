@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Oznacz środek prostokąta przez $O$. Zauważ, że jest on równoodległy od wszystkich wierzchołków podstawy. Jak ta własność może pomóc w analizie długości krawędzi bocznych $AS, BS, CS, DS$?",
-    "Równość $AS+CS=BS+DS$ jest trudna do bezpośredniej analizy z powodu pierwiastków ukrytych w długościach odcinków. Spróbuj poszukać innej, prostszej zależności między długościami krawędzi, badając ich kwadraty.",
-    "Wprowadź układ współrzędnych ze środkiem w punkcie $O$. Wyraź sumy kwadratów długości przeciwległych krawędzi bocznych ($AS^2+CS^2$ oraz $BS^2+DS^2$) i porównaj je. Czy dostrzegasz stałą zależność?",
-    "Wykorzystaj odkrytą tożsamość dotyczącą kwadratów długości krawędzi wraz z równością daną w zadaniu. Pokaż, że te dwa warunki łącznie wymuszają równość niektórych krawędzi, co prowadzi do sprzeczności."
+    "Narysuj rzut wierzchołka $S$ na płaszczyznę podstawy i oznacz go $P$. Kwadrat długości każdej krawędzi bocznej (np. $AS^2$) zależy od wysokości ostrosłupa i kwadratu odległości $AP^2$. Zapisz te zależności, korzystając z twierdzenia Pitagorasa.",
+    "Równość $AS+CS=BS+DS$ jest trudna do analizy. Zbadaj, czy istnieje prostsza zależność, porównując sumy kwadratów przeciwległych krawędzi bocznych: $AS^2+CS^2$ oraz $BS^2+DS^2$.",
+    "Zauważ, że związek między sumami kwadratów krawędzi bocznych zależy od sum kwadratów odległości w podstawie: $AP^2+CP^2$ i $BP^2+DP^2$. Jaka jest uniwersalna zależność między tymi sumami dla dowolnego punktu $P$ i prostokąta $ABCD$?",
+    "Posiadasz dwie równości: $AS+CS=BS+DS$ oraz $AS^2+CS^2=BS^2+DS^2$. Wykaż za pomocą algebry, że te dwa warunki oznaczają, iż para długości $(AS, CS)$ jest permutacją pary $(BS, DS)$, co prowadzi do sprzeczności z treścią zadania."
   ],
   "skills_required": [
     "coordinate_geometry",

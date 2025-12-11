@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Przypomnij sobie wzór Eulera dla wielościanów: $W - K + S = 2$, gdzie $W$ to liczba wierzchołków, $K$ to liczba krawędzi, a $S$ to liczba ścian. Zastanów się też, ile krawędzi wychodzi z każdego wierzchołka w wielościanie wypukłym.",
-    "Policz krawędzie na dwa sposoby: raz sumując boki wszystkich ścian, raz patrząc z perspektywy wierzchołków. Pamiętaj, że każda krawędź należy do dokładnie dwóch ścian.",
-    "Jeśli każda krawędź jest bokiem siedmiokąta, to każda ściana ma co najmniej 7 boków. Wyprowadź nierówność łączącą liczbę krawędzi $K$ z liczbą ścian $S$. Co to mówi o stosunku $\\frac{K}{S}$?",
-    "Z warunku zadania dostaniesz $K \\geq \\frac{7S}{2}$. Połącz to ze wzorem Eulera i faktem, że w każdym wierzchołku wielościanu wypukłego zbiegają się co najmniej 3 krawędzie. Sprawdź, czy otrzymane nierówności mogą być jednocześnie spełnione."
+    "Przypomnij sobie wzór Eulera dla wielościanów ($W-K+S=2$) oraz fakt, że w każdym wierzchołku wielościanu wypukłego spotykają się co najmniej 3 krawędzie.",
+    "Spróbuj przeprowadzić dowód nie wprost. Załóż, że taki wielościan istnieje i pokaż, że prowadzi to do sprzeczności z pewną ogólną własnością wszystkich wielościanów wypukłych.",
+    "Wykaż, że w każdym wielościanie wypukłym średnia liczba boków przypadająca na jedną ścianę jest mniejsza od 6. Wykorzystaj wzór Eulera i nierówność łączącą liczbę wierzchołków i krawędzi.",
+    "Korzystając z warunku zadania, wykaż, że średnia liczba boków ściany w takim wielościanie musiałaby być nie mniejsza niż 6. Zestawienie tego faktu z poprzednią wskazówką da szukaną sprzeczność."
   ],
   "skills_required": [
     "polyhedra",

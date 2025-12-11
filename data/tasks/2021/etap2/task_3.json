@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Pogrupuj liczby od 1 do 100 według ich reszt z dzielenia przez 4. Kiedy suma dwóch liczb jest podzielna przez 4? Jakie reszty muszą mieć te liczby?",
-    "Przeanalizuj, które zbiory liczb (o tych samych lub różnych resztach) muszą być pomalowane różnymi kolorami. Poszukaj jak największego zbioru liczb, w którym każde dwie muszą mieć inny kolor.",
-    "Zwróć uwagę na liczby o resztach 0 i 2. Co możesz powiedzieć o ich kolorach? Następnie rozważ liczby o resztach 1 i 3. Czy można znaleźć większy zbiór liczb wymagających różnych kolorów, łącząc elementy z tych dwóch grup?",
-    "Policz, ile jest liczb w każdej z czterech grup. Wykorzystaj obserwację z poprzedniej wskazówki, aby znaleźć największy zbiór liczb, które muszą mieć różne kolory. To da Ci dolne oszacowanie na $n$. Czy potrafisz skonstruować kolorowanie dla tej liczby kolorów?"
+    "Pogrupuj liczby od 1 do 100 według ich reszt z dzielenia przez 4. Kiedy suma dwóch różnych liczb jest podzielna przez 4, w zależności od ich reszt?",
+    "Zastanów się, które zbiory liczb (o tych samych resztach) wymagają, aby każdy ich element miał inny kolor. Poszukaj największego takiego zbioru.",
+    "Przeanalizuj grupy o resztach 0 i 2. Co wynika z warunku zadania dla kolorów liczb wewnątrz każdej z tych grup? Jaka jest zależność między kolorami liczb z grupy o reszcie 1 a kolorami z grupy o reszcie 3?",
+    "Policz, ile jest liczb w każdej z czterech grup. Wykorzystaj swoje obserwacje, aby znaleźć dolne ograniczenie na liczbę kolorów $n$. Czy potrafisz skonstruować poprawne kolorowanie przy użyciu tej liczby kolorów?"
   ],
   "prerequisites": [],
   "skills_required": [

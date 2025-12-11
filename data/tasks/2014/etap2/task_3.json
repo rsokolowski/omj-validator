@@ -14,9 +14,9 @@
   ],
   "hints": [
     "Zastanów się, od czego zależy parzystość sumy dwóch liczb. Kiedy suma dwóch liczb całkowitych jest parzysta, a kiedy nieparzysta?",
-    "Rozważ podział ścian sześcianu ze względu na parzystość liczb na nich zapisanych. Ile ścian jest parzystych, a ile nieparzystych? Przeanalizuj różne przypadki.",
-    "Zwróć uwagę na strukturę sześcianu: każda ściana sąsiaduje z dokładnie czterema innymi ścianami (przez krawędzie). Policz, ile krawędzi tworzy ściana parzysta z innymi parzystymi, a ile z nieparzystymi.",
-    "Rozpatrz przypadki w zależności od liczby ścian nieparzystych (0, 1, 2, ..., 6). Dla każdego przypadku policz krawędzie między ścianami o tej samej parzystości - to właśnie te krawędzie mają sumy parzyste."
+    "Zamiast liczyć krawędzie parzyste, spróbuj oszacować, ile co najwyżej może być krawędzi nieparzystych. Krawędź jest nieparzysta, gdy łączy ścianę z liczbą parzystą i ścianę z liczbą nieparzystą.",
+    "Liczba nieparzystych krawędzi zależy od tego, ile jest ścian z liczbami nieparzystymi. Oznacz tę liczbę przez $k$. Rozważ, jak ułożenie tych $k$ ścian na sześcianie wpływa na liczbę krawędzi łączących je ze ścianami parzystymi.",
+    "Przeanalizuj przypadki dla $k=0, 1, 2, 3$. Zauważ, że przypadki dla $k=4, 5, 6$ są symetryczne. Jaka jest największa możliwa liczba krawędzi nieparzystych?"
   ],
   "skills_required": [
     "parity_arguments",

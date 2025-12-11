@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj równoległobok i zaznacz dane kąty. Oblicz miary wszystkich kątów wewnętrznych równoległoboku. Zauważ, że trójkąty $ABD$ i $BCD$ mają szczególne własności. Jakie?",
-    "Kluczowa informacja to $BC=CE$. Wykorzystaj też fakt, że w równoległoboku $BC=AD$. Rozważ obrót jednej z części figury wokół wierzchołka $D$, aby w sprytny sposób połączyć te równości.",
-    "Obróć trójkąt $DAB$ o $90^\\circ$ wokół punktu $D$ tak, aby bok $DB$ nałożył się na $DC$. Niech $A'$ będzie obrazem punktu $A$. Pokaż, że punkty $A'$, $D$ i $E$ leżą na jednej prostej.",
-    "Zauważ, że trójkąt $CDA'$ jest prostokątny i równoramienny. Wykorzystaj równość $CE=AD=A'D$ w trójkącie $CA'E$, aby znaleźć miarę kąta $DEC$, a następnie oblicz szukany kąt."
+    "Narysuj równoległobok i zaznacz w nim wszystkie dane z treści zadania. Oblicz miary kątów wewnętrznych tego równoległoboku. Zwróć uwagę na trójkąty $ABD$ i $BCD$ - jakie mają szczególne własności?",
+    "Wykorzystaj kluczową równość $CE = BC = AD$. Aby jej użyć, warto powiązać długości boków $AD$ i $CD$. Spróbuj dorysować wysokość z wierzchołka $C$ na prostą zawierającą bok $AD$.",
+    "Oznaczmy przez $H$ spodek wysokości z wierzchołka $C$ na prostą $AD$. Jakim trójkątem jest $\\triangle CDH$? Wyraź długość boku $AD$ za pomocą długości wysokości $CH$.",
+    "Zauważ, że w trójkącie prostokątnym $CEH$ jedna z przyprostokątnych jest dwa razy krótsza od przeciwprostokątnej. Jakie są miary kątów w takim trójkącie? To pozwoli Ci obliczyć miarę kąta $DCE$."
   ],
   "skills_required": [
     "angle_chasing",

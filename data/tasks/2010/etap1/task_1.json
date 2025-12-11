@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Porównaj oba równania - co zauważasz? Jaką rolę pełnią zmienne $x$ i $y$ w tych równaniach?",
-    "Symetria układu sugeruje dwa podejścia: zbadanie przypadku $x = y$ oraz analizę różnicy równań.",
-    "Odejmij równania stronami i rozłóż otrzymane wyrażenie na iloczyn. Jakie dwa przypadki otrzymujesz?",
-    "Po rozłożeniu $(x-y)(x+y-4) = 0$ rozważ osobno przypadki $x = y$ oraz $x + y = 4$. W każdym przypadku podstaw do jednego z równań."
+    "Zwróć uwagę na symetrię równań – zamiana $x$ z $y$ nie zmienia układu. Co to sugeruje na temat możliwych operacji na równaniach?",
+    "W symetrycznych układach równań warto spróbować dodać lub odjąć równania stronami, aby uzyskać prostszą zależność między zmiennymi.",
+    "Dodaj oba równania stronami i uporządkuj wyrazy. Czy dostrzegasz w otrzymanym wyrażeniu wzór skróconego mnożenia na kwadrat sumy?",
+    "Po dodaniu równań powinieneś dojść do postaci $(x+y-2)^2=0$. Wyznacz stąd sumę $x+y$ i podstaw uzyskaną zależność do jednego z początkowych równań."
   ],
   "skills_required": [
     "symmetric_systems",

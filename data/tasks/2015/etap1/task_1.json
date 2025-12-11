@@ -14,9 +14,9 @@
   ],
   "hints": [
     "Rozwiń i uprość lewą stronę równania. Jakie wyrazy się redukują?",
-    "Po uproszczeniu otrzymasz iloczyn dwóch wyrażeń równy 6. Zastanów się, jak sparametryzować rozwiązania.",
-    "Zauważ, że 6 można zapisać jako iloczyn dwóch dodatnich liczb całkowitych. Jedna z nich może zależeć od parametru.",
-    "Spróbuj ustalić jeden z czynników (np. $z$) jako stałą, a drugi wyrazić przez wolny parametr $x$. Dla jakich wartości $x$ otrzymasz dodatnie $y$?"
+    "Zapisz uproszczoną lewą stronę w postaci iloczynu. Otrzymasz równanie, w którym iloczyn dwóch wyrażeń jest równy 6.",
+    "Zauważ, że oba czynniki iloczynu muszą być liczbami całkowitymi. Jakie pary liczb całkowitych dają w iloczynie 6? Pamiętaj, że $z$ musi być dodatnie.",
+    "Wybierz jedną z otrzymanych par wartości dla czynników. Zapisz wynikające z tego wyboru równanie. Czy potrafisz znaleźć nieskończenie wiele dodatnich liczb całkowitych $x, y, z$ spełniających te warunki?"
   ],
   "skills_required": [
     "algebraic_identities"

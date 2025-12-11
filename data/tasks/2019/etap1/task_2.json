@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek i zaznacz wszystkie równe odcinki. Ile trójkątów równoramiennych możesz wyróżnić na tym rysunku?",
-    "Oznacz szukane kąty jako zmienne (np. $\\alpha$, $\\beta$) i wykorzystaj własność trójkąta równoramiennego: kąty przy podstawie są równe.",
-    "Rozważ kolejno trójkąty $ACP$, $CPQ$ i $PQB$. Dla każdego z nich zapisz zależności między kątami, korzystając z tego, że suma kątów w trójkącie wynosi $180^\\circ$.",
-    "Zapisz układ równań łączący kąty przy wierzchołkach $A$ i $B$ z kątem $104^\\circ$. Pamiętaj, że punkty $P$ i $Q$ leżą na bokach trójkąta, więc kąty przy tych punktach sumują się do $180^\\circ$."
+    "Narysuj rysunek i zaznacz wszystkie równe odcinki. Zauważ, że na rysunku powstały trzy kluczowe trójkąty równoramienne.",
+    "Oznacz $\\angle CAB = \\alpha$. Korzystając z sumy kątów w trójkącie $ABC$, wyraź miarę kąta $\\angle ABC$ w zależności od $\\alpha$.",
+    "Skup się na trójkątach równoramiennych przy wierzchołkach $A$ i $B$. Wyraź miary kątów $\\angle APC$ i $\\angle QPB$ w zależności od $\\alpha$.",
+    "Punkty $A, P, B$ leżą na jednej prostej. Wykorzystaj tę własność do obliczenia miary kąta $\\angle CPQ$. Wynik pozwoli Ci znaleźć wartość $\\alpha$."
   ],
   "prerequisites": [],
   "skills_required": [

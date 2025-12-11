@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Narysuj trójkąt $ABC$ z dwusieczną $CD$. Kluczowa jest równość kątów $\\angle ACD = \\angle BCD$. Pomyśl, jak można ją wykorzystać, dorysowując linię równoległą do $CD$, aby 'przenieść' te kąty w inne miejsce.",
-    "Poprowadź prostą przez wierzchołek $B$ równoległą do odcinka $CD$. Niech $E$ będzie punktem jej przecięcia z prostą zawierającą bok $AC$. Zastanów się nad własnościami trójkąta $CBE$.",
-    "Użyj twierdzenia o kątach naprzemianległych i odpowiadających dla prostych równoległych $CD$ i $BE$. Pokaż, że trójkąt $CBE$ jest równoramienny i wskaż jego równe boki.",
-    "Zauważ, że konstrukcja z prostą równoległą tworzy też parę trójkątów podobnych: $\\triangle ACD$ i $\\triangle AEB$. Zapisz wynikającą z podobieństwa proporcję, a następnie wykorzystaj nierówność trójkąta dla $\\triangle CBE$."
+    "Nierówność do udowodnienia wiąże długość dwusiecznej $d$ z długościami boków $a$ i $b$. Zastanów się, jak można geometrycznie powiązać te trzy długości, wykorzystując fakt, że $CD$ jest dwusieczną.",
+    "Aby znaleźć związek między $d$, $a$ i $b$, często przydaje się dorysowanie dodatkowej linii i poszukanie trójkątów podobnych. Pomyśl o konstrukcji, która pozwoli \"przenieść\" kąty i stworzyć takie trójkąty.",
+    "Poprowadź przez wierzchołek $B$ prostą równoległą do $CD$, aż do przecięcia z prostą $AC$ w punkcie $E$. Używając własności kątów naprzemianległych i odpowiadających, udowodnij, że jeden z nowo powstałych trójkątów jest równoramienny.",
+    "Ta sama konstrukcja tworzy parę trójkątów podobnych: $\\triangle ACD$ i $\\triangle AEB$. Zapisz odpowiednią proporcję, a następnie wykorzystaj nierówność trójkąta w trójkącie równoramiennym, aby zakończyć dowód."
   ],
   "prerequisites": [],
   "skills_required": [

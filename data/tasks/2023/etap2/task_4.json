@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Narysuj kwadrat i zaznacz punkty. Zastanów się, jakie cztery figury powstają w pierwszym podziale (z odcinkami $KL, MN, LN$). Oznacz długości na bokach, np. $AK, BL, \\dots$.",
+    "Narysuj kwadrat i zaznacz punkty. Zastanów się, jakie cztery figury powstają w pierwszym podziale (z odcinkami $KL, MN, LN$). Oznacz długości na bokach, np. $AK, BL$.",
     "Zapisz pola czterech figur z pierwszego podziału za pomocą oznaczonych długości. Warunek równości pól jest skomplikowany. Spróbuj znaleźć prostszą, równoważną własność położeń punktów $K,L,M,N$.",
     "Zamiast rozpatrywać każdą z czterech figur osobno, rozważ sumę pól dwóch sąsiednich figur. Jaki kształt tworzą razem i jakie jest jego pole? Co to mówi o położeniu punktów?",
-    "Wykorzystaj znalezioną zależność, aby obliczyć pola figur w drugim podziale. Zauważ, że pola dwóch narożnych trójkątów można łatwo powiązać z warunkami zadania. Aby pokazać równość pól dwóch pozostałych czworokątów, porównaj pola trójkątów $\\triangle KMN$ i $\\triangle LKM$."
+    "Znaleziona symetria położeń punktów to kluczowy krok. Wykorzystaj ją wraz z warunkami na pola, aby dokładnie określić położenie punktów $K,L,M,N$. Gdy już będziesz je znać, sprawdzenie tezy zadania będzie prostym rachunkiem."
   ],
   "skills_required": [
     "area_methods",

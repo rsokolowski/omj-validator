@@ -15,7 +15,7 @@
     "Teza, że punkt jest jednakowo odległy od dwóch prostych, jest równoważna temu, że leży on na dwusiecznej kąta między nimi. O który kąt i dwusieczną chodzi w tym zadaniu?",
     "Wykorzystaj daną w zadaniu równość oraz fakt, że suma kątów w czworokącie wypukłym wynosi $360^\\circ$. Spróbuj wyrazić kąt $\\angle ADC$ za pomocą kąta $\\angle ABC$.",
     "Punkt $O$ jest środkiem okręgu opisanego na $\\triangle ABC$. Jaka jest zależność między kątem środkowym $\\angle AOC$ a kątem wpisanym $\\angle ABC$? Porównaj tę zależność z tą uzyskaną dla $\\angle ADC$.",
-    "Suma kątów $\\angle ADC$ i $\\angle AOC$ powinna wynieść $360^\\circ$, co oznacza, że punkty $A, O, C, D$ leżą na jednym okręgu. Wykorzystaj równe kąty wpisane w tym okręgu oraz to, że $\\triangle AOC$ jest równoramienny."
+    "Skoro kąty $\\angle ADC$ i $\\angle AOC$ są równe, to punkty $A, O, C, D$ leżą na jednym okręgu. Wiesz, że $OA=OC$. Jakie kąty wpisane w tym nowym okręgu muszą być dzięki temu równe?"
   ],
   "prerequisites": [
     "2010_etap1_6"

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Wykonaj rysunek. Rozważ odbicie symetryczne punktu $D$ względem prostej $AP$. Gdzie znajdzie się obraz tego punktu, punkt $D'$? Jakie własności (np. długości boków, miary kątów) ma trójkąt $APD'$?",
-    "Teza dotyczy równości pól $P_{APCD} = P_{ABP}$. Zauważ, że $P_{APCD} = P_{APD} + P_{PCD}$. Wykorzystaj własności odbicia z poprzedniej wskazówki, aby zastąpić pole $P_{APD}$ innym polem.",
-    "Po przekształceniach teza staje się równoważna równości pól trójkątów $PCD$ i $PBD'$. Oba te trójkąty są prostokątne. Co wystarczyłoby pokazać, aby udowodnić tę równość pól, korzystając z ich boków?",
-    "Wykaż, że trójkąty $PCD$ i $PBD'$ są podobne. W tym celu oblicz miary ich kątów ostrych w zależności od $\\alpha = \\angle PAB$. Z podobieństwa trójkątów wywnioskuj zależność między długościami ich boków, a następnie tezę o równości pól."
+    "Wykonaj rysunek. Rozważ odbicie symetryczne punktu D względem prostej AP. Gdzie znajdzie się obraz tego punktu, punkt D'? Jakie własności (długości boków, miary kątów) ma trójkąt APD'?",
+    "Teza dotyczy równości pól $P_{APCD} = P_{ABP}$. Zauważ, że $P_{APCD} = P_{APD} + P_{PCD}$. Użyj własności odbicia, by zastąpić jedno z pól i w efekcie uprościć tezę.",
+    "Problem sprowadza się do wykazania, że pola trójkątów $PCD$ i $BPD'$ są równe. Aby porównać te trójkąty, oznacz $\\angle PAB = \\alpha$ i wyznacz miary ich kątów wewnętrznych w zależności od $\\alpha$.",
+    "Okazuje się, że trójkąty $PCD$ i $BPD'$ mają takie same kąty, więc są podobne. Jaka jest skala tego podobieństwa? Wykorzystaj fakt, że odbicie symetryczne zachowuje długości odcinków."
   ],
   "skills_required": [
     "trapezoid_parallelogram",

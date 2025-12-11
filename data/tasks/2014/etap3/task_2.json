@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Zacznij od konkretnych przykładów: jakie kolory mają liczby 4, 5, 6? Użyj warunku dla różnych par $(a, b)$, np. $(2, 2)$, $(2, 3)$, $(2, 4)$.",
-    "Spróbuj pokazać, że pewne liczby muszą mieć ten sam kolor, łącząc je 'łańcuchem' zależności. Każda para $(a, b)$ daje ci informację: $a + b$ i $ab$ są tego samego koloru.",
-    "Zauważ, że dla $a = 2$ masz: $2 + b$ i $2b$ są tego samego koloru. To pozwala połączyć liczby parzyste z nieparzystymi. Jakie wnioski daje to dla kolejnych liczb?",
-    "Pokaż najpierw, że liczby 5, 6, 8, 10 mają ten sam kolor (użyj par $(2,3)$, $(2,4)$, $(2,5)$). Następnie rozszerz to na wszystkie liczby większe od 4, pokazując że każda taka liczba jest połączona z już 'pokolorowanymi'."
+    "Zacznij od konkretnych przykładów. Używając par $(a,b)$ takich jak $(2,3)$, $(2,4)$ czy $(3,3)$, spróbuj ustalić, które z małych liczb, np. 5, 6, 7, 8, 9, muszą mieć ten sam kolor.",
+    "Pokaż, że wszystkie liczby $n > 4$ mają ten sam kolor co liczba 6. Spróbuj to udowodnić przez indukcję, pokazując, że kolor liczby $n$ zależy od kolorów liczb od niej mniejszych.",
+    "Rozważ dwa przypadki dla liczby $n$. Jeśli $n$ jest liczbą złożoną, $n=ab$, to jej kolor zależy od koloru mniejszej liczby $a+b$. A co jeśli $n$ jest liczbą pierwszą?",
+    "Gdy $n$ jest liczbą pierwszą, przedstaw ją jako sumę, np. $n = 2 + (n-2)$. Wtedy $C(n) = C(2(n-2))$. Zauważ, że liczba $2(n-2)$ jest złożona, co pozwala sprowadzić jej kolor do koloru jeszcze mniejszej liczby."
   ],
   "skills_required": [
     "divisibility_arguments",

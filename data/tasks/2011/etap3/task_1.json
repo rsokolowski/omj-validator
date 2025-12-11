@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Jeśli $x + \\sqrt{3}$ jest wymierne, to co możesz powiedzieć o $x$? Rozważ, czy $x$ może zawierać $\\sqrt{3}$ w jakiejś postaci.",
-    "Zapisz $x$ w postaci $a + b\\sqrt{3}$, gdzie $a$ i $b$ są wymierne. Podstaw tę postać do obu warunków i zbadaj, kiedy wyniki są wymierne.",
-    "Liczba wymierna nie może zawierać niezerowej części przy $\\sqrt{3}$. Jakie warunki na $a$ i $b$ wynikają z tego, że $x + \\sqrt{3}$ i $x^2 + \\sqrt{3}$ są wymierne?",
-    "Z pierwszego warunku dostaniesz równanie na $b$. Oblicz $(a + b\\sqrt{3})^2 + \\sqrt{3}$ i zbadaj, przy jakim warunku współczynnik przy $\\sqrt{3}$ znika."
+    "Liczba $x + \\sqrt{3}$ jest wymierna. Oznaczmy ją przez $q$. Wyraź $x$ w zależności od $q$ i $\\sqrt{3}$.",
+    "Skorzystaj z otrzymanej postaci $x$ i wstaw ją do drugiego warunku z zadania, który mówi, że $x^2 + \\sqrt{3}$ również jest liczbą wymierną.",
+    "Po podstawieniu i uproszczeniu otrzymasz wyrażenie, które jest sumą części wymiernej i części z $\\sqrt{3}$. Kiedy taka suma może być liczbą wymierną?",
+    "Wyrażenie $(q - \\sqrt{3})^2 + \\sqrt{3}$ musi być wymierne. Przekształć je, grupując składniki wymierne i niewymierne, a następnie wyznacz warunek na $q$."
   ],
   "skills_required": [
     "algebraic_identities",

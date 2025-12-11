@@ -12,10 +12,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Czworościan ma 4 ściany, a kwadrat ma 4 wierzchołki. Jeśli żadne dwa wierzchołki kwadratu nie leżą na jednej ścianie, to ile wierzchołków kwadratu musi być na każdej ścianie?",
-    "Zastanów się, gdzie na krawędziach czworościanu mogłyby leżeć wierzchołki kwadratu. Czy istnieje szczególny typ czworościanu, dla którego łatwiej byłoby znaleźć taki kwadrat?",
-    "Rozważ czworościan foremny i środki jego krawędzi. Ile jest krawędzi w czworościanie? Które pary środków krawędzi są jednakowo oddalone od siebie?",
-    "Zbadaj sześć środków krawędzi czworościanu foremnego. Sprawdź, które czwórki tych punktów tworzą kwadrat i czy spełniają warunek zadania dotyczący ścian."
+    "Zadanie pyta, czy *dla każdego* czworościanu można znaleźć taki kwadrat. Jeśli znajdziesz choć jeden czworościan, na którym jest to niemożliwe, jaka będzie odpowiedź?",
+    "Zamiast rozważać idealnie symetryczny czworościan, pomyśl o przypadku 'ekstremalnym'. Co by było, gdyby jeden z wierzchołków czworościanu był bardzo blisko płaszczyzny jego podstawy?",
+    "W takim 'płaskim' czworościanie jedna ściana (podstawa) jest duża, a trzy pozostałe są 'stromymi', wąskimi trójkątami. Zastanów się, jak rzut wierzchołków kwadratu na płaszczyznę podstawy ogranicza ich możliwe położenie.",
+    "Jeden wierzchołek kwadratu leży na podstawie, a trzy pozostałe na stromych ścianach bocznych. Rzuty tych trzech punktów na podstawę muszą leżeć blisko jej środka. Czy cztery punkty, z których trzy są w małym obszarze, a czwarty może być daleko, mogą tworzyć kwadrat?"
   ],
   "skills_required": [
     "spatial_3d",

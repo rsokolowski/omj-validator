@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Główną trudnością w zadaniu jest nietypowy warunek $\\sphericalangle DAB + \\sphericalangle ABC = 90^\\circ$. Zastanów się, jaką konfigurację geometryczną tworzą proste zawierające boki $AD$ i $BC$.",
-    "Przedłużenie nierównoległych boków czworokąta często upraszcza problem. Spróbuj przedłużyć boki $AD$ i $BC$ do przecięcia w punkcie $P$. Jaki szczególny trójkąt powstanie?",
-    "Trójkąt $PAB$ jest prostokątny. Teraz wszystkie potrzebne pola ($[ABM]$, $[DAM]$, $[BCM]$) można wyrazić w zależności od położenia punktów na ramionach kąta prostego. Wprowadzenie układu współrzędnych z początkiem w $P$ może to ułatwić.",
-    "Umieść $P$ w początku układu współrzędnych, a $A$ i $B$ na osiach. Wyraź współrzędne punktów $C, D, M$ za pomocą nieznanych długości $PA, PB$ oraz danych $a, b$. Oblicz potrzebne pola i uprość wynikowe wyrażenie."
+    "Punkt M jest środkiem boku CD. Zastanów się, jak ta informacja wpływa na pola trójkątów, których jednym z wierzchołków jest M. Jakie znasz twierdzenia o polach związane ze środkiem boku?",
+    "Spróbuj uprościć dane wyrażenie, zastępując pola trójkątów z wierzchołkiem M. Wykorzystaj fakt, że mediana dzieli trójkąt na dwie części o równych polach, a pole $[ABM]$ jest średnią arytmetyczną pól $[ABC]$ i $[ABD]$.",
+    "Po uproszczeniach algebraicznych, szukane wyrażenie powinno przyjąć postać $[ABC] - [BCD]$. Teraz skup się na obliczeniu tej różnicy.",
+    "Przedłuż boki $AD$ i $BC$ do przecięcia w punkcie $P$. Wykorzystaj powstały trójkąt prostokątny, aby wyrazić pola $[ABC]$ i $[BCD]$ za pomocą wspólnej podstawy $BC$ i odpowiednich wysokości."
   ],
   "skills_required": [
     "area_methods",

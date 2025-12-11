@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Czworościan foremny ma 6 krawędzi, co naturalnie sugeruje powiązanie każdej z 6 kul z jedną krawędzią. Aby kule się nie przenikały, odległość ich środków musi wynosić co najmniej 1. Muszą też w całości mieścić się w czworościanie.",
-    "Najbardziej symetryczne umieszczenie środków kul będzie na odcinkach łączących środek czworościanu ze środkami jego krawędzi. Zastanów się, gdzie dokładnie na tych odcinkach je umieścić, aby spełnić warunek zawierania w czworościanie.",
-    "Kluczowe jest obliczenie wymiarów czworościanu. Wyznacz długość jego krawędzi $a$, wiedząc, że promień sfery wpisanej (stycznej do jego ścian) wynosi $1$.",
-    "Umieść środek każdej kuli w takim punkcie, by była ona styczna do najbliższych jej ścian. Oblicz odległość między środkami dwóch tak umieszczonych kul (dla sąsiednich krawędzi) i wykaż, że jest ona nie mniejsza niż $1$."
+    "Czworościan ma 6 krawędzi, a my mamy 6 kul. Spróbuj powiązać każdą kulę z jedną krawędzią. Jakie dwa warunki muszą spełniać te kule, aby rozwiązanie było poprawne?",
+    "Wykorzystaj symetrię czworościanu. Rozważ umieszczenie środków kul na odcinkach łączących środek czworościanu $O$ ze środkami jego krawędzi $E_1, \\dots, E_6$.",
+    "Środek czworościanu $O$ jest oddalony od każdej ściany o $1$. Środek krawędzi $E_i$ leży na dwóch ścianach (odległość $0$). Gdzie na odcinku $OE_i$ znajduje się punkt, którego odległość od tych dwóch ścian wynosi $\\frac{1}{2}$?",
+    "Wykaż, że środki kul leżą dokładnie w połowie odcinków $OE_i$. Oblicz odległość między środkami dwóch takich kul, rozważając przypadki krawędzi sąsiednich oraz przeciwległych."
   ],
   "skills_required": [
     "spatial_3d",

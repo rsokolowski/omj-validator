@@ -13,10 +13,10 @@
     "geometria"
   ],
   "hints": [
-    "Wyobraź sobie, że płaszczyzna przecina wielościan. Przekrój jest wielokątem. Gdzie leżą wierzchołki i boki tego wielokąta w odniesieniu do wielościanu?",
-    "Skoro przekrój jest trójkątem, to płaszczyzna przecina dokładnie trzy krawędzie wielościanu. Boki tego trójkąta leżą na ścianach wielościanu.",
-    "Aby boki przekroju tworzyły trójkąt, każda para z trzech przeciętych krawędzi musi należeć do wspólnej ściany. Co to mówi o wzajemnym położeniu tych krawędzi?",
-    "Zatem te trzy krawędzie muszą wychodzić z jednego, wspólnego wierzchołka. Jaki jest stopień tego wierzchołka i do jakiej sprzeczności to prowadzi?"
+    "Wierzchołki trójkątnego przekroju leżą na trzech krawędziach wielościanu, a jego boki – na trzech ścianach. Co to mówi o tym, jak te trzy krawędzie muszą być ułożone względem siebie?",
+    "Te trzy krawędzie muszą wychodzić z jednego wierzchołka. Zastanów się, dlaczego nie mogą one tworzyć trójkątnej ściany wielościanu.",
+    "Zgodnie z treścią zadania, z każdego wierzchołka wychodzą co najmniej cztery krawędzie. Rozważmy więc czwartą krawędź wychodzącą z tego samego wierzchołka.",
+    "Z powodu wypukłości wielościanu, ta czwarta krawędź musi znajdować się 'pomiędzy' pozostałymi. Czy płaszczyzna, która przecina trzy krawędzie, musi przeciąć również tę czwartą?"
   ],
   "skills_required": [
     "polyhedra",

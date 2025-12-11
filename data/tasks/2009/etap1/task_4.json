@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj 18-kąt foremny wpisany w okrąg. Jaka jest miara kąta środkowego opartego na jednym boku wielokąta?",
-    "Aby wykazać, że czworokąt jest prostokątem, udowodnij, że tworzące go proste przecinają się pod kątami prostymi. Przypomnij sobie twierdzenie o kącie między cięciwami w okręgu.",
-    "Kąt między dwiema cięciwami jest równy połowie sumy miar łuków leżących między ich ramionami. Oblicz te miary, licząc, ile boków 18-kąta się na nich rozciąga.",
-    "Aby sprawdzić, czy prostokąt jest kwadratem, rozważ jego symetrie. Co stałoby się z podanymi czterema prostymi, gdybyś obrócił(a) cały rysunek o $90^\\circ$ wokół środka 18-kąta?"
+    "Narysuj 18-kąt foremny wpisany w okrąg. Jaka jest miara łuku rozpiętego na jednym boku wielokąta? Zwróć uwagę na osie symetrii całej figury.",
+    "Aby wykazać, że czworokąt jest prostokątem, udowodnij, że ma dwie pary boków równoległych, a sąsiednie boki są prostopadłe. Zastanów się, jak orientacja prostej $A_iA_j$ zależy od jej wierzchołków.",
+    "Oblicz sumy indeksów wierzchołków dla każdej z czterech prostych (np. dla $A_2A_7$ suma to $2+7=9$). Czy widzisz jakąś prawidłowość, która łączy proste równoległe i proste prostopadłe?",
+    "Wykorzystaj zależność między sumami indeksów, by pogrupować proste w pary równoległe i prostopadłe. Aby sprawdzić, czy prostokąt jest kwadratem, rozważ obrót figury o $90^\\circ$ wokół jej środka."
   ],
   "prerequisites": [],
   "skills_required": [

@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Rozwiń iloczyn $(a+1)(b+1)(c+1)(d+1)$ i zastanów się, jak pogrupować wyrazy, aby wykorzystać dane warunki $a+b = cd$ oraz $c+d = ab$.",
-    "Spróbuj pogrupować czynniki parami: najpierw $(a+1)(b+1)$, potem $(c+1)(d+1)$. Rozważ, jak zapisać te iloczyny w postaci wykorzystującej dane równości.",
-    "Zauważ, że $(a+1)(b+1) = ab + a + b + 1$ oraz $(c+1)(d+1) = cd + c + d + 1$. Podstaw teraz dane warunki - co otrzymujesz w obu przypadkach?",
-    "Po podstawieniu warunków oba dwumiany $(a+1)(b+1)$ i $(c+1)(d+1)$ przyjmują tę samą postać. Zapisz iloczyn jako kwadrat pewnego wyrażenia i wyciągnij wniosek o znaku."
+    "Mamy udowodnić, że iloczyn $(a+1)(b+1)(c+1)(d+1)$ jest nieujemny. Zastanów się, jak można by wykorzystać podane równości $a+b=cd$ i $c+d=ab$ do uproszczenia tego iloczynu.",
+    "Zamiast wymnażać wszystkie cztery nawiasy naraz, spróbuj połączyć je w pary: $(a+1)(b+1)$ oraz $(c+1)(d+1)$. Wymnóż każdą parę osobno.",
+    "Po wymnożeniu par otrzymasz wyrażenia $ab+a+b+1$ oraz $cd+c+d+1$. Użyj teraz danych w zadaniu równości, aby zastąpić w nich iloczyny $ab$ i $cd$. Co zauważasz?",
+    "Okazuje się, że oba wyrażenia, $(a+1)(b+1)$ i $(c+1)(d+1)$, są równe tej samej wartości. Cały iloczyn jest więc kwadratem pewnego wyrażenia. Jaki to ma wpływ na jego znak?"
   ],
   "skills_required": [
     "algebraic_identities",

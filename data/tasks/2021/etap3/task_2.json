@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zadanie dotyczy liczb zdefiniowanych przez ich cyfry. Zapisz obie liczby dla $n=1, 2, 3$. Jakie znasz proste sposoby na sprawdzenie, czy dana liczba jest złożona?",
-    "Sprawdź podzielność wypisanych liczb przez małe liczby pierwsze, np. 2, 3, 5. Czy dla pewnych wartości $n$ jedna z liczb staje się podzielna przez którąś z nich? Poszukaj wzorca.",
-    "Zbadaj podzielność obu liczb przez 3. Zapisz, ile wynosi suma cyfr każdej z nich w zależności od $n$. Kiedy liczba jest podzielna przez 3?",
-    "Wyznacz, dla jakich $n$ co najmniej jedna z liczb jest podzielna przez 3. Dla pozostałych wartości $n$ sprawdź najmniejszy przypadek. Czy obie liczby są wtedy pierwsze?"
+    "Zapisz obie liczby dla kilku małych wartości $n$, np. $n=1, 2, 3$. Jakie znasz cechy podzielności, które zależą od cyfr liczby?",
+    "Zbadaj sumę cyfr obu liczb w zależności od $n$. Czy dla pewnych wartości $n$ suma ta staje się podzielna przez 3, co oznaczałoby, że sama liczba też jest podzielna przez 3?",
+    "Pokaż, że jeśli $n$ nie daje reszty 1 z dzielenia przez 3, to co najmniej jedna z liczb jest złożona. Sprawdź najmniejszy pozostały przypadek, $n=1$. Co można powiedzieć o następnym, $n=4$?",
+    "Zauważ, że jedna z liczb dla $n=1$ to 37. Zbadaj podzielność liczb $3\\underbrace{77\\ldots7}_{n}$ przez 37 dla kolejnych $n$ dających resztę 1 z dzielenia przez 3. Czy widzisz jakąś regularność?"
   ],
   "skills_required": [
     "divisibility_arguments",

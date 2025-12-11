@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Sfera jest styczna do każdej ściany. Zastanów się, co to oznacza dla dwóch sąsiednich ścian, na przykład $\\triangle SAB$ i $\\triangle SBC$. Gdzie musi leżeć środek sfery względem płaszczyzn tych ścian?",
-    "Warunek styczności sfery do sąsiednich ścian (np. $\\triangle SAB$ i $\\triangle SBC$) implikuje, że okręgi wpisane w te trójkąty muszą stykać się ze wspólną krawędzią $SB$ w tym samym punkcie. Co to mówi o długościach odcinków stycznych od wierzchołka $S$ do tych okręgów?",
-    "Powyższa własność zachodzi dla wszystkich par sąsiednich ścian. Oznacza to, że możemy przypisać każdemu wierzchołkowi $V$ unikalną wartość $r_V$ tak, że krawędzie mają długości $|SA|=r_S+r_A$, $|AB|=r_A+r_B$ itd. Wyraź boki wszystkich czterech ścian bocznych za pomocą tych wartości.",
-    "Zadanie sprowadza się do udowodnienia tożsamości na kątach w trójkątach o bokach danych przez sumy promieni. Aby to zrobić, spróbuj \"rozłożyć\" ściany boczne na płaszczyźnie na dwa sposoby i porównać kluczowe odległości. Zestaw ze sobą $\\triangle SAB$ i $\\triangle SCD$, a osobno $\\triangle SBC$ i $\\triangle SDA$."
+    "Warunek, że w ostrosłup można wpisać sferę, oznacza, że jej środek jest równo odległy od wszystkich pięciu ścian. Zastanów się, co to oznacza dla odległości środka sfery od ścian bocznych.",
+    "Można wykazać, że ta własność prowadzi do ważnej konsekwencji: dla każdego wierzchołka (np. A) odcinki styczności od niego do punktów styczności okręgów wpisanych w ściany schodzące się w A mają tę samą długość. Oznacz te długości $s, a, b, c, d$.",
+    "Wykorzystaj te oznaczenia do wyrażenia długości wszystkich krawędzi ostrosłupa. Na przykład $|SA| = s+a$, a $|AB| = a+b$. Zapisz długości boków wszystkich czterech trójkątów bocznych.",
+    "Aby porównać sumy kątów, stwórz na płaszczyźnie dwie figury. Pierwszą, składając $\\triangle SAB$ i $\\triangle SAD$ wzdłuż boku $SA$. Drugą, z $\\triangle SCB$ i $\\triangle SCD$ wzdłuż $SC$. Porównaj odległości między wierzchołkami $B$ i $D$ w obu figurach."
   ],
   "skills_required": [
     "spatial_3d",

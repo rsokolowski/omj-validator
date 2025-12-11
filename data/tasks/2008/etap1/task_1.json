@@ -13,10 +13,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj na płaszczyźnie zbiór punktów spełniających równanie $|x| + |y| = 1$. Jaka to figura? Następnie zastanów się, jak wygląda wykres drugiego równania.",
-    "Zadanie sprowadza się do znalezienia liczby punktów przecięcia dwóch narysowanych figur. Zauważ, że zmiana parametru $a$ przesuwa jedną z nich w pionie.",
-    "Kluczowe są momenty, w których charakterystyczne punkty jednej figury (np. wierzchołki) pokrywają się z drugą figurą. Zwróć szczególną uwagę na wierzchołki kwadratu.",
-    "Zbadaj, jaka jest liczba rozwiązań, gdy wierzchołek łamanej $y=|x|+a$ pokrywa się z górnym wierzchołkiem kwadratu, a także gdy ramiona łamanej przechodzą przez wierzchołki kwadratu leżące na osi $x$."
+    "Narysuj w układzie współrzędnych zbiór punktów spełniających równanie $|x|+|y|=1$. Jaką figurę otrzymałeś? Następnie naszkicuj wykres funkcji $y=|x|+a$ dla przykładowej wartości $a$.",
+    "Zadanie sprowadza się do znalezienia liczby punktów wspólnych obu figur. Zauważ, że zmiana parametru $a$ przesuwa wykres $y=|x|+a$ w pionie. Zbadaj, jak zmienia się liczba przecięć w trakcie tego ruchu.",
+    "Zwróć uwagę na nachylenia prostych, z których składają się obie figury. Co szczególnego zauważasz? Kluczowe do zbadania są te wartości $a$, dla których wierzchołek jednej figury leży na drugiej.",
+    "Zbadaj liczbę rozwiązań dla $a=1$ oraz $a=-1$. Są to wartości, dla których wierzchołek łamanej pokrywa się z wierzchołkami kwadratu. Następnie rozważ, co dzieje się pomiędzy tymi wartościami oraz powyżej i poniżej nich."
   ],
   "prerequisites": [
     "2007_etap1_1"

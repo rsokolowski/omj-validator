@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Oznaczmy przez $W, K, S$ liczbę wierzchołków, krawędzi i ścian. Jakie są minimalne wartości liczby boków ściany ($s_i$) oraz liczby krawędzi zbiegających się w wierzchołku ($w_j$) w takim wielościanie?",
-    "Spróbuj oszacować z dołu sumę boków wszystkich ścian ($\\\"[sum s_i]$\\\") oraz sumę stopni wszystkich wierzchołków ($\\\"[sum w_j]$\\\") w zależności od liczby ścian $S$ i liczby wierzchołków $W$.",
-    "Wykorzystaj metodę podwójnego zliczania, aby powiązać obie te sumy z liczbą krawędzi $K$. Otrzymasz w ten sposób dwie nierówności, jedną łączącą $S$ i $K$, a drugą łączącą $W$ i $K$.",
-    "Podstaw uzyskane nierówności do wzoru Eulera dla wielościanów ($W-K+S=2$) i sprawdź, jakie ograniczenie wynika z tego dla liczby krawędzi $K$. Czy każdy nieparzysty $K$ może spełnić ten warunek?"
+    "Zapisz znaną zależność między liczbą krawędzi wielościanu ($K$) a sumą liczby boków jego wszystkich ścian ($s_i$).",
+    "Każda ściana ma parzystą liczbę boków, więc $s_i = 2k_i$ dla pewnej liczby całkowitej $k_i$. Co wynika z poprzedniej zależności dla sumy liczb $k_i$?",
+    "Suma liczb całkowitych jest nieparzysta wtedy i tylko wtedy, gdy zawiera nieparzystą liczbę nieparzystych składników. Co to mówi o liczbie ścian, dla których $k_i = s_i/2$ jest nieparzyste?",
+    "Wykazałeś, że musi istnieć nieparzysta liczba ścian, których liczba boków przy dzieleniu przez 4 daje resztę 2. Taki wniosek jest sprzeczny z pewną ogólną własnością wszystkich wielościanów wypukłych. Spróbuj powiązać go ze wzorem Eulera."
   ],
   "skills_required": [
     "double_counting",

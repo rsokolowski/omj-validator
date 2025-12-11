@@ -13,9 +13,9 @@
   ],
   "hints": [
     "Masz dane dwa równania liniowe, a teza do udowodnienia jest równaniem kwadratowym. Zastanów się, jak można przejść od zależności liniowych do kwadratowych.",
-    "Najprostszą operacją, która tworzy wyrażenia kwadratowe, jest podniesienie do kwadratu. Co się stanie, jeśli podniesiesz do kwadratu obie strony każdego z podanych równań?",
-    "Po podniesieniu obu równań do kwadratu, spróbuj dodać je stronami. Zwróć szczególną uwagę na wyrazy zawierające iloczyn $ab$.",
-    "Sprawdź, co się dzieje z wyrazami zawierającymi iloczyn $ab$, gdy dodasz do siebie oba równania podniesione do kwadratu. Uprość otrzymaną sumę."
+    "Podniesienie obu stron każdego z równań do kwadratu wprowadzi szukane wyrażenia $a^2$ i $b^2$. Wykonaj tę operację i zobacz, jakie jeszcze inne wyrazy pojawią się w obu równościach.",
+    "Spójrz na wyrazy zawierające iloczyn $ab$ w obu nowych równaniach. Zauważ, że mają one przeciwne znaki. Jaką operację na tych równaniach warto wykonać, aby te wyrazy się uprościły?",
+    "Dodaj oba równania stronami. Wyrazy z iloczynem $ab$ zredukują się. Uporządkuj pozostałe składniki, aby otrzymać tezę."
   ],
   "skills_required": [
     "symmetric_systems",

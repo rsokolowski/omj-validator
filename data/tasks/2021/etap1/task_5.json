@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Oznacz $AM = BK = x$ i wyraź długości pozostałych odcinków na bokach trójkąta przez $x$ i długość boku $a$. Narysuj dokładny rysunek i zaznacz wszystkie dane warunki.",
-    "Skoro $KM = LM$ i $\\angle KML = 90^\\circ$, to trójkąt $KML$ jest równoramiennym trójkątem prostokątnym. Zastanów się, jak wykorzystać obrót o $90^\\circ$ wokół punktu $M$.",
-    "Rozważ obrót o $90^\\circ$ wokół punktu $M$, który przekształca punkt $K$ na punkt $L$. Gdzie przechodzi punkt $B$ przy tym obrocie? Jak to się ma do punktu $A$?",
-    "Zbadaj trójkąty $BMK$ i $AML$ - sprawdź, czy obrót o $90^\\circ$ wokół $M$ przekształca jeden w drugi. Następnie wykorzystaj kąty w trójkącie $CKL$, pamiętając o kątach trójkąta równobocznego."
+    "Narysuj starannie figurę. Oznacz długość boku trójkąta $ABC$ przez $a$, a równe odcinki $AM$ i $BK$ przez $x$. Wyraź długości $MB$ i $KC$ w zależności od $a$ i $x$.",
+    "Warunki $KM=LM$ i $\\angle KML=90^\\circ$ silnie sugerują, aby wykorzystać obrót o $90^\\circ$ wokół punktu $M$.",
+    "Niech obrót wokół $M$ o $90^\\circ$ przekształca $K$ na $L$, a $B$ na $B'$. Jakie własności (długości boków, miary kątów) ma trójkąt $B'ML$ w porównaniu z trójkątem $BMK$?",
+    "Porównaj trójkąt $AML$ z trójkątem $B'ML$. Użyj równości $AM=BK$, aby znaleźć zależność między $AL$ i $BM$. Następnie oblicz stosunek długości $CL$ do $CK$ i wyciągnij wniosek."
   ],
   "prerequisites": [
     "2021_etap1_2"

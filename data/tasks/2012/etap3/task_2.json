@@ -12,10 +12,10 @@
     "logika"
   ],
   "hints": [
-    "Przedstaw problem w języku teorii grafów, gdzie osoby to wierzchołki, a znajomość to krawędź. Załóż nie wprost, że nie ma osoby, która zna wszystkich.",
-    "Zgodnie z założeniem, muszą istnieć dwie osoby, $A$ i $B$, które się nie znają. Wybierz dowolną inną osobę $C$ i rozważ trójkę osób {$A, B, C$}.",
-    "Zastosuj warunek z zadania do trójki {$A, B, C$}. Kto z nich musi znać pozostałą dwójkę? Co to oznacza dla liczby znajomych osoby $A$?",
-    "Wiesz już, ilu znajomych ma osoba $A$. Czy każda inna osoba na przyjęciu musi mieć tyle samo znajomych? Policz sumę stopni wszystkich wierzchołków i poszukaj sprzeczności."
+    "Przedstaw problem w języku teorii grafów: osoby to wierzchołki, a znajomość to krawędź. Załóż nie wprost, że nikt nie zna wszystkich pozostałych osób.",
+    "Z założenia nie wprost wynika, że istnieje para osób, $A$ i $B$, które się nie znają. Rozważ dowolną inną osobę $C$ i zastosuj warunek z zadania do trójki {$A, B, C$}.",
+    "Osobą znającą dwie pozostałe w trójce {$A, B, C$} musi być $C$. To oznacza, że każda osoba spoza pary {$A, B$} zna i $A$, i $B$. Czy zbiór tych 97 osób też musi spełniać warunek z zadania?",
+    "Tak, zbiór 97 osób również spełnia warunek zadania. Można więc powtórzyć ten sam argument, odkładając na bok kolejne pary nieznajomych. Co pozostanie na końcu tego procesu, skoro liczba osób jest nieparzysta?"
   ],
   "skills_required": [
     "extremal_principle",

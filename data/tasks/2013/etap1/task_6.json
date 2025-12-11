@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Wyobraź sobie sześcian o wierzchołkach w wygodnych punktach. Gdzie znajduje się środek sfery opisanej na sześcianie i jaki jest jej promień?",
-    "Rozważ użycie układu współrzędnych. Umieść środek sześcianu w początku układu - jak wtedy wyglądają współrzędne wierzchołków?",
-    "Zauważ, że współrzędne każdego wierzchołka sześcianu to kombinacje wartości $\\pm a$ dla pewnego $a$. Jak uprości się suma kwadratów odległości od punktu $P = (x, y, z)$?",
-    "Rozwiń każdy kwadrat odległości $(x \\pm a)^2 + (y \\pm a)^2 + (z \\pm a)^2$ i zsumuj po wszystkich 8 wierzchołkach. Zauważ, które wyrazy się zniosą dzięki symetrii."
+    "Środek sfery opisanej na sześcianie jest jednocześnie jego środkiem symetrii. Jaką stałą odległość ma każdy wierzchołek sześcianu oraz punkt P od tego środka?",
+    "Sześcian ma wiele symetrii. Zwróć uwagę na wierzchołki leżące na przeciwległych końcach głównych przekątnych. Czy można je połączyć w pary, aby uprościć obliczenie sumy?",
+    "Rozważ parę przeciwległych wierzchołków $A$ i $B$ oraz punkt $P$. Jaki związek łączy kwadraty odległości $PA^2$ i $PB^2$ z odległością punktu $P$ od środka odcinka $AB$?",
+    "Środkiem każdej pary przeciwległych wierzchołków jest środek sześcianu. Zastosuj spostrzeżenie z poprzedniej wskazówki do każdej z czterech takich par i zsumuj wyniki."
   ],
   "skills_required": [
     "coordinate_geometry",

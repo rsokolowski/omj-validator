@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Warunek w zadaniu dotyczy sumy długości odcinków. Zastanów się, jak można geometrycznie zilustrować sumę $AB + BK$ na jednej prostej.",
-    "Przedłuż bok $AB$ do punktu $M$ tak, że $BM=BK$. Zrób podobną konstrukcję dla boku $AD$, wyznaczając punkt $N$. Jaki wniosek dotyczący długości odcinków $AM$ i $AN$ płynie z warunku podanego w zadaniu?",
-    "Zauważ, że nowo powstały trójkąt $\\triangle AMN$ jest równoramienny. Jaką własność ma dwusieczna kąta między ramionami w takim trójkącie w stosunku do jego podstawy?",
-    "Wiesz już, że dwusieczna kąta $BAD$ jest prostopadła do prostej $MN$. Aby dokończyć dowód, wystarczy pokazać, że prosta $KL$ jest równoległa do $MN$. Spróbuj wykazać, że $\\triangle CKL$ jest podobny do $\\triangle AMN$."
+    "Warunek w zadaniu dotyczy długości boków równoległoboku. Spróbuj wyrazić boki $AB$ i $AD$ za pomocą odcinków związanych z wierzchołkiem $C$ i uprość podaną równość.",
+    "Co uproszczony warunek mówi o trójkącie $\\triangle CKL$? Zastanów się nad własnościami dwusiecznej kąta $\\angle BCD$ w tym trójkącie.",
+    "Jaki jest związek między dwusieczną kąta $\\angle BAD$ a dwusieczną kąta $\\angle BCD$ w równoległoboku? Pomyśl o symetrii tej figury.",
+    "Wiesz już, że dwusieczna kąta $\\angle BCD$ jest prostopadła do prostej $KL$. Wykorzystaj związek między dwusiecznymi, aby dokończyć dowód."
   ],
   "skills_required": [
     "trapezoid_parallelogram",

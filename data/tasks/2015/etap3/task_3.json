@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek z trójkątem równobocznym, okręgiem opisanym i wszystkimi punktami. Co oznacza, że Q jest symetryczny do P względem M? Jakie odcinki mają wtedy równe długości?",
-    "Symetria środkowa zachowuje odległości. Skoro M jest środkiem AC, to symetria względem M przekształca A w C i odwrotnie. Zastanów się, jaki odcinek odpowiada odcinkowi PA przy tej symetrii.",
-    "Zauważ, że przy symetrii względem M punkt A przechodzi na C, a punkt P przechodzi na Q. Jaką długość ma więc odcinek QC? Porównaj z PA.",
-    "Skoro QC = PA, przypomnij sobie własność punktu na okręgu opisanym na trójkącie równobocznym: dla punktu P na łuku AB zachodzi równość $PA + PB = PC$. Wykorzystaj tę własność do pokazania, że $BQ = PQ$."
+    "Narysuj dokładny rysunek. Skoro M jest środkiem odcinków AC i PQ, to jaką szczególną własność ma czworokąt APCQ? Jakie równości boków i które boki są do siebie równoległe?",
+    "Aby wykazać równość odcinków, często warto poszukać przystających trójkątów. Spróbuj znaleźć parę trójkątów, z których jeden zawiera bok BQ, a drugi bok o znanej długości.",
+    "Rozważ trójkąty $\\triangle ABP$ i $\\triangle CBQ$. Wykorzystaj informacje z pierwszej wskazówki, aby udowodnić, że te trójkąty są przystające z cechy bok-kąt-bok.",
+    "Z przystawania $\\triangle ABP$ i $\\triangle CBQ$ wynika nie tylko równość boków $BP=BQ$, ale też równość pewnych kątów. Wykorzystaj tę drugą informację, aby obliczyć miarę kąta $\\angle PBQ$ i zakończyć dowód."
   ],
   "skills_required": [
     "circle_theorems",
