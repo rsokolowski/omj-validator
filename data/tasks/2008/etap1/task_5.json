@@ -13,12 +13,18 @@
     "algebra"
   ],
   "hints": [
-    "Narysuj trójkąt $ABC$ z dwusieczną $CD$. Zastanów się, jak można wykorzystać fakt, że $CD$ dzieli trójkąt $ABC$ na dwa mniejsze trójkąty. Jakie są ich pola?",
-    "Spróbuj wyrazić pole trójkąta $ABC$ na dwa sposoby: jako sumę pól trójkątów $ACD$ i $BCD$, oraz bezpośrednio przez bok i wysokość. Czy możesz wykorzystać wspólną wysokość?",
-    "Zwróć uwagę, że trójkąty $ACD$ i $BCD$ mają wspólną wysokość opuszczoną z wierzchołka $C$ na prostą $AB$. Porównaj tę wysokość z odcinkiem $d$ - która jest większa i dlaczego?",
-    "Wyraź pole $ABC$ jako $\\frac{1}{2}(a+b) \\cdot h$, gdzie $h$ to wysokość z $C$ na $AB$, oraz jako $\\frac{1}{2} \\cdot AB \\cdot h_C$. Wykorzystaj fakt, że wysokość trójkąta jest zawsze mniejsza lub równa dowolnemu odcinkowi z wierzchołka do przeciwległego boku (chyba że ten odcinek jest wysokością)."
+    "Narysuj trójkąt $ABC$ z dwusieczną $CD$. Kluczowa jest równość kątów $\\angle ACD = \\angle BCD$. Pomyśl, jak można ją wykorzystać, dorysowując linię równoległą do $CD$, aby 'przenieść' te kąty w inne miejsce.",
+    "Poprowadź prostą przez wierzchołek $B$ równoległą do odcinka $CD$. Niech $E$ będzie punktem jej przecięcia z prostą zawierającą bok $AC$. Zastanów się nad własnościami trójkąta $CBE$.",
+    "Użyj twierdzenia o kątach naprzemianległych i odpowiadających dla prostych równoległych $CD$ i $BE$. Pokaż, że trójkąt $CBE$ jest równoramienny i wskaż jego równe boki.",
+    "Zauważ, że konstrukcja z prostą równoległą tworzy też parę trójkątów podobnych: $\\triangle ACD$ i $\\triangle AEB$. Zapisz wynikającą z podobieństwa proporcję, a następnie wykorzystaj nierówność trójkąta dla $\\triangle CBE$."
   ],
   "prerequisites": [],
-  "skills_required": ["area_methods", "inequality_manipulation"],
-  "skills_gained": ["area_methods", "inequality_manipulation"]
+  "skills_required": [
+    "area_methods",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "area_methods",
+    "inequality_manipulation"
+  ]
 }

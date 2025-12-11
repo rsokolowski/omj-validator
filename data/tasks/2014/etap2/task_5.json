@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Narysuj trójkąt równoboczny $ABC$ z punktem $P$ w środku i oznacz wszystkie sześć małych trójkątów. Jakie pary trójkątów mają wspólne boki lub wierzchołki? Czy widzisz jakieś naturalne symetrie?",
-    "Rozważ, co się dzieje gdy punkt $P$ leży na osi symetrii trójkąta. Które trójkąty wtedy mają równe pola? Jak zmienia się sytuacja gdy przesuwamy $P$?",
-    "Zauważ, że trójkąty $AEP$ i $AFP$ mają wspólny wierzchołek $A$ i punkt $P$. Jak ich pola zależą od odległości $E$ i $F$ od prostej $AP$? Przeanalizuj podobne pary dla wierzchołków $B$ i $C$.",
-    "Zbadaj przypadek, gdy $P$ leży na jednej osi symetrii trójkąta - ile par trójkątów o równych polach wtedy powstaje? Następnie sprawdź, czy przesunięcie $P$ z osi pozwala uzyskać dokładnie cztery równe pola."
+    "Narysuj figurę i oznacz wszystkie sześć trójkątów. Zastanów się, jak można porównywać pola trójkątów, które mają wspólną wysokość, a ich podstawy leżą na jednej prostej.",
+    "Wykorzystaj stosunki pól. Pokaż, że np. stosunek pól $S(AFP)$ do $S(BFP)$ jest równy stosunkowi pól $S(AC P)$ do $S(BCP)$. Wyraź w ten sposób stosunki pól dla wszystkich trzech par trójkątów na bokach $AB, BC, CA$.",
+    "Zauważ, że równość pól w pewnych parach, np. $S(BDP) = S(CDP)$, jest równoważna temu, że punkt $P$ leży na jednej z osi symetrii trójkąta $ABC$. Dlaczego?",
+    "Zbadaj przypadek, gdy $P$ leży na osi symetrii. Powstają wtedy trzy pary trójkątów o równych polach. Czy można tak dobrać położenie $P$ na tej osi, aby pola z dwóch różnych par stały się sobie równe?"
   ],
   "skills_required": [
     "area_methods",

@@ -13,10 +13,10 @@
     "geometria"
   ],
   "hints": [
-    "Przypomnij sobie wzór Eulera dla wielościanów: $W - K + S = 2$, gdzie $W$ to wierzchołki, $K$ to krawędzie, $S$ to ściany. Zastanów się też, jakie wielokąty mogą być ścianami, jeśli wszystkie ich kąty wewnętrzne mają być $\\geq 90°$.",
-    "Policz, ile kątów może mieć ściana wielościanu przy zadanym warunku. Każda krawędź należy do dokładnie dwóch ścian - wykorzystaj to do związania liczby krawędzi z liczbą ścian.",
-    "Zauważ, że wielokąt o $n$ bokach ma sumę kątów $(n-2) \\cdot 180°$. Jeśli każdy kąt ma być $\\geq 90°$, to ile boków może mieć taka ściana? Wyprowadź nierówność między liczbą krawędzi $K$ a liczbą ścian $S$.",
-    "Skoro każda ściana ma co najwyżej 4 boki, to $2K \\leq 4S$, czyli $S \\geq \\frac{K}{2}$. Połącz to ze wzorem Eulera i warunkiem, że wielościan ma co najmniej 4 wierzchołki, aby sprawdzić, czy $K = 100$ jest możliwe."
+    "Zadanie ma dwa główne warunki. Co wynika z faktu, że każdy kąt ściany jest $\\ge 90°$? Zastanów się, co to oznacza dla liczby boków ścian, a także dla kątów spotykających się w jednym wierzchołku.",
+    "Przeanalizuj najpierw, ile co najmniej boków musi mieć ściana wielościanu. Następnie rozważ, ile ścian może spotykać się w jednym wierzchołku, pamiętając o własnościach wielościanów wypukłych.",
+    "Suma kątów ścian zbiegających się w wierzchołku wielościanu wypukłego jest mniejsza od $360°$. Co możesz wywnioskować o liczbie krawędzi wychodzących z każdego wierzchołka, skoro każdy kąt jest nie mniejszy niż $90°$?",
+    "Wiesz już, ile krawędzi musi wychodzić z każdego wierzchołka. Wykorzystaj tę informację, aby powiązać całkowitą liczbę wierzchołków $W$ z całkowitą liczbą krawędzi $K=100$ i sprawdź, czy to możliwe."
   ],
   "skills_required": [
     "polyhedra",

@@ -23,9 +23,9 @@
     "divisibility_arguments"
   ],
   "hints": [
-    "Zacznij od małych przypadków: co jeśli $n=3$ lub $n=4$? Sprawdź, czy warunki mogą być spełnione. Zastanów się, która liczba musi być niebieska, a która czerwona.",
-    "Zwróć uwagę na ograniczenia: najmniejsza niebieska musi być różnicą dwóch czerwonych, a najmniejsza czerwona musi być sumą dwóch niebieskich. Przeanalizuj, jakie to nakłada warunki na wielkość tych liczb.",
-    "Jeśli $1$ jest niebieska, to jest różnicą dwóch czerwonych - jakie to muszą być liczby? Jeśli $1$ jest czerwona, to jest sumą dwóch różnych niebieskich - czy to możliwe?",
-    "Sprawdź systematycznie wartości $n = 5, 6, 7, ...$. Dla każdego $n$ spróbuj skonstruować podział lub udowodnij, że jest niemożliwy. Kluczowe pytanie: ile minimum liczb niebieskich potrzebujesz?"
+    "Zastanów się, jaki kolor musi mieć liczba 1. Czy może być sumą dwóch różnych liczb niebieskich? Co to oznacza dla dalszej analizy?",
+    "Rozważ najmniejsze i największe liczby w obu kolorach. Jaka jest relacja między największą liczbą niebieską a największą czerwoną? Która z nich musi być równa $n$?",
+    "Największa liczba niebieska, oznaczmy ją $n_k$, musi być różnicą dwóch liczb czerwonych. Jaką największą wartość może przyjąć $n_k$ w zależności od $n$ i najmniejszej liczby czerwonej?",
+    "Wykaż, że największa liczba niebieska jest mniejsza od $n-2$. Co z tego wynika dla kolorów liczb $n, n-1, n-2$? Wykorzystaj to, by znaleźć dolne ograniczenie na $n$."
   ]
 }

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj trójkąt równoramienny $ABC$ z $AC = BC = 5$ i zaznacz wysokość z wierzchołka $A$ na prostą $BC$ (lub jej przedłużenie). Gdzie może padać podstawa tej wysokości?",
-    "Wykorzystaj twierdzenie Pitagorasa w trójkącie prostokątnym utworzonym przez wysokość z $A$. Pomoże ci to znaleźć brakujące długości.",
-    "Pole trójkąta można obliczyć na dwa sposoby: używając podstawy $BC$ i wysokości z $A$, lub podstawy $AB$ i wysokości z $C$. Czy potrafisz wyznaczyć długość $AB$?",
-    "Oblicz najpierw pole trójkąta korzystając z $BC = 5$ i wysokości $h_A = 4$. Następnie wyznacz $AB$ z twierdzenia Pitagorasa i użyj równości pól, by znaleźć wysokość z $C$."
+    "Narysuj trójkąt $ABC$ i zaznacz w nim wysokość z wierzchołka $A$. Jej spodek leży na prostej zawierającej bok $BC$. Czy musi on leżeć na samym boku $BC$, czy może leżeć na jego przedłużeniu?",
+    "Wysokość z wierzchołka $A$ (długości 4), ramię trójkąta (długości 5) i fragment prostej $BC$ tworzą trójkąt prostokątny. Oblicz długość trzeciego boku w tym trójkącie.",
+    "Rozważ teraz dwa możliwe położenia spodka wysokości z $A$. W zależności od tego, czy leży on na boku $BC$ czy na jego przedłużeniu, oblicz dwie możliwe długości podstawy $AB$.",
+    "Pole trójkąta można obliczyć, znając długość boku i opuszczonej na niego wysokości. Zapisz pole trójkąta na dwa sposoby, aby znaleźć możliwe wartości wysokości poprowadzonej z wierzchołka $C$."
   ],
   "skills_required": [
     "pythagorean_theorem",

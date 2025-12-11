@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj prostopadłościan i zaznacz punkt P na przekątnej AC'. Zauważ, że z warunku AC' = AB + AD oraz AP = AB, C'P = AD wynika, że punkt P dzieli odcinek AC' na dwie części. Co możesz powiedzieć o położeniu punktu P?",
-    "Aby udowodnić, że kąt jest prosty, możesz użyć twierdzenia odwrotnego do twierdzenia Pitagorasa. Oblicz długości odcinków BP, B'P i BB', a następnie sprawdź odpowiednią zależność między ich kwadratami.",
-    "Skorzystaj z faktu, że w prostopadłościanie przekątna AC' ma długość $\\sqrt{AB^2 + AD^2 + AA'^2}$. Wykorzystaj też, że odcinki AB, AD, AA' są parami prostopadłe, co ułatwia obliczanie odległości.",
-    "Oblicz $BP^2$ i $B'P^2$ korzystając z twierdzenia Pitagorasa w odpowiednich trójkątach prostokątnych. Następnie sprawdź, czy zachodzi równość $BP^2 + B'P^2 = BB'^2$, co da kąt prosty przy P."
+    "Oznacz długości krawędzi prostopadłościanu jako $a=AB$, $b=AD$ i $c=AA'$. Zapisz podane w zadaniu zależności, używając tych oznaczeń. Gdzie dokładnie na przekątnej $AC'$ leży punkt $P$?",
+    "Aby udowodnić, że kąt $\\angle BPB'$ jest prosty, najwygodniej będzie skorzystać z twierdzenia odwrotnego do twierdzenia Pitagorasa dla trójkąta $\\triangle BPB'$. Musisz więc obliczyć kwadraty długości jego boków.",
+    "Wykorzystaj wzór na długość przekątnej prostopadłościanu, aby połączyć daną równość $AC' = a+b$ z długościami krawędzi. Odkryjesz w ten sposób kluczową zależność między $a, b$ i $c$.",
+    "Aby obliczyć $BP^2$ i $B'P^2$, rozważ rzut prostokątny punktu $P$ na prostą zawierającą krawędź $BB'$. Nazwij ten rzut $H$. Wykorzystaj trójkąty prostokątne $\\triangle BPH$ i $\\triangle B'PH$."
   ],
   "prerequisites": [
     "2020_etap1_2"

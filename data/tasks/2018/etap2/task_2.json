@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trapezu z kątem prostym przy $B$. Oznacz kąty przy wierzchołku $A$ - co wiesz o dwusiecznej? Jak rozkłada się kąt $\\angle BAD$?",
-    "Zauważ, że równość pól $APCD$ i $ABP$ można przeformułować. Skoro te dwa obszary razem tworzą cały trapez, to każdy z nich stanowi połowę pola trapezu. Jak inaczej można to zapisać używając trójkąta $APD$?",
-    "Zbadaj kąty w trójkącie $ABP$. Skoro $AP$ jest dwusieczną kąta $\\angle BAD$, a $\\angle ABP = 90°$, to czym jest kąt $\\angle APB$? Jak to się ma do kąta $\\angle APD = 45°$?",
-    "Wykaż, że trójkąt $ABP$ jest równoramienny (wykorzystaj sumę kątów i własność dwusiecznej). Następnie porównaj pole trójkąta $ABP$ z polem trójkąta $APD$, szukając związku między ich podstawami i wysokościami."
+    "Wykonaj rysunek. Rozważ odbicie symetryczne punktu $D$ względem prostej $AP$. Gdzie znajdzie się obraz tego punktu, punkt $D'$? Jakie własności (np. długości boków, miary kątów) ma trójkąt $APD'$?",
+    "Teza dotyczy równości pól $P_{APCD} = P_{ABP}$. Zauważ, że $P_{APCD} = P_{APD} + P_{PCD}$. Wykorzystaj własności odbicia z poprzedniej wskazówki, aby zastąpić pole $P_{APD}$ innym polem.",
+    "Po przekształceniach teza staje się równoważna równości pól trójkątów $PCD$ i $PBD'$. Oba te trójkąty są prostokątne. Co wystarczyłoby pokazać, aby udowodnić tę równość pól, korzystając z ich boków?",
+    "Wykaż, że trójkąty $PCD$ i $PBD'$ są podobne. W tym celu oblicz miary ich kątów ostrych w zależności od $\\alpha = \\angle PAB$. Z podobieństwa trójkątów wywnioskuj zależność między długościami ich boków, a następnie tezę o równości pól."
   ],
   "skills_required": [
     "trapezoid_parallelogram",

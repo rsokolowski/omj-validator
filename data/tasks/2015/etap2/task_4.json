@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trójkąta $ABC$ z zaznaczonym środkiem $M$ boku $AB$. Jakie odcinki możesz poprowadzić z punktu $M$? Przypomnij sobie własności środkowej trójkąta.",
-    "Rozważ okrąg opisany na trójkącie $ABC$. Środkowa z wierzchołka $C$ do środka przeciwprostokątnej ma szczególną własność w trójkącie prostokątnym. Spróbuj też wykorzystać kąty wpisane.",
-    "Połącz punkt $M$ z wierzchołkiem $C$. Zauważ, że warunek $\\angle BAC + \\angle MCB = 90°$ można powiązać z kątami w trójkącie $MBC$. Co możesz powiedzieć o trójkącie $AMC$?",
-    "Rozważ dwa przypadki: gdy $\\angle ACB = 90°$ oraz gdy $\\angle ACB \\neq 90°$. W drugim przypadku zbadaj, kiedy punkt $M$ leży na okręgu opisanym w szczególny sposób i co to implikuje dla boków trójkąta."
+    "Narysuj trójkąt $ABC$ i zaznacz $M$ jako środek boku $AB$. Oznacz $\\angle BAC = \\alpha$. Jak, używając $\\alpha$, można zapisać miarę kąta $\\angle MCB$ na podstawie warunku z zadania?",
+    "Rozważ okrąg opisany na trójkącie $ABC$ i niech $O$ będzie jego środkiem. Skup się na trójkącie $OBC$. Jakie ma on szczególne własności wynikające z definicji punktu $O$?",
+    "Jaki jest związek między kątem środkowym $\\angle BOC$ a kątem wpisanym $\\angle BAC$? Wykorzystaj tę zależność, aby wyrazić miarę kąta $\\angle OCB$ w zależności od $\\alpha$.",
+    "Porównaj obliczony kąt $\\angle OCB$ z kątem $\\angle MCB$ z treści zadania. Co możesz wywnioskować o położeniu punktów $C, M, O$? Jakie to ma konsekwencje dla trójkąta $ABC$?"
   ],
   "skills_required": [
     "angle_chasing",

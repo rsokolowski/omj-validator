@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek czworokąta $ABCD$ z podanymi kątami i bokami. Co szczególnego mają kąty $120°$? Jak się mają do kąta w trójkącie równobocznym ($60°$)?",
-    "Spróbuj dobudować do czworokąta pomocnicze trójkąty równoboczne. Kąt $120°$ to kąt pełny minus kąt trójkąta równobocznego - może to wykorzystać w konstrukcji.",
-    "Zbuduj trójkąt równoboczny na boku $AB$ (na zewnątrz czworokąta). Oznacz nowy wierzchołek jako $E$. Zbadaj, jakie trójkąty powstają i czy któreś z nich są przystające lub podobne.",
-    "Po dobudowaniu trójkąta równobocznego na $AB$, sprawdź czy punkty $E$, $B$, $C$ oraz $E$, $A$, $D$ tworzą konfigurację, która pozwala znaleźć $ED$. Następnie wykorzystaj własności powstałej figury do wyznaczenia $AD$."
+    "Narysuj czworokąt. Zauważ, że kąty $120°$ są rozwarte. Co się stanie, jeśli przedłużysz boki $AD$ i $BC$ tak, aby przecięły się, tworząc trójkąt oparty na boku $AB$?",
+    "Niech proste $AD$ i $BC$ przetną się w punkcie $P$. Oblicz kąty w trójkącie $\triangle PAB$. Jakim jest on trójkątem i jakie są długości jego boków?",
+    "Teraz spójrz na większy trójkąt $\triangle PDC$. Wykorzystaj to, co wiesz o punkcie $P$, aby obliczyć długość boku $PC$ i wyrazić długość boku $PD$ za pomocą szukanej długości $AD$.",
+    "W trójkącie $\triangle PDC$ znasz długości dwóch boków ($PC$ i $CD$) oraz miarę kąta $\\angle DPC$. Co możesz wywnioskować o tym trójkącie? Oblicz $PD$, a następnie $AD$."
   ],
   "skills_required": [
     "angle_chasing"

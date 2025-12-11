@@ -11,7 +11,9 @@
   "categories": [
     "geometria"
   ],
-  "prerequisites": ["2020_etap1_7"],
+  "prerequisites": [
+    "2020_etap1_7"
+  ],
   "skills_required": [
     "spatial_3d",
     "pythagorean_theorem"
@@ -20,9 +22,9 @@
     "spatial_3d"
   ],
   "hints": [
-    "Zastanów się, jak wygląda powstały czworościan. Które punkty sześciokąta stają się wierzchołkami czworościanu i jakie odcinki tworzą jego krawędzie?",
-    "Oblicz długości wszystkich krawędzi czworościanu, korzystając z własności sześciokąta foremnego. Czy zauważasz jakąś regularność w tych długościach?",
-    "Powstały czworościan ma szczególną strukturę - sprawdź, czy jego ściany są trójkątami równobocznymi lub równoramiennymi. Zastanów się, jak znaleźć jego wysokość.",
-    "Wyznacz pole podstawy czworościanu (trójkąta $BMD$) i znajdź wysokość opuszczoną z wierzchołka powstałego ze złożenia punktów $A$, $C$, $E$. Skorzystaj z twierdzenia Pitagorasa."
+    "Wierzchołkami powstałego czworościanu są punkty $B, M, D$ oraz $P$ (powstały ze złączenia $A, C, E$). Zastanów się, które odcinki z płaskiej figury stają się krawędziami czworościanu $PBMD$.",
+    "Korzystając z własności sześciokąta foremnego o boku 2, oblicz długości wszystkich sześciu krawędzi czworościanu $PBMD$.",
+    "Sprawdź, czy któraś ze ścian czworościanu jest trójkątem prostokątnym. Użyj twierdzenia odwrotnego do twierdzenia Pitagorasa dla obliczonych długości krawędzi.",
+    "Odkrycie trójkątów prostokątnych pozwala sprytnie wybrać podstawę czworościanu. Wybierz taką ścianę na podstawę, aby wysokość opuszczona na nią była jedną z krawędzi."
   ]
 }

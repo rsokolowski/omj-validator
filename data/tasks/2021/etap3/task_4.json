@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Rozwiń obie strony równania i uprość. Co możesz powiedzieć o wyrazach, które się pojawią?",
-    "Po rozwinięciu i uproszczeniu otrzymasz równanie liniowe względem pewnych wyrażeń. Spróbuj je pogrupować.",
-    "Zauważ, że po uproszczeniu dostaniesz równanie postaci $ab + bc + ca + 1 = 0$. Jak można je przekształcić?",
-    "Zapisz równanie jako $(a+1)(b+c) = -(bc+1)$. Przeanalizuj możliwe wartości całkowite, pamiętając że żadna zmienna nie może być równa $0$."
+    "Równanie ma postać $L=P$. Zastanów się, co się stanie, gdy jedna ze stron będzie równa zero. Kiedy iloczyn $(1+a)(1+b)(1+c)$ jest równy 0?",
+    "Rozważ teraz przypadek, gdy żadna ze stron równania nie jest zerem. Jak można wtedy przekształcić równanie, aby po jednej stronie została tylko liczba 1?",
+    "Równanie można zapisać jako $\\frac{1-a}{1+a} \\cdot \\frac{1-b}{1+b} \\cdot \\frac{1-c}{1+c} = 1$. Oznaczmy $x = \\frac{1-a}{1+a}$. Wyznacz $a$ w zależności od $x$. Jaką własność musi mieć $x$, aby $a$ było liczbą całkowitą?",
+    "Aby $a$ było liczbą całkowitą, wyrażenie $1+x$ musi być dzielnikiem liczby 2. Znajdź wszystkie możliwe wartości $a \\neq 0$ i odpowiadające im wartości $x, y, z$. Sprawdź, czy ich iloczyn może być równy 1."
   ],
   "skills_required": [
     "algebraic_identities",

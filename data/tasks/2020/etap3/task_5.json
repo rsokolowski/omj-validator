@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, co wiesz o sumie cyfr liczby. Jeśli $a$ i $b$ mają te same cyfry, to jaka jest suma cyfr $a$ i suma cyfr $b$? A jaka jest suma cyfr liczby $10^{1000}$?",
-    "Przypomnij sobie, że suma cyfr liczby daje tę samą resztę z dzielenia przez 9, co sama liczba. Zbadaj reszty z dzielenia przez 9 obu stron równania $a + b = 10^{1000}$.",
-    "Skoro $a$ i $b$ mają identyczne cyfry, to $a \\equiv b \\pmod{9}$. Jaką resztę z dzielenia przez 9 daje $10^{1000}$? Co to mówi o $a$ i $b$?",
-    "Z analizy reszt wynika, że $a$ i $b$ są podzielne przez 9. Teraz zbadaj ostatnie cyfry: jeśli $a$ kończy się cyfrą $c$, a $b$ cyfrą $d$, to $c + d$ musi dawać 0 na końcu sumy. Rozważ, czy $c$ i $d$ mogą być niezerowe, pamiętając o tym, że $a$ i $b$ mają te same cyfry."
+    "Aby wykazać, że liczby są podzielne przez 10, musisz udowodnić, że ich ostatnie cyfry to 0. Co równość $a+b=10^{1000}$ mówi o sumie ostatnich cyfr liczb $a$ i $b$?",
+    "Załóżmy, że liczby $a$ i $b$ nie są podzielne przez 10. Co to oznacza dla ich ostatnich cyfr? Zastanów się, jak wyglądałoby pisemne dodawanie $a+b$ i jakie byłyby przeniesienia.",
+    "Jeśli ostatnie cyfry sumują się do 10, to następuje przeniesienie do następnej kolumny. Co to implikuje dla sumy cyfr na kolejnych pozycjach (dziesiątek, setek, itd.)?",
+    "Liczby $a$ i $b$ mają te same cyfry, więc mają tę samą sumę cyfr. Porównaj sumy cyfr liczb $a$ i $b$, korzystając z zależności, które znalazłeś dla par cyfr na odpowiadających pozycjach. Czy to prowadzi do sprzeczności?"
   ],
   "skills_required": [
     "modular_arithmetic",

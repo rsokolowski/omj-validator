@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Przypomnij sobie, kiedy suma trzech liczb jest parzysta. Jakie kombinacje parzystości (parzysta/nieparzysta) dają parzystą sumę?",
-    "Oznacz parzystość liczby w każdym wierzchołku. Skoro suma trzech kolejnych jest parzysta, co możesz powiedzieć o parzystości co trzeciego wierzchołka?",
-    "Zauważ, że jeśli $a_i + a_{i+1} + a_{i+2}$ jest parzyste i $a_{i+1} + a_{i+2} + a_{i+3}$ też jest parzyste, to $a_i$ i $a_{i+3}$ mają tę samą parzystość. Jak to ogranicza rozkład parzystości wokół $n$-kąta?",
-    "Policz, ile jest liczb parzystych i nieparzystych wśród $1, 2, \\ldots, n$. Sprawdź, dla jakich $n$ możliwy jest odpowiedni podział wierzchołków na grupy o tej samej parzystości."
+    "Suma trzech liczb jest parzysta. Jakie kombinacje parzystości (P - parzysta, N - nieparzysta) tych trzech liczb spełniają ten warunek?",
+    "Warunek dotyczy *każdych* trzech kolejnych wierzchołków. Porównaj sumę dla wierzchołków $(a_i, a_{i+1}, a_{i+2})$ z sumą dla wierzchołków $(a_{i+1}, a_{i+2}, a_{i+3})$.",
+    "Obie sumy z poprzedniej wskazówki są parzyste. Co wynika z tego faktu dla parzystości liczb $a_i$ i $a_{i+3}$? Jaki wzór parzystości musi panować na obwodzie wielokąta?",
+    "Wyprowadzony wzór na parzystości narzuca silny warunek na $n$. Policz, ile liczb parzystych i nieparzystych potrzeba do ułożenia takiego wzoru, a ile jest dostępnych w zbiorze {$1, 2, \\ldots, n$}."
   ],
   "skills_required": [
     "parity_arguments",

@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zapisz obie liczby w postaci algebraicznej. Co to znaczy $1\\underbrace{77\\ldots7}_{n}$? Jak wyrazić taką liczbę za pomocą potęg liczby 10?",
-    "Sprawdź małe przypadki: dla $n=1, 2, 3$ oblicz obie liczby i zbadaj ich podzielność. Poszukaj wzorca - czy któraś z tych liczb dzieli się przez małą liczbę pierwszą?",
-    "Zbadaj reszty z dzielenia obu liczb przez 3. Jak zachowuje się suma cyfr każdej z tych liczb w zależności od $n$? Kiedy liczba dzieli się przez 3?",
-    "Oblicz sumę cyfr obu liczb dla różnych wartości $n$. Dla jakiego $n$ suma cyfr nie dzieli się przez 3 w obu przypadkach jednocześnie? Sprawdź, czy dla tego $n$ obie liczby są rzeczywiście pierwsze."
+    "Zadanie dotyczy liczb zdefiniowanych przez ich cyfry. Zapisz obie liczby dla $n=1, 2, 3$. Jakie znasz proste sposoby na sprawdzenie, czy dana liczba jest złożona?",
+    "Sprawdź podzielność wypisanych liczb przez małe liczby pierwsze, np. 2, 3, 5. Czy dla pewnych wartości $n$ jedna z liczb staje się podzielna przez którąś z nich? Poszukaj wzorca.",
+    "Zbadaj podzielność obu liczb przez 3. Zapisz, ile wynosi suma cyfr każdej z nich w zależności od $n$. Kiedy liczba jest podzielna przez 3?",
+    "Wyznacz, dla jakich $n$ co najmniej jedna z liczb jest podzielna przez 3. Dla pozostałych wartości $n$ sprawdź najmniejszy przypadek. Czy obie liczby są wtedy pierwsze?"
   ],
   "skills_required": [
     "divisibility_arguments",

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj 18-kąt foremny wpisany w okrąg i zaznacz podane wierzchołki. Przypomnij sobie, jak obliczać kąt środkowy odpowiadający jednemu bokowi wielokąta foremnego.",
-    "Wykorzystaj własność kąta wpisanego w okrąg - jaki jest związek między kątem wpisanym a kątem środkowym opartym na tym samym łuku?",
-    "Zbadaj, pod jakim kątem przecinają się poszczególne pary prostych. Policz, ile boków wielokąta rozpina każda cięciwa (np. $A_2A_7$ rozpina 5 boków) i wykorzystaj to do wyznaczenia odpowiednich kątów.",
-    "Aby wykazać, że czworokąt jest prostokątem, pokaż że jego kąty są proste. Dla pytania o kwadrat - sprawdź czy sąsiednie boki prostokąta mają równe długości, analizując symetrię figury."
+    "Narysuj 18-kąt foremny wpisany w okrąg. Jaka jest miara kąta środkowego opartego na jednym boku wielokąta?",
+    "Aby wykazać, że czworokąt jest prostokątem, udowodnij, że tworzące go proste przecinają się pod kątami prostymi. Przypomnij sobie twierdzenie o kącie między cięciwami w okręgu.",
+    "Kąt między dwiema cięciwami jest równy połowie sumy miar łuków leżących między ich ramionami. Oblicz te miary, licząc, ile boków 18-kąta się na nich rozciąga.",
+    "Aby sprawdzić, czy prostokąt jest kwadratem, rozważ jego symetrie. Co stałoby się z podanymi czterema prostymi, gdybyś obrócił(a) cały rysunek o $90^\\circ$ wokół środka 18-kąta?"
   ],
   "prerequisites": [],
   "skills_required": [

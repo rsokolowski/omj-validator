@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trójkąta ostrokątnego z wysokościami AD i BE. Zapisz, jakie są wymiary każdego z prostokątów - co jest długością, a co szerokością każdego z nich?",
-    "Przypomnij sobie, że wysokość trójkąta tworzy trójkąty prostokątne. Spróbuj wyrazić pola prostokątów przez boki i odcinki powstałe na bokach trójkąta.",
-    "Zwróć uwagę na trójkąty prostokątne ABD i ABE. Jak można wyrazić odcinki BD i AE używając twierdzenia Pitagorasa lub własności rzutów prostokątnych?",
-    "Zastosuj twierdzenie Pitagorasa do trójkątów ABD i ABE. Zauważ, że $BD \\cdot BC + AE \\cdot AC$ można przekształcić używając zależności $BD = AB \\cdot \\cos(\\angle ABC)$ wyrażonej przez boki trójkąta bez trygonometrii."
+    "Narysuj trójkąt ostrokątny $ABC$ z wysokościami $AD$ i $BE$. Zapisz tezę zadania w postaci równania, używając pól odpowiednich figur. Pola prostokątów wyraź jako iloczyny długości boków.",
+    "Twoim celem jest wykazanie, że suma $BD \\cdot BC + AE \\cdot AC$ jest równa $AB^2$. Spróbuj przekształcić każdy z tych iloczynów na wyrażenie związane z bokiem $AB$. Pomocne mogą okazać się trójkąty podobne.",
+    "Aby znaleźć odpowiednie trójkąty podobne, dorysuj trzecią wysokość $CF$ w trójkącie $ABC$. Zastanów się, które z nowo powstałych trójkątów prostokątnych są do siebie podobne.",
+    "Poszukaj par trójkątów prostokątnych, które mają jeden wspólny kąt ostry. Zapisz proporcje wynikające z podobieństwa trójkątów $\\triangle ADB$ i $\\triangle CFB$ oraz trójkątów $\\triangle AEB$ i $\\triangle CFA$."
   ],
   "skills_required": [
     "area_methods",

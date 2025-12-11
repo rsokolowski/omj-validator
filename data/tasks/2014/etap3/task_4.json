@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zauważ, że $a^2 + 2b + 1$ jest bliskie $(a+1)^2 = a^2 + 2a + 1$. Jaka jest różnica między tymi wyrażeniami? Podobnie zbadaj drugie wyrażenie.",
-    "Jeśli $a^2 + 2b + 1$ jest kwadratem, to musi być równe $(a+k)^2$ dla pewnego $k \\geq 1$. Między jakimi kolejnymi kwadratami może leżeć to wyrażenie?",
-    "Rozważ przypadek $a > b$. Wtedy $a^2 + 2b + 1 < (a+1)^2$. Co to oznacza dla możliwości bycia kwadratem? A co z drugim wyrażeniem?",
-    "Pokaż, że jeśli $a \\neq b$, to jedno z wyrażeń leży ściśle między dwoma kolejnymi kwadratami (więc nie może być kwadratem). Wykorzystaj fakt, że $(n+1)^2 - n^2 = 2n + 1$."
+    "Zauważ, że wyrażenie $a^2 + 2b + 1$ jest bardzo podobne do kwadratu liczby $a+1$. Jaka jest różnica między $a^2 + 2b + 1$ a $(a+1)^2$?",
+    "Wyrażenie $a^2 + 2b + 1$ jest na pewno większe od $a^2$. Jeśli ma być kwadratem, to musi być kwadratem liczby co najmniej $a+1$. Co by się stało, gdyby było ono mniejsze od $(a+1)^2$?",
+    "Rozważmy przypadki. Jeśli $a=b$, oba wyrażenia są kwadratami. Załóżmy, że $a \\neq b$, na przykład $a > b$. Pokaż, że w tym przypadku zachodzi nierówność $a^2 < a^2 + 2b + 1 < (a+1)^2$.",
+    "Wykorzystaj założenie $a > b$, aby udowodnić nierówność z poprzedniej wskazówki. Jaki wniosek możesz wyciągnąć dla przypadku $b > a$, korzystając z symetrii problemu?"
   ],
   "skills_required": [
     "algebraic_identities",

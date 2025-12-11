@@ -11,10 +11,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zauważ, że $n^4 - 1$ można rozłożyć na czynniki. Jakie znane wzory skróconego mnożenia mogą tu pomóc?",
-    "Zbadaj reszty z dzielenia $n$ przez $3$. Ile różnych reszt może dawać liczba całkowita przy dzieleniu przez $3$?",
-    "Sprawdź, dla jakich reszt $n$ modulo $3$ wyrażenie $n^4 - 1$ jest podzielne przez $9$. Rozważ każdy przypadek osobno.",
-    "Rozłóż $n^4 - 1 = (n^2-1)(n^2+1) = (n-1)(n+1)(n^2+1)$. Dla $n \\equiv 0 \\pmod{3}$ zbadaj podzielność każdego czynnika przez $3$."
+    "Zauważ, że wyrażenie $n^4 - 1$ można rozłożyć na czynniki, korzystając ze wzorów skróconego mnożenia.",
+    "Podzielność przez 9 jest silnie związana z podzielnością przez 3. Zbadaj problem, rozważając reszty z dzielenia $n$ przez 3.",
+    "Zacznij od przypadku, gdy $n$ jest podzielne przez 3. Czy po rozłożeniu na czynniki wyrażenie $n^4-1$ może być wtedy podzielne przez 3?",
+    "W pozostałych przypadkach jeden z czynników $n-1$ lub $n+1$ jest podzielny przez 3. Aby cały iloczyn był podzielny przez 9, potrzebny jest drugi czynnik 3. Zastanów się, który czynnik może go dostarczyć."
   ],
   "skills_required": [
     "modular_arithmetic",

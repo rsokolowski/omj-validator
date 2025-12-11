@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Oznacz liczbę dwuzłotówek przez $a$, a pięciozłotówek przez $b$. Zapisz równanie opisujące łączną wartość monet. Jakie pary $(a, b)$ spełniają to równanie?",
-    "Wypisz wszystkie możliwe kombinacje liczby monet spełniające warunek $2a + 5b = 100$. Rozważ każdy przypadek osobno i sprawdź, czy można uzyskać 50 złotych.",
-    "Zauważ, że 50 złotych można uzyskać na różne sposoby: samymi dwuzłotówkami (25 sztuk), samymi pięciozłotówkami (10 sztuk), lub mieszanką. Sprawdź, czy w każdym przypadku masz wystarczająco dużo monet odpowiedniego typu.",
-    "Dla każdej możliwej pary $(a, b)$ sprawdź, czy $a \\geq 25$ (wtedy wybierz 25 dwuzłotówek), lub czy $b \\geq 10$ (wtedy wybierz 10 pięciozłotówek), lub czy można wybrać odpowiednią mieszankę monet."
+    "Oznacz liczbę dwuzłotówek przez $a$, a pięciozłotówek przez $b$ i zapisz równanie wynikające z treści zadania. Jak można uzyskać 50 zł, używając tylko dwuzłotówek lub tylko pięciozłotówek?",
+    "Zastanów się, co by się stało, gdyby Jaś *nie mógł* wybrać monet o wartości 50 zł. Co to by mówiło o liczbie monet każdego rodzaju, które posiada?",
+    "Gdyby Jaś nie mógł wybrać 50 zł, musiałby mieć za mało monet obu rodzajów. Oznaczałoby to, że ma mniej niż 25 dwuzłotówek ORAZ mniej niż 10 pięciozłotówek. Jaka jest największa możliwa suma pieniędzy w takiej sytuacji?",
+    "Obliczona przez Ciebie największa możliwa suma jest mniejsza niż 100 zł. Co to oznacza w kontekście założenia, że Jaś nie może wybrać 50 zł?"
   ],
   "skills_required": [
     "diophantine_equations"

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek prostokąta z punktami $E$ i $F$. Oznacz kąty przy wierzchołku $A$ w trójkątach $ABE$ i $ADF$. Co możesz powiedzieć o sumie tych kątów, wiedząc że $\\angle EAF = 45°$ i $\\angle DAB = 90°$?",
-    "Spróbuj znaleźć związek między trójkątami $ABE$ i $ADF$. Warunek $BE = DF$ wraz z własnościami prostokąta sugeruje, że te trójkąty mogą być w szczególnej relacji.",
-    "Zbadaj, czy trójkąty $ABE$ i $ADF$ są przystające. Jakie boki i kąty możesz porównać? Jeśli są przystające, co to oznacza dla ich pól i dla boków $AE$, $AF$?",
-    "Jeśli $AE = AF$, to trójkąt $AEF$ jest równoramienny z kątem $45°$ przy wierzchołku $A$. Wyraź pola wszystkich trzech trójkątów przez odpowiednie boki i kąty, korzystając ze wzoru $\\frac{1}{2} \\cdot a \\cdot b$ dla trójkątów prostokątnych."
+    "Narysuj dokładny rysunek. Oznacz $\\angle BAE = \\alpha$ i $\\angle DAF = \\beta$. Jaka jest zależność między $\\alpha$ i $\\beta$, skoro $\\angle EAF = 45^\\circ$ i $\\angle DAB = 90^\\circ$?",
+    "Aby powiązać ze sobą różne części figury, często przydaje się transformacja geometryczna. Rozważ obrót trójkąta $ADF$ o $90^\\circ$ wokół wierzchołka $A$ w stronę trójkąta $ABE$.",
+    "Niech $G$ będzie obrazem punktu $F$ w obrocie z poprzedniej wskazówki. Porównaj trójkąt $AEF$ z trójkątem $AEG$. Zwróć uwagę na ich boki ($AE$, $AF$, $AG$) i kąty przy wierzchołku $A$.",
+    "Wykaż, że $\\triangle AEF \\cong \\triangle AEG$, a więc ich pola są równe. Pozostaje uzasadnić, że pole trójkąta $AEG$ jest równe sumie pól trójkątów $ABE$ i $ADF$."
   ],
   "prerequisites": [],
   "skills_required": [

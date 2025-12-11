@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, ile krawędzi (znajomości) ma graf na początku, a ile na końcu przyjęcia. Co oznacza, że każdy ma 3 znajomych w kontekście sumy stopni wierzchołków?",
-    "Policz sumę wszystkich znajomości - każda znajomość jest liczona dwukrotnie. Jakie warunki podzielności musi spełniać $n$, aby liczba krawędzi była całkowita?",
-    "Na początku suma stopni to $3n$, na końcu $4n$. Sprawdź, dla jakich $n$ obie te sumy dają parzystą liczbę krawędzi i czy $n$ musi być parzyste.",
-    "Wykaż, że $n$ musi być parzyste (dlaczego?), a potem skonstruuj przykłady dla małych parzystych wartości $n$. Czy istnieje dolne ograniczenie na $n$?"
+    "Przedstaw sytuację za pomocą grafu: osoby to wierzchołki, a znajomości to krawędzie. Jaki jest stopień każdego wierzchołka na początku, a jaki na końcu przyjęcia?",
+    "Zamiast analizować osobno stan początkowy i końcowy, pomyśl o grafie, który zawiera tylko *nowe* znajomości. Jakie krawędzie on zawiera?",
+    "Ile nowych znajomości zyskała każda osoba? Jaki jest więc stopień każdego wierzchołka w grafie *nowych* znajomości? Jak wygląda taki graf?",
+    "Graf nowych znajomości musi dzielić wszystkie osoby na pary. Jaki warunek musi spełniać liczba osób $n$? Pamiętaj też o minimalnej liczbie osób potrzebnej do tego, by każdy miał 3 znajomych."
   ],
   "skills_required": [
     "graph_theory",

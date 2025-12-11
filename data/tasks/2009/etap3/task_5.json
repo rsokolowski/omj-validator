@@ -12,10 +12,10 @@
     "logika"
   ],
   "hints": [
-    "Przypomnij sobie wzór Eulera dla wielościanów: $W - K + S = 2$, gdzie $W$ to liczba wierzchołków, $K$ to liczba krawędzi, a $S$ to liczba ścian. Jak wykorzystać informację, że w każdym wierzchołku zbiegają się dokładnie 3 krawędzie?",
-    "Spróbuj policzyć liczbę krawędzi na dwa sposoby: raz sumując boki wszystkich ścian (każda krawędź należy do 2 ścian), a raz przez wierzchołki (każda krawędź ma 2 końce, w każdym wierzchołku 3 krawędzie).",
-    "Oznacz przez $n_1, n_2, \\ldots, n_{100}$ liczby boków kolejnych ścian. Jedna z nich to 99. Zapisz zależności: $n_1 + n_2 + \\ldots + n_{100} = 2K$ oraz $3W = 2K$. Podstaw do wzoru Eulera.",
-    "Z otrzymanych równań wyznacz sumę $n_1 + n_2 + \\ldots + n_{100}$. Pamiętaj, że każda ściana wielościanu wypukłego ma co najmniej 3 boki. Sprawdź, czy pozostałe 99 ścian może mieć wystarczającą liczbę boków."
+    "Zacznij od podstawowych własności wielościanów. Wzór Eulera łączy liczbę ścian ($S$), wierzchołków ($W$) i krawędzi ($K$). Jak informacja o 3 krawędziach w wierzchołku pozwala powiązać $W$ i $K$?",
+    "Użyj wzoru Eulera oraz zależności między $W$ i $K$, aby obliczyć dokładne wartości tych parametrów. Następnie policz, ile łącznie boków ($L$) muszą mieć wszystkie ściany wielościanu.",
+    "Wielościan ma jedną ścianę 99-kątną i 99 innych ścian. Zastanów się, jak te 99 ścian musi być połączonych z 99-kątem. Ile krawędzi może dzielić z nim każda z nich, biorąc pod uwagę wypukłość?",
+    "Pozostałe 99 ścian tworzy pierścień wokół 99-kąta. Policz krawędzie tych 99 ścian, dzieląc je na 3 typy: wspólne z 99-kątem, \"promieniowe\" i \"zewnętrzne\". Ile powinno być krawędzi zewnętrznych, a ile wynika z obliczeń?"
   ],
   "skills_required": [
     "polyhedra",

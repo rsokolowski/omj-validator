@@ -15,9 +15,9 @@
   ],
   "hints": [
     "Oblicz sumę wszystkich liczb od 1 do 17. Zastanów się, jaka będzie suma 16 liczb wpisanych do tabeli w zależności od tego, którą liczbę pominiesz.",
-    "Jeśli suma górnego wiersza jest dwa razy większa od sumy dolnego, to jak można wyrazić sumę wszystkich 16 liczb przez sumę dolnego wiersza? Jakie warunki podzielności musi spełniać suma 16 liczb?",
+    "Jeśli suma górnego wiersza jest dwa razy większa od sumy dolnego, to jak można wyrazić sumę wszystkich 16 liczb przez sumę dolnego wiersza? Jaki warunek podzielności musi spełniać suma 16 liczb?",
     "Suma 16 liczb musi być podzielna zarówno przez 3 (z warunku o wierszach), jak i przez 8 (z warunku o kolumnach). Znajdź liczby od 1 do 17, których odjęcie od 153 daje wielokrotność 24.",
-    "Sprawdź, które liczby od 1 do 17 dają przy odjęciu od 153 wielokrotność 24. Dla każdego kandydata sprawdź, czy da się skonstruować tabelę spełniającą wszystkie warunki (każda kolumna ma sumę będącą liczbą całkowitą)."
+    "Gdy ustalisz, która liczba musi zostać pominięta, oblicz wymaganą sumę w każdej kolumnie. Aby uzasadnić, że rozwiązanie istnieje, spróbuj dobrać pozostałe 16 liczb w pary o takiej właśnie sumie."
   ],
   "prerequisites": [],
   "skills_required": [

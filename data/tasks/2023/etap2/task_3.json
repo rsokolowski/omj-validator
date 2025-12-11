@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trapezu z zaznaczonym punktem $P$ na przekątnej $AC$. Jakie wnioski możesz wyciągnąć z warunku $\\sphericalangle ABC = \\sphericalangle ACB$ dla trójkąta $ABC$?",
-    "Skoro trójkąt $ABC$ jest równoramienny, poszukaj innych trójkątów równoramiennych w tej konfiguracji. Zastanów się, jakie boki mogą być równe dzięki równościom kątów.",
-    "Zwróć uwagę na trójkąt $BPC$ - znasz w nim kąt $\\sphericalangle BPC$ oraz $\\sphericalangle PCB$ (który jest częścią $\\sphericalangle ACB$). Porównaj ten trójkąt z innymi trójkątami na rysunku.",
-    "Rozważ trójkąty $ABP$ i $CPD$ (lub $BPC$). Wykorzystaj fakt, że proste $AB$ i $CD$ są równoległe, więc powstają kąty naprzemianległe. Sprawdź, czy możesz wykazać przystawanie lub równość odpowiednich boków."
+    "Narysuj trapez i zaznacz wszystkie podane równości kątów. Co warunek $\\sphericalangle ABC = \\sphericalangle ACB$ mówi o bokach trójkąta $ABC$?",
+    "Wykorzystaj pozostałe równości kątów. Jaką specjalną własność ma trapez $ABCD$? Jaki wniosek można wyciągnąć na temat trójkąta $BPC$?",
+    "Masz już kilka par równych odcinków. Zestaw je ze sobą. Czy potrafisz znaleźć dwa odcinki równej długości, z których jeden wychodzi z wierzchołka $A$, a drugi z wierzchołka $B$?",
+    "Spróbuj udowodnić, że trójkąty $\triangle APB$ oraz $\triangle CDA$ są przystające. Sprawdź, które boki i kąty w tych trójkątach są sobie równe."
   ],
   "skills_required": [
     "angle_chasing",

@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Oznacz czwartą potęgę liczby pierwszej jako $r^4$. Co wiesz o rozkładzie liczby $r^4 - 4$ na czynniki? Przypomnij sobie wzór na różnicę kwadratów.",
-    "Skoro $pq = r^4 - 4$, to możesz wykorzystać rozkład $r^4 - 4 = (r^2-2)(r^2+2)$. Zastanów się, jak dwa czynniki pierwsze $p$ i $q$ mogą odpowiadać tym dwóm czynnikom.",
-    "Jeśli $p$ i $q$ są różne, to jeden z nich musi być równy $r^2 - 2$, a drugi $r^2 + 2$. Kiedy oba te wyrażenia mogą być liczbami pierwszymi? Rozważ małe wartości $r$.",
-    "Sprawdź systematycznie małe liczby pierwsze $r = 2, 3, 5, ...$. Dla każdego $r$ oblicz $r^2 - 2$ i $r^2 + 2$, a następnie sprawdź, czy obie są pierwsze. Nie zapomnij o przypadku $p = q$."
+    "Zapisz warunek z zadania w postaci równania $pq+4=r^4$, gdzie $r$ jest liczbą pierwszą. Przekształć je do postaci $pq = r^4 - 4$ i rozłóż prawą stronę na czynniki, korzystając ze wzoru na różnicę kwadratów.",
+    "Iloczyn dwóch liczb pierwszych $p$ i $q$ został przedstawiony jako iloczyn $(r^2-2)(r^2+2)$. Rozważ dwa główne przypadki: gdy $p=q$ oraz gdy $p$ i $q$ są różnymi liczbami pierwszymi.",
+    "W przypadku $p \\ne q$, liczby $p$ i $q$ muszą być równe $r^2-2$ i $r^2+2$. Zauważ, że te dwie liczby, razem z $r^2$, tworzą trzy wyrażenia: $r^2-2, r^2, r^2+2$. Co możesz powiedzieć o ich podzielności przez 3?",
+    "Jedna z liczb $r^2-2$, $r^2$, $r^2+2$ musi być podzielna przez 3. Przeanalizuj, co to oznacza dla liczb pierwszych $p, q, r$. Kiedy liczba postaci $r^2+2$ (lub $r^2-2$) może być liczbą pierwszą podzielną przez 3?"
   ],
   "skills_required": [
     "prime_factorization",

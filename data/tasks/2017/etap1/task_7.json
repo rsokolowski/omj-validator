@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj prostopadłościan i zaznacz punkty $K$, $L$, $M$ na odpowiednich krawędziach. Zastanów się, które wierzchołki prostopadłościanu znajdą się po której stronie płaszczyzny $KLM$.",
-    "Przedłuż płaszczyznę $KLM$ tak, aby przecięła również krawędź $DD'$ w pewnym punkcie $N$. Wtedy płaszczyzna przetnie prostopadłościan wzdłuż czworokąta $KLMN$. Oblicz, gdzie leży punkt $N$.",
-    "Zauważ, że wysokości punktów $K$, $L$, $M$, $N$ nad podstawą tworzą ciąg arytmetyczny (lub sprawdź, czy $KLMN$ jest równoległobokiem). Jedna z brył to graniastosłup ścięty o podstawie będącej kwadratem.",
-    "Objętość graniastosłupa ściętego o podstawie $S$ można obliczyć jako $S \\cdot h_{śr}$, gdzie $h_{śr}$ to średnia arytmetyczna wysokości w wierzchołkach podstawy. Oblicz średnią z $AK$, $BL$, $CM$, $DN$ i pomnóż przez pole podstawy."
+    "Narysuj prostopadłościan i zaznacz na jego krawędziach punkty K, L, M. Płaszczyzna przechodząca przez te punkty przecina również czwartą krawędź boczną, DD'. Nazwijmy ten punkt N.",
+    "Przekrój prostopadłościanu płaszczyzną jest czworokąt KLMN. Zastanów się, jakie własności ma ten czworokąt, wykorzystując fakt, że przeciwległe ściany prostopadłościanu są równoległe.",
+    "Czworokąt KLMN jest równoległobokiem. Jaki związek wynika z tej własności dla długości odcinków AK, BL, CM i DN? Pomyśl o sumach wysokości na przeciwległych krawędziach.",
+    "Objętość jednej z brył (graniastosłupa ściętego) jest równa iloczynowi pola podstawy i średniej arytmetycznej wysokości w jej czterech wierzchołkach: AK, BL, CM oraz DN."
   ],
   "skills_required": [
     "spatial_3d",

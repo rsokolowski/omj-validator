@@ -13,10 +13,10 @@
     "geometria"
   ],
   "hints": [
-    "Zastanów się, ile jest wszystkich przekątnych w 101-kącie i jak można je sklasyfikować względem prostej $\\ell$. Co się dzieje z wierzchołkami wielokąta po obu stronach prostej?",
-    "Spróbuj podzielić wierzchołki wielokąta na dwie grupy: te leżące po jednej stronie prostej $\\ell$ i te po drugiej. Jak liczba wierzchołków w każdej grupie wpływa na liczbę przecinanych przekątnych?",
-    "Przekątna jest przecinana przez prostą $\\ell$ wtedy i tylko wtedy, gdy jej końce leżą po przeciwnych stronach tej prostej. Jeśli po jednej stronie jest $k$ wierzchołków, ile przekątnych łączy wierzchołki z różnych stron?",
-    "Oznacz liczbę wierzchołków po jednej stronie prostej przez $k$, a po drugiej przez $101-k$. Policz, ile jest przekątnych i boków łączących wierzchołki z różnych stron, a następnie zbadaj parzystość tej liczby."
+    "Prosta $\\ell$ dzieli wierzchołki wielokąta na dwie grupy. Kiedy prosta przecina odcinek łączący dwa wierzchołki? Zastanów się, co to oznacza dla położenia tych wierzchołków względem prostej.",
+    "Rozważmy dwa zbiory odcinków przecinanych przez prostą $\\ell$: boki i przekątne. Jeśli pokażemy, że łączna liczba przecinanych odcinków jest parzysta oraz że liczba przecinanych boków jest parzysta, to co powiemy o liczbie przecinanych przekątnych?",
+    "Niech po jednej stronie prostej $\\ell$ leży $k$ wierzchołków, a po drugiej $101-k$. Ile jest wszystkich odcinków (boków i przekątnych) łączących wierzchołki z przeciwnych stron? Jaka jest parzystość tej liczby, skoro 101 jest liczbą nieparzystą?",
+    "Pomyśl o bokach wielokąta jako o zamkniętej łamanej. Ile razy prosta $\\ell$ musi przeciąć taką zamkniętą linię? Co to mówi o parzystości liczby przeciętych boków? Połącz ten fakt z poprzednią wskazówką."
   ],
   "skills_required": [
     "parity_arguments",

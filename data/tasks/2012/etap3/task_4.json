@@ -12,10 +12,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Zastanów się, co oznacza warunek $\\frac{ab}{c} > 2$. Przekształć tę nierówność do postaci bez ułamka. Co możesz powiedzieć o iloczynie wszystkich czterech wyrażeń?",
-    "Spróbuj podejścia nie wprost: załóż, że co najwyżej jedna z tych liczb jest większa od $2$. Co to oznacza dla pozostałych trzech wyrażeń?",
-    "Pomnóż wszystkie cztery wyrażenia przez siebie. Zauważ, że wiele czynników się skróci. Jaki jest wynik tego iloczynu?",
-    "Iloczyn wszystkich czterech wyrażeń wynosi $(abcd)^2 / (abcd) = abcd > 16$. Jeśli trzy z nich są $\\leq 2$, to ich iloczyn jest $\\leq 8$. Jakie ograniczenie daje to na czwarte wyrażenie?"
+    "Załóżmy, że teza jest fałszywa. Co to oznacza? Ile z podanych liczb jest wtedy mniejszych lub równych 2? Zapisz te nierówności.",
+    "Przyjrzyj się budowie tych czterech ułamków. Zauważ, że zmienne $a, b, c, d$ pojawiają się w cyklicznym porządku. Co się stanie, gdy pomnożysz niektóre z tych ułamków przez siebie?",
+    "Sprawdź iloczyn pierwszej i trzeciej liczby oraz drugiej i czwartej. Zauważ, że te iloczyny mają bardzo prostą postać. Jaką nierówność spełniają, wiedząc, że $a,b,c,d > 2$?",
+    "Jeśli co najmniej trzy z czterech liczb są $\\le 2$, to czy musi istnieć para liczb (pierwsza i trzecia lub druga i czwarta), których oba składniki są $\\le 2$? Połącz to z poprzednią wskazówką, aby uzyskać sprzeczność."
   ],
   "skills_required": [
     "inequality_manipulation",

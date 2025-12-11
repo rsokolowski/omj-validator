@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj sześciokąt foremny i zaznacz punkt $S$ w środku. Które boki sześciokąta są do siebie równoległe? Jakie to ma znaczenie dla wysokości trójkątów?",
-    "Rozważ podział sześciokąta na trójkąty w inny sposób - na przykład przez środek sześciokąta. Spróbuj porównać sumę pól $ABS$, $CDS$, $EFS$ z sumą pól $BCS$, $DES$, $FAS$.",
-    "Zauważ, że boki $AB$, $CD$, $EF$ są parami równoległe. Dla każdej pary równoległych boków (np. $AB$ i $DE$) suma odległości punktu $S$ od tych boków jest stała. Co to oznacza dla sumy pól odpowiednich trójkątów?",
-    "Połącz punkt $S$ ze wszystkimi wierzchołkami sześciokąta. Otrzymasz 6 trójkątów, które razem dają cały sześciokąt. Pogrupuj je w pary: ($ABS$ z $DES$), ($BCS$ z $EFS$), ($CDS$ z $FAS$). Każda para ma podstawy równoległe i równe - oblicz sumę pól w każdej parze."
+    "Sprawdź, czy teza jest prawdziwa, gdy punkt $S$ jest środkiem sześciokąta. Jaką część pola całej figury stanowi wtedy suma pól trójkątów $ABO$, $CDO$ i $EFO$?",
+    "Suma pól zależy od sumy wysokości opuszczonych z punktu $S$ na boki $AB, CD, EF$. Spróbuj udowodnić, że ta suma wysokości jest stała, niezależnie od położenia punktu $S$.",
+    "Przedłuż boki $AB, CD, EF$ sześciokąta. Jaką figurę tworzą proste, na których leżą te boki? Zastanów się nad własnościami tej figury.",
+    "Suma odległości dowolnego punktu wewnątrz trójkąta równobocznego od jego boków jest stała. Jak możesz wykorzystać tę własność dla dużego trójkąta, który narysowałeś, i punktu $S$?"
   ],
   "skills_required": [
     "area_methods",

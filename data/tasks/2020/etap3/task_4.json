@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zacznij od narysowania dokładnego rysunku. Zaznacz trójkąty równoramienne $ANC$ (bo $AN = AC$) i $BMC$ (bo $BM = BC$). Jakie kąty w tych trójkątach są równe?",
-    "Czworokąt $MSNC$ ma dwa boki równoległe do boków trójkąta $ABC$. Zastanów się, jaki to czworokąt i jakie ma własności. Czy możesz wyrazić jego kąty przez kąty trójkąta $ABC$?",
-    "Zbadaj położenie punktu $C$ względem czworokąta $MSNC$. Jak kąty przy wierzchołku $C$ w trójkątach równoramiennych $ANC$ i $BMC$ wiążą się z kątami tego czworokąta?",
-    "Wyraź kąty $\\angle CSM$ i $\\angle CSN$ przez kąty trójkąta $ABC$. Wykorzystaj, że w trójkącie równoramiennym kąty przy podstawie są równe, oraz własności kątów przy równoległych prostych."
+    "Zacznij od narysowania dokładnego rysunku i zaznaczenia wszystkich danych z zadania. Zauważ, że w zadaniu występują dwa trójkąty równoramienne.",
+    "Punkt $S$ powstał z przecięcia prostych równoległych do boków $AC$ i $BC$. Wykorzystaj te proste do zbudowania równoległoboku, którego jednym z wierzchołków jest $C$, a drugim $S$.",
+    "Niech prosta $NS$ przecina $BC$ w punkcie $P$, a prosta $MS$ przecina $AC$ w punkcie $Q$. Rozważ równoległobok $CQSP$. Jaka jest relacja między długościami jego boków $SP$ i $SQ$?",
+    "Użyj twierdzenia Talesa, aby wyrazić długości $SP$ i $SQ$ w zależności od boków trójkąta $ABC$. Następnie wykorzystaj dane w zadaniu równości: $AN=AC$ oraz $BM=BC$."
   ],
   "skills_required": [
     "angle_chasing",

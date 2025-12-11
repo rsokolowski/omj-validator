@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, jak wygląda największy dzielnik liczby $a$ różny od $a$. Jaką postać musi mieć liczba $a$, żeby jej największy właściwy dzielnik był równy $b$?",
-    "Rozważ dwa przypadki: gdy $a$ jest potęgą liczby pierwszej i gdy $a$ ma co najmniej dwa różne dzielniki pierwsze. Jak wtedy wygląda największy właściwy dzielnik?",
-    "Zauważ, że jeśli $a = p^k$ dla liczby pierwszej $p$, to $b = p^{k-1}$ i suma $a + b = p^{k-1}(p+1)$. Jeśli zaś $a$ ma dzielnik pierwszy $p$ i inny dzielnik $q > p$, to $b = \\frac{a}{p}$.",
-    "Przeanalizuj, czy suma $a + b$ może być potęgą dwójki w każdym przypadku. Dla $a = p^k$ zbadaj czynnik $p + 1$. Dla $a$ z wieloma dzielnikami pierwszymi zbadaj, jakie czynniki ma $a + b = a(1 + \\frac{1}{p})$."
+    "Największy dzielnik liczby $a$ (różny od $a$) jest powiązany z jej najmniejszym dzielnikiem pierwszym. Spróbuj znaleźć tę zależność.",
+    "Rozważ dwa przypadki dotyczące budowy liczby $a$: gdy jest ona potęgą liczby pierwszej oraz gdy ma co najmniej dwa różne dzielniki pierwsze.",
+    "Jeśli $a=p^k$ ($p$ jest liczbą pierwszą, $k \\ge 2$), to $b=p^{k-1}$. Jeśli $a$ ma co najmniej dwa różne dzielniki pierwsze, a $p$ jest najmniejszym z nich, to $b = \\frac{a}{p}$.",
+    "W obu przypadkach zapisz sumę $a+b$ i wyłącz wspólny czynnik przed nawias. Zastanów się, kiedy otrzymany iloczyn może być potęgą dwójki."
   ],
   "skills_required": [
     "prime_factorization",

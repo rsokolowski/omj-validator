@@ -11,10 +11,10 @@
     "geometria"
   ],
   "hints": [
-    "Przypomnij sobie, czym jest symetralna odcinka. Jaką własność ma każdy punkt leżący na symetralnej? Co to oznacza dla punktów $P$ i $Q$?",
-    "Rozważ długości odcinków łączących punkty $P$ i $Q$ z wierzchołkami czworokąta. Skoro $P$ leży na symetralnej $AB$, to $PA = PB$. Podobnie dla $Q$. Spróbuj wykorzystać te równości.",
-    "Połącz punkty $K$ i $L$ z wierzchołkami czworokąta. Zauważ, że $K$ jest środkiem $BC$, więc możesz wyrazić pewne odległości przez inne. Zastanów się, jak warunek $KP = LQ$ ogranicza położenie prostych $AB$ i $CD$.",
-    "Załóż nie wprost, że proste $AB$ i $CD$ nie są równoległe. Rozważ, jak symetralne tych odcinków przecinają odcinek $KL$ i czy w tej sytuacji równość $KP = LQ$ może zachodzić. Wykorzystaj własności środkowych trójkątów lub trapezów."
+    "Przypomnij sobie, czym jest symetralna odcinka. Jaką własność ma każdy punkt leżący na symetralnej? Co to oznacza dla punktów P i Q?",
+    "Aby powiązać ze sobą warunki dotyczące boków AB i CD, rozważ wprowadzenie punktu pomocniczego. Dobrym kandydatem jest środek jednej z przekątnych, na przykład AC.",
+    "Niech M będzie środkiem przekątnej AC. Zastosuj twierdzenie o medianie do trójkątów $\\triangle PAC$ i $\\triangle PBC$, aby powiązać ze sobą kwadraty długości $PA, PB, PC, PM, PK$. Wykorzystaj fakt, że $PA=PB$.",
+    "Zależność, którą otrzymałeś dla punktu P, oznacza, że prosta KL jest prostopadła do odcinka MK. Jaki wniosek płynie z analogicznej analizy dla punktu Q i odcinka ML? Co to razem oznacza dla położenia punktu M?"
   ],
   "skills_required": [
     "angle_chasing",

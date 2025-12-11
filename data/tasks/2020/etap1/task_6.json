@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Ile wszystkich przekątnych ma $(2n+2)$-kąt wypukły? Porównaj tę liczbę z $n^2$ narysowanych przekątnych. Zastanów się, jakie przekątne mogą pozostać nienarysowane.",
-    "Rozważ klasyfikację przekątnych według tego, na ile wierzchołków dzielą wielokąt po każdej stronie. Użyj zasady szufladkowej lub argumentu zliczania.",
-    "Przekątna dzieli $(2n+2)$-kąt na dwa wielokąty. Suma ich wierzchołków to $(2n+2)+2 = 2n+4$. Kiedy oba wielokąty mają nieparzystą liczbę wierzchołków? Zbadaj parzystość.",
-    "Aby oba wielokąty miały nieparzystą liczbę wierzchołków, przekątna musi pozostawiać po każdej stronie parzystą liczbę wierzchołków (poza końcami). Policz, ile jest takich przekątnych i porównaj z liczbą pozostałych."
+    "Przekątna rozcina wielokąt na dwie mniejsze figury. Z ilu wierzchołków składają się te figury, jeśli przekątna zostawia po jednej stronie $k$ wierzchołków wielokąta? Kiedy obie te liczby są nieparzyste?",
+    "Podzielmy wszystkie możliwe przekątne na dwa rodzaje: te, które spełniają warunek z zadania (\"dobre\"), i te, które go nie spełniają (\"złe\"). Spróbuj policzyć, ile jest przekątnych każdego rodzaju.",
+    "Warunek z zadania jest spełniony, gdy przekątna zostawia po obu swoich stronach nieparzystą liczbę wierzchołków. Policz, ile jest wszystkich \"złych\" przekątnych – tych, które zostawiają parzystą liczbę wierzchołków.",
+    "Porównaj liczbę narysowanych przekątnych ($n^2$) z całkowitą liczbą \"złych\" przekątnych, które można narysować w tym wielokącie. Zastosuj zasadę szufladkową."
   ],
   "skills_required": [
     "counting_techniques"

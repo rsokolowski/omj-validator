@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Przypomnij sobie wzór na pole trójkąta wyrażony przez bok i odpowiadającą mu wysokość. Jaki związek łączy wszystkie trzy pary bok-wysokość?",
-    "Skoro $a \\cdot h_a = b \\cdot h_b = c \\cdot h_c = 2P$, zastanów się jakie warunki muszą spełniać boki i wysokości, aby wszystkie były całkowite. Czy możesz znaleźć konkretny przykład?",
-    "Poszukaj trójkąta o bokach będących wielokrotnościami pewnych liczb, tak aby pole było liczbą całkowitą dającą całkowite wysokości. Rozważ trójkąty o bokach proporcjonalnych do prostych liczb.",
-    "Zbadaj trójkąt o bokach $a$, $b$, $c$ takich, że $2P$ dzieli się przez każdy z boków. Sprawdź np. trójkąty o bokach będących wielokrotnościami liczb 3, 4, 5 lub podobnych - pamiętaj o warunku ostrokątności!"
+    "Zapisz wzór na pole trójkąta na trzy różne sposoby, używając każdego boku i odpowiadającej mu wysokości. Jaki warunek musi spełniać liczba $2P$, aby wszystkie wysokości były całkowite, jeśli boki są całkowite?",
+    "Spróbuj skonstruować trójkąt, który na pewno będzie miał całkowite boki i przynajmniej jedną całkowitą wysokość. Pomyśl o złożeniu dwóch trójkątów prostokątnych wzdłuż jednej z przyprostokątnych.",
+    "Najprostszy przypadek to złożenie dwóch identycznych trójkątów prostokątnych o bokach całkowitych (trójkątów pitagorejskich). Jaki rodzaj trójkąta powstanie? Sprawdź, czy może on być ostrokątny.",
+    "Złóż dwa trójkąty prostokątne o bokach 3, 4, 5 wzdłuż boku o długości 4. Oblicz boki i wysokości powstałego trójkąta. Jeśli nie wszystkie wysokości są całkowite, pomyśl o przeskalowaniu całej figury."
   ],
   "skills_required": [
     "area_methods",

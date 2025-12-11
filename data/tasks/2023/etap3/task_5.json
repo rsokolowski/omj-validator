@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, jak zapisać liczbę złożoną z samych jedynek (repunit) za pomocą wzoru. Na przykład $\\underbrace{11\\ldots1}_{n} = \\frac{10^n - 1}{9}$. Jak wyrazić liczbę z jedynkami i dziewiątkami?",
-    "Spróbuj wykorzystać własności podzielności przez $19$. Zauważ, że $10^{18} \\equiv 1 \\pmod{19}$ (małe twierdzenie Fermata). Jak to się ma do liczby $S$?",
-    "Oblicz najpierw wartość $S$ modulo $19$. Liczba $\\underbrace{11\\ldots1}_{19}$ to $\\frac{10^{19}-1}{9}$. Jak uprościć $10^{19} \\pmod{19}$? Czy $S$ ma jakąś szczególną własność przy dzieleniu przez $19$?",
-    "Zapisz dużą liczbę jako $\\underbrace{11\\ldots1}_{S} \\cdot 10^S + \\underbrace{99\\ldots9}_{S}$. Jeśli wykażesz, że $S \\equiv 0 \\pmod{19}$, to zarówno liczba jedynek jak i dziewiątek będzie wielokrotnością $19$. Wykorzystaj to!"
+    "Jak można zapisać liczbę złożoną z samych jedynek, a potem całą liczbę z zadania, używając potęg dziesiątki? Wzór na $\\underbrace{11\\ldots1}_{n}$ to $\\frac{10^n-1}{9}$.",
+    "Aby wykazać podzielność przez 19, warto skorzystać z małego twierdzenia Fermata, które mówi, że $10^{18} \\equiv 1 \\pmod{19}$. Jaką resztę z dzielenia musimy znać dla liczby $S$, aby to twierdzenie było przydatne?",
+    "Kluczem jest znalezienie reszty z dzielenia $S$ przez $18$. Można to zrobić, badając reszty z dzielenia $S$ przez $2$ i $9$. Jakie proste cechy liczby $S$ pozwolą Ci to zrobić?",
+    "Przyjrzyj się ostatniej cyfrze liczby $S$ oraz sumie jej cyfr. Wyznacz na tej podstawie resztę z dzielenia $S$ przez $18$. Teraz możesz obliczyć $10^S \\pmod{19}$ i sprawdzić podzielność całej liczby."
   ],
   "skills_required": [
     "modular_arithmetic",

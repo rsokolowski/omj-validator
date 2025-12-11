@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek równoległoboku $ABCD$ z przekątnymi. Zaznacz punkt $P$ na $BD$ tak, by $AP = BD$. Gdzie znajduje się środek $Q$ odcinka $CP$? Co wiesz o przekątnych równoległoboku?",
-    "Przypomnij sobie twierdzenie o kącie wpisanym opartym na średnicy okręgu - jeśli punkt leży na okręgu, a \"widzi\" średnicę, to kąt jest prosty. Czy możesz znaleźć odpowiedni okrąg?",
-    "Oznacz przez $O$ środek przekątnej $BD$ (czyli też środek $AC$). Zbadaj, jakie odległości mają punkty $B$, $D$ i $Q$ od punktu $O$. Wykorzystaj fakt, że $Q$ jest środkiem $CP$.",
-    "Rozważ trójkąt $ACP$ i jego środkową z wierzchołka $A$. Skoro $Q$ jest środkiem $CP$, a $O$ środkiem $AC$, to odcinek $OQ$ jest środkową. Oblicz długość $OQ$ i porównaj z $OB$ oraz $OD$."
+    "Narysuj równoległobok $ABCD$ i jego przekątne. Zaznacz punkt $P$ na przekątnej $BD$ oraz punkt $Q$ będący środkiem odcinka $CP$. Co wiesz o punkcie przecięcia przekątnych równoległoboku?",
+    "Aby wykazać, że kąt jest prosty, często warto poszukać okręgu, w którym ten kąt jest oparty na średnicy. Czy punkty $B, Q, D$ mogą leżeć na jednym okręgu?",
+    "Niech $O$ będzie środkiem przekątnej $BD$. Jaki warunek musi spełniać punkt $Q$, aby leżał na okręgu o średnicy $BD$? Zbadaj odległość punktu $Q$ od punktu $O$.",
+    "Zauważ, że $O$ jest również środkiem przekątnej $AC$. Rozważ trójkąt $ACP$. Co możesz powiedzieć o odcinku $OQ$, który łączy środki boków $AC$ i $CP$?"
   ],
   "skills_required": [
     "trapezoid_parallelogram",

@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Masz dwa warunki: nierówność $a < b < 2013$ oraz równanie $a + b = 4020$. Spróbuj wyrazić jedną zmienną przez drugą, aby pracować tylko z jedną niewiadomą.",
-    "Użyj równania $a + b = 4020$, aby wyeliminować $a$. Podstaw $a = 4020 - b$ do nierówności i rozwiąż je względem $b$.",
-    "Po podstawieniu otrzymasz nierówności dla $b$. Zwróć uwagę, że szukasz liczb całkowitych - jakie wartości $b$ spełniają wszystkie warunki jednocześnie?",
-    "Z nierówności $a < b$ oraz $b < 2013$ wyznacz przedział dla $b$. Następnie znajdź wszystkie liczby całkowite w tym przedziale i dla każdej oblicz odpowiadające $a$."
+    "Suma liczb $a$ i $b$ jest stała i wynosi 4020. Jaka jest ich średnia arytmetyczna i co ona mówi o położeniu tych liczb względem siebie?",
+    "Zauważ, że $a$ i $b$ są symetrycznie rozmieszczone wokół swojej średniej. Spróbuj wyrazić je za pomocą tej średniej i pewnej dodatniej liczby $k$, która opisuje ich oddalenie od niej.",
+    "Wykorzystaj teraz drugi warunek, $b < 2013$. Jakie ograniczenie dla liczby $k$ wynika z tej nierówności?",
+    "Pamiętaj, że $a$ i $b$ są liczbami całkowitymi. Jakie wartości może przyjmować $k$? Znajdź wszystkie możliwości i wyznacz odpowiadające im pary $(a, b)$."
   ],
   "skills_required": [
     "inequality_manipulation",

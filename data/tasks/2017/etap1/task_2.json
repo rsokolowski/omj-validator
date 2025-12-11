@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Oznacz środek odcinka $AP$ jako $M$, a środek odcinka $CD$ jako $N$. Co wiesz o położeniu punktu $N$ względem równoległoboku? Narysuj dokładny rysunek.",
-    "Przypomnij sobie twierdzenie o odcinku łączącym środki dwóch boków trójkąta (środkowa trójkąta). Zastanów się, w jakim trójkącie możesz zastosować tę własność.",
-    "Rozważ trójkąt $APC$ i jego środkowe. Punkt $N$ (środek $CD$) jest też środkiem przekątnej $AC$ równoległoboku. Jaki odcinek w trójkącie $APC$ jest równoległy do $PC$?",
-    "Odcinek $MN$ (gdzie $M$ to środek $AP$, $N$ to środek $AC$) jest środkową trójkąta $APC$, więc $MN \\parallel PC$. Skoro $PC = BC$, to trójkąt $BPC$ jest równoramienny. Wykorzystaj własności tego trójkąta, by pokazać prostopadłość."
+    "Oznaczmy środek odcinka $AP$ przez $M$, a środek odcinka $CD$ przez $N$. Narysuj starannie figurę i zastanów się, jak geometrycznie przedstawić warunek prostopadłości prostych $BP$ i $MN$.",
+    "Aby wykazać prostopadłość, często prościej jest znaleźć odcinek równoległy do $MN$ i udowodnić, że jest on prostopadły do $BP$. Rozważ wprowadzenie nowego punktu, który jest środkiem innego kluczowego odcinka.",
+    "Niech $K$ będzie środkiem odcinka $BP$. Użyj twierdzenia o linii środkowej w trójkącie $ABP$, aby powiązać odcinek $MK$ z bokiem $AB$. Następnie zbadaj czworokąt $MKNC$.",
+    "Wiesz już, że $MN \text{ } \textrm{||} \text{ } KC$. Wykorzystaj teraz warunek $PC = BC$. Jaką specjalną własność ma trójkąt $BPC$ i co ona mówi o jego środkowej $KC$ poprowadzonej na podstawę $BP$?"
   ],
   "skills_required": [
     "trapezoid_parallelogram",

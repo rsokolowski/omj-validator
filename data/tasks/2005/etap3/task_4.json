@@ -10,10 +10,10 @@
     "geometria"
   ],
   "hints": [
-    "Przypomnij sobie, gdzie leży środek okręgu opisanego na trójkącie. Co decyduje o tym, czy jest on wewnątrz, czy na zewnątrz trójkąta? Jak to się uogólnia na czworościan?",
-    "Rozważ szczególne przypadki czworościanów - na przykład czworościan prostokątny (taki, gdzie trzy krawędzie wychodzące z jednego wierzchołka są parami prostopadłe). Zbadaj, jakie są wtedy kąty dwuścienne.",
-    "Środek sfery opisanej na czworościanie leży na przecięciu płaszczyzn symetralnych krawędzi. Dla czworościanu prostokątnego zastanów się, gdzie leży ten punkt względem ścian.",
-    "Rozważ czworościan ABCD, gdzie krawędzie AB, AC, AD są parami prostopadłe. Znajdź środek sfery opisanej i sprawdź, czy spełnia warunki zadania dotyczące kątów dwuściennych."
+    "Przypomnij sobie, gdzie leży środek okręgu opisanego na trójkącie. Co decyduje o tym, czy jest on wewnątrz, czy na zewnątrz trójkąta? Jakie warunki w czworościanie mogą odgrywać podobną rolę?",
+    "Spróbuj skonstruować kontrprzykład. Rozważ czworościan, w którym trzy krawędzie wychodzące z jednego wierzchołka są parami prostopadłe. Sprawdź, czy spełnia on warunek o kątach dwuściennych.",
+    "Taki czworościan można uzupełnić do prostopadłościanu, którego jest narożnikiem. Gdzie w takim razie leży środek sfery opisanej na tym czworościanie?",
+    "Środek sfery jest środkiem prostopadłościanu. Aby sprawdzić, czy leży on w czworościanie, zbadaj jego położenie względem ściany przeciwległej do wierzchołka z kątami prostymi."
   ],
   "skills_required": [
     "spatial_3d",

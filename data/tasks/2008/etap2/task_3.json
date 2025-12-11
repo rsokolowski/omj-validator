@@ -12,12 +12,18 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek. Zaznacz równoległobok $ABCD$, punkt $E$ na boku $BC$, prostą $k$ przez $D$ równoległą do $AE$ oraz równoległobok $AEKL$. Jak oblicza się pole równoległoboku?",
-    "Pole równoległoboku to iloczyn podstawy i wysokości. Zastanów się, jakie podstawy i wysokości mają oba równoległoboki. Czy możesz wybrać wspólną podstawę dla obu figur?",
-    "Rozważ odcinek $AE$ jako wspólną podstawę obu równoległoboków. Jaka jest wysokość równoległoboku $ABCD$ opuszczona na prostą $AE$? A jaka jest wysokość równoległoboku $AEKL$?",
-    "Skoro $DL \\parallel AE$ (bo $AEKL$ to równoległobok z bokiem $AE$ i prosta $k$ jest równoległa do $AE$), to odległość od punktu $D$ do prostej $AE$ jest taka sama jak odległość od prostej $k$ do prostej $AE$. Wykorzystaj to do porównania wysokości obu równoległoboków."
+    "Narysuj starannie obie figury. Zamiast porównywać pola równoległoboków bezpośrednio, spróbuj pokazać, że oba są równe polu pewnej trzeciej figury (lub jej wielokrotności).",
+    "Dobrym kandydatem na figurę pomocniczą jest trójkąt $\\triangle ADE$. Spróbuj wyrazić pole równoległoboku $AEKL$ w zależności od pola trójkąta $\\triangle ADE$.",
+    "Pole $AEKL$ to dwukrotność pola $\\triangle ALE$. Zauważ, że trójkąty $\\triangle ALE$ i $\\triangle ADE$ mają wspólną podstawę $AE$. Co wynika z faktu, że punkty $D$ i $L$ leżą na prostej $k$ równoległej do $AE$?",
+    "Teraz wyraź pole równoległoboku $ABCD$ również w zależności od pola trójkąta $\\triangle ADE$. Wybierz dla obu figur wspólną podstawę $AD$ i porównaj ich wysokości."
   ],
   "prerequisites": [],
-  "skills_required": ["trapezoid_parallelogram", "area_methods"],
-  "skills_gained": ["area_methods", "trapezoid_parallelogram"]
+  "skills_required": [
+    "trapezoid_parallelogram",
+    "area_methods"
+  ],
+  "skills_gained": [
+    "area_methods",
+    "trapezoid_parallelogram"
+  ]
 }

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj prostokąt i zaznacz punkt $X$ spełniający warunki $BX = XD = AB$. Jakie trójkąty tworzą się w tej konfiguracji? Zastanów się, co oznacza równość trzech odcinków.",
-    "Skoro $BX = AB$ i $XD = AB$, to trójkąty $ABX$ i pewien inny trójkąt są równoramienne. Wykorzystaj własności trójkątów równoramiennych do wyznaczenia kątów przy ich wierzchołkach.",
-    "Zwróć uwagę, że stosunek $BC : AB = \\sqrt{2}$ nie jest przypadkowy. Sprawdź, jak długość przekątnej prostokąta ma się do boku $AB$. Czy punkt $X$ może leżeć na jakimś szczególnym miejscu?",
-    "Oblicz długość przekątnej $BD$ korzystając z twierdzenia Pitagorasa i porównaj ją z długością $AB$. Jeśli $BX = XD = AB$, to co możesz powiedzieć o trójkącie $BXD$?"
+    "Narysuj figurę i zaznacz na niej wszystkie równe odcinki. Twoim celem jest wyznaczenie miary kąta w trójkącie $BXD$. Zauważ, że znasz już długości dwóch jego boków – są równe $AB$.",
+    "Aby w pełni poznać własności trójkąta $BXD$ i wyznaczyć jego kąty, potrzebujesz znać długości wszystkich trzech boków. Skup się na znalezieniu długości boku $BD$.",
+    "Długość przekątnej $BD$ zależy od wymiarów prostokąta. Wykorzystaj podany w zadaniu stosunek długości boków $BC : AB = \\sqrt{2}$ oraz twierdzenie Pitagorasa, aby obliczyć długość $BD$ w zależności od $AB$.",
+    "Wiesz już, że trójkąt $BXD$ jest równoramienny, a jego boki mają długości $AB$, $AB$ i $AB \\cdot \\sqrt{3}$. Aby znaleźć szukany kąt, poprowadź wysokość z wierzchołka $X$ i zbadaj własności powstałych trójkątów prostokątnych."
   ],
   "prerequisites": [],
   "skills_required": [

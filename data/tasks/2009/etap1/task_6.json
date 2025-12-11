@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zastanów się, przez ile krawędzi czworościanu musi przechodzić płaszczyzna, aby w przekroju powstał czworokąt. Narysuj czworościan i spróbuj wyobrazić sobie różne przekroje.",
-    "Przekrój czworokątny powstaje, gdy płaszczyzna przecina dokładnie cztery krawędzie. Pomyśl, jakie czworokąty mogą tak powstać - czy mogą być regularne? Rozważ symetrię czworościanu.",
-    "Zauważ, że krawędzie czworościanu można podzielić na pary przeciwległych (nieprzecinających się). Zbadaj przekrój przechodzący przez środki czterech krawędzi - jaki to czworokąt?",
-    "Przekrój przez środki dwóch par przeciwległych krawędzi daje kwadrat. Oblicz długość boku tego kwadratu korzystając z twierdzenia Pitagorasa w trójkącie utworzonym na ścianie czworościanu."
+    "Aby w przekroju czworościanu otrzymać czworokąt, płaszczyzna musi przeciąć cztery z sześciu krawędzi. Wyobraź sobie, jak można ułożyć taką płaszczyznę względem całej bryły.",
+    "Czworościan foremny jest bardzo symetryczną bryłą. Rozważ przekroje płaszczyznami, które są równoległe do dwóch przeciwległych (nieprzecinających się) krawędzi.",
+    "Niech płaszczyzna tnąca będzie równoległa do krawędzi $AB$ i $CD$. Przetnie ona pozostałe cztery krawędzie: $AC, AD, BC, BD$. Jaki czworokąt powstanie w przekroju i dlaczego?",
+    "Boki otrzymanego prostokąta zależą od położenia płaszczyzny. Wyraź ich długości w zależności od stosunku, w jakim dzielą one krawędzie, a następnie oblicz obwód. Co zauważasz?"
   ],
   "prerequisites": [],
   "skills_required": [

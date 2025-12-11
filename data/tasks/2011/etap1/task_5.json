@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek pięciokąta wypukłego $ABCDE$ z kątami prostymi przy $B$ i $D$. Zastanów się, co oznacza warunek kąta prostego dla położenia punktu względem odcinka.",
-    "Przypomnij sobie twierdzenie o kącie wpisanym opartym na średnicy. Jeśli kąt $ABC = 90°$, to gdzie leży punkt $B$ względem odcinka $AC$?",
-    "Zauważ, że punkt $B$ leży na okręgu o średnicy $AC$, a punkt $D$ leży na okręgu o średnicy $CE$. Jaką maksymalną odległość od środka odcinka może mieć punkt leżący na takim okręgu?",
-    "Wykorzystaj, że $BD \\leq \\frac{AC}{2} + \\frac{CE}{2}$ (suma promieni okręgów). Jak to połączyć z faktem, że obwód trójkąta $ACE$ zawiera także bok $AE$?"
+    "Narysuj pięciokąt i zaznacz w nim kąty proste. Jaka jest geometryczna zależność między trzema punktami, jeśli tworzą one kąt prosty, np. $A, B, C$?",
+    "Skoro $\\angle ABC = 90^\\circ$, to punkt $B$ leży na okręgu o średnicy $AC$. Podobnie, punkt $D$ leży na okręgu o średnicy $CE$. Jak można wykorzystać te dwa okręgi, aby oszacować długość odcinka $BD$?",
+    "Oznaczmy środki odcinków $AC$ i $CE$ jako $M_1$ i $M_2$. Rozważ łamaną łączącą punkty $B, M_1, M_2, D$. Jak jej długość ma się do długości odcinka $BD$?",
+    "Długość odcinka $BM_1$ to promień pierwszego okręgu, a $M_2D$ to promień drugiego. Jaka jest zależność między długością odcinka $M_1M_2$ a bokami trójkąta $ACE$?"
   ],
   "prerequisites": [],
   "skills_required": [

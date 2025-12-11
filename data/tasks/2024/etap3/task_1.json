@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Czworościan ma 6 krawędzi i 4 ściany. Każda ściana to trójkąt. Jaki warunek musi spełniać każdy trójkąt? Jakie są możliwe zestawy 6 różnych liczb całkowitych sumujących się do 25?",
-    "Rozważ nierówność trójkąta: suma dwóch boków musi być większa od trzeciego. Spróbuj wypisać wszystkie możliwe zestawy 6 różnych liczb naturalnych o sumie 25 (zacznij od minimalnego zestawu $\\{1,2,3,4,5,6\\}$ o sumie 21).",
-    "Zwróć uwagę, że każdy wierzchołek czworościanu należy do dokładnie 3 krawędzi. Jeśli masz bardzo długą krawędź w zestawie, do jakich trójkątów będzie należeć i czy spełnią one nierówność trójkąta?",
-    "Dla każdego znalezionego zestawu 6 liczb sprawdź, czy istnieje przypisanie tych liczb do krawędzi czworościanu takie, że wszystkie 4 ściany spełniają nierówność trójkąta. Analizuj przypadki systematycznie."
+    "Czworościan ma 6 krawędzi tworzących 4 trójkątne ściany. Jaki warunek muszą spełniać długości boków każdego trójkąta? Jakie mogą być zestawy 6 różnych liczb całkowitych, których suma wynosi 25?",
+    "Znajdź wszystkie możliwe zestawy 6 różnych dodatnich liczb całkowitych o sumie 25. Zauważ, że najmniejsza suma to $1+2+3+4+5+6=21$. Co możesz powiedzieć o najmniejszej liczbie w każdym ze swoich zestawów?",
+    "Skoro w każdym możliwym zestawie jest krawędź o długości 1, zastanów się nad nią. Musi ona być bokiem w dwóch ścianach czworościanu. Jakie warunki muszą spełniać pozostałe dwa boki w takiej ścianie?",
+    "Niech boki jednej ze ścian mają długości $1, x, y$, gdzie $x$ i $y$ to różne liczby całkowite z Twojego zestawu. Zapisz nierówność trójkąta dla tych boków. Jaka jest najmniejsza możliwa różnica między dwiema różnymi liczbami całkowitymi?"
   ],
   "skills_required": [
     "spatial_3d",

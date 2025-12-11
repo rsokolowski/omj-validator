@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zacznij od zbadania prostych przykładów: czy zbiór {1, 2} spełnia warunki? A {-1, 0, 1}? Co musi należeć do zbioru, jeśli zawiera on liczbę $a$?",
-    "Rozważ największy lub najmniejszy element zbioru. Co możesz powiedzieć o jego podwojeniu? Czy zbiór musi zawierać liczbę $0$?",
-    "Jeśli $m$ jest największą liczbą w zbiorze, to $m + m = 2m$ też musi należeć do zbioru. Kiedy to możliwe przy skończonej liczbie elementów?",
-    "Pokaż, że zbiór musi mieć postać $\\{-na, ..., -a, 0, a, ..., na\\}$ dla pewnej liczby rzeczywistej $a \\neq 0$. Uzasadnij, dlaczego żadna inna konfiguracja nie jest możliwa."
+    "Sprawdź, czy zbiór $\\{-2, 1, 3\\}$ spełnia warunki zadania. A zbiór $\\{-1, 0, 1\\}$? Pamiętaj, że suma każdych dwóch *różnych* liczb ze zbioru musi także do niego należeć.",
+    "Niech $M$ będzie największą, a $m$ najmniejszą liczbą w zbiorze. Co możesz powiedzieć o sumie dwóch największych liczb? A o sumie dwóch najmniejszych?",
+    "Suma dwóch największych liczb nie może być większa od największej z nich. Co to mówi o drugiej co do wielkości liczbie? Podobnie, co wynika z analizy sumy dwóch najmniejszych liczb?",
+    "Pokaż, że zbiór nie może mieć więcej niż 3 elementy. Rozważ osobno przypadki, gdy zbiór ma 2 lub 3 elementy, i znajdź wszystkie możliwe postacie takich zbiorów."
   ],
   "skills_required": [
     "extremal_principle",

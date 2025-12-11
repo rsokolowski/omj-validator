@@ -12,12 +12,14 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek i oznacz wszystkie kąty. Co oznacza warunek $\\angle ADC = \\angle BDE$? Jakie kąty są wspólne w tych trójkątach?",
-    "Poszukaj par trójkątów, które mogą być podobne. Zwróć uwagę na trójkąty $ADE$, $BDE$, $ADC$ i $BCE$ - które z nich mają wspólne kąty?",
-    "Zauważ, że z warunku $\\angle BCD = \\angle AED$ wynika, że czworokąt $CDEA$ jest wpisany w okrąg (kąty wpisane oparte na tym samym łuku). Co to daje dla pozostałych kątów?",
-    "Skoro $CDEA$ jest czworokątem wpisanym, to $\\angle CAE = \\angle CDE$. Połącz to z pierwszym warunkiem, aby wykazać, że trójkąt $ABE$ jest równoramienny."
+    "Narysuj duży, czytelny rysunek i zaznacz w nim równe kąty. Zauważ, że kąt $\\angle ADC$ jest kątem zewnętrznym dla trójkąta $\\triangle BDC$. Jaką zależność między kątami możesz stąd odczytać?",
+    "Kluczem do zadania jest umiejętne wykorzystanie twierdzenia o kącie zewnętrznym w trójkącie. Zastosuj je dwukrotnie dla odpowiednio dobranych trójkątów i kątów.",
+    "Zastosuj twierdzenie o kącie zewnętrznym najpierw dla trójkąta $\\triangle BDC$ (wyrażając kąt $\\angle ADC$), a następnie dla trójkąta $\\triangle ADE$ (wyrażając kąt $\\angle BDE$).",
+    "Porównaj uzyskane zależności, korzystając z równości kątów podanych w treści zadania. Jaką własność trójkąta $\\triangle ABE$ możesz dzięki temu udowodnić?"
   ],
-  "prerequisites": ["2021_etap1_5"],
+  "prerequisites": [
+    "2021_etap1_5"
+  ],
   "skills_required": [
     "angle_chasing",
     "isosceles_triangle"

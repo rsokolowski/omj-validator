@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Wyobraź sobie zawodników jako punkty, a mecze jako odcinki łączące pary punktów. Ile łącznie odcinków wychodzi ze wszystkich punktów? Jak to się ma do liczby meczy?",
-    "Policz sumę wszystkich rozegranych meczy na dwa sposoby: raz sumując po zawodnikach, raz licząc wszystkie mecze. Każdy mecz jest liczony dwukrotnie przy sumowaniu po zawodnikach.",
-    "Z warunku na liczbę meczy wynika, że $n$ musi spełniać pewien warunek parzystości. Znajdź ten warunek, a następnie sprawdź, czy da się faktycznie zorganizować turniej dla małych wartości $n$.",
-    "Dla znalezionych kandydatów na $n$ spróbuj narysować konkretny przykład turnieju. Podziel zawodników na dwie grupy i zastanów się, jak połączyć je meczami, żeby uzyskać właściwe liczby meczy."
+    "Przedstaw zawodników jako wierzchołki grafu, a rozegrane mecze jako jego krawędzie. Jaki jest stopień każdego wierzchołka, czyli ile krawędzi z niego wychodzi?",
+    "Oblicz sumę stopni wszystkich wierzchołków w tym grafie. Tę samą wielkość można wyrazić w zależności od całkowitej liczby rozegranych meczy. Co wynika z porównania tych dwóch wyrażeń?",
+    "Zależność, którą znajdziesz, narzuca pewien warunek na liczbę $n$. Gdy już go poznasz, pozostaje sprawdzić, czy dla każdej liczby $n$ spełniającej ten warunek da się skonstruować odpowiedni turniej.",
+    "Aby pokazać, że dla danej wartości $n$ turniej jest możliwy, spróbuj go skonstruować. Ustaw $2n$ zawodników w okręgu i niech każdy zagra z sąsiadami. Jakie stopnie mają teraz wierzchołki i jak je zmodyfikować, dodając kilka meczy?"
   ],
   "skills_required": [
     "graph_theory",

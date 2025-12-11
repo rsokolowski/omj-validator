@@ -13,12 +13,20 @@
     "geometria"
   ],
   "hints": [
-    "Zastanów się, ile punktów musisz rozważyć, aby mieć pewność, że trzy z nich będą tego samego koloru. Spróbuj narysować kilka trójkątów prostokątnych równoramiennych i zobacz, jak mogą na siebie zachodzić.",
-    "Kluczem jest zasada szufladkowa. Skonstruuj odpowiednią konfigurację punktów, w której wiele trójkątów prostokątnych równoramiennych dzieli wspólne wierzchołki.",
-    "Rozważ kwadrat i jego środek - ile trójkątów prostokątnych równoramiennych możesz utworzyć z tych pięciu punktów? Co się stanie, gdy środek i jakiś wierzchołek kwadratu będą tego samego koloru?",
-    "Weź kwadrat $ABCD$ ze środkiem $S$. Przeanalizuj przypadki: jeśli $S$ ma ten sam kolor co któryś wierzchołek, np. $A$, to poszukaj trzeciego punktu tego koloru wśród pozostałych, który utworzy odpowiedni trójkąt."
+    "Zacznij od dwóch dowolnych punktów $A$ i $B$ tego samego koloru. Gdzie mógłby leżeć trzeci punkt $P$ tego samego koloru, aby trójkąt $ABP$ był prostokątny i równoramienny?",
+    "Zbuduj kwadrat $ABCD$ na odcinku $AB$. Jeśli któryś z pozostałych wierzchołków, $C$ lub $D$, ma ten sam kolor co $A$ i $B$, to łatwo wskażesz szukany trójkąt.",
+    "Załóżmy więc, że oba wierzchołki $C$ i $D$ mają drugi kolor. Mamy teraz parę punktów jednego koloru ($A,B$) i parę drugiego ($C,D$). Jaki jest kluczowy piąty punkt tej konfiguracji?",
+    "Rozważ środek kwadratu. Pokaż, że niezależnie od jego koloru, tworzy on jednokolorowy trójkąt prostokątny równoramienny z jedną z par wierzchołków: $(A,B)$ lub $(C,D)$."
   ],
-  "prerequisites": ["2005_etap1_3"],
-  "skills_required": ["pigeonhole", "isosceles_triangle"],
-  "skills_gained": ["pigeonhole", "case_analysis"]
+  "prerequisites": [
+    "2005_etap1_3"
+  ],
+  "skills_required": [
+    "pigeonhole",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "pigeonhole",
+    "case_analysis"
+  ]
 }

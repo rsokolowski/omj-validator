@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek równoległoboku ABCD i zaznacz wszystkie dane kąty. Zauważ, że kąt ABC = 90° + 45° = 135°. Jakie są pozostałe kąty równoległoboku?",
-    "Skoro BC = CE, to trójkąt BCE jest równoramienny. Które kąty w tym trójkącie są równe? Spróbuj wyrazić kąt CBE przez znane już kąty.",
-    "Wykorzystaj własność równoległoboku: AB || CD, więc kąty ABD i BDC są naprzemianległe. Znajdź kąt BDC, a potem zastanów się, jak położony jest punkt E względem przekątnej BD.",
-    "W trójkącie równoramiennym BCE znasz już kąt przy wierzchołku B (wyrażony przez kąty równoległoboku). Użyj faktu, że suma kątów w trójkącie wynosi 180°, aby wyznaczyć kąt BCE."
+    "Narysuj równoległobok i zaznacz dane kąty. Oblicz miary wszystkich kątów wewnętrznych równoległoboku. Zauważ, że trójkąty $ABD$ i $BCD$ mają szczególne własności. Jakie?",
+    "Kluczowa informacja to $BC=CE$. Wykorzystaj też fakt, że w równoległoboku $BC=AD$. Rozważ obrót jednej z części figury wokół wierzchołka $D$, aby w sprytny sposób połączyć te równości.",
+    "Obróć trójkąt $DAB$ o $90^\\circ$ wokół punktu $D$ tak, aby bok $DB$ nałożył się na $DC$. Niech $A'$ będzie obrazem punktu $A$. Pokaż, że punkty $A'$, $D$ i $E$ leżą na jednej prostej.",
+    "Zauważ, że trójkąt $CDA'$ jest prostokątny i równoramienny. Wykorzystaj równość $CE=AD=A'D$ w trójkącie $CA'E$, aby znaleźć miarę kąta $DEC$, a następnie oblicz szukany kąt."
   ],
   "skills_required": [
     "angle_chasing",

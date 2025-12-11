@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Narysuj 5 punktów reprezentujących osoby i zaznacz znajomości jako linie łączące punkty. Zastanów się, co oznacza \"znajomość\" dla obu osób jednocześnie.",
-    "Policz sumę wszystkich liczb napisanych na tablicy. Zauważ, że każda znajomość jest liczona dwukrotnie - raz przez każdą z dwóch zaprzyjaźnionych osób.",
-    "Skoro suma wszystkich liczb musi być parzysta (bo każda znajomość dodaje 2 do sumy), to piąta liczba musi mieć określoną parzystość. Rozważ też, ile znajomych może mieć maksymalnie piąta osoba.",
-    "Sprawdź osobno przypadki, gdy piąta liczba to $0$, $2$ lub $4$. Dla każdego przypadku spróbuj narysować konkretny układ znajomości lub wykaż, że jest niemożliwy."
+    "Narysuj 5 punktów reprezentujących osoby i zaznacz znajomości jako linie łączące punkty. Zastanów się, co oznacza, że znajomość jest wzajemna.",
+    "Policz sumę wszystkich liczb napisanych na tablicy. Zauważ, że każda znajomość (linia na rysunku) jest liczona dwukrotnie – raz dla każdej z dwóch osób.",
+    "Suma wszystkich liczb musi być parzysta. Co to oznacza dla parzystości piątej liczby? Rozważ też, ile maksymalnie znajomych może mieć jedna osoba w tej grupie.",
+    "Wykorzystaj poprzednią wskazówkę, aby ustalić, jakie wartości może przyjąć piąta liczba. Dla każdej z tych możliwości spróbuj narysować odpowiedni układ znajomości."
   ],
   "skills_required": [
     "graph_theory"

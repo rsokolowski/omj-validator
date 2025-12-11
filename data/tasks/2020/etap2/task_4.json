@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek równoległoboku $ABCD$ z punktami $K$ na $BC$ i $L$ na $CD$. Zaznacz dwusieczną kąta $BAD$. Co wiesz o punktach leżących na dwusiecznej kąta?",
-    "Wykorzystaj własność dwusiecznej kąta: każdy punkt na dwusiecznej jest równoodległy od ramion kąta. Spróbuj znaleźć punkt na dwusiecznej, który będzie miał szczególny związek z odcinkami $AK$ i $AL$.",
-    "Oznacz przez $P$ punkt przecięcia dwusiecznej kąta $BAD$ z prostą $KL$. Rozważ odległości punktu $P$ od prostych $AB$ i $AD$. Jak warunek $AB + BK = AD + DL$ wpływa na położenie punktów $K$ i $L$ względem dwusiecznej?",
-    "Poprowadź przez punkt $P$ leżący na dwusiecznej proste równoległe do boków równoległoboku. Wykorzystaj równość odległości od ramion kąta, aby pokazać, że $P$ leży na prostej $KL$ w taki sposób, że $KL \\perp AP$."
+    "Warunek w zadaniu dotyczy sumy długości odcinków. Zastanów się, jak można geometrycznie zilustrować sumę $AB + BK$ na jednej prostej.",
+    "Przedłuż bok $AB$ do punktu $M$ tak, że $BM=BK$. Zrób podobną konstrukcję dla boku $AD$, wyznaczając punkt $N$. Jaki wniosek dotyczący długości odcinków $AM$ i $AN$ płynie z warunku podanego w zadaniu?",
+    "Zauważ, że nowo powstały trójkąt $\\triangle AMN$ jest równoramienny. Jaką własność ma dwusieczna kąta między ramionami w takim trójkącie w stosunku do jego podstawy?",
+    "Wiesz już, że dwusieczna kąta $BAD$ jest prostopadła do prostej $MN$. Aby dokończyć dowód, wystarczy pokazać, że prosta $KL$ jest równoległa do $MN$. Spróbuj wykazać, że $\\triangle CKL$ jest podobny do $\\triangle AMN$."
   ],
   "skills_required": [
     "trapezoid_parallelogram",

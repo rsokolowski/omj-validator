@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek czworokąta wpisanego w okrąg. Zaznacz równe odcinki $BC = CD$ i kąt $60°$. Jakie własności ma czworokąt wpisany w okrąg?",
-    "Wykorzystaj twierdzenie o kątach wpisanych opartych na tym samym łuku. Zastanów się też, co wynika z równości $BC = CD$ dla trójkąta $BCD$.",
-    "Skoro $BC = CD$, to trójkąt $BCD$ jest równoramienny. Znajdź kąty tego trójkąta wykorzystując własności czworokąta wpisanego. Poszukaj też innych równoramiennych trójkątów na rysunku.",
-    "Odłóż na boku $AB$ punkt $E$ taki, że $AE = AD$. Zbadaj trójkąt $ADE$ - jest równoramienny. Wyznacz jego kąty i sprawdź, czy $BE = DC$."
+    "Narysuj czworokąt wpisany w okrąg i zaznacz dane. Co równość cięciw $BC=CD$ mówi o łukach okręgu i o kątach wpisanych opartych na tych łukach?",
+    "Teza ma postać sumy odcinków: $AB = AD + DC$. Takie równości często dowodzi się przez odłożenie jednego z mniejszych odcinków na większym. Spróbuj skonstruować na boku $AB$ punkt $E$ taki, że $AE=AD$.",
+    "Mamy teraz punkt $E$ na boku $AB$ taki, że $AE=AD$. Porównaj trójkąt $\\triangle ADC$ z trójkątem $\\triangle AEC$. Czy mają jakieś wspólne lub równe boki albo kąty?",
+    "Wykaż, że $\\triangle ADC \\cong \\triangle AEC$. Co wynika z tego przystawania dla długości boku $EC$ i miary kąta $\\angle AEC$? Wykorzystaj te informacje do zbadania własności trójkąta $\\triangle EBC$."
   ],
   "skills_required": [
     "circle_theorems",

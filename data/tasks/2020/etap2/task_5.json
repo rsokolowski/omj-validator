@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Zastanów się, co oznacza warunek 'niezależnie od kolejności dołączania'. Rozważ różne scenariusze - co się dziaje, gdy jako pierwsza dołącza osoba A, a co gdy osoba B?",
-    "Spróbuj rozumowania nie wprost: załóż, że żaden z gości nie zna wszystkich pozostałych. Co to oznacza dla każdego gościa?",
-    "Jeśli każdy gość nie zna co najmniej jednego innego gościa, rozważ co się stanie, gdy taki 'nieznany' gość dołączy jako ostatni. Ile osób już obecnych musi wtedy znać?",
-    "Przeanalizuj sytuację, gdy gość, który nie zna kogoś, dołącza jako ostatni z 11 gości. Musi znać co najmniej połowę z 11 obecnych osób. Sprawdź, czy to prowadzi do sprzeczności z założeniem."
+    "Przedstaw relacje znajomości jako graf, w którym goście są wierzchołkami. Co pozwala Ci zrobić warunek 'niezależnie od kolejności', gdy chcesz przetestować jakieś założenie?",
+    "Załóż nie wprost, że każdy gość kogoś nie zna. Rozważ wtedy gościa, który ma *minimalną* liczbę nieznajomych. Oznaczmy tę minimalną, dodatnią liczbę przez $m$.",
+    "Niech $A$ będzie gościem z $m$ nieznajomymi, a $B$ jednym z nich. Skonstruuj kolejkę, gdzie najpierw dołączają wszyscy znajomi $A$, a tuż po nich $B$. Jaki warunek musi spełnić $B$?",
+    "Użyj warunku dla $B$, aby oszacować od dołu liczbę jego nieznajomych. Porównaj tę liczbę z $m$. Czy to nie przeczy założeniu, że $m$ było minimalną liczbą nieznajomych?"
   ],
   "skills_required": [
     "graph_theory"

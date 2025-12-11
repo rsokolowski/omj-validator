@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Sprawdź najpierw, czy warunek na pole jest spełniony: ile wynosi pole pozostałej figury i ile pól pokrywa każdy prostokąt? Czy to wystarczy do odpowiedzi?",
-    "Sama zgodność pól nie wystarcza do udowodnienia możliwości pokrycia. Poszukaj niezmiennika - spróbuj pokolorować kartkę w specjalny sposób i zbadaj, jak prostokąty pokrywają pola różnych kolorów.",
-    "Pokoloruj kolumny kartki cyklicznie trzema kolorami (1, 2, 3, 1, 2, 3, ...). Policz, ile pól każdego koloru pokrywa prostokąt $1 \\times 6$ oraz $2 \\times 3$.",
-    "Przy kolorowaniu kolumn trzema kolorami każdy prostokąt $1 \\times 6$ i $2 \\times 3$ pokrywa dokładnie 2 pola każdego koloru. Policz, ile pól każdego koloru ma pozostała figura po wycięciu kwadratu $5 \\times 5$."
+    "Oblicz pole figury, która pozostała po wycięciu kwadratu. Czy fakt, że jest ono wielokrotnością pola każdego z prostokątów, gwarantuje możliwość ułożenia parkietażu?",
+    "Aby udowodnić, że pokrycie jest niemożliwe, spróbuj pokolorować planszę. Celem jest znalezienie takiego kolorowania, w którym każdy prostokąt pokrywa taką samą liczbę pól każdego koloru.",
+    "Użyj trzech kolorów. Zauważ, że proste kolorowanie wierszy lub kolumn nie działa dla wszystkich obrotów prostokątów. Poszukaj wzoru, w którym kolor pola zależy od obu jego współrzędnych.",
+    "Pokoloruj pole $(i, j)$ w zależności od sumy jego współrzędnych $i+j$. Policz, ile pól każdego koloru pokrywa dowolny prostokąt, a następnie zlicz pola każdego koloru w całej figurze."
   ],
   "skills_required": [
     "tiling",

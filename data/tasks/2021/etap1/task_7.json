@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Zastanów się, ile różnych liczb $n$-cyfrowych można utworzyć z wybranych cyfr i jaką własność muszą wszystkie spełniać. Co by się stało, gdyby wszystkie cyfry były takie same?",
-    "Rozważ przypadek, gdy wszystkie $n$ cyfr jest identycznych. Liczba złożona z $n$ takich samych cyfr $c$ ma szczególną postać - spróbuj ją wyrazić przez $c$ i liczbę złożoną z samych jedynek.",
-    "Liczba zapisana $n$ jedynkami to $\\frac{10^n - 1}{9}$. Zbadaj, dla jakich $n$ ta liczba jest podzielna przez 7. Przypomnij sobie, że reszty z dzielenia kolejnych potęg 10 przez 7 tworzą cykliczny wzorzec.",
-    "Oblicz reszty $10^1, 10^2, 10^3, \\ldots$ z dzielenia przez 7 i znajdź długość cyklu. Następnie wykorzystaj fakt, że $10^n \\equiv 1 \\pmod{7}$ wtedy i tylko wtedy, gdy $n$ jest wielokrotnością tej długości cyklu."
+    "Warunek w zadaniu dotyczy *każdej* liczby, którą można ułożyć z wybranych cyfr. Rozważ dwie takie liczby, różniące się tylko zamianą miejscami dwóch sąsiednich cyfr. Co wiesz o ich różnicy?",
+    "Zapisz algebraicznie różnicę tych liczb. Jest ona postaci $k \\cdot (c_i - c_j)$ dla pewnych cyfr $c_i, c_j$ i liczby $k$ niepodzielnej przez 7. Jaki wniosek płynie stąd dla cyfr $c_i$ i $c_j$?",
+    "Wszystkie wybrane cyfry muszą dawać tę samą resztę z dzielenia przez 7. Zatem każda liczba utworzona z tych cyfr jest (modulo 7) krotnością liczby złożonej z $n$ jedynek. Co z tego wynika?",
+    "Zbadaj, dla jakich $n$ liczba $11\\dots1$ ($n$ jedynek) jest podzielna przez 7. W tym celu znajdź najmniejszą dodatnią potęgę $k$, dla której $10^k \\equiv 1 \\pmod{7}$."
   ],
   "prerequisites": [],
   "skills_required": [

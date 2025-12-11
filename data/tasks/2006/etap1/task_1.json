@@ -12,12 +12,17 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, jak suma cyfr liczby $n$ związana jest z liczbą jej cyfr. Jaka jest maksymalna suma cyfr liczby mającej $k$ cyfr?",
-    "Spróbuj oszacować, ile cyfr może mieć iloczyn $a \\cdot b$. Wykorzystaj fakt, że liczba o sumie cyfr równej $s$ musi mieć co najmniej pewną minimalną liczbę cyfr.",
-    "Zauważ, że jeśli liczba $a$ ma sumę cyfr równą 2006, to $a$ ma co najmniej $\\lceil 2006/9 \\rceil$ cyfr. Podobnie dla $b$. Ile maksymalnie cyfr może mieć iloczyn dwóch takich liczb?",
-    "Porównaj maksymalną możliwą sumę cyfr iloczynu $a \\cdot b$ (równą $9 \\times$ liczba cyfr iloczynu) z wymaganą wartością $2006^2$. Czy da się uzyskać tak dużą sumę cyfr?"
+    "Zastanów się, jak suma cyfr iloczynu $a \\cdot b$ ma się do iloczynu sum cyfr $S(a) \\cdot S(b)$. Sprawdź na przykładach, np. $11 \\cdot 12$ i $14 \\cdot 15$, kiedy suma cyfr iloczynu jest mniejsza.",
+    "Aby suma cyfr iloczynu $a \\cdot b$ mogła być równa $S(a) \\cdot S(b)$, podczas mnożenia tych liczb (np. sposobem pisemnym) nie mogą powstawać przeniesienia. Jakie warunki muszą spełniać cyfry liczb $a$ i $b$, aby do tego nie doszło?",
+    "Najłatwiej uniknąć przeniesień, gdy cyfry mnożonych liczb są małe. Rozważ przypadek, w którym liczby $a$ i $b$ składają się wyłącznie z cyfr 0 i 1. Co to oznacza dla sum ich cyfr i wyniku ich mnożenia?",
+    "Spróbuj zbudować takie liczby. Niech $a$ będzie liczbą z 2006 jedynkami obok siebie. Jak rozmieścić 2006 jedynek w liczbie $b$ (używając zer jako 'rozdzielaczy'), aby w iloczynie $a \\cdot b$ żadne cyfry się nie 'nałożyły'?"
   ],
-  "skills_required": ["digit_manipulation", "modular_arithmetic"],
-  "skills_gained": ["digit_manipulation"],
+  "skills_required": [
+    "digit_manipulation",
+    "modular_arithmetic"
+  ],
+  "skills_gained": [
+    "digit_manipulation"
+  ],
   "prerequisites": []
 }

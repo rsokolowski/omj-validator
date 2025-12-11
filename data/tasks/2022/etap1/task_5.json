@@ -19,9 +19,9 @@
     "inequality_manipulation"
   ],
   "hints": [
-    "Przyjrzyj się warunkom $a+b \\geq ab$, $b+c \\geq bc$, $c+a \\geq ca$. Spróbuj przekształcić każdą z tych nierówności do postaci, w której po jednej stronie masz 0 lub 1. Co można wywnioskować o wartościach $a$, $b$, $c$?",
-    "Rozważ wprowadzenie nowych zmiennych przez podstawienie. Skoro nierówności dotyczą par zmiennych, może warto zapisać warunki w formie ograniczeń na iloczyny lub sumy. Pomyśl też o dodaniu stronami nierówności.",
-    "Zauważ, że $a+b \\geq ab$ można przekształcić do $\\frac{1}{a} + \\frac{1}{b} \\geq 1$. Wprowadź podstawienie $x = \\frac{1}{a}$, $y = \\frac{1}{b}$, $z = \\frac{1}{c}$ i zapisz wszystkie warunki oraz tezę w nowych zmiennych.",
-    "Po podstawieniu masz warunki $x+y \\geq 1$, $y+z \\geq 1$, $z+x \\geq 1$, czyli $x+y+z \\geq \\frac{3}{2}$. Teza przyjmuje postać $\\frac{1}{x} + \\frac{1}{y} + \\frac{1}{z} \\geq \\frac{3}{4xyz}$. Wykorzystaj nierówność między średnią arytmetyczną a harmoniczną."
+    "Przyjrzyj się warunkom $a+b \\geq ab$. Dzieląc obie strony przez $ab$ (co wolno, bo $a,b>0$), otrzymasz nierówność wiążącą odwrotności liczb. Jak wyglądają wszystkie trzy warunki po takim przekształceniu?",
+    "Przekształcone nierówności mają prostszą strukturę. Wprowadź nowe zmienne, np. $x=1/a, y=1/b, z=1/c$, aby uprościć zarówno warunki, jak i tezę do udowodnienia.",
+    "Po podstawieniu masz warunki $x+y \\geq 1$, $y+z \\geq 1$, $z+x \\geq 1$ oraz tezę $xy+yz+zx \\geq 3/4$. Spróbuj uzyskać dwa pomocnicze wyniki: dolne oszacowanie na sumę $x+y+z$ oraz nierówność wiążącą sumę $x+y+z$ z sumą $xy+yz+zx$.",
+    "Dodaj stronami trzy nierówności z warunku, aby oszacować $x+y+z$. Następnie pomnóż każdą z nich ($x+y \\geq 1$, itd.) przez trzecią zmienną ($z$, itd.) i dodaj otrzymane wyniki, aby powiązać $x+y+z$ z $xy+yz+zx$."
   ]
 }

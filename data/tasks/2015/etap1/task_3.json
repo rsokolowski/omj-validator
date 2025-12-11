@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zastanów się, dla jakich wartości $n$ wyrażenie $n^4 + 4$ jest podzielne przez 17. Sprawdź kilka małych wartości $n$ i poszukaj wzorca w resztach z dzielenia przez 17.",
-    "Skorzystaj z rozkładu algebraicznego wyrażenia $n^4 + 4$. Znana tożsamość Sophie Germain pozwala zapisać $a^4 + 4b^4$ jako iloczyn dwóch czynników.",
-    "Wyrażenie $n^4 + 4$ można rozłożyć na iloczyn $(n^2 - 2n + 2)(n^2 + 2n + 2)$. Aby iloraz przez 17 był liczbą pierwszą, zastanów się, jakie warunki muszą spełniać te czynniki.",
-    "Zbadaj, kiedy jeden z czynników $(n^2 - 2n + 2)$ lub $(n^2 + 2n + 2)$ może być równy 17, a drugi dawać liczbę pierwszą. Dla jakich $n$ to zachodzi?"
+    "Liczba, którą badamy, ma być pierwsza, oznaczmy ją $p$. Oznacza to, że $n^4 + 4 = 17p$. Zastanów się, czy wyrażenie $n^4 + 4$ da się zapisać w postaci iloczynu, co pomogłoby w analizie jego podzielności.",
+    "Aby rozłożyć $n^4 + 4$, spróbuj uzupełnić to wyrażenie do pełnego kwadratu. Dodając i odejmując $4n^2$, możesz przekształcić je tak, aby skorzystać ze wzoru na różnicę kwadratów $a^2 - b^2$.",
+    "Stosując tę metodę, otrzymujemy rozkład $n^4 + 4 = (n^2 - 2n + 2)(n^2 + 2n + 2)$. Mamy więc $(n^2 - 2n + 2)(n^2 + 2n + 2) = 17p$. Co to oznacza dla wartości tych dwóch czynników w nawiasach?",
+    "Jeden z czynników musi być równy 17, a drugi $p$ (lub odwrotnie), ponieważ $p$ jest liczbą pierwszą. Rozwiąż odpowiednie równania kwadratowe dla $n$, pamiętając, że $n$ musi być liczbą naturalną."
   ],
   "skills_required": [
     "algebraic_identities",

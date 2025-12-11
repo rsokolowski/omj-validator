@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Policz, ile różnych sum w ogóle obliczamy i jakie wartości mogą przyjmować. Czy sama zasada szufladkowa wystarczy do uzyskania trzech równych sum?",
-    "Zastanów się nad sumą wszystkich elementów tablicy. Jak można ją obliczyć na różne sposoby? Jakie to daje zależności między sumami wierszy i kolumn?",
-    "Przeanalizuj parzystość sum. Suma wszystkich wierszy równa się sumie wszystkich kolumn. Co możesz powiedzieć o liczbie sum parzystych i nieparzystych wśród wierszy? A wśród kolumn?",
-    "Podziel 10 sum na grupy według parzystości. W każdej grupie masz pewną liczbę sum, a każda może przyjąć tylko niektóre wartości (0, 2, 4 lub 1, 3). Zastosuj zasadę szufladkową osobno dla każdej grupy parzystości."
+    "Ile jest wszystkich sum do obliczenia i jakie wartości mogą one przyjmować? Zauważ, że proste użycie zasady szufladkowej nie wystarczy, by udowodnić tezę.",
+    "Załóż dla dowodu nie wprost, że żadne trzy sumy nie są równe. Co w tej sytuacji możesz powiedzieć o zbiorze wartości wszystkich dziesięciu sum?",
+    "Jeśli żadne trzy sumy nie są równe, to zbiór sum musi zawierać po dwie wartości 0, 1, 2, 3 i 4. Zastanów się, co oznacza dla liczb w tablicy, że jedna z sum jest równa 0, a inna 4.",
+    "Linia (wiersz, kolumna lub przekątna) o sumie 0 składa się z samych zer, a linia o sumie 4 z samych jedynek. Czy takie dwie linie mogą się przeciąć? Rozważ wszystkie możliwe pary takich linii."
   ],
   "skills_required": [
     "pigeonhole",

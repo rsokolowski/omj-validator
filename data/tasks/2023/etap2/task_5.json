@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Oznacz przez $N$ sumę wszystkich niebieskich liczb, a przez $Z$ sumę wszystkich żółtych. Rozważ różnicę $N - Z$. Jak zmienia się ta różnica gdy usuwamy pojedyncze liczby?",
-    "Pomyśl o ciągu stanów: zacznij od wszystkich liczb i usuwaj je po kolei (jedną po drugiej). Śledź jak zmienia się różnica sum. Czy możesz użyć zasady szufladkowej lub argumentu o wartościach pośrednich?",
-    "Każda liczba ma wartość od 1 do 20, więc usunięcie jednej liczby zmienia różnicę sum o co najwyżej 20. Rozważ wszystkie możliwe $2^{800}$ podzbiorów — ile różnych wartości może przyjąć różnica sum i ile jest podzbiorów?",
-    "Dla każdego niepustego podzbioru liczb rozważ różnicę (suma niebieskich w podzbiorze) minus (suma żółtych w podzbiorze). Pokaż, że wśród wszystkich możliwych niepustych właściwych podzbiorów dwa muszą dawać tę samą różnicę — ich symetryczna różnica da różnicę równą 0."
+    "Zadanie sprowadza się do znalezienia takiego niepustego i niewszystkiego podzbioru liczb z tablicy, w którym suma liczb niebieskich jest równa sumie liczb żółtych.",
+    "Zamiast rozważać wszystkie $2^{800}$ możliwe podzbiory, spróbuj znaleźć mniejszą, ale dobrze zdefiniowaną kolekcję podzbiorów, do której można zastosować Zasadę Szufladkową Dirichleta.",
+    "Uporządkuj liczby niebieskie w ciąg $(b_1, \\dots, b_{400})$ i żółte w ciąg $(y_1, \\dots, y_{400})$. Rozważ sumy $B_i = \\sum_{k=1}^i b_k$ oraz $Y_j = \\sum_{k=1}^j y_k$ (dla $i,j$ od 0 do 400). Ile różnych różnic postaci $B_i - Y_j$ można utworzyć?",
+    "Możesz utworzyć $401 \\times 401$ różnic $B_i - Y_j$. Jaki jest zakres wartości, które mogą one przyjąć? Zastosuj Zasadę Szufladkową, aby pokazać, że dwie takie różnice muszą być równe, a następnie wykorzystaj tę równość do zbudowania szukanego zbioru liczb."
   ],
   "skills_required": [
     "pigeonhole",

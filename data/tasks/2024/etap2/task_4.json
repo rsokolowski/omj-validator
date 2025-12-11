@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zastanów się, co się stanie, gdy podniesiesz obie strony równania do sześcianu. Jaką postać przyjmie lewa strona? Rozpisz $(\\sqrt[3]{a} + \\sqrt[3]{b})^3$ korzystając ze wzoru na sześcian sumy.",
-    "Spróbuj podejścia nie wprost: załóż, że takie $a$ i $b$ istnieją, i poszukaj sprzeczności. Zwróć uwagę na to, które wyrażenia w rozwinięciu są wymierne, a które niewymierne.",
-    "Po podniesieniu do sześcianu otrzymasz wyrażenie zawierające $\\sqrt[3]{a^2b}$ i $\\sqrt[3]{ab^2}$. Kiedy suma liczby wymiernej i niewymiernej może być wymierna? Rozważ, co musiałoby być spełnione.",
-    "Zbadaj warunek, przy którym $\\sqrt[3]{ab}$ byłoby wymierne. Jeśli $ab = k^3$ dla pewnego $k$, to podstaw $b = \\frac{k^3}{a}$ i sprawdź, czy równanie może być spełnione dla dodatnich całkowitych $a$, $b$."
+    "Zapisz równanie w postaci $\\frac{\\sqrt[3]{a}}{\\sqrt[3]{2025}} + \\frac{\\sqrt[3]{b}}{\\sqrt[3]{2025}} = 1$. Jak można inaczej zapisać składniki sumy po lewej stronie?",
+    "Niech $x = \\sqrt[3]{a/2025}$ i $y = \\sqrt[3]{b/2025}$. Mamy $x+y=1$. Aby $a=2025x^3$ i $b=2025y^3$ były liczbami całkowitymi, jakiego rodzaju liczbami (np. całkowitymi, wymiernymi) muszą być $x$ i $y$?",
+    "Jeśli $x$ jest liczbą wymierną, to $x=p/q$ dla pewnych względnie pierwszych liczb całkowitych $p, q$. Warunek, że $a = 2025(p/q)^3$ jest liczbą całkowitą, narzuca silne ograniczenie na mianownik $q$. Jakie?",
+    "Rozłóż 2025 na czynniki pierwsze. Wykorzystaj ten rozkład, aby znaleźć możliwe wartości dla mianownika $q$. Sprawdź, czy któraś z nich prowadzi do znalezienia dodatnich całkowitych $a$ i $b$."
   ],
   "prerequisites": [],
   "skills_required": [

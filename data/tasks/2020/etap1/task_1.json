@@ -13,12 +13,15 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Wypisz wszystkie dwucyfrowe liczby, które są kwadratami liczb całkowitych. Zastanów się, jak kolejne pary cyfr w szukanej liczbie muszą być ze sobą powiązane.",
-    "Zauważ, że druga cyfra jednej pary musi być pierwszą cyfrą następnej pary. Spróbuj narysować schemat pokazujący, które kwadraty można ze sobą \"połączyć\".",
-    "Zbadaj, od których cyfr mogą zaczynać się dwucyfrowe kwadraty, a na których mogą się kończyć. Czy istnieje cyfra, która pozwala przejść z jednego kwadratu do następnego?",
-    "Sprawdź systematycznie: dla każdego dwucyfrowego kwadratu znajdź wszystkie kwadraty, które mogą po nim następować (tzn. zaczynają się od jego ostatniej cyfry). Czy da się utworzyć łańcuch długości 5 takich połączeń?"
+    "Wypisz wszystkie dwucyfrowe liczby, które są kwadratami liczb całkowitych. Zastanów się, jak muszą na siebie 'zachodzić' kolejne pary cyfr w szukanej liczbie.",
+    "Potraktuj dwucyfrowe kwadraty jako punkty. Narysuj strzałkę od jednego kwadratu do drugiego, jeśli można je połączyć (ostatnia cyfra pierwszego jest pierwszą cyfrą drugiego).",
+    "Przyjrzyj się narysowanemu schematowi. Czy z każdego kwadratu da się przejść do jakiegoś następnego? Zwróć uwagę na te, które są 'ślepymi zaułkami'.",
+    "Szukana liczba sześciocyfrowa odpowiada ścieżce złożonej z 5 kwadratów. Jaka jest najdłuższa ścieżka, którą można znaleźć na Twoim schemacie?"
   ],
-  "skills_required": ["digit_manipulation", "case_analysis"],
+  "skills_required": [
+    "digit_manipulation",
+    "case_analysis"
+  ],
   "skills_gained": [
     "case_analysis",
     "counting_techniques"

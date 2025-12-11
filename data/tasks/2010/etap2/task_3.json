@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Oznacz zawodników siedzących przy stole kolejno $Z_1, Z_2, \\ldots, Z_n$. Co oznacza warunek o wygrywaniu z sąsiadem po lewej? Narysuj diagram dla małego $n$, np. $n=4$.",
-    "Skup się na relacjach między zawodnikami, którzy NIE siedzą obok siebie. Czy możesz znaleźć parę zawodników $Z_i$ i $Z_j$ (niebędących sąsiadami), gdzie wynik meczu między nimi tworzy coś interesującego z wynikami ich meczów z osobami między nimi?",
-    "Rozważ zawodnika $Z_1$ i zawodnika $Z_3$ (przeskakując jedną osobę). Jeden z nich wygrał z drugim. Przeanalizuj oba przypadki i zobacz, jak wynik tego meczu łączy się z wynikami meczów z $Z_2$.",
-    "Jeśli $Z_1$ wygrał z $Z_3$, to mamy ciąg $Z_1 \\to Z_3 \\to Z_2 \\to Z_1$ (gdzie strzałka oznacza wygraną). Sprawdź, czy to daje szukany cykl. A jeśli $Z_3$ wygrał z $Z_1$?"
+    "Oznaczmy zawodników siedzących przy stole zgodnie z ruchem wskazówek zegara jako $Z_1, Z_2, \\ldots, Z_n$. Co wiemy o wyniku meczu między $Z_i$ a $Z_{i+1}$ (oraz między $Z_n$ a $Z_1$)?",
+    "Poszukajmy cyklu złożonego z trzech zawodników. Dobrym punktem wyjścia jest przyjrzenie się trzem kolejnym zawodnikom przy stole, np. $Z_1, Z_2, Z_3$. Jakie wyniki meczów między nimi już znamy?",
+    "Znamy wyniki meczów $Z_1$ z $Z_2$ i $Z_2$ z $Z_3$. Rozważ dwa możliwe wyniki meczu między $Z_1$ a $Z_3$. Czy w którymś z tych przypadków od razu znajdujemy szukany cykl?",
+    "Jeśli nie znalazłeś cyklu, to znaczy, że $Z_1$ pokonał $Z_3$. Co ten wynik, w połączeniu z brakiem cyklu z udziałem $Z_1, Z_3, Z_4$, mówi nam o wyniku meczu $Z_1$ z $Z_4$? Spróbuj uogólnić tę obserwację."
   ],
   "skills_required": [
     "graph_theory",

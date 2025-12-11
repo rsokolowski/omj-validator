@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trapezu z zaznaczonymi wszystkimi punktami. Zastanów się, jaką własność ma punkt E (przecięcie przekątnych) i jak dzieli on przekątne trapezu. Co wiesz o proporcjach w trapezach?",
-    "Wykorzystaj fakt, że prosta przez E równoległa do podstaw dzieli ramiona trapezu w określonym stosunku. Przypomnij sobie, w jakim stosunku przekątne trapezu dzielą się wzajemnie. Spróbuj wyrazić długość AF przez AB i CD.",
-    "Warunek AB + CD = AD jest kluczowy! Sprawdź, czy punkt F ma szczególne położenie na boku AD. Rozważ konstrukcję pomocniczą - na przykład odłożenie odcinków równych AB i CD na prostej zawierającej AD.",
-    "Skonstruuj punkt P na przedłużeniu DA za A tak, że AP = AB, oraz zauważ, że DF = CD (wynika to z własności proporcji w trapezie). Zbadaj trójkąty PBF i DCF - jakie mają własności? Czy są równoramienne?"
+    "Narysuj dokładny rysunek i zaznacz na nim wszystkie punkty i zależności. Jaki jest związek między trójkątami, na które przekątne dzielą trapez?",
+    "Prosta $EF$ jest równoległa do podstaw. Wykorzystaj podobieństwo trójkątów, aby powiązać stosunek $AF/FD$ ze stosunkiem, w jakim punkt $E$ dzieli przekątne.",
+    "Kluczowy warunek to $AB + CD = AD$. Połącz go z proporcją znalezioną w poprzednim kroku, aby obliczyć długości odcinków $AF$ i $FD$ w zależności od długości podstaw.",
+    "Odkrycie z poprzedniego kroku sprawia, że trójkąty $\\triangle ABF$ i $\\triangle CDF$ są równoramienne. Wykorzystaj tę własność oraz sumę kątów przy ramieniu $AD$, aby obliczyć szukany kąt $\\angle BFC$."
   ],
   "skills_required": [
     "trapezoid_parallelogram",

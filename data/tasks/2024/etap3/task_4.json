@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek rombu z zaznaczonym punktem $P$ i prostą przez $P$ równoległą do $AD$. Jakie kąty rombu znasz? Pamiętaj, że przekątna rombu dzieli kąty wierzchołkowe na połowy.",
-    "Wykorzystaj własności rombu i kątów naprzemianległych przy równoległych prostych. Spróbuj obliczyć wszystkie kąty w trójkątach $BPC$ i $APQ$ - szukaj trójkątów równoramiennych.",
-    "Zwróć uwagę na kąty przy przekątnej $AC$ i kąty powstające z równoległości $PQ \\parallel AD$. Czy widzisz trójkąt równoramienny z wierzchołkiem w $B$? A może w $A$?",
-    "Wykaż, że trójkąt $BPC$ jest równoramienny (z równymi bokami $BP$ i $PC$). Następnie, korzystając z równoległości i własności rombu, wykaż że $AQ = PC$."
+    "Narysuj duży i dokładny rysunek. Oblicz miary kątów wewnętrznych rombu oraz kątów, na które dzieli je przekątna $AC$.",
+    "Oblicz miary wszystkich kątów w trójkącie $BPC$. Jaki wniosek dotyczący długości odcinka $BP$ możesz z tego wyciągnąć w odniesieniu do boku rombu?",
+    "Wykorzystaj równość odcinków z poprzedniego kroku, aby obliczyć miary kątów w trójkącie $ABP$. Następnie, korzystając z warunku $PQ \\parallel AD$, oblicz miary kątów w trójkącie $APQ$.",
+    "Teza $BP=AQ$ jest równoważna pewnej równości boków w trójkącie $ABQ$. Oblicz wszystkie kąty w tym trójkącie i sprawdź, czy ta równość może zachodzić."
   ],
   "skills_required": [
     "angle_chasing",

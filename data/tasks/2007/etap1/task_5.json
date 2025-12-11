@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek z okręgiem wpisanym i punktami styczności K, L, M, N. Jakie własności mają odcinki styczne z jednego wierzchołka? Jak promienie do punktów styczności odnoszą się do boków?",
-    "Punkty K, L, M, N leżą na okręgu, więc można rozważać kąty wpisane. Zastanów się, jak kąty $\\angle AKN$, $\\angle BKL$ związane są z łukami okręgu i kątami wpisanymi.",
-    "Zauważ, że $\\angle KLM$ i $\\angle KNM$ to kąty wpisane oparte na tym samym łuku KM. Co to oznacza dla tych kątów? Użyj warunków zadania, by powiązać $\\angle AKN$ i $\\angle BKL$.",
-    "Oznacz $\\angle AKN = \\alpha$ i $\\angle BKL = \\beta$. Z równości kątów wpisanych opartych na łuku KM dostaniesz równanie wiążące $\\alpha$ i $\\beta$. Rozwiąż układ i oblicz długość cięciwy LN z promienia okręgu."
+    "Zauważ, że punkty K, L, M, N leżą na okręgu. Jakie twierdzenie łączy kąt między styczną a cięciwą (np. ∠AKN) z miarą odpowiedniego łuku tego okręgu?",
+    "Oznaczmy ∠AKN = α oraz ∠BKL = β. Wyraź miary wszystkich czterech łuków $\\widehat{KL}, \\widehat{LM}, \\widehat{MN}, \\widehat{NK}$ w zależności od α i β, korzystając z danych w zadaniu i własności kątów wpisanych oraz kątów między styczną a cięciwą.",
+    "Użyj twierdzenia o kącie między styczną a cięciwą, aby powiązać α z łukiem $\\widehat{NK}$ i β z łukiem $\\widehat{KL}$. Następnie, używając danych z zadania, znajdź zależności dla łuków $\\widehat{MN}$ i $\\widehat{LM}$.",
+    "Suma miar czterech łuków tworzących okrąg jest stała. Ułóż równanie pozwalające obliczyć sumę α+β. Długość odcinka LN zależy od kąta środkowego ∠LON. Wyraź ten kąt przez α i β, a następnie oblicz jego miarę."
   ],
   "skills_required": [
     "tangential_quadrilateral",

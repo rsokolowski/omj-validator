@@ -14,11 +14,19 @@
   ],
   "hints": [
     "Narysuj na płaszczyźnie zbiór punktów spełniających równanie $|x| + |y| = 1$. Jaka to figura? Następnie zastanów się, jak wygląda wykres drugiego równania.",
-    "Rozważ przypadki ze względu na znak $x$ (czy $x \\geq 0$ czy $x < 0$). W każdym przypadku uprość wyrażenie $|x|$ i zbadaj, jaką prostą opisuje drugie równanie.",
-    "Zauważ, że z drugiego równania wynika $y = |x| + a \\geq a$. Dla jakich wartości $y$ istnieją punkty na pierwszej figurze? Kiedy prosta może przecinać tę figurę?",
-    "Podstaw $y = |x| + a$ do pierwszego równania, otrzymując $|x| + ||x| + a| = 1$. Przeanalizuj osobno przypadki $a \\geq 0$, $a < 0$ i zbadaj, ile rozwiązań ma równanie w zależności od wartości $a$."
+    "Zadanie sprowadza się do znalezienia liczby punktów przecięcia dwóch narysowanych figur. Zauważ, że zmiana parametru $a$ przesuwa jedną z nich w pionie.",
+    "Kluczowe są momenty, w których charakterystyczne punkty jednej figury (np. wierzchołki) pokrywają się z drugą figurą. Zwróć szczególną uwagę na wierzchołki kwadratu.",
+    "Zbadaj, jaka jest liczba rozwiązań, gdy wierzchołek łamanej $y=|x|+a$ pokrywa się z górnym wierzchołkiem kwadratu, a także gdy ramiona łamanej przechodzą przez wierzchołki kwadratu leżące na osi $x$."
   ],
-  "prerequisites": ["2007_etap1_1"],
-  "skills_required": ["absolute_value", "coordinate_geometry"],
-  "skills_gained": ["case_analysis", "absolute_value"]
+  "prerequisites": [
+    "2007_etap1_1"
+  ],
+  "skills_required": [
+    "absolute_value",
+    "coordinate_geometry"
+  ],
+  "skills_gained": [
+    "case_analysis",
+    "absolute_value"
+  ]
 }

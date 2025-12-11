@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Co to znaczy, że ułamek jest wymierny? Jeśli $\\frac{a-b}{a+b} = \\frac{p}{q}$ dla liczb całkowitych $p$, $q$, to co możesz wywnioskować o stosunku $\\frac{a}{b}$?",
-    "Spróbuj wyrazić stosunek $\\frac{a}{b}$ jako funkcję wymierną liczby wymiernej. Czy stosunek dwóch dodatnich liczb, których iloraz pewnych kombinacji jest wymierny, sam musi być wymierny?",
-    "Z równości $\\frac{a-b}{a+b} = r$ (gdzie $r$ jest wymierne) wyznacz $\\frac{a}{b}$. Podziel licznik i mianownik przez $b$ i rozwiąż równanie.",
-    "Po wyznaczeniu $\\frac{a}{b} = \\frac{1+r}{1-r}$ (gdzie $r$ jest wymierne), podstaw ten stosunek do wyrażenia $\\frac{2a-b}{2a+b}$ dzieląc przez $b$. Sprawdź, że wynik jest wymierny jako złożenie operacji arytmetycznych na liczbach wymiernych."
+    "Niech $\frac{a-b}{a+b} = r$, gdzie $r$ jest liczbą wymierną. Co możesz wywnioskować o stosunku $\frac{a}{b}$ na podstawie tej informacji?",
+    "Pokaż, że jeśli $\frac{a-b}{a+b}$ jest liczbą wymierną, to stosunek $\frac{a}{b}$ również musi być liczbą wymierną. Następnie zbadaj, jak ten fakt wpływa na wymierność docelowego wyrażenia.",
+    "Aby z równości $\frac{a-b}{a+b} = r$ wyznaczyć stosunek $\frac{a}{b}$, spróbuj podzielić licznik i mianownik po lewej stronie przez $b$. Otrzymasz równanie, z którego obliczysz $\frac{a}{b}$.",
+    "Przekształć wyrażenie $\frac{2a-b}{2a+b}$ w podobny sposób, dzieląc licznik i mianownik przez $b$. Wykorzystaj wymierność stosunku $\frac{a}{b}$, aby zakończyć dowód."
   ],
   "skills_required": [
     "algebraic_identities",

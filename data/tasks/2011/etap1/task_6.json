@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Oznacz $S = \\sqrt{a} + \\sqrt{b} + \\sqrt{ab}$. Co możesz powiedzieć o wyrażeniu $\\sqrt{ab} = \\sqrt{a} \\cdot \\sqrt{b}$? Rozważ, co by było, gdyby jedna z liczb $\\sqrt{a}$ lub $\\sqrt{b}$ była niewymierna.",
-    "Spróbuj podejścia nie wprost: załóż, że $\\sqrt{a}$ jest niewymierna i zobacz, do jakiej sprzeczności to prowadzi. Wykorzystaj fakt, że $a$ i $b$ są wymierne.",
-    "Zauważ, że możesz wyrazić $\\sqrt{a}$ jako kombinację wyrażeń zawierających $S$ i inne składniki. Spróbuj przekształcić $S - \\sqrt{ab}$ i sprawdź, czy możesz uzyskać równanie, w którym $\\sqrt{a}$ występuje po jednej stronie.",
-    "Rozważ wyrażenie $(\\sqrt{a} + \\sqrt{b})^2 = a + b + 2\\sqrt{ab}$. Skoro $S$ jest wymierna, to $\\sqrt{a} + \\sqrt{b} = S - \\sqrt{ab}$. Zbadaj, kiedy kwadrat tej różnicy może być wymierny."
+    "Niech $x=\\sqrt{a}$ i $y=\\sqrt{b}$. Zapisz warunki zadania używając $x$ i $y$. Co wiesz o liczbach $x^2$ i $y^2$? Co wiesz o sumie $x+y+xy$?",
+    "Wyrażenie $x+y+xy$ wygląda znajomo. Czy potrafisz je powiązać z iloczynem $(x+1)(y+1)$? Spróbuj przekształcić dane równanie do prostszej postaci.",
+    "Wykorzystaj nową postać równania, aby wyrazić $y$ (czyli $\\sqrt{b}$) za pomocą $x$ (czyli $\\sqrt{a}$) i znanych liczb wymiernych. Pamiętaj, że $y^2=b$ jest liczbą wymierną.",
+    "Podnieś do kwadratu wyrażenie na $y$ z poprzedniej wskazówki. Otrzymasz równanie postaci $b = (\\dots)^2$. Uporządkuj je tak, aby po jednej stronie znalazł się tylko $x$ (czyli $\\sqrt{a}$)."
   ],
   "prerequisites": [],
   "skills_required": [

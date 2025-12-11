@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek z punktami $D$ (środek $AB$) i $E$ (środek $CD$). Zaznacz równe kąty $\\angle CAE$ i $\\angle BCD$. Co możesz powiedzieć o położeniu punktu $E$ względem trójkąta?",
-    "Rozważ przedłużenie odcinka $AE$ poza punkt $E$. Jakie trójkąty mogą okazać się podobne lub przystające? Pomyśl o wykorzystaniu faktu, że $E$ jest środkiem $CD$.",
-    "Przedłuż $AE$ do punktu $F$ tak, aby $E$ był środkiem $AF$. Zbadaj czworokąt $ACFD$ - jakie ma własności skoro $E$ jest środkiem obu przekątnych $AF$ i $CD$?",
-    "Skoro $ACFD$ jest równoległobokiem, to $AC \\parallel DF$ i $AC = DF$. Wykorzystaj warunek $\\angle CAE = \\angle BCD$ oraz fakt, że $D$ jest środkiem $AB$, aby pokazać zależność między trójkątami $ACD$ i $BDF$."
+    "Narysuj starannie figurę, zaznaczając środki odcinków i równe kąty. Teza, którą masz udowodnić ($AC=CD$), oznacza, że pewien trójkąt jest równoramienny. Który to trójkąt?",
+    "W zadaniach z środkami odcinków często pomaga dobudowanie równoległoboku. Punkt E jest środkiem CD. Jak można przedłużyć odcinek AE, aby punkt E stał się również środkiem innego odcinka?",
+    "Przedłuż odcinek AE do punktu F w taki sposób, aby E było środkiem odcinka AF. Jaki czworokąt tworzą punkty A, C, F, D? Wykorzystaj teraz fakt, że D jest środkiem AB, aby znaleźć drugi równoległobok na rysunku.",
+    "Z własności obu równoległoboków wynikają dwie pary prostych równoległych. Użyj ich, aby przenieść dane kąty ($\\/angle CAE$ i $\\/angle BCD$) do wnętrza jednego trójkąta i wykazać, że jest on równoramienny."
   ],
   "skills_required": [
     "angle_chasing",

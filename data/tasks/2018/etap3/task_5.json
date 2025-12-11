@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Rozważ mały przykład: jak może wyglądać jeden kwadrat $2 \\times 2$, w którym suma pewnych trzech liczb wynosi zero? Jakie kombinacje trzech liczb z zestawu $\\{-1, 0, 1\\}$ dają sumę zero?",
-    "Zastanów się, jakie ograniczenia nakładają na siebie sąsiednie kwadraty $2 \\times 2$. Czy da się wypełnić całą tablicę samymi jedynkami? Poszukaj górnego ograniczenia na sumę wszystkich pól.",
-    "Zbadaj, co dzieje się w wierszu lub kolumnie tablicy. Jeśli w kwadracie $2 \\times 2$ trzy liczby sumują się do zera, to co można powiedzieć o czwartej liczbie? Ile może być co najwyżej jedynek w jednym wierszu?",
-    "Spróbuj skonstruować wypełnienie tablicy z jak największą liczbą jedynek, spełniające warunek zadania. Rozważ układ, w którym jedynki tworzą regularny wzór (np. szachownicowy lub paskowy)."
+    "Rozważ kwadrat 2x2. Jakie zestawy czterech liczb ze zbioru $\\{-1, 0, 1\\}$ spełniają warunek zadania? Co można powiedzieć o sumie wszystkich czterech liczb w takim kwadracie?",
+    "Problem wymaga znalezienia maksimum. Znajdź górne ograniczenie na sumę, a potem skonstruuj przykład, który je osiąga. Zacznij od znalezienia maksymalnej liczby jedynek w dowolnym kwadracie 2x2.",
+    "Suma liczb w każdym z 16 kwadratów 2x2 jest niewielka. Co otrzymasz, jeśli zsumujesz te 16 sum? Zauważ, że pola w środku tablicy są wliczane do tej sumy więcej razy niż te na brzegu.",
+    "Wykorzystaj uzyskaną nierówność, aby powiązać sumę całkowitą z sumą liczb na brzegu tablicy. Pokaż, że liczby na brzegu podlegają pewnym ograniczeniom, co pozwoli oszacować sumę całkowitą. Na koniec poszukaj tablicy o naprzemiennych wierszach."
   ],
   "skills_required": [
     "case_analysis",

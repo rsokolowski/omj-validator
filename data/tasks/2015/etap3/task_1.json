@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zapisz warunek podzielności formalnie: $(m+n) | (m + n^2)$ oznacza, że istnieje liczba całkowita $k$ taka, że $m + n^2 = k(m+n)$. Co możesz powiedzieć o różnicy $n^2 - n$?",
-    "Spróbuj wyrazić $m + n^3$ przez wyrażenia, o których wiesz, że są podzielne przez $m + n$. Pamiętaj, że jeśli $(m+n) | a$ i $(m+n) | b$, to $(m+n) | (a \\pm b)$ oraz $(m+n) | (ka)$ dla dowolnej liczby całkowitej $k$.",
-    "Zauważ, że $n^3 - n^2 = n^2(n-1)$. Zbadaj, jak powiązać $m + n^3$ z wyrażeniem $m + n^2$, które jest podzielne przez $m + n$. Rozważ też, czy $(m+n) | n(m+n)$.",
-    "Zapisz $m + n^3 = (m + n^2) + n^2(n-1)$. Pierwszy składnik jest podzielny przez $m+n$ z założenia. Dla drugiego składnika wykorzystaj fakt, że skoro $(m+n) | (m+n^2)$ i $(m+n) | (m+n)$, to $(m+n) | (n^2 - n)$."
+    "Skoro $m+n$ dzieli $m+n^2$ oraz dzieli samo siebie, to co musi dzielić ich różnicę? Oblicz tę różnicę.",
+    "Chcemy pokazać, że $m+n$ dzieli $m+n^3$. Spróbuj przedstawić $m+n^3$ jako sumę wyrażeń, o których już wiesz, że są podzielne przez $m+n$.",
+    "Wyrażenie $m+n^3$ jest bardzo podobne do danego w zadaniu wyrażenia $m+n^2$. Rozważ ich różnicę. Czy potrafisz ją powiązać z wynikiem uzyskanym w pierwszej wskazówce?",
+    "Zapisz $m+n^3$ jako sumę $(m+n^2) + (n^3-n^2)$. Pierwszy składnik jest podzielny przez $m+n$ z założenia. Pokaż, że drugi składnik też jest podzielny, wykorzystując fakt, że $m+n$ dzieli $n^2-n$."
   ],
   "skills_required": [
     "divisibility_arguments",

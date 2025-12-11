@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Przeanalizuj kilka pierwszych ruchów i zaobserwuj, jak zmieniają się liczby na tablicy. Jaką własność mają wszystkie liczby, które mogą się pojawić?",
-    "Poszukaj niezmiennika - własności, która nie zmienia się po każdym ruchu. Rozważ różne operacje modulo.",
-    "Zbadaj reszty z dzielenia obu liczb na tablicy przez 3. Co dzieje się z tymi resztami po wykonaniu ruchu?",
-    "Zauważ, że początkowe reszty z dzielenia przez 3 to: $2 \\mod 3 = 2$ i $5 \\mod 3 = 2$. Sprawdź, jakie reszty mogą mieć dwie kolejne liczby naturalne."
+    "Wypisz kilka pierwszych par liczb, które można uzyskać. Zwróć uwagę nie tylko na same liczby, ale też na ich sumę i różnicę.",
+    "Aby liczby były kolejne, ich różnica musi wynosić 1. Zastanów się, czy jest jakaś własność różnicy liczb na tablicy, która nie zmienia się w specyficzny sposób po każdym ruchu.",
+    "Niech na tablicy będą liczby $a$ i $b$. Nowa para to $(a, a+b)$ lub $(b, a+b)$. Wyraź nową różnicę między liczbami w zależności od $a$ i $b$.",
+    "Różnica liczb w następnym kroku jest zawsze równa jednej z liczb z kroku poprzedniego. Jakie wartości mogą przyjmować liczby na tablicy? Czy w takim razie ich różnica może kiedykolwiek wynosić 1?"
   ],
   "prerequisites": [],
   "skills_required": [

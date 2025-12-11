@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek czworokąta ABCD i zaznacz dwusieczne kątów $\\angle BCD$ i $\\angle CDA$. Co oznacza warunek $AD + BC = CD$ geometrycznie? Czy możesz zaznaczyć odpowiednie odcinki na boku $CD$?",
-    "Skoro $AD + BC = CD$, spróbuj znaleźć punkt $P$ na odcinku $CD$ taki, że $DP = AD$ (lub $CP = BC$). Jakie trójkąty równoramienne powstają w tej konstrukcji? Jak dwusieczne kątów przechodzą przez takie trójkąty?",
-    "Zauważ, że jeśli $DP = AD$, to trójkąt $ADP$ jest równoramienny. Dwusieczna kąta $\\angle ADC$ ma szczególną własność w tym trójkącie. Podobnie przeanalizuj sytuację przy wierzchołku $C$ z punktem $P$ takim, że $CP = BC$.",
-    "Pokaż, że punkt $S$ leży na symetralnej odcinka $AB$. Wykorzystaj fakt, że dwusieczna w trójkącie równoramiennym jest jednocześnie symetralną podstawy. Jak punkty $A$, $P$, $B$ i dwusieczne tworzą konfigurację prowadzącą do $AS = BS$?"
+    "Narysuj dokładny rysunek. Warunek $AD + BC = CD$ sugeruje, że na boku $CD$ można znaleźć szczególny punkt. Jak go skonstruować, używając długości boków $AD$ i $BC$?",
+    "Wybierz na boku $CD$ taki punkt $P$, że $DP = AD$. Co wynika z tego dla długości odcinka $CP$? Zauważ, że w ten sposób powstały dwa trójkąty równoramienne: $\\triangle ADP$ i $\\triangle BCP$.",
+    "Punkt $S$ leży na dwusiecznych kątów przy wierzchołkach $D$ i $C$. Jakie szczególne własności mają te dwusieczne w trójkątach równoramiennych $\\triangle ADP$ i $\\triangle BCP$?",
+    "Dwusieczna kąta między ramionami w trójkącie równoramiennym jest symetralną podstawy. Co to oznacza dla odległości punktu $S$ od wierzchołków $A$ i $P$? A od wierzchołków $B$ i $P$? Połącz te fakty."
   ],
   "skills_required": [
     "angle_chasing",

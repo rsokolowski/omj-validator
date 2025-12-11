@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Czy potrafisz znaleźć choć jedną trójkę $(a, b, c)$ spełniającą równanie? Spróbuj małych wartości. Zastanów się, jak z jednego rozwiązania mogłoby powstać więcej.",
-    "Szukaj rodziny rozwiązań zależnych od parametru $n$. Spróbuj podstawić wyrażenia typu $a = f(n)$, $b = g(n)$, $c = h(n)$ dla odpowiednich funkcji.",
-    "Zwróć uwagę na strukturę wyrażenia $a^3 + 3b^6$. Czy da się je przekształcić do postaci kwadratu? Przypomnij sobie wzory na sześcian sumy lub różnicy.",
-    "Rozważ, czy wyrażenie postaci $(m^3 - 3m)^2$ lub podobne może pomóc. Poszukaj tożsamości algebraicznej wiążącej sześciany i kwadraty z czynnikiem 3."
+    "Czy potrafisz znaleźć choć jedną trójkę $(a, b, c)$ spełniającą równanie? Spróbuj małych wartości.",
+    "Spróbuj znaleźć nieskończoną rodzinę rozwiązań, zakładając, że istnieje prosty związek algebraiczny między $a$ i $b$.",
+    "Zauważ, że równanie można zapisać jako $a^3 + 3(b^2)^3 = c^2$. Jaki związek między $a$ a $b^2$ sprawiłby, że lewa strona równania przyjmie prostszą postać?",
+    "Co się stanie, jeśli podstawisz do równania najprostszy możliwy związek, czyli $a=b^2$? Sprawdź, czy lewa strona staje się wtedy pełnym kwadratem."
   ],
   "skills_required": [
     "diophantine_equations",

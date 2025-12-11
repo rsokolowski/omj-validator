@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zapisz warunki zadania algebraicznie: $ab = k^2$ oraz $(a+1)(b+1) = m^2$ dla pewnych liczb całkowitych $k$ i $m$. Co możesz powiedzieć o różnicy $(a+1)(b+1) - ab$?",
-    "Rozwiń $(a+1)(b+1)$ i porównaj z $ab$. Otrzymasz związek między $a$, $b$, $k$ i $m$. Spróbuj znaleźć wzorzec - czy możesz zgadnąć postać liczby $n$, dla której $(a+n)(b+n)$ też będzie kwadratem?",
-    "Zauważ, że $(a+1)(b+1) - ab = a + b + 1$. Skoro $ab = k^2$ i $(a+1)(b+1) = m^2$, to $m^2 - k^2 = a + b + 1$. Rozłóż lewą stronę na iloczyn i zastanów się, jaką postać może mieć $n$.",
-    "Sprawdź, czy $n = k^2$ (lub $n = m^2$) daje kwadrat. Rozważ wyrażenie $(a + k^2)(b + k^2)$ i spróbuj je przekształcić, korzystając z faktu że $ab = k^2$."
+    "Zapisz warunki zadania w postaci równań, używając zmiennych na oznaczenie pierwiastków: niech $ab = k^2$ i $(a+1)(b+1) = m^2$. Twoim celem jest znalezienie konkretnej liczby $n>1$.",
+    "Dowód jest konstruktywny – polega na wskazaniu działającej wartości $n$. Pomyśl, jakie proste wyrażenie algebraiczne, zależne od $a$ i $b$, mogłoby być dobrym kandydatem na $n$.",
+    "Rozwiń wyrażenie, które ma być kwadratem: $(a+n)(b+n) = ab + n(a+b) + n^2$. Pierwszy składnik, $ab$, jest już kwadratem. Czy możesz dobrać $n$ tak, aby uprościć to wyrażenie?",
+    "Sprawdź, co się stanie, gdy wybierzesz $n=ab$. Podstaw tę wartość do wyrażenia $(a+n)(b+n)$ i użyj założeń z zadania, by pokazać, że jest ono kwadratem. Pamiętaj, by uzasadnić, że można znaleźć $n>1$."
   ],
   "skills_required": [
     "diophantine_equations",

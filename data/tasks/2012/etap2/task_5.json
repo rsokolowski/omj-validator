@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zastanów się: jeśli $p^2 + pq + q^2 = k^2$, to jaką relację ma $k$ względem $p$ i $q$? Czy $k$ jest większe, mniejsze, czy równe pewnym wyrażeniom zależnym od $p$ i $q$?",
-    "Spróbuj oszacować wyrażenie $p^2 + pq + q^2$ z obu stron - znajdź kwadraty doskonałe, między którymi może się znajdować. Rozważ $(p+q)^2$ oraz inne naturalne kandydaty.",
-    "Zauważ, że $p^2 + pq + q^2$ leży między pewnymi kolejnymi kwadratami doskonałymi. Kiedy może być równe jednemu z nich? Zbadaj, co wynika z równości dla małych wartości $p$ i $q$.",
-    "Porównaj $p^2 + pq + q^2$ z $(p+q)^2$ i $p^2 + q^2$. Sprawdź przypadek $p = q$ osobno, a następnie przeanalizuj przypadek $p \\neq q$ korzystając z własności liczb pierwszych."
+    "Niech $p^2 + pq + q^2 = k^2$. Rozważ najpierw prosty przypadek, gdy $p=q$. Następnie, dla $p \\neq q$, zastanów się, jak duża jest liczba $k$ w porównaniu do $p$ i $q$.",
+    "Zakładając bez straty ogólności, że $p < q$, spróbuj ograniczyć $k^2$ z góry i z dołu przez kwadraty liczb całkowitych. Porównaj $p^2+pq+q^2$ z $q^2$ oraz $(p+q)^2$.",
+    "Z poprzedniej wskazówki wynika, że $q < k < p+q$. Oznacza to, że $k$ można zapisać jako $q+m$ dla pewnej dodatniej liczby całkowitej $m$. Jaki warunek musi spełniać $m$? Podstaw $k=q+m$ do równania.",
+    "Po podstawieniu i uproszczeniu otrzymasz $(p-m)(p+m) = q(2m-p)$. Ponieważ $q$ jest liczbą pierwszą i $q>p$, przeanalizuj, który z czynników po lewej stronie musi być podzielny przez $q$."
   ],
   "skills_required": [
     "primality_testing",

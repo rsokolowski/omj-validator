@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek z okręgiem opisanym na $ABCD$, przekątnymi przecinającymi się w $E$ oraz punktem $F$ jako przecięciem prostopadłych. Jakie kąty przy punkcie $F$ znasz z konstrukcji?",
-    "Przypomnij sobie, że punkty, z których odcinek widać pod kątem prostym, leżą na okręgu o tym odcinku jako średnicy. Poszukaj takich okręgów pomocniczych w zadaniu.",
-    "Zauważ, że $\\angle BFC = 90°$ z konstrukcji. Zastanów się, na jakim okręgu leżą punkty $B$, $F$, $C$. Podobnie przeanalizuj, gdzie leżą punkty związane z przekątnymi.",
-    "Wykorzystaj własności kątów wpisanych w czworokącie $ABCD$ oraz w okręgach pomocniczych. Spróbuj wykazać, że $\\angle AEF = 90°$ badając odpowiednie kąty wpisane oparte na tych samych łukach."
+    "Narysuj starannie całą konfigurację. Z definicji punktu $F$ wynikają dwa kąty proste. Zaznacz je na rysunku. Gdzie one się znajdują?",
+    "Kąty proste często sugerują istnienie okręgów. Poszukaj czworokąta, którego wierzchołki leżą na jednym okręgu, wykorzystując kąty proste z konstrukcji.",
+    "Zauważ, że z punktów $B$ i $C$ widać pewien odcinek pod kątem prostym. Który to odcinek? Co to oznacza dla punktów $B, C, E, F$?",
+    "Wykorzystaj kąty wpisane w nowo znalezionym okręgu, aby powiązać kąt z wierzchołkiem $F$ z kątem przy wierzchołku $B$. Następnie użyj kątów wpisanych w okręgu opisanym na $ABCD$."
   ],
   "skills_required": [
     "circle_theorems",

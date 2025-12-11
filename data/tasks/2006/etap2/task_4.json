@@ -13,12 +13,20 @@
     "algebra"
   ],
   "hints": [
-    "Zastanów się, co oznacza, że liczba kończy się cyframi \"10\". Przez jakie potęgi liczb 2 i 5 musi być podzielna, a przez jakie nie może być podzielna?",
-    "Zbadaj parzystość poszczególnych czynników $(a+b)$, $(b+c)$, $(c+d)$, $(d+a)$. Czy wszystkie mogą być nieparzyste? Ile z nich musi być parzystych?",
-    "Zauważ, że suma wszystkich czterech czynników to $2(a+b+c+d)$. Co to mówi o parzystości liczby czynników parzystych? Ile dwójek (jako czynników pierwszych) musi zawierać cały iloczyn?",
-    "Pokaż, że iloczyn zawsze jest podzielny przez $4$ (czyli przez $2^2$). Następnie rozważ, kiedy iloczyn byłby podzielny przez dokładnie jedną piątkę - przeanalizuj, czy to jest możliwe przy jednoczesnej podzielności przez $2^2$ ale nie przez $100$."
+    "Zastanów się, co oznacza, że liczba kończy się cyframi \"10\". Przez jaką największą potęgę dwójki jest podzielna? Czy w takim razie jest ona podzielna przez 4?",
+    "Aby iloczyn był parzysty, przynajmniej jeden z jego czynników musi być parzysty. Zastanów się, ile spośród czynników $(a+b)$, $(b+c)$, $(c+d)$, $(d+a)$ może być parzystych.",
+    "Zbadaj sumę czterech czynników: $(a+b)+(b+c)+(c+d)+(d+a)$. Jaka jest jej parzystość i co z tego wynika dla liczby parzystych czynników w tej sumie?",
+    "Jeśli iloczyn ma być parzysty, to ile co najmniej czynników musi być parzystych? Co to oznacza dla podzielności całego iloczynu przez 4? Zestaw ten wniosek z obserwacją z pierwszej wskazówki."
   ],
-  "skills_required": ["modular_arithmetic", "parity_arguments", "polynomial_analysis"],
-  "skills_gained": ["modular_arithmetic"],
-  "prerequisites": ["2006_etap1_1"]
+  "skills_required": [
+    "modular_arithmetic",
+    "parity_arguments",
+    "polynomial_analysis"
+  ],
+  "skills_gained": [
+    "modular_arithmetic"
+  ],
+  "prerequisites": [
+    "2006_etap1_1"
+  ]
 }

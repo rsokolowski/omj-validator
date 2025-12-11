@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Przyjrzyj się drugiemu równaniu - czy można wyciągnąć wspólny czynnik przed nawias? Co to mówi o możliwych wartościach $x$?",
-    "Spróbuj z jednego równania wyrazić jedną zmienną przez drugą, a następnie podstawić do pozostałego równania.",
-    "Z drugiego równania wyraź $y$ jako funkcję $x$. Zwróć uwagę, że $x \\neq 0$ (dlaczego?). Podstaw otrzymane wyrażenie do pierwszego równania.",
-    "Po podstawieniu $y = 1 - \\frac{5}{2x}$ do pierwszego równania, pomnóż przez $x^2$ aby pozbyć się ułamków. Otrzymasz równanie, które można sprowadzić do postaci kwadratowej."
+    "Przyjrzyj się obu równaniom. Czy widzisz w nich wyrazy, które przypominają składniki wzorów skróconego mnożenia, jak $x^2$, $y^2$ czy $2xy$?",
+    "Zamiast podstawiać jedną zmienną do drugiego równania, co prowadzi do trudnych rachunków, spróbuj dodać oba równania stronami.",
+    "Po dodaniu równań przenieś wszystkie wyrazy na jedną stronę. Spróbuj tak pogrupować otrzymane składniki, aby zapisać je jako sumę dwóch kwadratów.",
+    "Równanie powinno mieć postać $A^2+B^2=0$. Jaki warunek muszą spełniać $A$ i $B$? Wyznacz stąd jedyną możliwą parę $(x,y)$ i koniecznie sprawdź, czy jest ona rozwiązaniem pierwotnego układu."
   ],
   "skills_required": [
     "symmetric_systems",

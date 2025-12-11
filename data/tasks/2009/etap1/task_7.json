@@ -13,12 +13,14 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Oznacz $a^2 + a$ jako $p$ i $a^3 + a$ jako $q$. Co możesz powiedzieć o różnicy, ilorazie lub innych kombinacjach tych wyrażeń?",
-    "Spróbuj wyrazić jedno z wyrażeń przez drugie, używając faktoryzacji. Zauważ, że oba wyrażenia mają wspólny czynnik $a$.",
-    "Rozważ wyrażenie $a^3 + a - a(a^2 + a)$. Co otrzymujesz? Jak możesz wykorzystać fakt, że suma i różnica liczb wymiernych jest wymierna?",
-    "Oblicz $q - a \\cdot p = a^3 + a - a(a^2 + a) = a - a^2$. Teraz masz $a^2 + a$ oraz $a - a^2$ wymierne. Co daje ich suma?"
+    "Oznaczmy $p = a^2+a$ i $q = a^3+a$. Z założenia $p$ i $q$ są liczbami wymiernymi. Celem jest wyrażenie $a$ za pomocą $p$ i $q$.",
+    "Spróbuj pozbyć się wyższych potęg $a$. Zauważ, że z pierwszego równania możesz wyznaczyć $a^2$ w zależności od $a$ i wymiernej liczby $p$.",
+    "Skoro umiesz wyrazić $a^2$ za pomocą $a$ i $p$, to czy potrafisz zrobić to samo dla $a^3$? Podstaw uzyskane wyrażenie na $a^3$ do drugiego równania, $q=a^3+a$.",
+    "Wykorzystaj fakt, że $a^3 = a \\cdot a^2 = a(p-a)$. Po podstawieniu tego do równania $q=a^3+a$ i dalszych przekształceniach otrzymasz równanie liniowe względem $a$. Wyznacz z niego $a$."
   ],
-  "prerequisites": ["2007_etap2_1"],
+  "prerequisites": [
+    "2007_etap2_1"
+  ],
   "skills_required": [
     "algebraic_identities",
     "constructive_proof",

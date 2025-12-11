@@ -15,7 +15,7 @@
     "Zastanów się, jak można przekształcić wyrażenie $p^2 + q^2$ tak, aby pojawiła się w nim suma $p + q$. Przypomnij sobie wzory skróconego mnożenia.",
     "Spróbuj zastosować dowód nie wprost: załóż, że $(p + q) | (p^2 + q^2)$ i pokaż, że prowadzi to do sprzeczności z założeniem, że $p$ i $q$ są różnymi liczbami pierwszymi.",
     "Skorzystaj z tożsamości $p^2 + q^2 = (p+q)^2 - 2pq$. Jeśli $(p+q)$ dzieli lewą stronę i $(p+q)^2$, to co musi dzielić?",
-    "Z faktu, że $(p+q) | 2pq$, przeanalizuj osobno przypadki: czy $p+q$ może dzielić $2$, $p$ lub $q$? Wykorzystaj, że $p$ i $q$ są różnymi liczbami pierwszymi większymi od $1$."
+    "Wiesz już, że $p+q$ musi dzielić $2pq$. Zastanów się, jakie mogą być dzielniki pierwsze liczby $p+q$. Czy może nim być $p$? A czy może $q$?"
   ],
   "skills_required": [
     "algebraic_identities",

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Przypomnij sobie wzór Eulera dla wielościanów: $W - K + S = 2$, gdzie $W$ to liczba wierzchołków, $K$ krawędzi, $S$ ścian. Zastanów się też, jak policzyć sumę stopni wszystkich wierzchołków (stopień wierzchołka to liczba krawędzi w nim schodzących).",
-    "Użyj techniki podwójnego zliczania. Każda krawędź łączy dokładnie dwa wierzchołki. Co to oznacza dla sumy stopni wszystkich wierzchołków? Jaką parzystość ma ta suma, jeśli każdy stopień jest parzysty?",
-    "Zbadaj parzystość liczby krawędzi $K$ w dwóch przypadkach. Z jednej strony - co wynika z sumy stopni wierzchołków? Z drugiej strony - każda krawędź należy do dokładnie dwóch ścian. Co to oznacza dla sumy liczby krawędzi wszystkich ścian?",
-    "Policz sumę krawędzi po wszystkich ścianach na dwa sposoby i porównaj parzystości. Pamiętaj, że każda ściana ma co najmniej 3 krawędzie. Jeśli ścian jest nieparzyście wiele, co możesz powiedzieć o parzystości tej sumy?"
+    "Zastanów się, jak można zliczyć łączną liczbę par (wierzchołek, ściana), gdzie wierzchołek należy do ściany. Można to zrobić na dwa sposoby: sumując po wszystkich ścianach albo sumując po wszystkich wierzchołkach.",
+    "Sumując po ścianach, otrzymasz sumę liczb krawędzi wszystkich ścian ($s_f$). Sumując po wierzchołkach, otrzymasz sumę stopni wszystkich wierzchołków ($d_v$). Obie te sumy muszą być równe. Zapisz tę kluczową równość.",
+    "Przeanalizuj parzystość obu stron otrzymanej równości. Po stronie z wierzchołkami, każdy stopień $d_v$ jest parzysty. Jaka jest więc parzystość całej sumy po tej stronie?",
+    "Teraz spójrz na stronę ze ścianami. Jest to suma $S$ składników, a wiesz, że $S$ jest nieparzyste. Kiedy suma nieparzystej liczby składników jest parzysta? Jaki wniosek o liczbie ścian z nieparzystą liczbą krawędzi to implikuje? Czy to nie prowadzi do sprzeczności?"
   ],
   "skills_required": [
     "polyhedra",

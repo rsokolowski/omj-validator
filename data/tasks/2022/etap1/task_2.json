@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Oblicz najpierw wartość całego wyrażenia $1-2+3-4+\\ldots-100$. Pogrupuj składniki w pary: $(1-2)+(3-4)+\\ldots$",
-    "Zastanów się, co się stanie gdy w pewnym miejscu wstawisz znak $=$. Lewa strona to suma początkowych wyrazów, prawa to pozostałe. Jak zmiana znaku wpływa na wartość?",
-    "Jeśli przed liczbą $k$ był znak $-$ i zamieniamy go na $=$, to w prawej stronie ta liczba $k$ zmienia znak na $+$. Jak to wpływa na różnicę między stronami?",
-    "Niech $L$ oznacza lewą stronę, $P$ prawą. Zauważ, że $L + P$ (ze starymi znakami) to wartość całego wyrażenia. Szukasz miejsca, gdzie $L = P$. Sprawdź, dla których $k$ jest to możliwe."
+    "Oblicz wartość całego wyrażenia $1-2+3-4+\\ldots-100$. Pomocne może być łączenie sąsiednich liczb w pary.",
+    "Oznacz lewą stronę nowego równania jako $L$, a prawą jako $P$. Porównaj sumę $L+P$ z wartością całego początkowego wyrażenia. Czym się różnią?",
+    "Różnica między sumą $L+P$ a wartością początkowego wyrażenia zależy tylko od liczby $k$. Wyraź tę różnicę za pomocą $k$, rozważając osobno przypadek, gdy przed $k$ był znak `+` i gdy był `-`.",
+    "Wykorzystaj warunek $L=P$ w zależności znalezionej w poprzednim kroku, aby otrzymać równanie na $L$. Wartość $L$ (czyli suma do $k-1$) też zależy od $k$. Znajdź tę zależność i rozwiąż równanie."
   ],
   "prerequisites": [],
   "skills_required": [

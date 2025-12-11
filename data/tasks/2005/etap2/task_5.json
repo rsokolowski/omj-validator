@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zwróć uwagę na szczególne kąty w tym sześciokącie. Które z nich mają wartość 90°? Co to może sugerować o położeniu pewnych wierzchołków względem odcinka $AD$?",
-    "Spróbuj znaleźć figurę, w której można zamknąć cały sześciokąt, a której pole łatwo wyrazić przez $|AD|$. Przypomnij sobie, z jakiej figury widać odcinek pod kątem prostym.",
-    "Skoro kąty $\\angle DAB$ i $\\angle CDA$ są proste, to wierzchołki $B$ i $C$ leżą na okręgu o średnicy $AD$ (twierdzenie odwrotne do Talesa). Sprawdź, czy podobnie jest z pozostałymi wierzchołkami.",
-    "Wykaż, że wszystkie wierzchołki $B, C, E, F$ leżą wewnątrz lub na brzegu półkola o średnicy $AD$. Następnie porównaj pole tego półkola z wartością $\\frac{1}{2}|AD|^2$."
+    "Zastanów się, co podane kąty mówią o wzajemnym położeniu prostych zawierających boki sześciokąta. Co się stanie, jeśli przedłużysz boki $AB$ i $DC$ aż do ich przecięcia w punkcie $P$?",
+    "Spróbuj zamknąć cały sześciokąt wewnątrz większej, prostej figury. Poszukaj prostokąta, który jest naturalnie powiązany z bokami sześciokąta, a jego pole można łatwo odnieść do długości odcinka $AD$.",
+    "Oblicz kąt, pod jakim przecinają się proste $AB$ i $DC$. Następnie, wykorzystując kąty proste przy wierzchołkach $A$ i $D$, pokaż, że cztery proste zawierające boki $AB, DC, AF, DE$ tworzą prostokąt.",
+    "Wykaż, że wierzchołki $A$ i $D$ są przeciwległymi wierzchołkami prostokąta z poprzedniej wskazówki. Pole sześciokąta jest mniejsze od pola tego prostokąta. Jaka jest zależność między polem prostokąta a kwadratem długości jego przekątnej?"
   ],
   "skills_required": [
     "angle_chasing",

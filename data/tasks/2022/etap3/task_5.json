@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Jak zapisać liczbę $\\underbrace{33\\ldots3}_{m}$ algebraicznie? Przypomnij sobie, że $\\underbrace{11\\ldots1}_{k} = \\frac{10^k - 1}{9}$. Spróbuj wyrazić daną liczbę przez potęgi 10.",
-    "Zapisz całą liczbę jako wyrażenie algebraiczne i spróbuj je uprościć. Zwróć uwagę na wspólny czynnik, który można wyciągnąć przed nawias.",
-    "Po uproszczeniu powinieneś otrzymać wyrażenie postaci $\\frac{a \\cdot (10^n \\cdot b + c)}{d}$ gdzie $a, b, c, d$ to małe liczby. Zastanów się, jakie warunki musi spełniać wyrażenie w nawiasie, żeby cała liczba była kwadratem.",
-    "Zbadaj wyrażenie $10^n \\cdot k + l$ dla małych wartości $n$. Kiedy takie wyrażenie może być kwadratem? Sprawdź przypadki $n = 1, 2, 3$ i poszukaj regularności lub argumentu, dlaczego rozwiązań jest skończenie wiele."
+    "Przyjrzyj się uważnie postaci danej liczby. Jakie są jej dwie ostatnie cyfry, gdy $n > 1$? A jaka jest ostatnia cyfra, gdy $n=1$?",
+    "Kwadraty liczb całkowitych mają pewne własności dotyczące ich ostatnich cyfr. Zastanów się, jaka musi być przedostatnia cyfra kwadratu, który kończy się cyfrą 6. Wykorzystaj to do analizy przypadku $n > 1$.",
+    "Po wykluczeniu przypadków $n > 1$, pozostaje zbadać liczby postaci $\\underbrace{33\\ldots3}_{m}6$ dla $n=1$. Sprawdź kilka pierwszych wartości $m$, aby nabrać intuicji.",
+    "Aby pokazać, że dla $m>2$ liczba $\\underbrace{33\\ldots3}_{m}6$ nie jest kwadratem, zbadaj jej resztę z dzielenia przez 16. Kwadraty liczb parzystych dają tylko reszty 0 lub 4 z dzielenia przez 16."
   ],
   "skills_required": [
     "digit_manipulation",

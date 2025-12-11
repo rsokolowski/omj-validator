@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trapezu z zaznaczonym punktem $M$. Co wiesz o trójkącie $ABC$, skoro $AC = BC$? Jakie kąty są równe?",
-    "Poszukaj konstrukcji pomocniczej. Spróbuj znaleźć punkt, który pomoże powiązać kąt $\\angle ACM$ z kątem $\\angle CBD$. Czy symetria może pomóc?",
-    "Rozważ środek $N$ odcinka $BC$. Jakie własności ma odcinek $MN$? Sprawdź, czy jest równoległy do któregoś boku trapezu.",
-    "Wykorzystaj twierdzenie o odcinku łączącym środki boków trójkąta. Jeśli $MN \\parallel DC$, to jak możesz powiązać kąty $\\angle ACM$ i $\\angle NCA$? A następnie $\\angle NCA$ z $\\angle CBD$?"
+    "Narysuj starannie trapez i zaznacz wszystkie dane z zadania. Jaki wniosek na temat kątów w trójkącie $ABC$ płynie z równości boków $AC=BC$?",
+    "Obecność środka odcinka często sugeruje pewien rodzaj konstrukcji. Pomyśl o symetrii lub o uzupełnieniu figury do równoległoboku.",
+    "Przedłuż odcinek $CM$ za punkt $M$ do punktu $P$ tak, aby $CM = MP$. Jaki czworokąt tworzą punkty $A, C, P, D$ i jakie są jego podstawowe własności?",
+    "Wykorzystaj własności czworokąta $ACPD$, aby pokazać, że $P$ leży na prostej $AB$. Następnie zbadaj czworokąt $BCDP$. Jak jego własności pozwalają powiązać kąt $\\angle CBD$ z kątem $\\angle ACM$?"
   ],
   "skills_required": [
     "angle_chasing",

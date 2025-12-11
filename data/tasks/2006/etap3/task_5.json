@@ -12,10 +12,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Zastanów się, gdzie w każdym trójkącie bocznym może znajdować się kąt prosty. Jakie są możliwości: przy wierzchołku ostrosłupa, przy wierzchołku podstawy, czy może gdzie indziej?",
-    "Rozważ przypadki osobno. Co by oznaczało, gdyby kąt prosty był przy wierzchołku ostrosłupa? A co, gdyby był przy podstawie? Spróbuj narysować rzut ostrosłupa z góry.",
-    "Jeśli kąt prosty jest przy wierzchołku podstawy, to krawędź boczna jest prostopadła do krawędzi podstawy w tym punkcie. Co to oznacza dla położenia wierzchołka ostrosłupa względem podstawy?",
-    "Zbadaj, gdzie musi znajdować się rzut wierzchołka ostrosłupa na płaszczyznę podstawy, jeśli wszystkie kąty proste są przy wierzchołkach podstawy. Czy taki punkt może istnieć dla czworokąta?"
+    "Zastanów się, gdzie w każdym trójkącie bocznym może znajdować się kąt prosty. Jakie są możliwości: przy wierzchołku ostrosłupa czy przy jednym z wierzchołków podstawy?",
+    "Rozważmy sytuację, w której kąty proste znajdują się przy wierzchołkach podstawy. Co by się stało, gdyby w dwóch sąsiednich ścianach bocznych kąt prosty był przy tym samym wierzchołku podstawy?",
+    "Jeśli w $\\triangle SAB$ kąt prosty jest przy wierzchołku A, a w $\\triangle SAD$ również przy A, to krawędź boczna SA jest prostopadła do dwóch krawędzi podstawy. Co to oznacza dla położenia krawędzi SA względem całej podstawy?",
+    "Załóżmy, że krawędź SA jest wysokością ostrosłupa. Dwie ściany boczne są już trójkątami prostokątnymi. Jaki warunek musi spełniać podstawa ABCD, aby pozostałe dwie ściany również były prostokątne?"
   ],
   "skills_required": [
     "spatial_3d",

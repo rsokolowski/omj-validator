@@ -13,10 +13,10 @@
     "geometria"
   ],
   "hints": [
-    "Zastanów się, jakie warunki muszą spełniać cztery wierzchołki 100-kąta foremnego, aby tworzyły prostokąt. Narysuj 100-kąt i zaznacz kilka przykładowych prostokątów.",
-    "Ile różnych prostokątów można wpisać w 100-kąt foremny? Każdy prostokąt jest wyznaczony przez parę prostopadłych średnic - spróbuj policzyć, ile jest takich par.",
-    "Zauważ, że wszystkie prostokąty wpisane w 100-kąt mają środek w środku tego wielokąta. Każdy wierzchołek należy do dokładnie jednego prostokąta razem z trzema innymi wierzchołkami. Jak rozmieszczone są kolory na przeciwległych wierzchołkach?",
-    "Skoro mamy 50 białych i 50 czerwonych wierzchołków, a wierzchołki przeciwległe (połączone średnicą) tworzą 50 par, zastosuj zasadę szufladkową do kolorów w parach przeciwległych wierzchołków."
+    "Jakie cztery wierzchołki 100-kąta foremnego tworzą prostokąt? Zauważ, że przekątne takiego prostokąta są średnicami okręgu opisanego na wielokącie.",
+    "Wszystkie 100 wierzchołków można podzielić na 50 par punktów leżących na przeciwko siebie. Rozważ te pary jako podstawowe 'klocki' do budowy prostokątów.",
+    "Każda z 50 par przeciwległych wierzchołków może być jednokolorowa (oba białe lub oba czerwone) albo dwukolorowa. Zastanów się nad liczbą par każdego z tych trzech typów.",
+    "Wykorzystaj fakt, że jest łącznie 50 białych i 50 czerwonych wierzchołków, aby znaleźć kluczową zależność między liczbą par biało-białych a liczbą par czerwono-czerwonych."
   ],
   "skills_required": [
     "transformations",

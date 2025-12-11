@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Przypomnij sobie: z jakich punktów płaszczyzny dany odcinek widać pod kątem prostym? Pomyśl o twierdzeniu Talesa i kącie wpisanym opartym na średnicy.",
-    "Zadanie sprowadza się do zbadania przecięcia dwóch okręgów. Skonstruuj okrąg wszystkich punktów, z których odcinek $AC$ widać pod kątem $90°$. Jaki jest jego środek i promień?",
-    "Oblicz odległość między środkami obu okręgów. Wykorzystaj fakt, że $M$ jest środkiem $AB$ oraz znajdź położenie środka okręgu o średnicy $AC$. Rozważ trójkąt $ABC$ i jego środkowe.",
-    "Aby pokazać, że okręgi mają dokładnie jeden punkt wspólny, porównaj odległość ich środków z sumą i różnicą promieni. Użyj twierdzenia Pitagorasa do obliczenia potrzebnych odległości w trójkącie."
+    "Zastanów się, jaki zbiór tworzą wszystkie punkty $P$ na płaszczyźnie, dla których kąt $\\angle APC$ jest prosty. Jakie twierdzenie o okręgach się z tym wiąże?",
+    "Zadanie sprowadza się do zbadania liczby punktów wspólnych dwóch okręgów. Jeden jest dany w treści, a drugi to zbiór punktów $P$. Wyznacz środek i promień tego drugiego okręgu.",
+    "Aby określić wzajemne położenie okręgów, oblicz odległość między ich środkami. Zauważ, że jeden środek jest w połowie boku $AB$, a drugi w połowie boku $AC$. Jaka jest własność odcinka łączącego środki boków trójkąta?",
+    "Dwa okręgi mają dokładnie jeden punkt wspólny, gdy są styczne. Sprawdź, czy odległość między ich środkami jest równa sumie lub różnicy długości ich promieni."
   ],
   "skills_required": [
     "circle_theorems",

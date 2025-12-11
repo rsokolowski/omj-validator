@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, jakie reszty z dzielenia przez 2 i przez 3 mogą dawać liczby pierwsze większe od 3. Jaką postać mają takie liczby?",
-    "Skoro każda liczba pierwsza większa od 3 jest nieparzysta, to czym są różnice $a-b$, $b-c$, $c-a$? Rozważ też reszty z dzielenia przez 3.",
-    "Zauważ, że każda różnica dwóch liczb nieparzystych jest parzysta. Ponadto liczby pierwsze większe od 3 dają reszty 1 lub 2 z dzielenia przez 3 - ile możliwych reszt mają trzy takie liczby?",
-    "Pokaż, że iloczyn trzech różnic jest podzielny przez $2^4 = 16$ (co najmniej jedna różnica dzieli się przez 4) oraz przez 3. Rozważ, jakie reszty z dzielenia przez 6 mogą mieć liczby $a$, $b$, $c$."
+    "Aby udowodnić podzielność przez 48, wystarczy pokazać podzielność przez 3 oraz przez 16. Jakie wspólne własności, związane z podzielnością, mają liczby pierwsze większe od 3?",
+    "Rozważ podzielność przez 3 i 16 osobno. Jakie reszty z dzielenia przez 3 mogą dawać liczby $a, b, c$? Co to mówi o ich różnicach? Zauważ też, że wszystkie te liczby są nieparzyste.",
+    "Skoro mamy trzy liczby, a tylko dwie możliwe reszty z dzielenia przez 3, to co najmniej dwie muszą mieć tę samą resztę. To załatwia podzielność przez 3. Każda różnica jest parzysta, więc iloczyn dzieli się przez 8. Gdzie znaleźć brakujący czynnik 2?",
+    "Pomyśl o resztach z dzielenia liczb $a, b, c$ przez 4. Ile jest możliwych reszt dla liczb pierwszych większych od 3? Zastosuj tę samą zasadę, co przy dzieleniu przez 3, aby pokazać, że jedna z różnic jest podzielna przez 4."
   ],
   "skills_required": [
     "modular_arithmetic",

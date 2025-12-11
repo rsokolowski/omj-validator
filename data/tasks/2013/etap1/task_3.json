@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek prostokąta $ABCD$ z punktami $E$ na $BC$, $F$ na $CD$ i środkiem $M$ odcinka $AF$. Co wiesz o trójkącie równobocznym $AEF$? Jakie ma boki i kąty?",
-    "Rozważ przystawanie trójkątów. Porównaj trójkąty $ABE$ i $DAF$ - co możesz powiedzieć o ich bokach i kątach? Wykorzystaj fakt, że $ABCD$ jest prostokątem.",
-    "Skoro $M$ jest środkiem $AF$, to $AM = MF$. Zauważ, że $AE = AF$ (boki trójkąta równobocznego). Zbadaj, jak długość $BE$ ma się do długości $AE$ i $AF$.",
-    "Wykaż najpierw, że $BE = CF = AM = MF$. Następnie zbadaj kąty trójkąta $BCM$ - wykorzystaj kąty w trójkątach $ABE$ i $DCF$ oraz fakt, że suma kątów przy wierzchołku $A$ w trójkątach $ABE$, $AEF$, $DAF$ wynosi $90°$."
+    "Narysuj starannie figurę. Zaznacz równe boki i kąty wynikające z tego, że $\\triangle AEF$ jest równoboczny, a $ABCD$ to prostokąt. Co musisz udowodnić o bokach i kątach $\\triangle BCM$?",
+    "Porównaj trójkąty prostokątne $\\triangle ABE$ i $\\triangle ADF$. Mają równe przeciwprostokątne. Aby pokazać, że są przystające, rozważ obrót $\\triangle ABE$ o $90^\\circ$ wokół punktu $A$.",
+    "Gdy już wiesz, że $ABCD$ jest kwadratem, spójrz na trójkąt prostokątny $\\triangle ADF$. Punkt $M$ jest środkiem przeciwprostokątnej $AF$. Jaka jest długość środkowej $DM$ w stosunku do długości $AF$?",
+    "Wykorzystaj kluczową równość $AM=DM$, aby udowodnić, że $\\triangle ABM \\cong \\triangle CDM$. To pokaże, że $BM=CM$. Na koniec wykaż, że również $BM=BC$, badając własności $\\triangle ABM$."
   ],
   "skills_required": [
     "angle_chasing",

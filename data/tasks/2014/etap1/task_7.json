@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zidentyfikuj dwa trójkąty prostokątne w czworościanie. Co wiesz o bokach każdego z nich dzięki twierdzeniu Pitagorasa?",
-    "Zastosuj twierdzenie Pitagorasa oddzielnie do trójkątów $ACB$ i $ADB$. Oznacz nieznane boki i wyraź $AB^2$ w każdym z nich.",
-    "Zauważ, że $BC$ i $AD$ to boki, które możesz powiązać. Spróbuj wyrazić $AB^2$ przez $CD$ używając obu równań z twierdzenia Pitagorasa.",
-    "Z trójkąta $ACB$: $AB^2 = AC^2 + BC^2$, z trójkąta $ADB$: $AB^2 = AD^2 + DB^2$. Podstaw $AC = CD = DB$ i zastanów się, jaką nierówność spełniają $BC$ i $AD$, aby uzyskać oszacowanie $AB^2 < 4 \\cdot CD^2$."
+    "Zadanie wspomina o dwóch kątach prostych. Jaki jest zbiór wszystkich punktów $P$ w przestrzeni, dla których kąt $\\angle APB$ jest prosty, przy ustalonych punktach A i B? Gdzie w takim razie muszą leżeć punkty C i D?",
+    "Skoro C i D leżą na sferze o średnicy AB, rozważ jej środek M (będący też środkiem AB). Połącz M z wierzchołkami czworościanu. Które z nowo powstałych odcinków mają jednakową długość, równą promieniowi sfery?",
+    "Zauważ, że powstały trzy trójkąty równoramienne ze wspólnym wierzchołkiem M: $\\triangle AMC$, $\\triangle CMD$ i $\\triangle DMB$. Wykorzystaj dane z zadania ($AC=CD=DB$) aby porównać kąty przy wierzchołku M w tych trójkątach.",
+    "Suma kątów $\\angle AMC + \\angle CMD + \\angle DMB$ odpowiada kątowej drodze od A do B. Porównaj sumę miar tych kątów z miarą kąta $\\angle AMB$. Wykorzystaj tę zależność, aby znaleźć ograniczenie na miarę kąta $\\angle AMC$ i zakończyć dowód."
   ],
   "skills_required": [
     "spatial_3d",

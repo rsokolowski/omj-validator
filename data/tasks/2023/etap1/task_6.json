@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Oznacz te trzy wyrażenia jako $P = ab+b+1$, $Q = bc+c+1$, $R = ca+a+1$. Spróbuj wyciągnąć wspólny czynnik w każdym z nich. Co łączy te wyrażenia?",
-    "Zauważ, że każde wyrażenie można zapisać w postaci iloczynowej, np. $ab+b+1 = b(a+1)+1$. Jeśli jedno wyrażenie jest równe zeru, co możesz powiedzieć o wartości odpowiedniej zmiennej?",
-    "Jeśli $ab+b+1 = 0$, to $b(a+1) = -1$. To oznacza, że $b \\neq 0$ i $a \\neq -1$. Jak możesz wyrazić $b$ przez $a$? Podstaw to wyrażenie do pozostałych równań.",
-    "Z równania $ab+b+1=0$ wynika $b = \\frac{-1}{a+1}$. Podstaw tę wartość do drugiego wyrażenia, które też jest równe zeru, i wyznacz zależność między zmiennymi. Następnie sprawdź trzecie wyrażenie."
+    "Załóżmy bez straty ogólności, że $ab+b+1=0$ i $bc+c+1=0$. Przekształć lewą stronę każdego z tych równań, wyłączając z pierwszego $b$, a z drugiego $c$ przed nawias.",
+    "Zauważ, że w przekształconym drugim równaniu, $c(b+1)=-1$, pojawia się wyrażenie $b+1$. Spróbuj powiązać je z pierwszym równaniem, $b(a+1)=-1$.",
+    "Z pierwszego równania wynika, że $b=\\frac{-1}{a+1}$. Wykorzystaj to, aby wyrazić $b+1$ w zależności od $a$. Uprość otrzymane wyrażenie.",
+    "Podstaw znalezione wyrażenie na $b+1$ do drugiego równania, $c(b+1)=-1$. Po uproszczeniu otrzymasz zależność, która jest równoważna tezie, że trzecie wyrażenie jest równe zeru."
   ],
   "skills_required": [
     "algebraic_identities",

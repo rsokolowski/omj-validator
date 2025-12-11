@@ -14,9 +14,9 @@
   ],
   "hints": [
     "Zastanów się, jak muszą być ułożone kamienie, które pozostaną. Jeśli między dwoma kamieniami tego samego koloru nie ma kamienia innego koloru, to co to oznacza dla całego pozostałego ciągu?",
-    "Pozostałe kamienie muszą tworzyć ciąg naprzemiennie zmieniających się kolorów. Poszukaj więc sposobu na wybranie 50 kamieni tworzących taki naprzemienny wzór.",
-    "Rozważ wszystkie możliwe wybory 50 kolejnych pozycji w rzędzie (pozycje 1-50, 2-51, ..., 51-100). Dla każdego takiego wyboru policz, ile czerwonych kamieni jest na pozycjach nieparzystych w tym fragmencie.",
-    "Gdy przesuwamy okno o jedną pozycję, liczba czerwonych kamieni na pozycjach nieparzystych zmienia się co najwyżej o 1. Skorzystaj z tego, że wartości skrajne (dla pierwszego i ostatniego okna) różnią się, więc gdzieś pomiędzy osiągamy wartość 25."
+    "Pozostałe kamienie muszą tworzyć dwa bloki jednokolorowe. Oznacza to, że wszystkie wybrane kamienie jednego koloru muszą pochodzić z początkowej części rzędu, a drugiego koloru - z końcowej. Poszukaj takiego punktu podziału.",
+    "Rozważmy dwie możliwości. Skupmy się na jednej: chcemy wybrać 25 czerwonych kamieni z początku rzędu i 25 niebieskich z jego końca. Co musiałoby być prawdą o położeniu 25-tego czerwonego kamienia, aby to było możliwe?",
+    "Oznaczmy pozycję 25-tego czerwonego kamienia jako $p_C$, a 25-tego niebieskiego jako $p_N$. Załóżmy, że nie da się ułożyć bloku czerwonego przed niebieskim. Co to mówi o relacji między $p_C$ a $p_N$? A co, jeśli nie da się ułożyć bloku niebieskiego przed czerwonym?"
   ],
   "prerequisites": [],
   "skills_required": [

@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Rozłóż wyrażenia $p^2+p$ oraz $q^2+q$ na czynniki. Co zauważasz o ich strukturze?",
-    "Skoro $p$ i $q$ są różnymi liczbami pierwszymi nieparzystymi, zastanów się, które czynniki z rozkładu $q(q+1)$ mogą dzielić $p(p+1)$.",
-    "Zauważ, że $p(p+1)$ jest iloczynem dwóch kolejnych liczb. Zbadaj, jak $q$ i $q+1$ mogą być związane z $p$ lub $p+1$.",
-    "Jeśli $q \\mid p$, to z pierwszości wynika $p = q$, co jest sprzeczne. Rozważ przypadek $q \\mid (p+1)$ i pokaż, że wtedy $\\frac{p-q}{2}$ ma nietrywialny dzielnik."
+    "Rozłóż wyrażenia $p^2+p$ oraz $q^2+q$ na czynniki. Jaką zależność podzielności między nimi opisuje treść zadania?",
+    "Zauważ, że $q$ musi dzielić $p(p+1)$. Ponieważ $p$ i $q$ to różne liczby pierwsze, co stąd wynika? Zapisz znalezioną zależność w postaci równania z nową zmienną, np. $k$.",
+    "Wykorzystaj teraz drugą część podzielności: $q+1 \\mid p(p+1)$. Podstaw do niej zależność z poprzedniej wskazówki. Co otrzymasz na temat $k$? Czy $p$ i $q+1$ mogą mieć wspólny dzielnik większy od 1?",
+    "Powinieneś dojść do wniosku, że $q+1$ dzieli $k$. Zapisz $k=c(q+1)$ dla pewnego $c \\ge 1$. Wyraź $\\frac{1}{2}(p-q)$ za pomocą $c$ i $q$, a następnie znajdź nietrywialny rozkład tego wyrażenia na czynniki."
   ],
   "skills_required": [
     "prime_factorization",

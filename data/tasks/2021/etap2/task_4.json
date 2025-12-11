@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zastanów się, co oznacza równość pól $P(ABD) = P(ABCE)$. Spróbuj przeformułować ten warunek, rozbijając czworokąt $ABCE$ na prostsze figury. Narysuj dokładny rysunek pięciokąta.",
-    "Wykorzystaj warunki $AC = AD$ oraz $BD = BE$ - co mówią one o położeniu punktów $A$ i $B$ względem odcinków $CD$ i $DE$? Przypomnij sobie własność symetralnej odcinka.",
-    "Zauważ, że skoro $A$ leży na symetralnej $CD$, a $B$ leży na symetralnej $DE$, to pewne trójkąty mają równe pola (trójkąty o wspólnej podstawie i równych wysokościach). Jak kąt prosty $\\angle CDE$ wpływa na te symetralności?",
-    "Przekształć warunek $P(ABD) = P(ABCE)$ do postaci $P(ABD) - P(ABC) = P(BCE)$, czyli $P(BCD) = P(BCE)$. Wykaż, że trójkąty $BCD$ i $BCE$ mają równe pola, korzystając z tego, że $B$ leży na symetralnej odcinka $DE$."
+    "Teza $P(ABD) = P(ABCE)$ dotyczy równości pól. Wyraź pole czworokąta $ABCE$ jako sumę pól dwóch trójkątów, aby uprościć tę zależność.",
+    "Warunki $AC=AD$ i $BD=BE$ oznaczają, że punkty $A$ i $B$ leżą na symetralnych odpowiednich odcinków. Jaka jest kluczowa własność geometryczna symetralnej?",
+    "Połącz fakt, że $A$ i $B$ leżą na symetralnych, z warunkiem $\\angle CDE=90^\\circ$. Jakie proste w tej konfiguracji muszą być równoległe? Jak można wykorzystać istnienie prostych równoległych do porównywania pól trójkątów?",
+    "Wykorzystaj równoległości z poprzedniej wskazówki, aby powiązać ze sobą pola trójkątów $ADE$, $BCD$ i $CDE$. Następnie użyj związku między polami trójkątów składowych czworokąta $ABCD$, aby zakończyć dowód."
   ],
   "prerequisites": [],
   "skills_required": [

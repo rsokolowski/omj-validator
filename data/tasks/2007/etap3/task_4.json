@@ -12,10 +12,10 @@
     "logika"
   ],
   "hints": [
-    "Mamy 20 wierzchołków i każdy należy do dokładnie czterech czwórek kolejnych wierzchołków. Ile jest takich czwórek w 20-kącie? Co to oznacza dla sum?",
-    "Spróbuj zsumować wszystkie ograniczenia. Jeśli każda czwórka ma sumę mniejszą od 43, to jaka jest maksymalna suma wszystkich czwórek razem?",
-    "Każda liczba od 1 do 20 pojawia się w dokładnie czterech czwórkach (bo każdy wierzchołek ma czterech sąsiadów w każdą stronę). Oblicz sumę wszystkich liczb pomnożoną przez 4.",
-    "Porównaj sumę $4 \\cdot (1 + 2 + \\ldots + 20)$ z maksymalną możliwą sumą ze wszystkich 20 czwórek. Czy te wartości są ze sobą zgodne?"
+    "Ile jest czwórek kolejnych wierzchołków w 20-kącie? Zapisz za pomocą nierówności warunek, który musi spełniać suma numerów w każdej takiej czwórce.",
+    "Spróbuj oszacować z góry sumę wszystkich tych 20 czwórek. Wykorzystaj nierówności, które zapisałeś w poprzednim kroku.",
+    "Teraz oblicz tę samą sumę (wszystkich 20 czwórek) w dokładny sposób. Zastanów się, ile razy w tej łącznej sumie pojawi się numer z każdego wierzchołka.",
+    "Porównaj dokładną wartość sumy z jej górnym oszacowaniem. Co ta równość mówi o sumie numerów w *każdej* pojedynczej czwórce? Czy taka sytuacja jest możliwa?"
   ],
   "skills_required": [
     "double_counting",

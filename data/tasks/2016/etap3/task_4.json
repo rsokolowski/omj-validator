@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj sześciokąt $ABCDEF$ z zaznaczonymi równymi kątami przy $B$, $C$, $E$, $F$. Co wiesz o punktach leżących na symetralnej odcinka? Każdy taki punkt jest równoodległy od końców tego odcinka.",
-    "Zastanów się, gdzie mogą się przecinać symetralne odcinków $BC$ i $EF$. Oznacz ten punkt przez $P$. Jakie odległości od wierzchołków sześciokąta ma punkt $P$? Wykorzystaj własność symetralnej.",
-    "Skoro $P$ leży na symetralnej $BC$, to $PB = PC$. Podobnie z symetralnej $EF$ wynika $PE = PF$. Spróbuj pokazać, że z warunku na kąty i boki wynika również $PA = PD$. Co to oznacza dla położenia $P$ względem odcinka $AD$?",
-    "Rozważ trójkąty $PAB$, $PCD$, $PDE$, $PAF$. Wykorzystaj równość kątów przy $B$, $C$, $E$, $F$ oraz warunek $AB + DE = AF + CD$, aby pokazać że $PA = PD$. Punkt równoodległy od końców odcinka leży na jego symetralnej, a symetralna $AD$ przechodzi przez..."
+    "Niech $P$ będzie punktem przecięcia symetralnych odcinków $BC$ i $EF$. Co ta definicja mówi o odległościach punktu $P$ od wierzchołków $B, C, E, F$? Celem zadania jest wykazanie, że punkty $A, P, D$ leżą na jednej prostej.",
+    "Połączenie warunków na kąty i boki sugeruje użycie przekształceń geometrycznych, takich jak obroty. Rozważ wykonanie obrotów odpowiednich trójkątów wokół punktu $P$.",
+    "Obróć trójkąt $PCD$ wokół $P$ tak, aby odcinek $PC$ nałożył się na $PB$. Niech obrazem punktu $D$ będzie $D'$. Gdzie leży punkt $D'$? Podobnie, obróć trójkąt $PFA$ wokół $P$ tak, aby $PF$ nałożył się na $PE$. Gdzie znajdzie się obraz punktu $A$?",
+    "Powinieneś zauważyć, że $D'$ leży na prostej $AB$, a obraz punktu $A$ (nazwijmy go $A'$) leży na prostej $DE$. Wykorzystaj dany warunek na długości boków, aby pokazać, że pewne kluczowe odcinki są równe. Ta równość, w połączeniu z obrotami, prowadzi do wniosku, że punkty $A, P, D$ są współliniowe."
   ],
   "skills_required": [
     "perpendicular_bisector",

@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Ile wynosi pole kwadratu $1 \\times 1$, a ile kwadratu $2 \\times 2$? Jeśli mamy po $k$ części każdego rodzaju, jakie jest łączne pole pokrycia?",
-    "Zapisz równanie łączące $n^2$ z liczbą części $k$. Jakie wnioski o podzielności $n$ możesz wyciągnąć?",
-    "Skoro $n^2$ musi być podzielne przez pewną liczbę, to przez co musi być podzielne samo $n$? Jaka jest najmniejsza taka wartość?",
-    "Dla znalezionego kandydata na $n$ spróbuj skonstruować konkretne pokrycie. Zacznij od umieszczenia kwadratów $2 \\times 2$ i sprawdź, czy pozostałe pola da się wypełnić pojedynczymi kwadratami."
+    "Ile wynosi pole kwadratu o boku 1, a ile o boku 2? Jeśli mamy po $k$ części każdego rodzaju, jakie jest łączne pole, które one pokrywają?",
+    "Pole wszystkich części musi być równe polu kwadratu $n \\times n$. Zapisz to jako równanie. Jaką własność podzielności musi mieć $n$, aby to równanie miało rozwiązanie?",
+    "Sprawdź najmniejszą możliwą wartość $n$. Policz, ile jest na planszy komórek $(x,y)$, których obie współrzędne $x, y$ są parzyste. Ile takich komórek pokrywa każdy kwadrat $2 \\times 2$?",
+    "Skoro najmniejszy kandydat okazał się niemożliwy, zbadaj następny. Spróbuj ułożyć wszystkie kwadraty $2 \\times 2$ tak, by utworzyły jeden duży prostokąt wewnątrz kwadratu $n \\times n$."
   ],
   "skills_required": [
     "divisibility_arguments",

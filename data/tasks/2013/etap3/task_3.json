@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Rozważ, co oznacza warunek podzielności: $a^2 + b^2 \\mid 4ab$. Czy możesz zapisać to jako nierówność lub zbadać stosunek tych liczb?",
-    "Spróbuj podejścia przez sprzeczność: załóż, że $a \\neq b$. Bez straty ogólności możesz przyjąć $a > b$. Wprowadź podstawienie $a = kb$ dla pewnego $k > 1$.",
-    "Po podstawieniu $a = kb$ zbadaj, kiedy wyrażenie $\\frac{4kb^2}{k^2b^2 + b^2} = \\frac{4k}{k^2 + 1}$ może być liczbą całkowitą. Przeanalizuj wartość tego ułamka dla różnych $k$.",
-    "Pokaż, że dla $k > 1$ zachodzi $\\frac{4k}{k^2+1} < 2$, więc jedyną możliwą wartością całkowitą jest $1$. Sprawdź, dla jakich $k$ to zachodzi i czy prowadzi to do sprzeczności."
+    "Warunek $a^2+b^2 \\mid 4ab$ oznacza, że ułamek $\\frac{4ab}{a^2+b^2}$ musi być dodatnią liczbą całkowitą. Oznaczmy tę liczbę przez $k$. Jakie wartości może przyjmować $k$?",
+    "Aby znaleźć możliwe wartości $k$, spróbuj oszacować wartość ułamka $\\frac{4ab}{a^2+b^2}$ od góry. Czy potrafisz powiązać mianownik $a^2+b^2$ z wyrażeniem $ab$ z licznika za pomocą nierówności?",
+    "Pomyśl o znanej tożsamości algebraicznej $(a-b)^2 = a^2 - 2ab + b^2$. Jak możesz wykorzystać fakt, że $(a-b)^2 \\ge 0$, aby znaleźć związek między $a^2+b^2$ a $2ab$?",
+    "Używając nierówności z poprzedniego kroku, wykaż, że $k \\le 2$. Skoro $k$ jest dodatnią liczbą całkowitą, jakie są jedyne możliwe wartości $k$? Sprawdź każdy przypadek, aby zobaczyć, który z nich prowadzi do wniosku $a=b$."
   ],
   "skills_required": [
     "divisibility_arguments",

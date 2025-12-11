@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Rozważ funkcję $f(t) = t^2 + t$. Jak wygląda jej wykres? Dla jakich wartości $t$ funkcja ta jest rosnąca, a dla jakich malejąca?",
-    "Spróbuj przeformułować warunek zadania: z $x^2 + x \\leq y$ wynika coś o $f(x)$ i $y$. Co musisz pokazać o $f(y)$ i $x$? Zastanów się, czy możesz wykorzystać monotoniczność funkcji $f$.",
-    "Zauważ, że $f(t) = t^2 + t = (t + \\frac{1}{2})^2 - \\frac{1}{4}$. Funkcja $f$ jest rosnąca dla $t \\geq -\\frac{1}{2}$. Rozważ dwa przypadki: gdy $x \\geq -\\frac{1}{2}$ oraz gdy $x < -\\frac{1}{2}$.",
-    "Dla przypadku $x \\geq -\\frac{1}{2}$: skoro $f(x) \\leq y$, to $x \\leq y$ (bo $f(x) \\geq x$ dla takich $x$). Następnie wykorzystaj monotoniczność $f$. Dla $x < -\\frac{1}{2}$ sprawdź, czy $f(y) \\geq x$ zachodzi bezpośrednio."
+    "Zdefiniujmy funkcję $f(t) = t^2 + t$. Warunek z zadania to $f(x) \\leq y$, a teza to $f(y) \\geq x$. Jaka jest najmniejsza wartość funkcji $f$? Dla jakich argumentów $t$ jest ona rosnąca?",
+    "Masz daną nierówność $y \\geq f(x)$ i chcesz udowodnić $f(y) \\geq x$. Spróbuj wykorzystać fakt, że funkcja $f$ jest rosnąca w pewnym przedziale. Co by się stało, gdybyś do obu stron nierówności $y \\geq f(x)$ zastosował funkcję $f$?",
+    "Funkcja $f(t)$ jest rosnąca dla $t \\geq -1/2$. Aby móc zastosować $f$ do obu stron nierówności $y \\geq f(x)$ i zachować jej zwrot, musisz mieć pewność, że obie strony, czyli $y$ i $f(x)$, są w tym przedziale. Jaka jest minimalna wartość $f(x)$?",
+    "Z nierówności $y \\geq f(x)$ możesz wywnioskować, że $f(y) \\geq f(f(x))$. Dowód będzie zakończony, jeśli pokażesz, że $f(f(x)) \\geq x$ dla dowolnej liczby rzeczywistej $x$. Spróbuj udowodnić tę ostatnią nierówność."
   ],
   "skills_required": [
     "inequality_manipulation",

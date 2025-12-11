@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Zastanów się, kiedy dwie strzałki wskazują na to samo pole. Czy zależy to od ich kierunków? Rozważ osobno przypadki: dwie strzałki poziome, dwie pionowe, jedna pozioma i jedna pionowa.",
-    "Spróbuj wybrać po jednej strzałce z każdego wiersza. Ile strzałek wtedy zostawiasz? Teraz pomyśl, jak unikać konfliktów między wybranymi strzałkami.",
-    "Dwie strzałki poziome w tym samym wierszu zawsze konfliktują. Dwie strzałki pionowe w tej samej kolumnie zawsze konfliktują. A co ze strzałkami w różnych wierszach i kolumnach - kiedy mogą konfliktować?",
-    "Rozważ wybór strzałek z różnych wierszy I różnych kolumn (jak rozmieszczenie wież na szachownicy). Zbadaj, w jakich przypadkach para strzałka pozioma + strzałka pionowa może wskazywać na to samo pole i jak tego uniknąć przy wyborze."
+    "Pomyśl o prostych zestawach 5 strzałek, które na pewno nie będą ze sobą w konflikcie. Co możesz powiedzieć o zestawie 5 strzałek poziomych, jeśli każda jest w innym wierszu?",
+    "Zadanie będzie rozwiązane, jeśli znajdziesz 5 strzałek poziomych, po jednej z każdego wiersza. Kiedy jest to możliwe? A co jeśli się nie da? Może wtedy da się znaleźć inny prosty zestaw?",
+    "Załóż, że nie da się wybrać 5 strzałek poziomych z 5 różnych wierszy. Co to oznacza? Musi istnieć wiersz, w którym wszystkie strzałki są... ?",
+    "Załóż, że nie da się ani wybrać po jednej strzałce poziomej z każdego wiersza, ani po jednej pionowej z każdej kolumny. Rozważ wiersz z samymi strzałkami pionowymi i kolumnę z samymi strzałkami poziomymi. Co dzieje się na ich przecięciu?"
   ],
   "skills_required": [
     "counting_techniques",

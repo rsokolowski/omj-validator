@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Przypomnij sobie, czym jest symetralna odcinka - jaki zbiór punktów ona tworzy? Narysuj dokładny rysunek z okręgiem opisanym na trójkącie $ABC$ i zastanów się, gdzie leży środek tego okręgu względem symetralnej $AB$.",
-    "Skoro szukamy punktu na okręgu opisanym, pomyśl o własnościach tego okręgu. Symetralna boku trójkąta przechodzi przez środek okręgu opisanego - jak to wykorzystać? Rozważ, jakie własności musi mieć punkt przecięcia symetralnych.",
-    "Niech $P$ będzie punktem przecięcia symetralnych $AB$ i $DE$. Z definicji symetralnej: $PA = PB$ oraz $PD = PE$. Wykorzystaj warunek $AE = BD$ - jaką zależność możesz zapisać dla odcinków $PA$, $PB$, $PD$, $PE$, $AE$, $BD$?",
-    "Rozważ trójkąty $PAE$ i $PBD$. Masz równości $PA = PB$, $PD = PE$ oraz $AE = BD$. Sprawdź, czy te trójkąty są przystające i co z tego wynika dla położenia punktu $P$ względem odcinka $AB$ i okręgu opisanego."
+    "Spróbuj odwrócić rozumowanie. Zamiast szukać punktu przecięcia symetralnych, wybierz punkt $P$ na okręgu opisanym na $\\triangle ABC$, który leży też na symetralnej $AB$. Następnie udowodnij, że ten punkt musi leżeć na symetralnej $DE$.",
+    "Niech $P$ będzie punktem na okręgu opisanym na $\\triangle ABC$ i na symetralnej $AB$. Z definicji $PA=PB$. Aby pokazać, że $P$ leży na symetralnej $DE$, musisz udowodnić, że $PD=PE$.",
+    "Najprostszy sposób na wykazanie $PD=PE$ to znalezienie przystających trójkątów. Rozważ $\\triangle PAE$ i $\\triangle PBD$. Masz już $AE=BD$ (z treści) i $PA=PB$ (z wyboru $P$). Czego brakuje do przystawania bok-kąt-bok (SAS)?",
+    "Potrzebujesz równości kątów $\\angle PAE = \\angle PBD$. Wykorzystaj fakt, że $P$ leży na okręgu opisanym na $\\triangle ABC$. Zwróć uwagę na kąty wpisane oparte na tym samym łuku."
   ],
   "skills_required": [
     "circle_theorems",

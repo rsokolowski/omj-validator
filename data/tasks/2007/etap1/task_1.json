@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Przypomnij sobie, kiedy wartość bezwzględna jest równa zero. Jeśli $|A| = 0$, to co możesz powiedzieć o $A$?",
-    "Rozwiązuj równanie \"od zewnątrz do wewnątrz\" - najpierw usuń zewnętrzną wartość bezwzględną, potem kolejne. Na każdym etapie otrzymasz równanie typu $|B| = c$.",
-    "Zauważ, że $|B| = c$ dla $c > 0$ daje dwa przypadki: $B = c$ lub $B = -c$. Ile równań otrzymasz po usunięciu wszystkich wartości bezwzględnych?",
-    "Zacznij od $||x-1|-2|-3| = 4$. Następnie rozważ przypadki $|x-1|-2|-3 = 4$ oraz $||x-1|-2|-3 = -4$. Kontynuuj analogicznie dla każdej warstwy, pamiętając że wartość bezwzględna nie może być ujemna."
+    "Przekształć równanie tak, aby po jednej stronie została tylko najbardziej zewnętrzna wartość bezwzględna. Jaką postać ma wtedy równanie?",
+    "Twoje równanie ma postać $|A|=c$. Możesz je rozwiązać, usuwając zewnętrzną wartość bezwzględną i rozważając dwa przypadki. Tę samą metodę można zastosować do kolejnych, wewnętrznych wartości bezwzględnych.",
+    "Równanie $|A|=c$ ma dwa rozwiązania tylko wtedy, gdy $c>0$. Co się dzieje, gdy $c=0$ lub $c<0$? Zwracaj na to uwagę na każdym etapie usuwania wartości bezwzględnej.",
+    "Pierwszy krok prowadzi do dwóch równań: $||x-1|-2|-3 = 4$ oraz $||x-1|-2|-3 = -4$. Przekształć je do postaci $|B|=c$ i sprawdź, czy oba mają sens, zanim zaczniesz rozwiązywać je dalej."
   ],
   "skills_required": [
     "absolute_value",

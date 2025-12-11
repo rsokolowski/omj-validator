@@ -13,12 +13,20 @@
     "geometria"
   ],
   "hints": [
-    "Zastanów się, kiedy dwa boki w wielokącie foremnym są równoległe. Narysuj 17-kąt i oznacz wierzchołki numerami od 0 do 16. Jakie pary wierzchołków tworzą odcinki równoległe?",
-    "Spróbuj pogrupować wszystkie możliwe odcinki łączące wierzchołki według kierunków. Ile różnych kierunków (klas równoległości) występuje w 17-kącie foremnym? Użyj zasady szufladkowej.",
-    "W 17-kącie foremnym odcinki są równoległe, gdy różnice numerów ich końców są równe lub sumują się do 17. Mając 10 punktów, ile odcinków można utworzyć? Ile mamy kierunków do rozważenia?",
-    "Mając 10 wybranych wierzchołków, można utworzyć $\\binom{10}{2} = 45$ odcinków. Policz liczbę różnych kierunków w 17-kącie i zastosuj zasadę szufladkową, by znaleźć dwa odcinki równoległe rozłączne."
+    "Aby cztery wierzchołki tworzyły trapez, dwa łączące je odcinki muszą być równoległe. Oznacz wierzchołki 17-kąta liczbami od 0 do 16. Kiedy dwa odcinki w wielokącie foremnym są równoległe?",
+    "Każdy odcinek łączący dwa wierzchołki ma określony 'kierunek'. Policz, ile odcinków można utworzyć z 10 wierzchołków, a następnie spróbuj policzyć, ile jest możliwych kierunków. Zastosuj zasadę szufladkową.",
+    "Dwa odcinki, łączące wierzchołki $(i, j)$ oraz $(k, l)$, są równoległe, jeśli suma ich indeksów jest taka sama (modulo 17), czyli $i+j \\equiv k+l \\pmod{17}$. Ile jest możliwych wartości dla takiej sumy?",
+    "Z 10 wierzchołków można utworzyć $\\binom{10}{2}=45$ odcinków. Każdemu z nich przyporządkuj sumę indeksów jego końców (modulo 17). Zastosuj zasadę szufladkową. Co się stanie, gdy dwa odcinki mają tę samą sumę?"
   ],
-  "skills_required": ["pigeonhole", "counting_techniques", "trapezoid_parallelogram"],
-  "skills_gained": ["pigeonhole"],
-  "prerequisites": ["2005_etap2_2"]
+  "skills_required": [
+    "pigeonhole",
+    "counting_techniques",
+    "trapezoid_parallelogram"
+  ],
+  "skills_gained": [
+    "pigeonhole"
+  ],
+  "prerequisites": [
+    "2005_etap2_2"
+  ]
 }

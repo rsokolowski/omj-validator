@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Przypomnij sobie, jaki warunek musi spełniać trójkąt wpisany w okrąg, aby był prostokątny. Co jest wtedy jego przeciwprostokątną?",
-    "W 100-kącie foremnym ile jest par wierzchołków, które są końcami średnicy okręgu opisanego? Wybieramy 51 wierzchołków - czy możemy uniknąć wybrania obu końców jakiejś średnicy?",
-    "Zastosuj zasadę szufladkową: potraktuj pary przeciwległych wierzchołków jako 'szufladki'. Ile mamy szufladek, a ile wkładamy wierzchołków?",
-    "Gdy mamy już dwa wierzchołki będące końcami średnicy, zastanów się gdzie musi leżeć trzeci wierzchołek, aby trójkąt był nie tylko prostokątny, ale też równoramienny. Ile takich pozycji jest w 100-kącie?"
+    "Jaki jest związek między trzema wierzchołkami wielokąta foremnego, które tworzą trójkąt prostokątny równoramienny? Pomyśl o łukach okręgu opisanego, które łączą te wierzchołki.",
+    "Trzy takie wierzchołki, np. $V_0, V_{25}, V_{50}$, można uzupełnić o czwarty wierzchołek, $V_{75}$, tworząc bardzo regularny czworokąt. Jaki to czworokąt i jakie ma własności?",
+    "Wszystkie 100 wierzchołków 100-kąta można podzielić na rozłączne grupy wierzchołków, z których każda tworzy taki właśnie czworokąt. Ile jest takich grup? Potraktuj je jako szufladki.",
+    "Wybrano 51 wierzchołków. Zastosuj Zasadę Szufladkową do tych 51 'przedmiotów' i znalezionych 'szufladek'. Co to oznacza, że co najmniej trzy wybrane wierzchołki trafiły do tej samej szufladki?"
   ],
   "skills_required": [
     "pigeonhole",

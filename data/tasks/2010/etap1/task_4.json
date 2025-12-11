@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj sześciokąt z punktem $X$ i zaznacz wszystkie środki boków. Jakie czworokąty powstają? Czy widzisz jakiś wzorzec w tym, jak są rozmieszczone?",
-    "Oprócz trzech czworokątów z zadania (QAKX, LCMX, NEPX) istnieją też trzy pozostałe (KBLX, MDNX, PFQX). Zastanów się, co można powiedzieć o sumie pól wszystkich sześciu czworokątów.",
-    "Zauważ, że sześć czworokątów pokrywa cały sześciokąt, ale z pewnym nakładaniem się w okolicy punktu $X$. Zbadaj, jak pola trójkątów przy wierzchołku $X$ zależą (lub nie zależą) od jego położenia.",
-    "Wykaż najpierw, że suma pól wszystkich sześciu czworokątów jest stała. Następnie pokaż, że suma pól KBLX + MDNX + PFQX też nie zależy od $X$ - wykorzystaj symetrię sytuacji."
+    "Narysuj dowolny wypukły sześciokąt, zaznacz w nim punkt $X$ oraz środki boków. Połącz wierzchołki sześciokąta oraz punkt $X$ ze środkami odpowiednich boków, aby zobaczyć wszystkie sześć czworokątów.",
+    "Zauważ, że trzy czworokąty wymienione w zadaniu oraz trzy pozostałe (KBLX, MDNX, PFQX) razem w całości pokrywają sześciokąt $ABCDEF$. Co to oznacza dla sumy ich pól?",
+    "Pole każdego czworokąta można przedstawić jako sumę pól dwóch trójkątów o wspólnym wierzchołku $X$. Porównaj pole trójkąta $\\triangle AKX$ z polem trójkąta $\\triangle BKX$. Co możesz zauważyć?",
+    "Wykorzystaj fakt, że środkowa dzieli trójkąt na dwa trójkąty o równych polach. Pokaż, że suma pól czworokątów $QAKX, LCMX, NEPX$ jest równa sumie pól pozostałych trzech czworokątów."
   ],
   "skills_required": [
     "area_methods",

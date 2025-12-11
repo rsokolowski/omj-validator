@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Masz dwie niewiadome $a$ i $b$ związane warunkiem $ab = 1$. Czy możesz wyrazić jedną przez drugą i sprowadzić problem do jednej zmiennej?",
-    "Spróbuj użyć nierówności między średnią arytmetyczną a geometryczną (AM-GM). Zastanów się, jak rozbić wyrażenie na składniki, dla których znasz iloczyn.",
-    "Po podstawieniu $a = \\frac{1}{b}$ otrzymujesz wyrażenie zależne tylko od $b$. Spróbuj zapisać $\\frac{1}{b} + b^3$ jako sumę kilku składników, których iloczyn jest stały.",
-    "Rozpisz $b^3 = b \\cdot b \\cdot b$ i zastosuj nierówność AM-GM do czterech składników: $\\frac{1}{b}, b, b, b$. Kiedy zachodzi równość w tej nierówności?"
+    "Zadanie polega na znalezieniu minimum sumy $a+b^3$ pod warunkiem $ab=1$. Zauważ, że ten warunek pozwala wyrazić jedną zmienną za pomocą drugiej. Jak wtedy wygląda suma, którą masz zminimalizować?",
+    "Do znalezienia minimum sumy dodatnich wyrażeń często przydaje się nierówność między średnią arytmetyczną a geometryczną (AM-GM). Kluczem jest taki dobór składników, aby ich iloczyn był stałą liczbą.",
+    "Twoje wyrażenie to $\frac{1}{b} + b^3$. Aby iloczyn składników w nierówności AM-GM był stały, potęgi $b$ muszą się skrócić. Zastanów się, jak rozbić jeden ze składników ($\frac{1}{b}$ lub $b^3$) na kilka równych części.",
+    "Spróbuj zastosować nierówność AM-GM dla czterech składników. Trzy z nich powinny być równe i w sumie dawać jeden ze składników Twojego wyrażenia. Który składnik należy rozbić na trzy części, aby iloczyn całej czwórki był stały?"
   ],
   "skills_required": [
     "inequality_manipulation",

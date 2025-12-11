@@ -11,10 +11,10 @@
     "algebra"
   ],
   "hints": [
-    "Przyjrzyj się strukturze każdego równania. Co łączy lewą i prawą stronę? Spróbuj przenieść wszystkie wyrazy na jedną stronę i wyłączyć wspólny czynnik.",
-    "Każde równanie można przekształcić do postaci z nawiasem. Pomyśl o wyciągnięciu wspólnego czynnika - co otrzymasz dla równania $ab = a + b$?",
-    "Po przekształceniu każdego równania do postaci $(a-1)(b-1) = 1$ i podobnych, zastanów się jakie wartości mogą przyjmować wyrażenia $(a-1)$, $(b-1)$, $(c-1)$. Co się dzieje gdy któraś z tych wartości wynosi 0?",
-    "Rozważ dwa przypadki: gdy $a = b = c$ oraz gdy zmienne są różne. W pierwszym przypadku rozwiąż jedno równanie. W drugim przemnóż przez siebie trzy przekształcone równania i wykorzystaj symetrię."
+    "Spróbuj przekształcić jedno z równań, przenosząc wszystkie wyrazy na jedną stronę. Czy powstałe wyrażenie $ab - a - b = 0$ da się jakoś zapisać w postaci iloczynu?",
+    "Wyrażenie $ab - a - b$ trudno jest od razu zwinąć. Spróbuj wyłączyć $a$ z pierwszych dwóch wyrazów. Jak możesz przekształcić pozostałą część, aby pojawił się ten sam czynnik w nawiasie?",
+    "Każde równanie ma teraz postać $(x-1)(y-1)=1$. Zapisz tak cały układ. Co możesz wywnioskować, porównując pierwsze równanie z drugim? A drugie z trzecim?",
+    "Wiesz już, że zmienne muszą być sobie równe. Podstaw $a=b=c$ do dowolnego z początkowych równań i znajdź możliwe wartości."
   ],
   "skills_required": [
     "algebraic_identities",

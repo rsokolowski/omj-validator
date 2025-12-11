@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek równoległoboka $ABCD$ z zaznaczonymi punktami $X$ i $Y$. Oznacz na rysunku wszystkie równe odcinki wynikające z warunków zadania oraz własności równoległoboka.",
-    "Zastanów się, czy możesz znaleźć dwa trójkąty, które zawierają odcinki $CX$ i $CY$ jako odpowiednie boki. Spróbuj wykazać przystawanie tych trójkątów.",
-    "Zauważ, że $BC = AD = DX$ oraz $CD = AB = BY$. Rozważ trójkąty $CDX$ i $CBY$ - jakie boki mają równe?",
-    "Porównaj trójkąty $CDX$ i $CBY$. Masz już dwie pary równych boków. Zastanów się, jak wykorzystać kąty równoległoboka, aby wykazać równość trzeciej pary elementów."
+    "Narysuj dokładny rysunek i oznacz na nim wszystkie równe odcinki wynikające z warunków zadania oraz z własności równoległoboka.",
+    "Aby udowodnić, że $CX=CY$, spróbuj znaleźć parę przystających trójkątów, w których $CX$ i $CY$ są odpowiadającymi sobie bokami.",
+    "Rozważ trójkąty $CDX$ i $CBY$. Zauważ, że mają one już po dwa boki odpowiednio równe. Które to boki i dlaczego?",
+    "Aby wykazać przystawanie, porównaj kąty $\\angle CDX$ i $\\angle CBY$. Wykorzystaj fakt, że trójkąty $ADX$ i $ABY$ są równoramienne, oraz to, że boki równoległoboka są równoległe."
   ],
   "skills_required": [
     "trapezoid_parallelogram",

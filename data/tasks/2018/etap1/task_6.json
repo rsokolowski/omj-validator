@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Zastanów się, ile pól czarnych i białych znajduje się w każdym wierszu i w każdej kolumnie szachownicy $14 \\times 14$. Jak można opisać położenie wybranych pól?",
-    "Wybór jednego pola z każdego wiersza i każdej kolumny to permutacja. Zbadaj, jak kolor pola na pozycji $(i, j)$ zależy od parzystości $i$ i $j$.",
-    "Przeanalizuj parzystość sumy współrzędnych wybranych pól. Jeśli pole jest czarne gdy $i+j$ jest parzyste (lub nieparzyste), co to oznacza dla sumy wszystkich $i+j$?",
-    "Policz sumę $\\sum(i+j)$ dla wszystkich 14 wybranych pól, wiedząc że $i$ i $j$ przebiegają wartości $1, 2, \\ldots, 14$. Sprawdź, czy możliwe jest uzyskanie dokładnie 7 pól o parzystej i 7 o nieparzystej sumie współrzędnych."
+    "Zauważ, że wybrane pola mają współrzędne $(i, p_i)$, gdzie ciąg $(p_1, ..., p_{14})$ jest permutacją liczb od 1 do 14. Od czego zależy kolor pola o współrzędnych $(i, j)$? Zwróć uwagę na parzystość sumy $i+j$.",
+    "Zgodnie z treścią zadania, musimy wybrać 7 pól o parzystej sumie współrzędnych (białe) i 7 pól o nieparzystej sumie współrzędnych (czarne). Rozważ sumę $S$ wszystkich 28 współrzędnych wybranych pól.",
+    "Spróbuj obliczyć parzystość sumy $S$ na dwa sposoby. Po pierwsze, wykorzystaj fakt, że współrzędne są permutacją. Jaka jest parzystość sumy $\\sum_{i=1}^{14} (i+p_i)$?",
+    "Po drugie, jaka musiałaby być parzystość sumy $S$, gdyby była ona sumą 7 liczb parzystych i 7 liczb nieparzystych? Porównanie wyników z obu sposobów powinno doprowadzić do sprzeczności."
   ],
   "skills_required": [
     "parity_arguments",

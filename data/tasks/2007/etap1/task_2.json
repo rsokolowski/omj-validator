@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek czworokąta $ABCD$ i zaznacz wszystkie punkty $K$, $L$, $M$, $N$. Co oznacza, że punkt $K$ jest symetryczny do $B$ względem $A$? Jak można to wyrazić za pomocą odcinków?",
-    "Spróbuj powiązać boki czworokąta $KLMN$ z przekątnymi lub bokami czworokąta $ABCD$. Rozważ rozbicie obu czworokątów na trójkąty i porównanie ich pól.",
-    "Zauważ, że np. $KL$ jest związane z odcinkiem $AC$. Zbadaj, jak boki czworokąta $KLMN$ mają się do przekątnych $AC$ i $BD$ oryginalnego czworokąta - sprawdź równoległość i stosunek długości.",
-    "Pokaż, że $KLMN$ jest równoległobokiem, którego boki są równoległe do przekątnych $ABCD$ i dwukrotnie od nich dłuższe. Następnie porównaj pole $KLMN$ z polem $ABCD$, korzystając z rozkładu na trójkąty."
+    "Narysuj czworokąt $ABCD$ i punkty $K, L, M, N$. Zastanów się, co definicja symetrii mówi o położeniu punktu $A$ względem $K$ i $B$, punktu $B$ względem $L$ i $C$ itd. Jakie odcinki mają równe długości?",
+    "Pole czworokąta $KLMN$ można wyrazić jako sumę pola czworokąta $ABCD$ i pól czterech trójkątów znajdujących się na zewnątrz niego. Spróbuj powiązać pola tych zewnętrznych trójkątów z polem $ABCD$.",
+    "Rozważ jeden z zewnętrznych trójkątów, na przykład $\\triangle KBL$. Porównaj jego podstawę i wysokość z podstawą i wysokością trójkąta $\\triangle ABC$. Jaki jest stosunek ich pól?",
+    "Pokaż, że pole trójkąta $\\triangle KBL$ jest dwukrotnie większe od pola trójkąta $\\triangle ABC$. Użyj podobnego rozumowania dla pozostałych trzech zewnętrznych trójkątów, a następnie zsumuj wszystkie pola."
   ],
   "skills_required": [
     "transformations",

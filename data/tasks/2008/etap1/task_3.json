@@ -13,12 +13,19 @@
     "algebra"
   ],
   "hints": [
-    "Narysuj kwadrat $ABCD$ i kilka różnych prostych przechodzących przez jego środek. Jak zachowują się odległości przeciwległych wierzchołków od prostej?",
-    "Wykorzystaj symetrię środkową kwadratu względem jego środka. Co możesz powiedzieć o parach punktów $A, C$ oraz $B, D$?",
-    "Zauważ, że jeśli środek kwadratu leży na prostej $\\ell$, to punkty symetryczne względem środka mają takie same odległości od tej prostej. Wprowadź układ współrzędnych ze środkiem kwadratu w początku.",
-    "Umieść środek kwadratu w początku układu współrzędnych. Jeśli prosta $\\ell$ przechodzi przez początek, to $a = c$ oraz $b = d$. Wyraź współrzędne wierzchołków i oblicz sumę $a^2 + b^2 + c^2 + d^2 = 2a^2 + 2b^2$."
+    "Narysuj kwadrat i prostą przechodzącą przez jego środek. Wykorzystaj symetrię środkową kwadratu, aby znaleźć pary równych odległości spośród a, b, c, d.",
+    "Rozważ drugą prostą, prostopadłą do ℓ i przechodzącą przez środek. Jak można wyrazić kwadrat odległości wierzchołka od środka za pomocą jego odległości od tych dwóch prostopadłych prostych?",
+    "Pomyśl o obrocie o 90° wokół środka kwadratu. Jak zbiór odległości {a, b, c, d} od prostej ℓ ma się do zbioru odległości od prostej do niej prostopadłej?",
+    "Zsumuj kwadraty odległości wszystkich wierzchołków od środka kwadratu. Zapisz tę sumę na dwa sposoby: raz używając długości boku kwadratu, a drugi raz używając odległości a, b, c, d i wyniku z poprzedniej wskazówki."
   ],
   "prerequisites": [],
-  "skills_required": ["coordinate_geometry", "transformations", "algebraic_identities"],
-  "skills_gained": ["invariants", "coordinate_geometry"]
+  "skills_required": [
+    "coordinate_geometry",
+    "transformations",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "invariants",
+    "coordinate_geometry"
+  ]
 }

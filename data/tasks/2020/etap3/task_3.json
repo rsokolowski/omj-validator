@@ -14,9 +14,9 @@
   ],
   "hints": [
     "Zauważ, że każdy zawodnik wygrał inną liczbę meczów. Ile jest zawodników i jakie wartości mogą przyjmować liczby wygranych meczów? Czy wszystkie te wartości muszą wystąpić?",
-    "Zastanów się, ile meczów mógł maksymalnie rozegrać każdy zawodnik. Jeśli 16 zawodników ma 16 różnych liczb wygranych, to jakie to muszą być liczby? Co to mówi o liczbie rozegranych meczów?",
-    "Skoro wygrane przyjmują wartości $0, 1, 2, \\ldots, 15$, to każdy zawodnik musiał rozegrać wszystkie 15 możliwych meczów. Jaki jest związek między liczbą wygranych a przegranych dla każdego zawodnika?",
-    "Jeśli każdy rozegrał dokładnie 15 meczów, to dla każdego zawodnika: wygrane + przegrane = 15. Użyj tego, by pokazać, że jeśli wygrane są parami różne, to przegrane też muszą być parami różne."
+    "Pomyśl o całkowitej liczbie meczów rozegranych w turnieju. Można ją obliczyć na dwa sposoby: sumując wygrane wszystkich zawodników lub analizując, ile meczów rozegrał każdy z nich.",
+    "Jaka jest suma wszystkich wygranych w turnieju? Oznacz przez $m_i$ liczbę meczów gracza $i$. Jaki jest związek między sumą wszystkich $m_i$ a całkowitą liczbą meczów?",
+    "Wiesz, że suma meczów rozegranych przez wszystkich graczy wynosi 240. Jaka jest maksymalna liczba meczów, jaką mógł rozegrać jeden zawodnik? Co z tego wynika?"
   ],
   "skills_required": [
     "counting_techniques",

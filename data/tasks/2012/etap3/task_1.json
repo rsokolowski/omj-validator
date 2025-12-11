@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Przyjrzyj się warunkom: masz równanie $a + b + c = bc$. Spróbuj wyrazić jedną zmienną przez pozostałe. Co otrzymasz gdy wyznaczysz $a$?",
-    "Przekształć wyrażenie $(a+b)(a+c)$ podstawiając to, co wiesz o $a$. Rozważ analizę parzystości zmiennych $b$ i $c$.",
-    "Zauważ, że parzystość $b$ i $c$ determinuje parzystość całego wyrażenia. Ile przypadków musisz rozważyć? Sprawdź osobno gdy obie są parzyste, obie nieparzyste, lub różnej parzystości.",
-    "Po podstawieniu $a = bc - b - c$ otrzymasz $(a+b)(a+c) = c(b-1) \\cdot b(c-1)$. Zbadaj iloczyn $(b-1) \\cdot b \\cdot (c-1) \\cdot c$ - jaką podzielność ma iloczyn dwóch kolejnych liczb całkowitych?"
+    "Zacznij od przekształcenia danego warunku $a+b+c=bc$, aby wyznaczyć $a$ w zależności od $b$ i $c$.",
+    "Teraz podstaw otrzymane wyrażenie na $a$ do iloczynu $(a+b)(a+c)$. Uprość wyrażenia, które powstały w obu nawiasach.",
+    "Z każdego z uproszczonych nawiasów wyłącz wspólny czynnik przed nawias. Zobaczysz, że całe wyrażenie można zapisać w bardzo zgrabnej postaci.",
+    "Otrzymany iloczyn zawiera dwie pary kolejnych liczb całkowitych. Jaka jest podzielność iloczynu dwóch kolejnych liczb? Jak to wpływa na podzielność całego wyrażenia?"
   ],
   "skills_required": [
     "divisibility_arguments",

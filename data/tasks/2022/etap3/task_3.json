@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek. Oznacz kąty w trójkącie $ABC$: jeśli $\\angle ACB = 60°$, to $\\angle CAB + \\angle ABC = 120°$. Gdzie może leżeć punkt $E$ na prostej $BC$?",
-    "Skorzystaj z własności trójkątów równoramiennych. W trójkącie $ABD$ mamy $AB = BD$ - jakie kąty są równe? W trójkącie $ABE$ mamy $AB = AE$ - jakie kąty są równe?",
-    "Oznacz $\\angle CAB = \\alpha$ i $\\angle ABC = \\beta$ (gdzie $\\alpha + \\beta = 120°$). Wyraź kąty przy podstawach obu trójkątów równoramiennych przez $\\alpha$ i $\\beta$. Zastanów się, jak wyznaczyć $\\angle AEB$.",
-    "Znajdź kąt $\\angle AEC$ (jako kąt przyległy lub ten sam co $\\angle AEB$, zależnie od położenia $E$). Następnie w trójkącie $AEC$ wyznacz $\\angle EAC$ i oblicz $\\angle AEC$. Kąt $\\angle DEC$ jest częścią tego kąta."
+    "Narysuj starannie figurę. Punkt E leży na prostej BC. Rozważ, gdzie dokładnie może się znajdować (na odcinku BC, czy poza nim). Sprawdź, czy któraś z możliwości nie prowadzi do sprzeczności.",
+    "Oznaczmy $\\angle CAB = \\alpha$ i $\\angle ABC = \\beta$. Korzystając z tego, że trójkąty $ABD$ i $ABE$ są równoramienne, wyraź miary ich kątów wewnętrznych w zależności od $\\alpha$ i $\\beta$ dla poprawnej lokalizacji punktu E.",
+    "Skup się na kątach powstałych przez podział kątów trójkąta $ABC$. Oblicz miary kątów $\\angle DBC$ oraz $\\angle CAE$ w zależności od $\\alpha$ i $\\beta$. Powinieneś zauważyć pewną bardzo ciekawą zależność.",
+    "Zauważona równość kątów, w połączeniu z równością odcinków $BD=AE$, jest kluczem do zadania. Rozważ trójkąt $DEC$. Jaki warunek musiałby on spełniać, aby teza zadania była prawdziwa? Spróbuj udowodnić ten warunek."
   ],
   "skills_required": [
     "angle_chasing",

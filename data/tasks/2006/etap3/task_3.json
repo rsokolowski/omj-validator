@@ -11,10 +11,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek. Zaznacz odcinek środkowy $MN$ i przypomnij sobie jego własności względem boku $AB$. Gdzie leży środek odcinka $MN$?",
-    "Zauważ, że zarówno wysokość z $C$, jak i symetralna boku $AB$ są prostopadłe do $AB$. Co to oznacza dla wzajemnego położenia tych prostych?",
-    "Skoro obie proste są równoległe i przecinają odcinek $MN$, pomyśl o symetrii. Znajdź środek odcinka $MN$ i zbadaj, jak punkty $D$ i $E$ są położone względem tego środka.",
-    "Niech $P$ będzie środkiem $MN$, a $S$ środkiem $AB$. Pokaż, że $P$ leży na symetralnej $AB$, a następnie wykorzystaj równoległość wysokości i symetralnej do pokazania, że $PD = PE$."
+    "Narysuj figurę. Zaznacz, że $M$ i $N$ są środkami boków. Jaka jest kluczowa własność odcinka $MN$ łączącego środki boków w trójkącie $ABC$?",
+    "Zwróć uwagę na dwie kluczowe proste: wysokość z $C$ i symetralną boku $AB$. Obie są prostopadłe do $AB$. Jak można wykorzystać tę własność, aby porównywać odcinki na równoległych prostych $MN$ i $AB$?",
+    "Teza $MD=NE$ jest równoważna temu, że środek odcinka $MN$ jest jednocześnie środkiem odcinka $DE$. Spróbuj udowodnić, że te dwa środki się pokrywają.",
+    "Rozważ rzuty prostokątne punktów $M, N, D, E$ na prostą $AB$. Pokaż, że rzut środka odcinka $MN$ pokrywa się z rzutem środka odcinka $DE$."
   ],
   "skills_required": [
     "midsegment_properties",

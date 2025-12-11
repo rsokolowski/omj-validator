@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Zastanów się, co to znaczy, że dwie liczby są kolejne. Jak możesz zapisać warunek \"liczby są kolejne\" jako równanie?",
-    "Oblicz różnicę $(a^2 + b) - (a + b^2)$ lub $(a + b^2) - (a^2 + b)$. Spróbuj ją rozłożyć na czynniki.",
-    "Zauważ, że różnicę $a^2 - b^2 + b - a$ można zapisać jako $(a-b)(a+b) - (a-b) = (a-b)(a+b-1)$. Kiedy iloczyn dwóch czynników równa się $1$ lub $-1$?",
-    "Rozważ wszystkie możliwe przypadki: $(a-b) = 1$ i $(a+b-1) = 1$, lub $(a-b) = -1$ i $(a+b-1) = -1$, itd. Dla każdego przypadku wyznacz $a$ i $b$, a następnie sprawdź, czy warunek jest spełniony."
+    "Zastanów się, co to znaczy, że dwie liczby całkowite są kolejne. Jaka jest wtedy wartość ich różnicy? Zapisz odpowiedni warunek w postaci równania.",
+    "Oblicz różnicę między liczbami $a^2+b$ oraz $a+b^2$. Spróbuj przekształcić otrzymane wyrażenie, aby zapisać je w postaci iloczynu dwóch czynników.",
+    "Oznaczmy czynniki, które otrzymałeś w iloczynie, przez $X$ i $Y$. Zbadaj ich sumę $X+Y$. Co możesz powiedzieć o parzystości tej sumy?",
+    "Jeżeli suma dwóch liczb całkowitych jest nieparzysta, to co można powiedzieć o parzystości każdej z nich? Jaka jest wtedy parzystość ich iloczynu i czy może on być równy $1$ lub $-1$?"
   ],
   "skills_required": [
     "algebraic_identities",

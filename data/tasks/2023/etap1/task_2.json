@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zaznacz na rysunku wszystkie równe odcinki: $AX = MX = MC = MY = BY$. Jakie trójkąty równoramienne możesz zidentyfikować? Co wynika z tego, że $M$ jest środkiem $XY$ i jednocześnie $MX = MY$?",
-    "Skoro masz wiele trójkątów równoramiennych, wprowadź oznaczenia na kąty przy ich podstawach. Pamiętaj, że w trójkącie równoramiennym kąty przy podstawie są równe. Spróbuj wyrazić wszystkie kąty przez jedną niewiadomą.",
-    "Zwróć uwagę na trójkąt $MXC$ gdzie $MX = MC$ oraz na trójkąt $MYC$ gdzie $MY = MC$. Jakie są kąty w tych trójkątach? Wykorzystaj też fakt, że punkty $X$, $M$, $Y$ są współliniowe.",
-    "Zapisz warunek, że suma kątów przy wierzchołku $C$ w trójkącie $ABC$ musi być równa $\\angle ACB$. Użyj również faktu, że kąty $\\angle XMC$ i $\\angle YMC$ są kątami przyległymi (sumują się do $180°$). Z tych zależności wyznacz miary kątów, a następnie oblicz $\\angle AMB$."
+    "Zaznacz na rysunku wszystkie podane równe odcinki. Wskaż wszystkie trójkąty równoramienne, które dzięki temu powstały. Zauważ, że punkt $M$ jest środkiem odcinka $XY$.",
+    "Zamiast od razu wprowadzać wiele zmiennych dla kątów, poszukaj głębszej własności geometrycznej. Co oznacza fakt, że punkt $M$ jest równo odległy od punktów $X$, $C$ oraz $Y$?",
+    "Punkt $M$ jest środkiem okręgu przechodzącego przez punkty $X$, $C$ i $Y$. Co możesz powiedzieć o kącie $\\angle XCY$, wiedząc, że środek tego okręgu leży na boku $XY$?",
+    "Wyznacz miarę kąta $\\angle ACB$. Następnie oznacz kąty przy podstawach w trójkątach $AXM$ i $BYM$ jako $\\alpha$ i $\\beta$. Znajdź sumę $\\alpha+\\beta$, a potem wykorzystaj ją w trójkącie $AMB$, by obliczyć szukany kąt."
   ],
   "skills_required": [
     "isosceles_triangle",

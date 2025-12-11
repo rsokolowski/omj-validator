@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Oznaczmy $p = a + b + 1$. Skoro $p$ jest liczbą pierwszą i dzieli $4ab - 1$, zastanów się, jak wyrazić $4ab - 1$ używając zmiennej $p$ i różnicy $a - b$.",
-    "Spróbuj przekształcić wyrażenie $4ab - 1$ tak, aby pojawiła się w nim suma $a + b$ lub wyrażenie $(a + b + 1)$. Pomocne może być dodanie i odjęcie odpowiednich składników.",
-    "Zauważ, że $(a + b + 1)^2 = a^2 + b^2 + 1 + 2ab + 2a + 2b$. Spróbuj wyrazić $4ab$ przez $(a+b+1)^2$ i $(a-b)^2$, korzystając z tożsamości $(a-b)^2 = a^2 - 2ab + b^2$.",
-    "Po przekształceniach otrzymasz, że $p$ dzieli wyrażenie postaci $(a-b)^2 + c$ dla pewnej małej stałej $c$. Skoro $p = a + b + 1 \\geq 3$, zbadaj kiedy liczba pierwsza może dzielić takie wyrażenie."
+    "Oznaczmy $p = a+b+1$. Z treści zadania wiemy, że $p$ jest liczbą pierwszą i dzieli $4ab-1$. Jak można to zapisać w języku arytmetyki modularnej?",
+    "Chcemy udowodnić, że $a=b$, co jest równoważne $a-b=0$. Spróbuj przekształcić wyrażenie $4ab-1$ tak, aby pojawiła się w nim różnica $a-b$.",
+    "Składnik $4ab$ jest częścią znanej tożsamości algebraicznej wiążącej $a+b$ oraz $a-b$. Wykorzystaj ją oraz zależność $a+b=p-1$, aby przekształcić warunek podzielności.",
+    "Powinieneś dojść do wniosku, że $p$ dzieli $(a-b)^2$. Co z tego wynika, skoro $p$ jest liczbą pierwszą? Porównaj bezwzględną wartość różnicy $|a-b|$ z wartością $p$."
   ],
   "skills_required": [
     "divisibility_arguments",

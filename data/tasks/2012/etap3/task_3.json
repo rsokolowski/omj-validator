@@ -11,10 +11,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek i oznacz wszystkie dane. Skoro $AP = PQ = QB$, jakie trójkąty równoramienne powstają? Jakie kąty możesz z tego wywnioskować?",
-    "Zastanów się, jak wykorzystać kąt $120°$ przy $C$. Jeśli $PQ$ jest bokiem trójkąta równoramiennego z wierzchołkiem $C$, co możesz powiedzieć o kątach tego trójkąta?",
-    "Rozważ okrąg przechodzący przez punkty $P$, $M$, $Q$. Co by oznaczało, gdyby kąt $\\angle PMQ = 90°$? Jaki warunek musiałby być spełniony dla położenia punktu $M$?",
-    "Zbadaj trójkąt $CPQ$ - jest równoramienny z kątem $120°$ przy wierzchołku. Znajdź jego pozostałe kąty. Następnie sprawdź, czy punkt $M$ leży na okręgu o średnicy $PQ$."
+    "Narysuj starannie figurę. Oznacz kąty przy wierzchołkach $A$ i $B$ jako $\\alpha$ i $\\beta$. Jaka jest zależność między tymi kątami? Zaznacz równe odcinki $AP=PQ=QB$.",
+    "Punkt $M$ jest środkiem boku $AB$. Taka informacja często sugeruje dokonanie pewnej konstrukcji, np. dorysowanie linii lub punktu, aby wykorzystać symetrię względem $M$.",
+    "Rozważ punkt $P'$ taki, że $M$ jest środkiem odcinka $PP'$. Jaki czworokąt tworzą punkty $A, P, B, P'$? Co z tego wynika dla długości i położenia odcinka $BP'$?",
+    "Wykorzystaj równości $AP=QB$ i $AP=BP'$. Jaki szczególny trójkąt tworzą punkty $Q, B, P'$? Zauważ, że trójkąt $PQP'$ jest równoramienny, a odcinek $QM$ jest jego środkową."
   ],
   "skills_required": [
     "angle_chasing",

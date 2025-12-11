@@ -14,11 +14,18 @@
   ],
   "hints": [
     "Zauważ, że każdy iloczyn $x_i x_{i+1}$ może przyjąć tylko wartość $1$ lub $-1$. Kiedy iloczyn jest równy $1$, a kiedy $-1$? Jak to się ma do relacji między sąsiednimi liczbami?",
-    "Pomyśl o tym zadaniu jako o zliczaniu: ile jest par sąsiednich liczb o tym samym znaku, a ile o różnych znakach? Oznacz te liczby i zastanów się, jakie ograniczenia na nie działają.",
-    "Skoro idziemy cyklicznie przez 101 liczb i wracamy do początku, policz ile razy musimy \"zmienić znak\" przechodząc z $1$ na $-1$ lub odwrotnie. Czy ta liczba zmian może być dowolna?",
-    "Liczba zmian znaku w cyklu musi być parzysta (wracamy do punktu wyjścia). Masz 101 iloczynów, chcesz jak najwięcej $-1$. Jaka jest największa parzysta liczba nieprzekraczająca 101?"
+    "Aby zminimalizować sumę, potrzebujesz jak najwięcej iloczynów o wartości $-1$. Oznacz liczbę takich \"ujemnych\" iloczynów przez $k$. Czy $k$ może przyjąć dowolną wartość od $0$ do $101$?",
+    "Pomyśl o całym cyklu liczb. Co się stanie, jeśli pomnożysz przez siebie wszystkie składniki sumy: $(x_1x_2) \\cdot (x_2x_3) \\cdot \\ldots \\cdot (x_{101}x_1)$? Uprość ten iloczyn.",
+    "Wartość iloczynu z poprzedniej wskazówki musi być równa $1$. Co to oznacza dla liczby $k$ (liczby ujemnych składników)? Znajdź największą możliwą wartość $k$ i upewnij się, że da się dla niej zbudować odpowiedni ciąg."
   ],
   "prerequisites": [],
-  "skills_required": ["parity_arguments", "invariants", "sequences"],
-  "skills_gained": ["parity_arguments", "invariants"]
+  "skills_required": [
+    "parity_arguments",
+    "invariants",
+    "sequences"
+  ],
+  "skills_gained": [
+    "parity_arguments",
+    "invariants"
+  ]
 }

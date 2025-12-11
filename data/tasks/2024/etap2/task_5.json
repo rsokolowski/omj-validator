@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zastanów się, co oznacza, że liczba jest olimpijska. Jak wygląda ciąg operacji prowadzący od 1 do danej liczby olimpijskiej $n$? Spróbuj zapisać to formalnie.",
-    "Jeśli znasz ciąg operacji od 1 do $n$, jak skonstruować ciąg operacji od 1 do $n^2$? Pomyśl o związku między operacjami wykonywanymi na $n$ a operacjami na $n^2$.",
-    "Kluczowa obserwacja: jeśli $n$ zwiększamy o cyfrę jedności $c$, to jak zmienia się $n^2$? Zbadaj, ile razy trzeba wykonać operację na $n^2$, aby uzyskać $(n+c)^2$.",
-    "Rozważ różnicę $(n+c)^2 - n^2 = 2nc + c^2$. Pokaż, że tę różnicę można uzyskać przez odpowiednią liczbę operacji na $n^2$, wykorzystując fakt, że cyfra jedności $n^2$ zależy tylko od cyfry jedności $n$."
+    "Dowód najłatwiej przeprowadzić indukcyjnie. Załóż, że $n$ jest liczbą olimpijską i $n^2$ też. Jeśli $c$ jest cyfrą jedności $n$, musisz pokazać, że z $n^2$ da się dojść do $(n+c)^2$.",
+    "Zbadaj, jakie mogą być cyfry jedności liczb olimpijskich. Wypisz kilkanaście pierwszych takich liczb i zobacz, czy jest jakaś reguła. To bardzo uprości dalsze rozumowanie.",
+    "Startując od $n^2$, tworzymy kolejne liczby, dodając do nich ich cyfry jedności. Zbadaj ciąg samych cyfr jedności tych liczb. Jaka jest zależność między kolejnymi wyrazami tego ciągu? Czy staje się on okresowy?",
+    "Suma, którą trzeba dodać do $n^2$, to $2nc+c^2$. Wiesz już, że dodawane cyfry tworzą okresowy ciąg o sumie 20 w jednym cyklu. Pokaż, że $2nc+c^2$ można uzyskać, sumując wielokrotność 20 i sumę kilku początkowych wyrazów tego ciągu."
   ],
   "prerequisites": [
     "2022_etap2_2"

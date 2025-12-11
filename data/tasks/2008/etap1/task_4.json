@@ -13,12 +13,21 @@
     "algebra"
   ],
   "hints": [
-    "Przypomnij sobie wzór na sumę sześcianów: $a^3 + b^3 = (a+b)(a^2 - ab + b^2)$. Kiedy iloczyn dwóch liczb jest podzielny przez 3?",
-    "Skoro $a+b$ jest liczbą pierwszą, rozważ dwa przypadki: albo $3 | (a+b)$, albo $3 | (a^2 - ab + b^2)$. Co oznacza pierwszy przypadek dla wartości $a+b$?",
-    "Zbadaj reszty z dzielenia $a$ i $b$ przez 3. Jaką resztę daje wyrażenie $a^2 - ab + b^2$ w zależności od reszt $a$ i $b$? Rozważ wszystkie kombinacje.",
-    "Gdy $a+b \\neq 3$, sprawdź kiedy $a^2 - ab + b^2 \\equiv 0 \\pmod{3}$. Oblicz to wyrażenie modulo 3 dla każdej pary reszt $(a \\mod 3, b \\mod 3)$."
+    "Użyj wzoru na sumę sześcianów, aby rozłożyć wyrażenie $a^3+b^3$ na czynniki. Skoro ich iloczyn jest podzielny przez 3, co to oznacza dla poszczególnych czynników?",
+    "Rozważ dwa przypadki. Pierwszy, prostszy: 3 dzieli czynnik $a+b$. Jaka jest wtedy jedyna możliwa wartość $a+b$, skoro jest to liczba pierwsza?",
+    "Zastanów się nad drugim przypadkiem: 3 dzieli $a^2 - ab + b^2$. Spróbuj powiązać to wyrażenie z $(a+b)^2$. Czym się różnią?",
+    "Skoro $a^2 - ab + b^2$ i $(a+b)^2$ różnią się o wielokrotność 3, to co można powiedzieć o ich resztach z dzielenia przez 3? Co to oznacza dla warunku $3 | (a^2 - ab + b^2)$?"
   ],
-  "prerequisites": ["2006_etap1_3"],
-  "skills_required": ["modular_arithmetic", "primality_testing", "algebraic_identities"],
-  "skills_gained": ["modular_arithmetic", "case_analysis"]
+  "prerequisites": [
+    "2006_etap1_3"
+  ],
+  "skills_required": [
+    "modular_arithmetic",
+    "primality_testing",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "modular_arithmetic",
+    "case_analysis"
+  ]
 }

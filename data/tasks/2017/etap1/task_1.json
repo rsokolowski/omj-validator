@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Masz dwa równania z trzema niewiadomymi $a$, $b$, $c$. Spróbuj wyrazić dwie z nich przez trzecią lub poszukaj związku między nimi.",
-    "Zastanów się, jak z dwóch równań liniowych uzyskać wyrażenie kwadratowe. Jakie operacje na równaniach mogą prowadzić do sumy kwadratów?",
-    "Spróbuj podnieść oba równania do kwadratu i zbadaj, co otrzymasz po ich dodaniu. Zwróć uwagę na wyrazy mieszane z $ab$ i $bc$.",
-    "Po podniesieniu równań do kwadratu otrzymasz wyrażenia z $a^2$, $b^2$, $c^2$ oraz wyrazy z iloczynami. Sprawdź, czy wyrazy mieszane się zniosą po dodaniu stronami."
+    "Masz dane dwa równania liniowe, a teza do udowodnienia jest równaniem kwadratowym. Zastanów się, jak można przejść od zależności liniowych do kwadratowych.",
+    "Najprostszą operacją, która tworzy wyrażenia kwadratowe, jest podniesienie do kwadratu. Co się stanie, jeśli podniesiesz do kwadratu obie strony każdego z podanych równań?",
+    "Po podniesieniu obu równań do kwadratu, spróbuj dodać je stronami. Zwróć szczególną uwagę na wyrazy zawierające iloczyn $ab$.",
+    "Sprawdź, co się dzieje z wyrazami zawierającymi iloczyn $ab$, gdy dodasz do siebie oba równania podniesione do kwadratu. Uprość otrzymaną sumę."
   ],
   "skills_required": [
     "symmetric_systems",

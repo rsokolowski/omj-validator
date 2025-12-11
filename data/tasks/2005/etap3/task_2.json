@@ -10,10 +10,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek z równoległobokiem $ABCD$, punktami $E$ na $AB$, $F$ na $AD$, oraz punktami $P$ i $Q$ na przedłużeniach boków. Jakie figury powstają? Czy widzisz jakieś trójkąty o tym samym polu?",
-    "Spróbuj wyrazić pola obu trójkątów przez pola innych figur. Pomyśl o dodawaniu i odejmowaniu pól - może pole większej figury minus pole mniejszej da ci coś użytecznego?",
-    "Zwróć uwagę na trójkąty o wspólnej podstawie lub wspólnej wysokości. Które trójkąty na rysunku mają równe pola? Poszukaj par trójkątów między równoległymi prostymi.",
-    "Rozważ pole trójkąta $EPQ$ i pole równoległoboku $ABCD$. Spróbuj wyrazić pole $CEF$ i pole $APQ$ jako różnicę większych obszarów i porównaj otrzymane wyrażenia."
+    "Narysuj starannie całą konfigurację. Zwróć uwagę na pary prostych równoległych ($AB \\| DC$ i $AD \\| BC$) i na punkty, w których prosta $EF$ je przecina.",
+    "Pole trójkąta nie zmienia się, jeśli jego wierzchołek przesuwamy po prostej równoległej do podstawy. To kluczowa własność w tym zadaniu.",
+    "Zastosuj tę własność do trójkątów, których podstawy leżą na prostych $PC$ i $QC$. Porównaj pole $\\triangle FPC$ z polem $\\triangle APC$ oraz pole $\\triangle ECQ$ z polem $\\triangle ACQ$.",
+    "Wykaż, że oba pola, $\\triangle CEF$ i $\\triangle APQ$, są równe tej samej wielkości: $[ACQ] - [FCQ]$. Dla $\\triangle CEF$ wykorzystaj współliniowość punktów Q, F, E. Dla $\\triangle APQ$ rozważ czworokąt $APQC$."
   ],
   "skills_required": [
     "area_methods",

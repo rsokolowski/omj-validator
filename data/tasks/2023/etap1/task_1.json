@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zapisz tę liczbę jako wyrażenie algebraiczne używając potęg liczby $10$. Pamiętaj, że $\\underbrace{99\\ldots9}_{n} = 10^n - 1$ oraz $\\underbrace{11\\ldots1}_{n} = \\frac{10^n - 1}{9}$.",
-    "Spróbuj przedstawić całą liczbę jako iloczyn prostszych wyrażeń. Poszukaj wspólnego czynnika lub zastosuj grupowanie.",
-    "Po zapisaniu liczby w postaci algebraicznej, sprawdź czy da się ją rozłożyć na czynniki. Zwróć uwagę, że dla $n \\geq 2$ jeden z czynników może być większy od $1$ i mniejszy od całej liczby.",
-    "Przekształć liczbę do postaci $\\frac{10^n - 1}{9} \\cdot (10^n + 9)$ i sprawdź, dla jakich $n$ oba czynniki są większe od $1$."
+    "Zapisz daną liczbę w postaci $\\underbrace{11\\ldots1}_{n}00\\ldots0 + \\underbrace{99\\ldots9}_{n}$. Następnie przedstaw oba składniki za pomocą wyrażeń algebraicznych z potęgami liczby 10.",
+    "Po zapisaniu liczby w postaci sumy algebraicznej, poszukaj wspólnego czynnika, który można wyłączyć przed nawias.",
+    "Zauważ, że zarówno liczba złożona z samych jedynek, jak i liczba złożona z samych dziewiątek, są powiązane z wyrażeniem $10^n-1$. Wykorzystaj to do znalezienia wspólnego czynnika.",
+    "Gdy przedstawisz liczbę jako iloczyn, zastanów się, jakie warunki muszą spełniać czynniki, aby ich iloczyn był liczbą pierwszą. Sprawdź, dla jakich $n$ jeden z otrzymanych czynników jest równy 1."
   ],
   "skills_required": [
     "divisibility_arguments",

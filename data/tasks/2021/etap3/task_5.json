@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Policz oryginalną sumę wszystkich liczb w tabeli. Jak zmienia się suma, gdy zmieniamy znak jednej liczby $a$ na $-a$?",
-    "Zauważ symetrię tabeli: liczba $k$ i liczba $17-k$ leżą w pozycjach symetrycznych względem środka tabeli. Zbadaj, jak warunek '2 minusy w każdym wierszu i kolumnie' wpływa na parowanie liczb.",
-    "Pokoloruj pola tabeli w szachownicę. Ile minusów musi być na polach białych, a ile na czarnych? Jak to się ma do sum liczb na polach każdego koloru?",
-    "Udowodnij, że jeśli w każdym wierszu i kolumnie są dokładnie 2 minusy, to suma zaznaczonych liczb musi być równa sumie niezaznaczonych. Wykorzystaj fakt, że $k + (17-k) = 17$ dla liczb w pozycjach symetrycznych."
+    "Niech $S$ będzie początkową sumą wszystkich liczb, a $S_M$ sumą ośmiu liczb, którym zmieniono znak. Jaka jest nowa suma liczb w tabeli, wyrażona za pomocą $S$ i $S_M$? Co musisz udowodnić na temat wartości $S_M$?",
+    "Zamiast rozważać konkretne układy minusów, spróbuj znaleźć ogólną własność sumy liczb dla *dowolnego* układu spełniającego warunki zadania. Zauważ, że wartość liczby w tabeli zależy od jej położenia (numeru wiersza i kolumny).",
+    "Wyraź wartość liczby w komórce w wierszu $i$ i kolumnie $j$ za pomocą wzoru zależnego od $i$ oraz $j$. Następnie zapisz sumę $S_M$ jako sumę tych wzorów dla ośmiu wybranych komórek.",
+    "Przekształć uzyskaną sumę, grupując wyrazy oddzielnie ze względu na wiersze ($i$) i kolumny ($j$). Jaką informację o liczbie minusów w każdym wierszu i każdej kolumnie możesz wykorzystać do obliczenia tej sumy?"
   ],
   "skills_required": [
     "double_counting",

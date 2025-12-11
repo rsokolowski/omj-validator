@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Przypomnij sobie własności odcinków stycznych poprowadzonych z jednego punktu do sfery (lub okręgu). Co możesz powiedzieć o odcinkach z wierzchołka S do punktów styczności sfery ze ścianami bocznymi?",
-    "Skoro sfera jest styczna do każdej ściany bocznej, to w każdym trójkącie bocznym (np. $\\triangle SAB$) można wpisać okrąg. Wykorzystaj własność okręgu wpisanego w trójkąt i odcinków stycznych.",
-    "Dla trójkąta o bokach $a$, $b$, $c$ z wpisanym okręgiem, odcinki styczne z wierzchołków mają długości wyrażające się przez obwód. Zbadaj, jak sumy odpowiednich odcinków stycznych w przeciwległych ścianach bocznych są ze sobą powiązane.",
-    "Oznacz długości odcinków stycznych z wierzchołka $S$ do punktów styczności na poszczególnych ścianach. Pokaż, że suma pewnych par odcinków jest równa. Następnie wykorzystaj fakt, że w trójkątach równoramiennych o równych ramionach i równych podstawach kąty przy wierzchołku są równe."
+    "Sfera jest styczna do każdej ściany. Zastanów się, co to oznacza dla dwóch sąsiednich ścian, na przykład $\\triangle SAB$ i $\\triangle SBC$. Gdzie musi leżeć środek sfery względem płaszczyzn tych ścian?",
+    "Warunek styczności sfery do sąsiednich ścian (np. $\\triangle SAB$ i $\\triangle SBC$) implikuje, że okręgi wpisane w te trójkąty muszą stykać się ze wspólną krawędzią $SB$ w tym samym punkcie. Co to mówi o długościach odcinków stycznych od wierzchołka $S$ do tych okręgów?",
+    "Powyższa własność zachodzi dla wszystkich par sąsiednich ścian. Oznacza to, że możemy przypisać każdemu wierzchołkowi $V$ unikalną wartość $r_V$ tak, że krawędzie mają długości $|SA|=r_S+r_A$, $|AB|=r_A+r_B$ itd. Wyraź boki wszystkich czterech ścian bocznych za pomocą tych wartości.",
+    "Zadanie sprowadza się do udowodnienia tożsamości na kątach w trójkątach o bokach danych przez sumy promieni. Aby to zrobić, spróbuj \"rozłożyć\" ściany boczne na płaszczyźnie na dwa sposoby i porównać kluczowe odległości. Zestaw ze sobą $\\triangle SAB$ i $\\triangle SCD$, a osobno $\\triangle SBC$ i $\\triangle SDA$."
   ],
   "skills_required": [
     "spatial_3d",

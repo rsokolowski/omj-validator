@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek kwadratu z punktem $P$ spełniającym oba warunki. Zauważ, że $AP = AB$ oznacza, że punkt $P$ leży na pewnym okręgu o środku w $A$.",
-    "Skoro $\\angle CPD = 90°$, to punkt $P$ leży na okręgu o średnicy $CD$. Wykorzystaj fakt, że $P$ leży jednocześnie na dwóch okręgach.",
-    "Trójkąt $ABP$ jest równoramienny (bo $AP = AB$). Zbadaj kąty w tym trójkącie i zastanów się, jak związane są z kątami przy wierzchołkach $C$ i $D$.",
-    "Połącz punkt $P$ ze środkiem odcinka $CD$ i wykorzystaj własności trójkąta wpisanego w okrąg o średnicy $CD$. Poszukaj trójkątów podobnych lub przystających w tej konfiguracji."
+    "Narysuj starannie kwadrat $ABCD$ i punkt $P$ wewnątrz. Zaznacz wszystkie równe odcinki wynikające z założeń $AP=AB$ i z własności kwadratu. Zaznacz też kąt prosty $\\angle CPD$.",
+    "Aby powiązać ze sobą długości odcinków $DP$ i $CP$, rozważ obrót jednej z części figury. Obrót może pomóc stworzyć nowe trójkąty o znanych własnościach.",
+    "Spróbuj obrócić trójkąt $\\triangle DPC$ o $90^\\circ$ wokół wierzchołka $D$. Dokąd przejdzie punkt $C$, a dokąd $P$? Nazwij obraz punktu $P$ literą $P'$. Co możesz powiedzieć o trójkącie $\\triangle PDP'$?",
+    "Rozważ trójkąt $\\triangle AP'P$. Wyraź długości jego boków za pomocą $a$, $CP$ i $DP$. Zastanów się nad jego kątami - jeden z nich ma szczególną wartość, co pozwala znaleźć związek między bokami."
   ],
   "skills_required": [
     "circle_theorems",

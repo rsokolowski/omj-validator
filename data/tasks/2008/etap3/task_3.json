@@ -11,10 +11,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek. Gdzie leży środek cięciwy $AB$? Jak nazywa się odcinek łączący środek okręgu ze środkiem cięciwy?",
-    "Przypomnij sobie własność: odcinek łączący środek okręgu ze środkiem cięciwy jest prostopadły do tej cięciwy. Jak to może pomóc w porównaniu długości?",
-    "Oznacz środek cięciwy $AB$ jako $M$. Zastanów się, jaka jest relacja między $SM$, $SC$ i $CD$. Co możesz powiedzieć o położeniu punktu $M$ względem $C$?",
-    "Rozważ trójkąt prostokątny $SAM$. Z twierdzenia Pitagorasa: $SA^2 = SM^2 + AM^2$, więc $AM > SM$. Pokaż, że $SM \\geq CD$ i wyprowadź stąd żądaną nierówność."
+    "Narysuj rysunek i oznacz środek cięciwy $AB$ jako $M$. Zauważ, które odcinki są promieniami okręgu. Jakim rodzajem trójkąta jest $\\triangle SAM$?",
+    "Twoim celem jest wykazanie, że $AM > CD$. Spróbuj powiązać długości $AM$ i $CD$ z promieniem okręgu oraz odległościami punktów od środka $S$.",
+    "Kluczowe są dwa trójkąty: $\\triangle SAM$ i $\\triangle SCM$. Zastosuj nierówność trójkąta do pierwszego z nich. Jaka jest relacja między długością przyprostokątnej a przeciwprostokątnej w drugim?",
+    "Z nierówności trójkąta wiesz, że $AM > SA - SM$. Z drugiej strony $CD = SD - SC$. Porównaj $SM$ z $SC$, aby powiązać ze sobą te dwie zależności."
   ],
   "skills_required": [
     "circle_theorems",

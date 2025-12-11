@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek z trójkątem $ABC$, kwadratami $BCED$ i $ACFG$ oraz zaznacz środek okręgu opisanego $O$. Jak można opisać położenie punktów $D$ i $G$ względem wierzchołków trójkąta?",
-    "Rozważ użycie obrotów - kwadrat można scharakteryzować przez obrót o $90°$. Zastanów się, jak punkty $D$ i $G$ powstają przez obrót odpowiednich wierzchołków trójkąta.",
-    "Zbadaj, jak środek okręgu opisanego $O$ jest równoodległy od wierzchołków. Czy możesz pokazać, że $O$ jest również równoodległy od punktów $D$ i $G$? Wykorzystaj fakt, że $\\angle ACB = 45°$.",
-    "Pokaż, że obrót o $90°$ wokół punktu $B$ przekształca $C$ w $D$, a obrót o $90°$ wokół $C$ przekształca $A$ w $G$. Następnie zbadaj, jak te obroty działają na środek okręgu opisanego i wykorzystaj własność kąta $45°$ jako połowy kąta prostego."
+    "Narysuj figurę. Zauważ, że warunek $\\angle ACB=45°$ mówi coś bardzo ważnego o środku okręgu opisanego $O$ i wierzchołkach $A, B$. Jaki jest kąt $\\angle AOB$ i co to oznacza dla $\\triangle AOB$?",
+    "Aby udowodnić, że $O$ jest środkiem $DG$, możemy pokazać, że suma wektorów $\\vec{OD}$ i $\\vec{OG}$ jest wektorem zerowym. Umieśćmy $O$ w początku układu współrzędnych.",
+    "Wykorzystaj wniosek z pierwszej wskazówki. Jeśli $O=(0,0)$, a $\\triangle AOB$ jest prostokątny i równoramienny, to gdzie na osiach współrzędnych najwygodniej jest umieścić punkty $A$ i $B$?",
+    "Wyraź wektory $\\vec{D}$ i $\\vec{G}$ za pomocą wektorów $\\vec{A}$, $\\vec{B}$, $\\vec{C}$ i operacji obrotu o $\\pm 90^\\circ$. Sprawdź, czy $\\vec{D} + \\vec{G}$ jest równe wektorowi zerowemu."
   ],
   "skills_required": [
     "circle_theorems",

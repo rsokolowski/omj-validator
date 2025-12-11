@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trójkąta równoramiennego z równoległobokiem $CQPR$ wpisanym w jego wnętrze. Oznacz punkt symetryczny do $P$ względem $QR$ jako $P'$. Zastanów się, jakie własności ma równoległobok i co oznacza symetria względem prostej.",
-    "Przypomnij sobie warunek, kiedy punkt leży na okręgu opisanym na trójkącie - możesz wykorzystać kąty wpisane. Pomyśl też o własnościach przekątnych równoległoboka.",
-    "Zauważ, że przekątne równoległoboka $CQPR$ przecinają się w połowie. Jak położony jest środek odcinka $CP$ względem odcinka $QR$? Co to oznacza dla punktu $P'$?",
-    "Skoro $P'$ jest symetryczny do $P$ względem $QR$, a przekątne równoległoboka przecinają się w połowie, to $P'$ leży na prostej $CP$. Zbadaj kąt $\\angle CAB$ i porównaj go z odpowiednim kątem przy $P'$, korzystając z równoramienności trójkąta $ABC$."
+    "Narysuj starannie figurę. Z definicji symetrii osiowej, jakie odcinki mają taką samą długość jak $RP$ i $QP$?",
+    "Aby dowiedzieć się więcej o $P'$, musimy poznać długości $RP$ i $QP$. Wykorzystaj fakt, że $CQPR$ to równoległobok. Jakie proste są do siebie równoległe? Jakie kąty są w związku z tym równe?",
+    "Zauważ, że proste $AC$ i $QP$ są równoległe, podobnie jak $BC$ i $RP$. Wykorzystaj tę wiedzę do analizy kątów w trójkątach $\\triangle APR$ i $\\triangle BQP$. Co możesz powiedzieć o tych trójkątach?",
+    "Powinieneś odkryć, że $AR=RP$ i $BQ=QP$. Połącz to z własnościami symetrii. Otrzymasz, że $AR=RP'$ i $BQ=QP'$. Wykorzystaj te równości, aby przez rachunek na kątach wykazać, że punkty $A, C, B, P'$ leżą na jednym okręgu."
   ],
   "skills_required": [
     "isosceles_triangle",

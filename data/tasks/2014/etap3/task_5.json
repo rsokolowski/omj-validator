@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Zastanów się, jakie wielościany znasz, których wszystkie ściany są wielokątami foremnymi. Jakie warunki muszą spełniać kąty przy każdym wierzchołku wielościanu wypukłego?",
-    "Spróbuj wyjść od znanego wielościanu o ścianach foremnych i zastanów się, jak można by go zmodyfikować, aby jedna ściana przestała być foremna, zachowując wypukłość.",
-    "Rozważ wielościany, które mają ściany kwadratowe. Czy można \"rozciągnąć\" taki wielościan wzdłuż jednej osi, zamieniając kwadraty na prostokąty? Ile ścian się wtedy zmieni?",
-    "Poszukaj wielościanu, w którym tylko jedna ściana jest kwadratem (pozostałe to np. trójkąty równoboczne). Jeśli ten kwadrat zamienisz na prostokąt przez lekkie rozciągnięcie, czy reszta wielościanu może pozostać bez zmian?"
+    "Wyobraź sobie taki wielościan. Jedna jego ściana ($F_0$) jest nieforemna, a wszystkie pozostałe ($F_1, F_2, ...$) są foremne. Co możesz powiedzieć o długościach krawędzi ściany $F_0$, skoro każda z nich jest też krawędzią jakiejś ściany foremnej?",
+    "Z poprzedniej wskazówki wynika, że ściana nieforemna musi mieć wszystkie boki równe. Jest więc wielokątem równobocznym, ale nie równokątnym. Najprostszym przykładem jest romb. Spróbuj skonstruować wielościan, którego jedna ściana jest rombem, a pozostałe są trójkątami równobocznymi.",
+    "Rozważ dwa czworościany foremne o tej samej długości krawędzi. Czy można je połączyć w taki sposób, aby powstał nowy, wypukły wielościan? Pomyśl o łączeniu ich wzdłuż jednej krawędzi, a nie całej ściany.",
+    "Weź dwa czworościany foremne $ABCS$ i $ABCD$ o wspólnej krawędzi $AB$. Złóż je wzdłuż tej krawędzi. Powstanie pięciościan. Zastanów się, jakie są jego ściany. Czy któraś z nich jest rombem, a pozostałe trójkątami równobocznymi?"
   ],
   "skills_required": [
     "spatial_3d",

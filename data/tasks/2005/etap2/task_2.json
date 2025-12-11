@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Zastanów się, jakie reszty z dzielenia przez 11 mogą dawać poszczególne liczby. Ile jest możliwych reszt? Czy możesz pogrupować liczby według tych reszt?",
-    "Rozważ sumy częściowe ciągu liczb: $S_1 = a_1$, $S_2 = a_1 + a_2$, itd. Ile takich sum możesz utworzyć? Jak zasada szufladkowa może tu pomóc?",
-    "Masz 111 sum częściowych $S_1, S_2, \\ldots, S_{111}$, a każda z nich daje jedną z 11 możliwych reszt przy dzieleniu przez 11. Co wynika z tej dysproporcji?",
-    "Jeśli dwie sumy $S_i$ i $S_j$ (gdzie $i < j$) dają tę samą resztę z dzielenia przez 11, to czym jest $S_j - S_i$? Ile wyrazów zawiera ta różnica i co możesz powiedzieć o jej podzielności?"
+    "Problem dotyczy podzielności przez 11, więc kluczowe będą reszty. Ile jest możliwych reszt z dzielenia przez 11? Spróbuj pogrupować dane 111 liczb według tych reszt.",
+    "Masz 111 liczb i 11 grup (reszt). Czy ta dysproporcja nie sugeruje użycia zasady szufladkowej Dirichleta? Określ, co jest 'gołębiami', a co 'szufladkami'.",
+    "Zastosuj zasadę szufladkową do 111 liczb i 11 reszt. Jaki jest minimalny gwarantowany rozmiar jednej z grup liczb, które mają tę samą resztę?",
+    "Wiesz już, że istnieje grupa co najmniej 11 liczb o tej samej reszcie $r$. Wybierz z niej 11 liczb. Jaka będzie reszta z dzielenia ich sumy przez 11?"
   ],
   "skills_required": [
     "pigeonhole",

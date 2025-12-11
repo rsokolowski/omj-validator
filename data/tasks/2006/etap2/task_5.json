@@ -12,12 +12,18 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj ostrosłup i oznacz długości krawędzi bocznych. Co możesz powiedzieć o trójkątach $ASB$, $BSC$ i $CSA$? Jakie mają kąty przy wierzchołku $S$?",
-    "Skoro wszystkie kąty przy $S$ są równe, rozważ przypadek gdy krawędzie boczne mają równe długości. Jak wtedy wyglądają trójkąty boczne? Wykorzystaj własności trójkątów równoramiennych.",
-    "Dla trójkąta równoramiennego z kątem $20°$ przy wierzchołku, jakie są kąty przy podstawie? Porównaj podstawę takiego trójkąta z jego ramionami - która jest dłuższa?",
-    "W trójkącie, naprzeciw większego kąta leży dłuższy bok. Zbadaj, czy podstawa trójkąta równoramiennego z małym kątem przy wierzchołku jest krótsza od ramienia. Zsumuj wszystkie trzy podstawy."
+    "Teza dotyczy sumy długości boków podstawy. Zastanów się, jak można przedstawić sumę długości kilku odcinków w sposób geometryczny, np. jako długość jednej linii łamanej.",
+    "Wyobraź sobie, że rozcinasz powierzchnię boczną ostrosłupa wzdłuż krawędzi $AS$ i rozkładasz ją na płaszczyźnie. Powstanie siatka złożona z trzech trójkątów: $\\triangle ASB$, $\\triangle BSC$ i $\\triangle CSA$.",
+    "W tej siatce obwód podstawy tworzy linię łamaną. Jaki jest całkowity kąt przy wierzchołku $S$ w tej nowej figurze? Zwróć uwagę na jej skrajne krawędzie.",
+    "Długość linii łamanej jest nie mniejsza niż odległość w linii prostej między jej końcami. Zbadaj trójkąt utworzony przez wierzchołek $S$ oraz początek i koniec tej łamanej – jakie ma kąty i boki?"
   ],
-  "skills_required": ["spatial_3d", "isosceles_triangle", "inequality_manipulation"],
-  "skills_gained": ["spatial_3d"],
+  "skills_required": [
+    "spatial_3d",
+    "isosceles_triangle",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "spatial_3d"
+  ],
   "prerequisites": []
 }

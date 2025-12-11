@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zapisz sumę kolejnych liczb od $k$ do $k+m$ za pomocą wzoru na sumę ciągu arytmetycznego. Ile wynosi ta suma w zależności od $k$ i liczby składników?",
-    "Zastanów się nad podzielnością. Potęga $2^n$ ma bardzo specyficzną własność - jakie liczby są jej dzielnikami? Porównaj to z postacią otrzymanego wzoru.",
-    "Suma $(m+1)$ kolejnych liczb począwszy od $k$ wynosi $\\frac{(m+1)(2k+m)}{2}$. Przeanalizuj czynniki $(m+1)$ oraz $(2k+m)$ - czy któryś z nich musi być nieparzysty?",
-    "Zauważ, że spośród dwóch kolejnych liczb całkowitych $(m+1)$ i $(2k+m)$ dokładnie jedna jest parzysta. Co to oznacza dla dzielników ich iloczynu podzielonego przez $2$?"
+    "Niech suma zaczyna się od liczby $k \\ge 1$ i składa się z $L \\ge 2$ kolejnych liczb. Zapisz wzór na tę sumę w zależności od $k$ i $L$.",
+    "Przyrównaj otrzymany wzór do $2^n$ i przekształć równanie, aby pozbyć się ułamka. Otrzymasz równanie postaci $2^{n+1} = L \\cdot (\\dots)$. Jakie dzielniki ma lewa strona równania?",
+    "Zastanów się nad parzystością dwóch czynników po prawej stronie równania: $L$ oraz $(2k+L-1)$. Jaka jest parzystość ich sumy? Co to oznacza dla parzystości każdego z tych czynników?",
+    "Skoro iloczyn $L \\cdot (2k+L-1)$ jest potęgą dwójki, a jeden z czynników jest nieparzysty, to jaką wartość musi przyjąć ten nieparzysty czynnik? Sprawdź, czy jest to zgodne z warunkami zadania."
   ],
   "skills_required": [
     "parity_arguments",

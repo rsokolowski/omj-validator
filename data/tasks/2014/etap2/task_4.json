@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Oznacz różnicę ciągu arytmetycznego przez $d$. Jak wyrazić $p - s$ przez $d$? Zastanów się, jakie własności musi mieć $d$, skoro wszystkie cztery liczby są pierwsze.",
-    "Rozważ podzielność przez małe liczby. Co możesz powiedzieć o resztach z dzielenia liczb pierwszych (większych od 2 i 3) przez 2 i przez 3?",
-    "Jeśli $p$, $q$, $r$, $s$ są większe od 3, to są nieparzyste. Co to oznacza dla parzystości $d$? Rozważ też reszty tych czterech liczb przy dzieleniu przez 3 - ile jest możliwych reszt i ile masz liczb?",
-    "Skoro $d$ musi być parzyste (aby wszystkie liczby były nieparzyste), to $d$ jest podzielne przez 2. Użyj zasady szufladkowej dla reszt modulo 3: cztery liczby i trzy możliwe reszty - co z tego wynika dla $d$?"
+    "Liczby $p, q, r, s$ tworzą ciąg arytmetyczny. Oznacz jego różnicę ($r-s$) przez $d$. Wyraź $p-s$ za pomocą $d$. Co musisz udowodnić o podzielności $d$, aby teza zadania była prawdziwa?",
+    "Aby pokazać, że $d$ jest podzielne przez 6, należy udowodnić, że dzieli się przez 2 i przez 3. W obu przypadkach kluczowe jest zbadanie reszt z dzielenia, jakie mogą dawać liczby pierwsze.",
+    "Zacznij od najmniejszych liczb pierwszych. Czy najmniejsza z liczb, $s$, może być równa 2? A czy któraś z czterech liczb może być równa 3? Wykluczenie tych możliwości to ważny krok.",
+    "Wiesz już, że wszystkie cztery liczby są nieparzyste. Co to oznacza dla parzystości $d$? Wiesz też, że żadna nie jest podzielna przez 3. Załóż, że $d$ nie dzieli się przez 3 i zobacz, do jakiej sprzeczności to prowadzi."
   ],
   "skills_required": [
     "modular_arithmetic",

@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, jaką postać muszą mieć liczby całkowite, których iloczyn jest potęgą liczby $5$. Czy mogą zawierać inne czynniki pierwsze?",
-    "Skoro iloczyn ma być równy $5^{1002}$, każda z czterech liczb musi być potęgą piątki. Zbadaj własności takich liczb pod kątem parzystości.",
-    "Jaka jest parzystość dowolnej potęgi liczby $5$? Co możesz powiedzieć o sumie czterech takich liczb?",
-    "Suma czterech liczb nieparzystych daje liczbę parzystą, ale nie podzielną przez $4$ lub daje liczbę podzielną przez $4$, ale nie przez $8$. Sprawdź, przez jaką najwyższą potęgę dwójki może być podzielna suma czterech potęg piątki."
+    "Iloczyn czterech dodatnich liczb całkowitych jest potęgą liczby 5. Zapisz te cztery liczby jako $5^{x_1}, 5^{x_2}, 5^{x_3}, 5^{x_4}$. Co wiesz o sumie wykładników $x_1+x_2+x_3+x_4$?",
+    "Suma tych czterech liczb musi być równa $2^{1002}$. Zbadaj tę sumę, analizując jej resztę z dzielenia przez jakąś małą potęgę dwójki, na przykład 4 lub 8.",
+    "Jaka jest reszta z dzielenia $5^k$ przez 8? Zauważ, że zależy ona od parzystości wykładnika $k$. Co to oznacza dla podzielności sumy $5^{x_1}+5^{x_2}+5^{x_3}+5^{x_4}$ przez 8?",
+    "Suma $5^{x_1}+5^{x_2}+5^{x_3}+5^{x_4}$ jest podzielna przez 8 (bo $2^{1002}$ jest) tylko wtedy, gdy liczba nieparzystych wykładników ($x_i$) jest nieparzysta. Porównaj ten wniosek z tym, co wiesz o sumie wykładników."
   ],
   "skills_required": [
     "prime_factorization"

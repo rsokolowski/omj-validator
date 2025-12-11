@@ -13,12 +13,18 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, co oznacza \"dla każdej pary liczb dodatnich\". Czy możesz znaleźć szczególne wartości $x$ i $y$, które pozwolą przetestować, czy nierówność może być spełniona lub naruszona?",
-    "Spróbuj podstawiać konkretne proste wartości, np. $x = y$ lub $x = y = 1$. Dla jakich $n$ nierówność będzie spełniona, a dla jakich nie? Rozważ osobno małe i duże wartości $n$.",
-    "Gdy $x = y = 1$, nierówność przyjmuje postać $1 < 2$, co jest prawdą. Ale czy to wystarczy? Sprawdź, co się dzieje dla innych wartości, np. gdy $y$ jest bardzo duże w porównaniu z $x$.",
-    "Przeanalizuj zachowanie obu stron nierówności gdy $y \\to \\infty$ przy ustalonym $x > 0$. Porównaj, jak szybko rosną $xy^n$ oraz $x^4 + y^4$ w zależności od wartości $n$. Dla jakiego $n$ lewa strona rośnie szybciej niż prawa?"
+    "Nierówność ma zachodzić dla *każdej* pary liczb dodatnich. Czy istnieje jakaś szczególna relacja między $x$ i $y$ (np. $y=x$), która uprości problem i pozwoli zawęzić poszukiwania $n$?",
+    "Podstawiając $y=x$, otrzymujemy $x^{n+1} < 2x^4$. Przeanalizuj tę nierówność. Zauważ, że potęga $x$ po lewej stronie zależy od $n$. Co się dzieje, gdy ta potęga jest większa, równa lub mniejsza od 4?",
+    "Analiza przypadku $y=x$ powinna wyeliminować prawie wszystkie wartości $n$. Pozostaje sprawdzić, czy dla jedynej kandydującej wartości nierówność jest zawsze prawdziwa. Przekształć ją do postaci, która zależy tylko od ilorazu $t = x/y$.",
+    "Aby udowodnić otrzymaną nierówność dla zmiennej $t>0$, rozważ dwa przypadki. Co możesz powiedzieć o znakach wyrażeń, gdy $t \\ge 1$, a co, gdy $0 < t < 1$?"
   ],
-  "skills_required": ["inequality_manipulation", "case_analysis", "divisibility_arguments"],
-  "skills_gained": ["inequality_manipulation"],
+  "skills_required": [
+    "inequality_manipulation",
+    "case_analysis",
+    "divisibility_arguments"
+  ],
+  "skills_gained": [
+    "inequality_manipulation"
+  ],
   "prerequisites": []
 }

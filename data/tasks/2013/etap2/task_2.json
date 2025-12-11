@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj trapez $ABCD$ z podstawami $AB$ i $CD$, zaznacz środki $M$ i $N$ oraz punkt $P$ na odcinku $MN$. Przypomnij sobie wzór na pole trójkąta: $\\frac{1}{2} \\cdot \\text{podstawa} \\cdot \\text{wysokość}$.",
-    "Zastanów się, jak wyrazić pola trójkątów $ADP$ i $BCP$ przez wspólne elementy. Czy możesz znaleźć taką podstawę dla każdego trójkąta, żeby wysokości były łatwe do porównania?",
-    "Rozważ $AD$ jako podstawę trójkąta $ADP$ i $BC$ jako podstawę trójkąta $BCP$. Zbadaj, jakie są odległości punktu $P$ od prostych $AD$ i $BC$. Wykorzystaj fakt, że $M$ jest środkiem $AB$.",
-    "Poprowadź wysokości z punktu $P$ na proste zawierające boki $AD$ i $BC$. Wykorzystaj własność, że punkt $P$ leży na odcinku łączącym środki podstaw trapezu - jak to wpływa na sumę lub różnicę tych wysokości w stosunku do położenia $P$?"
+    "Narysuj trapez $ABCD$ z podstawami $AB$ i $CD$. Zaznacz środki $M$ i $N$ oraz punkt $P$ na odcinku $MN$. Zastanów się, jak można wyrazić pola trójkątów $ADP$ i $BCP$ poprzez działania na polach innych figur.",
+    "Rozważ czworokąty $ADNM$ i $BCNM$. Spróbuj wyrazić pole trójkąta $ADP$ używając pola czworokąta $ADNM$ i pól dwóch mniejszych trójkątów o wierzchołku $P$.",
+    "Zapisz pole $\\triangle ADP$ jako $P(ADNM) - P(\\triangle APM) - P(\\triangle DPN)$. Zapisz analogiczną równość dla pola $\\triangle BCP$. Porównaj parami trójkąty, których pola odejmujesz w obu wyrażeniach.",
+    "Zadanie sprowadza się do dowodu, że $P(ADNM) = P(BCNM)$. Pokaż, że pole czworokąta $ADNM$ jest równe połowie pola trapezu $ABCD$, dzieląc go na trójkąty $ADN$ i $AMN$."
   ],
   "skills_required": [
     "area_methods",

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trójkąta ostrokątnego z zaznaczonym punktem $K$ na boku $AB$ oraz środkiem okręgu opisanego $O$. Gdzie leży punkt $O$ względem boku $AB$? Jaką wspólną część mają oba czworokąty?",
-    "Spróbuj rozbić każdy z czworokątów na trójkąty o wspólnym wierzchołku. Zastanów się, jaką szczególną własność ma środek okręgu opisanego względem boków trójkąta - gdzie dokładnie leży $O$ względem odcinka $AB$?",
-    "Zauważ, że $O$ leży na symetralnej odcinka $AB$. Poprowadź prostą przez $O$ równoległą do $AB$ lub rozważ, jak położenie $O$ wpływa na odległości od punktów $A$ i $B$. Porównaj pola trójkątów $AOK$ i $BOK$.",
-    "Rozbij pole czworokąta $AKOC$ na sumę pól $\\triangle AKO$ i $\\triangle KOC$, podobnie $BKOC$ na $\\triangle BKO$ i $\\triangle KOC$. Skoro $\\triangle KOC$ jest wspólny, wystarczy pokazać równość pól $\\triangle AKO$ i $\\triangle BKO$. Wykorzystaj fakt, że $O$ leży na symetralnej $AB$."
+    "Aby porównać pola figur, nie zawsze trzeba używać skomplikowanych przekształceń. Czasem najprościej jest je obliczyć. Pomyśl o metodzie, która pozwala na obliczenie pola dowolnego wielokąta.",
+    "Wprowadź układ współrzędnych. Jego sprytne umiejscowienie znacznie uprości obliczenia. Gdzie warto umieścić początek układu (punkt (0,0)) i jedną z osi, mając do dyspozycji punkty A, B, C, K?",
+    "Umieść punkt K w początku układu współrzędnych, a prostą AB na osi OX. Zapisz współrzędne A, B i C używając np. odległości a=AK, b=BK, c=CK. Jaka własność punktu O pozwoli Ci wyznaczyć jego pierwszą współrzędną?",
+    "Punkt O musi leżeć na symetralnej odcinka AB. Jeśli A=(-a,0) i B=(b,0), to pierwsza współrzędna środka AB i punktu O wynosi (b-a)/2. Oblicz pola czworokątów AKOC i BKOC, używając wzoru na pole wielokąta o danych wierzchołkach."
   ],
   "skills_required": [
     "triangle_centers",

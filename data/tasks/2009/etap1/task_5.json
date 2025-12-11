@@ -13,12 +13,15 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Zauważ, że $a^2 - b^2$ jest podzielne przez 5 wtedy, gdy $a^2$ i $b^2$ dają tę samą resztę z dzielenia przez 5. Jakie reszty mogą dawać kwadraty liczb niepodzielnych przez 5?",
-    "Policz, ile różnych reszt z dzielenia przez 5 mogą mieć kwadraty liczb całkowitych niepodzielnych przez 5. Czy przyda się tu zasada szufladkowa?",
-    "Sprawdź reszty z dzielenia przez 5 dla $1^2, 2^2, 3^2, 4^2$. Ile jest różnych możliwych reszt? Porównaj tę liczbę z liczbą wierzchołków wielokąta.",
-    "Skoro kwadraty liczb niepodzielnych przez 5 dają tylko dwie różne reszty modulo 5, a mamy 55 wierzchołków ułożonych w cykl, rozważ ciąg reszt kwadratów przy kolejnych wierzchołkach i użyj zasady szufladkowej dla par sąsiednich."
+    "Warunek, że $a^2 - b^2$ jest podzielne przez 5, oznacza, że $a^2$ i $b^2$ dają tę samą resztę z dzielenia przez 5. Jakie reszty modulo 5 mogą dawać kwadraty liczb niepodzielnych przez 5?",
+    "Wyznacz zbiór możliwych reszt, jakie mogą przyjmować kwadraty liczb przy wierzchołkach. Skoro jest ich niewiele, zastanów się, jak musiałyby być one rozmieszczone na 55 wierzchołkach.",
+    "Okazuje się, że są tylko dwie możliwe reszty. Załóżmy, wbrew tezie, że kwadraty liczb przy sąsiednich wierzchołkach zawsze dają różne reszty. Jaki wzór musi tworzyć ciąg tych reszt na obwodzie wielokąta?",
+    "Jeśli ciąg reszt musi być naprzemienny, to jaka reszta będzie przy wierzchołku nr 55, jeśli przy pierwszym jest reszta R1? Co to oznacza dla sąsiedztwa wierzchołków nr 55 i nr 1?"
   ],
-  "prerequisites": ["2005_etap2_2", "2009_etap1_3"],
+  "prerequisites": [
+    "2005_etap2_2",
+    "2009_etap1_3"
+  ],
   "skills_required": [
     "modular_arithmetic",
     "pigeonhole"

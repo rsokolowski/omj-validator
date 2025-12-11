@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Dla każdej strzałki określ dwie liczby: ile strzałek ona wskazuje oraz ile strzałek wskazuje na nią. Spróbuj zapisać te wartości dla małego przypadku, np. $n = 3$ lub $n = 5$.",
-    "Pomyśl o różnicy między liczbą strzałek wskazywanych a liczbą strzałek wskazujących na daną strzałkę. Co się dzieje, gdy przechodzimy od strzałki do strzałki? Rozważ sumę wszystkich tych różnic.",
-    "Zauważ, że suma po wszystkich strzałkach liczby 'wskazuje na' równa się sumie liczby 'jest wskazywana przez'. Zbadaj jak zmienia się różnica tych wartości dla kolejnych strzałek i wykorzystaj fakt, że $n$ jest nieparzyste.",
-    "Dla skrajnych strzałek (pierwszej i ostatniej) różnica ma określony znak. Pokaż, że przechodząc od lewej do prawej, różnica zmienia się o co najwyżej pewną wartość. Skoro $n$ jest nieparzyste, gdzieś różnica musi wynieść zero."
+    "Dla każdej strzałki $i$ oznacz przez $P_i$ liczbę strzałek, na które ona wskazuje, a przez $W_i$ liczbę strzałek, które na nią wskazują. Zapisz te wartości dla przykładu z zadania.",
+    "Zapisz warunek z zadania w postaci równania $P_i = W_i$. Spróbuj wyrazić obie strony tego równania za pomocą symboli, np. numeru strzałki $i$ oraz liczby strzałek danego rodzaju.",
+    "Równanie $P_i = W_i$ przyjmie inną postać w zależności od zwrotu strzałki $i$. Rozważ te dwa przypadki i uprość je. Zwróć uwagę na parzystość obu stron, pamiętając, że $n$ jest nieparzyste.",
+    "Rozważ dwa przypadki w zależności od parzystości całkowitej liczby strzałek skierowanych w lewo. W każdym z nich tylko jeden rodzaj strzałki (lewa lub prawa) może spełnić warunek parzystości. Pokaż, że taka strzałka faktycznie istnieje."
   ],
   "skills_required": [
     "parity_arguments",

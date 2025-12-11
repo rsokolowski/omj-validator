@@ -12,12 +12,14 @@
     "algebra"
   ],
   "hints": [
-    "Mamy trzy wyrażenia, które są sobie równe. Oznacz ich wspólną wartość przez $k$ i zastanów się, co można wywnioskować z każdej pary równości.",
-    "Spróbuj odjąć stronami dwie równości, np. $xy(x+y) = yz(y+z)$. Wyciągnij wspólne czynniki i rozważ, kiedy iloczyn może być równy zero.",
-    "Po przekształceniu $xy(x+y) - yz(y+z) = 0$ otrzymasz wyrażenie z czynnikiem $y$. Sprawdź osobno przypadek, gdy pozostałe zmienne są równe, i przypadek, gdy są różne.",
-    "Rozwiń i pogrupuj: $y(x^2 + xy - yz - z^2) = y((x^2-z^2) + y(x-z)) = y(x-z)(x+y+z)$. Skoro $y \\neq 0$, rozważ co wynika z tego równania i analogicznych dla innych par."
+    "Mamy układ trzech równań. Zacznij od rozważenia tylko jednej równości, na przykład $xy(x+y) = yz(y+z)$. Co z niej wynika?",
+    "Przenieś wszystkie wyrazy na jedną stronę równania i spróbuj wyłączyć przed nawias wspólne czynniki. Pamiętaj, że z założenia $x, y, z \\neq 0$.",
+    "Po wyłączeniu czynnika $y$ otrzymasz w nawiasie cztery składniki. Spróbuj je tak pogrupować, aby dostrzec wzór skróconego mnożenia na różnicę kwadratów.",
+    "Wyłączenie nowego wspólnego czynnika doprowadzi cię do równania w postaci iloczynu. Taki iloczyn jest równy zero, gdy któryś z czynników jest zerem, co prowadzi do dwóch głównych przypadków. Rozważ je, pamiętając o symetrii całego układu równań."
   ],
-  "prerequisites": ["2015_etap2_3"],
+  "prerequisites": [
+    "2015_etap2_3"
+  ],
   "skills_required": [
     "symmetric_systems",
     "algebraic_identities",

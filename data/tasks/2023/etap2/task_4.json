@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Narysuj kwadrat z punktami $K$, $L$, $M$, $N$ na bokach i zaznacz oba podziały. Ile figur powstaje w każdym przypadku i jakie to figury? Oznacz długości odcinków na bokach kwadratu.",
-    "Wprowadź współrzędne lub oznaczenia dla pozycji punktów na bokach. Wyraź pola powstałych figur przez te wielkości. Szukaj symetrii w układzie punktów.",
-    "Zbadaj jakie warunki na położenie punktów $K$, $L$, $M$, $N$ wynikają z równości pól w pierwszym podziale. Zwróć uwagę na punkty $L$ i $N$ - występują w obu podziałach.",
-    "Porównaj pole trójkąta $KLN$ z polem trójkąta $KMN$. Wykorzystaj fakt, że oba trójkąty mają wspólny bok $KN$ - jakie warunki musi spełniać położenie $L$ względem $M$?"
+    "Narysuj kwadrat i zaznacz punkty. Zastanów się, jakie cztery figury powstają w pierwszym podziale (z odcinkami $KL, MN, LN$). Oznacz długości na bokach, np. $AK, BL, \\dots$.",
+    "Zapisz pola czterech figur z pierwszego podziału za pomocą oznaczonych długości. Warunek równości pól jest skomplikowany. Spróbuj znaleźć prostszą, równoważną własność położeń punktów $K,L,M,N$.",
+    "Zamiast rozpatrywać każdą z czterech figur osobno, rozważ sumę pól dwóch sąsiednich figur. Jaki kształt tworzą razem i jakie jest jego pole? Co to mówi o położeniu punktów?",
+    "Wykorzystaj znalezioną zależność, aby obliczyć pola figur w drugim podziale. Zauważ, że pola dwóch narożnych trójkątów można łatwo powiązać z warunkami zadania. Aby pokazać równość pól dwóch pozostałych czworokątów, porównaj pola trójkątów $\\triangle KMN$ i $\\triangle LKM$."
   ],
   "skills_required": [
     "area_methods",

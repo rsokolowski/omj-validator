@@ -15,9 +15,9 @@
   ],
   "hints": [
     "Zauważ, że sumę wszystkich liczb w tablicy można obliczyć na dwa sposoby: dodając sumy wierszy lub dodając sumy kolumn. Co z tego wynika?",
-    "Jeśli 8 sum ma być różnymi potęgami liczby $2$, to muszą być to pewne 8 różnych liczb z ciągu $1, 2, 4, 8, 16, \\ldots$ Zastanów się, jak podzielić je na dwie grupy o równych sumach.",
-    "Rozważ własność sum potęg dwójki: jeśli $2^a$ jest największą potęgą w zbiorze, to suma pozostałych potęg (mniejszych od $2^a$) jest mniejsza niż $2^a$. Jak to wpływa na możliwość równego podziału?",
-    "Weź 8 najmniejszych różnych potęg dwójki i sprawdź, czy można je podzielić na dwie grupy po 4 elementy o równych sumach. Porównaj największy element z sumą pozostałych w każdej grupie."
+    "Jeśli 8 sum ma być różnymi potęgami liczby $2$, to zadanie sprowadza się do podzielenia zbioru ośmiu różnych potęg dwójki na dwie grupy (wiersze i kolumny) o jednakowej sumie.",
+    "Rozważ kluczową własność potęg dwójki: największa potęga w dowolnym zbiorze różnych potęg dwójki jest większa niż suma wszystkich pozostałych potęg z tego zbioru.",
+    "Niech $2^k$ będzie największą z ośmiu wybranych potęg. Musi ona należeć do jednej z grup. Co możesz powiedzieć o sumie liczb w tej grupie w porównaniu z sumą liczb w drugiej grupie?"
   ],
   "skills_required": [
     "constructive_proof",

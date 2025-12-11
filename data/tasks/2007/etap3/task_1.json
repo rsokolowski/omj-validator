@@ -11,10 +11,10 @@
     "algebra"
   ],
   "hints": [
-    "Zauważ, że każde z wyrażeń $ab + bc$, $bc + ca$, $ca + ab$ można przekształcić, wyciągając wspólny czynnik przed nawias. Co łączy te wyrażenia?",
-    "Spróbuj dodać do siebie wszystkie trzy wyrażenia. Co otrzymasz? Rozważ też, co by się stało, gdyby dwie z liczb $a$, $b$, $c$ miały różne znaki.",
-    "Załóż nie wprost, że nie wszystkie liczby mają ten sam znak. Rozpatrz przypadek, gdy dokładnie jedna z nich ma inny znak niż pozostałe dwie. Jakie znaki będą miały wtedy poszczególne sumy?",
-    "Jeśli np. $a > 0$, $b > 0$, $c < 0$, zbadaj znak wyrażenia $bc + ca = c(a+b)$. Pamiętaj, że wszystkie trzy sumy mają być dodatnie - czy to możliwe?"
+    "Zauważ, że każde z podanych wyrażeń można zapisać w prostszej postaci, wyłączając wspólny czynnik przed nawias.",
+    "Teza dotyczy znaków liczb. Spróbuj udowodnić ją nie wprost, czyli zakładając, że liczby $a, b, c$ nie mają jednakowych znaków.",
+    "Jeśli znaki nie są jednakowe, to istnieją dwie główne możliwości (z dokładnością do permutacji). Rozważ pierwszą z nich: dwie liczby są dodatnie, a jedna ujemna.",
+    "Załóż, że np. $a>0, b>0, c<0$. Jaki znak będzie miało wtedy wyrażenie $bc+ca$? Wykorzystaj postać iloczynową z pierwszej wskazówki, aby to ustalić."
   ],
   "skills_required": [
     "algebraic_identities",

@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, co oznacza warunek 'jedna jest dzielnikiem drugiej'. Jakie ciągi liczb tworzą łańcuchy, w których każda kolejna jest wielokrotnością poprzedniej?",
-    "Szukaj najdłuższego łańcucha liczb $a_1 | a_2 | a_3 | \\ldots | a_k$, gdzie wszystkie liczby są w przedziale $1$ do $1000$. Ten łańcuch wymaga co najmniej $k$ kolorów.",
-    "Zbadaj ciąg potęg liczby $2$: ile takich potęg mieści się w przedziale od $1$ do $1000$? Każde dwie kolejne potęgi muszą mieć różne kolory.",
-    "Pokaż, że znaleziona liczba kolorów wystarcza. Przypisz każdej liczbie kolor równy wykładnikowi największej potęgi $2$, która ją dzieli."
+    "Zastanów się, co oznacza warunek z zadania. Jeśli masz ciąg liczb $a_1, a_2, \\ldots, a_k$ taki, że $a_1 | a_2 | \\ldots | a_k$, to ile co najmniej kolorów potrzeba, aby je pomalować?",
+    "Aby znaleźć najmniejszą możliwą liczbę kolorów, poszukaj najdłuższego łańcucha podzielności $a_1 | a_2 | \\ldots | a_k$ wśród liczb od 1 do 1000. Długość tego łańcucha da dolne ograniczenie na $n$.",
+    "Aby łańcuch podzielności był jak najdłuższy, kolejne liczby powinny rosnąć jak najwolniej. Rozważ ciąg, w którym każda następna liczba jest dwukrotnością poprzedniej, zaczynając od 1.",
+    "Udowodnij, że znaleziona liczba kolorów wystarcza. Zdefiniuj kolor liczby $m$ jako liczbę jej czynników pierwszych, liczonych z krotnościami (np. dla $12=2^2 \\cdot 3$ ta liczba to $2+1=3$). Sprawdź, czy to kolorowanie jest poprawne."
   ],
   "skills_required": [
     "divisibility_arguments",

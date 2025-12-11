@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Zastanów się, kiedy może zachodzić równość w tej nierówności. Spróbuj podstawić $a = b = c = 2$ i zobacz, co się dzieje.",
-    "Wykorzystaj fakt, że $a, b, c \\leq 2$ oznacza, że wyrażenia $(2-a)$, $(2-b)$, $(2-c)$ są nieujemne. Iloczyn nieujemnych czynników jest nieujemny.",
-    "Rozwiń iloczyn $(2-a)(2-b)(2-c) \\geq 0$ i sprawdź, jaką nierówność otrzymasz po przekształceniach.",
-    "Po rozwinięciu $(2-a)(2-b)(2-c)$ pogrupuj wyrazy i przekształć nierówność tak, aby po jednej stronie pojawiło się $a+b+c+2$, a po drugiej $abc$ plus dodatkowe składniki."
+    "Zbadaj wyrażenie $W = a+b+c+2-abc$. Zauważ, że jeśli potraktujesz $b$ i $c$ jako stałe, $W$ jest funkcją liniową zmiennej $a$. Sprawdź, co się dzieje w przypadku, gdy $a=2$.",
+    "Funkcja liniowa na przedziale przyjmuje swoje wartości ekstremalne (najmniejszą i największą) na jego końcach. Wykorzystaj tę własność kolejno dla zmiennych $a$, $b$ i $c$.",
+    "Aby znaleźć najmniejszą możliwą wartość wyrażenia $W$, wystarczy sprawdzić jego wartość tylko w \"narożnikach\" dziedziny, tzn. gdy każda ze zmiennych $a,b,c$ jest na krańcu swojego przedziału.",
+    "Sprawdź osiem przypadków, w których każda ze zmiennych $a,b,c$ jest równa $2$ lub jest bardzo bliska $0$. Pokaż, że w każdym z tych przypadków wyrażenie $a+b+c+2-abc$ jest nieujemne."
   ],
   "skills_required": [
     "inequality_manipulation",

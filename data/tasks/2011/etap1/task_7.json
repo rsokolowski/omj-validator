@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj sześcian i zaznacz wszystkie podane punkty. Gdzie dokładnie leżą odcinki KM i LN? Czy potrafisz opisać ich wzajemne położenie w przestrzeni?",
-    "Zastanów się, jak znaleźć minimalną odległość między dwoma odcinkami w przestrzeni. Pomocne może być rzutowanie na odpowiednio wybraną płaszczyznę lub wykorzystanie symetrii sześcianu.",
-    "Zauważ, że odcinki KM i LN są do siebie równoległe lub skośne. Znajdź płaszczyznę przekroju sześcianu, która zawiera oba te odcinki lub jest do nich prostopadła. Jak wygląda ta płaszczyzna?",
-    "Rozważ przekrój sześcianu płaszczyzną przechodzącą przez środek sześcianu, prostopadłą do obu odcinków KM i LN. Na tej płaszczyźnie zbadaj, jakie są możliwe położenia rzutów punktów P i Q, i kiedy ich odległość jest najmniejsza."
+    "Narysuj sześcian i zaznacz na nim punkty K, L, M, N. Zastanów się, jak w przestrzeni ułożone są względem siebie odcinki KM i LN. Czy są równoległe? Czy się przecinają?",
+    "Problem jest w trzech wymiarach, co bywa trudne. Spróbuj go uprościć, patrząc na \"cień\" całej sytuacji, czyli rzutując kluczowe punkty i odcinki na jedną z płaszczyzn.",
+    "Na którą płaszczyznę najlepiej rzutować? Wybierz taką, na której rzuty odcinków KM i LN utworzą prostą i czytelną konfigurację. Rozważ rzut na płaszczyznę podstawy sześcianu, czyli ABCD.",
+    "Rzuty odcinków KM i LN leżą na dwóch prostych równoległych. Odległość między punktami P i Q jest związana z odległością ich rzutów. Zastosuj twierdzenie Pitagorasa w trzech wymiarach."
   ],
   "prerequisites": [],
   "skills_required": [

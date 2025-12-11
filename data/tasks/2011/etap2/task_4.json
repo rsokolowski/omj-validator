@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Przepisz równanie w postaci $a+b+c - ab - bc - ca = 0$. Spróbuj pogrupować wyrazy tak, aby wyciągnąć wspólne czynniki. Co się stanie, gdy podstawisz wartości brzegowe $0$ lub $1$?",
-    "Rozważ przekształcenie wyrażenia poprzez dodanie i odjęcie odpowiednich składników. Czy potrafisz zapisać lewą stronę jako iloczyn czynników zawierających $(1-a)$, $(1-b)$, $(1-c)$?",
-    "Pomnóż równanie przez $2$ i spróbuj doprowadzić do sumy kwadratów lub iloczynów postaci $(1-a)(1-b)$ itp. Zauważ, że dla $a,b,c \\in [0,1]$ wyrażenia $(1-a)$, $(1-b)$, $(1-c)$ są nieujemne.",
-    "Przekształć równanie do postaci $a(1-b) + b(1-c) + c(1-a) = 0$ lub równoważnej. Skoro wszystkie czynniki są nieujemne w podanym przedziale, kiedy suma nieujemnych składników równa się zero?"
+    "Przenieś wszystkie wyrazy na jedną stronę, aby otrzymać równanie równe zeru. Zauważ, że wszystkie zmienne $a, b, c$ należą do przedziału $[0,1]$. Co to mówi o wartościach wyrażeń takich jak $(1-a)$?",
+    "Spróbuj pogrupować wyrazy w równaniu. Zamiast grupować alfabetycznie, połącz wyraz z jedną zmienną (np. $a$) z wyrazem z iloczynem (np. $-ab$). Jaki wspólny czynnik można wyciągnąć?",
+    "Po wyciągnięciu czynnika $a(1-b)$, jakie wyrazy zostały? Spróbuj powtórzyć ten sam proces dla pozostałych wyrazów, grupując $b$ z $-bc$ i tak dalej. Czy widzisz powtarzającą się, cykliczną strukturę?",
+    "Równanie można zapisać jako sumę trzech składników. Zastanów się, jaki jest znak każdego z tych składników, pamiętając o założeniach dotyczących $a,b,c$. Kiedy suma nieujemnych liczb jest równa zero?"
   ],
   "prerequisites": [
     "2010_etap1_1"

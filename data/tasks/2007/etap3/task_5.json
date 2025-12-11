@@ -11,10 +11,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj ostrosłup prawidłowy czworokątny i zaznacz przekrój płaszczyzną. Gdzie leżą punkty $A$, $B$, $C$, $D$ na krawędziach bocznych? Kiedy przekrój nie jest trapezem?",
-    "Wykorzystaj podobieństwo trójkątów. Zastanów się, jak położenie punktów przekroju na krawędziach bocznych wpływa na własności czworokąta $ABCD$ i położenie punktu $P$.",
-    "Oznacz odległości punktów $A$, $B$, $C$, $D$ od wierzchołka ostrosłupa. Zbadaj, kiedy proste $AB$ i $CD$ się przecinają (a nie są równoległe). Jak te odległości determinują wysokość punktu $P$?",
-    "Rozważ przekrój ostrosłupa płaszczyzną przechodzącą przez oś symetrii i dwie przeciwległe krawędzie boczne. W tym przekroju znajdź zależność między położeniem punktów na krawędziach a wysokością punktu $P$. Jakie wartości może przyjąć ta wysokość?"
+    "Narysuj ostrosłup. Punkt $P$ jest przecięciem prostych $AB$ i $CD$. Zauważ, że prosta $AB$ leży w płaszczyźnie jednej ze ścian bocznych. W płaszczyźnie której ściany leży prosta $CD$?",
+    "Skoro punkt $P$ leży na obu prostych, to musi należeć do obu płaszczyzn ścian bocznych. Co jest częścią wspólną (przecięciem) tych dwóch płaszczyzn?",
+    "Przecięciem tych płaszczyzn jest prosta. Zauważ, że wierzchołek $S$ należy do obu płaszczyzn. Jaki kierunek ma ta prosta, jeśli wiemy, że krawędzie podstawy w tych płaszczyznach są do siebie równoległe?",
+    "Prosta, na której leży punkt $P$, przechodzi przez wierzchołek $S$ i jest równoległa do podstawy. Jaka jest więc odległość dowolnego punktu tej prostej od płaszczyzny podstawy? Oblicz tę wartość."
   ],
   "skills_required": [
     "spatial_3d",

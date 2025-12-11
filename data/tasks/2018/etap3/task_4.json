@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek i oznacz kąty. Jakie wnioski płyną z równości kątów $\\angle EAD = \\angle AED$ oraz $\\angle ECB = \\angle CEB$? Co to mówi o bokach odpowiednich trójkątów?",
-    "Skoro w trójkącie dwa kąty są równe, to trójkąt jest równoramienny. Zidentyfikuj trójkąty równoramienne na rysunku i zapisz równości boków, które z tego wynikają.",
-    "Wyraź długości $AC$ i $BC$ przez inne odcinki, korzystając z własności trójkątów równoramiennych. Zauważ, że $AD = AE$ oraz $BC = BE$. Jak teraz przedstawić lewą stronę nierówności?",
-    "Po podstawieniu $AC = AD + DC$ (z nierówności trójkąta w $\\triangle ACD$) i $BC = BE$, sprowadź problem do wykazania nierówności $DC > CE$. Dlaczego punkt $E$ leży między $C$ a $D$?"
+    "Narysuj rysunek i wykorzystaj dane równości kątów do zidentyfikowania trójkątów równoramiennych. Jakie równości długości boków z tego wynikają?",
+    "Spróbuj znaleźć związki między długościami odcinków `DB` i `BC`. Można to zrobić na dwa różne sposoby, które doprowadzą do zaskakującego wniosku.",
+    "Zastosuj nierówność trójkąta dla trójkąta `ABE`. Użyj uzyskanych wcześniej równości boków, aby otrzymać pierwszą nierówność wiążącą `DB` i `BC`.",
+    "Przeanalizuj kąty. Jaki jest kąt `∠BED` - ostry, prosty czy rozwarty? Jaki wniosek na temat długości boków w trójkącie `BDE` można z tego wyciągnąć? Porównaj go z poprzednim wynikiem."
   ],
   "skills_required": [
     "isosceles_triangle",

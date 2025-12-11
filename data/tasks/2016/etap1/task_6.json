@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj ostrosłup i oznacz odcinki $DA$, $DB$, $DC$. Co wynika z faktu, że wszystkie trzy kąty przy $D$ są proste? Jaką figurę przestrzenną przypomina taki układ trzech prostopadłych odcinków?",
-    "Skoro $DA \\perp DB$, $DB \\perp DC$ i $DC \\perp DA$, to punkt $D$ jest jak wierzchołek prostopadłościanu. Użyj twierdzenia Pitagorasa w trójkątach $ADB$, $BDC$, $CDA$ aby powiązać długości $DA$, $DB$, $DC$ z bokami podstawy.",
-    "Oznacz $DA = a$, $DB = b$, $DC = c$. Z twierdzenia Pitagorasa w każdym z trzech trójkątów prostokątnych otrzymasz układ równań: $a^2 + b^2 = 1$, $b^2 + c^2 = 1$, $c^2 + a^2 = 1$. Co wynika z symetrii tego układu?",
-    "Rozwiąż układ równań, aby znaleźć $a = b = c$. Objętość ostrosłupa o trzech wzajemnie prostopadłych krawędziach bocznych o długościach $a$, $b$, $c$ wyraża się wzorem $V = \\frac{1}{6}abc$."
+    "Narysuj ostrosłup. Co mówi nam fakt, że kąty $\\angle ADB$, $\\angle BDC$, $\\angle CDA$ są proste? Jaki znajomy obiekt ma taki \"narożnik\" z trzema prostopadłymi krawędziami?",
+    "Ściany $ADB$, $BDC$ i $CDA$ są trójkątami prostokątnymi. Zastosuj twierdzenie Pitagorasa w każdej z nich, aby powiązać długości krawędzi wychodzących z wierzchołka $D$ z bokami podstawy $ABC$.",
+    "Oznacz długości krawędzi $DA=a, DB=b, DC=c$. Zapisz układ trzech równań. Zauważ, że boki podstawy $ABC$ mają tę samą długość. Co w związku z tym możesz powiedzieć o wartościach $a,b,c$?",
+    "Wyznacz długości $a, b, c$. Aby obliczyć objętość, potraktuj jedną ze ścian bocznych (np. $\\triangle ADB$) jako podstawę ostrosłupa. Która krawędź będzie wtedy jego wysokością?"
   ],
   "skills_required": [
     "spatial_3d",

@@ -12,9 +12,9 @@
   ],
   "hints": [
     "Wyobraź sobie punkty jako wierzchołki grafu, a kolorowe odcinki jako krawędzie. Co oznacza, że dwa punkty są 'połączone odcinkiem lub łamaną' tego samego koloru? Jak to się ma do pojęcia spójności grafu?",
-    "Zastosuj dowód nie wprost: załóż, że ani niebieski, ani czerwony kolor nie spełnia warunku. Co to oznacza dla obu kolorów? Każdy z nich musi mieć 'dziurę' w połączeniach.",
-    "Jeśli graf niebieski nie jest spójny, istnieją punkty $A$ i $B$, które nie są połączone żadną niebieską drogą. Jakiego koloru musi być odcinek $AB$? A co z innymi punktami - jak są połączone z $A$ i z $B$?",
-    "Rozważ dowolny punkt $C$ różny od $A$ i $B$. Odcinki $AC$ i $BC$ muszą być czerwone (dlaczego?). Powtórz to rozumowanie dla wszystkich punktów i zastanów się, co to mówi o grafie czerwonym."
+    "Zastosuj dowód nie wprost. Załóż, że ani graf niebieski, ani czerwony nie jest spójny. Co to oznacza dla każdego z nich?",
+    "Jeśli graf niebieski jest niespójny, to zbiór punktów można podzielić na dwa niepuste zbiory, $A$ i $B$, bez żadnych niebieskich odcinków między nimi. Jaki kolor muszą mieć wszystkie odcinki łączące $A$ z $B$? Zastosuj tę samą logikę do niespójnego grafu czerwonego.",
+    "Masz teraz dwa podziały punktów: na zbiory $A, B$ oraz na $C, D$. Każdy punkt należy więc do jednej z czterech grup (np. do $A$ i jednocześnie do $C$). Zbadaj kolory odcinków między punktami z różnych grup, aby znaleźć sprzeczność."
   ],
   "skills_required": [
     "graph_theory",

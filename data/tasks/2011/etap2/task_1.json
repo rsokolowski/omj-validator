@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zauważ, że $175 = 5^2 \\cdot 7$. Skoro $a + b = 175$, to możesz wyrazić $b$ przez $a$. Jaki warunek musi spełniać iloczyn $a \\cdot b$?",
-    "Zastanów się, jak czynniki pierwsze $5^2$ i $7$ mogą się rozłożyć między liczby $a$ i $b = 175 - a$. Rozważ osobno podzielność przez $7$ i przez $25$.",
-    "Zbadaj: jeśli $7 | a$, to co można powiedzieć o $175 - a$? Podobnie przeanalizuj podzielność przez $5$. Pamiętaj, że potrzebujesz łącznie co najmniej dwie piątki i jedną siódemkę w iloczynie.",
-    "Rozpisz wszystkie możliwości: (1) $a$ podzielne przez $175$, (2) $a$ podzielne przez $25$ ale nie przez $7$, (3) $a$ podzielne przez $7$ ale nie przez $25$, itd. Dla każdego przypadku sprawdź, czy drugi czynnik dostarcza brakujące dzielniki."
+    "Zapisz warunki zadania. Wykorzystaj równość `a+b=175`, aby wyrazić `b` za pomocą `a` i wstawić do warunku o podzielności iloczynu.",
+    "Otrzymałeś warunek, że `175` dzieli `a(175-a)`. Rozwiń ten iloczyn i zobacz, czy możesz uprościć ten warunek podzielności.",
+    "Wyrażenie `a(175-a)` jest równe `175a - a^2`. Całość jest podzielna przez 175, a pierwszy składnik `175a` również. Co to oznacza dla podzielności drugiego składnika, `a^2`?",
+    "Warunek sprowadza się do `175 | a^2`. Wiedząc, że `175 = 5^2 \\cdot 7`, zastanów się, jakie czynniki pierwsze musi zawierać liczba `a`, aby jej kwadrat był podzielny przez 175."
   ],
   "prerequisites": [
     "2011_etap1_4"

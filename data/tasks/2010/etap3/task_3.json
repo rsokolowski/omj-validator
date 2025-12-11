@@ -11,10 +11,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek zaznaczając wszystkie punkty. Zastanów się, jakie własności ma środek okręgu wpisanego $I$ - przez jakie punkty przechodzą dwusieczne kątów trójkąta?",
-    "Wykorzystaj kluczową własność: gdy okrąg jest styczny do prostej, to kąt między styczną a cięciwą równa się kątowi wpisanemu opartemu na tej cięciwie. Jakie kąty możesz w ten sposób powiązać?",
-    "Zbadaj trójkąt $BIP$ - jakie ma własności? Zwróć uwagę na kąty przy wierzchołkach $B$ i $P$. Czy prosta $AI$ jako styczna do okręgu daje ci informację o kącie $\\angle BIP$?",
-    "Pokaż, że trójkąt $BIP$ jest równoramienny z $IB = IP$. Następnie wykorzystaj własności dwusiecznej i podobieństwo trójkątów, aby wykazać, że $I$ leży w połowie odcinka $PQ$."
+    "Narysuj dokładny rysunek. Zastanów się, jakie własności ma środek okręgu wpisanego $I$ i jak definiowane są proste $AI$, $BI$, $CI$.",
+    "Skorzystaj z twierdzenia o kącie między styczną a cięciwą okręgu. Jaką równość kątów uzyskasz, rozważając styczną $AI$ i cięciwę $IB$?",
+    "Wyraź miarę kąta $\\angle AIB$ za pomocą kątów trójkąta $ABC$. Wykorzystaj to do znalezienia miary kąta $\\angle BPI$, a następnie kąta $\\angle CPI$.",
+    "Rozważ trójkąt $PIC$. Oblicz miarę kąta $\\angle PIC$. Jaką rolę pełni prosta $CI$ w trójkącie $PQC$? Wyciągnij z tego wniosek na temat położenia punktu $I$."
   ],
   "skills_required": [
     "circle_theorems",

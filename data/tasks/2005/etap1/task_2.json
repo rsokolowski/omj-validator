@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Oznacz punkt przecięcia przekątnych jako $P$. Jakie trójkąty tworzą przekątne? Przypomnij sobie warunek na istnienie okręgu wpisanego w czworokąt.",
-    "Wykorzystaj dwie kluczowe własności: dla czworokąta stycznego sumy przeciwległych boków są równe ($a + c = b + d$), a przy prostopadłych przekątnych możesz łatwo wyrazić długości boków przez odcinki powstałe z podziału przekątnych.",
-    "Niech przekątne dzielą się na odcinki $AP = p$, $CP = q$, $BP = r$, $DP = s$. Zapisz długości boków czworokąta używając twierdzenia Pitagorasa i podstaw do warunku na czworokąt styczny.",
-    "Po podstawieniu do równania $a + c = b + d$ otrzymasz zależność między $p$, $q$, $r$, $s$. Spróbuj ją przekształcić, aby wykazać, że $p = q$ lub $r = s$."
+    "Narysuj czworokąt i jego przekątne. Oznacz odcinki, na które punkt przecięcia dzieli przekątne (np. p, q, r, s). Jakie twierdzenie łączy długości boków w czworokącie, w który można wpisać okrąg?",
+    "Użyj twierdzenia Pitagorasa, aby wyrazić kwadraty długości boków ($a^2, b^2, c^2, d^2$) przez p, q, r, s. Porównaj sumę kwadratów przeciwległych boków $a^2+c^2$ z sumą $b^2+d^2$.",
+    "Wiesz już, że $a+c=b+d$ oraz $a^2+c^2=b^2+d^2$. Podnieś pierwsze równanie do kwadratu i użyj drugiego, aby znaleźć prostą zależność między iloczynami przeciwległych boków $ac$ i $bd$.",
+    "Zależności $a+c=b+d$ oraz $ac=bd$ oznaczają, że para boków ${a, c}$ jest taka sama jak para ${b, d}$. Rozważ dwa przypadki, które z tego wynikają, i pokaż, co każdy z nich oznacza dla odcinków p, q, r, s."
   ],
   "skills_required": [
     "tangential_quadrilateral",

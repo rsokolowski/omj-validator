@@ -15,9 +15,11 @@
     "Zastanów się, co oznacza, że ułamek jest skracalny. Jaki warunek musi spełniać największy wspólny dzielnik licznika i mianownika?",
     "Spróbuj zbadać, jak zmienia się NWD$(a+n, b+n)$ w zależności od $n$. Czy istnieje związek między NWD$(a+n, b+n)$ a różnicą $a-b$?",
     "Zauważ, że jeśli liczba $d$ dzieli zarówno $a+n$ jak i $b+n$, to dzieli również ich różnicę. Co to mówi o możliwych dzielnikach wspólnych?",
-    "Rozważ, co się stanie gdy $n$ będzie odpowiednio dużą wielokrotnością liczby $|a-b|$. Czy ułamek nadal będzie skracalny, jeśli $a \\neq b$?"
+    "Załóż, że $a \\neq b$ i niech $d = |a-b|$. Spróbuj dobrać $n$ tak, aby liczba $a+n$ dawała resztę 1 z dzielenia przez $d$. Czy to możliwe dla odpowiednio dużego $n$?"
   ],
-  "prerequisites": ["2016_etap2_3"],
+  "prerequisites": [
+    "2016_etap2_3"
+  ],
   "skills_required": [
     "divisibility_arguments",
     "prime_factorization",

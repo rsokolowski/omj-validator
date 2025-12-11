@@ -13,10 +13,10 @@
     "geometria"
   ],
   "hints": [
-    "Zastanów się, jak wygląda otoczka wypukła zbioru punktów. Ile kolorów może się pojawić na wierzchołkach otoczki wypukłej?",
-    "Rozważ dwa przypadki: gdy na otoczce wypukłej są punkty wszystkich trzech kolorów oraz gdy są tylko jednego lub dwóch kolorów. W drugim przypadku szukaj trójkolorowego trójkąta używając punktów wewnątrz otoczki.",
-    "Jeśli na otoczce są wszystkie trzy kolory, wybierz po jednym punkcie każdego koloru i zastanów się, czy taki trójkąt może zawierać w środku inne punkty ze zbioru. Jeśli tak, jak go poprawić?",
-    "Gdy trójkąt trójkolorowy zawiera w środku punkty, wybierz jeden z nich i zastąp nim odpowiedni wierzchołek trójkąta - powstanie mniejszy trójkąt trójkolorowy. Powtarzaj aż do uzyskania pustego wnętrza."
+    "Istnienie co najmniej jednego punktu z każdego z trzech kolorów gwarantuje, że można utworzyć trójkąt trójkolorowy. Zastanów się, co by się stało, gdyby taki trójkąt zawierał w środku inny zaznaczony punkt.",
+    "Spośród wszystkich możliwych trójkątów trójkolorowych wybierzmy jeden o szczególnej własności - na przykład o najmniejszym możliwym polu. Czy taki trójkąt może być tym, którego szukamy?",
+    "Załóżmy, że wybrany trójkąt o najmniejszym polu, nazwijmy go $\\triangle ABC$, nie jest pusty i zawiera wewnątrz punkt $P$. Jakiego koloru musi być punkt $P$?",
+    "Punkt $P$ ma ten sam kolor co jeden z wierzchołków $\\triangle ABC$, powiedzmy $A$. Czy możesz użyć punktu $P$ do skonstruowania nowego trójkąta trójkolorowego? Porównaj jego pole z polem $\\triangle ABC$."
   ],
   "skills_required": [
     "extremal_principle",

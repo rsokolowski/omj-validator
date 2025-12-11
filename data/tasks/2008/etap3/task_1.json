@@ -11,10 +11,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Oznacz szukaną liczbę przez $n$, a sumę jej cyfr przez $S(n)$. Zapisz warunek z zadania jako równanie. Zastanów się, jak duża może być suma cyfr liczby w porównaniu do samej liczby.",
-    "Zauważ, że suma cyfr liczby $k$-cyfrowej jest co najwyżej $9k$. Wykorzystaj to, by ograniczyć liczbę cyfr szukanej liczby - ile cyfr może mieć liczba spełniająca warunek?",
-    "Skoro $n = 11 \\cdot S(n)$, to $n$ musi dzielić się przez $11$. Ponadto dla liczby dwucyfrowej $n = 10a + b$ mamy $S(n) = a + b$. Podstaw to do równania.",
-    "Dla liczby dwucyfrowej $\\overline{ab}$ dostaniesz równanie $10a + b = 11(a+b)$. Uprość je i zbadaj, jakie wartości cyfr $a$ i $b$ są możliwe (pamiętaj: $a \\geq 1$, $0 \\leq b \\leq 9$)."
+    "Oznacz szukaną liczbę przez $n$, a sumę jej cyfr przez $S(n)$. Zapisz warunek z zadania jako równanie. Jaką oczywistą własność podzielności musi mieć liczba $n$?",
+    "Oszacuj, ile cyfr może mieć szukana liczba. Porównaj najmniejszą możliwą wartość liczby $k$-cyfrowej z największą możliwą wartością $11 \\cdot S(n)$ dla takiej liczby.",
+    "Wykorzystaj znaną własność: liczba $n$ daje tę samą resztę z dzielenia przez 9, co suma jej cyfr $S(n)$. Zastosuj tę własność do równania z zadania. Co możesz wywnioskować o $S(n)$?",
+    "Wiesz już, że $n$ ma co najwyżej trzy cyfry, a $S(n)$ jest wielokrotnością 9. Sprawdź kolejne wielokrotności 9 jako kandydatów na $S(n)$ i dla każdej z nich oblicz $n$. Czy otrzymana liczba spełnia warunki?"
   ],
   "skills_required": [
     "digit_manipulation",

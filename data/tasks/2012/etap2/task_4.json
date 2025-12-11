@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Zastanów się, co oznacza warunek 'każda prosta jest jednokolorowa lub dwukolorowa'. Weź dwie różne proste przechodzące przez ten sam punkt — ile kolorów może mieć ten punkt wspólny?",
-    "Rozważ, ile kolorów może wystąpić łącznie na dwóch przecinających się prostych. Spróbuj znaleźć ograniczenie górne na liczbę kolorów, analizując konfigurację kilku prostych.",
-    "Weź trzy proste przechodzące przez jeden punkt. Każda para prostych dzieli wspólny punkt — jak to ogranicza możliwe kolory? Pomyśl też, czy da się skonstruować kolorowanie z użyciem tej maksymalnej liczby kolorów.",
-    "Spróbuj podzielić płaszczyznę na równoległe pasy i pokolorować je różnymi kolorami. Sprawdź, ile kolorów możesz użyć, aby każda prosta przecinała co najwyżej dwa pasy (lub leżała w jednym)."
+    "Warunek zadania mówi, że na każdej prostej mogą być co najwyżej dwa kolory. Co z tego wynika, jeśli spróbujemy umieścić na jednej prostej trzy punkty o trzech różnych kolorach?",
+    "Problem ma dwie części. Najpierw spróbuj udowodnić, że nie da się użyć pewnej liczby kolorów, np. czterech. Następnie podaj przykład kolorowania, które pokazuje, że mniejsza liczba kolorów jest możliwa.",
+    "Załóż, że istnieją cztery punkty, każdy w innym kolorze. Co możemy powiedzieć o ich wzajemnym położeniu? Rozważ prostą przechodzącą przez dwa z nich i jej przecięcie z prostą łączącą dwa pozostałe.",
+    "Aby pokazać, że trzy kolory są możliwe, rozważ prostą konstrukcję. Weź dwie przecinające się proste. Jak można pokolorować punkty na tych prostych i poza nimi, używając łącznie trzech kolorów?"
   ],
   "skills_required": [
     "case_analysis",

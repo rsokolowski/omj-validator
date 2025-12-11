@@ -13,12 +13,17 @@
     "logika"
   ],
   "hints": [
-    "Zastanów się, ile maksymalnie odcinków można narysować między 6 punktami. Ile odcinków \"brakuje\" do pełnego połączenia wszystkich punktów?",
+    "Zastanów się, ile maksymalnie odcinków można narysować między 6 punktami. Ile odcinków 'brakuje' do pełnego połączenia wszystkich punktów?",
     "Rozważ sytuację odwrotną: zamiast patrzeć na narysowane odcinki, pomyśl o tych, których NIE narysowano. Co by się stało, gdyby trójkąt nie istniał?",
-    "Jeśli nie ma żadnego trójkąta wśród narysowanych odcinków, to dla każdych trzech punktów co najmniej jeden odcinek między nimi nie został narysowany. Ile jest trójek punktów i ile odcinków \"brakuje\"?",
-    "Mamy $\\binom{6}{3} = 20$ trójek punktów. Każdy brakujący odcinek może \"blokować\" co najwyżej 4 trójki (bo łączy 2 punkty, a pozostałe 4 punkty tworzą 4 trójki z tą parą). Sprawdź, czy 5 brakujących odcinków wystarczy, by zablokować wszystkie 20 trójek."
+    "Policz, ile jest wszystkich możliwych trójek punktów. Zgodnie z założeniem, że nie ma trójkątów, każda taka trójka musi być 'zepsuta' przez co najmniej jeden brakujący odcinek.",
+    "Mamy 5 brakujących odcinków. Każdy z nich 'psuje' 4 trójki, co daje łącznie $5 \\times 4 = 20$ 'zepsutych' trójek. Czy to gwarantuje, że wszystkie 20 *różnych* trójek jest zepsutych? Pomyśl, co się stanie, gdy dwa brakujące odcinki wychodzą z tego samego punktu."
   ],
-  "skills_required": ["graph_theory", "contradiction"],
-  "skills_gained": ["graph_theory"],
+  "skills_required": [
+    "graph_theory",
+    "contradiction"
+  ],
+  "skills_gained": [
+    "graph_theory"
+  ],
   "prerequisites": []
 }

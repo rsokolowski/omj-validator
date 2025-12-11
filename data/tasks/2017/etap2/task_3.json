@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Masz dwa równania i trzy niewiadome. Spróbuj przekształcić układ tak, aby wyeliminować jedną zmienną lub uzyskać wyrażenie, które można rozłożyć na czynniki.",
-    "Rozważ pomnożenie pierwszego równania przez $z$, a drugiego przez odpowiednią wartość, a następnie dodanie lub odjęcie równań. Poszukaj struktury iloczynowej.",
-    "Zauważ, że po odpowiednim przekształceniu możesz uzyskać wyrażenie postaci $(x+y)(1+z)$ lub podobne. Jakie pary liczb całkowitych dają w iloczynie konkretną wartość?",
-    "Dodaj oba równania stronami, aby otrzymać $x + y + z(x - y) = 3$, co można zapisać jako $(x+y)(1+z) - 2z = 3$. Teraz rozważ różne wartości całkowite $z$ i sprawdź, które dają całkowite $x$ i $y$."
+    "Masz do rozwiązania układ dwóch równań z trzema niewiadomymi całkowitymi. Zwróć uwagę na strukturę tych równań i poszukaj sposobu na wyeliminowanie jednej ze zmiennych.",
+    "Spróbuj pomnożyć każde z równań przez odpowiednią zmienną tak, aby po dodaniu lub odjęciu równań stronami uprościł się pewien skomplikowany człon, na przykład zawierający iloczyn trzech zmiennych.",
+    "Prawidłowe przekształcenie doprowadzi cię do równania zawierającego tylko zmienne $x$ i $y$. Spróbuj doprowadzić je do postaci, w której suma kwadratów wyrażeń z $x$ i $y$ jest równa pewnej liczbie.",
+    "Równanie można zapisać w postaci $(2x-1)^2 + (2y-2)^2 = 5$. Znajdź wszystkie pary kwadratów liczb całkowitych, które sumują się do 5, a następnie wyznacz z nich wartości $x$ i $y$."
   ],
   "skills_required": [
     "diophantine_equations",

@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Oznacz środek prostokąta przez $O$ (punkt przecięcia przekątnych). Co wiesz o odległościach wierzchołków prostokąta od punktu $O$? Rozważ, jak położenie punktu $S$ wpływa na długości krawędzi bocznych.",
-    "Wprowadź układ współrzędnych ze środkiem w punkcie $O$. Wyraź długości $AS$, $BS$, $CS$, $DS$ za pomocą współrzędnych punktu $S$ i wymiarów prostokąta.",
-    "Zauważ, że $A$ i $C$ to wierzchołki przeciwległe (podobnie $B$ i $D$). Zbadaj, czy suma $AS + CS$ zależy od położenia $S$, czy może jest związana z sumą $BS + DS$ w szczególny sposób.",
-    "Oblicz $AS^2 + CS^2$ oraz $BS^2 + DS^2$ używając wzoru na odległość. Co zauważasz? Czy z równości sum kwadratów wynika coś o sumach odległości?"
+    "Oznacz środek prostokąta przez $O$. Zauważ, że jest on równoodległy od wszystkich wierzchołków podstawy. Jak ta własność może pomóc w analizie długości krawędzi bocznych $AS, BS, CS, DS$?",
+    "Równość $AS+CS=BS+DS$ jest trudna do bezpośredniej analizy z powodu pierwiastków ukrytych w długościach odcinków. Spróbuj poszukać innej, prostszej zależności między długościami krawędzi, badając ich kwadraty.",
+    "Wprowadź układ współrzędnych ze środkiem w punkcie $O$. Wyraź sumy kwadratów długości przeciwległych krawędzi bocznych ($AS^2+CS^2$ oraz $BS^2+DS^2$) i porównaj je. Czy dostrzegasz stałą zależność?",
+    "Wykorzystaj odkrytą tożsamość dotyczącą kwadratów długości krawędzi wraz z równością daną w zadaniu. Pokaż, że te dwa warunki łącznie wymuszają równość niektórych krawędzi, co prowadzi do sprzeczności."
   ],
   "skills_required": [
     "coordinate_geometry",

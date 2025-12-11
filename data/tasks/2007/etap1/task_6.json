@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, jak często musi pojawiać się cyfra 0 w liczbie, aby spełnić warunek o trójkach. Rozważ małe przykłady - co się dzieje dla liczby 3-cyfrowej, 4-cyfrowej?",
-    "Skoro każde trzy kolejne cyfry muszą zawierać 0 i być różne, przeanalizuj możliwe wzorce rozmieszczenia zer. Na których pozycjach musi stać 0?",
-    "Zauważ, że jeśli 0 nie stoi na pozycji $i$, to musi stać na pozycjach $i-1$ i $i+1$ (aby trójki zawierające pozycję $i$ miały zero). Co to oznacza dla struktury całej liczby?",
-    "Wykaż, że zera muszą stać dokładnie na pozycjach parzystych (2, 4, 6, ..., 14). Następnie policz, ile jest sposobów wyboru cyfr niezerowych na pozycje nieparzyste, pamiętając o warunku różności w trójkach."
+    "Zauważ, że w każdej trójce kolejnych cyfr musi być dokładnie jedna cyfra 0. Dlaczego nie może być ich więcej? Co to mówi o cyfrach bezpośrednio sąsiadujących z zerem?",
+    "Skup się na tym, jak położenie jednego zera wpływa na pozycje innych. Jeśli cyfra na pozycji $i$ jest zerem ($c_i=0$), co możesz wywnioskować o cyfrach $c_{i+1}$ i $c_{i+2}$?",
+    "Jeśli wiesz już, że $c_{i+1}$ i $c_{i+2}$ muszą być niezerowe, to co to implikuje dla cyfry $c_{i+3}$, biorąc pod uwagę trójkę $(c_{i+1}, c_{i+2}, c_{i+3})$?",
+    "Położenie wszystkich zer jest zdeterminowane przez to, czy zerem jest $c_2$ czy $c_3$ (pamiętaj, że $c_1 \\neq 0$). Rozważ te dwa przypadki i dla każdego z nich zlicz, na ile sposobów można dobrać pozostałe cyfry."
   ],
   "skills_required": [
     "counting_techniques",

@@ -12,10 +12,10 @@
     "logika"
   ],
   "hints": [
-    "Przyjęcie można przedstawić jako graf, gdzie wierzchołki to osoby, a krawędzie łączą osoby, które się znają. Jak przeformułować warunek zadania w języku grafów?",
-    "Rozważ osobę, która ma najwięcej znajomych na przyjęciu. Co by się stało, gdyby nie znała wszystkich? Użyj zasady ekstremalnej.",
-    "Załóż, że osoba z maksymalną liczbą znajomych nie zna kogoś. Rozpatrz trójkę: ta osoba, ktoś kogo nie zna, oraz dowolny znajomy pierwszej osoby. Jaki wniosek płynie z warunku zadania?",
-    "Jeśli osoba $A$ ma najwięcej znajomych i nie zna osoby $B$, to w trójce $\\{A, B, C\\}$ (gdzie $C$ zna $A$) kto może znać obie pozostałe osoby? Sprawdź, czy to nie prowadzi do sprzeczności z maksymalnością $A$."
+    "Przedstaw problem w języku teorii grafów, gdzie osoby to wierzchołki, a znajomość to krawędź. Załóż nie wprost, że nie ma osoby, która zna wszystkich.",
+    "Zgodnie z założeniem, muszą istnieć dwie osoby, $A$ i $B$, które się nie znają. Wybierz dowolną inną osobę $C$ i rozważ trójkę osób {$A, B, C$}.",
+    "Zastosuj warunek z zadania do trójki {$A, B, C$}. Kto z nich musi znać pozostałą dwójkę? Co to oznacza dla liczby znajomych osoby $A$?",
+    "Wiesz już, ilu znajomych ma osoba $A$. Czy każda inna osoba na przyjęciu musi mieć tyle samo znajomych? Policz sumę stopni wszystkich wierzchołków i poszukaj sprzeczności."
   ],
   "skills_required": [
     "extremal_principle",

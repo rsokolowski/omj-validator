@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zastanów się, co oznaczają warunki geometrycznie. Jeśli $AP = AB$, to gdzie leży punkt $P$ względem punktu $A$? Narysuj kilka trójkątów równoramiennych.",
-    "Rozważ dowód nie wprost. Załóż, że taki punkt $P$ istnieje i zbadaj sumę kątów przy punkcie $P$ w powstałych trójkątach równoramiennych.",
-    "Przyjrzyj się kątom przy wierzchołkach $A$, $B$, $C$, $D$. W trójkącie równoramiennym kąty przy podstawie są równe. Jak kąty wewnętrzne czworokąta $ABCD$ związane są z kątami w trójkątach $PAB$, $PBC$, $PCD$, $PDA$?",
-    "Wyraź sumę kątów wewnętrznych czworokąta przez kąty przy $P$. Wykorzystaj fakt, że suma kątów przy $P$ wynosi $360°$, a suma kątów czworokąta to $360°$. Sprawdź, czy wypukłość jest możliwa."
+    "Warunki w zadaniu, takie jak $AB=AP$, oznaczają, że powstaje kilka trójkątów równoramiennych. Zidentyfikuj te trójkąty i wskaż w każdym z nich wierzchołek, przy którym schodzą się równe ramiona.",
+    "Załóż, że taki czworokąt i punkt $P$ istnieją. Spróbuj doprowadzić do sprzeczności, analizując własności kątów utworzonych przez punkt $P$ i wierzchołki czworokąta.",
+    "Jaka jest suma kątów wokół punktu $P$? Zauważ, że każdy z tych kątów ($\\_angle APB, \\_angle BPC, \\dots$) jest kątem wewnętrznym w jednym z trójkątów równoramiennych. Czy są to kąty przy podstawie, czy między ramionami?",
+    "Kąty przy podstawie trójkąta równoramiennego muszą być ostre. Co wynika z tego faktu dla sumy kątów $\\_angle APB + \\_angle BPC + \\_angle CPD + \\_angle DPA$?"
   ],
   "skills_required": [
     "isosceles_triangle",

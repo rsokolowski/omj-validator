@@ -12,12 +12,17 @@
     "geometria"
   ],
   "hints": [
-    "Oznacz $AB = c$ i zastanów się, co wiesz o medianie $CM$. Narysuj dokładny rysunek z kątem $120°$ przy wierzchołku $C$. Kiedy mediana jest najkrótsza?",
-    "Rozważ opisanie okręgu na boku $AB$ jako średnicy lub użycie wzoru na długość mediany przez boki trójkąta. Alternatywnie: czy pomocnicza konstrukcja (np. przedłużenie mediany) może pomóc?",
-    "Punkt $M$ leży na okręgu o średnicy $AB$. Zauważ, że długość $CM$ zależy od położenia punktu $C$. Zbadaj, jak kąt $\\angle ACB = 120°$ ogranicza położenie wierzchołka $C$.",
-    "Punkty, z których odcinek $AB$ widać pod kątem $120°$, leżą na pewnym łuku. Znajdź promień tego okręgu w zależności od $AB$ i określ minimalną odległość od punktu $M$ do tego łuku."
+    "Nierówność $CM \\geq X$ oznacza, że szukamy najmniejszej możliwej długości odcinka $CM$. Zastanów się, dla jakiego kształtu trójkąta $ABC$ (z zachowanym kątem $120^\\circ$) mediana $CM$ będzie najkrótsza.",
+    "Punkty $A$ i $B$ są stałe, a wierzchołek $C$ może zmieniać swoje położenie. Pomyśl, jaki zbiór punktów tworzą wszystkie możliwe położenia punktu $C$, dla których kąt $\\angle ACB$ ma miarę $120^\\circ$.",
+    "Zbiór punktów, z których odcinek $AB$ widać pod stałym kątem, to łuk okręgu. Zadanie sprowadza się więc do znalezienia najkrótszej odległości od punktu $M$ do punktów tego łuku.",
+    "Znajdź środek i promień okręgu zawierającego łuk, na którym leży punkt $C$. Najmniejsza odległość od $M$ do tego łuku znajduje się na prostej łączącej $M$ ze środkiem okręgu."
   ],
-  "skills_required": ["angle_chasing", "inequality_manipulation"],
-  "skills_gained": ["inequality_manipulation"],
+  "skills_required": [
+    "angle_chasing",
+    "inequality_manipulation"
+  ],
+  "skills_gained": [
+    "inequality_manipulation"
+  ],
   "prerequisites": []
 }

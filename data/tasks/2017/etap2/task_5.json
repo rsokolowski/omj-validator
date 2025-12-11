@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, ile jest kwadratów liczb całkowitych, które mogą być różnicą dwóch liczb. Czy możesz ograniczyć się do pewnego skończonego zbioru liczb całkowitych?",
-    "Użyj zasady szufladkowej. Jeśli masz trzy kolory i odpowiednio dużo liczb, to wiele z nich musi mieć ten sam kolor. Pomyśl o ciągu kolejnych kwadratów.",
-    "Rozważ liczby $0, 1, 4, 9, 16, 25, \\ldots$ (kolejne kwadraty). Jakie różnice występują między nimi? Sprawdź, co się dzieje dla pierwszych kilku kwadratów $0, 1, 4, 9$.",
-    "Przeanalizuj kolorowania liczb $0, 1, 2, 3, 4, 5$. Zauważ, że różnice $1-0$, $4-0$, $4-3$, $5-4$, $5-1$ są kwadratami. Sprawdź, czy każde kolorowanie tych sześciu liczb trzema kolorami daje parę tego samego koloru różniącą się o kwadrat."
+    "Zamiast sprawdzać wszystkie liczby, spróbuj znaleźć pewną regułę, którą musi spełniać każde kolorowanie. Czy możesz znaleźć grupę liczb, których wzajemne różnice są kwadratami?",
+    "Wykorzystaj trójkę pitagorejską, na przykład $3^2+4^2=5^2$. Rozważ, jakie zależności narzuca to na kolory czterech liczb: $x$, $x+9$, $x+16$ oraz $x+25$.",
+    "Pokaż, że dla dowolnej liczby $x$ niemożliwe jest, aby liczby $x+9$ i $x+16$ miały różne kolory. Rozważ wszystkie trzy kolory dla liczb $x$ i $x+25$ i doprowadź do sprzeczności.",
+    "Wiesz już, że dla dowolnej liczby $z$ musi zachodzić $c(z)=c(z+7)$. Co to oznacza dla całego kolorowania? Wykorzystaj tę okresowość, aby znaleźć dwie liczby tego samego koloru, których różnica jest kwadratem."
   ],
   "skills_required": [
     "pigeonhole",

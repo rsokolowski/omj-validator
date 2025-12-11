@@ -12,12 +12,17 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek: trójkąt prostokątny z kątem prostym przy $C$ i kwadrat $APBQ$ zbudowany na przeciwprostokątnej $AB$. Gdzie leżą punkty $P$ i $Q$ względem trójkąta?",
-    "Zastanów się, jak udowodnić prostopadłość dwóch prostych. Jedną z metod jest pokazanie, że kąt $\\angle PCQ = 90°$. Czy możesz wykorzystać okrąg lub własności kątów?",
-    "Zauważ, że punkt $C$ leży na okręgu o średnicy $AB$ (bo $\\angle ACB = 90°$). Jak położone są punkty $P$ i $Q$ względem tego okręgu i jego środka?",
-    "Środek kwadratu $APBQ$ jest jednocześnie środkiem okręgu opisanego na trójkącie $ABC$. Wykorzystaj symetrię kwadratu i własność kąta wpisanego opartego na średnicy, aby zbadać kąt $\\angle PCQ$."
+    "Narysuj trójkąt prostokątny $ABC$. Kwadrat $APBQ$ jest zbudowany tak, że odcinek $AB$ jest jego przekątną. Gdzie w takim razie leży środek tego kwadratu?",
+    "Aby udowodnić prostopadłość prostych, należy pokazać, że kąt między nimi jest prosty. Skup się na wykazaniu, że $\\angle PCQ = 90^\\circ$. Pomyśl o wykorzystaniu własności okręgów.",
+    "Kąt $\\angle ACB$ jest prosty, więc punkt $C$ leży na okręgu o średnicy $AB$. Gdzie leżą punkty $P$ i $Q$ w odniesieniu do tego samego okręgu?",
+    "Skoro punkty $C, P, Q$ leżą na jednym okręgu, to kąt $\\angle PCQ$ jest kątem wpisanym. Na jakiej cięciwie jest on oparty i jaki jest związek tej cięciwy ze środkiem okręgu?"
   ],
-  "skills_required": ["pythagorean_theorem", "transformations"],
-  "skills_gained": ["transformations"],
+  "skills_required": [
+    "pythagorean_theorem",
+    "transformations"
+  ],
+  "skills_gained": [
+    "transformations"
+  ],
   "prerequisites": []
 }

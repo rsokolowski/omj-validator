@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trapezu z zaznaczonymi kątami $60°$ przy wierzchołkach $A$ i $B$. Jakie kąty mają ramiona trapezu z podstawami? Gdzie mogą powstać trójkąty równoboczne lub równoramienne?",
-    "Poszukaj trójkątów przystających. Skoro $EB = CD$, może uda się znaleźć trójkąt zawierający bok $AE$ przystający do trójkąta zawierającego bok $BD$?",
-    "Rozważ przedłużenie boków trapezu lub poprowadzenie przekątnych. Zbadaj trójkąt $ABD$ - jakie ma kąty? Podobnie zbadaj położenie punktu $E$ i trójkąt $ABE$.",
-    "Porównaj trójkąty $\\triangle ABD$ i $\\triangle BAE$. Mają wspólny bok $AB$. Sprawdź, czy $AD = BE$ (wykorzystaj, że $AD = CD$ w tym trapeziezie) oraz porównaj kąty przy tym boku."
+    "Narysuj trapez i zaznacz w nim wszystkie dane. Ponieważ kąty przy podstawie $AB$ są równe, jest to trapez równoramienny. Jakie odcinki są w nim równe? Jakie są miary kątów przy podstawie $CD$?",
+    "Aby wykazać równość odcinków $AE$ i $BD$, najwygodniej jest znaleźć parę przystających trójkątów, w których te odcinki są odpowiadającymi sobie bokami.",
+    "W wyjściowej figurze trudno znaleźć odpowiednie trójkąty. Spróbuj dokonać konstrukcji. Na boku $AB$ wybierz taki punkt $F$, aby $AF=BC$. Co możesz powiedzieć o odcinku $FB$ w porównaniu z $CD$?",
+    "Gdy na boku $AB$ wybierzesz punkt $F$ tak, że $AF=BC$, okaże się, że $FB=CD$. Wykorzystaj to oraz daną równość $EB=CD$, aby pokazać, że trójkąt $\triangle FBE$ jest równoboczny. Teraz porównaj trójkąty $\triangle AFE$ i $\triangle BCD$."
   ],
   "prerequisites": [],
   "skills_required": [

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek kwadratu z przekątną AC i zaznacz punkty E oraz F. Jakie kąty w kwadracie już znasz? Jak leży przekątna względem boków?",
-    "Wykorzystaj symetrię kwadratu. Rozważ odbicie symetryczne względem przekątnej AC — gdzie przechodzi punkt D i jak to się ma do punktu F?",
-    "Przekątna AC jest osią symetrii kwadratu. Punkt D przechodzi na punkt B przy tym odbiciu. Zbadaj, jak warunek $EF = DE$ wiąże się z tym odbiciem.",
-    "Jeśli $E$ leży na osi symetrii, a $DE = EF$, to zastanów się, czy $F$ może być obrazem $D$ w pewnym przekształceniu. Zbadaj kąty w trójkącie $DEF$ wykorzystując własności tego przekształcenia."
+    "Narysuj starannie figurę i zaznacz w niej równe odcinki. Zastanów się, jak można wykorzystać fakt, że kąt DAB jest prosty, a przekątna AC dzieli go na dwa kąty po 45 stopni.",
+    "Spróbuj stworzyć na rysunku trójkąt przystający do trójkąta AFE. Możesz to zrobić, konstruując odpowiedni punkt na boku AD.",
+    "Na boku AD zaznacz punkt G taki, że AG = AF. Udowodnij, że trójkąty AFE i AGE są przystające. Jaki wniosek płynie z tego przystawania dla długości odcinka EG?",
+    "Połącz równość EG = EF (z przystawania) z równością DE = EF (z treści zadania). Jaką własność ma teraz trójkąt DEG? Wyraź kąty tego trójkąta, a następnie oblicz miarę kąta DEF."
   ],
   "skills_required": [
     "pythagorean_theorem",
@@ -25,5 +25,7 @@
   "skills_gained": [
     "transformations"
   ],
-  "prerequisites": ["2020_etap1_2"]
+  "prerequisites": [
+    "2020_etap1_2"
+  ]
 }

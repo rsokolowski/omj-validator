@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trójkąta ostrokątnego z kątem $45°$ przy $A$. Zaznacz wszystkie trzy wysokości i ich punkt przecięcia $H$. Oznacz też spodki wysokości.",
-    "Rozważ okrąg opisany na trójkącie $ABC$. Jak położenie ortocentrum $H$ związane jest z tym okręgiem? Poszukaj symetrycznego odbicia punktu $H$ względem boku lub środka boku.",
-    "Jeśli $H'$ jest odbiciem punktu $H$ względem boku $BC$, to $H'$ leży na okręgu opisanym. Zastanów się, jaki kąt rozpiąłby łuk $BC$ widziany z punktu $H'$ i porównaj go z kątem $\\angle BAC$.",
-    "Wykorzystaj fakt, że $|AH| = |HH'|/2$ nie jest tu pomocne - zamiast tego zbadaj czworokąt $BHCD$, gdzie $D$ to spodek wysokości z $A$. Jest on wpisany w okrąg o średnicy $BC$. Znajdź związek między $|AH|$ a tym okręgiem."
+    "Narysuj trójkąt ostrokątny $ABC$ z $\\angle BAC = 45°$. Poprowadź wysokość z wierzchołka $B$ na bok $AC$, jej spodek oznacz jako $E$. Oznacz jako $H$ punkt przecięcia wysokości trójkąta.",
+    "Aby udowodnić, że $|AH| = |BC|$, poszukaj dwóch przystających trójkątów, w których te odcinki są odpowiadającymi sobie bokami.",
+    "Zauważ, że wysokość $BE$ tworzy trójkąt prostokątny $\\triangle ABE$. Jaki wniosek na temat długości boków tego trójkąta płynie z faktu, że $\\angle BAE = 45°$?",
+    "Teraz porównaj trójkąt $\\triangle AHE$ z trójkątem $\\triangle BCE$. Wykaż, że są przystające, korzystając z równości boków znalezionej w poprzednim kroku oraz z równości odpowiednich kątów."
   ],
   "skills_required": [
     "triangle_centers",

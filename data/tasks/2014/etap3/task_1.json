@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, jakie liczby złożone są najprostsze? Które z nich występują najczęściej? Przypomnij sobie definicję liczby pierwszej i złożonej.",
-    "Rozważ osobno przypadki liczb parzystych i nieparzystych większych od 5. Jak można rozłożyć liczbę parzystą na sumę dwóch składników?",
-    "Dla liczb parzystych $n > 5$ spróbuj odjąć najmniejszą liczbę złożoną. Co otrzymasz? Dla nieparzystych - jaka parzysta liczba złożona może pomóc?",
-    "Zbadaj: jeśli $n$ jest parzyste, to $n - 4$ jest parzyste i większe od 1. Jeśli $n$ jest nieparzyste, to $n - 9$ jest parzyste. Kiedy te różnice są pierwsze, a kiedy złożone?"
+    "Chcemy przedstawić liczbę $n$ jako sumę liczby pierwszej $p$ i liczby złożonej $c$. Jakie są najmniejsze liczby pierwsze, a jakie najmniejsze liczby złożone?",
+    "Rozważ osobno przypadki, gdy $n$ jest liczbą parzystą, a gdy jest nieparzystą. Pomyśl o parzystości składników $p$ i $c$ w każdym z tych przypadków.",
+    "Zamiast szukać odpowiedniej liczby złożonej $c$, spróbujmy ustalić liczbę pierwszą $p$. Jakie najprostsze liczby pierwsze możemy wybrać dla parzystych i nieparzystych $n$?",
+    "Jeśli $n$ jest parzyste, przedstaw je jako $n = 2 + (n-2)$. Jeśli $n$ jest nieparzyste, przedstaw je jako $n = 3 + (n-3)$. Sprawdź, czy w obu przypadkach drugi składnik jest liczbą złożoną."
   ],
   "skills_required": [
     "parity_arguments",

@@ -13,12 +13,21 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, jakie warunki muszą spełniać $a$, $b$, $c$, aby mianowniki były dodatnie. Spróbuj przepisać równanie w prostszej postaci przez mnożenie krzyżowe.",
-    "Wykonaj mnożenie obu stron przez mianowniki i uprość otrzymane wyrażenie. Poszukaj zależności między zmiennymi $a$, $b$, $c$.",
-    "Po uproszczeniu powinieneś otrzymać równanie postaci $b^2 = ac$. Wykorzystaj fakt, że wszystkie liczby są nieparzyste dodatnie i zastanów się, kiedy iloczyn dwóch liczb nieparzystych jest kwadratem liczby nieparzystej.",
-    "Rozważ, jak można sparametryzować rozwiązania. Jeśli $b^2 = ac$ dla nieparzystych dodatnich $a$, $b$, $c$, to jakie trójki postaci $(a, b, c)$ spełniają ten warunek? Sprawdź warunek dodatniości mianowników dla znalezionych trójek."
+    "Przekształć równanie tak, aby nie zawierało ułamków. Zastanów się też, jakie warunki muszą spełniać liczby $a,b,c$, aby wyrażenia w mianownikach były dodatnie.",
+    "Po uproszczeniu przenieś wszystkie wyrazy na jedną stronę. Spróbuj tak pogrupować składniki, aby można było wyłączyć wspólny czynnik przed nawias.",
+    "Poprawne przekształcenia powinny doprowadzić cię do równania postaci $X \\cdot Y = 0$. Oznacza to, że albo $X=0$, albo $Y=0$.",
+    "Rozważ oba przypadki. W jednym z nich kluczowe okaże się założenie, że liczby $a, b, c$ są nieparzyste. Sprawdź, czy otrzymane rozwiązania spełniają warunki z początku zadania."
   ],
-  "prerequisites": ["2005_etap1_4"],
-  "skills_required": ["symmetric_systems", "algebraic_identities", "divisibility_arguments"],
-  "skills_gained": ["symmetric_systems", "algebraic_identities"]
+  "prerequisites": [
+    "2005_etap1_4"
+  ],
+  "skills_required": [
+    "symmetric_systems",
+    "algebraic_identities",
+    "divisibility_arguments"
+  ],
+  "skills_gained": [
+    "symmetric_systems",
+    "algebraic_identities"
+  ]
 }

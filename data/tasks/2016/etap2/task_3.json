@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, co oznacza podzielność $a+b$ przez $d$. Jak można zapisać liczbę $a$ w postaci $a = qd + r$, gdzie $r$ to reszta z dzielenia przez $d$? Jaki jest związek między resztami $a$ i $b$?",
-    "Skoro $a + b$ dzieli się przez $d$, to reszty z dzielenia $a$ i $b$ przez $d$ muszą się uzupełniać. Spróbuj wykorzystać ten fakt razem z warunkiem o podzielności iloczynu $a \\cdot b$ przez $d^2$.",
-    "Zapisz $a = qd + r$ i $b = pd + s$, gdzie $r + s$ dzieli się przez $d$. Co możesz powiedzieć o iloczynie $a \\cdot b$ modulo $d^2$? Zwróć uwagę na wyrażenie $r \\cdot s$.",
-    "Pokaż, że iloczyn reszt $r \\cdot s$ musi dzielić się przez $d^2$. Ale skoro $0 \\leq r, s < d$, to $r \\cdot s < d^2$. Jakie wartości mogą przyjmować $r$ i $s$?"
+    "Zapisz $a$ i $b$ przy pomocy ilorazów i reszt z dzielenia przez $d$. Jak warunek $d | (a+b)$ wpływa na możliwe wartości tych reszt?",
+    "Suma reszt $r_a$ i $r_b$ musi być wielokrotnością $d$. Ponieważ reszty są nieujemne i mniejsze od $d$, ich suma może wynosić $0$ lub $d$. Co trywialnie wynika z pierwszego przypadku?",
+    "Rozważ drugi przypadek: $r_a + r_b = d$, gdzie reszty nie są zerowe. Wyraź iloczyn $a \\cdot b$ za pomocą $d$ i $r_a$. Co warunek $d^2 | (a \\cdot b)$ mówi o podzielności $r_a^2$?",
+    "Z warunku podzielności iloczynu $a \\cdot b$ powinno wynikać, że $d^2$ musi dzielić $r_a^2$. Dlaczego jest to niemożliwe, skoro $r_a$ jest niezerową resztą z dzielenia przez $d$? Jaki stąd wniosek?"
   ],
   "skills_required": [
     "divisibility_arguments",

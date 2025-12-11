@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trójkąta $ABC$ z zaznaczonymi kątami. Następnie wykonaj kolejno odbicia punktów $A$, $B$ i $C$ względem odpowiednich prostych. Jakie kąty ma trójkąt $ABC$ przy wierzchołkach $A$ i $B$?",
-    "Przypomnij sobie własności symetrii osiowej: odbicie zachowuje odległości i kąty. Zastanów się, jakie odległości w konfiguracji są równe dzięki symetrii (np. $CA' = CA$, $CB' = CB$).",
-    "Zbadaj położenie punktów $A'$ i $B'$. Zwróć uwagę, że punkt $A'$ leży na okręgu o środku $C$ i promieniu $CA$, podobnie $B'$. Jak możesz wykorzystać równość $CA = CB$ oraz miary kątów $\\angle A'CB$ i $\\angle ACB'$?",
-    "Oblicz miary kątów $\\angle A'CB'$ oraz $\\angle ACB'$ i $\\angle BCA'$ korzystając z własności odbić. Następnie wyznacz odległości $CA'$, $CB'$, $CC'$ i sprawdź, czy punkt $C'$ jest równoodległy od $A'$ i $B'$ oraz czy te odległości są równe $A'B'$."
+    "Narysuj starannie figurę. Trójkąt $ABC$ jest równoramienny. Jakie są miary jego kątów przy podstawie $AB$?",
+    "Symetria osiowa zachowuje odległości. Zastanów się, które odcinki mają taką samą długość jak boki $AC$ i $BC$. Skup się na punktach, które są równoodległe od wierzchołka $C$.",
+    "Zbadaj trójkąty $\\triangle ACA'$ i $\\triangle BCB'$. Znasz długości ich dwóch boków. Oblicz miarę kąta między nimi, np. $\\angle ACA'$, pamiętając, że prosta odbicia jest dwusieczną odpowiedniego kąta.",
+    "Gdy znasz już własności trójkątów $\\triangle ACA'$ i $\\triangle BCB'$, oblicz kwadraty długości boków $A'B'$, $A'C'$ i $B'C'$. Pomocne będzie zbadanie kątów w trójkątach $\\triangle A'CB'$, $\\triangle C'AA'$ i $\\triangle C'BB'$."
   ],
   "prerequisites": [
     "2021_etap1_5"

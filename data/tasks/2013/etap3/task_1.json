@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Oznacz pięć liczb jako $a, b, c, d, e$ i wypisz kilka nierówności wynikających z warunku. Co możesz wywnioskować, mnożąc lub dzieląc odpowiednie nierówności?",
-    "Spróbuj rozważyć przypadek skrajny: weź najmniejszą spośród pięciu liczb. Jak wyglądają nierówności, gdy jedna z dwóch liczb w iloczynie jest najmniejsza?",
-    "Dla najmniejszej liczby $a$ rozważ nierówność $a \\cdot b < c \\cdot d \\cdot e$ oraz podobne. Co się stanie, gdy weźmiesz iloczyn $a$ z każdą inną liczbą po kolei i porównasz z odpowiednimi trójkami?",
-    "Pomnóż kilka wybranych nierówności stronami tak, aby po jednej stronie pojawił się iloczyn wszystkich pięciu liczb podniesiony do pewnej potęgi. Porównaj wykładniki i wyciągnij wnioski o wartości tego iloczynu."
+    "Oznacz pięć liczb i dla ułatwienia analizy uporządkuj je rosnąco, np. $a \\le b \\le c \\le d \\le e$. Zapisz przykładową nierówność wynikającą z treści zadania.",
+    "Aby pokazać, że wszystkie liczby są większe od 1, wystarczy udowodnić to dla najmniejszej z nich. Załóż nie wprost, że najmniejsza liczba $a$ spełnia warunek $a \\le 1$.",
+    "Aby uzyskać sprzeczność, rozważ nierówności dla par złożonych z największych liczb. Zapisz warunki dla iloczynów $d \\cdot e$ oraz $c \\cdot e$.",
+    "Pomnóż stronami dwie nierówności z poprzedniego kroku. Uprość wynik i sprawdź, czy uzyskana zależność jest zgodna z uporządkowaniem liczb i założeniem, że $a \\le 1$."
   ],
   "skills_required": [
     "inequality_manipulation",

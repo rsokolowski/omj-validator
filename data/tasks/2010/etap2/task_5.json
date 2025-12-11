@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Czworościan foremny ma 4 wierzchołki, 6 krawędzi i 4 ściany. Zastanów się, gdzie naturalnie można umieścić 6 identycznych obiektów w takiej figurze. Narysuj czworościan i zaznacz jego elementy.",
-    "Spróbuj umieścić środki kul w środkach krawędzi czworościanu. Każda krawędź ma dokładnie jeden środek, a krawędzi jest dokładnie 6 - tyle samo co kul do rozmieszczenia.",
-    "Wyznacz długość krawędzi czworościanu korzystając z tego, że jest on opisany na sferze o promieniu $1$. Przypomnij sobie (lub wyprowadź), jaka jest zależność między krawędzią czworościanu foremnego a promieniem sfery opisanej.",
-    "Sprawdź, że odległość między środkami dwóch sąsiednich krawędzi (mających wspólny wierzchołek) jest nie mniejsza niż $1$. Wykorzystaj fakt, że te środki tworzą trójkąt równoboczny na każdej ścianie czworościanu."
+    "Czworościan foremny ma 6 krawędzi, co naturalnie sugeruje powiązanie każdej z 6 kul z jedną krawędzią. Aby kule się nie przenikały, odległość ich środków musi wynosić co najmniej 1. Muszą też w całości mieścić się w czworościanie.",
+    "Najbardziej symetryczne umieszczenie środków kul będzie na odcinkach łączących środek czworościanu ze środkami jego krawędzi. Zastanów się, gdzie dokładnie na tych odcinkach je umieścić, aby spełnić warunek zawierania w czworościanie.",
+    "Kluczowe jest obliczenie wymiarów czworościanu. Wyznacz długość jego krawędzi $a$, wiedząc, że promień sfery wpisanej (stycznej do jego ścian) wynosi $1$.",
+    "Umieść środek każdej kuli w takim punkcie, by była ona styczna do najbliższych jej ścian. Oblicz odległość między środkami dwóch tak umieszczonych kul (dla sąsiednich krawędzi) i wykaż, że jest ona nie mniejsza niż $1$."
   ],
   "skills_required": [
     "spatial_3d",

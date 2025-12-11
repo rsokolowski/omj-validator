@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Przyjrzyj się strukturze równania: mamy dwa ułamki, które są sobie równe. Co otrzymasz, gdy pomnożysz obie strony przez mianowniki? Rozważ też, kiedy takie ułamki mogą być równe.",
-    "Spróbuj pomnożyć równanie na krzyż i uprościć otrzymane wyrażenie. Szukaj postaci, która pozwoli wyciągnąć wspólne czynniki lub zapisać równość w prostszej formie.",
-    "Po przekształceniu powinieneś otrzymać równość zawierającą $c^2$ oraz wyrażenia z $a$ i $b$. Zauważ, że $c^2 > 0$ dla $c \\neq 0$. Jak to wpływa na relację między $a$ i $b$?",
-    "Z równania wynika zależność między $a$, $b$ i $c^2$. Przeanalizuj znaki: jeśli $c^2 > 0$, to jakie są możliwe znaki $a$ i $b$? Następnie oszacuj sumę $a + b + c$ rozważając przypadki dla znaku $c$."
+    "Równanie zawiera dwa ułamki. Dobrym pierwszym krokiem jest pozbycie się mianowników. Jak możesz przekształcić to równanie, aby nie zawierało ułamków?",
+    "Po wymnożeniu na krzyż uprość otrzymane wyrażenie. Pogrupuj wyrazy i poszukaj wspólnego czynnika, który można wyłączyć przed nawias, pamiętając, że $c \\neq 0$.",
+    "Uproszczone równanie powinno dać ci prostą zależność między sumą $a+b$ a wyrażeniem $c^2$. Wykorzystaj tę zależność, aby wyrazić sumę $a+b+c$ tylko za pomocą zmiennej $c$.",
+    "Pozostaje wykazać, że otrzymane wyrażenie ze zmienną $c$ jest zawsze niedodatnie. Pamiętaj, że $c$ jest liczbą całkowitą różną od zera. Przekształć nierówność do postaci iloczynowej."
   ],
   "skills_required": [
     "algebraic_identities",

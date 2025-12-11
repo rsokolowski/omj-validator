@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Oznacz pierwsze wyrażenie przez $S_1$, a drugie przez $S_2$. Skoro $S_1 = S_2$, co możesz powiedzieć o różnicy $S_1 - S_2$?",
-    "Sprowadź ułamki do wspólnego mianownika $xyz$. Wykorzystaj fakt, że $z = -(x+y)$, aby uprościć licznik.",
-    "Rozpisz $S_1 - S_2$ i uprość. Zauważ, że $\\frac{x}{y} - \\frac{y}{x} = \\frac{x^2 - y^2}{xy}$. Jakie podobne różnice pojawiają się w wyrażeniu?",
-    "Po sprowadzeniu do wspólnego mianownika, w liczniku pojawi się wyrażenie z $x^3 + y^3 + z^3$. Przypomnij sobie tożsamość: jeśli $x+y+z=0$, to $x^3+y^3+z^3 = 3xyz$."
+    "Oznaczmy wspólną wartość obu wyrażeń przez $V$. Zauważ, że drugie wyrażenie to $\\frac{x}{z} + \\frac{z}{y} + \\frac{y}{x} + 1$. Jak można zapisać wyrażenie $\\frac{x}{z} + \\frac{z}{y} + \\frac{y}{x}$ używając $V$?",
+    "Spróbuj przekształcić wyrażenie $V = \\frac{x}{y} + \\frac{y}{z} + \\frac{z}{x}$ w taki sposób, aby wykorzystać warunek $x+y+z=0$. Czasem dodanie stałej do obu stron równania pomaga w uproszczeniu.",
+    "Co się stanie, jeśli do wyrażenia na $V$ dodasz 3? Spróbuj rozdzielić tę trójkę, dodając 1 do każdego z ułamków w sumie.",
+    "Wykorzystaj fakt, że $x+y=-z$, $y+z=-x$ i $z+x=-y$. Jak teraz wygląda wyrażenie na $V+3$? Czy widzisz związek z drugim z podanych w zadaniu wyrażeń?"
   ],
   "skills_required": [
     "algebraic_identities",

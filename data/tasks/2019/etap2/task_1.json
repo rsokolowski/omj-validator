@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Oznacz trzy kolejne liczby całkowite jako $n$, $n+1$, $n+2$. Oblicz sumę $(a+b) + (b+c) + (c+a)$ na dwa sposoby - raz przez $a$, $b$, $c$, a raz przez te trzy kolejne liczby.",
-    "Wykorzystaj fakt, że suma trzech kolejnych liczb całkowitych jest zawsze podzielna przez 3. Co to mówi o wartości $a+b+c$?",
-    "Skoro znasz $a+b+c$ oraz wartości $a+b$, $b+c$, $c+a$, możesz wyznaczyć każdą z liczb $a$, $b$, $c$ osobno przez odejmowanie. Na przykład $c = (a+b+c) - (a+b)$.",
-    "Rozważ przypadki przyporządkowania sum $a+b$, $b+c$, $c+a$ do kolejnych liczb $n$, $n+1$, $n+2$. Sprawdź, że w każdym przypadku $a$, $b$, $c$ wychodzą całkowite i kolejne."
+    "Oznacz trzy kolejne liczby całkowite jako $n, n+1, n+2$. Oblicz sumę $(a+b) + (b+c) + (c+a)$ na dwa sposoby i przyrównaj wyniki.",
+    "Z otrzymanej równości wyznacz sumę $a+b+c$. Wykorzystaj warunek, że $n$ jest liczbą nieparzystą, aby pokazać, że $a+b+c$ jest liczbą całkowitą.",
+    "Zauważ, że znając sumę $S = a+b+c$ oraz wartości $a+b$, $b+c$, $c+a$, możesz wyznaczyć każdą z liczb $a, b, c$. Na przykład $c = S - (a+b)$.",
+    "Wyznacz zbiór wartości `{a, b, c}` w zależności od $n$. Nie musisz rozpatrywać sześciu możliwych przyporządkowań. Wystarczy, że rozważysz zbiór `{S-n, S-(n+1), S-(n+2)}`."
   ],
   "prerequisites": [],
   "skills_required": [

@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Przyjrzyj się strukturze układu równań. Co się stanie, gdy odejmiesz kolejne równania od siebie? Zauważ, że układ jest cykliczny: $a \\to b \\to c \\to a$.",
-    "Odejmij pierwsze równanie od drugiego, drugie od trzeciego, a trzecie od pierwszego. Wykorzystaj wzór na różnicę kwadratów $x^2 - y^2 = (x-y)(x+y)$.",
-    "Po odjęciu równań otrzymasz wyrażenia zawierające $(b^2 - a^2)$, $(c^2 - b^2)$ i $(a^2 - c^2)$. Rozłóż każde jako iloczyn sumy i różnicy, a następnie wyciągnij wspólne czynniki.",
-    "Pomnóż przez siebie trzy otrzymane równości. Zwróć uwagę, że po lewej stronie pojawi się $(a-b)(b-c)(c-a)$, a po prawej stronie pewne wyrażenia się skrócą dzięki cykliczności układu."
+    "Układ równań jest cykliczny. Zamiast odejmować równania, spróbuj je wszystkie do siebie dodać stronami. Jaką prostą zależność między liczbami $a, b, c$ można dzięki temu odkryć?",
+    "Przekształć każde z wyjściowych równań, przenosząc jeden z kwadratów na drugą stronę, np. do postaci $a = b^2 - a^2$. Następnie zastosuj wzór na różnicę kwadratów.",
+    "Wykorzystaj zależność między $a, b, c$ znalezioną w pierwszym kroku (np. $a+b = -c$), aby uprościć wyrażenia otrzymane po zastosowaniu wzoru na różnicę kwadratów.",
+    "Powinieneś otrzymać trzy nowe, znacznie prostsze równości. Pomnóż je przez siebie stronami, a następnie uprość wynik, pamiętając, że liczby $a, b, c$ są różne od zera."
   ],
   "skills_required": [
     "algebraic_identities",

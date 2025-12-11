@@ -13,12 +13,21 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Zastanów się, jak wygląda rzut prostokątny prostych brył (sześcianu, graniastosłupa) na różne płaszczyzny. Narysuj kilka przykładów - ile boków może mieć rzut sześcianu?",
-    "Szukaj wielościanu, który ma wystarczająco wiele krawędzi i wierzchołków, by dawać rzuty o różnej liczbie boków. Rozważ bryły złożone lub graniastosłupy o odpowiedniej podstawie.",
-    "Pomyśl o graniastosłupie o podstawie będącej wielokątem. Jak zmienia się liczba boków rzutu w zależności od tego, czy patrzymy prostopadle do podstawy, wzdłuż osi, czy pod kątem?",
-    "Rozważ graniastosłup o podstawie czworokątnej. Sprawdź, jakie rzuty otrzymasz patrząc: prostopadle do podstawy, wzdłuż krawędzi bocznej, oraz pod odpowiednim kątem do przekątnej podstawy."
+    "Wyobraź sobie, że świecisz latarką na prosty wielościan, na przykład graniastosłup. Jak kształt jego cienia (rzutu) zależy od kierunku, z którego świecisz?",
+    "Spróbujmy skonstruować wielościan spełniający warunki zadania. Graniastosłupy proste mają tę zaletę, że dwa z ich głównych rzutów mają łatwy do przewidzenia kształt.",
+    "Rzut graniastosłupa na płaszczyznę podstawy jest taki sam jak podstawa, a rzut na płaszczyznę boczną jest czworokątem. Jaką podstawę graniastosłupa należy wybrać, aby uzyskać dwie z trzech figur z zadania?",
+    "Rozważ graniastosłup o podstawie sześciokątnej. Daje on rzuty 6-kątny i 4-kątny. Zastanów się, czy rzutując go pod odpowiednim kątem \"z ukosa\", można uzyskać 8-kąt, skoro graniastosłup ten ma 12 wierzchołków."
   ],
-  "prerequisites": ["2005_etap2_1"],
-  "skills_required": ["spatial_3d", "polyhedra", "counting_techniques"],
-  "skills_gained": ["spatial_3d", "constructive_proof"]
+  "prerequisites": [
+    "2005_etap2_1"
+  ],
+  "skills_required": [
+    "spatial_3d",
+    "polyhedra",
+    "counting_techniques"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "constructive_proof"
+  ]
 }

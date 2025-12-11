@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Zastanów się, jakie cyfry może mieć liczba $n$ - są to tylko 0, 3, 4, 5, 6, 7, 8. Co to oznacza dla możliwych reszt z dzielenia $n$ przez pewną liczbę?",
-    "Rozważ dowód nie wprost: załóż, że w $3n$ również nie ma cyfr 1, 2, 9. Jakie ograniczenia to nakłada na obie liczby?",
-    "Jeśli $n$ i $3n$ mają tylko cyfry ze zbioru {0, 3, 4, 5, 6, 7, 8}, to każda cyfra daje resztę 0, 3, 4, 5, 6, 7 lub 8 modulo 9. Zbadaj, jaką resztę z dzielenia przez 9 może mieć suma cyfr takiej liczby.",
-    "Suma cyfr liczby złożonej tylko z cyfr {0,3,4,5,6,7,8} nie może dawać reszty 1, 2 ani 9 przy dzieleniu przez 9. Skoro $n \\equiv$ suma cyfr $n$ (mod 9), sprawdź czy $n$ i $3n$ mogą jednocześnie spełniać to ograniczenie."
+    "Zastosuj dowód nie wprost. Załóż, że cyfry liczby $n$ oraz liczby $3n$ pochodzą wyłącznie ze zbioru cyfr dozwolonych: {0, 3, 4, 5, 6, 7, 8}.",
+    "Zastanów się, jak pierwsza (najbardziej znacząca) cyfra liczby $n$ wpływa na rząd wielkości liczby $3n$.",
+    "Jeśli $c$ jest pierwszą cyfrą $k$-cyfrowej liczby $n$, to $c \\cdot 10^{k-1} \\le n < (c+1) \\cdot 10^{k-1}$. Oszacuj w ten sposób liczbę $3n$ i określ, jaka może być jej pierwsza cyfra.",
+    "Pierwsza cyfra liczby $n$ musi należeć do zbioru {3, 4, 5, 6, 7, 8}. Rozważ każdy z tych przypadków i pokaż, że za każdym razem pierwsza cyfra $3n$ jest jedną z cyfr zakazanych: 1, 2 lub 9."
   ],
   "skills_required": [
     "digit_manipulation",

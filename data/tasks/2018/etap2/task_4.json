@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Wprowadź układ współrzędnych umieszczając jeden wierzchołek w początku układu. Które położenie wierzchołków uprości obliczenia, biorąc pod uwagę warunek $AB = 3 \\cdot BC$?",
-    "Wyznacz współrzędne wszystkich kluczowych punktów: $P$, $Q$ (dzielą $AB$ na trzy równe części) oraz $M$ (środek $AC$). Następnie zastanów się, jak sprawdzić prostopadłość dwóch odcinków.",
-    "Aby wykazać, że $\\angle PMQ = 90°$, sprawdź czy wektory $\\vec{MP}$ i $\\vec{MQ}$ są prostopadłe. Dwa wektory są prostopadłe, gdy suma iloczynów odpowiednich współrzędnych równa się zero.",
-    "Oblicz współrzędne wektorów $\\vec{MP}$ i $\\vec{MQ}$, a następnie sprawdź warunek prostopadłości. Wykorzystaj fakt, że $|AB| = 3 \\cdot |BC|$ przy wyborze konkretnych współrzędnych wierzchołków."
+    "Narysuj starannie figurę. Warunek $AB = 3 \\cdot BC$ w połączeniu z podziałem boku $AB$ oznacza, że pewne cztery odcinki mają tę samą długość. Zidentyfikuj je.",
+    "Aby udowodnić, że kąt jest prosty, można użyć własności trójkąta prostokątnego. Jaka jest szczególna zależność między długością środkowej poprowadzonej z wierzchołka kąta prostego a długością boku naprzeciwko?",
+    "Skup się na trójkącie $PMQ$. Poprowadź środkową z wierzchołka $M$ do boku $PQ$. Jeśli wykażesz, że jest ona o połowę krótsza od boku $PQ$, to zadanie będzie rozwiązane.",
+    "Niech $S$ będzie środkiem odcinka $PQ$. Zauważ, że $S$ jest również środkiem boku $AB$. Zastosuj twierdzenie o linii środkowej w trójkącie $ABC$, aby znaleźć długość $MS$."
   ],
   "skills_required": [
     "coordinate_geometry",

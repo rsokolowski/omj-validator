@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zapisz liczbę $a$ w postaci $a = 10k + c$, gdzie $c$ to cyfra jedności, a $k$ to liczba siedmiocyfrowa utworzona z pozostałych cyfr. Jak wyrazić liczbę $b$ przez $k$ i $c$?",
-    "Spróbuj znaleźć związek algebraiczny między liczbami $a$ i $b$. Czy można wyrazić jedną z nich jako kombinację liniową drugiej i jakiejś wielokrotności 101?",
-    "Zbadaj, ile wynosi reszta z dzielenia $10^7$ przez 101. Przyda się fakt, że $10^2 = 100 \\equiv -1 \\pmod{101}$.",
-    "Pokaż, że $10b - a$ jest wielokrotnością 101. Oblicz tę różnicę, wykorzystując zapis $a = 10k + c$ oraz $b = c \\cdot 10^7 + k$."
+    "Zapisz liczbę $a$ w postaci $a = 10k + c$, gdzie $c$ jest jej cyfrą jedności, a $k$ to liczba utworzona z pozostałych siedmiu cyfr. Jak, używając $k$ i $c$, zapisać liczbę $b$?",
+    "Otrzymałeś dwa wyrażenia, na $a$ i na $b$, które zależą od $k$. Spróbuj znaleźć między nimi związek (nowe równanie), w którym $k$ nie występuje.",
+    "Zauważ, że w jednym wyrażeniu występuje $10k$, a w drugim $k$. Pomnóż jedno z wyrażeń przez odpowiednią liczbę, aby móc usunąć $k$ przez odjęcie stronami.",
+    "Zbadaj wyrażenie $10b - a$. Uprość je, a następnie wykaż, że jest ono podzielne przez 101. Pomocna będzie obserwacja, że $10^2 = 100$, co daje resztę $-1$ przy dzieleniu przez 101."
   ],
   "skills_required": [
     "modular_arithmetic",

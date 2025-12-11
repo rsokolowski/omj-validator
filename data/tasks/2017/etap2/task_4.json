@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trapezu z przekątnymi i punktami $P$, $Q$. Oznacz wszystkie kąty, które znasz lub możesz oznaczyć. Co wiesz o kątach przy wierzchołkach trapezu?",
-    "Przypomnij sobie warunek na to, by cztery punkty leżały na jednym okręgu (czworokąt wpisany). Kiedy suma pewnych kątów wynosi $180°$?",
-    "Zbadaj, czy punkty $A$, $P$, $Q$, $B$ lub inna czwórka punktów mogą leżeć na wspólnym okręgu. Wykorzystaj dany warunek $\\angle APD = \\angle BQC$ oraz kąty przyległe.",
-    "Zauważ, że $\\angle APD + \\angle APC = 180°$ oraz $\\angle BQC + \\angle BQA = 180°$. Skoro $\\angle APD = \\angle BQC$, to $\\angle APC = \\angle BQA$. Co to mówi o czworokącie $APQB$?"
+    "Narysuj trapez i jego przekątne przecinające się w punkcie S. Z podobieństwa trójkątów $\\triangle SAB$ i $\\triangle SCD$ wynika zależność między odcinkami SA, SB, SC, SD. Zapisz ją w formie iloczynu.",
+    "Rozwiązanie opiera się na własnościach czworokątów wpisanych w okrąg. Spróbuj udowodnić, że punkty A, B, P, Q leżą na wspólnym okręgu, a teza wyniknie z prostego rachunku na kątach.",
+    "Wykaż, że w tym trapezie warunek \"A, B, P, Q leżą na jednym okręgu\" jest równoważny warunkowi \"C, D, P, Q leżą na jednym okręgu\". Wykorzystaj zależność iloczynów z pierwszej wskazówki i twierdzenie o potędze punktu.",
+    "Użyj danej równości kątów $\\angle APD = \\angle BQC$, aby pokazać, że punkty C, D, P, Q faktycznie leżą na jednym okręgu. To, w połączeniu z poprzednią wskazówką, pozwoli udowodnić tezę."
   ],
   "skills_required": [
     "circle_theorems",

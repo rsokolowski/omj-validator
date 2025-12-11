@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zastanów się, jak policzyć łączną liczbę boków wszystkich ścian wielościanu. Każda krawędź wielościanu jest bokiem ilu ścian?",
-    "Użyj techniki podwójnego zliczania: policz sumę boków wszystkich ścian na dwa sposoby - raz przez ściany, raz przez krawędzie.",
-    "Jeśli każda ściana ma parzystą liczbę boków, to jaka jest parzystość sumy boków wszystkich ścian? Jak to się ma do liczby krawędzi?",
-    "Zauważ, że suma boków wszystkich ścian równa się $2k$, gdzie $k$ to liczba krawędzi. Porównaj parzystość obu stron tego równania."
+    "Oznaczmy przez $W, K, S$ liczbę wierzchołków, krawędzi i ścian. Jakie są minimalne wartości liczby boków ściany ($s_i$) oraz liczby krawędzi zbiegających się w wierzchołku ($w_j$) w takim wielościanie?",
+    "Spróbuj oszacować z dołu sumę boków wszystkich ścian ($\\\"[sum s_i]$\\\") oraz sumę stopni wszystkich wierzchołków ($\\\"[sum w_j]$\\\") w zależności od liczby ścian $S$ i liczby wierzchołków $W$.",
+    "Wykorzystaj metodę podwójnego zliczania, aby powiązać obie te sumy z liczbą krawędzi $K$. Otrzymasz w ten sposób dwie nierówności, jedną łączącą $S$ i $K$, a drugą łączącą $W$ i $K$.",
+    "Podstaw uzyskane nierówności do wzoru Eulera dla wielościanów ($W-K+S=2$) i sprawdź, jakie ograniczenie wynika z tego dla liczby krawędzi $K$. Czy każdy nieparzysty $K$ może spełnić ten warunek?"
   ],
   "skills_required": [
     "double_counting",

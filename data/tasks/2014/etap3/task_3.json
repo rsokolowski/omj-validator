@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Rozpisz pole całego czworokąta $ABCD$ jako sumę pól trójkątów zawierających punkt $M$. Jakie trójkąty możesz wyróżnić? Jak wykorzystać fakt, że $M$ jest środkiem $CD$?",
-    "Skoro $M$ jest środkiem $CD$, to $[DAM] + [BCM]$ można wyrazić przez pola innych trójkątów. Zastanów się, jak pole trójkąta zmienia się, gdy dzielisz jego bok na pół.",
-    "Warunek $\\sphericalangle DAB + \\sphericalangle ABC = 90^\\circ$ jest kluczowy. Rozważ wprowadzenie układu współrzędnych lub przedłużenie boków $AD$ i $BC$ - co się stanie, gdy się przetną?",
-    "Jeśli przedłużysz $AD$ i $BC$ aż do przecięcia w punkcie $P$, to trójkąt $PAB$ będzie prostokątny. Wykorzystaj to, aby wyrazić szukane pola przez $a$ i $b$."
+    "Główną trudnością w zadaniu jest nietypowy warunek $\\sphericalangle DAB + \\sphericalangle ABC = 90^\\circ$. Zastanów się, jaką konfigurację geometryczną tworzą proste zawierające boki $AD$ i $BC$.",
+    "Przedłużenie nierównoległych boków czworokąta często upraszcza problem. Spróbuj przedłużyć boki $AD$ i $BC$ do przecięcia w punkcie $P$. Jaki szczególny trójkąt powstanie?",
+    "Trójkąt $PAB$ jest prostokątny. Teraz wszystkie potrzebne pola ($[ABM]$, $[DAM]$, $[BCM]$) można wyrazić w zależności od położenia punktów na ramionach kąta prostego. Wprowadzenie układu współrzędnych z początkiem w $P$ może to ułatwić.",
+    "Umieść $P$ w początku układu współrzędnych, a $A$ i $B$ na osiach. Wyraź współrzędne punktów $C, D, M$ za pomocą nieznanych długości $PA, PB$ oraz danych $a, b$. Oblicz potrzebne pola i uprość wynikowe wyrażenie."
   ],
   "skills_required": [
     "area_methods",

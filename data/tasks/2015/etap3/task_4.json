@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Objętość klocków i prostopadłościanu się zgadza (sprawdź!). Ale czy to wystarczy, żeby ułożenie było możliwe? Pomyśl, jakie inne przeszkody mogą istnieć.",
-    "Spróbuj pokolorować kostki jednostkowe prostopadłościanu w pewien regularny sposób. Czy możesz znaleźć kolorowanie, które ujawni problem z układaniem klocków?",
-    "Rozważ podział prostopadłościanu na małe kostki $2 \\times 2 \\times 2$. Ile takich kostek mieści prostopadłościan $8 \\times 8 \\times 9$? A ile kostek $2 \\times 2 \\times 2$ pokrywa każdy klocek $2 \\times 3 \\times 3$?",
-    "Pokoloruj kostki $2 \\times 2 \\times 2$ na przemian dwoma kolorami (jak szachownicę 3D). Policz, ile kostek każdego koloru pokrywa pojedynczy klocek $2 \\times 3 \\times 3$, a ile jest w całym prostopadłościanie."
+    "Objętości się zgadzają, ale to nie gwarantuje sukcesu. Wyobraź sobie, że kroisz ułożony prostopadłościan na równe plastry. Co musi być prawdą dla każdego takiego przekroju?",
+    "Spróbuj znaleźć w prostopadłościanie taką płaszczyznę cięcia, która ujawni problem. Zwróć uwagę na to, że wymiary klocka ($2, 3, 3$) i prostopadłościanu ($8, 8, 9$) nie do końca do siebie pasują.",
+    "Przetnijmy myślami prostopadłościan płaszczyzną równoległą do podstawy $8 \\times 8$, na przykład między pierwszą a drugą warstwą sześcianików. Pole przekroju wyniesie $8 \\times 8 = 64$. Jakie pole przekroju może mieć pojedynczy klocek?",
+    "Pole przekroju klocka zależy od jego ułożenia i może wynosić $2 \\times 3 = 6$ lub $3 \\times 3 = 9$. Suma pól przekrojów wszystkich przeciętych klocków musi dać 64. Zbadaj podzielność tej sumy przez 3."
   ],
   "skills_required": [
     "tiling",

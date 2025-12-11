@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek trójkąta równoramiennego ABC z zaznaczonym punktem D na boku AB. Gdzie leży D, skoro BD = 2AD? Zaznacz kąt prosty przy C.",
-    "Poszukaj trójkątów podobnych w tej konfiguracji. Kąt prosty BCD sugeruje, że CD może być wysokością lub że powstają trójkąty prostokątne o specjalnych własnościach.",
-    "Rozważ trójkąty BCD i ACD. Jakie kąty są w nich równe? Wykorzystaj fakt, że AC = BC oraz że suma kątów przy wierzchołku C wynosi tyle, ile kąt ACB.",
-    "Oznacz kąt BAC = α. Wyraź pozostałe kąty w trójkącie przez α, korzystając z równoramienności. Następnie użyj warunku kąta prostego i stosunku BD:AD = 2:1, by utworzyć równanie na α."
+    "Narysuj trójkąt równoramienny $ABC$ i zaznacz na boku $AB$ punkt $D$ tak, aby $BD=2AD$. Oznacz szukany kąt $\\angle BAC$ jako $\\alpha$. Jakie inne kąty w trójkącie $ABC$ możesz wyrazić za pomocą $\\alpha$?",
+    "Problem łączy informację o kątach ($\\angle BCD=90^\\circ$) z informacją o długościach ($BD=2AD$). Spróbuj użyć twierdzenia Pitagorasa w odpowiednich trójkątach prostokątnych, aby powiązać te informacje.",
+    "W trójkącie równoramiennym $ABC$ warto dorysować wysokość z wierzchołka $C$. Niech $H$ będzie jej spodkiem na podstawie $AB$. Jakie własności ma ten punkt? Wyraź długości odcinków $AD, DH, HB$ za pomocą jednej zmiennej.",
+    "Zastosuj tw. Pitagorasa w $\\triangle CHD$ i $\\triangle CHB$, by powiązać $BC^2$ i $CD^2$. Połącz wynik z tw. Pitagorasa w $\\triangle BCD$, by obliczyć $CD$ w zależności od $AD$. Co to mówi o trójkącie $\\triangle ACD$?"
   ],
   "prerequisites": [],
   "skills_required": [

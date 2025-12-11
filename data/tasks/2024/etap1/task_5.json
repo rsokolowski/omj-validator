@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, jakie reszty z dzielenia przez 3 mogą dawać liczby pierwsze większe od 3. Czy liczba pierwsza może być podzielna przez 3?",
-    "Rozważ wszystkie możliwe reszty z dzielenia przez 3 dla liczb $a$, $b$, $c$. Pamiętaj, że suma reszt modulo 3 określa resztę sumy.",
-    "Przeanalizuj, jaką resztę z dzielenia przez 3 daje każda z pięciu liczb pierwszych. Zwróć szczególną uwagę na to, że liczba 3 jest jedyną liczbą pierwszą podzielną przez 3.",
-    "Załóż, że $b$ nie jest podzielne przez 3 (czyli $b \\equiv 1$ lub $b \\equiv 2 \\pmod{3}$). Sprawdź, czy przy każdym wyborze reszt dla $a$ i $c$ wszystkie pięć sum może dawać reszty różne od 0 modulo 3."
+    "Wszystkie pięć podanych liczb jest pierwszych. Jaka jest jedyna liczba pierwsza podzielna przez 3? Wykaż, że żadna z tych pięciu liczb nie może być równa 3, pamiętając, że $a, b, c > 1$.",
+    "Skoro żadna z pięciu liczb pierwszych nie jest podzielna przez 3, to jakie reszty mogą one dawać przy dzieleniu przez 3? Poszukaj prostych równości algebraicznych łączących te pięć liczb.",
+    "Zauważ, że $a+b+c = a + (b+c)$. Co ta równość mówi nam o resztach z dzielenia przez 3 liczb pierwszych $a$, $b+c$ oraz $a+b+c$?",
+    "Zastosuj to samo rozumowanie do równości $a+b+c = c + (a+b)$. Otrzymasz w ten sposób dwie zależności (kongruencje) na resztach. Co z nich wynika na temat podzielności $b$ przez 3?"
   ],
   "prerequisites": [],
   "skills_required": [

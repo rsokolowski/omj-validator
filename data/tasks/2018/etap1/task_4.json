@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zapisz warunki zadania za pomocą równań. Co oznacza, że liczba $a$ daje resztę $2$ przy dzieleniu przez $b$? Jakie nierówności muszą zachodzić między resztą a dzielnikiem?",
-    "Pamiętaj, że reszta z dzielenia jest zawsze mniejsza od dzielnika. Jakie nierówności między $a$, $b$, $c$ z tego wynikają? Spróbuj ustalić, która z tych liczb jest największa, a która najmniejsza.",
-    "Z warunku, że reszta z dzielenia wynosi $2$, wynika, że dzielnik musi być większy od $2$. Zbadaj, jakie ograniczenia na wartości $a$, $b$, $c$ dają te nierówności oraz warunek $c \\equiv 4 \\pmod{a}$.",
-    "Skoro $b > 2$ i $c > 2$, a $a > c$ (bo reszta $4 < a$), to $a \\geq 5$. Jednocześnie $a = b \\cdot k + 2$ dla pewnego $k \\geq 1$. Rozważ przypadki dla małych wartości $k$ i sprawdź, czy znajdziesz sprzeczność lub jedyne rozwiązanie."
+    "Zapisz podane warunki w postaci równań z resztą. Pamiętaj, że reszta z dzielenia jest zawsze nieujemna i mniejsza od dzielnika. Jakie nierówności wynikają z tego faktu dla liczb $a, b, c$?",
+    "Wykorzystaj zapisane równania, aby porównać wielkości liczb $a$ i $b$ oraz $b$ i $c$. Czy potrafisz na tej podstawie uszeregować liczby $a, b, c$ od największej do najmniejszej?",
+    "Masz już ustaloną relację między $a$ i $c$. Przyjrzyj się teraz trzeciemu warunkowi, który mówi o dzieleniu $c$ przez $a$. Zapisz go w postaci równania $c = m \\cdot a + 4$. Co możesz powiedzieć o liczbie $m$?",
+    "Wiesz, że $a$ i $c$ są dodatnimi liczbami całkowitymi oraz że $a > c$. Czy równość $c = m \\cdot a + 4$ może być spełniona, jeśli $m$ jest liczbą całkowitą dodatnią (czyli $m \\ge 1$)? Jaki musi być jedyny możliwy wybór dla $m$?"
   ],
   "skills_required": [
     "modular_arithmetic",

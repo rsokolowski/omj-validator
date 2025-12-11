@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zapisz warunek podzielności: $(a+b) | (5a+3b)$. Co to oznacza? Jeśli $(a+b)$ dzieli pewną liczbę, to dzieli też jej wielokrotności oraz sumy z innymi liczbami podzielnymi przez $(a+b)$.",
-    "Spróbuj przedstawić $5a+3b$ jako sumę wielokrotności $(a+b)$ i jakiejś reszty. Jaką wielokrotność $(a+b)$ warto odjąć od $5a+3b$?",
-    "Zauważ, że $5a+3b = k(a+b) + r$ dla pewnych wartości. Oblicz $5a+3b - 3(a+b)$ lub $5a+3b - 5(a+b)$. Co otrzymujesz i co to mówi o podzielności?",
-    "Skoro $(a+b) | (5a+3b)$ i $(a+b) | 3(a+b)$, to $(a+b) | (5a+3b - 3a - 3b) = 2(a-b)$. Analogicznie sprawdź odejmując $5(a+b)$. Wykorzystaj oba warunki podzielności dla $a, b > 0$."
+    "Zapisz warunek z zadania w języku matematyki: $(a+b) | (5a+3b)$. Przypomnij sobie kluczową własność podzielności: jeśli liczba $d$ dzieli $X$ i $Y$, to dzieli też ich różnicę $X-Y$.",
+    "Spróbuj tak przekształcić wyrażenie $5a+3b$, aby uprościć warunek podzielności. Skoro wiesz, że $(a+b)|(a+b)$, to wiesz też, że $a+b$ dzieli każdą wielokrotność siebie, np. $k(a+b)$.",
+    "Dobierz taką wielokrotność $k(a+b)$, aby po odjęciu jej od $5a+3b$ wynik był jak najprostszy. Spróbuj odjąć na przykład $3(a+b)$ lub $5(a+b)$. Co wtedy otrzymasz?",
+    "Z poprzedniej wskazówki wynika, że $(a+b)|2a$ oraz $(a+b)|2b$. Ponieważ $a, b$ są dodatnimi liczbami całkowitymi, to $a+b \neq 0$. Co wynika z faktu, że $(a+b)|2a$? Jaka nierówność musi zachodzić? Zapisz analogiczną nierówność dla drugiego warunku i połącz wnioski."
   ],
   "skills_required": [
     "divisibility_arguments"

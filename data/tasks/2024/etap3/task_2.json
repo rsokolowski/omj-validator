@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Oznacz liczbę chłopców przez $c$, a dziewcząt przez $d$. Zastanów się, ile jest par (chłopiec, dziewczyna), które się znają - policz to na dwa sposoby.",
-    "Użyj podwójnego zliczania: policz krawędzie łączące chłopców z dziewczętami raz z perspektywy chłopców, raz z perspektywy dziewcząt. Co to daje?",
-    "Z równości $7c = 3d$ wynika pewna proporcja między $c$ i $d$. Dodatkowo rozważ, ile jest par znajomych tej samej płci - czy liczba takich par musi być całkowita?",
-    "Pokaż, że $c$ dzieli się przez $3$, a $d$ przez $7$. Następnie użyj warunku, że liczba krawędzi chłopiec-chłopiec (czyli $\\frac{3c}{2}$) musi być całkowita."
+    "Oznacz liczbę chłopców przez $c$, a dziewcząt przez $d$. Policz na dwa sposoby, ile jest łącznie znajomości między chłopcami a dziewczętami. Jaką zależność między $c$ i $d$ to daje?",
+    "Z uzyskanej zależności wynika, że $c$ i $d$ są wielokrotnościami pewnych liczb. Zapisz sumę $c+d$ za pomocą jednego współczynnika. Czego jeszcze brakuje, aby udowodnić tezę?",
+    "Rozważ teraz znajomości między osobami tej samej płci. Ile jest łącznie 'jednostronnych' zgłoszeń znajomości wśród samych chłopców? Jaka jest faktyczna liczba par znajomych chłopców?",
+    "Liczba par znajomych chłopców musi być liczbą całkowitą. Jaki warunek nakłada to na liczbę chłopców $c$? Połącz ten wniosek z zależnością między $c$ i $d$ z pierwszej wskazówki."
   ],
   "skills_required": [
     "double_counting",

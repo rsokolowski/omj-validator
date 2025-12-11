@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Oznacz długości odcinków na bokach kwadratu, np. $|AK| = a$, $|BL| = b$, $|CM| = c$, $|DN| = d$. Zapisz obwody wszystkich czterech trójkątów za pomocą tych oznaczeń.",
-    "Rozważ dowód nie wprost: załóż, że obwód każdego z czterech trójkątów jest co najmniej równy $2$. Co możesz powiedzieć o sumie tych obwodów?",
-    "Oblicz sumę obwodów wszystkich czterech trójkątów. Zauważ, że każdy bok kwadratu jest użyty dokładnie raz, a każdy z odcinków $KL$, $LM$, $MN$, $NK$ pojawia się w dokładnie jednym obwodzie.",
-    "Suma obwodów wynosi $4 + |KL| + |LM| + |MN| + |NK|$. Użyj faktu, że czworokąt $KLMN$ ma obwód większy niż pewna wartość. Porównaj z założeniem, że każdy obwód $\\geq 2$."
+    "Oznacz długości odcinków, na które punkty $K, L, M, N$ dzielą boki kwadratu, np. $|AK|=a, |BL|=b$. Wyraź obwody czterech narożnych trójkątów za pomocą tych zmiennych.",
+    "Załóż nie wprost, że obwód każdego z czterech trójkątów jest nie mniejszy niż 2. Zbadaj, co ta informacja mówi o sumie obwodów tych trójkątów.",
+    "Oblicz sumę obwodów czterech trójkątów. Zauważ, że suma długości ich przyprostokątnych jest równa obwodowi kwadratu. Jak ta suma zależy od obwodu wewnętrznego czworokąta $KLMN$?",
+    "Z założenia wynika, że obwód czworokąta $KLMN$ musiałby być nie mniejszy niż 4. Wykaż, że to niemożliwe, szacując z góry każdy bok $KLMN$ (np. $|KL|$) przez sumę odpowiednich odcinków na bokach kwadratu."
   ],
   "skills_required": [
     "area_methods",

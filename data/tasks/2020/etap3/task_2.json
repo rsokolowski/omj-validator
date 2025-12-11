@@ -13,9 +13,9 @@
   ],
   "hints": [
     "Narysuj dokładny rysunek i zastanów się, jakie własności ma punkt $M$ jako środek przeciwprostokątnej trójkąta prostokątnego. Czy znasz zależność między odległością $CM$ a bokami trójkąta?",
-    "Wykorzystaj fakt, że w trójkącie prostokątnym środek przeciwprostokątnej jest równoodległy od wszystkich trzech wierzchołków: $CM = MA = MB$. Co to oznacza dla punktu $C$?",
-    "Skoro $PQ = CQ$, to punkt $Q$ leży na pewnym okręgu o środku $C$. Rozważ, jak położenie punktu $Q$ na odcinku $MB$ wpływa na długość $AP$. Kiedy $AP$ jest największe?",
-    "Wyrażaj długości przez odległość $MQ$. Zauważ, że $AP = AM - PM = AM - (PQ - MQ)$. Wykorzystaj warunek $PQ = CQ$ i nierówność trójkąta w trójkącie $CMQ$."
+    "Skoro $CM = AM = MB$, oznaczmy tę wspólną długość przez $R$. Wyraź obie strony nierówności $AP \\leqslant 2 \\cdot MQ$ za pomocą $R$ oraz odległości punktów $P$ i $Q$ od punktu $M$.",
+    "Warunek $PQ=CQ$ jest kluczowy. Długość $PQ$ można łatwo wyrazić za pomocą odległości od $M$. Jak można wykorzystać długość $CQ$? Z jakimi punktami $Q$ tworzy trójkąt o bokach, które potrafisz wyrazić?",
+    "Rozważ trójkąt $CMQ$. Wyraziłeś już długości jego boków. Jakie fundamentalne twierdzenie, będące nierównością, obowiązuje dla długości boków każdego trójkąta? Zastosuj je."
   ],
   "skills_required": [
     "circle_theorems",

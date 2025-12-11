@@ -10,10 +10,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zacznij od prostego pytania: skoro $a^q$ daje resztę 1 przy dzieleniu przez $p$, to co możesz powiedzieć o najmniejszej dodatniej potędze $a$, która daje resztę 1? Jak to się ma do $p-1$?",
-    "Szukaj związku między $p$, $q$ a tą najmniejszą potęgą. Pamiętaj, że $q$ jest liczbą pierwszą - więc ta najmniejsza potęga może być równa 1 lub $q$. Rozważ oba przypadki osobno.",
-    "W przypadku gdy najmniejsza potęga to $q$: wynika stąd, że $q$ dzieli $p-1$, czyli $p \\geq q+1$. Co to oznacza dla $a$? W przypadku gdy najmniejsza potęga to 1: co to mówi o $a$?",
-    "Gdy $a$ daje resztę 1 przy dzieleniu przez $p$, mamy $a \\geq p+1$ (bo $a > 1$). Gdy najmniejsza potęga to $q$, sprawdź że $a \\geq q$. Podobnie przeanalizuj $b$ i $q$. Połącz te oszacowania."
+    "Co się stanie, jeśli podstawisz $a=1$ i $b=1$? Czy warunki zadania są spełnione? A czy nierówność, którą masz udowodnić, jest wtedy prawdziwa?",
+    "Warunek $a^q \\equiv 1 \\pmod p$ jest kluczowy. Rząd $a$ modulo $p$ musi być dzielnikiem liczby pierwszej $q$. Jakie są jedyne dwie możliwości dla tego rzędu?",
+    "Są dwie możliwości: rząd $a$ modulo $p$ to 1 (czyli $a \\equiv 1 \\pmod p$) albo $q$. Analogicznie dla $b$. Rozważ cztery przypadki, które z tego wynikają (np. $a \\equiv 1 \\pmod p$ i $b \\equiv 1 \\pmod q$, itd.).",
+    "W trzech z czterech przypadków dowód jest prosty – w jednym założenia prowadzą do sprzeczności. W przypadku $a \\equiv 1 \\pmod p$ i $b \\equiv 1 \\pmod q$ użyj obserwacji z pierwszej wskazówki, że nie może być jednocześnie $a=1$ i $b=1$."
   ],
   "skills_required": [
     "modular_arithmetic",

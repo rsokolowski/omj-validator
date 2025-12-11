@@ -12,12 +12,20 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, jakie reszty z dzielenia przez 3 mogą dawać liczby pierwsze. Czy każda liczba pierwsza może dawać dowolną resztę?",
-    "Zbadaj podzielność przez 3. Jeśli liczba pierwsza $p > 3$, to jaką resztę z dzielenia przez 3 daje $p^2$? A co z $p^2 + 6$?",
-    "Zauważ, że dla $p > 3$ wyrażenie $p^2 + 6$ jest zawsze podzielne przez 3, ale większe od 3. Co to oznacza dla pierwszości $q$?",
-    "Sprawdź osobno przypadki $p = 2$ i $p = 3$, obliczając odpowiadające im wartości $q$ i $r$, a następnie weryfikując ich pierwszość."
+    "Sprawdź, co się dzieje dla kilku najmniejszych liczb pierwszych $p$, takich jak 2, 3, 5. Czy któraś z nich prowadzi do rozwiązania?",
+    "Aby pokazać, że dla $p > 5$ nie ma więcej rozwiązań, rozważ reszty z dzielenia przez pewną małą liczbę. Zwróć uwagę na liczby występujące w zadaniu.",
+    "Zbadaj, jakie reszty z dzielenia przez 5 dają liczby $p, q, r$. Zauważ, że jeśli $p > 5$, to $p$ nie dzieli się przez 5. Jakie reszty z dzielenia przez 5 może dawać $p^2$?",
+    "Pokaż, że dla $p > 5$ jedna z liczb $q$ lub $r$ musi być podzielna przez 5. Dlaczego, skoro jest liczbą pierwszą, nie może być równa 5?"
   ],
-  "skills_required": ["modular_arithmetic", "primality_testing", "case_analysis"],
-  "skills_gained": ["primality_testing"],
-  "prerequisites": ["2005_etap2_4"]
+  "skills_required": [
+    "modular_arithmetic",
+    "primality_testing",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "primality_testing"
+  ],
+  "prerequisites": [
+    "2005_etap2_4"
+  ]
 }

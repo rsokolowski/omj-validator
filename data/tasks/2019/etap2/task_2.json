@@ -12,12 +12,14 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek równoległoboka $ABCD$ z symetralną odcinka $AB$. Zaznacz punkt $X$ na $CD$ i punkt $E$ jako przecięcie przekątnych. Jaką szczególną własność ma punkt $X$ leżący na symetralnej?",
-    "Skoro $X$ leży na symetralnej $AB$, to $XA = XB$. Trójkąt $ABX$ jest więc równoramienny. Rozważ, jak wykorzystać własności środkowych trójkąta lub punktu $E$ jako środka równoległoboka.",
-    "Zauważ, że $E$ jest środkiem przekątnej $AC$. Przyjrzyj się trójkątowi $AXC$ - jaki odcinek łączy środek jednego boku ze środkiem innego boku? Jak ma się on do trzeciego boku?",
-    "W trójkącie $AXC$ punkt $E$ jest środkiem $AC$. Znajdź środek odcinka $AX$ (wykorzystaj równoramienność trójkąta $ABX$ i własności równoległoboka). Odcinek łączący środki dwóch boków trójkąta ma długość równą połowie trzeciego boku."
+    "Narysuj figurę opisaną w zadaniu. Jaka jest najważniejsza własność punktów leżących na symetralnej odcinka? Jak przekłada się to na długości odcinków $XA$ i $XB$?",
+    "Punkt $E$ jest środkiem symetrii całego równoległoboku. Rozważ skonstruowanie punktu $X'$ symetrycznego do $X$ względem $E$. Gdzie będzie leżał ten punkt i jaki czworokąt utworzy on z punktami $B$, $C$ i $X$?",
+    "Pokaż, że czworokąt $BCXX'$ jest trapezem. Następnie, używając własności symetrii ($AX=CX'$) oraz faktu, że $X$ leży na symetralnej ($AX=BX$), wykaż, że przekątne tego trapezu są równe.",
+    "Trapez, którego przekątne są równej długości, jest trapezem równoramiennym, co oznacza, że jego ramiona (boki nierównoległe) także są równe. Zastosuj ten fakt do trapezu $BCXX'$, aby znaleźć długość odcinka $XX'$ i powiązać ją z $XE$."
   ],
-  "prerequisites": ["2017_etap1_2"],
+  "prerequisites": [
+    "2017_etap1_2"
+  ],
   "skills_required": [
     "trapezoid_parallelogram",
     "isosceles_triangle",

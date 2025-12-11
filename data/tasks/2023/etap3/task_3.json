@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Przyjrzyj się strukturze obu nawiasów - jakie podobieństwa i różnice widzisz między odpowiadającymi sobie ułamkami? Co mają wspólnego mianowniki?",
-    "Iloczyn dwóch liczb jest nieujemny, gdy obie mają ten sam znak lub co najmniej jedna jest zerem. Spróbuj wykazać, że oba nawiasy mają zawsze ten sam znak.",
-    "Wyciągnij przed nawias wspólne czynniki z każdego ułamka. Rozważ grupowanie składników według mianowników i poszukaj faktoryzacji całego wyrażenia.",
-    "Spróbuj pokazać, że każdy nawias można zapisać w postaci iloczynu lub sumy, która pozwoli określić jego znak. Rozważ, czy oba nawiasy mogą być równe lub czy ich iloczyn jest kwadratem pewnego wyrażenia."
+    "Oznaczmy wyrażenia w nawiasach jako $X$ i $Y$. Zwróć uwagę, że mają te same mianowniki, a ich liczniki są zbudowane w podobny, cykliczny sposób.",
+    "Aby udowodnić, że iloczyn $X \\cdot Y$ jest nieujemny, warto zbadać, jaka jest algebraiczna zależność między $X$ a $Y$.",
+    "Najprostszym sposobem na porównanie dwóch wyrażeń jest zbadanie ich różnicy. Spróbuj obliczyć wartość $X-Y$, grupując składniki o tych samych mianownikach.",
+    "Uprość każdy z członów różnicy $X-Y$ (np. $\\frac{a^2c - b^2c}{a+b}$). Po zsumowaniu uproszczonych wyrażeń otrzymasz zaskakująco prosty wynik. Co on oznacza dla iloczynu $X \\cdot Y$?"
   ],
   "skills_required": [
     "algebraic_identities",

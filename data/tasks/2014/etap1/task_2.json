@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek: trójkąt równoboczny wpisany w okrąg, punkt $D$ na łuku $BC$, oraz punkt $E$ będący odbiciem $B$ względem prostej $CD$. Co wiesz o własnościach symetrii osiowej?",
-    "Wykorzystaj własności kątów wpisanych w okrąg - kąty wpisane oparte na tym samym łuku są równe. Zastanów się też, jakie kąty są równe dzięki symetrii względem prostej $CD$.",
-    "Skoro $E$ jest obrazem $B$ w symetrii względem $CD$, to $\\angle DCE = \\angle DCB$. Zbadaj, jak kąt $\\angle ADB$ (wpisany, oparty na łuku $AB$) ma się do kątów przy punkcie $D$ związanych z symetrią.",
-    "Pokaż, że kąt $\\angle ADE$ jest kątem półpełnym (czyli punkty $A$, $D$, $E$ leżą na prostej). Wykorzystaj fakt, że $\\angle ADB = \\angle ACB$ oraz związek między $\\angle BDC$ a $\\angle DCE$ wynikający z symetrii."
+    "Narysuj starannie figurę. Co to znaczy, że punkt E jest symetryczny do B względem prostej CD? Jakie odcinki i kąty są sobie równe z definicji tej symetrii?",
+    "Aby wykazać, że punkty A, D, E leżą na jednej prostej, wystarczy pokazać, że kąt ∠ADE jest półpełny. Spróbuj obliczyć ten kąt, korzystając z własności kątów w okręgu i symetrii.",
+    "Kąt ∠ADE można przedstawić jako sumę dwóch kątów. Zauważ, że jeden z nich, ∠ADB, jest oparty na łuku AB. Drugi, ∠BDE, jest związany z symetrią. Jaki jest związek między kątami ∠CDB i ∠CDE?",
+    "Wyznacz miarę kąta ∠ADB, korzystając z tego, że jest to kąt wpisany. Następnie wyznacz miarę kąta ∠CDB, również jako kąta wpisanego. Jaką miarę ma w takim razie kąt ∠BDE?"
   ],
   "skills_required": [
     "circle_theorems",

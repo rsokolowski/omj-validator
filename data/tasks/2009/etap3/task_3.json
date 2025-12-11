@@ -11,10 +11,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładnie sytuację z zadania. Co wiesz o odległościach od punktu $P$ do boków trójkąta $ABC$? Jak te odległości mają się do boków trójkąta $DEF$?",
-    "Zastanów się, jakie własności ma punkt symetryczny względem prostej. Czy możesz wyrazić boki trójkąta $DEF$ przez odległości punktu $P$ od boków trójkąta $ABC$?",
-    "Skoro $DEF$ jest równoboczny, to punkt $P$ musi mieć szczególną własność - jego odległości od boków $ABC$ spełniają pewien warunek. Pomyśl o twierdzeniu Cevy - kiedy trzy proste przechodzące przez wierzchołki trójkąta przecinają się w jednym punkcie?",
-    "Znajdź, w jakim stosunku proste $AD$, $BE$, $CF$ dzielą przeciwległe boki trójkąta $ABC$. Wykorzystaj fakt, że trójkąt $DEF$ jest równoboczny, aby pokazać, że iloczyn stosunków z twierdzenia Cevy równa się 1."
+    "Punkt $D$ jest odbiciem $P$ względem prostej $BC$. Jeśli $P_a$ jest rzutem prostokątnym $P$ na prostą $BC$, to jakie jest wzajemne położenie punktów $P, P_a, D$?",
+    "Niech $P_a, P_b, P_c$ będą rzutami $P$ na boki trójkąta. Zauważ, że $P_a$ jest środkiem odcinka $PD$. Jaka jest zatem relacja między trójkątem $DEF$ a trójkątem $P_aP_bP_c$?",
+    "Skoro $\\triangle DEF$ jest równoboczny, to trójkąt spodkowy $P_aP_bP_c$ też. Wyraź długości boków trójkąta spodkowego za pomocą odległości $AP, BP, CP$ i kątów $\\triangle ABC$, a znajdziesz kluczowy warunek, jaki musi spełniać punkt $P$.",
+    "Aby wykazać, że proste $AD, BE, CF$ przecinają się w jednym punkcie, udowodnij, że iloczyn stosunków $\\frac{AZ}{ZB} \\cdot \\frac{BX}{XC} \\cdot \\frac{CY}{YA}$ jest równy 1. Stosunek $\\frac{AZ}{ZB}$ można wyrazić jako stosunek pól $\\frac{P(\\triangle ACF)}{P(\\triangle BCF)}$."
   ],
   "skills_required": [
     "transformations",

@@ -12,12 +12,17 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj sześciokąt $ABCDEF$ z kątami $120°$. Przedłuż jego boki i zobacz, jaką figurę tworzą te przedłużenia. Co powstaje na zewnątrz sześciokąta?",
-    "Zauważ, że przedłużenia boków sześciokąta tworzą trójkąt. Zbadaj, jakiego typu jest ten trójkąt i jak sześciokąt jest w nim położony.",
-    "Skoro każdy kąt sześciokąta ma $120°$, to kąty zewnętrzne mają po $60°$. Jak to wpływa na trójkąt utworzony przez przedłużenia boków? Gdzie leżą boki $AB$, $CD$, $EF$ względem tego trójkąta?",
-    "Pokaż, że boki $AB$, $CD$, $EF$ leżą na bokach trójkąta równobocznego. Przypomnij sobie, gdzie przecinają się symetralne boków trójkąta równobocznego."
+    "Przedłuż naprzemienne boki sześciokąta (np. $BC$, $DE$ i $FA$) aż do ich punktów przecięcia. Jaką figurę tworzą te przedłużenia i jakie trzy mniejsze figury odcinają od niej, tworząc dany sześciokąt?",
+    "Skorzystaj z faktu, że wszystkie kąty wewnętrzne sześciokąta mają miarę $120°$. Jakie są miary kątów zewnętrznych? Wykorzystaj tę informację do zbadania własności zarówno dużego trójkąta, jak i trzech małych trójkątów w jego rogach.",
+    "Udowodnij, że wszystkie cztery trójkąty, które powstały na Twoim rysunku, są równoboczne. Zwróć uwagę na położenie boków $AB$, $CD$ i $EF$ w tej konfiguracji.",
+    "Czym jest symetralna odcinka $AB$ dla małego trójkąta równobocznego, którego $AB$ jest jednym z boków? Jak ta symetralna jest powiązana z dużym trójkątem równobocznym? Zastosuj to samo rozumowanie dla boków $CD$ i $EF$."
   ],
-  "skills_required": ["angle_chasing", "transformations"],
-  "skills_gained": ["angle_chasing"],
+  "skills_required": [
+    "angle_chasing",
+    "transformations"
+  ],
+  "skills_gained": [
+    "angle_chasing"
+  ],
   "prerequisites": []
 }

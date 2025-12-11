@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zacznij od przekształcenia równości ułamków - pomnóż obie strony krzyżowo i uprość. Co otrzymujesz?",
-    "Spróbuj wyrazić powstałe równanie w postaci, która pokazuje związek między $a$, $b$ i $n$. Poszukaj faktoryzacji lub wyrażenia jako iloczyn.",
-    "Zauważ, że po przekształceniach otrzymasz równanie łączące $n^2$ z wyrażeniem zawierającym $a$ i $b$. Spróbuj zapisać je w postaci $n^2 = (\\text{coś})$, gdzie 'coś' zależy od $a$ i $b$.",
-    "Przekształć równanie do postaci $n^2(a - b) = ab(b - a)$, czyli $n^2 = ab$ (przy założeniu $a \\neq b$). Rozważ też przypadek $a = b$ osobno."
+    "Zacznij od przekształcenia danej równości tak, aby pozbyć się ułamków. Pomnóż obie strony równania na krzyż.",
+    "Przenieś wszystkie wyrazy na jedną stronę i spróbuj je odpowiednio pogrupować. Poszukaj wspólnego czynnika, który można wyłączyć przed nawias.",
+    "Powinieneś otrzymać równanie w postaci $A \\cdot B = 0$. Co to implikuje na temat wartości wyrażeń $A$ i $B$? Jakie dwa przypadki należy rozważyć?",
+    "Twoja faktoryzacja prowadzi do dwóch przypadków: $a=b$ lub $n^2=ab$. Wykaż, że w obu tych sytuacjach liczba $\\sqrt{ab}$ jest całkowita."
   ],
   "skills_required": [
     "algebraic_identities",

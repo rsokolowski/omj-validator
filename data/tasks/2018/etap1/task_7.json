@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Narysuj sześcian i zaznacz wszystkie dane punkty. Zastanów się, jak wygląda płaszczyzna przechodząca przez $B'$, $D'$ i $K$. Jaką własność mają punkty $B'$ i $D'$ względem sześcianu?",
-    "Punkty $B'$, $D'$, $K$, $L$ leżą na jednej płaszczyźnie. Wykorzystaj własności przekątnych i symetrii sześcianu, aby znaleźć położenie punktu $L$ na krawędzi $AD$.",
-    "Zauważ, że prosta $B'D'$ jest przekątną górnej ściany sześcianu. Zbadaj, w jakim stosunku punkt $L$ dzieli krawędź $AD$, korzystając z tego, że punkty $K$ i $L$ muszą leżeć na prostej równoległej do $B'D'$ (lub na płaszczyźnie przez te punkty).",
-    "Aby obliczyć objętość ostrosłupa, wyznacz najpierw pole czworokąta $D'B'KL$ (rozważ podział na trójkąty lub wykorzystaj wzór na pole czworokąta). Następnie znajdź odległość punktu $A$ od płaszczyzny podstawy, korzystając z układu współrzędnych lub własności sześcianu."
+    "Wykonaj staranny rysunek sześcianu i zaznacz punkty $B'$, $D'$ i $K$. Pomyśl o płaszczyźnie, która je zawiera. Gdzie przetnie ona krawędź $AD$, tworząc punkt $L$?",
+    "Zadanie można podzielić na dwa etapy. Najpierw znajdź dokładne położenie punktu $L$. Następnie znajdź sprytny sposób na obliczenie objętości ostrosłupa, na przykład dzieląc go na prostsze bryły.",
+    "Płaszczyzna $B'D'KL$ przecina dwie równoległe płaszczyzny: podstawę dolną i górną sześcianu. Jakie są linie przecięcia i jaka jest zależność między nimi? Wykorzystaj tę własność, aby znaleźć położenie punktu $L$.",
+    "Zamiast obliczać pole podstawy $D'B'KL$ i wysokość, podziel ostrosłup na dwa czworościany: $A-D'KL$ i $A-D'B'K$. Objętość każdego z nich obliczysz łatwo, jeśli sprytnie wybierzesz ich podstawy na ścianach sześcianu."
   ],
   "skills_required": [
     "spatial_3d",

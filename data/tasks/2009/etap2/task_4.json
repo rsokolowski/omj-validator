@@ -13,12 +13,14 @@
     "logika"
   ],
   "hints": [
-    "Przedstaw sytuację jako graf, gdzie osoby to wierzchołki, a znajomości to krawędzie. Ile krawędzi ma taki graf? Jakie warunki musi spełniać?",
-    "Zastanów się, ile różnych grafów 3-regularnych na 6 wierzchołkach może istnieć. Spróbuj je narysować i sklasyfikować.",
-    "Szukamy cyklu długości 4 w tym grafie. Wybierz dowolną osobę i przeanalizuj, jak mogą wyglądać połączenia między jej znajomymi a pozostałymi osobami.",
-    "Rozważ dwa przypadki: gdy istnieją dwie osoby, które się nie znają i mają dokładnie dwóch wspólnych znajomych, oraz gdy każde dwie osoby nieznające się mają inną liczbę wspólnych znajomych."
+    "Przedstaw sytuację jako graf: osoby to wierzchołki, a znajomości to krawędzie. Co w języku teorii grafów oznacza, że cztery osoby mogą usiąść przy okrągłym stole, aby każda siedziała między znajomymi?",
+    "Zauważ, że szukany układ czterech osób istnieje, jeśli w grafie znajdziemy dwie osoby, które się nie znają, ale mają co najmniej dwóch wspólnych znajomych. Spróbuj udowodnić, że taka para osób musi istnieć.",
+    "Wybierz dowolną osobę, nazwijmy ją A. Ma ona trzech znajomych i dwie osoby, których nie zna. Wybierz jedną z osób, której A nie zna (nazwijmy ją B) i zastanów się, kim mogą być znajomi osoby B.",
+    "Rozważ dwie możliwości dotyczące znajomych osoby B. Albo zna ona drugą osobę nieznajomą dla A, albo jej nie zna. Co w każdym z tych przypadków możesz powiedzieć o liczbie wspólnych znajomych osób A i B?"
   ],
-  "prerequisites": ["2006_etap2_3"],
+  "prerequisites": [
+    "2006_etap2_3"
+  ],
   "skills_required": [
     "graph_theory",
     "case_analysis"

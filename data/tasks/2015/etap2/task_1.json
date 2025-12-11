@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Przypomnij sobie, jaka jest jedyna parzysta liczba pierwsza. Zastanów się, jakie muszą być parzystości liczb $a$, $b$, $c$, aby sumy dwóch z nich mogły być pierwsze.",
-    "Rozważ parzystość sumy $a + b + c$. Skoro każda z sum $a+b$, $b+c$, $c+a$ ma być pierwsza, co możesz powiedzieć o tym, ile spośród $a$, $b$, $c$ jest parzystych?",
-    "Zauważ, że jeśli wszystkie trzy liczby są nieparzyste, to każda z sum dwóch z nich jest parzysta i większa od 2. Rozważ przypadek, gdy dokładnie jedna z liczb jest parzysta - co wtedy możesz powiedzieć o sumie $a + b + c$?",
-    "Skoro dokładnie jedna liczba musi być parzysta, a suma $a + b + c$ też ma być pierwsza (czyli nieparzysta lub równa 2), sprawdź małe wartości dla liczby parzystej równej 2."
+    "Jaka jest jedyna parzysta liczba pierwsza? Zastanów się, co możesz powiedzieć o sumie dwóch liczb całkowitych, jeśli mają taką samą parzystość (obie parzyste lub obie nieparzyste).",
+    "Zauważ, że jeśli dwie z liczb $a, b, c$ mają tę samą parzystość, ich suma jest parzysta. Aby taka suma była liczbą pierwszą, musi być równa 2. Co to mówi o możliwych parzystościach liczb $a, b, c$?",
+    "Rozważ, ile spośród liczb $a, b, c$ może być parzystych. Czy dwie z nich mogą być parzyste? A co, jeśli wszystkie trzy są nieparzyste?",
+    "Pozostały dwa przypadki do zbadania: wszystkie liczby są nieparzyste albo dokładnie jedna jest parzysta. W każdym z tych przypadków wykorzystaj fakt, że suma dwóch liczb o tej samej parzystości musi być równa 2."
   ],
   "skills_required": [
     "parity_arguments",
