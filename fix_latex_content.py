@@ -125,7 +125,8 @@ Odpowiedz TYLKO w formacie JSON: {{"tasks": [...]}} gdzie każdy element ma pola
                 "--json-schema", json_schema,
                 "--allowed-tools", "Read",
                 "--model", model,
-                "--add-dir", str(pdf_path.parent)
+                "--add-dir", str(pdf_path.parent),
+                "--no-session-persistence"
             ],
             capture_output=True,
             text=True,
