@@ -157,7 +157,8 @@ def call_claude(prompt: str, json_schema: str, model: str = "opus") -> str:
                 "--output-format", "json",
                 "--json-schema", json_schema,
                 "--allowedTools", "Read,Glob",  # Allow reading files
-                "--model", model
+                "--model", model,
+                "--no-session-persistence"
             ],
             capture_output=True,
             text=True,

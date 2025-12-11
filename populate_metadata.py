@@ -302,7 +302,8 @@ def call_claude(prompt: str, model: str = "opus") -> str:
                 "--output-format", "json",
                 "--json-schema", JSON_SCHEMA,
                 "--tools", "",  # Disable tools for simple analysis
-                "--model", model
+                "--model", model,
+                "--no-session-persistence"
             ],
             capture_output=True,
             text=True,
