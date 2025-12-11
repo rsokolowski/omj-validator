@@ -124,6 +124,9 @@ services:
       PUBLIC_ACCESS: "true"
       ALLOWED_EMAILS: "test-user@example.com,test-user-2@example.com,test-admin@example.com,restricted@example.com"
 
+      # Admin emails - only test-admin@example.com has admin access
+      ADMIN_EMAILS: "test-admin@example.com"
+
       # AI Provider - point to fake Gemini
       AI_PROVIDER: gemini
       GEMINI_API_KEY: "fake-api-key-for-testing"
