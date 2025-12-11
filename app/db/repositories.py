@@ -108,6 +108,54 @@ class UserRepository:
         oldest = result[1]
         return count, oldest
 
+    def search_by_email(self, query: str, limit: int = 10) -> list[UserDB]:
+        """Search users by email prefix (case-insensitive).
+
+        Used for admin panel autocomplete.
+
+        Args:
+            query: Search query (prefix match, minimum 2 characters)
+            limit: Maximum number of results
+
+        Returns:
+            List of matching users ordered by email.
+        """
+        # Require minimum 2 characters to prevent scanning all users
+        if not query or len(query) < 2:
+            return []
+        return (
+            self.db.query(UserDB)
+            .filter(UserDB.email.ilike(f"{query}%"))
+            .order_by(UserDB.email)
+            .limit(limit)
+            .all()
+        )
+
+    def get_all(self) -> list[UserDB]:
+        """Get all users ordered by email.
+
+        Used for admin panel user filter dropdown.
+        """
+        return self.db.query(UserDB).order_by(UserDB.email).all()
+
+    def get_by_google_subs(self, google_subs: list[str]) -> dict[str, UserDB]:
+        """Get multiple users by Google sub IDs in a single query.
+
+        Args:
+            google_subs: List of Google sub IDs
+
+        Returns:
+            Dict mapping google_sub to UserDB
+        """
+        if not google_subs:
+            return {}
+        users = (
+            self.db.query(UserDB)
+            .filter(UserDB.google_sub.in_(google_subs))
+            .all()
+        )
+        return {user.google_sub: user for user in users}
+
 
 class SubmissionRepository:
     """Repository for submission data access."""
@@ -408,3 +456,51 @@ class SubmissionRepository:
         self.db.commit()
         logger.info(f"Deleted all {count} submissions")
         return count
+
+    def get_all_submissions_paginated(
+        self,
+        offset: int = 0,
+        limit: int = 20,
+        user_id_filter: Optional[str] = None,
+        status_filter: Optional[str] = None,
+    ) -> tuple[list[SubmissionDB], int]:
+        """Get all submissions with pagination and filters.
+
+        Used for admin panel to view all submissions across users.
+
+        Args:
+            offset: Number of records to skip
+            limit: Maximum number of records to return
+            user_id_filter: Filter by user_id (exact match)
+            status_filter: Filter by status (pending/processing/completed/failed)
+
+        Returns:
+            Tuple of (submissions list, total count matching filters).
+        """
+        query = self.db.query(SubmissionDB)
+
+        # Apply filters
+        if user_id_filter:
+            query = query.filter(SubmissionDB.user_id == user_id_filter)
+
+        if status_filter:
+            try:
+                status_enum = SubmissionStatus(status_filter)
+                query = query.filter(SubmissionDB.status == status_enum)
+            except ValueError:
+                # Invalid status, ignore filter
+                pass
+
+        # Get total count before pagination
+        total_count = query.count()
+
+        # Apply ordering and pagination
+        submissions = (
+            query
+            .order_by(SubmissionDB.timestamp.desc())
+            .offset(offset)
+            .limit(limit)
+            .all()
+        )
+
+        return submissions, total_count
