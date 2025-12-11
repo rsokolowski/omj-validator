@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zastanów się, co podane kąty mówią o wzajemnym położeniu prostych zawierających boki sześciokąta. Co się stanie, jeśli przedłużysz boki $AB$ i $DC$ aż do ich przecięcia w punkcie $P$?",
-    "Spróbuj zamknąć cały sześciokąt wewnątrz większej, prostej figury. Poszukaj prostokąta, który jest naturalnie powiązany z bokami sześciokąta, a jego pole można łatwo odnieść do długości odcinka $AD$.",
-    "Oblicz kąt, pod jakim przecinają się proste $AB$ i $DC$. Następnie, wykorzystując kąty proste przy wierzchołkach $A$ i $D$, pokaż, że cztery proste zawierające boki $AB, DC, AF, DE$ tworzą prostokąt.",
-    "Wykaż, że wierzchołki $A$ i $D$ są przeciwległymi wierzchołkami prostokąta z poprzedniej wskazówki. Pole sześciokąta jest mniejsze od pola tego prostokąta. Jaka jest zależność między polem prostokąta a kwadratem długości jego przekątnej?"
+    "Zbadaj wzajemne położenie prostych zawierających boki $AB$ i $CD$. Wykorzystaj podane miary kątów $128^\\circ$ i $142^\\circ$, aby obliczyć kąt przecięcia tych prostych.",
+    "Zauważ, że kąty przy wierzchołkach $A$ i $D$ są proste. Wykorzystaj to oraz wynik z poprzedniej wskazówki, aby zauważyć, że proste zawierające boki $AF, AB, CD$ i $DE$ tworzą prostokąt.",
+    "Uzasadnij, że cały sześciokąt mieści się wewnątrz tego prostokąta. Co to oznacza dla relacji między polem sześciokąta a polem prostokąta?",
+    "Zauważ, że odcinek $AD$ jest przekątną tego prostokąta. Oznaczając boki prostokąta jako $x, y$, wykaż, że jego pole nie przekracza $\\frac{1}{2}(x^2+y^2)$."
   ],
   "skills_required": [
     "angle_chasing",

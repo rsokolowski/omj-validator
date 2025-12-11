@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj trapez $ABCD$ z podstawami $AB$ i $CD$. Zaznacz środki $M$ i $N$ oraz punkt $P$ na odcinku $MN$. Zastanów się, jak można wyrazić pola trójkątów $ADP$ i $BCP$ poprzez działania na polach innych figur.",
-    "Rozważ czworokąty $ADNM$ i $BCNM$. Spróbuj wyrazić pole trójkąta $ADP$ używając pola czworokąta $ADNM$ i pól dwóch mniejszych trójkątów o wierzchołku $P$.",
-    "Zapisz pole $\\triangle ADP$ jako $P(ADNM) - P(\\triangle APM) - P(\\triangle DPN)$. Zapisz analogiczną równość dla pola $\\triangle BCP$. Porównaj parami trójkąty, których pola odejmujesz w obu wyrażeniach.",
-    "Zadanie sprowadza się do dowodu, że $P(ADNM) = P(BCNM)$. Pokaż, że pole czworokąta $ADNM$ jest równe połowie pola trapezu $ABCD$, dzieląc go na trójkąty $ADN$ i $AMN$."
+    "Narysuj trapez i odcinek $MN$. Zauważ, że trójkąt $ADP$ zawiera się w czworokącie $ADNM$. Jakie dwie figury należy \"wyciąć\" z tego czworokąta, aby otrzymać trójkąt $ADP$?",
+    "Zapisz pole trójkąta $ADP$ jako różnicę pola czworokąta $ADNM$ i pól trójkątów $APM$ oraz $DPN$. Analogiczną równość ułóż dla trójkąta $BCP$.",
+    "Porównaj ze sobą odpowiednie składniki w obu wyrażeniach. Zastanów się, czy czworokąty $ADNM$ i $BCNM$ mają równe pola oraz czy pary małych trójkątów (np. $APM$ i $BPM$) są sobie równe.",
+    "Wykorzystaj fakt, że punkty $M$ i $N$ są środkami podstaw. Zauważ, że czworokąty $ADNM$ i $BCNM$ to trapezy o równych podstawach i wysokościach. Zastosuj też własność środkowej w trójkącie."
   ],
   "skills_required": [
     "area_methods",

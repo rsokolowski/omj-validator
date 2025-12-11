@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Przekształć równanie tak, aby nie zawierało ułamków. Zastanów się też, jakie warunki muszą spełniać liczby $a,b,c$, aby wyrażenia w mianownikach były dodatnie.",
-    "Po uproszczeniu przenieś wszystkie wyrazy na jedną stronę. Spróbuj tak pogrupować składniki, aby można było wyłączyć wspólny czynnik przed nawias.",
-    "Poprawne przekształcenia powinny doprowadzić cię do równania postaci $X \\cdot Y = 0$. Oznacza to, że albo $X=0$, albo $Y=0$.",
-    "Rozważ oba przypadki. W jednym z nich kluczowe okaże się założenie, że liczby $a, b, c$ są nieparzyste. Sprawdź, czy otrzymane rozwiązania spełniają warunki z początku zadania."
+    "Zacznij od ustalenia dziedziny równania (mianowniki różne od zera). Następnie przekształć równanie, np. mnożąc na krzyż, aby pozbyć się ułamków.",
+    "Przenieś wszystkie wyrazy na jedną stronę. Zastosuj wzór na różnicę kwadratów dla wyrazów $a^2$ i $b^2$, a następnie wyłącz wspólny czynnik przed nawias.",
+    "Dążysz do postaci iloczynowej $(a-b)(\\dots) = 0$. Pamiętaj, że iloczyn wynosi zero, gdy co najmniej jeden z czynników jest zerem. Rozważ dwa przypadki.",
+    "W jednym z przypadków sprawdź parzystość liczb. Skorzystaj z faktu, że suma dwóch liczb nieparzystych jest parzysta, co pozwoli wykluczyć to rozwiązanie."
   ],
   "prerequisites": [
     "2005_etap1_4"

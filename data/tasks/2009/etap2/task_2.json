@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj trapez i zaznacz w nim wszystkie dane. Ponieważ kąty przy podstawie $AB$ są równe, jest to trapez równoramienny. Jakie odcinki są w nim równe? Jakie są miary kątów przy podstawie $CD$?",
-    "Aby wykazać równość odcinków $AE$ i $BD$, najwygodniej jest znaleźć parę przystających trójkątów, w których te odcinki są odpowiadającymi sobie bokami.",
-    "W wyjściowej figurze trudno znaleźć odpowiednie trójkąty. Spróbuj dokonać konstrukcji. Na boku $AB$ wybierz taki punkt $F$, aby $AF=BC$. Co możesz powiedzieć o odcinku $FB$ w porównaniu z $CD$?",
-    "Gdy na boku $AB$ wybierzesz punkt $F$ tak, że $AF=BC$, okaże się, że $FB=CD$. Wykorzystaj to oraz daną równość $EB=CD$, aby pokazać, że trójkąt $\triangle FBE$ jest równoboczny. Teraz porównaj trójkąty $\triangle AFE$ i $\triangle BCD$."
+    "Narysuj trapez i zaznacz wszystkie dane. Pamiętaj, że jest to trapez równoramienny, więc $AD=BC$, a kąty przy podstawie $CD$ mają miarę $120^\\circ$.",
+    "Aby wykazać tezę, warto poszukać przystających trójkątów. Spróbuj dorysować na boku $AB$ taki punkt $F$, aby $AF=AD$. Jaki rodzaj trójkąta utworzą punkty $A, D, F$?",
+    "Zauważ, że $\\triangle ADF$ jest równoboczny. Korzystając z własności trapezu, uzasadnij, że pozostały fragment podstawy $FB$ ma długość równą $CD$. Co to oznacza dla trójkąta $FBE$?",
+    "Skoro $FB=EB$ i $\\angle B=60^\\circ$, to $\\triangle FBE$ jest równoboczny. Oblicz miarę kąta $AFE$ i wykaż przystawanie trójkątów $AFE$ oraz $BCD$."
   ],
   "prerequisites": [],
   "skills_required": [

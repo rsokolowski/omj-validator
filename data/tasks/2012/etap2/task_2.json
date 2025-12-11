@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zapisz wzór na pole trójkąta na trzy różne sposoby, używając każdego boku i odpowiadającej mu wysokości. Jaki warunek musi spełniać liczba $2P$, aby wszystkie wysokości były całkowite, jeśli boki są całkowite?",
-    "Spróbuj skonstruować trójkąt, który na pewno będzie miał całkowite boki i przynajmniej jedną całkowitą wysokość. Pomyśl o złożeniu dwóch trójkątów prostokątnych wzdłuż jednej z przyprostokątnych.",
-    "Najprostszy przypadek to złożenie dwóch identycznych trójkątów prostokątnych o bokach całkowitych (trójkątów pitagorejskich). Jaki rodzaj trójkąta powstanie? Sprawdź, czy może on być ostrokątny.",
-    "Złóż dwa trójkąty prostokątne o bokach 3, 4, 5 wzdłuż boku o długości 4. Oblicz boki i wysokości powstałego trójkąta. Jeśli nie wszystkie wysokości są całkowite, pomyśl o przeskalowaniu całej figury."
+    "Zapisz pole trójkąta $S$ na trzy sposoby: $2S = a h_a = b h_b = c h_c$. Zauważ, że aby wysokości były całkowite, podwojone pole musi być podzielne przez długość każdego boku.",
+    "Spróbuj skonstruować szukany trójkąt, sklejając dwa przystające trójkąty prostokątne o bokach całkowitych (np. trójkąty o bokach 3, 4, 5) wzdłuż jednej z przyprostokątnych.",
+    "Zauważ, że trójkąty o bokach 3, 4, 5 można skleić na dwa sposoby: wzdłuż boku 3 lub boku 4. Sprawdź, który z powstałych trójkątów jest ostrokątny i wybierz go do dalszych obliczeń.",
+    "Oblicz pozostałe wysokości w wybranym trójkącie. Jeśli otrzymasz ułamki, skorzystaj z podobieństwa: przez jaką liczbę całkowitą wystarczy pomnożyć wszystkie boki trójkąta, aby wysokości również stały się całkowite?"
   ],
   "skills_required": [
     "area_methods",

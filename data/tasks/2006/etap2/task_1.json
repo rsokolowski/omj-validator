@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Przyjrzyj się uważnie obu równaniom. Zwróć uwagę na współczynniki $1, 2, 4$ w drugim równaniu i na sumę kwadratów w pierwszym. Czy widzisz między nimi jakiś związek?",
-    "Spróbuj połączyć oba równania w jedno wyrażenie. Pomyśl o stworzeniu wyrażenia, które z definicji jest zawsze nieujemne (większe lub równe zero), na przykład sumy kwadratów.",
-    "Rozważ wyrażenie $(a-k)^2 + (b-2k)^2 + (c-4k)^2$ dla dowolnej liczby rzeczywistej $k$. Rozwiń je i użyj danych z zadania, aby wyrazić jego wartość w zależności od $k$.",
-    "Otrzymane wyrażenie kwadratowe zmiennej $k$ musi być zawsze nieujemne. Jaki warunek musi spełniać trójmian kwadratowy, aby nigdy nie przyjmował wartości ujemnych? Sprawdź, czy ten warunek jest tu spełniony."
+    "Zwróć uwagę na współczynniki $1, 2, 4$ przy niewiadomych w drugim równaniu. Oblicz sumę ich kwadratów i zastanów się, jak ma się ona do pierwszego równania.",
+    "Spróbuj porównać wartość wyrażenia $(a+2b+4c)^2$ z iloczynem $(a^2+b^2+c^2)(1^2+2^2+4^2)$. Czy przypomina Ci to znaną nierówność?",
+    "Zauważ, że różnica $(a^2+b^2+c^2)(1^2+2^2+4^2) - (a+2b+4c)^2$ daje się zapisać jako suma kwadratów (np. $(2a-b)^2 + \\dots$), więc musi być zawsze nieujemna.",
+    "Podstaw liczby z zadania do wyrażenia z poprzedniej wskazówki. Sprawdź, czy warunek nieujemności jest spełniony dla wartości $23 \\cdot 21$ oraz $22^2$. Co to oznacza dla istnienia rozwiązań?"
   ],
   "skills_required": [
     "inequality_manipulation",

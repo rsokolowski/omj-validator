@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie figurę i zaznacz na niej wszystkie środki odcinków. Zastanów się, jak można wykorzystać fakt, że punkty $D$ i $E$ są środkami.",
-    "W zadaniach z środkami odcinków często pomocna jest symetria środkowa. Rozważ punkt $F$ będący obrazem punktu $A$ w symetrii względem punktu $E$. Jaki czworokąt powstaje z punktów $A, C, F, D$?",
-    "Wykorzystaj własności powstałego równoległoboku, aby przenieść kąt $\\angle CAE$. Następnie pokaż, że czworokąt $BCFD$ również jest równoległobokiem, co pozwoli przenieść kąt $\\angle BCD$.",
-    "Pokaż, że kąty $\\angle DFC$ i $\\angle FDC$ są równe, korzystając z kątów naprzemianległych. Co to mówi o trójkącie $\\triangle CDF$? Połącz to z własnością równoległoboku $ACFD$, aby dojść do wniosku."
+    "Narysuj punkt $F$ jako obraz punktu $A$ w symetrii względem $E$. Zauważ, że czworokąt $ACFD$ jest równoległobokiem.",
+    "Wykaż, że odcinek $CF$ jest równoległy i równy odcinkowi $DB$. Jaki czworokąt tworzą punkty $D, B, F, C$?",
+    "Korzystając z równoległości boków w uzyskanych czworokątach, pokaż, że $\\angle CAF = \\angle CBF$. Co to mówi o punktach $A, B, F, C$?",
+    "Wykorzystaj własności trapezu wpisanego w okrąg oraz równości odcinków z punktu [2], aby pokazać, że $AC = CD$."
   ],
   "skills_required": [
     "angle_chasing",

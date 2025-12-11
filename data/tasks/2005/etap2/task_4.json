@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Sprawdź kilka małych wartości $n$ (np. $n = 1, 2, 3$) i oblicz $14^n - 9$. Które z tych liczb są pierwsze? Czy dostrzegasz jakiś wzorzec?",
-    "Rozważ osobno przypadki gdy $n$ jest parzyste i gdy $n$ jest nieparzyste. Dla liczb parzystych przypomnij sobie wzór na różnicę kwadratów: $a^2 - b^2 = (a-b)(a+b)$.",
-    "Dla nieparzystych $n > 1$ zbadaj reszty z dzielenia przez 5. Jaka jest reszta z dzielenia $14^n$ przez 5? A jaka reszta z dzielenia 9 przez 5? Co to oznacza dla $14^n - 9$?",
-    "Zauważ, że $14 \\equiv 4 \\pmod{5}$ oraz $9 \\equiv 4 \\pmod{5}$. Oblicz $4^n \\pmod{5}$ dla nieparzystego $n$ i sprawdź, czy $14^n - 9$ jest podzielne przez 5."
+    "Sprawdź małe wartości $n$, np. $n=1, 2, 3$. Oblicz $14^n - 9$ i oceń, czy wyniki są liczbami pierwszymi. Zwróć uwagę na cyfrę jedności wyników dla $n$ nieparzystych.",
+    "Rozważ oddzielnie $n$ parzyste i nieparzyste. Dla $n$ parzystych (czyli $n=2k$) zapisz $14^n - 9$ jako $(14^k)^2 - 3^2$ i zastosuj wzór skróconego mnożenia na różnicę kwadratów.",
+    "Dla $n$ nieparzystych zbadaj podzielność przez 5. Wygodnie jest użyć kongruencji: zauważ, że $14 = 3\\cdot 5 - 1$, więc $14 \\equiv -1 \\pmod{5}$. Ile wynosi reszta z dzielenia $14^n - 9$ przez 5?",
+    "Skoro dla wszystkich nieparzystych $n$ liczba $14^n - 9$ dzieli się przez 5, to w jakim jedynym przypadku może ona być liczbą pierwszą? Sprawdź, dla jakiego $n$ ten warunek jest spełniony."
   ],
   "skills_required": [
     "modular_arithmetic",

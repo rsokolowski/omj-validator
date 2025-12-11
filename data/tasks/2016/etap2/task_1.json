@@ -14,10 +14,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zauważ, że sumę wszystkich liczb w tablicy można obliczyć na dwa sposoby: dodając sumy wierszy lub dodając sumy kolumn. Co z tego wynika?",
-    "Jeśli 8 sum ma być różnymi potęgami liczby $2$, to zadanie sprowadza się do podzielenia zbioru ośmiu różnych potęg dwójki na dwie grupy (wiersze i kolumny) o jednakowej sumie.",
-    "Rozważ kluczową własność potęg dwójki: największa potęga w dowolnym zbiorze różnych potęg dwójki jest większa niż suma wszystkich pozostałych potęg z tego zbioru.",
-    "Niech $2^k$ będzie największą z ośmiu wybranych potęg. Musi ona należeć do jednej z grup. Co możesz powiedzieć o sumie liczb w tej grupie w porównaniu z sumą liczb w drugiej grupie?"
+    "Zauważ, że suma wszystkich liczb w tablicy jest równa sumie sum wierszy, a także sumie sum kolumn. Jaki warunek muszą więc spełniać te dwie czwórki liczb?",
+    "Mamy osiem różnych potęg dwójki. Zadanie sprowadza się do sprawdzenia, czy można je podzielić na dwie grupy (sumy wierszy i sumy kolumn) mające taką samą sumę całkowitą.",
+    "Niech $2^k$ będzie największą liczbą w tym zbiorze. Przypomnij sobie własności systemu dwójkowego: czy suma dowolnej liczby różnych potęg dwójki mniejszych od $2^k$ może osiągnąć wartość $2^k$?",
+    "Liczba $2^k$ musi należeć do jednej z grup (np. sum wierszy). Druga grupa (sumy kolumn) zawiera wyłącznie mniejsze potęgi. Czy w takiej sytuacji sumy obu grup mogą być równe?"
   ],
   "skills_required": [
     "constructive_proof",

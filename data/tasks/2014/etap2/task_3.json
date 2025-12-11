@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, od czego zależy parzystość sumy dwóch liczb. Kiedy suma dwóch liczb całkowitych jest parzysta, a kiedy nieparzysta?",
-    "Zamiast liczyć krawędzie parzyste, spróbuj oszacować, ile co najwyżej może być krawędzi nieparzystych. Krawędź jest nieparzysta, gdy łączy ścianę z liczbą parzystą i ścianę z liczbą nieparzystą.",
-    "Liczba nieparzystych krawędzi zależy od tego, ile jest ścian z liczbami nieparzystymi. Oznacz tę liczbę przez $k$. Rozważ, jak ułożenie tych $k$ ścian na sześcianie wpływa na liczbę krawędzi łączących je ze ścianami parzystymi.",
-    "Przeanalizuj przypadki dla $k=0, 1, 2, 3$. Zauważ, że przypadki dla $k=4, 5, 6$ są symetryczne. Jaka jest największa możliwa liczba krawędzi nieparzystych?"
+    "Zamiast analizować cały sześcian i ułożenie ścian, skup się na pojedynczym wierzchołku. Spotykają się w nim trzy ściany z pewnymi liczbami $a, b, c$. Jakie sumy są przypisane do trzech krawędzi wychodzących z tego wierzchołka?",
+    "Oblicz sumę liczb przypisanych tym trzem krawędziom przy wierzchołku. Czy wynik $S = (a+b) + (b+c) + (c+a)$ może być liczbą nieparzystą?",
+    "Skoro suma trzech liczb na krawędziach przy wierzchołku jest zawsze parzysta, to ile co najmniej liczb parzystych musi być w tej trójce? Rozważ możliwe układy parzystości (np. trzy nieparzyste, jedna parzysta i dwie nieparzyste itd.).",
+    "Sześcian ma 8 wierzchołków. Zsumuj minimalną liczbę krawędzi parzystych wychodzących z każdego wierzchołka, a następnie uwzględnij to, że każda krawędź łączy dwa wierzchołki (została policzona dwukrotnie)."
   ],
   "skills_required": [
     "parity_arguments",

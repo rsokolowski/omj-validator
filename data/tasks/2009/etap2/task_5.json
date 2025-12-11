@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Zadanie pyta 'czy istnieje', więc wystarczy podać jeden konkretny przykład. Spróbujmy go skonstruować, ustalając po kolei położenie wierzchołków i sprawdzając warunki.",
-    "Aby uprościć problem, załóżmy, że wierzchołek $S$ leży na prostej prostopadłej do płaszczyzny podstawy i przechodzącej przez wierzchołek $A$. Który warunek prostopadłości jest wtedy od razu spełniony?",
-    "Przy takim położeniu $S$, warunki dla krawędzi $SB$ i $SD$ narzucają pewne własności podstawie. Aby je spełnić, najprościej jest założyć, że podstawa ma kąt prosty w wierzchołku $A$. Sprawdź dlaczego (pomoże twierdzenie o trzech prostych prostopadłych).",
-    "Pozostaje warunek dla krawędzi $SC$. Wybierz podstawę jako trapez prostokątny z kątami prostymi przy $A$ i $D$. Zapisz warunek dla $SC$ i znajdź związek między długościami boków trapezu, który go spełnia."
+    "Zadanie pyta 'czy istnieje', więc wystarczy skonstruować jeden przykład. Rozważ dla uproszczenia ostrosłup, w którym krawędź $SA$ jest prostopadła do płaszczyzny podstawy.",
+    "Wtedy $SA \\perp AB$ i $SA \\perp AD$. Aby krawędzie $SB$ i $SD$ również były prostopadłe do pewnych boków podstawy, najprościej przyjąć, że $\\angle DAB = 90^\\circ$. Sprawdź, dlaczego to działa.",
+    "Pozostaje krawędź $SC$, której rzutem na podstawę jest przekątna $AC$. Zgodnie z twierdzeniem o trzech prostych prostopadłych, $SC$ będzie prostopadła do boku $BC$, jeśli $AC \\perp BC$.",
+    "Wystarczy więc narysować dowolny czworokąt $ABCD$, który posiada kąt prosty przy wierzchołku $A$ oraz kąt prosty $\\angle ACB$. Uzasadnij, że taka figura istnieje."
   ],
   "prerequisites": [
     "2006_etap1_6"

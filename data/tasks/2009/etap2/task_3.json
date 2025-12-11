@@ -12,12 +12,14 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Oblicz wartości obu wyrażeń dla kilku początkowych wartości $n$ (np. $n = 1, 2, 3, 4, 5$). Które z otrzymanych liczb są pierwsze? Czy zauważasz jakąś prawidłowość?",
-    "Zastanów się nad podzielnością przez 3. Jakie reszty z dzielenia przez 3 może dawać $n$? Zbadaj, jaką resztę daje wtedy wyrażenie $n^2 + n$.",
-    "Zauważ, że $n^2 + n = n(n+1)$ to iloczyn dwóch kolejnych liczb. Co możesz powiedzieć o podzielności iloczynu kolejnych liczb przez małe liczby pierwsze?",
-    "Sprawdź podzielność przez 3: dla $n \\equiv 0, 1, 2 \\pmod{3}$ wyznacz reszty z dzielenia $n^2+n+1$ oraz $n^2+n+3$ przez 3. Kiedy obie liczby mogą być pierwsze większe od 3?"
+    "Oblicz wartości wyrażeń dla $n=1, 2, 3, 4$. Zauważ, że w każdej otrzymanej parze przynajmniej jedna z liczb dzieli się przez 3.",
+    "Aby wyjaśnić tę prawidłowość, zbadaj reszty z dzielenia przez 3. Zacznij od wypisania możliwych reszt, jakie może dawać liczba $n$.",
+    "Sprawdź, jakie reszty z dzielenia przez 3 daje wyrażenie $n^2+n = n(n+1)$. Rozważ oddzielnie trzy przypadki: gdy $n$ daje resztę $0$, $1$ lub $2$.",
+    "Wykazałeś, że jedna z liczb zawsze dzieli się przez 3. Pamiętaj, że szukamy liczb pierwszych, a jedyną liczbą pierwszą podzielną przez 3 jest samo 3."
   ],
-  "prerequisites": ["2006_etap1_3"],
+  "prerequisites": [
+    "2006_etap1_3"
+  ],
   "skills_required": [
     "modular_arithmetic",
     "primality_testing",

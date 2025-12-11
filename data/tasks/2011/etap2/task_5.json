@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Teza, że punkt jest jednakowo odległy od dwóch prostych, jest równoważna temu, że leży on na dwusiecznej kąta między nimi. O który kąt i dwusieczną chodzi w tym zadaniu?",
-    "Wykorzystaj daną w zadaniu równość oraz fakt, że suma kątów w czworokącie wypukłym wynosi $360^\\circ$. Spróbuj wyrazić kąt $\\angle ADC$ za pomocą kąta $\\angle ABC$.",
-    "Punkt $O$ jest środkiem okręgu opisanego na $\\triangle ABC$. Jaka jest zależność między kątem środkowym $\\angle AOC$ a kątem wpisanym $\\angle ABC$? Porównaj tę zależność z tą uzyskaną dla $\\angle ADC$.",
-    "Wiesz już, że $\\angle AOC = \\angle ADC$ oraz $OA=OC$. Rozważ obrót wokół punktu $O$, który przekształca punkt $A$ na $C$. Niech obrazem punktu $D$ będzie $D'$. Zbadaj własności trójkąta $ODD'$."
+    "Zauważ, że punkt jest jednakowo odległy od ramion kąta wtedy i tylko wtedy, gdy leży na jego dwusiecznej. Twoim celem jest wykazanie, że prosta $DO$ dzieli kąt $\\angle ADC$ na połowy.",
+    "Skorzystaj z równości $\\angle DAB + \\angle BCD = \\angle ABC$ oraz faktu, że suma kątów w czworokącie wynosi $360^\\circ$. Wyraź miarę kąta $\\angle ADC$ wyłącznie za pomocą kąta $\\angle ABC$.",
+    "Punkt $O$ jest środkiem okręgu opisanego na $\\triangle ABC$. Przypomnij sobie zależność między kątem wpisanym $\\angle ABC$ a kątem środkowym $\\angle AOC$. Porównaj ten wynik z wyznaczoną wcześniej miarą $\\angle ADC$.",
+    "Równość kątów $\\angle AOC$ i $\\angle ADC$ oznacza, że punkty $A, O, C, D$ leżą na jednym okręgu. Wykorzystaj teraz równość promieni $OA=OC$, aby wywnioskować równość odpowiednich kątów przy wierzchołku $D$."
   ],
   "prerequisites": [
     "2010_etap1_6"

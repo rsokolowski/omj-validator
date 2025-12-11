@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Równanie zawiera pierwiastek kwadratowy, co utrudnia analizę. Jaką operację algebraiczną możesz wykonać po obu stronach, aby się go pozbyć?",
-    "Załóżmy, że teza zadania jest fałszywa, czyli że obie liczby $a$ i $b$ są wymierne. Spróbuj doprowadzić to założenie do sprzeczności. To klasyczna metoda dowodu nie wprost.",
-    "Po przekształceniu równania z pierwszej wskazówki, spróbuj doprowadzić je do postaci, w której po jednej stronie będzie tylko kwadrat różnicy $(a-b)^2$. Jaką wartość przyjmie to wyrażenie?",
-    "Z założenia, $a$ i $b$ są liczbami wymiernymi. Czy ich różnica $a-b$ też jest liczbą wymierną? A co możesz powiedzieć o liczbie, której kwadrat jest równy wartości $(a-b)^2$ obliczonej w poprzednim kroku?"
+    "Równanie zawiera pierwiastek z iloczynu $\\sqrt{ab}$. Aby uprościć analizę, podstaw $a=x^2$ oraz $b=y^2$ (gdzie $x,y>0$). Jak wtedy wygląda to równanie?",
+    "Przekształć otrzymane równanie, przenosząc wszystkie wyrazy na jedną stronę. Czy potrafisz zwinąć je do postaci kwadratu różnicy $(x-y)^2$?",
+    "Powinieneś otrzymać równość $(\\sqrt{a}-\\sqrt{b})^2 = 6$. Spierwiastkuj ją stronami. Co to mówi o różnicy liczb $\\sqrt{a}$ i $\\sqrt{b}$?",
+    "Wiadomo, że $\\sqrt{6}$ jest liczbą niewymierną. Wykorzystaj ten fakt, aby wywnioskować, że liczby $\\sqrt{a}$ i $\\sqrt{b}$ nie mogą być jednocześnie wymierne."
   ],
   "skills_required": [
     "inequality_manipulation",

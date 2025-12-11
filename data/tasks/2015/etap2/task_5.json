@@ -13,10 +13,10 @@
     "geometria"
   ],
   "hints": [
-    "Jakie cztery wierzchołki 100-kąta foremnego tworzą prostokąt? Zauważ, że przekątne takiego prostokąta są średnicami okręgu opisanego na wielokącie.",
-    "Wszystkie 100 wierzchołków można podzielić na 50 par punktów leżących na przeciwko siebie. Rozważ te pary jako podstawowe 'klocki' do budowy prostokątów.",
-    "Każda z 50 par przeciwległych wierzchołków może być jednokolorowa (oba białe lub oba czerwone) albo dwukolorowa. Zastanów się nad liczbą par każdego z tych trzech typów.",
-    "Wykorzystaj fakt, że jest łącznie 50 białych i 50 czerwonych wierzchołków, aby znaleźć kluczową zależność między liczbą par biało-białych a liczbą par czerwono-czerwonych."
+    "Zauważ, że przekątne każdego prostokąta wpisanego w okrąg są średnicami tego okręgu. Problem sprowadza się więc do podziału 50 średnic 100-kąta na 25 par.",
+    "Każdą z 50 średnic możesz zaklasyfikować do jednego z trzech typów, zależnie od kolorów jej końców: biało-biała, czerwono-czerwona lub mieszana.",
+    "Zastanów się, jakie dwie średnice utworzą wierzchołki prostokąta o wymaganym układzie kolorów (2 białe, 2 czerwone). Są dwie takie możliwe kombinacje typów średnic.",
+    "Oznacz liczby średnic każdego typu przez zmienne. Wykorzystaj informację o liczbie białych i czerwonych punktów, aby wykazać równość liczby średnic jednolitych obu kolorów."
   ],
   "skills_required": [
     "transformations",

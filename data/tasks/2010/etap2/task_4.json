@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Rozwiń obie strony nierówności i przenieś wszystko na jedną stronę. Co otrzymasz po uproszczeniu? Spróbuj sprawdzić nierówność dla konkretnych wartości, np. $x = y = \\frac{1}{2}$, aby lepiej zrozumieć jej strukturę.",
-    "Przekształć nierówność do postaci, w której badasz znak różnicy $(1-xy)^2 - x(1-y)^2 - y(1-x)^2$. Rozwiń wszystkie kwadraty i pogrupuj wyrazy podobne.",
-    "Po rozwinięciu i uproszczeniu spróbuj przedstawić różnicę jako sumę składników, których znak łatwo określić. Zwróć uwagę, że dla $x, y \\in (0,1)$ mamy $1-x > 0$, $1-y > 0$ oraz $xy > 0$.",
-    "Przekształć różnicę do postaci zawierającej wyrażenia typu $(1-x)(1-y)$ lub $xy(1-x)$, $xy(1-y)$. Każdy taki składnik jest dodatni dla $x, y \\in (0,1)$, co da ci tezę."
+    "Przenieś wszystkie wyrazy na jedną stronę nierówności, wykonaj potęgowanie i uporządkuj otrzymaną sumę. Twoim celem jest zbadanie znaku tego wyrażenia.",
+    "W uporządkowanym wyrażeniu poszukaj grupy składników, które można zwinąć do postaci $(1-x)(1-y)$. Pamiętaj, że $(1-x)(1-y) = 1 - x - y + xy$.",
+    "Zauważ, że gdy wyodrębnisz $(1-x)(1-y)$, to z pozostałych wyrazów również można wyłączyć ten sam czynnik. Wykonaj to wyłączenie.",
+    "Zapisz ostatecznie całą różnicę jako iloczyn trzech nawiasów. Uzasadnij, że dla $x,y \\in (0,1)$ każdy z tych czynników jest dodatni."
   ],
   "skills_required": [
     "inequality_manipulation",

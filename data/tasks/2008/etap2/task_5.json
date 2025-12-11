@@ -12,12 +12,18 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj ostrosłup i zaznacz przekrój. Co wiesz o podstawie ostrosłupa prawidłowego sześciokątnego? Jakie ma własności symetrii?",
-    "Rozważ rzut środkowy z wierzchołka ostrosłupa na płaszczyznę podstawy. Co się stanie z punktami $A, B, C, D, E, F$ i prostymi przez nie przechodzącymi?",
-    "Zauważ, że przy rzucie środkowym z wierzchołka ostrosłupa, punkty leżące na tej samej krawędzi bocznej rzutują się na ten sam wierzchołek podstawy. Jakie punkty podstawy odpowiadają punktom przekroju?",
-    "Zbadaj, na co rzutują się proste $AD$, $BE$ i $CF$. Wykorzystaj fakt, że przekątne sześciokąta foremnego łączące przeciwległe wierzchołki przechodzą przez jeden punkt - środek sześciokąta."
+    "Przypomnij sobie własność sześciokąta foremnego w podstawie: jego główne przekątne przecinają się w jednym punkcie (środku podstawy). Jaka ważna prosta łączy ten środek z wierzchołkiem ostrosłupa?",
+    "Rozważ płaszczyznę wyznaczoną przez wierzchołek ostrosłupa i dwie przeciwległe krawędzie boczne (np. te zawierające punkty $A$ i $D$). Zauważ, że wysokość ostrosłupa leży w tej płaszczyźnie.",
+    "Zwróć uwagę, że prosta $AD$ leży całkowicie w opisanej wyżej płaszczyźnie. Co to oznacza dla wzajemnego położenia prostej $AD$ i wysokości ostrosłupa?",
+    "Zauważ, że każda z prostych $AD$, $BE$ i $CF$ leży w płaszczyźnie przekroju i każda z nich przecina wysokość ostrosłupa. Wywnioskuj stąd, gdzie musi znajdować się ich punkt przecięcia."
   ],
   "prerequisites": [],
-  "skills_required": ["spatial_3d", "transformations"],
-  "skills_gained": ["spatial_3d", "transformations"]
+  "skills_required": [
+    "spatial_3d",
+    "transformations"
+  ],
+  "skills_gained": [
+    "spatial_3d",
+    "transformations"
+  ]
 }

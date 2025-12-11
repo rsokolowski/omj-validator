@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Narysuj figurę i oznacz wszystkie sześć trójkątów. Zastanów się, jak można porównywać pola trójkątów, które mają wspólną wysokość, a ich podstawy leżą na jednej prostej.",
-    "Wykorzystaj stosunki pól. Pokaż, że np. stosunek pól $S(AFP)$ do $S(BFP)$ jest równy stosunkowi pól $S(AC P)$ do $S(BCP)$. Wyraź w ten sposób stosunki pól dla wszystkich trzech par trójkątów na bokach $AB, BC, CA$.",
-    "Zauważ, że równość pól w pewnych parach, np. $S(BDP) = S(CDP)$, jest równoważna temu, że punkt $P$ leży na jednej z osi symetrii trójkąta $ABC$. Dlaczego?",
-    "Zbadaj przypadek, gdy $P$ leży na osi symetrii. Powstają wtedy trzy pary trójkątów o równych polach. Czy można tak dobrać położenie $P$ na tej osi, aby pola z dwóch różnych par stały się sobie równe?"
+    "Zauważ, że trójkąty $AFP$ i $BFP$ mają wspólną wysokość opuszczoną z wierzchołka $P$. Kiedy ich pola są równe? Wywnioskuj, na jakiej prostej musi wtedy leżeć punkt $P$.",
+    "Mamy trzy pary trójkątów przylegających do boków (np. para $AFP$ i $BFP$). Uzasadnij, że jeśli 4 trójkąty mają równe pola, to przynajmniej jedna taka para musi składać się z trójkątów o równych polach.",
+    "Wniosek z poprzedniego kroku ogranicza położenie punktu $P$ do osi symetrii trójkąta. Wówczas 6 pól przyjmuje tylko trzy wartości (każda występuje dwukrotnie). Oznaczmy je jako $X, Y, Z$.",
+    "Aby dokładnie 4 pola były równe, musiałoby zachodzić np. $X=Y \\neq Z$. Wyraź te pola w zależności od położenia punktu $P$ na osi i sprawdź, czy równość dwóch wartości nie wymusza automatycznie równości wszystkich trzech."
   ],
   "skills_required": [
     "area_methods",

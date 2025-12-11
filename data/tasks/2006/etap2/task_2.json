@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Przedłuż naprzemienne boki sześciokąta (np. $BC$, $DE$ i $FA$) aż do ich punktów przecięcia. Jaką figurę tworzą te przedłużenia i jakie trzy mniejsze figury odcinają od niej, tworząc dany sześciokąt?",
-    "Skorzystaj z faktu, że wszystkie kąty wewnętrzne sześciokąta mają miarę $120°$. Jakie są miary kątów zewnętrznych? Wykorzystaj tę informację do zbadania własności zarówno dużego trójkąta, jak i trzech małych trójkątów w jego rogach.",
-    "Udowodnij, że wszystkie cztery trójkąty, które powstały na Twoim rysunku, są równoboczne. Zwróć uwagę na położenie boków $AB$, $CD$ i $EF$ w tej konfiguracji.",
-    "Czym jest symetralna odcinka $AB$ dla małego trójkąta równobocznego, którego $AB$ jest jednym z boków? Jak ta symetralna jest powiązana z dużym trójkątem równobocznym? Zastosuj to samo rozumowanie dla boków $CD$ i $EF$."
+    "Wyznacz miary kątów zewnętrznych sześciokąta. Ich wartość ($60^\\circ$) sugeruje związek z trójkątami równobocznymi. Pomyśl, jak można uzupełnić rysunek, by je uzyskać.",
+    "Przedłuż proste zawierające co drugi bok sześciokąta (np. $BC$, $DE$ i $FA$). Zobacz, że tworzą one duży trójkąt, od którego odcięto trzy mniejsze trójkąty w narożnikach.",
+    "Uzasadnij, że wszystkie powstałe trójkąty (duży i trzy małe) są równoboczne. Zauważ, że odcinki $AB$, $CD$ i $EF$ są podstawami tych małych trójkątów.",
+    "Pamiętaj, że symetralna boku w trójkącie równobocznym jest też dwusieczną kąta naprzeciwległego. Wywnioskuj stąd, czym są symetralne odcinków $AB$, $CD$ i $EF$ dla dużego trójkąta."
   ],
   "skills_required": [
     "angle_chasing",
