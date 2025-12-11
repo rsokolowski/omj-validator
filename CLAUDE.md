@@ -161,7 +161,7 @@ GET  /uploads/{path}                 # Serve uploaded images
 
 ### Key Data Flows
 
-1. **Task Loading**: Per-task JSON files at `data/tasks/{year}/{etap}/task_{num}.json`. All 247 task files scanned on startup and cached.
+1. **Task Loading**: Per-task JSON files at `data/tasks/{year}/{etap}/task_{num}.json`. All 342 task files scanned on startup and cached.
 
    Task JSON structure:
    ```json
