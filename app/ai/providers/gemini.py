@@ -67,6 +67,7 @@ _CACHE_TTL_SECONDS = 24 * 60 * 60  # 24 hours
 GEMINI_PRICING = {
     # Gemini 3 series
     "gemini-3-pro-preview": {"input": 2.00, "output": 12.00},
+    "gemini-3-pro": {"input": 2.00, "output": 12.00},
     # Gemini 2.5 series
     "gemini-2.5-pro": {"input": 1.25, "output": 10.00},
     "gemini-2.5-flash": {"input": 0.30, "output": 2.50},
