@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie kwadrat $ABCD$ i punkt $P$ wewnątrz. Zaznacz wszystkie równe odcinki wynikające z założeń $AP=AB$ i z własności kwadratu. Zaznacz też kąt prosty $\\angle CPD$.",
-    "Aby powiązać ze sobą długości odcinków $DP$ i $CP$, rozważ obrót jednej z części figury. Obrót może pomóc stworzyć nowe trójkąty o znanych własnościach.",
-    "Spróbuj obrócić trójkąt $\\triangle DPC$ o $90^\\circ$ wokół wierzchołka $D$. Dokąd przejdzie punkt $C$, a dokąd $P$? Nazwij obraz punktu $P$ literą $P'$. Co możesz powiedzieć o trójkącie $\\triangle PDP'$?",
-    "Rozważ trójkąt $\\triangle AP'P$. Wyraź długości jego boków za pomocą $a$, $CP$ i $DP$. Zastanów się nad jego kątami - jeden z nich ma szczególną wartość, co pozwala znaleźć związek między bokami."
+    "Narysuj starannie figurę i zaznacz wszystkie odcinki równe bokowi kwadratu $a$. Zauważ, że $\triangle CPD$ jest prostokątny. Jaka zależność łączy $a$, $CP$ i $DP$?",
+    "Aby powiązać ze sobą długości $CP$ i $DP$, spróbuj \"przenieść\" jeden z trójkątów za pomocą obrotu, tak aby boki te znalazły się w jednym, nowym trójkącie.",
+    "Obróć trójkąt $\triangle DPC$ o $90^\textrm{o}$ wokół wierzchołka $D$, tak aby bok $DC$ nałożył się na $DA$. Niech $P'$ będzie obrazem punktu $P$. Jakie własności ma trójkąt $\triangle PDP'$? Wyraź długości boków trójkąta $\triangle AP'P$ za pomocą $a, CP, DP$.",
+    "W trójkącie $\triangle AP'P$ kąt przy wierzchołku $P'$ ma szczególną miarę. Aby to wykorzystać, poprowadź wysokość z wierzchołka $P$ na prostą $AP'$. Zastosuj twierdzenie Pitagorasa i połącz wynik z zależnością uzyskaną w pierwszej wskazówce."
   ],
   "skills_required": [
     "circle_theorems",

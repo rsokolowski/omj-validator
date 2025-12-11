@@ -13,9 +13,9 @@
   ],
   "hints": [
     "Narysuj duży i dokładny rysunek. Oblicz miary kątów wewnętrznych rombu oraz kątów, na które dzieli je przekątna $AC$.",
-    "Skup się na trójkącie $BPC$. Oblicz wszystkie jego kąty i wykaż, że odcinek $BP$ ma taką samą długość jak bok rombu.",
-    "Teraz zbadaj trójkąt $CQP$. Wykorzystaj warunek $PQ \\parallel AD$, aby znaleźć miary jego kątów. Jaki wniosek dotyczący długości odcinka $PQ$ można stąd wyciągnąć?",
-    "Wykorzystaj równości $BP=AB$ i $PQ=PC$. Rozważ trójkąt $APC$ i oblicz miary jego kątów. Teza $BP=AQ$ jest równoważna pewnej własności trójkąta $AQC$. Spróbuj ją udowodnić."
+    "Oblicz miary kątów w trójkącie $BPC$. Wykaż, że jest on równoramienny, co pozwoli Ci powiązać długość odcinka $BP$ z długością boku rombu.",
+    "Zdefiniujmy na próbę punkt $Q'$ na przekątnej $AC$ tak, aby $AQ' = AB$. Jakie będą wówczas miary kątów w trójkącie $ABQ'$?",
+    "Poprowadź przez punkt $Q'$ prostą równoległą do $AD$ i niech przetnie ona bok $CD$ w punkcie $P'$. Wykaż, że $P'$ to ten sam punkt co $P$ z treści zadania, dowodząc, że $\\measuredangle P'BC = 20^\\circ$."
   ],
   "skills_required": [
     "angle_chasing",

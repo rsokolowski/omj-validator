@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Punkt M jest środkiem boku CD. Zastanów się, jak ta informacja wpływa na pola trójkątów, których jednym z wierzchołków jest M. Jakie znasz twierdzenia o polach związane ze środkiem boku?",
-    "Spróbuj uprościć dane wyrażenie, zastępując pola trójkątów z wierzchołkiem M. Wykorzystaj fakt, że mediana dzieli trójkąt na dwie części o równych polach, a pole $[ABM]$ jest średnią arytmetyczną pól $[ABC]$ i $[ABD]$.",
-    "Po uproszczeniach algebraicznych, szukane wyrażenie powinno przyjąć postać $[ABC] - [BCD]$. Teraz skup się na obliczeniu tej różnicy.",
-    "Przedłuż boki $AD$ i $BC$ do przecięcia w punkcie $P$. Wykorzystaj powstały trójkąt prostokątny, aby wyrazić pola $[ABC]$ i $[BCD]$ za pomocą wspólnej podstawy $BC$ i odpowiednich wysokości."
+    "Punkt M jest środkiem boku CD. Jakie trójkąty o równych polach możesz wskazać na rysunku dzięki tej informacji?",
+    "Spróbuj powiązać szukane wyrażenie z polem trójkąta $[ABC]$. Zauważ, że pole to można wyrazić przez sumę lub różnicę pól trójkątów mających wierzchołek w punkcie $M$.",
+    "Po przekształceniach algebraicznych i wykorzystaniu równości pól z pierwszej wskazówki, szukane wyrażenie powinno uprościć się do postaci $[ABC] - [BCD]$. Teraz skup się na obliczeniu tej różnicy.",
+    "Przedłuż boki $AD$ i $BC$ aż do ich przecięcia w punkcie $P$. Jaki jest kąt przy wierzchołku $P$? Oblicz różnicę pól $[ABC]$ i $[BCD]$, wybierając dla obu trójkątów wspólną podstawę."
   ],
   "skills_required": [
     "area_methods",

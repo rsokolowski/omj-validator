@@ -14,9 +14,9 @@
   ],
   "hints": [
     "Przedstaw sytuację za pomocą grafu: osoby to wierzchołki, a znajomości to krawędzie. Jaki jest stopień każdego wierzchołka na początku, a jaki na końcu przyjęcia?",
-    "Zamiast analizować osobno stan początkowy i końcowy, pomyśl o grafie, który zawiera tylko *nowe* znajomości. Jakie krawędzie on zawiera?",
-    "Ile nowych znajomości zyskała każda osoba? Jaki jest więc stopień każdego wierzchołka w grafie *nowych* znajomości? Jak wygląda taki graf?",
-    "Graf nowych znajomości musi dzielić wszystkie osoby na pary. Jaki warunek musi spełniać liczba osób $n$? Pamiętaj też o minimalnej liczbie osób potrzebnej do tego, by każdy miał 3 znajomych."
+    "Zamiast analizować osobno stan początkowy i końcowy, pomyśl o grafie, który zawiera tylko *nowe* znajomości.",
+    "Ile nowych znajomości zyskała każda osoba? Jaki jest więc stopień każdego wierzchołka w grafie *nowych* znajomości i jaką musi on mieć strukturę?",
+    "Graf nowych znajomości narzuca warunek parzystości na $n$. Graf początkowy również ma swoje wymagania. Sprawdź, czy dla najmniejszej liczby $n$ spełniającej te warunki opisana sytuacja jest możliwa."
   ],
   "skills_required": [
     "graph_theory",

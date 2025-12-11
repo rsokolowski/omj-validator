@@ -12,9 +12,9 @@
   ],
   "hints": [
     "Zauważ, że A jest środkiem okręgu przechodzącego przez P, F, E. Podobnie dla B i C. Co możesz powiedzieć o trójkątach $\\triangle AFE$, $\\triangle BFD$ i $\\triangle CDE$ oraz o ich kątach przy wierzchołkach A, B, C?",
-    "Skoro $\\triangle DEF$ jest równoboczny, to podstawy trójkątów $\\triangle AFE$, $\\triangle BFD$, $\\triangle CDE$ są równe. Porównaj długość podstawy $EF$ z długością boku $BC$ przez podobieństwo do trójkąta o wierzchołkach B, C i środku okręgu opisanego na $\\triangle ABC$.",
+    "Skoro $\\triangle DEF$ jest równoboczny, to podstawy trójkątów z poprzedniej wskazówki są równe. Porównaj długość boku $EF$ z długością boku $BC$ przez podobieństwo do trójkąta o wierzchołkach B, C i środku okręgu opisanego na $\\triangle ABC$.",
     "Powyższe rozumowanie prowadzi do warunku $AP \\cdot BC = BP \\cdot CA = CP \\cdot AB$. Aby wykazać współpękowość prostych $AD, BE, CF$, udowodnij, że prosta $AD$ jest symetryczna do $AP$ względem dwusiecznej kąta $\\angle BAC$.",
-    "Symetria, o której mowa, jest równoważna równości kątów $\\angle DAB = \\angle PAC$. Aby jej dowieść, porównaj trójkąty $\\triangle ABD$ i $\\triangle CPA$. Wykorzystaj warunek z poprzedniej wskazówki, aby znaleźć pary proporcjonalnych boków."
+    "Aby udowodnić kluczową równość kątów $\\angle DAB = \\angle PAC$, rozważ dobudowanie na zewnątrz $\\triangle ABC$ punktu $Q$ tak, aby $\\triangle QAB$ był podobny do $\\triangle PAC$. Jaki związek ma punkt $Q$ z punktami $P$ i $D$?"
   ],
   "skills_required": [
     "transformations",

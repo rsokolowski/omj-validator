@@ -11,10 +11,10 @@
     "geometria"
   ],
   "hints": [
-    "Punkt leżący na symetralnej odcinka jest równoodległy od jego końców. Zapisz, co to oznacza dla punktów P i Q oraz odpowiednich wierzchołków czworokąta.",
-    "Aby powiązać ze sobą warunki dotyczące różnych boków, wprowadź punkty pomocnicze. Dobrym pomysłem jest rozważenie środków obu przekątnych czworokąta – niech M będzie środkiem AC, a N środkiem BD.",
-    "Wykorzystaj twierdzenie o środkowej w trójkącie (można je wyprowadzić z tw. Pitagorasa), aby powiązać kwadraty odległości. Z faktu $PA=PB$ wyprowadź zależność między $PM^2$ a $PK^2$. Zrób to samo dla Q, M, L oraz dla N.",
-    "Użyj założenia $KP=LQ$. Pokaż, że prowadzi ono do równości $PM^2+PN^2 = QM^2+QN^2$. Zastanów się, co ta równość oznacza dla położenia środka ciężkości czworokąta względem odcinka PQ."
+    "Let $O$ be the midpoint of the segment $KL$. What does the condition $KP=LQ$ imply about the positions of points $P$ and $Q$ relative to point $O$?",
+    "Consider the point reflection (symmetry) with respect to $O$. Let $s_{AB}$ be the perpendicular bisector of $AB$. The image of the line $s_{AB}$ under this reflection is a new line, parallel to $s_{AB}$. Which known point must lie on this new line?",
+    "The reflection shows that $Q$ lies on the perpendicular bisector of $CD$ (by definition) and also on the image of the perpendicular bisector of $AB$. What does this symmetry imply for the relationship between the perpendicular bisector of $AB$ and the perpendicular bisector of $CD$?",
+    "The entire geometric setup is symmetric. This implies that the perpendicular bisector of $CD$ must be the image of the perpendicular bisector of $AB$ under the reflection through $O$. What can you conclude about two lines if one is the image of the other under a point reflection?"
   ],
   "skills_required": [
     "angle_chasing",

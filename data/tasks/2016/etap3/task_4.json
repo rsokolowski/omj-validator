@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Niech $P$ będzie punktem przecięcia symetralnych odcinków $BC$ i $EF$. Co ta definicja mówi o odległościach punktu $P$ od wierzchołków $B, C, E, F$? Celem zadania jest wykazanie, że punkty $A, P, D$ leżą na jednej prostej.",
-    "Połączenie warunków na kąty i boki sugeruje użycie przekształceń geometrycznych, takich jak obroty. Rozważ wykonanie obrotów odpowiednich trójkątów wokół punktu $P$.",
-    "Obróć trójkąt $PCD$ wokół $P$ tak, aby odcinek $PC$ nałożył się na $PB$. Niech obrazem punktu $D$ będzie $D'$. Gdzie leży punkt $D'$? Podobnie, obróć trójkąt $PFA$ wokół $P$ tak, aby $PF$ nałożył się na $PE$. Gdzie znajdzie się obraz punktu $A$?",
-    "Powinieneś zauważyć, że $D'$ leży na prostej $AB$, a obraz punktu $A$ (nazwijmy go $A'$) leży na prostej $DE$. Wykorzystaj dany warunek na długości boków, aby pokazać, że pewne kluczowe odcinki są równe. Ta równość, w połączeniu z obrotami, prowadzi do wniosku, że punkty $A, P, D$ są współliniowe."
+    "Niech $P$ będzie punktem przecięcia symetralnych odcinków $BC$ i $EF$. Z definicji $PB=PC$ i $PE=PF$. Celem jest wykazanie, że punkty $A, P, D$ są współliniowe.",
+    "Spróbuj użyć obrotów wokół punktu $P$. Obróć trójkąt $PAB$ tak, aby odcinek $PB$ nałożył się na $PC$. Następnie rozważ podobny obrót dla trójkąta $PDE$.",
+    "Niech $A'$ będzie obrazem punktu $A$ po pierwszym obrocie, a $D'$ obrazem $D$ po drugim. Pokaż, że $A'$ leży na prostej $CD$, a $D'$ na prostej $AF$.",
+    "Wykorzystaj dany warunek na długości boków, aby pokazać, że $A'D=AD'$. To prowadzi do przystawania kluczowych trójkątów, a w konsekwencji do równości kątów $\\angle BPC = \\angle EPF$, co jest ostatnim krokiem do rozwiązania."
   ],
   "skills_required": [
     "perpendicular_bisector",

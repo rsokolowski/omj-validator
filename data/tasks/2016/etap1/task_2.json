@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj figurę. Aby udowodnić, że środek okręgu opisanego $O$ jest środkiem odcinka $DG$, możemy pokazać, że wektory $\\vec{CD}+\\vec{CG} = 2\\vec{CO}$. Najwygodniej będzie umieścić punkt $C$ w początku układu współrzędnych.",
-    "Wyraź wektory $\\vec{CD}$ i $\\vec{CG}$ za pomocą obrotów wektorów $\\vec{CB}$ i $\\vec{CA}$ o $\\pm 90^\\circ$. Wyznacz wektor $\\vec{CM}$ do środka $M$ odcinka $DG$ i zauważ, jak jest on powiązany z wektorem $\\vec{AB}$.",
-    "Teraz musimy pokazać, że wektor $\\vec{CO}$ ma tę samą własność. Wykorzystaj fakt, że $O$ leży na symetralnej boku $AB$. Niech $S$ będzie środkiem $AB$. Co wiemy o trójkącie $AOB$ i odcinku $OS$?",
-    "Warunek $\\angle ACB=45^\\circ$ implikuje, że $\\triangle AOB$ jest prostokątny równoramienny. W takim razie $OS = AS = AB/2$ oraz $OS \\perp AB$. Pokaż, że ta własność jednoznacznie określa wektor $\\vec{CO}$ w zależności od wektorów $\\vec{CA}$ i $\\vec{CB}$ i że jest on równy $\\vec{CM}$."
+    "Co warunek $\\angle ACB = 45°$ mówi o kącie środkowym $\\angle AOB$, gdzie $O$ jest środkiem okręgu opisanego na $\\triangle ABC$? Jaki jest w takim razie kształt trójkąta $AOB$?",
+    "Rozważmy obroty o $\\pm 90°$ wokół punktu $C$. Niech $O'$ będzie obrazem $O$ w obrocie o $90°$, a $O''$ w obrocie o $-90°$. Jakie trójkąty przystające otrzymamy, obracając $\\triangle OAC$ i $\\triangle OBC$?",
+    "Obrót o $90°$ wokół $C$ przekształca $\\triangle OBC$ na $\\triangle O'DC$, a obrót o $-90°$ przekształca $\\triangle OAC$ na $\\triangle O''GC$. Co to mówi o odległościach $O'D$ i $O''G$ od punktów $A, B, C$? Jaki jest związek między punktami $O', C, O''$?",
+    "Niech $M$ będzie środkiem odcinka $DG$. Rozważ czworokąt $O'DGO''$. Wyraź wektor $\\vec{CM}$ za pomocą wektorów $\\vec{O'D}$ i $\\vec{O''G}$. Pokaż, że ta zależność prowadzi do wniosku, że $M$ i $O$ to ten sam punkt."
   ],
   "skills_required": [
     "circle_theorems",

@@ -10,10 +10,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie całą konfigurację. Zwróć uwagę na pary prostych równoległych ($AB \\| DC$ i $AD \\| BC$) i na punkty, w których prosta $EF$ je przecina.",
+    "Narysuj starannie całą konfigurację. Zwróć uwagę na pary prostych równoległych ($AB \\| DC$ i $AD \\| BC$) i zastanów się, jak wpływają one na pola pewnych trójkątów.",
     "Pole trójkąta nie zmienia się, jeśli jego wierzchołek przesuwamy po prostej równoległej do podstawy. To kluczowa własność w tym zadaniu.",
-    "Zastosuj tę własność do trójkątów, których podstawy leżą na prostych $PC$ i $QC$. Porównaj pole $\\triangle FPC$ z polem $\\triangle APC$ oraz pole $\\triangle ECQ$ z polem $\\triangle ACQ$.",
-    "Wyraź pole $\\triangle CEF$ korzystając ze współliniowości punktów Q, F, E. Pole $\\triangle APQ$ wyznacz, rozważając pole czworokąta $APQC$."
+    "Zastosuj tę własność do trójkątów o podstawach na prostych $PC$ i $QC$. Porównaj pole $\\triangle FPC$ z polem $\\triangle APC$ oraz pole $\\triangle ECQ$ z polem $\\triangle ACQ$.",
+    "Rozważ pole czworokąta $APCQ$, aby powiązać pole $\\triangle APQ$ z polami trójkątów z poprzedniej wskazówki. Uprość otrzymane wyrażenie, korzystając z tego, że punkty $P, E, F, Q$ leżą na jednej prostej."
   ],
   "skills_required": [
     "area_methods",

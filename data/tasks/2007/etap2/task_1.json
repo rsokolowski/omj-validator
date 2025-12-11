@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "W jaki sposób można pozbyć się pierwiastka z podanego równania? Spróbuj podnieść obie strony do kwadratu i uprościć otrzymane wyrażenie.",
-    "Po uproszczeniu równania, przeprowadź dowód nie wprost. Załóż, że obie liczby $a$ i $b$ są wymierne i poszukaj sprzeczności.",
-    "Pokaż, że podane równanie jest równoważne równaniu $(a-b)^2=12$. Co z tego wynika na temat wartości wyrażenia $a-b$?",
-    "Zgodnie z Twoim założeniem, liczby $a$ i $b$ są wymierne. Jaka musi być w takim razie ich różnica $a-b$? Porównaj ten wniosek z wynikiem z poprzedniego kroku."
+    "Równanie zawiera pierwiastek kwadratowy, co utrudnia analizę. Jaką operację algebraiczną możesz wykonać po obu stronach, aby się go pozbyć?",
+    "Załóżmy, że teza zadania jest fałszywa, czyli że obie liczby $a$ i $b$ są wymierne. Spróbuj doprowadzić to założenie do sprzeczności. To klasyczna metoda dowodu nie wprost.",
+    "Po przekształceniu równania z pierwszej wskazówki, spróbuj doprowadzić je do postaci, w której po jednej stronie będzie tylko kwadrat różnicy $(a-b)^2$. Jaką wartość przyjmie to wyrażenie?",
+    "Z założenia, $a$ i $b$ są liczbami wymiernymi. Czy ich różnica $a-b$ też jest liczbą wymierną? A co możesz powiedzieć o liczbie, której kwadrat jest równy wartości $(a-b)^2$ obliczonej w poprzednim kroku?"
   ],
   "skills_required": [
     "inequality_manipulation",

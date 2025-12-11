@@ -15,7 +15,7 @@
     "Narysuj dokładny rysunek. Oznacz $\\angle BAE = \\alpha$ i $\\angle DAF = \\beta$. Jaka jest zależność między $\\alpha$ i $\\beta$, skoro $\\angle EAF = 45^\\circ$ i $\\angle DAB = 90^\\circ$?",
     "Aby powiązać ze sobą różne części figury, często przydaje się transformacja geometryczna. Rozważ obrót trójkąta $ADF$ o $90^\\circ$ wokół wierzchołka $A$ w stronę trójkąta $ABE$.",
     "Niech $G$ będzie obrazem punktu $F$ w obrocie z poprzedniej wskazówki. Porównaj trójkąt $AEF$ z trójkątem $AEG$. Zwróć uwagę na ich boki ($AE$, $AF$, $AG$) i kąty przy wierzchołku $A$.",
-    "Wykaż, że $\\triangle AEF \\cong \\triangle AEG$, a więc ich pola są równe. Pozostaje uzasadnić, że pole trójkąta $AEG$ jest równe sumie pól trójkątów $ABE$ i $ADF$."
+    "Pola trójkątów $AEF$ i $AEG$ są równe. Aby obliczyć pole $\\triangle AEG$, zastanów się nad położeniem odcinka $GE$ względem prostej $AB$. Wyznacz długość podstawy $GE$ i wysokość opuszczoną na nią z wierzchołka $A$."
   ],
   "prerequisites": [],
   "skills_required": [

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie figurę. Co to znaczy, że punkt E jest symetryczny do B względem prostej CD? Jakie odcinki i kąty są sobie równe z definicji tej symetrii?",
-    "Aby wykazać, że punkty A, D, E leżą na jednej prostej, wystarczy pokazać, że kąt ∠ADE jest półpełny. Spróbuj obliczyć ten kąt, korzystając z własności kątów w okręgu i symetrii.",
-    "Kąt ∠ADE można przedstawić jako sumę dwóch kątów. Zauważ, że jeden z nich, ∠ADB, jest oparty na łuku AB. Drugi, ∠BDE, jest związany z symetrią. Jaki jest związek między kątami ∠CDB i ∠CDE?",
-    "Wyznacz miarę kąta ∠ADB, korzystając z tego, że jest to kąt wpisany. Następnie wyznacz miarę kąta ∠CDB, również jako kąta wpisanego. Jaką miarę ma w takim razie kąt ∠BDE?"
+    "Narysuj starannie figurę. Z definicji symetrii osiowej, odbicie punktu $B$ względem prostej $CD$ daje punkt $E$. Jaka jest więc relacja między trójkątami $\\triangle CDB$ i $\\triangle CDE$? Co to oznacza dla kątów $\\angle CDB$ i $\\angle CDE$?",
+    "Aby wykazać, że punkty $A, D, E$ są współliniowe, wystarczy udowodnić, że kąt $\\angle ADE$ jest półpełny (ma miarę $180^\\circ$). Spróbuj wyrazić ten kąt jako sumę dwóch kątów z wierzchołkiem w punkcie $D$.",
+    "Kluczowe jest obliczenie miar kątów przy wierzchołku $D$. Zauważ, że kąt $\\angle ADE$ to suma kątów $\\angle ADC$ i $\\angle CDE$. Wykorzystaj fakt, że punkty $A, B, C, D$ leżą na jednym okręgu, aby znaleźć miary potrzebnych kątów.",
+    "Jaka jest miara kąta $\\angle ADC$? A jaka jest miara kąta $\\angle CDB$? Pamiętaj, że w czworokącie wpisanym w okrąg suma miar przeciwległych kątów wynosi $180^\\circ$. Wykorzystaj to oraz relację z pierwszej wskazówki, by obliczyć miarę kąta $\\angle ADE$."
   ],
   "skills_required": [
     "circle_theorems",

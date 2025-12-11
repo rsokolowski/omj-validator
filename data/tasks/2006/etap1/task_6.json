@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Gdzie, względem trójkąta, znajduje się środek okręgu opisanego na trójkącie rozwartokątnym?",
-    "Zastanów się nad związkiem między środkiem sfery opisanej na czworościanie a środkami okręgów opisanych na jego poszczególnych ścianach.",
-    "Rozważ rzut prostopadły środka sfery na płaszczyznę jednej ze ścian. Jakim ważnym punktem dla tej ściany jest ten rzut i dlaczego?",
-    "Jeśli punkt leży wewnątrz czworościanu, to jego rzut na płaszczyznę ściany musi leżeć wewnątrz tej ściany. Jak to się ma do ściany, która jest trójkątem rozwartokątnym?"
+    "Gdzie, względem swojego okręgu opisanego, leży trójkąt rozwartokątny? Czy można go zmieścić w pewnym półkolu?",
+    "Rozważ płaszczyznę prostopadłą do ściany rozwartokątnej, przechodzącą przez średnicę półkola, w którym mieści się ta ściana. Jaki ważny punkt czworościanu musi leżeć na tej płaszczyźnie?",
+    "Płaszczyzna ta przechodzi przez środek sfery opisanej. Skoro środek leży wewnątrz czworościanu, to jak muszą być rozmieszczone wierzchołki czworościanu względem tej płaszczyzny?",
+    "Wykazałeś, że trzy wierzchołki leżą po jednej stronie płaszczyzny przechodzącej przez środek sfery, a czwarty po drugiej. Czy środek sfery może wtedy należeć do wnętrza czworościanu?"
   ],
   "skills_required": [
     "spatial_3d",

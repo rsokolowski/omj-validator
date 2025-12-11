@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie figurę i zaznacz wszystkie równe boki i kąty. Co musisz udowodnić o bokach lub kątach trójkąta $BCM$, aby był on równoboczny?",
-    "Zastanów się, czy prostokąt $ABCD$ musi być kwadratem. Aby to sprawdzić, spróbuj udowodnić, że trójkąty prostokątne $\\triangle ABE$ i $\\triangle ADF$ są przystające.",
-    "Wykaż, że $\\angle BAE = \\angle DAF = 15^\\circ$. Możesz to zrobić, obracając $\\triangle ADF$ o $90^\\circ$ wokół $A$ i badając własności powstałego trójkąta równoramiennego.",
-    "Zbuduj wewnątrz kwadratu trójkąt równoboczny $\\triangle KBC$. Wykaż, że punkty $A, K, F$ leżą na jednej prostej, a następnie, że punkt $K$ jest środkiem odcinka $AF$, co oznacza, że $K=M$."
+    "Narysuj starannie figurę i zaznacz wszystkie dane. Aby wykazać, że trójkąt $BCM$ jest równoboczny, co musisz udowodnić o jego bokach lub kątach?",
+    "Zacznij od wykazania, że prostokąt $ABCD$ musi być kwadratem. W tym celu spróbuj udowodnić, że trójkąty prostokątne $\triangle ABE$ i $\triangle ADF$ są przystające.",
+    "Aby udowodnić przystawanie, zbadaj kąty. Obróć $\triangle ADF$ o $90^\\circ$ wokół punktu $A$. Wykorzystaj własności trójkąta równobocznego $AEF$, aby pokazać, że $\\angle BAE = \\angle DAF$.",
+    "Zbuduj wewnątrz kwadratu trójkąt równoboczny $\\triangle KBC$. Wykaż, że $K$ leży na odcinku $AF$. Aby udowodnić, że $K=M$, skorzystaj z własności środkowej w trójkącie prostokątnym $\\triangle ADF$ i porównaj kąty w trójkątach $\\triangle ADM$ i $\\triangle ADK$."
   ],
   "skills_required": [
     "angle_chasing",

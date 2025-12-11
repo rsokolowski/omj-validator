@@ -14,9 +14,9 @@
   ],
   "hints": [
     "Rozważ dowolny kwadrat 2x2. Zgodnie z warunkiem zadania, suma trzech z jego czterech liczb wynosi 0. Co to mówi o sumie wszystkich czterech liczb w tym kwadracie?",
-    "Aby znaleźć największą możliwą sumę, ustal jej górne ograniczenie, a następnie podaj przykład tablicy, która je osiąga. Warto dążyć do tego, by sumy w poszczególnych kwadratach 2x2 były jak największe.",
-    "Zastanów się nad sumą liczb w dwóch sąsiednich wierszach. Sumując wszystkie kwadraty 2x2 zawarte w tych dwóch wierszach, możesz uzyskać nierówność wiążącą sumy liczb w tych wierszach.",
-    "Spróbuj zmaksymalizować sumę w jednym wierszu, wpisując same jedynki. Jakie ograniczenie narzuca to na sumy w sąsiednich wierszach? Rozważ ułożenie wierszy o maksymalnej sumie na przemian z wierszami o niskiej sumie."
+    "Aby znaleźć największą możliwą sumę, spróbuj umieścić w tablicy jak najwięcej jedynek. Zastanów się, jakie są konsekwencje wypełnienia całego wiersza jedynkami.",
+    "Pokaż, że jeśli w pewnym wierszu znajdują się same jedynki, to w każdym wierszu z nim sąsiadującym suma liczb nie może być większa niż -2.",
+    "Wykorzystaj wniosek z poprzedniej wskazówki, aby oszacować maksymalną sumę. Ile wierszy z samymi jedynkami można maksymalnie umieścić w tablicy i gdzie, aby suma wszystkich liczb była jak największa?"
   ],
   "skills_required": [
     "case_analysis",

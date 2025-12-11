@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zauważ, że z warunków zadania wynikają dwie równości par boków. Zapisz, które boki są równe.",
-    "Wykaż, że kąt $\\angle AEC$ jest rozwarty. Co w związku z tym można powiedzieć o długości boku $AC$ w trójkącie $ACE$ w porównaniu z bokiem $AE$?",
-    "Zastosuj nierówność trójkąta dla trójkąta $ABE$. Połącz ją z nierównością $AC > AE$ uzyskaną w poprzednim kroku.",
-    "Otrzymana nierówność $AC+BC > AB$ jest prawdziwa, ale słabsza niż teza. Aby ją wzmocnić, rozważ nierówność $AC+AD > CD$ i przekształć ją, używając znanych równości, aby zakończyć dowód."
+    "Z warunków zadania wynikają równości pewnych par boków. Zapisz, które boki w których trójkątach są równe.",
+    "Wykorzystaj uzyskane równości, aby wyrazić tezę wyłącznie za pomocą odcinków wychodzących z wierzchołków A, C oraz punktów D i E. Teza przybierze postać $AC > CE + (\text{pewna różnica})$.",
+    "Przekształć nierówność do postaci $AC - CE > AD + DB - BC$. Użyj równości boków, aby prawa strona zależała od boków trójkąta $BDE$.",
+    "Otrzymałeś nierówność $AC - CE > DE + DB - BE$. Zauważ, że prawa strona jest różnicą dwóch boków trójkąta $BDE$ i trzeciego boku. Zastosuj nierówność trójkąta, aby oszacować prawą stronę i połącz to z faktem, że $AC > CE$ (co wynika z nierówności trójkąta w $\\triangle ACD$)."
   ],
   "skills_required": [
     "isosceles_triangle",

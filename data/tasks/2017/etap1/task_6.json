@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Przekształć równanie tak, aby wyrazić $n$ przez pozostałe zmienne. Co możesz powiedzieć o znaku wyrażenia $k^2 + k - m^2$?",
-    "Spróbuj dowodu nie wprost: załóż, że $m > n$ i zobacz, jakie ograniczenia to nakłada na relację między $k$ i $m$.",
-    "Zauważ, że funkcja $f(x) = x^2 + x$ jest rosnąca dla dodatnich $x$. Jeśli $m > n$, to porównaj wartości $k^2 + k$ oraz $m^2 + m$.",
-    "Z założenia $m > n$ wyprowadź nierówność $k < m$, czyli $k \\leq m-1$. Podstaw to ograniczenie do wyrażenia na $n$ i sprawdź, czy $n$ może być dodatnie."
+    "Przekształć podaną równość, aby wyznaczyć $n$. Skoro $n$ jest dodatnią liczbą całkowitą, to co to oznacza dla wartości wyrażenia $k^2+k-m^2$?",
+    "Rozważ dowód nie wprost. Załóż, że teza zadania jest fałszywa, czyli $m > n$, i spróbuj doprowadzić to założenie do sprzeczności.",
+    "Połącz założenie $m>n$ z wyjściową równością. Jaką nierówność uzyskasz, porównując ze sobą wyrażenia $m^2+m$ oraz $k^2+k$?",
+    "Zauważ, że nierówność między $m^2+m$ a $k^2+k$ implikuje nierówność między $m$ a $k$. Wykorzystaj ją w wyrażeniu na $n$, aby pokazać, że $n$ nie może być dodatnie."
   ],
   "skills_required": [
     "algebraic_identities",

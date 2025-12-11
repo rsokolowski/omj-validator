@@ -13,10 +13,10 @@
     "arytmetyka"
   ],
   "hints": [
-    "Zastanów się, co tak naprawdę wyznacza cyfrę jedności liczby. Czy musisz znać całą liczbę $999^{1000}$, żeby poznać jej cyfrę jedności?",
-    "Zbadaj cykliczność cyfr jedności kolejnych potęg liczby 999. Jaka jest cyfra jedności liczby $999^1$, $999^2$, $999^3$...?",
-    "Zauważ, że $999 \\equiv -1 \\pmod{10}$. Co to oznacza dla potęg parzystych?",
-    "Skoro znasz już cyfrę jedności liczby $999^{1000}$, znajdź taką cyfrę $c$, że $3c$ daje tę samą cyfrę jedności. Sprawdź kolejno cyfry 0-9."
+    "Równanie $3n = 999^{1000}$ dotyczy wielkich liczb, ale pytanie jest tylko o cyfrę jedności $n$. Jak można przeformułować to równanie, używając tylko cyfr jedności?",
+    "Aby znaleźć cyfrę jedności $n$, musisz najpierw ustalić cyfrę jedności liczby $999^{1000}$. Zależy ona wyłącznie od cyfry jedności podstawy, czyli $9$.",
+    "Bezpośrednie potęgowanie jest trudne. Zauważ jednak, że $9$ to $10-1$. Jak ta obserwacja upraszcza znalezienie reszty z dzielenia $9^{1000}$ przez $10$?",
+    "Gdy już znasz cyfrę jedności liczby $999^{1000}$, oznaczmy ją przez $j$. Twoje zadanie sprowadza się do znalezienia takiej cyfry $c$, że iloczyn $3 \\cdot c$ ma cyfrę jedności równą $j$."
   ],
   "skills_required": [
     "basic_operations",

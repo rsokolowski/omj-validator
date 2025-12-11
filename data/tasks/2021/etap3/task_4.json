@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Równanie ma postać $L=P$. Zastanów się, co się stanie, gdy jedna ze stron będzie równa zero. Kiedy iloczyn $(1+a)(1+b)(1+c)$ jest równy 0?",
-    "Rozważ teraz przypadek, gdy żadna ze stron równania nie jest zerem. Jak można wtedy przekształcić równanie, aby po jednej stronie została tylko liczba 1?",
-    "Równanie można zapisać jako $\\frac{1-a}{1+a} \\cdot \\frac{1-b}{1+b} \\cdot \\frac{1-c}{1+c} = 1$. Oznaczmy $x = \\frac{1-a}{1+a}$. Wyznacz $a$ w zależności od $x$. Jaką własność musi mieć $x$, aby $a$ było liczbą całkowitą?",
-    "Aby $a$ było liczbą całkowitą, wyrażenie $1+x$ musi być dzielnikiem liczby 2. Znajdź wszystkie możliwe wartości $a \\neq 0$ i odpowiadające im wartości $x, y, z$. Sprawdź, czy ich iloczyn może być równy 1."
+    "Równanie wygląda na skomplikowane z powodu iloczynów. Czy istnieje sposób, aby przekształcić je do prostszej postaci, na przykład bez nawiasów?",
+    "Po rozwinięciu obu stron równania, poszukaj wyrazów, które się uproszczą. Jaką znacznie prostszą postać przyjmuje to równanie?",
+    "Równanie można zapisać jako $a(1+bc) = -(b+c)$. Jaką zależność między $1+bc$ a $b+c$ to implikuje, skoro $a$ jest liczbą całkowitą?",
+    "Zbadaj, co się dzieje, gdy jedna ze zmiennych, np. $b$, przyjmuje wartość $1$ lub $-1$. Następnie rozważ, czy istnieją rozwiązania, w których $|b| \\ge 2$ i $|c| \\ge 2$, analizując warunek podzielności."
   ],
   "skills_required": [
     "algebraic_identities",

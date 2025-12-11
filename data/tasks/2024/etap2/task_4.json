@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zapisz równanie w postaci $\\frac{\\sqrt[3]{a}}{\\sqrt[3]{2025}} + \\frac{\\sqrt[3]{b}}{\\sqrt[3]{2025}} = 1$. Jak można inaczej zapisać składniki sumy po lewej stronie?",
-    "Niech $x = \\sqrt[3]{a/2025}$ i $y = \\sqrt[3]{b/2025}$. Mamy $x+y=1$. Aby $a=2025x^3$ i $b=2025y^3$ były liczbami całkowitymi, jakiego rodzaju liczbami (np. całkowitymi, wymiernymi) muszą być $x$ i $y$?",
-    "Jeśli $x$ jest liczbą wymierną, to $x=p/q$ dla pewnych względnie pierwszych liczb całkowitych $p, q$. Warunek, że $a = 2025(p/q)^3$ jest liczbą całkowitą, narzuca silne ograniczenie na mianownik $q$. Jakie?",
-    "Rozłóż 2025 na czynniki pierwsze. Wykorzystaj ten rozkład, aby znaleźć możliwe wartości dla mianownika $q$. Sprawdź, czy któraś z nich prowadzi do znalezienia dodatnich całkowitych $a$ i $b$."
+    "Liczba 2025 jest dość duża. Czy da się uprościć pierwiastek $\\sqrt[3]{2025}$? Spróbuj wyłączyć jak największą liczbę całkowitą przed znak pierwiastka, podobnie jak w $\\sqrt[3]{16} = 2\\sqrt[3]{2}$.",
+    "Równanie ma teraz postać $\\sqrt[3]{a} + \\sqrt[3]{b} = k\\sqrt[3]{m}$ dla pewnych liczb $k, m$. Naturalne wydaje się założenie, że $\\sqrt[3]{a}$ i $\\sqrt[3]{b}$ są także wielokrotnościami $\\sqrt[3]{m}$. Spróbuj zapisać $\\sqrt[3]{a} = x\\sqrt[3]{m}$ i $\\sqrt[3]{b} = y\\sqrt[3]{m}$.",
+    "Po podstawieniu otrzymujemy prostą zależność między $x$ i $y$. Zastanów się, jakiego rodzaju liczbami (np. wymiernymi, całkowitymi) muszą być $x$ i $y$, aby $a=x^3 m$ i $b=y^3 m$ były liczbami całkowitymi.",
+    "Zapisz $x=p/q$ i przeanalizuj warunek, aby $a=(p/q)^3 m$ było liczbą całkowitą. Rozkład $m$ na czynniki pierwsze narzuci bardzo silne ograniczenie na mianownik $q$. Znajdź wszystkie możliwe pary dodatnich liczb $(x,y)$."
   ],
   "prerequisites": [],
   "skills_required": [

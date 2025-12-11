@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Zadanie ma dwa kluczowe warunki: przekrój musi być pięciokątem, a objętości obu części muszą być równe. Zastanów się, co każdy z tych warunków mówi o płaszczyźnie tnącej.",
-    "Warunek równych objętości jest spełniony, gdy płaszczyzna cięcia przechodzi przez środek symetrii sześcianu. Gdzie znajduje się ten punkt?",
-    "Skup się na płaszczyźnie przechodzącej przez środek sześcianu. Rozważ dowolną ścianę i ścianę do niej przeciwległą. Czy taka płaszczyzna może przeciąć tylko jedną z nich, a drugiej nie?",
-    "Środek sześcianu jest jego środkiem symetrii. Jeśli płaszczyzna tnąca go zawiera, to jest ona figurą środkowosymetryczną. Co to oznacza dla liczby ścian, które taka płaszczyzna przecina?"
+    "Zadanie stawia dwa warunki: przekrój ma być pięciokątem, a powstałe bryły mają mieć równe objętości. Zastanów się, co warunek o równych objętościach mówi o położeniu płaszczyzny tnącej.",
+    "Płaszczyzna dzieląca sześcian na dwie równe części musi przechodzić przez jego środek symetrii. Pomyśl o konsekwencjach tego faktu dla ścian sześcianu.",
+    "Rozważ parę przeciwległych ścian sześcianu. Jeśli płaszczyzna przechodząca przez środek sześcianu przecina jedną z tych ścian, to czy musi przeciąć także drugą? Dlaczego?",
+    "Liczba boków wielokąta w przekroju jest równa liczbie przeciętych ścian. Skoro ściany są przecinane parami, to jaką własność musi mieć liczba boków przekroju? Czy pięciokąt ją spełnia?"
   ],
   "skills_required": [
     "spatial_3d",

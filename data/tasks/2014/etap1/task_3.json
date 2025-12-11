@@ -14,7 +14,7 @@
   "hints": [
     "Zadanie polega na znalezieniu minimum sumy $a+b^3$ pod warunkiem $ab=1$. Zauważ, że ten warunek pozwala wyrazić jedną zmienną za pomocą drugiej. Jak wtedy wygląda suma, którą masz zminimalizować?",
     "Do znalezienia minimum sumy dodatnich wyrażeń często przydaje się nierówność między średnią arytmetyczną a geometryczną (AM-GM). Kluczem jest taki dobór składników, aby ich iloczyn był stałą liczbą.",
-    "Twoje wyrażenie to $\frac{1}{b} + b^3$. Aby iloczyn składników w nierówności AM-GM był stały, potęgi $b$ muszą się skrócić. Zastanów się, jak rozbić jeden ze składników ($\frac{1}{b}$ lub $b^3$) na kilka równych części.",
+    "Twoje wyrażenie to $\\frac{1}{b} + b^3$. Aby iloczyn składników w nierówności AM-GM był stały, potęgi $b$ muszą się skrócić. Zastanów się, jak rozbić jeden ze składników ($\\frac{1}{b}$ lub $b^3$) na kilka równych części.",
     "Spróbuj zastosować nierówność AM-GM dla czterech składników. Trzy z nich powinny być równe i w sumie dawać jeden ze składników Twojego wyrażenia. Który składnik należy rozbić na trzy części, aby iloczyn całej czwórki był stały?"
   ],
   "skills_required": [

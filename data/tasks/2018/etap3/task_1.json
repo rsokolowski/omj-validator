@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Równość podana w zadaniu może zachodzić na dwa sposoby, w zależności od tego, który ułamek jest większy. Zapisz oba przypadki w postaci równań.",
-    "W każdym z równań przenieś wszystko na jedną stronę i sprowadź do wspólnego mianownika. Uprość licznik, aby otrzymać prostą zależność między $a$ i $b$.",
-    "Otrzymane zależności to $b-a = b(b-1)$ oraz $a-b = b(b-1)$. Przekształć je tak, aby wyznaczyć $a$ w zależności od $b$. Czy w obu przypadkach warunek $a>1$ jest spełniony?",
-    "W jedynym możliwym przypadku otrzymałeś zależność $a=b^2$. Podstaw to wyrażenie do ułamków $\frac{a}{b}$ i $\frac{a-1}{b-1}$ i wykaż, że są one liczbami całkowitymi."
+    "Warunek podany w zadaniu można zapisać jako dwa różne równania, w zależności od tego, który z ułamków jest większy. Zapisz oba te przypadki.",
+    "Przekształć każde z dwóch równań tak, aby pozbyć się ułamków. Uprość je, aby znaleźć prostą zależność wiążącą $a$ i $b$.",
+    "W każdym z przypadków wyraź $a$ w zależności od $b$. Pamiętając, że z założenia $b>1$, sprawdź, czy warunek $a>1$ może być spełniony.",
+    "Powinieneś zauważyć, że tylko jeden z przypadków jest możliwy. Podstaw znalezioną w tym przypadku zależność do ułamków $\\frac{a}{b}$ i $\\frac{a-1}{b-1}$ i wykaż, że ich wartości są liczbami całkowitymi."
   ],
   "skills_required": [
     "algebraic_identities",

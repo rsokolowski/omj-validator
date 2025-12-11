@@ -14,9 +14,9 @@
   ],
   "hints": [
     "Zauważ, że każdy zawodnik wygrał inną liczbę meczów. Ile jest zawodników i jakie wartości mogą przyjmować liczby wygranych meczów? Czy wszystkie te wartości muszą wystąpić?",
-    "Pomyśl o całkowitej liczbie meczów rozegranych w turnieju. Można ją obliczyć na dwa sposoby: sumując wygrane wszystkich zawodników lub analizując, ile meczów rozegrał każdy z nich.",
-    "Jaka jest suma wszystkich wygranych w turnieju? Oznacz przez $m_i$ liczbę meczów gracza $i$. Jaki jest związek między sumą wszystkich $m_i$ a całkowitą liczbą meczów?",
-    "Wiesz, że suma meczów rozegranych przez wszystkich graczy wynosi 240. Jaka jest maksymalna liczba meczów, jaką mógł rozegrać jeden zawodnik? Co z tego wynika?"
+    "Pomyśl o całkowitej liczbie meczów w turnieju. Można ją obliczyć, sumując wygrane wszystkich zawodników. Zastanów się też nad sumą meczów rozegranych przez każdego z graczy.",
+    "Jaki jest związek między sumą wygranych wszystkich zawodników a sumą meczów rozegranych przez nich? Oblicz tę drugą sumę, korzystając z informacji z poprzedniej wskazówki.",
+    "Porównaj obliczoną sumę meczów z jej największą możliwą wartością, pamiętając, że każdy zawodnik mógł rozegrać co najwyżej 15 meczów. Co z tego wynika dla każdego z zawodników?"
   ],
   "skills_required": [
     "counting_techniques",

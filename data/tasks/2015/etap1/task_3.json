@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Liczba, którą badamy, ma być pierwsza, oznaczmy ją $p$. Oznacza to, że $n^4 + 4 = 17p$. Zastanów się, czy wyrażenie $n^4 + 4$ da się zapisać w postaci iloczynu, co pomogłoby w analizie jego podzielności.",
-    "Aby rozłożyć $n^4 + 4$, spróbuj uzupełnić to wyrażenie do pełnego kwadratu. Dodając i odejmując $4n^2$, możesz przekształcić je tak, aby skorzystać ze wzoru na różnicę kwadratów $a^2 - b^2$.",
-    "Stosując tę metodę, otrzymujemy rozkład $n^4 + 4 = (n^2 - 2n + 2)(n^2 + 2n + 2)$. Mamy więc $(n^2 - 2n + 2)(n^2 + 2n + 2) = 17p$. Co to oznacza dla wartości tych dwóch czynników w nawiasach?",
-    "Jeden z czynników musi być równy 17, a drugi $p$ (lub odwrotnie), ponieważ $p$ jest liczbą pierwszą. Rozwiąż odpowiednie równania kwadratowe dla $n$, pamiętając, że $n$ musi być liczbą naturalną."
+    "Niech $p$ będzie szukaną liczbą pierwszą. Z treści zadania wynika równość $n^4+4 = 17p$. Kluczem do rozwiązania jest przedstawienie wyrażenia $n^4+4$ w postaci iloczynu.",
+    "Spróbuj uzupełnić wyrażenie $n^4+4$ do kwadratu sumy, dodając i odejmując $4n^2$. Pozwoli ci to zastosować wzór na różnicę kwadratów $a^2-b^2 = (a-b)(a+b)$.",
+    "Po rozkładzie na czynniki otrzymujemy równanie $(n^2 - 2n + 2)(n^2 + 2n + 2) = 17p$. Porównaj te dwa czynniki dla $n \\ge 1$. Który z nich jest zawsze mniejszy?",
+    "Mniejszy z czynników musi być dzielnikiem liczby $17p$. Rozważ przypadki, gdy jest on równy 1 lub 17. Zastanów się, czy istnieją inne możliwości, pamiętając, że $p$ jest liczbą pierwszą."
   ],
   "skills_required": [
     "algebraic_identities",

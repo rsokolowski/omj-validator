@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Teza $P(ABD) = P(ABCE)$ dotyczy równości pól. Wyraź pole czworokąta $ABCE$ jako sumę pól dwóch trójkątów, aby uprościć tę zależność.",
-    "Warunki $AC=AD$ i $BD=BE$ oznaczają, że punkty $A$ i $B$ leżą na symetralnych odpowiednich odcinków. Jaka jest kluczowa własność geometryczna symetralnej?",
-    "Połącz fakt, że $A$ i $B$ leżą na symetralnych, z warunkiem $\\angle CDE=90^\\circ$. Jakie proste w tej konfiguracji muszą być równoległe? Jak można wykorzystać istnienie prostych równoległych do porównywania pól trójkątów?",
-    "Wykorzystaj równoległości z poprzedniej wskazówki, aby powiązać ze sobą pola trójkątów $ADE$, $BCD$ i $CDE$. Następnie użyj związku między polami trójkątów składowych czworokąta $ABCD$, aby zakończyć dowód."
+    "Teza dotyczy równości pól. Zapisz pola $P(ABD)$ i $P(ABCE)$ za pomocą pól mniejszych trójkątów, aby znaleźć prostszą, równoważną tezę do udowodnienia.",
+    "Warunki $AC=AD$ i $BD=BE$ oznaczają, że punkty $A$ i $B$ leżą na symetralnych odcinków $CD$ i $DE$. Jaka jest kluczowa własność geometryczna symetralnej?",
+    "Połącz fakt, że symetralne są prostopadłe do odcinków, z warunkiem $\\angle CDE=90^\\circ$. Jakie proste w tej konfiguracji muszą być równoległe? Jak można wykorzystać równoległość do obliczania pól trójkątów?",
+    "Oblicz pola trójkątów $ADE$ i $BCD$, wykorzystując odkryte równoległości. Następnie wstaw uzyskane wyniki do uproszczonej tezy z pierwszej wskazówki, aby zakończyć dowód."
   ],
   "prerequisites": [],
   "skills_required": [

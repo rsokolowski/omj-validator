@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie figurę. Przeanalizuj możliwe położenia punktu E na prostej BC. Wykaż, że może on leżeć tylko na półprostej BC za punktem C.",
-    "Rozważ konstrukcję pomocniczą. Na odcinku BC zaznacz taki punkt P, że $CP=CA$. Jaki szczególny rodzaj trójkąta tworzą punkty A, C i P? Co wiesz o jego bokach i kątach?",
-    "Skup się na trójkątach $\\triangle APB$ oraz $\\triangle ACE$. Oblicz miary ich kątów wewnętrznych i wykaż, że są przystające.",
-    "Z przystawania trójkątów wynika równość boków $PB=CE$. Wykorzystaj tę informację oraz dane z zadania, aby przeanalizować trójkąt $PCD$ i znaleźć związek między odcinkami $PD$ i $BD$. To pozwoli obliczyć kąt $\\angle CDE$."
+    "Narysuj starannie figurę. Przeanalizuj możliwe położenia punktu E na prostej BC i wykaż, że punkt C musi leżeć między punktami B i E.",
+    "Zauważ, że w trójkącie $\\triangle CDE$ kąt $\\angle DCE=120°$. Teza, że $\\angle DEC=30°$, jest więc równoważna temu, że trójkąt ten jest równoramienny. Jaką równość odcinków należy udowodnić?",
+    "Aby udowodnić równość z poprzedniej wskazówki, wprowadź punkt pomocniczy P na odcinku BC, taki że $CP=CA$. Wykaż, że trójkąty $\\triangle APB$ i $\\triangle CAE$ są przystające.",
+    "Z przystawania wynika, że $CE=PB$. Zadanie sprowadza się więc do udowodnienia, że $CD=PB$. Porównaj trójkąty $\\triangle BCD$ i $\\triangle APB$ – mają one parę równych boków ($BD=AB$) i parę równych kątów."
   ],
   "skills_required": [
     "angle_chasing",

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie figurę. Teza, którą masz udowodnić ($AC=BC$), oznacza, że trójkąt $ABC$ jest równoramienny.",
-    "W zadaniach ze środkami odcinków często pomaga symetria. Odbij punkt $A$ względem punktu $E$, uzyskując punkt $F$. Jaki czworokąt tworzą punkty $A, D, F, C$?",
-    "Wykorzystaj własności równoległoboku $ADFC$ oraz fakt, że $D$ jest środkiem $AB$. Pokaż, że czworokąt $DBCF$ jest trapezem. Aby udowodnić tezę, wystarczy pokazać, że jest to trapez równoramienny.",
-    "Użyj równoległości boków w $ADFC$, aby przenieść kąt $\\angle CAE$ do wierzchołka $F$. Teraz, mając dwa równe kąty z treści zadania, udowodnij, że trójkąty $\\triangle ADC$ i $\\triangle FCB$ są przystające."
+    "Narysuj starannie figurę i zaznacz na niej wszystkie środki odcinków. Zastanów się, jak można wykorzystać fakt, że punkty $D$ i $E$ są środkami.",
+    "W zadaniach z środkami odcinków często pomocna jest symetria środkowa. Rozważ punkt $F$ będący obrazem punktu $A$ w symetrii względem punktu $E$. Jaki czworokąt powstaje z punktów $A, C, F, D$?",
+    "Wykorzystaj własności powstałego równoległoboku, aby przenieść kąt $\\angle CAE$. Następnie pokaż, że czworokąt $BCFD$ również jest równoległobokiem, co pozwoli przenieść kąt $\\angle BCD$.",
+    "Pokaż, że kąty $\\angle DFC$ i $\\angle FDC$ są równe, korzystając z kątów naprzemianległych. Co to mówi o trójkącie $\\triangle CDF$? Połącz to z własnością równoległoboku $ACFD$, aby dojść do wniosku."
   ],
   "skills_required": [
     "angle_chasing",

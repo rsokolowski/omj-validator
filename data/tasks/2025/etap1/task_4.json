@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Rozwiń lewą stronę równania, wymnażając nawiasy. Następnie uprość otrzymane wyrażenie, redukując wyrazy podobne po obu stronach.",
-    "Doprowadź uproszczone równanie do postaci, w której po jednej stronie jest zero. Następnie spróbuj zapisać drugą stronę w postaci iloczynu, wyłączając wspólne czynniki.",
-    "Zauważ, że oba składniki w uproszczonym równaniu, $ab^3$ i $a^3b^2$, są podzielne przez $a$ oraz przez $b^2$. Wyłącz wspólny czynnik $ab^2$ przed nawias.",
-    "Otrzymasz równanie $ab^2(a^2+b)=0$. Z treści zadania wiesz, że $a \\neq 0$ i $b \\neq 0$. Który z czynników musi być równy zero? Wyraź $b$ za pomocą $a$ i określ jego znak."
+    "Wymnóż nawiasy po lewej stronie równania. Następnie uprość równanie, redukując te same wyrażenia po obu stronach.",
+    "Przenieś wszystkie wyrazy na jedną stronę, aby po drugiej zostało zero. Spróbuj zapisać otrzymane wyrażenie w postaci iloczynu.",
+    "W uproszczonym równaniu oba składniki zawierają potęgi zmiennych $a$ i $b$. Jaki jest największy wspólny czynnik, który można wyłączyć przed nawias?",
+    "Otrzymane równanie ma postać iloczynu równego zero. Skoro $a \\neq 0$ i $b \\neq 0$, to który z czynników musi być zerem? Wyznacz $b$ i zbadaj jego znak."
   ],
   "skills_required": [
     "algebraic_identities",

@@ -23,9 +23,9 @@
     "divisibility_arguments"
   ],
   "hints": [
-    "Zastanów się, jaki kolor musi mieć liczba 1. Czy może być sumą dwóch różnych liczb niebieskich? Co to oznacza dla dalszej analizy?",
-    "Rozważ najmniejsze i największe liczby w obu kolorach. Jaka jest relacja między największą liczbą niebieską a największą czerwoną? Która z nich musi być równa $n$?",
-    "Największa liczba niebieska, oznaczmy ją $n_k$, musi być różnicą dwóch liczb czerwonych. Jaką największą wartość może przyjąć $n_k$ w zależności od $n$ i najmniejszej liczby czerwonej?",
-    "Wykaż, że największa liczba niebieska jest mniejsza od $n-2$. Co z tego wynika dla kolorów liczb $n, n-1, n-2$? Wykorzystaj to, by znaleźć dolne ograniczenie na $n$."
+    "Zastanów się, jaki kolor musi mieć liczba 1. Czy może być sumą dwóch różnych dodatnich liczb całkowitych?",
+    "Rozważ największe liczby w obu kolorach. Która z nich musi być równa $n$? Jaka nierówność łączy największą liczbę niebieską z najmniejszą i największą czerwoną?",
+    "Jaki kolor musi mieć liczba 2? Wykorzystaj tę obserwację, aby znaleźć możliwie najlepsze dolne ograniczenie na najmniejszą liczbę czerwoną.",
+    "Połącz nierówność z drugiej wskazówki z oszacowaniem na najmniejszą liczbę czerwoną. Co możesz wywnioskować o kolorach liczb $n, n-1$ oraz $n-2$?"
   ]
 }

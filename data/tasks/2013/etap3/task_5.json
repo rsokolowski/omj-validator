@@ -13,10 +13,10 @@
     "geometria"
   ],
   "hints": [
-    "Wierzchołki trójkątnego przekroju leżą na trzech krawędziach wielościanu, a jego boki – na trzech ścianach. Co to mówi o tym, jak te trzy krawędzie muszą być ułożone względem siebie?",
-    "Te trzy krawędzie muszą wychodzić z jednego wierzchołka. Zastanów się, dlaczego nie mogą one tworzyć trójkątnej ściany wielościanu.",
-    "Zgodnie z treścią zadania, z każdego wierzchołka wychodzą co najmniej cztery krawędzie. Rozważmy więc czwartą krawędź wychodzącą z tego samego wierzchołka.",
-    "Z powodu wypukłości wielościanu, ta czwarta krawędź musi znajdować się 'pomiędzy' pozostałymi. Czy płaszczyzna, która przecina trzy krawędzie, musi przeciąć również tę czwartą?"
+    "Pytanie brzmi 'Czy istnieje...'. Oznacza to, że wystarczy znaleźć jeden przykład wielościanu spełniającego warunki, aby odpowiedzieć twierdząco. Zastanówmy się, jak mógłby wyglądać.",
+    "Jak w najprostszy sposób można uzyskać przekrój będący trójkątem? Rozważmy sytuację, w której płaszczyzna tnąca zawiera jedną ze ścian wielościanu. Co to mówi o kształcie tej ściany?",
+    "Zatem szukamy wielościanu wypukłego, który ma trójkątne ściany i w każdym wierzchołku spotykają się co najmniej cztery krawędzie. Czy znasz taką bryłę?",
+    "Spróbuj zbudować taki wielościan. Pomyśl o dwóch identycznych ostrosłupach o podstawie kwadratowej. Co otrzymasz, jeśli skleisz je podstawami? Sprawdź, czy otrzymana bryła spełnia wszystkie warunki zadania."
   ],
   "skills_required": [
     "polyhedra",

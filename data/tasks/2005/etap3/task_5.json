@@ -10,10 +10,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zapisz warunki zadania używając kongruencji. Co z Małego Twierdzenia Fermata wiesz o rzędzie $a$ modulo $p$? Jakie są możliwe wartości tego rzędu, skoro $q$ jest liczbą pierwszą?",
+    "Zapisz warunki zadania używając kongruencji. Rząd $a$ modulo $p$ to najmniejsza liczba całkowita dodatnia $k$ taka, że $a^k \\equiv 1 \\pmod p$. Co wynika z warunku $a^q \\equiv 1 \\pmod p$ na temat rzędu $a$?",
     "Rozważ cztery przypadki w zależności od tego, czy rząd $a$ modulo $p$ jest równy 1 czy $q$, oraz czy rząd $b$ modulo $q$ jest równy 1 czy $p$.",
-    "Jeden z czterech przypadków prowadzi do natychmiastowej sprzeczności. W pozostałych, rozważ osobno sytuacje, gdy $a=1$ lub $b=1$ oraz gdy $a>1$ i $b>1$. Kiedy dowód jest trywialny?",
-    "Skup się na przypadku, gdy np. $a>1$ ma rząd $q$ modulo $p$, a $b=1$. Nierówność do udowodnienia to $\\frac{a}{p} + \\frac{1}{q} > 1$. Spróbuj znaleźć najmniejsze możliwe wartości $a, p, q$ spełniające warunki i sprawdź, czy nierówność zawsze zachodzi."
+    "Pokaż, że jeden z tych czterech przypadków jest niemożliwy. W pozostałych przypadkach kluczem do dowodu jest znalezienie jak najlepszego oszacowania $a$ i $b$ od dołu.",
+    "Jeśli rząd $a$ modulo $p$ to 1, to $a \\equiv 1 \\pmod p$. Jakie jest najmniejsze $a>1$ o tej własności? A jeśli rząd jest większy od 1, jaka jest najmniejsza możliwa wartość $a$? Zastosuj te oszacowania w każdym przypadku."
   ],
   "skills_required": [
     "modular_arithmetic",

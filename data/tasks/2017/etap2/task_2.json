@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Pola czworokątów $AKOC$ i $BKOC$ można przedstawić jako sumy lub różnice pól prostszych figur, na przykład trójkątów. Zauważ, że oba czworokąty zawierają wspólny trójkąt $\\triangle KOC$.",
-    "Równość pól czworokątów sprowadza się do porównania pól trójkątów $\\triangle AKO$ i $\\triangle BKO$. Jaka jest podstawowa własność środka okręgu opisanego $O$ związana z bokiem $AB$?",
-    "Niech $M$ będzie środkiem boku $AB$. Punkt $O$ leży na symetralnej $AB$, więc jego rzutem na prostą $AB$ jest właśnie punkt $M$. Wyraź pole $\\triangle AKO$ i $\\triangle BKO$ za pomocą pól trójkątów opartych na odcinkach $AM$, $BM$ i $KM$.",
-    "Pola trójkątów $\\triangle AMO$ i $\\triangle BMO$ są równe, ponieważ mają równe podstawy ($AM=BM$) i wspólną wysokość z wierzchołka $O$. Wykorzystaj tę równość, aby pokazać, że pola $\\triangle AKO$ i $\\triangle BKO$ również muszą być równe."
+    "Aby porównać pola figur, możemy spróbować je obliczyć. Czasem najprostszym sposobem jest umieszczenie figury w układzie współrzędnych. Kluczem jest sprytny wybór położenia osi.",
+    "Niech $M$ będzie środkiem boku $AB$. Wybierzmy układ współrzędnych tak, aby punkt $M$ był jego początkiem $(0,0)$, a prosta $AB$ była osią OX. Jakie współrzędne będą miały punkty $A$ i $B$ oraz środek okręgu opisanego $O$?",
+    "W przyjętym układzie współrzędnych $A=(-d, 0)$, $B=(d, 0)$, a $O=(0, y_O)$ dla pewnych liczb $d$ i $y_O$. Punkt $K$ jest rzutem prostopadłym $C$ na oś OX. Jeśli $C=(x_C, y_C)$, to jakie współrzędne ma punkt $K$?",
+    "Mając współrzędne wierzchołków $A, K, O, C$ oraz $B, K, O, C$, oblicz pola obu czworokątów. Możesz użyć wzoru na pole wielokąta ze współrzędnych (np. wzoru szewca) i porównać wyniki."
   ],
   "skills_required": [
     "triangle_centers",

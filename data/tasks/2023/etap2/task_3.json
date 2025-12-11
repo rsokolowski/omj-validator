@@ -13,9 +13,9 @@
   ],
   "hints": [
     "Narysuj trapez i zaznacz wszystkie podane równości kątów. Co warunek $\\sphericalangle ABC = \\sphericalangle ACB$ mówi o bokach trójkąta $ABC$?",
-    "Wykorzystaj pozostałe równości kątów. Jaką specjalną własność ma trapez $ABCD$? Jaki wniosek można wyciągnąć na temat trójkąta $BPC$?",
-    "Masz już kilka par równych odcinków. Zestaw je ze sobą. Czy potrafisz znaleźć dwa odcinki równej długości, z których jeden wychodzi z wierzchołka $A$, a drugi z wierzchołka $B$?",
-    "Spróbuj udowodnić, że trójkąty $\triangle APB$ oraz $\triangle CDA$ są przystające. Sprawdź, które boki i kąty w tych trójkątach są sobie równe."
+    "Wykorzystaj pozostałe równości kątów, aby znaleźć inne pary równych boków. Zwróć uwagę na własności trapezu $ABCD$ oraz trójkąta $BPC$.",
+    "Celem jest wykazanie $AP=CD$. Poszukaj trójkątów, w których boki te występują. Porównaj je, wykorzystując znalezione wcześniej równości boków.",
+    "Wykaż, że trójkąty $\\triangle APB$ i $\\triangle CDA$ są przystające. Znasz już dwie pary równych boków w tych trójkątach. Pozostaje porównać kąty zawarte między nimi."
   ],
   "skills_required": [
     "angle_chasing",

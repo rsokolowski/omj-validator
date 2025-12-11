@@ -12,10 +12,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Zastanów się, ile różnych wartości może przyjąć liczba królewiczów, z którymi zatańczyła dana królewna. Jakie są możliwe wartości minimalna i maksymalna?",
-    "To zadanie można rozwiązać za pomocą zasady szufladkowej (Dirichleta). Spróbuj określić, ile jest królewien (obiektów) i ile jest możliwych różnych wyników (szufladek).",
-    "Zwróć uwagę na warunek, że każdy królewicz zatańczył z tą samą liczbą królewien. Co to oznacza dla królewny, która zatańczyła z wszystkimi królewiczami, i tej, która nie zatańczyła z żadnym?",
-    "Pokaż, że nie może być jednocześnie królewny, która tańczyła z 0 królewiczami, i królewny, która tańczyła ze wszystkimi 102. Zatem możliwych wartości jest co najwyżej 102, a królewien jest 103."
+    "Zastanów się, ile różnych wartości może przyjąć liczba królewiczów, z którymi mogła zatańczyć pojedyncza królewna. Jaki jest zakres tych wartości?",
+    "Policz łączną liczbę wszystkich tańców (par królewicz-królewna) na dwa sposoby: raz sumując tańce z perspektywy wszystkich królewiczów, a raz z perspektywy wszystkich królewien.",
+    "Załóż dla dowodu nie wprost, że każda królewna zatańczyła z inną liczbą królewiczów. Jaki zbiór liczb tworzyłyby wtedy liczby partnerów wszystkich 103 królewien?",
+    "Oznacz przez $k$ stałą liczbę królewien, z którą zatańczył każdy królewicz. Zapisz równanie wynikające z podwójnego zliczenia i sprawdź, czy $k$ może być liczbą całkowitą."
   ],
   "skills_required": [
     "pigeonhole",

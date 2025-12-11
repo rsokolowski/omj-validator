@@ -14,8 +14,8 @@
   "hints": [
     "Zadanie pyta, czy *dla każdego* czworościanu można znaleźć taki kwadrat. Jeśli znajdziesz choć jeden czworościan, na którym jest to niemożliwe, jaka będzie odpowiedź?",
     "Zamiast rozważać idealnie symetryczny czworościan, pomyśl o przypadku 'ekstremalnym'. Co by było, gdyby jeden z wierzchołków czworościanu był bardzo blisko płaszczyzny jego podstawy?",
-    "W takim 'płaskim' czworościanie jedna ściana (podstawa) jest duża, a trzy pozostałe są 'stromymi', wąskimi trójkątami. Zastanów się, jak rzut wierzchołków kwadratu na płaszczyznę podstawy ogranicza ich możliwe położenie.",
-    "Jeden wierzchołek kwadratu leży na podstawie, a trzy pozostałe na stromych ścianach bocznych. Rzuty tych trzech punktów na podstawę muszą leżeć blisko jej środka. Czy cztery punkty, z których trzy są w małym obszarze, a czwarty może być daleko, mogą tworzyć kwadrat?"
+    "W takim 'płaskim' czworościanie trzy wierzchołki kwadratu muszą leżeć na stromych ścianach bocznych. Zastanów się nad rzutem kwadratu na płaszczyznę podstawy. Gdzie znajdą się rzuty tych trzech wierzchołków?",
+    "Rzuty trzech wierzchołków muszą leżeć blisko krawędzi podstawy. Aby znaleźć sprzeczność, rozważ podstawę, która też jest 'ekstremalna' – np. jest bardzo długim i wąskim trójkątem. Czy trzy punkty leżące blisko jego boków mogą być wierzchołkami (niemal) kwadratu?"
   ],
   "skills_required": [
     "spatial_3d",

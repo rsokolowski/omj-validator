@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Przypomnij sobie wzór Eulera dla wielościanów ($W-K+S=2$) oraz fakt, że w każdym wierzchołku wielościanu wypukłego spotykają się co najmniej 3 krawędzie.",
-    "Spróbuj przeprowadzić dowód nie wprost. Załóż, że taki wielościan istnieje i pokaż, że prowadzi to do sprzeczności z pewną ogólną własnością wszystkich wielościanów wypukłych.",
-    "Wykaż, że w każdym wielościanie wypukłym średnia liczba boków przypadająca na jedną ścianę jest mniejsza od 6. Wykorzystaj wzór Eulera i nierówność łączącą liczbę wierzchołków i krawędzi.",
-    "Korzystając z warunku zadania, wykaż, że średnia liczba boków ściany w takim wielościanie musiałaby być nie mniejsza niż 6. Zestawienie tego faktu z poprzednią wskazówką da szukaną sprzeczność."
+    "Przypomnij sobie wzór Eulera dla wielościanów ($W-K+S=2$) oraz nierówność wynikającą z faktu, że w każdym wierzchołku spotykają się co najmniej 3 krawędzie ($3W \\le 2K$).",
+    "Załóż, że taki wielościan istnieje. Użyj wzoru Eulera i nierówności $3W \\le 2K$, aby uzyskać nierówność, która zależy tylko od liczby ścian o danej liczbie boków ($S_n$).",
+    "Pokaż, że dla każdego wielościanu wypukłego prawdziwa jest nierówność $\\sum (6-n)S_n \\ge 12$. Następnie, korzystając z warunku zadania, znajdź drugą nierówność wiążącą $S_7$ z pozostałymi $S_n$.",
+    "Warunek zadania oznacza, że żadne dwie ściany niebędące siedmiokątami nie mogą mieć wspólnej krawędzi. Wywnioskuj stąd, że $7S_7 \\ge \\sum_{n \\ne 7} nS_n$. Połącz obie nierówności, aby uzyskać sprzeczność."
   ],
   "skills_required": [
     "polyhedra",

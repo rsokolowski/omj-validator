@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek. Skoro M jest środkiem odcinków AC i PQ, to jaką szczególną własność ma czworokąt APCQ? Jakie równości boków i które boki są do siebie równoległe?",
-    "Aby wykazać równość odcinków, często warto poszukać przystających trójkątów. Spróbuj znaleźć parę trójkątów, z których jeden zawiera bok BQ, a drugi bok o znanej długości.",
+    "Narysuj dokładny rysunek. Skoro $M$ jest środkiem odcinków $AC$ i $PQ$, to jaką szczególną własność ma czworokąt $APCQ$? Jakie równości boków i które boki są do siebie równoległe?",
+    "Aby wykazać równość odcinków, często warto poszukać przystających trójkątów. Spróbuj znaleźć parę trójkątów, z których jeden zawiera bok $BQ$.",
     "Rozważ trójkąty $\\triangle ABP$ i $\\triangle CBQ$. Wykorzystaj informacje z pierwszej wskazówki, aby udowodnić, że te trójkąty są przystające z cechy bok-kąt-bok.",
-    "Z przystawania $\\triangle ABP$ i $\\triangle CBQ$ wynika nie tylko równość boków $BP=BQ$, ale też równość pewnych kątów. Wykorzystaj tę drugą informację, aby obliczyć miarę kąta $\\angle PBQ$ i zakończyć dowód."
+    "Z przystawania trójkątów wynikają równości odpowiednich boków i kątów. Wykorzystaj obie te informacje, aby zbadać własności trójkąta $\\triangle PBQ$ i zakończyć dowód."
   ],
   "skills_required": [
     "circle_theorems",

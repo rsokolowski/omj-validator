@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Co to znaczy, że liczby mają jednakowe cyfry jedności? Jaką własność musi mieć ich różnica? Skup się na dwóch pierwszych różnych liczbach z ciągu: $n$ i $n^5$.",
-    "Aby udowodnić, że różnica $n^5-n$ jest podzielna przez 10, wystarczy pokazać, że jest podzielna przez 2 i przez 5. Dlaczego to wystarczy?",
-    "Podzielność przez 2 jest prosta do uzasadnienia. Aby pokazać podzielność przez 5, spróbuj algebraicznie przekształcić wyrażenie $n^5-n$, rozkładając je na czynniki.",
-    "Wyrażenie $n^5-n$ jest równe iloczynowi $(n-1)n(n+1)(n^2+1)$. Rozważ pięć możliwych reszt z dzielenia liczby $n$ przez 5 i w każdym przypadku znajdź czynnik podzielny przez 5."
+    "Zauważ, że wykładniki potęg $1, 5, 9, 13, \\dots$ tworzą ciąg arytmetyczny. Aby wykazać, że wszystkie liczby w zadaniu mają tę samą cyfrę jedności, wystarczy pokazać, że każda z nich ma taką samą cyfrę jedności jak $n$.",
+    "Problem sprowadza się do wykazania, że różnica $n^{4k-3} - n$ jest podzielna przez 10 dla każdej dodatniej liczby całkowitej $k$. Spróbuj najpierw udowodnić to dla $k=2$, czyli dla liczby $n^5$.",
+    "Aby udowodnić, że $n^5-n$ jest podzielne przez 10, pokaż podzielność przez 2 i 5. Kluczowy jest rozkład na czynniki $n^5-n = n(n^4-1)$. Zastanów się, jak ten sam czynnik pojawia się w ogólnym wyrażeniu $n^{4k-3}-n$.",
+    "Wykaż, że $n(n^4-1)$ jest podzielne przez 10. Następnie zauważ, że $n^{4k-3}-n = n((n^4)^{k-1}-1)$. Wykorzystaj fakt, że wyrażenie $a^m-1$ jest zawsze podzielne przez $a-1$, aby zakończyć dowód."
   ],
   "skills_required": [
     "modular_arithmetic"

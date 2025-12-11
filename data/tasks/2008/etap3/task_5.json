@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zapisz znaną zależność między liczbą krawędzi wielościanu ($K$) a sumą liczby boków jego wszystkich ścian ($s_i$).",
-    "Każda ściana ma parzystą liczbę boków, więc $s_i = 2k_i$ dla pewnej liczby całkowitej $k_i$. Co wynika z poprzedniej zależności dla sumy liczb $k_i$?",
-    "Suma liczb całkowitych jest nieparzysta wtedy i tylko wtedy, gdy zawiera nieparzystą liczbę nieparzystych składników. Co to mówi o liczbie ścian, dla których $k_i = s_i/2$ jest nieparzyste?",
-    "Wykazałeś, że musi istnieć nieparzysta liczba ścian, których liczba boków przy dzieleniu przez 4 daje resztę 2. Taki wniosek jest sprzeczny z pewną ogólną własnością wszystkich wielościanów wypukłych. Spróbuj powiązać go ze wzorem Eulera."
+    "Rozważ graf dualny do grafu krawędzi naszego wielościanu. Wierzchołki w tym grafie odpowiadają ścianom, a krawędzie łączą wierzchołki odpowiadające sąsiednim ścianom. Jakie własności ma ten nowy graf?",
+    "Każda ściana oryginalnego wielościanu ma parzystą liczbę boków. Co to oznacza dla stopni wierzchołków w grafie dualnym? Grafy, w których każdy wierzchołek ma parzysty stopień, nazywamy eulerowskimi.",
+    "Ściany grafu eulerowskiego można pokolorować dwoma kolorami (jak szachownicę) tak, że żadne dwie ściany o wspólnym boku nie mają tego samego koloru. Zrób to dla naszego grafu dualnego.",
+    "Policz krawędzie grafu dualnego ($K$), sumując boki ścian jednego koloru. Co ta suma mówi o liczbie ścian (w grafie dualnym) o nieparzystej liczbie boków? Pamiętaj, czemu odpowiadają ściany grafu dualnego."
   ],
   "skills_required": [
     "double_counting",

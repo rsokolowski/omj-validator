@@ -13,10 +13,10 @@
     "geometria"
   ],
   "hints": [
-    "Aby cztery wierzchołki tworzyły trapez, dwa łączące je odcinki muszą być równoległe. Oznacz wierzchołki 17-kąta liczbami od 0 do 16. Kiedy dwa odcinki w wielokącie foremnym są równoległe?",
-    "Każdy odcinek łączący dwa wierzchołki ma określony 'kierunek'. Policz, ile odcinków można utworzyć z 10 wierzchołków, a następnie spróbuj policzyć, ile jest możliwych kierunków. Zastosuj zasadę szufladkową.",
-    "Dwa odcinki, łączące wierzchołki $(i, j)$ oraz $(k, l)$, są równoległe, jeśli suma ich indeksów jest taka sama (modulo 17), czyli $i+j \\equiv k+l \\pmod{17}$. Ile jest możliwych wartości dla takiej sumy?",
-    "Z 10 wierzchołków można utworzyć $\\binom{10}{2}=45$ odcinków. Każdemu z nich przyporządkuj sumę indeksów jego końców (modulo 17). Zastosuj zasadę szufladkową. Co się stanie, gdy dwa odcinki mają tę samą sumę?"
+    "Aby wykazać istnienie trapezu, musisz znaleźć dwie równoległe cięciwy o różnych wierzchołkach. Oznaczmy wierzchołki 17-kąta liczbami $0, 1, \\dots, 16$. Jaki warunek muszą spełniać indeksy wierzchołków dwóch równoległych cięciw?",
+    "Policz, ile cięciw można utworzyć, wybierając 2 wierzchołki spośród 10. Potraktuj te cięciwy jak 'gołębie', a ich 'kierunki' jako 'klatki'. Ile jest możliwych kierunków?",
+    "Dwie cięciwy w wielokącie foremnym są równoległe, gdy ich osie symetrii się pokrywają. Zastanów się, jak oś symetrii cięciwy łączącej wierzchołki $i$ oraz $j$ zależy od sumy $i+j$.",
+    "Każdej z $\\binom{10}{2}$ cięciw przypisz sumę jej indeksów (modulo 17). Zastosuj Zasadę Szufladkową. Ile co najmniej cięciw musi mieć tę samą sumę? Wykaż, że wśród nich znajdziesz dwie o rozłącznych zbiorach wierzchołków."
   ],
   "skills_required": [
     "pigeonhole",

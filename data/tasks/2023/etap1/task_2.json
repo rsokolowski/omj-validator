@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zaznacz na rysunku wszystkie podane równe odcinki. Wskaż wszystkie trójkąty równoramienne, które dzięki temu powstały. Zauważ, że punkt $M$ jest środkiem odcinka $XY$.",
-    "Zamiast od razu wprowadzać wiele zmiennych dla kątów, poszukaj głębszej własności geometrycznej. Co oznacza fakt, że punkt $M$ jest równo odległy od punktów $X$, $C$ oraz $Y$?",
-    "Punkt $M$ jest środkiem okręgu przechodzącego przez punkty $X$, $C$ i $Y$. Co możesz powiedzieć o kącie $\\angle XCY$, wiedząc, że środek tego okręgu leży na boku $XY$?",
-    "Wyznacz miarę kąta $\\angle ACB$. Następnie oznacz kąty przy podstawach w trójkątach $AXM$ i $BYM$ jako $\\alpha$ i $\\beta$. Znajdź sumę $\\alpha+\\beta$, a potem wykorzystaj ją w trójkącie $AMB$, by obliczyć szukany kąt."
+    "Zaznacz na rysunku wszystkie równe odcinki i znajdź powstałe w ten sposób trójkąty równoramienne.",
+    "Skup się na warunku $MX = MC = MY$. Co on oznacza dla punktu $M$ i trójkąta $XCY$? Poszukaj tu głębszej własności geometrycznej, zanim zaczniesz liczyć kąty.",
+    "Punkt $M$ jest środkiem okręgu opisanego na trójkącie $XCY$. Co wynika dla kąta $\\angle XCY$ z faktu, że środek tego okręgu leży na boku $XY$?",
+    "Wiedząc, jaką miarę ma kąt $\\angle ACB$, oznacz równe kąty w trójkątach równoramiennych $AXM$ i $BYM$. Znajdź sumę tych kątów, a następnie wykorzystaj ją w trójkącie $AMB$."
   ],
   "skills_required": [
     "isosceles_triangle",

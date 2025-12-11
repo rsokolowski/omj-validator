@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Warunek, że w ostrosłup można wpisać sferę, oznacza, że jej środek jest równo odległy od wszystkich pięciu ścian. Zastanów się, co to oznacza dla odległości środka sfery od ścian bocznych.",
-    "Można wykazać, że ta własność prowadzi do ważnej konsekwencji: dla każdego wierzchołka (np. A) odcinki styczności od niego do punktów styczności okręgów wpisanych w ściany schodzące się w A mają tę samą długość. Oznacz te długości $s, a, b, c, d$.",
-    "Wykorzystaj te oznaczenia do wyrażenia długości wszystkich krawędzi ostrosłupa. Na przykład $|SA| = s+a$, a $|AB| = a+b$. Zapisz długości boków wszystkich czterech trójkątów bocznych.",
-    "Aby porównać sumy kątów, stwórz na płaszczyźnie dwie figury. Pierwszą, składając $\\triangle SAB$ i $\\triangle SAD$ wzdłuż boku $SA$. Drugą, z $\\triangle SCB$ i $\\triangle SCD$ wzdłuż $SC$. Porównaj odległości między wierzchołkami $B$ i $D$ w obu figurach."
+    "Kąty w zadaniu to kąty płaskie przy wierzchołku $S$. Wyobraź sobie, że przecinamy ostrosłup małą sferą o środku w $S$. Jaki ślad zostawią na tej sferze krawędzie i ściany boczne?",
+    "Warunek, że w ostrosłup można wpisać sferę, oznacza, że płaszczyzny dwusieczne jego kątów dwuściennych przecinają się w jednym punkcie. Zastanów się, co to oznacza dla figury powstałej na sferze.",
+    "Płaszczyzny dwusieczne kątów dwuściennych wzdłuż krawędzi bocznych ($SA, SB, SC, SD$) stają się na sferze dwusiecznymi kątów pewnego czworokąta. Co oznacza fakt, że te dwusieczne przecinają się w jednym punkcie?",
+    "Wykorzystaj fakt, że w czworokąt sferyczny, w który można wpisać okrąg, sumy długości przeciwległych boków są równe. Jak długości boków tego czworokąta mają się do kątów z tezy zadania?"
   ],
   "skills_required": [
     "spatial_3d",

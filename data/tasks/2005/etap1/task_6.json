@@ -14,9 +14,9 @@
   ],
   "hints": [
     "Zauważ, że znając łączną wagę 48 g, możesz określić, ile jest fałszywych monet. Ile gramów \"brakuje\" w porównaniu do wagi 5 prawdziwych monet?",
-    "Twoim zadaniem jest zidentyfikowanie jednej konkretnej pary fałszywych monet spośród wszystkich możliwości. Ile jest wszystkich możliwych par? Twoja strategia musi być w stanie je wszystkie rozróżnić.",
-    "Przeanalizuj pierwsze ważenie, np. dwóch monet. Wynik tego ważenia podzieli wszystkie możliwe pary na grupy. W najgorszym przypadku, ile możliwości będziesz musiał jeszcze rozważyć w kolejnych krokach?",
-    "Załóżmy, że po pierwszym ważeniu wiesz, że jedna fałszywa moneta jest w grupie A (2 monety), a druga w grupie B (3 monety). To najgorszy przypadek. Czy dysponując dwoma ważeniami, jesteś w stanie zawsze rozróżnić te 6 możliwości?"
+    "Musisz odróżnić 10 możliwych par fałszywych monet. Pomyśl o każdym ważeniu jako o teście, który daje pewien wynik. Trzy testy muszą dać łącznie wystarczająco dużo informacji, by wskazać jedną z 10 par.",
+    "Zamiast podejmować decyzje po każdym ważeniu, spróbuj ustalić wszystkie trzy ważenia z góry. Każda z 10 par da wtedy unikalną sekwencję trzech wyników, tworząc coś w rodzaju \"kodu\".",
+    "Oznacz monety numerami 1-5. Spróbuj tak dobrać trzy ważone grupy monet, aby żadne dwie różne pary fałszywych monet nie dawały identycznych wyników dla wszystkich trzech ważeń. Zacznij od zważenia np. trzech monet."
   ],
   "skills_required": [
     "weighing_problems",

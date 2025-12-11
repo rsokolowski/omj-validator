@@ -15,7 +15,7 @@
     "Narysuj trapez $ABCD$ z podstawami $AB$ i $CD$. Zaznacz, że jego przekątne $AC$ i $BD$ są prostopadłe. Celem jest wykazanie nierówności $AB+CD \\le AD+BC$.",
     "Sumę podstaw $AB+CD$ trudno jest analizować bezpośrednio. Spróbuj tak przekształcić figurę, aby otrzymać jeden odcinek o długości $AB+CD$, najlepiej jako bok w nowym, pomocniczym trójkącie.",
     "Przesuń równolegle przekątną $BD$ tak, aby punkt $D$ znalazł się w punkcie $C$. Niech punkt $B$ przejdzie na punkt $E$. Jaki jest trójkąt $ACE$? Wykorzystaj prostopadłość przekątnych i znajdź długości jego boków.",
-    "Z poprzedniej wskazówki wynika, że $(AB+CD)^2 = AC^2+BD^2$. Pozostaje udowodnić, że $AC^2+BD^2 \\le (AD+BC)^2$. Wyraź obie strony tej nierówności za pomocą odcinków, na które dzieli przekątne ich punkt przecięcia."
+    "Porównaj kwadraty obu stron nierówności. Wykorzystaj zależność wynikającą z konstrukcji z poprzedniej wskazówki. Wyraź długości boków za pomocą odcinków, na które dzieli przekątne ich punkt przecięcia, i poszukaj podobnych trójkątów."
   ],
   "skills_required": [
     "trapezoid_parallelogram",

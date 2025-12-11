@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie figurę. Z definicji symetrii osiowej, jakie odcinki mają taką samą długość jak $RP$ i $QP$?",
-    "Aby dowiedzieć się więcej o $P'$, musimy poznać długości $RP$ i $QP$. Wykorzystaj fakt, że $CQPR$ to równoległobok. Jakie proste są do siebie równoległe? Jakie kąty są w związku z tym równe?",
-    "Zauważ, że proste $AC$ i $QP$ są równoległe, podobnie jak $BC$ i $RP$. Wykorzystaj tę wiedzę do analizy kątów w trójkątach $\\triangle APR$ i $\\triangle BQP$. Co możesz powiedzieć o tych trójkątach?",
-    "Powinieneś odkryć, że $AR=RP$ i $BQ=QP$. Połącz to z własnościami symetrii. Otrzymasz, że $AR=RP'$ i $BQ=QP'$. Wykorzystaj te równości, aby przez rachunek na kątach wykazać, że punkty $A, C, B, P'$ leżą na jednym okręgu."
+    "Narysuj figurę. Skoro $P'$ jest symetrycznym odbiciem punktu $P$ względem prostej $QR$, to jakie odcinki wychodzące z $P'$ muszą mieć taką samą długość jak odcinki wychodzące z $P$?",
+    "Czworokąt $CQPR$ jest równoległobokiem, więc jego boki są parami równoległe. Wykorzystaj tę własność do znalezienia równych kątów i wykazania, że trójkąty $\triangle APR$ i $\triangle BQP$ są równoramienne.",
+    "Połącz wnioski z poprzednich kroków. Powinieneś otrzymać dwa ciągi równości: $AR=RP=RP'$ oraz $BQ=QP=QP'$. Co te równości oznaczają dla punktu $R$ i jego odległości od punktów $A, P, P'$?",
+    "Punkt $R$ jest środkiem okręgu przechodzącego przez $A, P, P'$, a $Q$ jest środkiem okręgu przez $B, P, P'$. Wyraź kąt $\\angle AP'B$ za pomocą kątów środkowych w tych okręgach i porównaj go z kątem $\\angle ACB$."
   ],
   "skills_required": [
     "isosceles_triangle",

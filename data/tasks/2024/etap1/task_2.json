@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zagięcie papieru wzdłuż linii $PQ$ jest symetrią osiową. Co jest symetralną jakiego odcinka? Co ta obserwacja mówi o trójkątach $QDD'$ oraz $PDD'$?",
-    "Aby udowodnić tezę $AP=AQ=AD'$, spróbuj wykazać każdą z równości osobno. Zacznij od $AQ=AD'$, co jest równoważne pokazaniu, że trójkąt $AD'Q$ jest równoramienny.",
-    "W trójkącie $AD'Q$ znasz już jeden kąt. Aby pokazać, że jest równoramienny, wykaż, że jego kąty przy podstawie $QD'$ są równe. Oznacz $\\angle DAC = \\alpha$ i spróbuj wyznaczyć miarę kąta $\\angle AD'Q$.",
-    "Wykorzystaj fakt, że trójkąt $QDD'$ jest równoramienny ($QD=QD'$). Pokaż, że prowadzi to do wniosku, że również trójkąt $ADD'$ jest równoramienny ($AD=AD'$). To pozwoli Ci obliczyć wszystkie kąty w trójkącie $AD'Q$ i udowodnić tezę."
+    "Zagięcie kartki wzdłuż odcinka $PQ$ to symetria osiowa. Co ta informacja mówi o odległościach punktów $P$ i $Q$ od wierzchołków $C$ i $C'$?",
+    "Suma $AP+AQ$ jest trudna do bezpośredniej analizy. Spróbuj przenieść odcinek $AP$ na prostą $AD$ za pomocą obrotu wokół punktu $A$, aby przekształcić sumę w długość jednego odcinka.",
+    "Obróć trójkąt $ABP$ wokół $A$ o kąt $\\angle DAB$. Niech $P'$ będzie obrazem punktu $P$. Wykaż, że trójkąty $PBC$ i $P'DC$ są przystające, a stąd $PC = P'C$.",
+    "Wykorzystaj równości $PC=P'C$ oraz $QC=QC'$, aby pokazać, że prosta $AD$ jest dwusieczną kąta $\\angle CQC'$. Co to oznacza dla obrazu punktu $C$ w symetrii względem prostej $AD$?"
   ],
   "prerequisites": [
     "2020_etap1_7"

@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Wszystkie pięć podanych liczb jest pierwszych. Jaka jest jedyna liczba pierwsza podzielna przez 3? Wykaż, że żadna z tych pięciu liczb nie może być równa 3, pamiętając, że $a, b, c > 1$.",
-    "Skoro żadna z pięciu liczb pierwszych nie jest podzielna przez 3, to jakie reszty mogą one dawać przy dzieleniu przez 3? Poszukaj prostych równości algebraicznych łączących te pięć liczb.",
-    "Zauważ, że $a+b+c = a + (b+c)$. Co ta równość mówi nam o resztach z dzielenia przez 3 liczb pierwszych $a$, $b+c$ oraz $a+b+c$?",
-    "Zastosuj to samo rozumowanie do równości $a+b+c = c + (a+b)$. Otrzymasz w ten sposób dwie zależności (kongruencje) na resztach. Co z nich wynika na temat podzielności $b$ przez 3?"
+    "Zastanów się nad parzystością liczb $a, b, c$. Suma $a+b+c$ musi być liczbą pierwszą. Co by się stało, gdyby liczby pierwsze $a$ i $c$ były obie nieparzyste? Co to oznacza dla jednej z nich?",
+    "Wiesz już, że jedna z liczb, powiedzmy $a$, musi być równa 2. Aby pokazać, że $b$ jest podzielne przez 3, spróbuj założyć, że tak nie jest (czyli $b$ daje resztę 1 lub 2 z dzielenia przez 3) i poszukaj sprzeczności.",
+    "Rozważ dwa przypadki dla liczby pierwszej $c$: gdy $c=3$ oraz gdy $c>3$. W każdym z nich zbadaj, jakie reszty z dzielenia przez 3 dają liczby z zadania, pamiętając o założeniu na temat $b$.",
+    "Gdy $c>3$, jakie reszty może dawać przy dzieleniu przez 3? Sprawdź wszystkie kombinacje reszt dla $b$ i $c$. W każdej z nich zbadaj, czy któraś z liczb $b+c$ lub $a+b+c$ nie staje się podzielna przez 3 i większa od 3."
   ],
   "prerequisites": [],
   "skills_required": [

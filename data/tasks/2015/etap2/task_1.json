@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Jaka jest jedyna parzysta liczba pierwsza? Zastanów się, co możesz powiedzieć o sumie dwóch liczb całkowitych, jeśli mają taką samą parzystość (obie parzyste lub obie nieparzyste).",
-    "Zauważ, że jeśli dwie z liczb $a, b, c$ mają tę samą parzystość, ich suma jest parzysta. Aby taka suma była liczbą pierwszą, musi być równa 2. Co to mówi o możliwych parzystościach liczb $a, b, c$?",
-    "Rozważ, ile spośród liczb $a, b, c$ może być parzystych. Czy dwie z nich mogą być parzyste? A co, jeśli wszystkie trzy są nieparzyste?",
-    "Pozostały dwa przypadki do zbadania: wszystkie liczby są nieparzyste albo dokładnie jedna jest parzysta. W każdym z tych przypadków wykorzystaj fakt, że suma dwóch liczb o tej samej parzystości musi być równa 2."
+    "Jaka jest jedyna parzysta liczba pierwsza? Zastanów się, jaka jest parzystość sumy dwóch liczb w zależności od ich parzystości.",
+    "Spośród dowolnych trzech liczb całkowitych $a, b, c$ co najmniej dwie muszą mieć tę samą parzystość. Co to oznacza dla ich sumy, która ma być liczbą pierwszą?",
+    "Wiesz już, że co najmniej jedna z sum, na przykład $a+b$, musi być równa 2. Jakie wartości muszą przyjąć $a$ i $b$, skoro są dodatnimi liczbami całkowitymi?",
+    "Znasz już wartości dwóch z trzech liczb. Podstaw je do pozostałych warunków zadania, aby znaleźć wartość trzeciej liczby."
   ],
   "skills_required": [
     "parity_arguments",

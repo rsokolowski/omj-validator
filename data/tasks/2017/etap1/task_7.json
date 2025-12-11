@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj prostopadłościan i zaznacz na jego krawędziach punkty K, L, M. Płaszczyzna przechodząca przez te punkty przecina również czwartą krawędź boczną, DD'. Nazwijmy ten punkt N.",
-    "Przekrój prostopadłościanu płaszczyzną jest czworokąt KLMN. Zastanów się, jakie własności ma ten czworokąt, wykorzystując fakt, że przeciwległe ściany prostopadłościanu są równoległe.",
-    "Czworokąt KLMN jest równoległobokiem. Jaki związek wynika z tej własności dla długości odcinków AK, BL, CM i DN? Pomyśl o sumach wysokości na przeciwległych krawędziach.",
-    "Objętość jednej z brył (graniastosłupa ściętego) jest równa iloczynowi pola podstawy i średniej arytmetycznej wysokości w jej czterech wierzchołkach: AK, BL, CM oraz DN."
+    "Narysuj prostopadłościan i zaznacz punkty K, L, M. Płaszczyzna KLM przecina też krawędź DD' w pewnym punkcie N. Zastanów się, jaką figurą jest czworokąt KLMN.",
+    "Przeciwległe ściany prostopadłościanu są do siebie równoległe. Co to oznacza dla odcinków, wzdłuż których płaszczyzna KLMN przecina te ściany?",
+    "Czworokąt KLMN jest równoległobokiem. Jego przekątne przecinają się w połowie. Jaki związek między wysokościami AK, BL, CM i DN z tego wynika?",
+    "Objętość bryły można obliczyć, dzieląc ją na dwie części o podstawach trójkątnych (np. wzdłuż przekątnej AC). Objętość graniastosłupa ściętego o podstawie trójkątnej to iloczyn pola podstawy i średniej arytmetycznej wysokości w wierzchołkach."
   ],
   "skills_required": [
     "spatial_3d",
