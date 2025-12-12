@@ -1,5 +1,6 @@
-import { Box, Typography, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { TaskCard } from "@/components/task/TaskCard";
 import { serverFetch } from "@/lib/api/server";
 import { TasksResponse } from "@/lib/types";
@@ -26,18 +27,17 @@ export default async function EtapPage({ params }: EtapPageProps) {
     { label: etapName },
   ];
 
+  const taskCount = data.tasks.length;
+  const taskWord = taskCount === 1 ? "zadanie" : taskCount < 5 ? "zadania" : "zadań";
+
   return (
     <Box>
-      <Breadcrumb items={breadcrumbItems} />
-
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" sx={{ fontWeight: 700, color: "grey.900", mb: 1 }}>
-          {year} - {etapName}
-        </Typography>
-        <Typography color="text.secondary">
-          {data.tasks.length} {data.tasks.length === 1 ? "zadanie" : data.tasks.length < 5 ? "zadania" : "zadań"}
-        </Typography>
-      </Box>
+      <PageHeader
+        title={`${year} - ${etapName}`}
+        subtitle={`${taskCount} ${taskWord}`}
+      >
+        <Breadcrumb items={breadcrumbItems} />
+      </PageHeader>
 
       <Stack spacing={2}>
         {data.tasks.map((task) => (
