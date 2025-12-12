@@ -128,10 +128,6 @@ class Settings(BaseSettings):
     def prompts_dir(self) -> Path:
         return self.base_dir / "prompts"
 
-    def gemini_prompt_path(self, etap: str = "etap2") -> Path:
-        """Get Gemini prompt path for specific etap (etap1, etap2, or etap3)."""
-        return self.prompts_dir / f"gemini_prompt_{etap}.txt"
-
     @property
     def db_url(self) -> str:
         """Get database URL, defaulting to local PostgreSQL."""
