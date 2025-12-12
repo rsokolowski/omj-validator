@@ -46,10 +46,10 @@ export function SubmissionsList({
           <AssignmentIcon sx={{ fontSize: 40, color: "grey.400" }} />
         </Box>
         <Typography variant="h6" color="text.secondary" gutterBottom>
-          Brak rozwiazan
+          Brak rozwiązań
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-          Nie masz jeszcze zadnych rozwiazan. Zacznij od wybrania zadania!
+          Nie masz jeszcze żadnych rozwiązań. Zacznij od wybrania zadania!
         </Typography>
         <Button
           component={Link}
@@ -60,7 +60,7 @@ export function SubmissionsList({
             "&:hover": { bgcolor: "primary.dark" },
           }}
         >
-          Przegladaj zadania
+          Przeglądaj zadania
         </Button>
       </Paper>
     );
