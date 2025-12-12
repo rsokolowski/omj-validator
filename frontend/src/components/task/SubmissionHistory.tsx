@@ -6,6 +6,7 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import { Submission } from "@/lib/types";
 import { getMaxScore } from "@/lib/utils/constants";
+import { MathContent } from "@/components/ui/MathContent";
 
 interface SubmissionHistoryProps {
   submissions: Submission[];
@@ -113,9 +114,9 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
     }
 
     return (
-      <Typography variant="body2" sx={{ color: "grey.700", whiteSpace: "pre-wrap" }}>
-        {submission.feedback || "Brak feedbacku"}
-      </Typography>
+      <Box sx={{ color: "grey.700", "& p": { margin: 0 } }}>
+        <MathContent content={submission.feedback || "Brak feedbacku"} />
+      </Box>
     );
   };
 

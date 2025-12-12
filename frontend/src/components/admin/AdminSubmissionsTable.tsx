@@ -28,6 +28,7 @@ import { AdminSubmission, AdminSubmissionsResponse, AdminUser, IssueType } from 
 import { getMaxScore } from "@/lib/utils/constants";
 import { useInfiniteScroll } from "@/lib/hooks/useInfiniteScroll";
 import { UserAutocomplete } from "./UserAutocomplete";
+import { MathContent } from "@/components/ui/MathContent";
 
 const PAGE_SIZE = 20;
 
@@ -245,9 +246,9 @@ export function AdminSubmissionsTable() {
     }
 
     return (
-      <Typography variant="body2" sx={{ color: "grey.700", whiteSpace: "pre-wrap" }}>
-        {submission.feedback || "No feedback available"}
-      </Typography>
+      <Box sx={{ color: "grey.700", "& p": { margin: 0 } }}>
+        <MathContent content={submission.feedback || "No feedback available"} />
+      </Box>
     );
   };
 
