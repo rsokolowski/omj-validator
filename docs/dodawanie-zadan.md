@@ -99,20 +99,21 @@ Przed generowaniem metadanych warto sprawdzić, czy oficjalne zasady oceniania O
 - Zmiany w regulaminie dla nowych edycji
 
 **Pliki do aktualizacji (jeśli zasady się zmieniły):**
-- `prompts/gemini_prompt_etap1.txt` - prompt do oceniania rozwiązań etapu 1
-- `prompts/gemini_prompt_etap2.txt` - prompt do oceniania rozwiązań etapu 2
-- `prompts/gemini_prompt_etap3.txt` - prompt do oceniania rozwiązań etapu 3 (utwórz jeśli brak)
+- `prompts/gemini_prompt_base.txt` - bazowy prompt (rola, język)
+- `prompts/gemini_prompt_scoring_etap1.txt` - kryteria punktacji etapu 1 (0-3 pkt)
+- `prompts/gemini_prompt_scoring_etap2.txt` - kryteria punktacji etapu 2 (0-6 pkt)
+- `prompts/gemini_prompt_scoring_etap3.txt` - kryteria punktacji etapu 3 (0-6 pkt)
+- `prompts/gemini_prompt_abuse.txt` - wykrywanie nadużyć + format JSON
 - `populate_metadata.py` - prompt do generowania wskazówek (PROMPT_TEMPLATE)
 - `fix_latex_content.py` - prompt do ekstrakcji treści (jeśli format PDF się zmienił)
 
-**Uwaga:** Każdy etap ma osobny prompt, ponieważ kryteria oceniania mogą się różnić.
+**Uwaga:** System promptów jest modularny - `prompt_builder.py` składa: base + scoring + abuse.
 
 **Przykład sprawdzenia:**
 ```bash
 # Przeczytaj aktualne prompty
 ls prompts/
-cat prompts/gemini_prompt_etap1.txt
-cat prompts/gemini_prompt_etap2.txt
+cat prompts/gemini_prompt_scoring_etap2.txt
 
 # Porównaj z zasadami z PDF statystyk
 # (otwórz PDF i sprawdź sekcję o punktacji)
