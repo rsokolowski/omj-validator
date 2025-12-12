@@ -25,11 +25,11 @@ test.describe('Admin Panel', () => {
     test('admin can access admin submissions page', async ({ page }) => {
       await page.goto('/admin/submissions');
 
-      // Should see the admin page title
-      await expect(page.getByRole('heading', { name: /admin.*submissions/i })).toBeVisible();
+      // Should see the admin page title (in Polish)
+      await expect(page.getByRole('heading', { name: /panel administratora/i })).toBeVisible();
 
-      // Should see the description
-      await expect(page.getByText(/view and filter all submissions/i)).toBeVisible();
+      // Should see the description (in Polish)
+      await expect(page.getByText(/przeglądaj i filtruj rozwiązania/i)).toBeVisible();
     });
 
     test('admin can view submissions table', async ({ page }) => {
@@ -118,9 +118,9 @@ test.describe('Admin Panel', () => {
     test('non-admin sees access denied on admin page', async ({ page }) => {
       await page.goto('/admin/submissions');
 
-      // Should see the access denied message
-      await expect(page.getByText(/access denied/i)).toBeVisible();
-      await expect(page.getByText(/you do not have permission/i)).toBeVisible();
+      // Should see the access denied message (in Polish)
+      await expect(page.getByText(/brak dostępu/i)).toBeVisible();
+      await expect(page.getByText(/nie masz uprawnień/i)).toBeVisible();
     });
 
     test('non-admin API check returns is_admin false', async ({ page }) => {
@@ -203,7 +203,7 @@ test.describe('Admin Panel', () => {
 
       // Should be on admin page
       await expect(page).toHaveURL(/\/admin\/submissions/);
-      await expect(page.getByRole('heading', { name: /admin.*submissions/i })).toBeVisible();
+      await expect(page.getByRole('heading', { name: /panel administratora/i })).toBeVisible();
     });
 
     test('switching from admin to non-admin user hides admin link', async ({ page, context }) => {
@@ -229,8 +229,8 @@ test.describe('Admin Panel', () => {
       await loginAs(context, TEST_USERS.restricted);
       await page.goto('/admin/submissions');
 
-      // Should see access denied
-      await expect(page.getByText(/access denied/i)).toBeVisible();
+      // Should see access denied (in Polish)
+      await expect(page.getByText(/brak dostępu/i)).toBeVisible();
     });
 
     test('restricted user does not see admin link in header', async ({ page, context }) => {
