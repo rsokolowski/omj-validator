@@ -1,6 +1,7 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { serverFetch } from "@/lib/api/server";
 import { ProgressData, User } from "@/lib/types";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { ProgressStats } from "@/components/progress/ProgressStats";
 import { CategoryFilter } from "@/components/progress/CategoryFilter";
 import { RecommendationsList } from "@/components/progress/RecommendationsList";
@@ -28,14 +29,10 @@ export default async function ProgressPage({ searchParams }: ProgressPageProps) 
 
   return (
     <Box>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" sx={{ fontWeight: 700, color: "grey.900", mb: 1 }}>
-          Nauka
-        </Typography>
-        <Typography color="text.secondary">
-          Śledź swój rozwój i odkrywaj rekomendowane zadania
-        </Typography>
-      </Box>
+      <PageHeader
+        title="Nauka"
+        subtitle="Śledź swój rozwój i odkrywaj rekomendowane zadania"
+      />
 
       {/* Stats */}
       <ProgressStats stats={data.stats} />

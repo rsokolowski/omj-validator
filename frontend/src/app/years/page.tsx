@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Box, Card, CardContent, Typography, Grid } from "@mui/material";
 import { serverFetch } from "@/lib/api/server";
 import { YearsResponse } from "@/lib/types";
+import { PageHeader } from "@/components/layout/PageHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -32,14 +33,10 @@ export default async function YearsPage() {
 
   return (
     <Box>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" sx={{ fontWeight: 700, color: "grey.900", mb: 1 }}>
-          Olimpiada Matematyczna Juniorów
-        </Typography>
-        <Typography color="text.secondary">
-          Wybierz rok, aby zobaczyć zadania
-        </Typography>
-      </Box>
+      <PageHeader
+        title="Olimpiada Matematyczna Juniorów"
+        subtitle="Wybierz rok, aby zobaczyć zadania"
+      />
 
       <Grid container spacing={2}>
         {data.years.map((year) => (

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Box, Card, CardContent, Typography, Grid } from "@mui/material";
 import { EmojiEvents, MilitaryTech, Stars } from "@mui/icons-material";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { serverFetch } from "@/lib/api/server";
 import { EtapsResponse } from "@/lib/types";
 import { ETAP_NAMES } from "@/lib/utils/constants";
@@ -69,20 +70,12 @@ export default async function YearPage({ params }: YearPageProps) {
 
   return (
     <Box>
-      <Breadcrumb items={breadcrumbItems} />
-
-      <Box sx={{ mb: 4 }}>
-        <Typography
-          variant="h4"
-          component="h1"
-          sx={{ fontWeight: 700, color: "grey.900", mb: 1 }}
-        >
-          OMJ {year}
-        </Typography>
-        <Typography color="text.secondary">
-          Wybierz etap zawodów - od eliminacji szkolnych do finału
-        </Typography>
-      </Box>
+      <PageHeader
+        title={`OMJ ${year}`}
+        subtitle="Wybierz etap zawodów - od eliminacji szkolnych do finału"
+      >
+        <Breadcrumb items={breadcrumbItems} />
+      </PageHeader>
 
       <Grid container spacing={3}>
         {data.etaps.map((etap) => {

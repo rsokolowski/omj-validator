@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
-import { Container, Typography, Paper, Alert, Box } from "@mui/material";
+import { Box, Paper, Alert, Typography } from "@mui/material";
 import { serverFetch, APIError } from "@/lib/api/server";
 import { AdminMeResponse } from "@/lib/types";
 import { AdminSubmissionsTable } from "@/components/admin/AdminSubmissionsTable";
+import { PageHeader } from "@/components/layout/PageHeader";
 
 type AdminStatusResult =
   | { type: "success"; data: AdminMeResponse }
@@ -27,19 +28,20 @@ export default async function AdminSubmissionsPage() {
   // Handle server errors (show error message instead of auth error)
   if (result.type === "server_error") {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Box>
+        <PageHeader title="Panel administratora" />
         <Paper sx={{ p: 4, textAlign: "center" }}>
           <Alert severity="error" sx={{ mb: 2 }}>
-            Server Error
+            Błąd serwera
           </Alert>
           <Typography variant="body1" color="text.secondary">
-            Failed to load admin panel: {result.message}
+            Nie udało się załadować panelu: {result.message}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            Please try again later or contact support if the problem persists.
+            Spróbuj ponownie później.
           </Typography>
         </Paper>
-      </Container>
+      </Box>
     );
   }
 
@@ -51,34 +53,30 @@ export default async function AdminSubmissionsPage() {
   // Show access denied if not admin
   if (!result.data.is_admin) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Box>
+        <PageHeader title="Panel administratora" />
         <Paper sx={{ p: 4, textAlign: "center" }}>
           <Alert severity="error" sx={{ mb: 2 }}>
-            Access Denied
+            Brak dostępu
           </Alert>
           <Typography variant="body1" color="text.secondary">
-            You do not have permission to access the admin panel.
+            Nie masz uprawnień do panelu administracyjnego.
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            Contact an administrator if you believe this is an error.
+            Skontaktuj się z administratorem, jeśli uważasz, że to błąd.
           </Typography>
         </Paper>
-      </Container>
+      </Box>
     );
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Admin: Submissions
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          View and filter all submissions across all users.
-        </Typography>
-      </Box>
-
+    <Box>
+      <PageHeader
+        title="Panel administratora"
+        subtitle="Przeglądaj i filtruj rozwiązania wszystkich użytkowników."
+      />
       <AdminSubmissionsTable />
-    </Container>
+    </Box>
   );
 }

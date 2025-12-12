@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
-import { Container, Typography, Paper, Alert, Box } from "@mui/material";
+import { Box, Paper, Alert, Typography } from "@mui/material";
 import { serverFetch, APIError } from "@/lib/api/server";
 import { MySolutionsDashboard } from "@/components/my-solutions/MySolutionsDashboard";
+import { PageHeader } from "@/components/layout/PageHeader";
 
 interface AuthResponse {
   user: { email: string; name: string } | null;
@@ -31,7 +32,8 @@ export default async function MySolutionsPage() {
   // Handle server errors
   if (result.type === "server_error") {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Box>
+        <PageHeader title="Moje rozwiązania" />
         <Paper sx={{ p: 4, textAlign: "center" }}>
           <Alert severity="error" sx={{ mb: 2 }}>
             Nie udało się załadować strony
@@ -43,7 +45,7 @@ export default async function MySolutionsPage() {
             Spróbuj ponownie później.
           </Typography>
         </Paper>
-      </Container>
+      </Box>
     );
   }
 
@@ -53,17 +55,12 @@ export default async function MySolutionsPage() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Moje rozwiązania
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Przeglądaj historię swoich rozwiązań i śledź postępy.
-        </Typography>
-      </Box>
-
+    <Box>
+      <PageHeader
+        title="Moje rozwiązania"
+        subtitle="Przeglądaj historię swoich rozwiązań i śledź postępy."
+      />
       <MySolutionsDashboard />
-    </Container>
+    </Box>
   );
 }
