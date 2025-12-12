@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj rysunek i oznacz długości odcinków, np. $AM=BK=x$. Zastanów się, jaką zależność między bokami $CL$ i $CK$ musisz udowodnić, aby kąt $CKL$ był prosty.",
-    "Aby wykorzystać równość $KM=LM$, poprowadź z punktu $M$ odcinki prostopadłe do boków $BC$ i $AC$. Utworzą one trójkąty o kątach $30^\\circ$, $60^\\circ$, $90^\\circ$.",
-    "Użyj twierdzenia Pitagorasa w powstałych trójkątach, aby wyrazić kwadraty długości $KM$ i $LM$ w zależności od $x$, boku trójkąta $a$ oraz szukanego odcinka $AL$.",
-    "Przyrównaj wyznaczone wyrażenia ($MK^2 = ML^2$) i uprość równanie, aby obliczyć długość $AL$. Porównaj wynik z długością $CK$ i wyciągnij wniosek."
+    "Narysuj starannie figurę i oznacz $AM = BK = x$. Teza $\\angle CKL = 90^\\circ$ jest równoważna pewnej zależności między długościami boków trójkąta $CKL$. Jakiej?",
+    "Aby wykorzystać warunek $KM=LM$, wyraź $KM^2$ i $LM^2$ w zależności od $x$ i innych długości na bokach trójkąta. Możesz to zrobić, opuszczając wysokości z punktu $M$ na boki $BC$ i $AC$.",
+    "Równość $KM^2=LM^2$ prowadzi do równania. Przekształć je tak, aby grupować wyrazy z $AL$ i $BM$. Spróbuj doprowadzić je do postaci iloczynowej $(...)(...)=0$.",
+    "Rozważ dwa przypadki wynikające z równania. Wykaż, że jeden z nich prowadzi do sprzeczności z założeniem $\\angle KML=90^\\circ$. W drugim przypadku znajdź stosunek $CL/CK$ i udowodnij, że $\\triangle CKL$ jest prostokątny."
   ],
   "prerequisites": [
     "2021_etap1_2"

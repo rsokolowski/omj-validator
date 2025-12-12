@@ -13,9 +13,9 @@
   ],
   "hints": [
     "Narysuj dokładny rysunek. Oznacz $\\angle BAE = \\alpha$ i $\\angle DAF = \\beta$. Jaka jest zależność między $\\alpha$ i $\\beta$, skoro $\\angle EAF = 45^\\circ$ i $\\angle DAB = 90^\\circ$?",
-    "Aby powiązać ze sobą rozłączne trójkąty, zastosuj obrót. Obróć trójkąt $ADF$ o $90^\\circ$ wokół wierzchołka $A$ tak, aby bok $AD$ pokrył się z bokiem $AB$.",
-    "Niech $G$ będzie obrazem punktu $F$. Wykaż, że trójkąty $AEF$ i $AEG$ są przystające. W tym celu porównaj długości ich boków oraz kąty przy wierzchołku $A$.",
-    "Pola trójkątów $AEF$ i $AEG$ są równe. Zauważ, że punkty $G$ i $E$ są równo oddalone od prostej $AB$. Oblicz pole $\\triangle AEG$ sumując pola dwóch trójkątów, na jakie dzieli go prosta $AB$."
+    "Aby geometrycznie połączyć kąty $\\alpha$ i $\\beta$, obróć trójkąt $ADF$ o $90^\\circ$ wokół wierzchołka $A$ tak, aby półprosta $AD$ nałożyła się na półprostą $AB$.",
+    "Niech $G$ będzie obrazem punktu $F$ w tym obrocie. Wykaż, że trójkąty $AEF$ i $AEG$ są przystające, porównując ich boki oraz kąt między nimi przy wierzchołku $A$.",
+    "Z przystawania wynika równość pól $\\triangle AEF$ i $\\triangle AEG$. Oblicz pole $\\triangle AEG$, zauważając, że prosta $AB$ dzieli go na dwa trójkąty. Znajdź ich wspólną podstawę na prostej $AB$."
   ],
   "prerequisites": [],
   "skills_required": [

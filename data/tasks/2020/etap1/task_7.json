@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Wyobraź sobie przestrzenną formę tej figury: cztery pięciokąty wyrastają z boków kwadratu i odchylają się symetrycznie na zewnątrz. Zastanów się, gdzie w tej strukturze znajdują się szukane punkty A i B.",
-    "Zamiast liczyć wszystkie długości, rozważ rzut jednego pięciokąta na płaszczyznę kwadratowej podstawy. Kluczem jest znalezienie kąta nachylenia ściany pięciokąta do poziomu.",
-    "Zauważ, że krawędź łącząca dwa sąsiednie pięciokąty rzutuje się na przekątną kwadratu. Wykorzystaj fakt, że rzeczywisty kąt między krawędziami pięciokąta to $108^\\circ$, a ich rzuty tworzą kąt prosty narożnika.",
-    "Oblicz długość rzutu wysokości pięciokąta na płaszczyznę podstawy. Wynik jest zaskakująco prosty (związany z połową boku kwadratu) i pozwala błyskawicznie wyznaczyć odległość między wierzchołkami."
+    "Wyobraź sobie, że figura stoi na kwadratowej podstawie. Wierzchołki A i B, których odległość szukamy, znajdują się na dwóch przeciwległych pięciokątach. Zauważ, że cała figura jest symetryczna.",
+    "Najprościej będzie umieścić figurę w układzie współrzędnych. Niech kwadratowa podstawa o boku 1 leży na płaszczyźnie XY. Twoim celem jest znalezienie współrzędnych punktów A i B.",
+    "Aby znaleźć współrzędne A i B, potrzebujesz wiedzieć, jak bardzo pięciokąty są nachylone. Tę informację zdobędziesz, analizując narożnik figury, w którym spotykają się dwa pięciokąty i kwadrat.",
+    "Rozważ wierzchołek V, wspólny dla dwóch sąsiednich pięciokątów. Wyznacz jego współrzędne, korzystając z tego, że jego odległości od trzech wierzchołków kwadratu są znane (dwie wynoszą 1, a jedna jest równa przekątnej pięciokąta)."
   ],
   "skills_required": [
     "angle_chasing",

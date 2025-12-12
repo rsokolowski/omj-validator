@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Oblicz długości przekątnych rombu w podstawie ($a$ i $a\\sqrt{3}$). Zauważ, że wierzchołki kwadratu leżą dokładnie nad wierzchołkami rombu, więc przekątne kwadratu rzutują się na przekątne rombu.",
-    "Przekątne kwadratu mają tę samą długość, ale ich rzuty (przekątne rombu) są różne. Przypomnij sobie kluczową własność: długość rzutu prostokątnego odcinka nigdy nie jest większa od długości samego odcinka.",
-    "Aby rzutem kwadratu był romb, jedna z przekątnych kwadratu musi być pozioma (zachowuje długość), a druga nachylona (jej rzut jest krótszy od niej).",
-    "Skoro przekątne kwadratu są równe, to ich długość musi być równa długości dłuższej przekątnej rombu (dlaczego nie krótszej?). Wyznacz bok kwadratu z jego przekątnej."
+    "Narysuj romb z podstawy i oblicz długości jego przekątnych. Wyobraź sobie, że kwadratowy przekrój jest \"zawieszony\" na krawędziach bocznych. Jaki kształt powstanie, gdy zrzutujesz ten kwadrat na płaszczyznę podstawy?",
+    "Porównaj przekątne kwadratu z przekątnymi jego rzutu (rombu). Przekątne kwadratu są równe, a przekątne rombu nie. Jak to możliwe? Pomyśl o związku między długością odcinka a długością jego rzutu.",
+    "Długość przekątnej kwadratu nie może być mniejsza niż długość jej rzutu. Co by się stało, gdyby długość jednej z przekątnych kwadratu była *równa* długości jej rzutu? Jakie musiałoby być jej położenie w przestrzeni?",
+    "Aby obie przekątne kwadratu były równe, jedna z nich musi być pozioma i odpowiadać dłuższej przekątnej rombu. Wyznacz długość boku kwadratu, znając długość jego przekątnej."
   ],
   "prerequisites": [
     "2017_etap1_7"

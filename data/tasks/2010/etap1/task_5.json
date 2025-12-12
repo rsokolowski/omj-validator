@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Narysuj prostokąt o wymiarach $2 \\times 3$ i wpisz w niego liczby. Znajdź dwa różne L-tetramina, które pokrywają te same trzy pola. Co wynika z porównania ich sum?",
-    "Wykorzystaj obserwację z poprzedniego kroku, aby pokazać, że wartości w każdym wierszu i kolumnie powtarzają się co dwa pola. Oznacza to, że cała tablica powstaje przez powielanie jednego fragmentu $2 \\times 2$.",
-    "Oznacz liczby w tym powtarzalnym bloku $2 \\times 2$ jako $a, b, c, d$. Wyraź sumę liczb w kilku różnych L-tetraminach za pomocą tych czterech zmiennych i przyrównaj je do zera.",
-    "Rozwiąż otrzymany układ równań, aby wyznaczyć wartości $a, b, c, d$. Jaka liczba znajduje się w każdym polu tablicy? Oblicz sumę liczb na obu przekątnych."
+    "Rozważ trzy pola w jednym rzędzie, obok siebie. Można do nich dołączyć czwarte pole (sąsiadujące z środkowym) na dwa sposoby, tworząc dwa różne L-tetramina. Co wynika z faktu, że suma liczb w obu jest zerowa?",
+    "Wykorzystaj obserwację z poprzedniego kroku, aby pokazać, że wartości w każdym wierszu i kolumnie powtarzają się co dwa pola. Oznacza to, że cała tablica powstaje przez powielanie jednego fragmentu 2x2.",
+    "Oznacz liczby w powtarzającym się bloku 2x2 jako $a, b, c, d$. Zapisz, używając tych liter, warunek zerowej sumy dla kilku różnych L-tetramin, które można umieścić na tablicy.",
+    "Z otrzymanych równań znajdź związki między liczbami $a, b, c, d$. Nie musisz wyznaczać ich dokładnych wartości! Zastanów się, jakie liczby znajdą się na przekątnych i oblicz ich sumę."
   ],
   "skills_required": [
     "invariants",

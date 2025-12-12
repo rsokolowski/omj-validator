@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zauważ, że warunek $\\angle ACB = 45^\\circ$ oznacza, że trójkąt $AOB$ (gdzie $O$ to środek okręgu opisanego) jest prostokątny i równoramienny. Jakie położenie ma punkt $O$ względem środka boku $AB$?",
-    "Niech $K$ będzie środkiem odcinka $AB$. Zastanów się, jak położenie punktu $M$ (środka $DG$) zależy od położenia punktów $D$ i $G$. Spróbuj wyrazić 'przesunięcie' od $K$ do $M$ za pomocą przesunięć $\\vec{BD}$ i $\\vec{AG}$.",
-    "Zauważ, że odcinek $BD$ to bok $BC$ obrócony o $90^\\circ$, a $AG$ to bok $AC$ obrócony o $90^\\circ$ (zwróć uwagę na kierunki). Co otrzymasz, gdy 'dodasz' do siebie te dwa obroty?",
-    "Wykaż, że wektor $\\vec{KM}$ jest połową sumy wektorów $\\vec{BD}$ i $\\vec{AG}$. Wynik tego dodawania powinien pokazać, że odcinek $KM$ jest prostopadły do $AB$ i ma długość połowy $AB$, co dowodzi, że $M$ pokrywa się z $O$."
+    "Niech $O$ będzie środkiem okręgu opisanego na trójkącie $ABC$. Jaki jest kształt trójkąta $AOB$, skoro kąt wpisany $ACB$ ma miarę $45^\\circ$? Co to oznacza dla położenia punktu $O$ względem boku $AB$?",
+    "Rozważ obrót o $90^\\circ$ wokół punktu $C$. Zauważ, że z definicji kwadratów, wektor $\\vec{CA}$ przechodzi na $\\vec{CG}$, a wektor $\\vec{CB}$ na $\\vec{CD}$ (lub odwrotnie, w zależności od orientacji). Co to oznacza dla trójkąta $ABC$?",
+    "Obrót wokół $C$ przekształca trójkąt $ABC$ na trójkąt $GDC$. Co w takim razie można powiedzieć o relacji między odcinkami $AB$ i $DG$? A co z ich środkami, punktami $K$ i $M$?",
+    "Udowodnij, że trójkąt $KCM$ (gdzie $K$ to środek $AB$, a $M$ to środek $DG$) jest prostokątny i równoramienny. Porównaj tę własność z własnościami punktu $O$ (środka okręgu opisanego) i jego położeniem względem punktu $K$."
   ],
   "skills_required": [
     "circle_theorems",

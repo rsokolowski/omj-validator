@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Z definicji symetralnej, punkt $P$ jest równo odległy od $A$ i $D$, a punkt $Q$ od $B$ i $C$. Jakie dwa trójkąty równoramienne można dzięki temu wskazać?",
-    "Teza zadania jest równoważna równości kątów przy podstawie tych trójkątów. Aby je powiązać, przedłuż nierównoległe boki trapezu $AD$ i $BC$ aż do ich przecięcia w punkcie $S$.",
-    "Wykorzystaj drugą własność symetralnej: prostopadłość. Niech $M$ i $N$ będą środkami ramion $AD$ i $BC$. Zauważ, że $PM \\perp AD$ i $QN \\perp BC$. Daje to dwa trójkąty prostokątne o wspólnym wierzchołku $S$.",
-    "Pokaż, że trójkąty $\\triangle SMP$ i $\\triangle SNQ$ są podobne. To podobieństwo jest kluczem do powiązania długości odcinków $PD$ i $QB$ z długościami ramion trapezu, co prowadzi wprost do tezy."
+    "Z definicji symetralnej, punkt $P$ jest równo odległy od $A$ i $D$, a punkt $Q$ od $B$ i $C$. Jaką własność mają dzięki temu trójkąty $\triangle APD$ i $\triangle BQC$?",
+    "Teza jest równoważna równości kątów przy podstawie tych trójkątów równoramiennych. Aby powiązać te kąty, przedłuż nierównoległe boki trapezu $AD$ i $BC$ aż do ich przecięcia w punkcie $S$.",
+    "Niech $M$ i $N$ będą środkami ramion $AD$ i $BC$. Zauważ, że symetralne tworzą z ramionami kąty proste. Poszukaj w punkcie $S$ dwóch podobnych trójkątów prostokątnych.",
+    "Z podobieństwa tych trójkątów wynika pewna proporcja boków. Użyj jej oraz podobieństwa trójkątów $\triangle SAB$ i $\triangle SDC$, aby udowodnić podobieństwo trójkątów $\triangle SPD$ i $\triangle SQC$."
   ],
   "skills_required": [
     "trapezoid_parallelogram",

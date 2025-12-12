@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Przypomnij sobie związek między polem figury a polem jej rzutu prostokątnego. Aby pole przekroju było duże, płaszczyzna tnąca musi być silnie nachylona do podstawy.",
-    "Spróbuj skonstruować przykład potwierdzający istnienie takiego ostrosłupa. Skup się na ostrosłupach bardzo wysokich, gdzie ściany boczne mają duże pola.",
-    "Poprowadź płaszczyznę przekroju przez dwa wierzchołki podstawy i dwa punkty na pozostałych krawędziach bocznych, znajdujące się bardzo blisko wierzchołka ostrosłupa.",
-    "Zauważ, że taki przekrój jest niemal identyczny ze ścianą boczną ostrosłupa. Jeśli ostrosłup jest wystarczająco wysoki, to pole tej ściany (a więc i przekroju) przekroczy pole podstawy."
+    "Zadanie pyta o istnienie, więc wystarczy znaleźć jeden działający przykład. Zastanów się: czy pole ściany bocznej ostrosłupa może być większe od pola jego podstawy?",
+    "Rozważ ostrosłup, który jest bardzo wysoki w stosunku do rozmiaru swojej podstawy. Wykaż, że pole jego ściany bocznej może być znacznie większe od pola podstawy.",
+    "Skoro już wiesz, że ściana boczna może mieć duże pole, spróbuj skonstruować przekrój, którego pole będzie bardzo bliskie polu tej ściany.",
+    "Poprowadź płaszczyznę przez jedną z krawędzi podstawy i przez punkty na pozostałych krawędziach bocznych, leżące bardzo blisko wierzchołka. Do czego dąży pole przekroju, gdy punkty te zbliżają się do wierzchołka?"
   ],
   "skills_required": [
     "spatial_3d",

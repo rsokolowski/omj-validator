@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Skup się na trójkącie równobocznym $AEF$. Skoro $M$ jest środkiem boku $AF$, to jaki kąt tworzy odcinek $EM$ z bokiem $AF$? Wyznacz miarę kąta $\\angle AME$.",
-    "Zauważ, że kąt $\\angle ABE$ jest prosty (z własności prostokąta) oraz kąt $\\angle AME$ też jest prosty. Co to oznacza dla punktów $A, B, E, M$? Czy można na nich opisać okrąg?",
-    "Wykorzystaj fakt, że czworokąt $ABEM$ jest wpisany w okrąg. Znajdź miarę kąta $\\angle ABM$, korzystając z tego, że $EM$ jest dwusieczną kąta w trójkącie równobocznym.",
-    "Powinieneś otrzymać $\\angle MBC = 60^\\circ$. Aby zakończyć dowód, wykaż, że $MB = MC$. W tym celu zauważ, że punkt $M$ leży dokładnie w połowie odległości między prostymi $AB$ i $CD$ (dlaczego?)."
+    "W trójkącie równobocznym $AEF$ odcinek $EM$ jest medianą. Jakie inne własności ma ten odcinek? Wyznacz miary kluczowych kątów, w szczególności $\\angle AME$ i $\\angle AEM$.",
+    "Poszukaj w figurze kątów prostych. Zauważ, że zarówno wierzchołek $B$ prostokąta, jak i punkt $M$ 'patrzą' na odcinek $AE$ pod kątem prostym. Co to oznacza dla punktów $A, B, E, M$?",
+    "Skoro punkty $A, B, E, M$ leżą na jednym okręgu, możesz znaleźć miarę kąta $\\angle ABM$, wiążąc go z innym kątem opartym na tym samym łuku.",
+    "Oblicz miarę kąta $\\angle MBC$. Aby zakończyć dowód, wykaż, że $MB=MC$. Wskazówka: Rozważ rzuty prostokątne punktów $A$, $F$ i $M$ na prostą $BC$."
   ],
   "skills_required": [
     "angle_chasing",

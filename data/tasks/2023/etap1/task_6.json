@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Przekształć równania $ab+b+1=0$ i $bc+c+1=0$ do postaci iloczynowej: $b(a+1)=-1$ oraz $c(b+1)=-1$.",
-    "Zauważ, że zmienna $b$ występuje w obu równaniach. Wyznacz $a$ z pierwszego równania oraz $c$ z drugiego, uzależniając obie te liczby wyłącznie od $b$.",
-    "Podstaw otrzymane wzory na $a$ i $c$ do badanego wyrażenia $ca+a+1$. Zacznij od obliczenia i uproszczenia samego iloczynu $ca$.",
-    "Dodaj do uproszczonego iloczynu $ca$ wyznaczone wcześniej wyrażenie na $a$ oraz jedynkę. Po wykonaniu działań suma powinna zredukować się do zera."
+    "Spróbuj dodać do obu stron równania $ab+b+1=0$ zmienną $a$. Zauważ, że lewą stronę da się teraz zapisać w postaci iloczynu.",
+    "Zapisz w ten sam sposób wszystkie trzy warunki z treści zadania. Twoim celem jest pokazanie, że jeśli dwa pierwsze równania są prawdziwe, to trzecie również musi być.",
+    "Z drugiego przekształconego równania, $(b+1)(c+1)=b$, wyznacz wyrażenie na $b+1$. Podstaw je do pierwszego przekształconego równania.",
+    "Po podstawieniu i uproszczeniu otrzymasz równość $b(a+1)=a(c+1)$. Przekształć ją dalej, aby dojść do wniosku, że $ca+a+1=0$."
   ],
   "skills_required": [
     "algebraic_identities",

@@ -14,10 +14,10 @@
     "logika"
   ],
   "hints": [
-    "Oblicz sumę wszystkich liczb od 1 do 17. Zastanów się, jaka będzie suma 16 liczb wpisanych do tabeli w zależności od tego, którą liczbę pominiesz.",
-    "Jeśli suma górnego wiersza jest dwa razy większa od sumy dolnego, to jak można wyrazić sumę wszystkich 16 liczb przez sumę dolnego wiersza? Jaki warunek podzielności musi spełniać suma 16 liczb?",
-    "Suma 16 liczb musi być podzielna zarówno przez 3 (z warunku o wierszach), jak i przez 8 (z warunku o kolumnach). Znajdź liczby od 1 do 17, których odjęcie od 153 daje wielokrotność 24.",
-    "Gdy ustalisz, która liczba musi zostać pominięta, oblicz wymaganą sumę w każdej kolumnie. Aby uzasadnić, że rozwiązanie istnieje, spróbuj dobrać pozostałe 16 liczb w pary o takiej właśnie sumie."
+    "Oblicz sumę wszystkich liczb od 1 do 17. Zastanów się, jak suma 16 liczb wpisanych do tabeli zależy od wartości pominiętej liczby.",
+    "Wykorzystaj warunki dotyczące sum w wierszach i w kolumnach, aby zapisać sumę wszystkich 16 liczb w tabeli na dwa różne sposoby.",
+    "Z zależności, które zapisałeś, wynikają dwa warunki podzielności dla sumy liczb w tabeli. Jaki jest ostateczny warunek podzielności, który musi spełniać ta suma?",
+    "Gdy ustalisz, która liczba musi zostać pominięta, uzasadnij, że odpowiednie wypełnienie tabeli istnieje. Oblicz wymaganą sumę w każdej kolumnie i spróbuj dobrać pozostałe 16 liczb w pary o takiej właśnie sumie."
   ],
   "prerequisites": [],
   "skills_required": [

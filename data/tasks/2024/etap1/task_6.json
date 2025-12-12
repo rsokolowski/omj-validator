@@ -16,7 +16,7 @@
     "Policz, ile pól znajduje się w każdym wierszu i każdej kolumnie. Jakie są minimalne i maksymalne możliwe sumy dla wiersza lub kolumny o $k$ polach?",
     "Masz $2n$ sum, które muszą być różne. Jaki jest zbiór wszystkich możliwych wartości, jakie te sumy mogą przyjąć? Co z tego wynika na temat wymaganego zbioru sum?",
     "Skoro znasz dokładny zbiór sum, które muszą wystąpić, oblicz sumę wszystkich tych $2n$ liczb. Czy można w inny sposób wyrazić sumę wszystkich sum wierszy i kolumn?",
-    "Zastanów się, ile razy wartość z każdej komórki jest wliczana do łącznej sumy wszystkich wierszy i kolumn. Jaki warunek na $n$ wynika z porównania obu sposobów liczenia tej sumy?"
+    "Zastanów się, ile razy wartość z każdej komórki jest wliczana do łącznej sumy. Porównując dwa sposoby liczenia tej sumy, znajdziesz warunek na $n$. Pamiętaj, by pokazać, że dla każdego $n$ spełniającego ten warunek istnieje odpowiednie wypełnienie."
   ],
   "prerequisites": [
     "2023_etap1_7"

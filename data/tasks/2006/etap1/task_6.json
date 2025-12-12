@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Przypomnij sobie, gdzie względem trójkąta rozwartokątnego leży środek opisanego na nim okręgu. Wykonaj rysunek pomocniczy.",
+    "Przypomnij sobie, gdzie względem trójkąta rozwartokątnego leży środek opisanego na nim okręgu.",
     "Zauważ, że środek sfery opisanej na czworościanie rzutuje się prostopadle na płaszczyznę dowolnej ściany dokładnie w środek okręgu opisanego na tej ścianie.",
-    "Aby środek sfery znalazł się we wnętrzu czworościanu, jego rzut musi trafić w 'cień' rzucany przez cały czworościan na płaszczyznę ściany rozwartokątnej.",
-    "Ten 'cień' to trójkąt powiększony o rzut czwartego wierzchołka. Czy potrafisz tak dobrać położenie czwartego wierzchołka, aby ten powiększony obszar przykrył środek okręgu?"
+    "Co warunek 'środek sfery leży w jego wnętrzu' mówi nam o położeniu rzutu tego środka na płaszczyznę ściany rozwartokątnej?",
+    "Zestaw ze sobą wszystkie fakty. Czy położenie środka okręgu opisanego na trójkącie rozwartokątnym nie jest sprzeczne z tym, gdzie musiałby się on znaleźć jako rzut wewnętrznego punktu czworościanu?"
   ],
   "skills_required": [
     "spatial_3d",

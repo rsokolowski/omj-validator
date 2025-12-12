@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zapisz równanie wynikające z treści zadania: $n^4+4 = 17p$. Kluczem do rozwiązania jest rozłożenie wyrażenia $n^4+4$ na iloczyn dwóch czynników naturalnych.",
-    "Aby rozłożyć $n^4+4$, zastosuj sprytny manewr: dodaj i odejmij $4n^2$. Pozwoli to uzupełnić wyrażenie do kwadratu sumy, a następnie skorzystać ze wzoru na różnicę kwadratów $a^2-b^2$.",
-    "Otrzymasz iloczyn dwóch czynników równy $17p$. Ponieważ $p$ jest liczbą pierwszą, istnieją tylko dwa możliwe zestawy czynników: para liczby 1 i $17p$ oraz para liczb 17 i $p$.",
-    "Przeanalizuj te przypadki. Oznacza to, że albo mniejszy z czynników wynosi 1, albo jeden z czynników (mniejszy lub większy) musi być równy 17. Rozwiąż odpowiednie równania i sprawdź czy wyliczone $p$ jest pierwsze."
+    "Zapisz równanie wynikające z treści zadania, oznaczając szukaną liczbę pierwszą jako $p$. Kluczem do rozwiązania jest rozłożenie wyrażenia $n^4+4$ na iloczyn dwóch czynników.",
+    "Wyrażenie $n^4+4$ przypomina niekompletny kwadrat. Spróbuj dodać i odjąć ten sam składnik, tak aby najpierw użyć wzoru na kwadrat sumy, a potem na różnicę kwadratów.",
+    "Po rozłożeniu na czynniki otrzymasz równanie postaci $A \\cdot B = 17p$. Zauważ, że dla naturalnego $n$ oba czynniki są liczbami naturalnymi. Który z nich jest zawsze mniejszy?",
+    "Mniejszy z czynników musi być dzielnikiem liczby $17p$, więc może być równy 1 lub 17. Rozważ oba te przypadki i znajdź $n$. Pamiętaj, by sprawdzić, czy uzyskana liczba $p$ jest pierwsza."
   ],
   "skills_required": [
     "algebraic_identities",
