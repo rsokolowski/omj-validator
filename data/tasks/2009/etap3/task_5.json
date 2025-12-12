@@ -12,10 +12,10 @@
     "logika"
   ],
   "hints": [
-    "Zacznij od podstawowych własności wielościanów. Wzór Eulera łączy liczbę ścian ($S$), wierzchołków ($W$) i krawędzi ($K$). Jak informacja o 3 krawędziach w wierzchołku pozwala powiązać $W$ i $K$?",
-    "Użyj wzoru Eulera oraz zależności między $W$ i $K$, aby obliczyć dokładne wartości tych parametrów. Następnie policz, ile łącznie boków ($L$) muszą mieć wszystkie ściany wielościanu.",
-    "Wielościan ma jedną ścianę 99-kątną i 99 innych ścian. Zastanów się, jak te 99 ścian musi być połączonych z 99-kątem. Ile krawędzi może dzielić z nim każda z nich, biorąc pod uwagę wypukłość?",
-    "Pozostałe 99 ścian tworzy pierścień wokół 99-kąta. Policz krawędzie tych 99 ścian, dzieląc je na 3 typy: wspólne z 99-kątem, \"promieniowe\" i \"zewnętrzne\". Ile powinno być krawędzi zewnętrznych, a ile wynika z obliczeń?"
+    "Zacznij od podstawowych własności wielościanów. Wzór Eulera łączy liczbę ścian ($S$), wierzchołków ($W$) i krawędzi ($K$). Jak powiązać $W$ i $K$, wiedząc, że w każdym wierzchołku zbiegają się 3 krawędzie?",
+    "Użyj wzoru Eulera i znalezionej zależności, aby obliczyć, ile wierzchołków i krawędzi musiałby mieć taki wielościan, gdyby istniał.",
+    "Rozważmy graf utworzony z wierzchołków i krawędzi wielościanu. Co się stanie, jeśli usuniemy z niego 99 krawędzi tworzących ścianę 99-kątną? Policz, ile wierzchołków i krawędzi pozostanie.",
+    "Jaki rodzaj grafu ma $N$ wierzchołków i $N-1$ krawędzi, jeśli jest spójny? Zauważ, że brzegi pozostałych 99 ścian muszą tworzyć w tym grafie cykle. Czy te dwa fakty da się pogodzić?"
   ],
   "skills_required": [
     "polyhedra",

@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Zacznij od konkretnych przykładów. Używając par $(a,b)$ takich jak $(2,3)$, $(2,4)$ czy $(3,3)$, spróbuj ustalić, które z małych liczb, np. 5, 6, 7, 8, 9, muszą mieć ten sam kolor.",
-    "Pokaż, że wszystkie liczby $n > 4$ mają ten sam kolor co liczba 6. Spróbuj to udowodnić przez indukcję, pokazując, że kolor liczby $n$ zależy od kolorów liczb od niej mniejszych.",
-    "Rozważ dwa przypadki dla liczby $n$. Jeśli $n$ jest liczbą złożoną, $n=ab$, to jej kolor zależy od koloru mniejszej liczby $a+b$. A co jeśli $n$ jest liczbą pierwszą?",
-    "Gdy $n$ jest liczbą pierwszą, przedstaw ją jako sumę, np. $n = 2 + (n-2)$. Wtedy $C(n) = C(2(n-2))$. Zauważ, że liczba $2(n-2)$ jest złożona, co pozwala sprowadzić jej kolor do koloru jeszcze mniejszej liczby."
+    "Zacznij od zbadania małych liczb. Używając par $(a,b)$ takich jak $(2,3)$, $(3,3)$ czy $(3,4)$, spróbuj pokazać, że liczby 5, 6, 7, 8, 9 muszą mieć ten sam kolor.",
+    "Wykaż przez indukcję, że wszystkie liczby $n>4$ mają ten sam kolor co liczba 6. Załóż, że to prawda dla liczb od 5 do $n-1$ i udowodnij dla $n$.",
+    "Podziel dowód indukcyjny na dwa przypadki: gdy $n$ jest liczbą złożoną i gdy $n$ jest liczbą pierwszą. Zauważ, że dla $n=ab$ kolor zależy od koloru mniejszej liczby $a+b$.",
+    "Dla $n$ pierwszego (np. $n \text{≥} 11$), zapisz $n=3+(n-3)$. Kolor $n$ jest więc taki sam jak kolor liczby $m=3(n-3)$. Znajdź dla $m$ taki rozkład na czynniki $c \text{·} d$, aby suma $c+d$ była mniejsza od $n$."
   ],
   "skills_required": [
     "divisibility_arguments",

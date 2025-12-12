@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Aby wykazać, że liczby są podzielne przez 10, musisz udowodnić, że ich ostatnie cyfry to 0. Co równość $a+b=10^{1000}$ mówi o sumie ostatnich cyfr liczb $a$ i $b$?",
-    "Załóżmy, że liczby $a$ i $b$ nie są podzielne przez 10. Co to oznacza dla ich ostatnich cyfr? Zastanów się, jak wyglądałoby pisemne dodawanie $a+b$ i jakie byłyby przeniesienia.",
-    "Jeśli ostatnie cyfry sumują się do 10, to następuje przeniesienie do następnej kolumny. Co to implikuje dla sumy cyfr na kolejnych pozycjach (dziesiątek, setek, itd.)?",
-    "Liczby $a$ i $b$ mają te same cyfry, więc mają tę samą sumę cyfr. Porównaj sumy cyfr liczb $a$ i $b$, korzystając z zależności, które znalazłeś dla par cyfr na odpowiadających pozycjach. Czy to prowadzi do sprzeczności?"
+    "Aby wykazać, że liczba jest podzielna przez 10, trzeba udowodnić, że jej cyfra jedności to 0. Co wynika z faktu, że cyfra jedności sumy $a+b$ jest zerem?",
+    "Załóżmy nie wprost, że $a$ i $b$ nie są podzielne przez 10. Oznacza to, że ich cyfry jedności są niezerowe. Rozważ pisemne dodawanie $a+b$ i przeanalizuj przeniesienia między kolejnymi pozycjami.",
+    "Jeśli suma cyfr jedności wynosi 10, to do rzędu dziesiątek jest przeniesienie 1. Jaka musi być wtedy suma cyfr dziesiątek, skoro w wyniku $a+b$ cyfra dziesiątek jest zerem? Ustal, jaka jest suma par cyfr na każdej pozycji.",
+    "Liczby $a$ i $b$ składają się z tych samych cyfr, więc suma ich cyfr jest równa. Porównaj ten fakt z sumą wszystkich par cyfr ($a_i+b_i$) obliczoną w poprzednim kroku, aby znaleźć sprzeczność."
   ],
   "skills_required": [
     "modular_arithmetic",

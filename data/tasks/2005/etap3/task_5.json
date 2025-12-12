@@ -10,10 +10,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zapisz warunki zadania używając kongruencji. Rząd $a$ modulo $p$ to najmniejsza liczba całkowita dodatnia $k$ taka, że $a^k \\equiv 1 \\pmod p$. Co wynika z warunku $a^q \\equiv 1 \\pmod p$ na temat rzędu $a$?",
-    "Rozważ cztery przypadki w zależności od tego, czy rząd $a$ modulo $p$ jest równy 1 czy $q$, oraz czy rząd $b$ modulo $q$ jest równy 1 czy $p$.",
-    "Pokaż, że jeden z tych czterech przypadków jest niemożliwy. W pozostałych przypadkach kluczem do dowodu jest znalezienie jak najlepszego oszacowania $a$ i $b$ od dołu.",
-    "Jeśli rząd $a$ modulo $p$ to 1, to $a \\equiv 1 \\pmod p$. Jakie jest najmniejsze $a>1$ o tej własności? A jeśli rząd jest większy od 1, jaka jest najmniejsza możliwa wartość $a$? Zastosuj te oszacowania w każdym przypadku."
+    "Zauważ, że jeśli $a \\ge p$ lub $b \\ge q$, nierówność jest prawdziwa. Główna trudność leży w przypadku, gdy jednocześnie $a < p$ i $b < q$.",
+    "Aby rozwiązać zadanie, wykaż, że przypadek $a < p$ i $b < q$ jest niemożliwy, jeśli założymy, że $a,b > 1$. Wykorzystaj Małe Twierdzenie Fermata.",
+    "Z warunku $a^q \\equiv 1 \\pmod p$ i Małego Twierdzenia Fermata wynika, że rząd $a$ modulo $p$ musi dzielić $q$ i $p-1$. Co to oznacza, skoro $a>1$ i $q$ jest liczbą pierwszą?",
+    "Rząd $a$ modulo $p$ musi być równy $q$, a rząd $b$ modulo $q$ musi być równy $p$. Oznacza to, że $q$ dzieli $p-1$, a $p$ dzieli $q-1$. Czy te dwa warunki mogą być spełnione jednocześnie?"
   ],
   "skills_required": [
     "modular_arithmetic",

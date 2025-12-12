@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zapisz warunki zadania w postaci równań: $ab = k^2$ i $(a+1)(b+1) = m^2$ dla pewnych dodatnich liczb całkowitych $k, m$. Musisz znaleźć $n>1$.",
-    "Dowód jest konstruktywny. Spróbuj znaleźć konkretną wartość $n$, wyrażoną za pomocą $a$ i $b$, która sprawi, że $(a+n)(b+n)$ będzie kwadratem liczby całkowitej.",
-    "Zamiast wymnażać nawiasy w wyrażeniu $(a+n)(b+n)$, zastanów się, jak można by je przekształcić. Czy da się dobrać $n$ tak, aby z czynników $(a+n)$ i $(b+n)$ wyłączyć coś użytecznego?",
-    "Aby z czynnika $(a+n)$ dało się wyłączyć $a$, liczba $n$ musi być wielokrotnością $a$. Podobnie dla $b$. Jaki jest najprostszy kandydat na $n$ o tej własności? Sprawdź go i pamiętaj o warunku $n>1$."
+    "Zapisz warunki zadania w postaci równań: $ab=k^2$ oraz $(a+1)(b+1)=m^2$ dla pewnych dodatnich liczb całkowitych $k, m$. Szukasz $n>1$ takiego, że $(a+n)(b+n)=s^2$ dla pewnej liczby $s$.",
+    "Rozważ wyrażenie $(a+n)(b+n)=s^2$. Przekształć je, mnożąc obie strony przez 4, a następnie stosując wzór na różnicę kwadratów, aby doprowadzić je do postaci $X^2-Y^2=Z^2$.",
+    "Twoje przekształcone równanie powinno mieć postać $(2n+a+b)^2 - (a-b)^2 = (2s)^2$. Oznacza to, że liczby $(|a-b|, 2s, 2n+a+b)$ tworzą trójkę pitagorejską.",
+    "Zauważ, że dla $n=0$ i $n=1$ otrzymujemy trójki pitagorejskie $(|a-b|, 2k, a+b)$ oraz $(|a-b|, 2m, a+b+2)$. Poszukaj sposobu na skonstruowanie trzeciej trójki o tym samym pierwszym boku, co pozwoli wyznaczyć nowe $n$."
   ],
   "skills_required": [
     "diophantine_equations",

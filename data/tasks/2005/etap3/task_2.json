@@ -10,10 +10,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie całą konfigurację. Zwróć uwagę na pary prostych równoległych ($AB \\| DC$ i $AD \\| BC$) i zastanów się, jak wpływają one na pola pewnych trójkątów.",
-    "Pole trójkąta nie zmienia się, jeśli jego wierzchołek przesuwamy po prostej równoległej do podstawy. To kluczowa własność w tym zadaniu.",
-    "Zastosuj tę własność do trójkątów o podstawach na prostych $PC$ i $QC$. Porównaj pole $\\triangle FPC$ z polem $\\triangle APC$ oraz pole $\\triangle ECQ$ z polem $\\triangle ACQ$.",
-    "Rozważ pole czworokąta $APCQ$, aby powiązać pole $\\triangle APQ$ z polami trójkątów z poprzedniej wskazówki. Uprość otrzymane wyrażenie, korzystając z tego, że punkty $P, E, F, Q$ leżą na jednej prostej."
+    "Narysuj starannie całą konfigurację. Zwróć uwagę na pary prostych równoległych ($AB \\parallel DC$ i $AD \\parallel BC$) i pomyśl, jak można to wykorzystać do porównywania pól.",
+    "Pole trójkąta o danej podstawie nie zmienia się, gdy jego trzeci wierzchołek porusza się po prostej równoległej do podstawy. Poszukaj w ten sposób par trójkątów o równych polach.",
+    "Wykaż, że pole trójkąta $\\triangle APC$ jest równe polu $\\triangle FPC$. Podobnie uzasadnij, że pole $\\triangle AQC$ jest równe polu $\\triangle EQC$.",
+    "Porównaj pole czworokąta $APCQ$ obliczone na dwa sposoby (przez podział wzdłuż przekątnych $AC$ i $PQ$). Wykorzystaj poprzednią wskazówkę, by uprościć równanie, a następnie zauważ, że niektóre trójkąty w nim występujące mają wspólną wysokość."
   ],
   "skills_required": [
     "area_methods",

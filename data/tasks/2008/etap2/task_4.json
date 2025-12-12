@@ -13,12 +13,19 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Ile łącznie meczów zostanie rozegranych w turnieju? Każdy z 50 zawodników gra z każdym innym dokładnie raz.",
-    "Policz sumę wszystkich zwycięstw w turnieju. Zastanów się, co musiałoby być prawdą, gdyby każdy zawodnik wygrał tę samą liczbę meczów.",
-    "Jeśli każdy ma wygrać tyle samo meczów, to łączna liczba zwycięstw musi dzielić się przez liczbę zawodników. Sprawdź, czy tak jest.",
-    "Oblicz $\\frac{50 \\cdot 49}{2}$ i sprawdź, czy wynik dzieli się przez $50$. Co to oznacza dla możliwości równego podziału zwycięstw?"
+    "Oblicz, ile łącznie meczów rozegrano w turnieju, w którym 50 zawodników gra systemem 'każdy z każdym'.",
+    "Zauważ, że w każdym meczu jest dokładnie jeden zwycięzca. Jaka jest więc relacja między całkowitą liczbą meczów a sumą zwycięstw odniesionych przez wszystkich zawodników?",
+    "Załóż, że każdy zawodnik wygrał $k$ meczów. Wyraź sumę zwycięstw wszystkich zawodników. Jaki warunek musi w związku z tym spełniać całkowita liczba meczów?",
+    "Całkowita liczba meczów wynosi $\\frac{50 \\cdot 49}{2}$. Czy ta liczba jest podzielna przez 50? Jaki wniosek można z tego wyciągnąć na temat istnienia całkowitej liczby zwycięstw $k$?"
   ],
   "prerequisites": [],
-  "skills_required": ["graph_theory", "double_counting", "divisibility_arguments"],
-  "skills_gained": ["graph_theory", "double_counting"]
+  "skills_required": [
+    "graph_theory",
+    "double_counting",
+    "divisibility_arguments"
+  ],
+  "skills_gained": [
+    "graph_theory",
+    "double_counting"
+  ]
 }

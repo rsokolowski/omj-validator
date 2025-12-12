@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Przekształć równanie mnożąc je stronami przez 2 i przenosząc wszystkie wyrazy na jedną stronę. Zwiń otrzymane wyrażenie do pełnego kwadratu różnicy.",
-    "Powinieneś otrzymać zależność $|\\sqrt{a} - \\sqrt{b}| = \\sqrt{6}$. Aby sprawdzić prawdziwość tezy, spróbuj znaleźć parę liczb wymiernych $a, b$ spełniającą to równanie.",
-    "Zauważ, że jeśli $\\sqrt{b} = \\sqrt{6}$, to $b=6$ jest liczbą wymierną. Podstaw tę wartość do zależności z poprzedniej wskazówki i oblicz $a$.",
-    "Dla $b=6$ otrzymujemy $\\sqrt{a} = 2\\sqrt{6}$, czyli $a=24$. Sprawdź, czy para liczb wymiernych $(24, 6)$ spełnia wyjściowe równanie i jaki wniosek płynie stąd dla tezy zadania."
+    "Zacznij od przekształcenia danego równania. Podniesienie obu stron do kwadratu pozwoli pozbyć się pierwiastka i uprościć wyrażenie.",
+    "Spróbuj udowodnić tezę nie wprost. Załóż, że obie liczby $a$ i $b$ są wymierne, i poszukaj sprzeczności wynikającej z tego założenia.",
+    "Po poprawnym uproszczeniu równania powinieneś otrzymać $(a-b)^2 = 12$. Zastanów się, jakie własności ma lewa strona tego równania, jeśli przyjąć założenie z poprzedniej wskazówki.",
+    "Jeżeli liczby $a$ i $b$ są wymierne, to ich różnica $a-b$ również jest liczbą wymierną. Czy kwadrat liczby wymiernej może być równy 12?"
   ],
   "skills_required": [
     "inequality_manipulation",

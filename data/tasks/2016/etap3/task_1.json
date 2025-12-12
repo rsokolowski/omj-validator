@@ -15,8 +15,8 @@
   "hints": [
     "Jeśli liczba jest wymierna, to można ją zapisać jako $\\frac{p}{q}$ dla pewnych liczb całkowitych. Co to oznacza dla wyrażenia z $\\sqrt{2}$?",
     "Spróbuj pomnożyć licznik i mianownik przez wyrażenie sprzężone $(b\\sqrt{2}-c)$, aby pozbyć się $\\sqrt{2}$ z mianownika. Następnie wykorzystaj fakt, że $\\sqrt{2}$ jest niewymierną.",
-    "Po przekształceniu otrzymasz wyrażenie postaci $A + B\\sqrt{2}$. Aby było wymierne, współczynnik $B$ przy $\\sqrt{2}$ musi być równy zero. Jaki warunek to daje?",
-    "Z warunku wymierności wyprowadź równość $ac = b^2$. Następnie zbadaj, jak można wykorzystać tę zależność do pokazania, że $(a+b+c)$ dzieli $(ab+bc+ca)$."
+    "Po przekształceniu otrzymasz wyrażenie postaci $A + B\\sqrt{2}$, gdzie $A$ i $B$ są wymierne. Aby cała liczba była wymierna, współczynnik $B$ musi być równy zero. Jaki warunek to daje?",
+    "Wykorzystaj zależność między $a, b, c$ znalezioną w poprzednim kroku. Podstaw ją do wyrażenia $ab+bc+ca$ i poszukaj wspólnego czynnika, który można wyłączyć przed nawias."
   ],
   "skills_required": [
     "algebraic_identities",

@@ -11,10 +11,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj rysunek i oznacz środek cięciwy $AB$ jako $M$. Zauważ, które odcinki są promieniami okręgu. Jakim rodzajem trójkąta jest $\\triangle SAM$?",
-    "Twoim celem jest wykazanie, że $AM > CD$. Spróbuj powiązać długości $AM$ i $CD$ z promieniem okręgu oraz odległościami punktów od środka $S$.",
-    "Kluczowe są dwa trójkąty: $\\triangle SAM$ i $\\triangle SCM$. Zastosuj nierówność trójkąta do pierwszego z nich. Jaka jest relacja między długością przyprostokątnej a przeciwprostokątnej w drugim?",
-    "Z nierówności trójkąta wiesz, że $AM > SA - SM$. Z drugiej strony $CD = SD - SC$. Porównaj $SM$ z $SC$, aby powiązać ze sobą te dwie zależności."
+    "Narysuj staranny rysunek. Oznacz środek cięciwy $AB$ jako $M$. Jaki jest związek między odcinkami $SM$ i $AB$? Zauważ, że długości $SA$, $SB$ i $SD$ są równe promieniowi okręgu.",
+    "Nierówność $AB > 2CD$ jest równoważna nierówności $AM > CD$. Spróbuj wyrazić kwadraty długości $AM$ i $CD$ za pomocą promienia okręgu $R$ i odległości punktów od środka $S$.",
+    "Zwróć uwagę na dwa trójkąty prostokątne: $\\triangle SMA$ oraz $\\triangle SMC$. Zastosuj w nich twierdzenie Pitagorasa, aby powiązać ze sobą długości $AM$, $SM$ i $SC$.",
+    "Wyraziłeś już $AM^2$ w zależności od $R$ i $SM$. Zauważ, że $CD = R - SC$. Porównaj $AM^2$ z $CD^2$, wykorzystując zależność między $SM$ a $SC$ wynikającą z trójkąta $\\triangle SMC$."
   ],
   "skills_required": [
     "circle_theorems",

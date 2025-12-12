@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Pomyśl o ścianach wielościanu jak o wierzchołkach nowego grafu, w którym krawędź łączy dwie ściany, jeśli mają wspólny bok (to tzw. graf dualny). Co założenie o wierzchołkach wielościanu mówi o ścianach tego nowego grafu?",
-    "Wykaż, że skoro w każdym wierzchołku wielościanu schodzi się parzysta liczba krawędzi, to jego ściany można pokolorować dwoma kolorami (np. czarnym i białym) tak, by sąsiednie ściany miały różne kolory.",
-    "Liczba wszystkich ścian jest nieparzysta. Co to oznacza dla liczby ścian czarnych i białych? Policz sumę boków wszystkich białych ścian. Zauważ, że każda krawędź wielościanu rozdziela dokładnie jedną ścianę białą i jedną czarną.",
-    "Suma boków wszystkich białych ścian jest równa całkowitej liczbie krawędzi `K`. Podobnie dla ścian czarnych. Co wynika z równości tych dwóch sum, jeśli rozważymy ich parzystość i weźmiemy pod uwagę, że liczba białych i czarnych ścian jest różna?"
+    "Rozważ graf wielościanu. Założenie o parzystej liczbie krawędzi w każdym wierzchołku ma ważną konsekwencję: ściany wielościanu można pokolorować dwoma kolorami (np. białym i czarnym) tak, aby żadne dwie sąsiednie ściany nie miały tego samego koloru.",
+    "Niech $F_b$ to liczba ścian czarnych, a $F_w$ to liczba białych. Co wynika z faktu, że całkowita liczba ścian $F = F_b + F_w$ jest nieparzysta? Jaka jest parzystość $F_b$ i $F_w$?",
+    "Policz sumę liczby krawędzi wszystkich białych ścian. Zauważ, że każda krawędź wielościanu rozdziela dokładnie jedną ścianę białą od jednej czarnej. Jak ta suma ma się do całkowitej liczby krawędzi $E$?",
+    "Zrób to samo dla ścian czarnych. Otrzymasz dwie sumy, obie równe $E$. Jedna z tych sum ma parzystą liczbę składników, a druga nieparzystą. Zbadaj parzystość obu sum, aby znaleźć sprzeczność."
   ],
   "skills_required": [
     "polyhedra",

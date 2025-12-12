@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj rysunek i oznacz $AC=BC=a$. Pamiętaj, że symetrie osiowe zachowują długości. Wypisz wszystkie odcinki na rysunku, które mają długość $a$.",
-    "Skup się na kątach przy wierzchołku $C$. Oblicz miary kątów $\\angle ACA'$ oraz $\\angle A'CB'$. Wykorzystaj te miary, aby określić rodzaj trójkątów $ACA'$ i $A'CB'$ oraz obliczyć długości $AA'$ i $A'B'$.",
-    "Aby obliczyć trzeci bok $A'C'$, rozważ trójkąt $A'AC'$. Znasz już długości boków $AA'$ i $AC'$. Zastanów się, jaki jest kąt między nimi.",
-    "Oblicz miarę kąta $\\angle A'AC'$, sprawdzając jakie kąty tworzą odcinki $AA'$ i $AC'$ z bokiem $AC$. Wykorzystaj to do obliczenia długości $A'C'$."
+    "Narysuj dokładny rysunek. Zauważ, że symetria osiowa zachowuje odległości. Wypisz wszystkie odcinki, o których możesz od razu powiedzieć, że mają długość równą $AC$.",
+    "Kluczowe jest zrozumienie, co symetrie robią z kątami. Zastanów się, jaka jest miara kąta $\\angle ACA'$ oraz, analogicznie, kąta $\\angle BCB'$. Co to mówi o trójkątach $\\triangle ACA'$ i $\\triangle BCB'$?",
+    "Wykorzystaj własności $\\triangle ACA'$ i $\\triangle BCB'$, aby znaleźć długości $AA'$ i $BB'$. Teraz możesz obliczyć boki $\\triangle A'B'C'$, badając kąty w trójkątach pomocniczych: $\\triangle A'AC'$, $\\triangle B'BC'$ i $\\triangle A'CB'$.",
+    "Aby obliczyć długość boku $A'C'$, znajdź miarę kąta $\\angle A'AC'$. Wyraź go jako sumę kątów $\\angle A'AC$ i $\\angle CAC'$. Drugi z tych kątów jest związany z kątem $\\angle CAB$ poprzez symetrię."
   ],
   "prerequisites": [
     "2021_etap1_5"

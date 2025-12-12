@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Wyobraź sobie taki wielościan. Jedna jego ściana ($F_0$) jest nieforemna, a wszystkie pozostałe są foremne. Co możesz powiedzieć o długościach krawędzi ściany $F_0$, jeśli wszystkie ściany foremne to trójkąty równoboczne o tym samym boku?",
-    "Ściana nieforemna musi być wielokątem równobocznym. Najprostszym przykładem jest romb (który nie jest kwadratem). Zauważ, że taki romb można zbudować z dwóch przystających trójkątów równobocznych połączonych wzdłuż jednego boku.",
-    "Spróbujmy skonstruować szukany wielościan z dwóch czworościanów foremnych. Pomyśl o ułożeniu ich tak, aby dwie z ich ścian (po jednej z każdego czworościanu) znalazły się w tej samej płaszczyźnie i utworzyły razem romb.",
-    "Weź dwa czworościany foremne $ABCD$ i $EBCD$. Ustaw je tak, aby ich ściany $\\triangle ABC$ i $\\triangle EBC$ leżały w jednej płaszczyźnie, tworząc romb $ABEC$. Pozostałe ściany obu czworościanów utworzą wypukłą bryłę. Sprawdź, jakie ma ona ściany."
+    "Załóżmy, że taki wielościan istnieje i wszystkie jego krawędzie mają tę samą długość. Co to oznacza dla jego ścian regularnych i tej jednej nieregularnej?",
+    "Naturalnym pomysłem jest próba zbudowania ostrosłupa na równobocznej, nieforemnej podstawie (np. rombie), którego ściany boczne są trójkątami równobocznymi. Zbadaj, czy taka konstrukcja jest możliwa.",
+    "Jeśli zbadałeś konstrukcję ostrosłupa, powinieneś dojść do wniosku, że jego podstawa musiałaby być jednocześnie równoboczna i wpisana w okrąg, a co za tym idzie – foremna. To sprzeczność. Oznacza to, że musimy poszukać innej, bardziej złożonej konstrukcji.",
+    "Skoro prosty ostrosłup nie działa, spróbuj połączyć ze sobą dwa inne, proste wielościany o wszystkich ścianach foremnych (np. dwa ostrosłupy) w nietypowy sposób, tak aby w wyniku połączenia powstała jedna, nieregularna ściana."
   ],
   "skills_required": [
     "spatial_3d",

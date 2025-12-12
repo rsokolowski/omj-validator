@@ -3,6 +3,7 @@
 Review task hints for quality, logical consistency, and grade-appropriateness.
 
 Uses Gemini API to analyze existing hints and regenerate them if needed.
+Includes convergence detection to ensure hints are stable across multiple LLM runs.
 
 Usage:
     python review_hints.py --year 2024 --etap etap1 --task 1    # Review specific task
@@ -10,6 +11,10 @@ Usage:
     python review_hints.py --year 2024                           # Review all tasks in year
     python review_hints.py --dry-run                             # Preview without saving
     python review_hints.py --model gemini-2.5-pro                # Specific Gemini model
+
+Convergence options:
+    --min-consecutive-passed N    # Min consecutive passes to claim victory (default: 3)
+    --max-retries N               # Max attempts per task before giving up (default: 20)
 """
 
 import argparse
@@ -500,7 +505,9 @@ class ReviewStats:
         self.updated = 0
         self.failed = 0
         self.skipped = 0
+        self.unconverged = 0
         self.failed_tasks: list[str] = []
+        self.unconverged_tasks: list[tuple[str, int, int]] = []  # (path, attempts, max_consecutive)
         self._lock = threading.Lock()
 
     def add_reviewed(self, updated: bool):
@@ -520,6 +527,11 @@ class ReviewStats:
     def add_skipped(self):
         with self._lock:
             self.skipped += 1
+
+    def add_unconverged(self, task_path: str, attempts: int, max_consecutive: int):
+        with self._lock:
+            self.unconverged += 1
+            self.unconverged_tasks.append((task_path, attempts, max_consecutive))
 
 
 def validate_gemini_response(data: dict) -> dict | None:
@@ -660,6 +672,10 @@ def main():
     parser.add_argument("--parallel", type=int, default=1, help="Number of parallel workers (default: 1)")
     parser.add_argument("--model", type=str, default="gemini-2.5-flash",
                         help="Gemini model to use (default: gemini-2.5-flash)")
+    parser.add_argument("--min-consecutive-passed", type=int, default=3,
+                        help="Minimum consecutive passes to consider hints stable (default: 3)")
+    parser.add_argument("--max-retries", type=int, default=20,
+                        help="Maximum attempts per task before giving up (default: 20)")
     args = parser.parse_args()
 
     # Configure Gemini
@@ -683,6 +699,7 @@ def main():
     if args.parallel > 1:
         print(f"Parallel workers: {args.parallel}")
 
+    print(f"Convergence: {args.min_consecutive_passed} consecutive passes required, max {args.max_retries} attempts per task")
     print()
 
     data_dir = Path(__file__).parent / "data" / "tasks"
@@ -705,6 +722,7 @@ def main():
     print(f"Reviewing hints for {len(task_files)} tasks...")
     if args.dry_run:
         print("(DRY RUN - no files will be modified)")
+        print("(Convergence detection disabled in dry-run mode - hints aren't persisted)")
     print()
 
     stats = ReviewStats(total=len(task_files))
@@ -712,8 +730,11 @@ def main():
     completed_count = [0]  # Use list for mutable reference in closure
 
     def process_single_task(task_path: Path) -> None:
-        """Process a single task (thread worker function)."""
+        """Process a single task with convergence detection (thread worker function)."""
         rel_path = task_path.relative_to(data_dir)
+        # In dry-run mode, skip convergence detection (hints aren't persisted)
+        min_consecutive = 1 if args.dry_run else args.min_consecutive_passed
+        max_attempts = 1 if args.dry_run else args.max_retries
 
         # Check if task has hints
         with open(task_path, 'r', encoding='utf-8') as f:
@@ -726,19 +747,61 @@ def main():
             stats.add_skipped()
             return
 
-        # Process the task (collect output for atomic printing)
-        success, updated, output_lines = process_task(
-            task_path,
-            dry_run=args.dry_run,
-            verbose=args.verbose,
-            gemini_model=args.model,
-            tracker=tracker,
-            gemini_client=gemini_client
-        )
+        # Convergence loop: retry until we get min_consecutive passes or hit max_attempts
+        consecutive_passes = 0
+        total_attempts = 0
+        max_consecutive_seen = 0
+        all_output_lines = []
+        final_updated = False
+        final_success = True
 
-        # Update stats
-        if success:
-            stats.add_reviewed(updated)
+        while consecutive_passes < min_consecutive and total_attempts < max_attempts:
+            total_attempts += 1
+
+            # Process the task (collect output for atomic printing)
+            success, updated, output_lines = process_task(
+                task_path,
+                dry_run=args.dry_run,
+                verbose=args.verbose,
+                gemini_model=args.model,
+                tracker=tracker,
+                gemini_client=gemini_client
+            )
+
+            if not success:
+                # API error - add to output and break
+                all_output_lines.append(f"  [Attempt {total_attempts}] API ERROR")
+                all_output_lines.extend(output_lines)
+                final_success = False
+                break
+
+            if updated:
+                # Hints were changed - reset consecutive counter
+                reset_info = f", was {consecutive_passes}" if consecutive_passes > 0 else ""
+                consecutive_passes = 0
+                final_updated = True
+                all_output_lines.append(f"  [Attempt {total_attempts}] UPDATED (reset consecutive{reset_info})")
+                # Only include detailed output for updates (shows new hints)
+                all_output_lines.extend(output_lines)
+            else:
+                # Passed without update - increment consecutive counter
+                consecutive_passes += 1
+                max_consecutive_seen = max(max_consecutive_seen, consecutive_passes)
+                if consecutive_passes < min_consecutive:
+                    all_output_lines.append(f"  [Attempt {total_attempts}] PASSED ({consecutive_passes}/{min_consecutive} consecutive)")
+                    # Skip detailed output for intermediate passes to reduce verbosity
+                else:
+                    all_output_lines.append(f"  [Attempt {total_attempts}] CONVERGED ({consecutive_passes}/{min_consecutive} consecutive)")
+
+        # Determine final outcome
+        converged = consecutive_passes >= min_consecutive
+
+        if final_success and converged:
+            stats.add_reviewed(final_updated)
+        elif final_success and not converged:
+            # Hit max retries without convergence
+            stats.add_unconverged(str(rel_path), total_attempts, max_consecutive_seen)
+            all_output_lines.append(f"  UNCONVERGED after {total_attempts} attempts (max consecutive: {max_consecutive_seen})")
         else:
             stats.add_failed(str(rel_path))
 
@@ -746,7 +809,7 @@ def main():
         with print_lock:
             completed_count[0] += 1
             print(f"[{completed_count[0]}/{len(task_files)}] {rel_path}")
-            for line in output_lines:
+            for line in all_output_lines:
                 print(line)
             # Show running cost estimate every 10 tasks
             if tracker and completed_count[0] % 10 == 0:
@@ -777,17 +840,35 @@ def main():
     print("=" * 60)
     print("SUMMARY")
     print("=" * 60)
+    effective_min = 1 if args.dry_run else args.min_consecutive_passed
+    effective_max = 1 if args.dry_run else args.max_retries
+    print(f"Convergence:     {effective_min} consecutive passes required, max {effective_max} attempts")
     print(f"Total tasks:     {stats.total}")
-    print(f"Reviewed:        {stats.reviewed}")
-    print(f"  - Passed:      {stats.passed}")
-    print(f"  - Updated:     {stats.updated}")
-    print(f"Failed:          {stats.failed}")
-    print(f"Skipped:         {stats.skipped}")
+    print(f"Converged:       {stats.reviewed}")
+    print(f"  - Passed:      {stats.passed} (hints unchanged)")
+    print(f"  - Updated:     {stats.updated} (hints modified)")
+    print(f"Unconverged:     {stats.unconverged} (hit max retries)")
+    print(f"Failed:          {stats.failed} (API errors)")
+    print(f"Skipped:         {stats.skipped} (no hints)")
+
+    # Print unconverged tasks list
+    if stats.unconverged_tasks:
+        print()
+        print("Unconverged tasks (could not achieve stable hints):")
+        for task_path, attempts, max_consecutive in stats.unconverged_tasks:
+            # Parse year/etap/task from path like "2024/etap1/task_1.json"
+            parts = task_path.split("/")
+            if len(parts) >= 3:
+                year, etap, filename = parts[-3], parts[-2], parts[-1]
+                task_num = filename.replace("task_", "").replace(".json", "")
+                print(f"  --year {year} --etap {etap} --task {task_num}  ({attempts} attempts, max {max_consecutive} consecutive)")
+            else:
+                print(f"  {task_path}  ({attempts} attempts, max {max_consecutive} consecutive)")
 
     # Print failed tasks list for retry
     if stats.failed_tasks:
         print()
-        print("Failed tasks (retry with specific flags):")
+        print("Failed tasks (API errors, retry with specific flags):")
         for task_path in stats.failed_tasks:
             # Parse year/etap/task from path like "2024/etap1/task_1.json"
             parts = task_path.split("/")

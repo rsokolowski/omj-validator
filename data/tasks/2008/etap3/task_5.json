@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Rozważ graf dualny do grafu krawędzi naszego wielościanu. Wierzchołki w tym grafie odpowiadają ścianom, a krawędzie łączą wierzchołki odpowiadające sąsiednim ścianom. Jakie własności ma ten nowy graf?",
-    "Każda ściana oryginalnego wielościanu ma parzystą liczbę boków. Co to oznacza dla stopni wierzchołków w grafie dualnym? Grafy, w których każdy wierzchołek ma parzysty stopień, nazywamy eulerowskimi.",
-    "Ściany grafu eulerowskiego można pokolorować dwoma kolorami (jak szachownicę) tak, że żadne dwie ściany o wspólnym boku nie mają tego samego koloru. Zrób to dla naszego grafu dualnego.",
-    "Policz krawędzie grafu dualnego ($K$), sumując boki ścian jednego koloru. Co ta suma mówi o liczbie ścian (w grafie dualnym) o nieparzystej liczbie boków? Pamiętaj, czemu odpowiadają ściany grafu dualnego."
+    "Rozważ sumę liczb boków wszystkich ścian wielościanu. Można ją obliczyć na dwa sposoby. Co wynika z porównania tych sposobów?",
+    "Oznacz przez $E$ liczbę krawędzi. Zbadaj sumę liczb boków wszystkich ścian modulo 4. Jaki warunek musi spełniać ta suma, jeśli $E$ jest liczbą nieparzystą?",
+    "Niech $F_2$ oznacza liczbę ścian, których liczba boków $k$ jest postaci $4j+2$ (np. 6-kąty, 10-kąty). Jaka musi być parzystość liczby $F_2$, jeśli $E$ jest nieparzyste?",
+    "Wykazałeś zależność między parzystością $E$ a parzystością $F_2$. Okazuje się, że dla każdego wielościanu o ścianach z parzystą liczbą boków, liczba $F_2$ musi być parzysta. Czy potrafisz to uzasadnić, dochodząc do sprzeczności?"
   ],
   "skills_required": [
     "double_counting",

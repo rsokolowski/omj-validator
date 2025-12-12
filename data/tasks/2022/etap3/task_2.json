@@ -13,9 +13,9 @@
   ],
   "hints": [
     "Największy dzielnik liczby $a$ (różny od $a$) jest powiązany z jej najmniejszym dzielnikiem pierwszym. Spróbuj znaleźć tę zależność.",
-    "Rozważ dwa przypadki dotyczące budowy liczby $a$: gdy jest ona potęgą liczby pierwszej oraz gdy ma co najmniej dwa różne dzielniki pierwsze.",
-    "Jeśli $a=p^k$ ($p$ jest liczbą pierwszą, $k \\ge 2$), to $b=p^{k-1}$. Jeśli $a$ ma co najmniej dwa różne dzielniki pierwsze, a $p$ jest najmniejszym z nich, to $b = \\frac{a}{p}$.",
-    "W obu przypadkach zapisz sumę $a+b$ i wyłącz wspólny czynnik przed nawias. Zastanów się, kiedy otrzymany iloczyn może być potęgą dwójki."
+    "Oznacz najmniejszy dzielnik pierwszy liczby $a$ przez $p$. Wykorzystaj znalezioną zależność, aby przedstawić sumę $a+b$ w postaci iloczynu.",
+    "Załóż nie wprost, że suma $a+b$ jest potęgą dwójki. Co wynika z tego dla czynników iloczynu z poprzedniego kroku? Jaką liczbą musi być w szczególności $p+1$?",
+    "Rozważ dwa przypadki w zależności od parzystości $p$. Jeśli $p=2$, zbadaj sumę $a+b$. Jeśli $p$ jest nieparzyste, zastanów się, jaka jest parzystość liczby $b$ i poszukaj sprzeczności."
   ],
   "skills_required": [
     "prime_factorization",

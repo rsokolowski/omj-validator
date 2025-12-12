@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Zwróć uwagę na współczynniki $1, 2, 4$ przy niewiadomych w drugim równaniu. Oblicz sumę ich kwadratów ($1^2+2^2+4^2$).",
-    "Spróbuj powiązać oba równania, budując sumę kwadratów różnic: $(a-1)^2 + (b-2)^2 + (c-4)^2$.",
-    "Rozpisz powyższą sumę korzystając ze wzorów skróconego mnożenia i podstaw wartości $23$ oraz $22$ z równań w zadaniu.",
-    "Z otrzymanej wartości sumy kwadratów wywnioskuj jedyne możliwe liczby $a, b, c$. Sprawdź, czy spełniają one pierwsze równanie układu."
+    "Zwróć uwagę na współczynniki $1, 2, 4$ przy niewiadomych w drugim równaniu. Oblicz sumę ich kwadratów, czyli $1^2+2^2+4^2$.",
+    "Zauważ, że w równaniach występują jednocześnie wyrażenia $a^2$ i $a$, $b^2$ i $2b$ oraz $c^2$ i $4c$. Spróbuj wykorzystać wzory skróconego mnożenia, aby je ze sobą powiązać.",
+    "Spróbuj zbudować sumę trzech kwadratów, która po rozwinięciu pozwoli wykorzystać oba podane równania. Jakie wyrażenia należy podnieść do kwadratu?",
+    "Oblicz wartość wyrażenia $(a-1)^2 + (b-2)^2 + (c-4)^2$. Otrzymana równość wyznacza jedynego kandydata na rozwiązanie. Sprawdź, czy ta trójka liczb $(a,b,c)$ faktycznie spełnia wyjściowy układ równań."
   ],
   "skills_required": [
     "inequality_manipulation",

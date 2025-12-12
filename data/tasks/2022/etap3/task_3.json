@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie figurę. Przeanalizuj możliwe położenia punktu E na prostej BC i wykaż, że punkt C musi leżeć między punktami B i E.",
-    "Zauważ, że w trójkącie $\\triangle CDE$ kąt $\\angle DCE=120°$. Teza, że $\\angle DEC=30°$, jest więc równoważna temu, że trójkąt ten jest równoramienny. Jaką równość odcinków należy udowodnić?",
-    "Aby udowodnić równość z poprzedniej wskazówki, wprowadź punkt pomocniczy P na odcinku BC, taki że $CP=CA$. Wykaż, że trójkąty $\\triangle APB$ i $\\triangle CAE$ są przystające.",
-    "Z przystawania wynika, że $CE=PB$. Zadanie sprowadza się więc do udowodnienia, że $CD=PB$. Porównaj trójkąty $\\triangle BCD$ i $\\triangle APB$ – mają one parę równych boków ($BD=AB$) i parę równych kątów."
+    "Narysuj starannie figurę. Przeanalizuj możliwe położenia punktu E na prostej BC i wykaż, że punkt C musi leżeć między punktami B i E. Jaka jest wtedy miara kąta $\\angle DCE$?",
+    "Teza, że $\\angle DEC=30°$, przy znanym kącie $\\angle DCE$, oznacza pewną szczególną własność trójkąta $DCE$. Jaką równość odcinków wystarczy więc udowodnić?",
+    "Wykorzystaj dane równości $AB=BD$ i $AB=AE$. Spróbuj wyrazić kwadraty tych długości ($AB^2$, $BD^2$, $AE^2$) za pomocą boków trójkątów $ABC$, $BCD$ i $ACE$. Można to zrobić, opuszczając w nich odpowiednie wysokości.",
+    "Z równości $AB^2=BD^2$ wyznacz długość $CD$ w zależności od $BC$ i $AC$. Następnie, z równości $AB^2=AE^2$ znajdź podobną zależność dla $CE$. Porównaj wyniki, aby zakończyć dowód."
   ],
   "skills_required": [
     "angle_chasing",

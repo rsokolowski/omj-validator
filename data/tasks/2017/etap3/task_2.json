@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek i zaznacz na nim wszystkie punkty i zależności. Jaki jest związek między trójkątami, na które przekątne dzielą trapez?",
-    "Prosta $EF$ jest równoległa do podstaw. Wykorzystaj podobieństwo trójkątów, aby powiązać stosunek $AF/FD$ ze stosunkiem, w jakim punkt $E$ dzieli przekątne.",
-    "Kluczowy warunek to $AB + CD = AD$. Połącz go z proporcją znalezioną w poprzednim kroku, aby obliczyć długości odcinków $AF$ i $FD$ w zależności od długości podstaw.",
-    "Odkrycie z poprzedniego kroku sprawia, że trójkąty $\\triangle ABF$ i $\\triangle CDF$ są równoramienne. Wykorzystaj tę własność oraz sumę kątów przy ramieniu $AD$, aby obliczyć szukany kąt $\\angle BFC$."
+    "Narysuj staranny rysunek. Zauważ, że przekątne trapezu tworzą dwie pary trójkątów. Jedna z tych par to trójkąty podobne. Jak ta własność może pomóc w określeniu położenia punktu F?",
+    "Wykorzystaj podobieństwo trójkątów $\\triangle ABE$ i $\\triangle CDE$, aby znaleźć stosunek, w jakim punkt E dzieli przekątną $AC$. Następnie, korzystając z twierdzenia Talesa, znajdź stosunek $AF:FD$.",
+    "Połącz otrzymaną proporcję z warunkiem $AB + CD = AD$. Jakie długości mają odcinki $AF$ i $FD$? Co to oznacza dla trójkątów $\\triangle ABF$ i $\\triangle CDF$?",
+    "Rozważ dwusieczne kątów $\\angle DAB$ i $\\angle ADC$. Jaki kąt tworzą one między sobą? Dwusieczna kąta między ramionami w trójkącie równoramiennym ma pewną szczególną własność. Połącz te obserwacje."
   ],
   "skills_required": [
     "trapezoid_parallelogram",

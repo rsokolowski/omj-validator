@@ -14,8 +14,8 @@
   "hints": [
     "Narysuj trapez i zaznacz wszystkie podane równości kątów. Co warunek $\\sphericalangle ABC = \\sphericalangle ACB$ mówi o trójkącie $\\triangle ABC$?",
     "Wykorzystaj pozostałe równości kątów, aby znaleźć inne pary równych boków. Zwróć uwagę na własności trapezu $ABCD$ oraz trójkąta $\\triangle BPC$.",
-    "Chcemy pokazać $AP=CD$. Zauważyłeś już, że $AB=AC$ oraz $BP=AD$. Przyjrzyj się figurom, których częścią są te cztery boki. Czy widzisz jakieś dwa trójkąty, które można by ze sobą porównać?",
-    "Aby pokazać, że wybrane trójkąty są przystające, spróbuj udowodnić równość kątów zawartych między parami równych boków. Oznacz miarę kątów z zadania jako $\\alpha$ i wykonaj obliczenia."
+    "Aby powiązać długości odcinków $AP$ i $CD$, poszukaj pary przystających trójkątów. Jeden z nich powinien zawierać bok $AP$, a drugi bok $CD$. Które trójkąty mogą być dobrymi kandydatami?",
+    "Porównaj trójkąty $\\triangle APB$ i $\\triangle CDA$. Wykorzystaj znalezione wcześniej równości boków i spróbuj udowodnić równość kątów między nimi, aby zastosować cechę przystawania bok-kąt-bok."
   ],
   "skills_required": [
     "angle_chasing",

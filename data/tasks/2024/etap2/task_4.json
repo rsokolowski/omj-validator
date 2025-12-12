@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zacznij od uproszczenia prawej strony: rozłóż $2025$ na czynniki pierwsze i wyłącz czynnik sześcienny przed znak pierwiastka, uzyskując postać $k\\sqrt[3]{m}$.",
-    "Poszukaj rozwiązania w najprostszej postaci, zakładając, że $\\sqrt[3]{a}$ i $\\sqrt[3]{b}$ są wyrazami podobnymi do prawej strony, czyli mają postać $x\\sqrt[3]{m}$.",
-    "Zauważ, że aby $a = (x\\sqrt[3]{m})^3 = x^3 m$ było liczbą całkowitą (gdy $m$ nie zawiera sześcianów), współczynnik $x$ musi być liczbą całkowitą.",
-    "Znajdź dwie dodatnie liczby całkowite $x, y$, których suma daje współczynnik $k$ z pierwszego kroku, i oblicz dla nich wartości $a$ oraz $b$."
+    "Uprość prawą stronę równania. Rozłóż $2025$ na czynniki pierwsze i wyłącz największy sześcian, jaki się da, przed znak pierwiastka.",
+    "Załóż, że $\\sqrt[3]{a}$ i $\\sqrt[3]{b}$ są \"wyrazami podobnymi\", czyli mają postać $x\\sqrt[3]{m}$ i $y\\sqrt[3]{m}$, gdzie $m$ jest liczbą pod pierwiastkiem z uproszczonej prawej strony.",
+    "Podstaw powyższe wyrażenia do równania i je uprość. Jaką zależność otrzymasz dla współczynników $x$ i $y$?",
+    "Poszukaj najprostszych dodatnich liczb całkowitych $x$ i $y$, które spełniają tę zależność. Pamiętaj, że $a$ i $b$ muszą być dodatnimi liczbami całkowitymi."
   ],
   "prerequisites": [],
   "skills_required": [

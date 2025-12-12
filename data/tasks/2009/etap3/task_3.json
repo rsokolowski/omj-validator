@@ -11,10 +11,10 @@
     "geometria"
   ],
   "hints": [
-    "Zauważ, że A jest środkiem okręgu przechodzącego przez P, F, E. Podobnie dla B i C. Co możesz powiedzieć o trójkątach $\\triangle AFE$, $\\triangle BFD$ i $\\triangle CDE$ oraz o ich kątach przy wierzchołkach A, B, C?",
-    "Skoro $\\triangle DEF$ jest równoboczny, to podstawy trójkątów z poprzedniej wskazówki są równe. Porównaj długość boku $EF$ z długością boku $BC$ przez podobieństwo do trójkąta o wierzchołkach B, C i środku okręgu opisanego na $\\triangle ABC$.",
-    "Powyższe rozumowanie prowadzi do warunku $AP \\cdot BC = BP \\cdot CA = CP \\cdot AB$. Aby wykazać współpękowość prostych $AD, BE, CF$, udowodnij, że prosta $AD$ jest symetryczna do $AP$ względem dwusiecznej kąta $\\angle BAC$.",
-    "Aby udowodnić kluczową równość kątów $\\angle DAB = \\angle PAC$, rozważ dobudowanie na zewnątrz $\\triangle ABC$ punktu $Q$ tak, aby $\\triangle QAB$ był podobny do $\\triangle PAC$. Jaki związek ma punkt $Q$ z punktami $P$ i $D$?"
+    "Narysuj rzuty prostopadłe $P_a, P_b, P_c$ punktu $P$ na proste $BC, CA, AB$. Jaki jest związek między trójkątem $DEF$ a trójkątem $P_aP_bP_c$?",
+    "Wykaż, że $\\triangle DEF$ jest równoboczny wtedy i tylko wtedy, gdy trójkąt rzutów $P_aP_bP_c$ jest równoboczny. Długość boku $P_bP_c$ zależy od długości $AP$ i miary kąta $\\angle BAC$. Jak? Wskazówka: punkty $A, P_c, P, P_b$ leżą na jednym okręgu.",
+    "Z warunku równoboczności $\\triangle P_aP_bP_c$ wyprowadź zależność $AP \\cdot \\sin A = BP \\cdot \\sin B = CP \\cdot \\sin C$. Użyj twierdzenia sinusów dla $\\triangle ABC$, by pokazać, że to oznacza $AP \\cdot BC = BP \\cdot CA = CP \\cdot AB$.",
+    "Aby wykazać współpędowość, udowodnij, że prosta $AD$ jest symetryczna do $AP$ względem dwusiecznej kąta $\\angle A$ (i analogicznie dla pozostałych wierzchołków). Jest to równoważne pokazaniu, że $\\angle PAB = \\angle DAC$."
   ],
   "skills_required": [
     "transformations",

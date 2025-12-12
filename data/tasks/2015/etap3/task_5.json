@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Przypomnij sobie wzór Eulera dla wielościanów ($W-K+S=2$) oraz nierówność wynikającą z faktu, że w każdym wierzchołku spotykają się co najmniej 3 krawędzie ($3W \\le 2K$).",
-    "Załóż, że taki wielościan istnieje. Użyj wzoru Eulera i nierówności $3W \\le 2K$, aby uzyskać nierówność, która zależy tylko od liczby ścian o danej liczbie boków ($S_n$).",
-    "Pokaż, że dla każdego wielościanu wypukłego prawdziwa jest nierówność $\\sum (6-n)S_n \\ge 12$. Następnie, korzystając z warunku zadania, znajdź drugą nierówność wiążącą $S_7$ z pozostałymi $S_n$.",
-    "Warunek zadania oznacza, że żadne dwie ściany niebędące siedmiokątami nie mogą mieć wspólnej krawędzi. Wywnioskuj stąd, że $7S_7 \\ge \\sum_{n \\ne 7} nS_n$. Połącz obie nierówności, aby uzyskać sprzeczność."
+    "Zastanów się, co warunek z zadania oznacza dla ścian spotykających się w jednym wierzchołku. Czy dwie ściany, które nie są siedmiokątami, mogą być sąsiadkami?",
+    "Oznacz przez $S_n$ liczbę ścian o $n$ bokach. Zliczając na dwa sposoby wierzchołki należące do ścian siedmiokątnych i niesiedmiokątnych, wyprowadź nierówność wiążącą sumę $\\sum_{n \\ne 7} nS_n$ z $7S_7$.",
+    "Wykorzystaj wzór Eulera dla wielościanów oraz fakt, że w każdym wierzchołku spotykają się co najmniej 3 krawędzie, aby uzyskać drugą nierówność: $12+S_7 \\le \\sum_{n \\ne 7} (6-n)S_n$.",
+    "Zestaw obie nierówności i pokaż, że wynika z nich, że $S_7 \\ge 2$. Rozważ najmniejszy możliwy przypadek, $S_7=2$, i zbadaj, jakie ściany (oprócz siedmiokątnych) mogą wtedy występować w wielościanie, aby doprowadzić do sprzeczności."
   ],
   "skills_required": [
     "polyhedra",

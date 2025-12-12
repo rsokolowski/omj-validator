@@ -11,10 +11,10 @@
     "geometria"
   ],
   "hints": [
-    "Let $O$ be the midpoint of the segment $KL$. What does the condition $KP=LQ$ imply about the positions of points $P$ and $Q$ relative to point $O$?",
-    "Consider the point reflection (symmetry) with respect to $O$. Let $s_{AB}$ be the perpendicular bisector of $AB$. The image of the line $s_{AB}$ under this reflection is a new line, parallel to $s_{AB}$. Which known point must lie on this new line?",
-    "The reflection shows that $Q$ lies on the perpendicular bisector of $CD$ (by definition) and also on the image of the perpendicular bisector of $AB$. What does this symmetry imply for the relationship between the perpendicular bisector of $AB$ and the perpendicular bisector of $CD$?",
-    "The entire geometric setup is symmetric. This implies that the perpendicular bisector of $CD$ must be the image of the perpendicular bisector of $AB$ under the reflection through $O$. What can you conclude about two lines if one is the image of the other under a point reflection?"
+    "Niech O będzie środkiem odcinka KL. Co warunek $KP=LQ$ mówi o wzajemnym położeniu punktów P i Q względem punktu O?",
+    "Wykorzystaj symetrię środkową $S_O$ o środku w O. Skoro obrazem punktu P jest Q, to Q leży na obrazie symetralnej $s_{AB}$. Przez jaki ważny punkt, związany z odcinkiem CD, przechodzi ten obraz?",
+    "Wykaż, że obrazem środka odcinka $AB$ w symetrii $S_O$ jest środek odcinka $CD$. Co to oznacza dla obrazu symetralnej $s_{AB}$? Przez jaki punkt ona przechodzi i do jakiego odcinka jest prostopadła?",
+    "Punkt $Q$ leży na dwóch prostych, które obie przechodzą przez środek $CD$. Jedna jest prostopadła do $CD$, a druga do $AB$. Załóż nie wprost, że proste $AB$ i $CD$ nie są równoległe. Co to implikuje?"
   ],
   "skills_required": [
     "angle_chasing",

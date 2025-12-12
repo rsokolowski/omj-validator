@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj duży i dokładny rysunek. Oblicz miary kątów wewnętrznych rombu oraz kątów, na które dzieli je przekątna $AC$.",
-    "Oblicz miary kątów w trójkącie $BPC$. Wykaż, że jest on równoramienny, co pozwoli Ci powiązać długość odcinka $BP$ z długością boku rombu.",
-    "Zdefiniujmy na próbę punkt $Q'$ na przekątnej $AC$ tak, aby $AQ' = AB$. Jakie będą wówczas miary kątów w trójkącie $ABQ'$?",
-    "Poprowadź przez punkt $Q'$ prostą równoległą do $AD$ i niech przetnie ona bok $CD$ w punkcie $P'$. Wykaż, że $P'$ to ten sam punkt co $P$ z treści zadania, dowodząc, że $\\measuredangle P'BC = 20^\\circ$."
+    "Narysuj duży i dokładny rysunek. Oblicz miary kątów wewnętrznych rombu oraz kątów, na jakie dzieli je przekątna $AC$.",
+    "Oblicz miary kątów w trójkącie $BPC$. Wykaż, że jest on równoramienny, co pozwala powiązać długość odcinka $BP$ z długością boku rombu.",
+    "Wykorzystaj równość $BP=AB$, aby określić typ trójkąta $ABP$ i obliczyć jego kąty. Porównaj kąt $\\measuredangle APB$ z kątem $\\measuredangle ADB$. Co możesz wywnioskować o punktach $A, B, P, D$?",
+    "Punkty $A, B, P, D$ leżą na jednym okręgu. Wykorzystaj równość cięciw $AB$ i $AD$, aby znaleźć związek między kątami $\\measuredangle APB$ i $\\measuredangle APD$. To pozwoli Ci obliczyć wszystkie kąty w trójkącie $APQ$."
   ],
   "skills_required": [
     "angle_chasing",

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Punkt M jest środkiem boku CD. Jakie trójkąty o równych polach możesz wskazać na rysunku dzięki tej informacji?",
-    "Spróbuj powiązać szukane wyrażenie z polem trójkąta $[ABC]$. Zauważ, że pole to można wyrazić przez sumę lub różnicę pól trójkątów mających wierzchołek w punkcie $M$.",
-    "Po przekształceniach algebraicznych i wykorzystaniu równości pól z pierwszej wskazówki, szukane wyrażenie powinno uprościć się do postaci $[ABC] - [BCD]$. Teraz skup się na obliczeniu tej różnicy.",
-    "Przedłuż boki $AD$ i $BC$ aż do ich przecięcia w punkcie $P$. Jaki jest kąt przy wierzchołku $P$? Oblicz różnicę pól $[ABC]$ i $[BCD]$, wybierając dla obu trójkątów wspólną podstawę."
+    "Przedłuż boki $DA$ i $CB$ aż do ich przecięcia w punkcie $P$. Jaki jest kąt $\\sphericalangle APB$? Zauważ, że proste, na których leżą boki $AD$ i $BC$, są prostopadłe.",
+    "Zastanów się, jak fakt, że $M$ jest środkiem $CD$, pozwala powiązać pola trójkątów z wierzchołkiem $M$ z polami trójkątów o wierzchołkach $C$ i $D$.",
+    "Wykaż, że $[ABM] = \\frac{1}{2}([ABC]+[ABD])$. Pomocne może być poprowadzenie wysokości z $C, D, M$ na prostą $AB$. Zauważ też, że $[ADM]=\\frac{1}{2}[ACD]$ oraz $[BCM]=\\frac{1}{2}[BCD]$.",
+    "Podstaw uzyskane związki do szukanego wyrażenia. Oblicz pola trójkątów $ABC, ABD, ACD, BCD$, wykorzystując prostopadłość prostych $PA$ i $PB$ do znalezienia odpowiednich podstaw i wysokości."
   ],
   "skills_required": [
     "area_methods",

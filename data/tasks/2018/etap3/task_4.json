@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Z warunków zadania wynikają równości pewnych par boków. Zapisz, które boki w których trójkątach są równe.",
-    "Wykorzystaj uzyskane równości, aby wyrazić tezę wyłącznie za pomocą odcinków wychodzących z wierzchołków A, C oraz punktów D i E. Teza przybierze postać $AC > CE + (\text{pewna różnica})$.",
-    "Przekształć nierówność do postaci $AC - CE > AD + DB - BC$. Użyj równości boków, aby prawa strona zależała od boków trójkąta $BDE$.",
-    "Otrzymałeś nierówność $AC - CE > DE + DB - BE$. Zauważ, że prawa strona jest różnicą dwóch boków trójkąta $BDE$ i trzeciego boku. Zastosuj nierówność trójkąta, aby oszacować prawą stronę i połącz to z faktem, że $AC > CE$ (co wynika z nierówności trójkąta w $\\triangle ACD$)."
+    "Zauważ, że warunki o równych kątach oznaczają, że trójkąty $ADE$ i $BCE$ są równoramienne. Zapisz wynikające z tego równości boków i podstaw je do nierówności, którą masz udowodnić.",
+    "Nierówność można przekształcić do postaci $AC+BE > CD+DB$. Spróbuj skonstruować odcinek o długości $CD+DB$, przedłużając odcinek $CD$ poza punkt $D$.",
+    "Przedłuż odcinek $CD$ do punktu $F$ tak, aby $DF=DB$. Porównaj trójkąty $\triangle BDE$ i $\triangle FDA$. Zwróć uwagę na ich boki oraz kąty przy wierzchołku $D$.",
+    "Wykaż, że $\triangle BDE \triangle FDA$. Wykorzystaj wynikającą z tego równość odpowiednich boków, aby uprościć dowodzoną nierówność, a następnie zastosuj nierówność trójkąta."
   ],
   "skills_required": [
     "isosceles_triangle",

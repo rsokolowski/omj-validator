@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zacznij od przekształcenia danej równości tak, aby pozbyć się ułamków. Pomnóż obie strony równania na krzyż.",
-    "Przenieś wszystkie wyrazy na jedną stronę i spróbuj je odpowiednio pogrupować. Poszukaj wspólnego czynnika, który można wyłączyć przed nawias.",
-    "Powinieneś otrzymać równanie w postaci $A \\cdot B = 0$. Co to implikuje na temat wartości wyrażeń $A$ i $B$? Jakie dwa przypadki należy rozważyć?",
-    "Twoja faktoryzacja prowadzi do dwóch przypadków: $a=b$ lub $n^2=ab$. Wykaż, że w obu tych sytuacjach liczba $\\sqrt{ab}$ jest całkowita."
+    "Zacznij od przekształcenia danej równości, aby pozbyć się ułamków. Najprościej jest pomnożyć równanie na krzyż.",
+    "Przenieś wszystkie wyrazy na jedną stronę równania. Spróbuj tak pogrupować składniki, aby można było wyłączyć wspólny czynnik przed nawias.",
+    "Twoim celem jest doprowadzenie równania do postaci $A \\cdot B = 0$. Zastanów się, jakie wyrażenia można połączyć, aby pojawił się czynnik $(a-b)$ lub $(b-a)$.",
+    "Równanie $A \\cdot B = 0$ oznacza, że $A=0$ lub $B=0$. Rozważ oba przypadki i w każdym z nich zbadaj, czy iloczyn $ab$ jest kwadratem liczby całkowitej."
   ],
   "skills_required": [
     "algebraic_identities",

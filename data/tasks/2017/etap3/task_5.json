@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek. Zastanów się, co szczególnego wynika z tego, że trójkąt jest równoboczny i że kąt DME ma dokładnie 60°. Czy ta wartość kąta przypomina Ci coś z trójkąta równobocznego?",
-    "Rozważ użycie przekształcenia geometrycznego - obrotu. Wokół którego punktu i o jaki kąt warto obrócić część figury, aby wykorzystać warunek $\\angle DME = 60°$?",
-    "Wykonaj obrót o 60° wokół punktu M. Gdzie przejdzie punkt D przy takim obrocie? Jakie trójkąty równoboczne możesz wskazać na rysunku po wykonaniu obrotu?",
-    "Po obrocie o 60° wokół M, punkt D przechodzi na pewien punkt D'. Zbadaj trójkąt MDD' - jaki to trójkąt? Następnie sprawdź, gdzie leży obraz pewnych punktów i jak długości odcinków po obrocie pozwalają wyrazić DE w terminach innych odcinków."
+    "Narysuj starannie figurę. Zauważ, że kąt $\\angle DME$ ma miarę $60^\\circ$, taką samą jak kąty wewnętrzne trójkąta $ABC$. To kluczowa własność, która sugeruje użycie obrotu.",
+    "Punkt $M$ jest naturalnym środkiem obrotu. Spróbuj obrócić jeden z trójkątów, $\\triangle ADM$ lub $\\triangle BEM$, o $60^\\circ$ wokół punktu $M$.",
+    "Obróćmy $\\triangle BEM$ o $60^\\circ$ przeciwnie do ruchu wskazówek zegara. Niech obrazami punktów $B$ i $E$ będą odpowiednio $B'$ i $E'$. Wykaż, że punkty $M, D, E'$ leżą na jednej prostej.",
+    "Pokaż, że punkt $B'$ jest środkiem boku $BC$. Zauważ, że $M$ jest środkiem $AB$, co pozwala powiązać długości $AM$ i $MB'$. Wykorzystaj te fakty do znalezienia zależności między odcinkami $AD, B'E'$ i $DE$."
   ],
   "skills_required": [
     "transformations",

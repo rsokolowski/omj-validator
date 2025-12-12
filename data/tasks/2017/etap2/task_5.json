@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Załóżmy nie wprost, że teza jest fałszywa. Oznacza to, że różnica dowolnych dwóch liczb tego samego koloru nie jest kwadratem liczby całkowitej.",
-    "Skorzystaj z równości $9+16=25$ (trójka pitagorejska). Rozważ kolory liczb $x, x+9, x+16$ oraz $x+25$. Zauważ, że prawie wszystkie różnice między nimi są kwadratami.",
-    "Liczba $x$ musi mieć inny kolor niż pozostałe trzy (dlaczego?). Zatem liczby $x+9, x+16$ i $x+25$ muszą być pokolorowane przy użyciu tylko dwóch barw. Wykaż, że wymusza to równość kolorów dla pewnej pary liczb.",
-    "Z poprzedniego kroku wynika, że $c(n) = c(n+7)$, czyli kolorowanie jest okresowe. Znajdź taką wielokrotność okresu, która jest kwadratem liczby całkowitej, aby uzyskać sprzeczność."
+    "Załóżmy nie wprost, że teza zadania jest fałszywa. Oznacza to, że jeśli dwie różne liczby mają ten sam kolor, ich różnica nie może być kwadratem liczby całkowitej.",
+    "Rozważ kolory czterech liczb: $x$, $x+9$, $x+16$ i $x+25$. Zauważ, że różnice między niektórymi parami tych liczb są kwadratami (np. $9=3^2$, $16=4^2$, $25=5^2$).",
+    "Kolor liczby $x$ musi być różny od kolorów liczb $x+9$, $x+16$ i $x+25$. Zatem te trzy liczby muszą być pokolorowane przy użyciu tylko dwóch pozostałych kolorów. Które z nich muszą mieć różne kolory, a które mogą mieć ten sam?",
+    "Z poprzedniego kroku wynika, że dla dowolnej liczby $n$ zachodzi $c(n)=c(n+7)$. Oznacza to, że kolorowanie jest okresowe. Wykorzystaj tę własność, aby znaleźć parę liczb w tym samym kolorze, których różnica jest kwadratem."
   ],
   "skills_required": [
     "pigeonhole",

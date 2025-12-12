@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Niech $P$ będzie punktem przecięcia symetralnych odcinków $BC$ i $EF$. Z definicji $PB=PC$ i $PE=PF$. Celem jest wykazanie, że punkty $A, P, D$ są współliniowe.",
-    "Spróbuj użyć obrotów wokół punktu $P$. Obróć trójkąt $PAB$ tak, aby odcinek $PB$ nałożył się na $PC$. Następnie rozważ podobny obrót dla trójkąta $PDE$.",
-    "Niech $A'$ będzie obrazem punktu $A$ po pierwszym obrocie, a $D'$ obrazem $D$ po drugim. Pokaż, że $A'$ leży na prostej $CD$, a $D'$ na prostej $AF$.",
-    "Wykorzystaj dany warunek na długości boków, aby pokazać, że $A'D=AD'$. To prowadzi do przystawania kluczowych trójkątów, a w konsekwencji do równości kątów $\\angle BPC = \\angle EPF$, co jest ostatnim krokiem do rozwiązania."
+    "Niech $P$ będzie punktem przecięcia symetralnych odcinków $BC$ i $EF$. Jaki warunek muszą spełniać punkty $A, P, D$, aby teza zadania była prawdziwa?",
+    "Własności punktu $P$ ($PB=PC$, $PE=PF$) sugerują użycie obrotów wokół niego. Rozważ obrót o środku w $P$ przeprowadzający $B$ na $C$. Co stanie się z trójkątem $\\triangle PAB$? Podobnie, rozważ obrót przeprowadzający $E$ na $F$.",
+    "Niech $A'$ to obraz $A$ w obrocie wokół $P$ mapującym $B$ na $C$. Wykorzystaj równość kątów $\\angle ABC = \\angle BCD$, by pokazać, że $A'$ leży na prostej $CD$. Postąp analogicznie z obrazem punktu $D$.",
+    "Wykorzystaj warunek na długości boków, aby znaleźć związek między długościami odcinków $A'D$ i $AD'$ (gdzie $D'$ to odpowiedni obraz $D$). Dowiedź, że $\\triangle PA'D \\cong \\triangle PAD'$. Jaka równość kątów wokół punktu $P$ z tego wynika?"
   ],
   "skills_required": [
     "perpendicular_bisector",

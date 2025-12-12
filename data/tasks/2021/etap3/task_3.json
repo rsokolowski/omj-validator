@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj równoległobok i zaznacz w nim wszystkie dane z treści zadania. Oblicz miary kątów wewnętrznych tego równoległoboku. Zwróć uwagę na trójkąty $ABD$ i $BCD$ - jakie mają szczególne własności?",
-    "Wykorzystaj kluczową równość $CE = BC = AD$. Aby jej użyć, warto powiązać długości boków $AD$ i $CD$. Spróbuj dorysować wysokość z wierzchołka $C$ na prostą zawierającą bok $AD$.",
-    "Oznaczmy przez $H$ spodek wysokości z wierzchołka $C$ na prostą $AD$. Jakim trójkątem jest $\\triangle CDH$? Wyraź długość boku $AD$ za pomocą długości wysokości $CH$.",
-    "Zauważ, że w trójkącie prostokątnym $CEH$ jedna z przyprostokątnych jest dwa razy krótsza od przeciwprostokątnej. Jakie są miary kątów w takim trójkącie? To pozwoli Ci obliczyć miarę kąta $DCE$."
+    "Narysuj figurę. Korzystając z własności równoległoboku, znajdź miarę kąta $\\measuredangle ADB$.",
+    "Wyznacz miary wszystkich kątów w trójkącie $\\triangle ABD$. Co możesz powiedzieć o relacji długości boków $AB$ i $AD$? Jaki szczególny typ równoległoboku to $ABCD$?",
+    "Połącz warunek $BC=CE$ z własnościami czworokąta $ABCD$. Jakim typem trójkąta jest $\\triangle CDE$ i które jego kąty muszą mieć równe miary?",
+    "Oblicz miarę kąta $\\measuredangle CDE$. Porównaj ją z miarą kąta $\\measuredangle CED$ i sprawdź, czy suma kątów w trójkącie $\\triangle CDE$ jest prawidłowa. Jaki wniosek można stąd wyciągnąć?"
   ],
   "skills_required": [
     "angle_chasing",

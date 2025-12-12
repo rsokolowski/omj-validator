@@ -15,8 +15,8 @@
   "hints": [
     "Oblicz wartości iloczynów $x_i x_{i+1}$ dla par liczb równych oraz dla par liczb różnych. Zwróć uwagę na to, które wyniki są liczbami niewymiernymi.",
     "Suma wszystkich iloczynów wynosi 199, czyli jest liczbą wymierną. Wywnioskuj stąd, jaka musi być zależność między liczbą par $(\\sqrt{2}+1)^2$ a liczbą par $(\\sqrt{2}-1)^2$.",
-    "Oznacz przez $m$ liczbę par sąsiadów o różnych wartościach. Korzystając z wniosku z poprzedniego punktu oraz wiedząc, że wszystkich par jest 99, a ich suma to 199, oblicz wartość $m$.",
-    "Otrzymana liczba $m$ wynosi 49. Potraktuj dwie możliwe wartości liczb jako kolory wierzchołków w cyklu. Czy w zamkniętym cyklu liczba zmian koloru może być nieparzysta?"
+    "Oznacz przez $m$ liczbę par sąsiadów o różnych wartościach. Korzystając z wniosku z poprzedniej wskazówki oraz wiedząc, że wszystkich par jest 99, a ich suma to 199, oblicz wartość $m$.",
+    "Zastanów się nad parzystością obliczonej liczby $m$. Wyobraź sobie, że liczby $\\sqrt{2}+1$ i $\\sqrt{2}-1$ to dwa kolory. Co oznacza $m$ w cyklu 99 pokolorowanych wierzchołków? Czy ta liczba może być nieparzysta?"
   ],
   "skills_required": [
     "algebraic_identities",
