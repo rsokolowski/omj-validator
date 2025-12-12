@@ -127,9 +127,9 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
     }
 
     return (
-      <Typography variant="body2" sx={{ color: "grey.700", whiteSpace: "pre-wrap" }}>
-        {submission.feedback || "Brak komentarza"}
-      </Typography>
+      <Box sx={{ color: "grey.700", "& p": { margin: 0 } }}>
+        <MathContent content={submission.feedback || "Brak komentarza"} />
+      </Box>
     );
   };
 

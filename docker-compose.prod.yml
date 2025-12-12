@@ -23,9 +23,7 @@ services:
       - omj-network
 
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: ghcr.io/rsokolowski/omj-validator-api:latest
     container_name: omj-api
     restart: unless-stopped
     depends_on:
@@ -89,12 +87,7 @@ services:
       - omj-network
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        # Backend URL for Next.js server-side requests (internal Docker network)
-        FASTAPI_URL: http://api:8100
+    image: ghcr.io/rsokolowski/omj-validator-frontend:latest
     container_name: omj-frontend
     restart: unless-stopped
     depends_on:

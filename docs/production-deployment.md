@@ -135,36 +135,57 @@ sudo certbot --nginx -d omj-validator.duckdns.org
 
 ```bash
 cd ~/omj-validator
-docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+docker compose -f docker-compose.prod.yml --env-file .env.prod pull
+docker compose -f docker-compose.prod.yml --env-file .env.prod up -d
 ```
 
 ## Deployment (Updates)
 
-### From Local Machine
+Images are built locally and pushed to GitHub Container Registry (`ghcr.io`), then pulled on the VM.
+
+### One-Time Setup (Local Machine)
 
 ```bash
-# One-liner: pull and rebuild
-gcloud compute ssh omj-validator --command="cd ~/omj-validator && git pull && sudo docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build"
+# 1. Create GitHub Personal Access Token (PAT)
+#    Go to https://github.com/settings/tokens
+#    Create token with 'write:packages' scope
+
+# 2. Login to GitHub Container Registry
+echo YOUR_PAT | docker login ghcr.io -u YOUR_USERNAME --password-stdin
 ```
 
-### On VM
+### Deploy from Local Machine
 
 ```bash
-gcloud compute ssh omj-validator
+# Build images locally and push to registry
+./build-and-push.sh
 
-cd ~/omj-validator
-git pull
-sudo docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build
+# Deploy to VM (pulls images from ghcr.io)
+./deploy.sh
+
+# Or both in one command
+./build-and-push.sh && ./deploy.sh
 ```
 
-### Rebuild Single Service
+### Deploy Script Options
 
 ```bash
-# Rebuild only API (faster for backend-only changes)
-sudo docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build api
+./deploy.sh                  # Pull latest and restart all services
+./deploy.sh --api            # Deploy only API
+./deploy.sh --frontend       # Deploy only frontend
+./deploy.sh --logs api       # View API logs
+./deploy.sh --status         # Check container status
+./deploy.sh --ssh            # SSH into VM
+```
 
-# Rebuild only frontend
-sudo docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build frontend
+### Build Script Options
+
+```bash
+./build-and-push.sh                  # Build and push both images
+./build-and-push.sh --api            # Build and push API only
+./build-and-push.sh --frontend       # Build and push frontend only
+./build-and-push.sh --tag v1.0.0     # Use specific tag
+./build-and-push.sh --no-push        # Build only, don't push
 ```
 
 ## Operations

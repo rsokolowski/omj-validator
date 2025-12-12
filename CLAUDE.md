@@ -244,14 +244,27 @@ Deployed on GCP Compute Engine VM with Docker Compose and Nginx reverse proxy.
 
 **Domain**: https://omj-validator.duckdns.org
 
-**Quick deploy** (from local machine):
+**Deployment workflow** (build locally, pull on VM):
 ```bash
-gcloud compute ssh omj-validator --command="cd ~/omj-validator && git pull && sudo docker compose -f docker-compose.prod.yml --env-file .env.prod up -d --build"
+# One-time setup: login to GitHub Container Registry
+# 1. Create PAT at https://github.com/settings/tokens with 'write:packages' scope
+# 2. Login: echo YOUR_PAT | docker login ghcr.io -u YOUR_USERNAME --password-stdin
+
+# Build and push images from local machine
+./build-and-push.sh
+
+# Deploy to VM (pulls images from ghcr.io)
+./deploy.sh
+
+# Or build and deploy in one command
+./build-and-push.sh && ./deploy.sh
 ```
 
-**View logs**:
+**Useful commands**:
 ```bash
-gcloud compute ssh omj-validator --command="sudo docker logs omj-api --tail=100"
+./deploy.sh --status        # Check container status
+./deploy.sh --logs api      # View API logs
+./deploy.sh --ssh           # SSH into VM
 ```
 
 See **[docs/production-deployment.md](docs/production-deployment.md)** for complete setup guide, operations, and troubleshooting.
