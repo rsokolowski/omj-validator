@@ -301,7 +301,44 @@ test.describe('Submission Flow', () => {
   });
 
   test.describe('Submission history', () => {
-    test('submission appears in history after completion', async ({ page, request }) => {
+    // Helper to get current history count from the page
+    const getHistoryCount = async (page: import('@playwright/test').Page): Promise<number> => {
+      const historySection = page.getByText(/historia rozwiązań/i);
+      const exists = await historySection.isVisible().catch(() => false);
+      if (!exists) return 0;
+      const text = await historySection.textContent();
+      const match = text?.match(/\((\d+)\)/);
+      return match ? parseInt(match[1], 10) : 0;
+    };
+
+    test('submission appears in history after completion without page reload', async ({ page, request }) => {
+      await setGeminiScenario(request, 'success_score_6');
+      await page.goto('/task/2024/etap2/1');
+
+      // Get initial history count (if history section exists)
+      const initialCount = await getHistoryCount(page);
+
+      // Submit a solution
+      const fileInput = page.locator('input[type="file"]');
+      await fileInput.setInputFiles(TEST_IMAGE);
+      await page.getByRole('button', { name: /prześlij/i }).click();
+
+      // Wait for completion - look for exact score format
+      await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
+
+      // History section should appear/update automatically WITHOUT page reload
+      // Wait for history section to show updated count
+      const expectedCount = initialCount + 1;
+      await expect(
+        page.getByText(new RegExp(`historia rozwiązań\\s*\\(${expectedCount}\\)`, 'i'))
+      ).toBeVisible({ timeout: 10000 });
+
+      // Verify the new submission is in the history list (shows score chip in history section)
+      const historyPaper = page.locator('text=Historia rozwiązań').locator('..');
+      await expect(historyPaper.locator('text=6/6').first()).toBeVisible();
+    });
+
+    test('submission persists in history after page reload', async ({ page, request }) => {
       await setGeminiScenario(request, 'success_score_6');
       await page.goto('/task/2024/etap2/1');
 
@@ -339,6 +376,44 @@ test.describe('Submission Flow', () => {
       await fileInput.setInputFiles(TEST_IMAGE_2);
       await page.getByRole('button', { name: /prześlij/i }).click();
       await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
+    });
+
+    test('history count updates after each submission without reload', async ({ page, request }) => {
+      // Using task 2024/etap2/3 to avoid interference with other tests using task 1
+      await page.goto('/task/2024/etap2/3');
+
+      // Get initial count using shared helper
+      const initialCount = await getHistoryCount(page);
+
+      // First submission
+      await setGeminiScenario(request, 'success_score_2');
+      let fileInput = page.locator('input[type="file"]');
+      await fileInput.setInputFiles(TEST_IMAGE);
+      await page.getByRole('button', { name: /prześlij/i }).click();
+      await expect(page.getByText(/Wynik:\s*2\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
+
+      // Verify history updated to initialCount + 1 without reload
+      await expect(
+        page.getByText(new RegExp(`historia rozwiązań\\s*\\(${initialCount + 1}\\)`, 'i'))
+      ).toBeVisible({ timeout: 10000 });
+
+      // Second submission
+      await setGeminiScenario(request, 'success_score_6');
+      fileInput = page.locator('input[type="file"]');
+      await expect(fileInput).toBeAttached();
+      await fileInput.setInputFiles(TEST_IMAGE_2);
+      await page.getByRole('button', { name: /prześlij/i }).click();
+      await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
+
+      // Verify history updated to initialCount + 2 without reload
+      await expect(
+        page.getByText(new RegExp(`historia rozwiązań\\s*\\(${initialCount + 2}\\)`, 'i'))
+      ).toBeVisible({ timeout: 10000 });
+
+      // Verify both submissions are visible in history (2/6 and 6/6 scores)
+      const historyPaper = page.locator('text=Historia rozwiązań').locator('..');
+      await expect(historyPaper.locator('text=2/6').first()).toBeVisible();
+      await expect(historyPaper.locator('text=6/6').first()).toBeVisible();
     });
   });
 });
