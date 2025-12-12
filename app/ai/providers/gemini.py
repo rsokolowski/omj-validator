@@ -79,6 +79,31 @@ GEMINI_PRICING = {
     "default": {"input": 0.10, "output": 0.40},
 }
 
+# JSON schema for structured output - forces Gemini to return valid JSON
+RESPONSE_JSON_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "score": {
+            "type": "integer",
+            "description": "Score according to OMJ criteria (0, 2, 5, or 6 for etap2/3; 0, 1, or 3 for etap1)"
+        },
+        "feedback": {
+            "type": "string",
+            "description": "Constructive feedback in Polish explaining the score"
+        },
+        "issue_type": {
+            "type": "string",
+            "enum": ["none", "wrong_task", "injection"],
+            "description": "Type of issue detected: none (normal), wrong_task (wrong problem), injection (manipulation attempt)"
+        },
+        "abuse_score": {
+            "type": "integer",
+            "description": "Confidence score 0-100 for abuse detection"
+        }
+    },
+    "required": ["score", "feedback", "issue_type", "abuse_score"]
+}
+
 
 class GeminiProvider:
     """AI provider using Google Gemini API for solution analysis."""
@@ -308,6 +333,8 @@ class GeminiProvider:
 
             config = types.GenerateContentConfig(
                 thinking_config=thinking_config,
+                response_mime_type="application/json",
+                response_json_schema=RESPONSE_JSON_SCHEMA,
             )
 
             response = await asyncio.wait_for(
@@ -468,6 +495,8 @@ class GeminiProvider:
 
             config = types.GenerateContentConfig(
                 thinking_config=thinking_config,
+                response_mime_type="application/json",
+                response_json_schema=RESPONSE_JSON_SCHEMA,
             )
 
             # Stream the response with timeout

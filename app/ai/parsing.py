@@ -73,7 +73,9 @@ def _extract_json_from_text(text: str) -> Optional[dict]:
 
     Uses multiple strategies to find valid JSON:
     1. Direct parse (for clean JSON-only responses)
-    2. Regex patterns for JSON embedded in text
+    2. Markdown code block extraction (```json ... ```)
+    3. Find JSON object with balanced braces containing "score"
+    4. Fallback regex patterns
 
     Args:
         text: Raw AI response text
@@ -90,10 +92,76 @@ def _extract_json_from_text(text: str) -> Optional[dict]:
         except json.JSONDecodeError:
             pass
 
-    # Strategy 2: Find JSON with various field orders
-    # Look for any JSON object containing "score"
+    # Strategy 2: Extract from markdown code blocks
+    # Handles: ```json {...} ``` or ``` {...} ```
+    code_block_patterns = [
+        r'```json\s*(\{[\s\S]*?\})\s*```',  # ```json {...} ```
+        r'```\s*(\{[\s\S]*?\})\s*```',       # ``` {...} ```
+    ]
+    for pattern in code_block_patterns:
+        match = re.search(pattern, text)
+        if match:
+            try:
+                return json.loads(match.group(1))
+            except json.JSONDecodeError:
+                continue
+
+    # Strategy 3: Find balanced JSON object containing "score"
+    # This handles nested objects like {"score": 5, "feedback": "text with {braces}"}
+    def find_balanced_json(s: str) -> Optional[str]:
+        """Find a balanced JSON object starting from first { and containing 'score'."""
+        start_idx = s.find('{')
+        while start_idx != -1:
+            depth = 0
+            in_string = False
+            escape_next = False
+            end_idx = start_idx
+
+            for i in range(start_idx, len(s)):
+                char = s[i]
+
+                if escape_next:
+                    escape_next = False
+                    continue
+
+                if char == '\\' and in_string:
+                    escape_next = True
+                    continue
+
+                if char == '"' and not escape_next:
+                    in_string = not in_string
+                    continue
+
+                if not in_string:
+                    if char == '{':
+                        depth += 1
+                    elif char == '}':
+                        depth -= 1
+                        if depth == 0:
+                            end_idx = i
+                            candidate = s[start_idx:end_idx + 1]
+                            # Check for "score" as a key (followed by colon)
+                            if '"score"' in candidate and '"score":' in candidate.replace(' ', '').replace('\n', ''):
+                                return candidate
+                            break
+
+            # Try next { if this one didn't work
+            next_start = s.find('{', start_idx + 1)
+            if next_start == -1:
+                break
+            start_idx = next_start
+
+        return None
+
+    balanced_json = find_balanced_json(text)
+    if balanced_json:
+        try:
+            return json.loads(balanced_json)
+        except json.JSONDecodeError:
+            pass
+
+    # Strategy 4: Simple regex fallback for flat JSON (no nested braces)
     patterns = [
-        # Match JSON containing score (flexible field order)
         r'\{[^{}]*"score"\s*:\s*\d+[^{}]*\}',
     ]
 
@@ -104,6 +172,9 @@ def _extract_json_from_text(text: str) -> Optional[dict]:
                 return json.loads(match.group())
             except json.JSONDecodeError:
                 continue
+
+    # Log a snippet of the response for debugging
+    logger.debug(f"Failed to extract JSON from response (first 500 chars): {text[:500]}")
 
     return None
 
@@ -137,7 +208,13 @@ def parse_ai_response(
         result_json = _extract_json_from_text(response_text)
 
         if not result_json:
-            logger.warning(f"No JSON found in {provider_name} response")
+            # Log more details for debugging
+            response_preview = response_text[:500] if len(response_text) > 500 else response_text
+            logger.warning(
+                f"No JSON found in {provider_name} response. "
+                f"Response length: {len(response_text)}, "
+                f"Preview: {response_preview!r}"
+            )
             provider_suffix = f" {provider_name}" if provider_name else ""
             return SubmissionResult(
                 score=0,
