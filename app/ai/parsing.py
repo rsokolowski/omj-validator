@@ -152,7 +152,11 @@ def parse_ai_response(
 
         # Parse abuse detection fields (optional, defaults for backward compatibility)
         issue_type_str = result_json.get("issue_type", "none")
-        abuse_score = int(result_json.get("abuse_score", 0))
+        try:
+            abuse_score = int(result_json.get("abuse_score", 0) or 0)
+        except (ValueError, TypeError):
+            logger.warning(f"Invalid abuse_score value, defaulting to 0")
+            abuse_score = 0
 
         # Validate and convert issue_type
         try:
