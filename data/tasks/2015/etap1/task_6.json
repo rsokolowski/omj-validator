@@ -13,9 +13,9 @@
   ],
   "hints": [
     "Rozłóż wyrażenia $p^2+p$ oraz $q^2+q$ na czynniki, aby zapisać warunek z zadania w prostszej postaci.",
-    "Zauważ, że z warunku $q(q+1) \\mid p(p+1)$ wynikają dwie podzielności. Co wynika z faktu, że $q \\mid p(p+1)$, skoro $p$ i $q$ to różne liczby pierwsze?",
+    "Z warunku $q(q+1) \\mid p(p+1)$ wynikają dwie podzielności. Co wynika z faktu, że $q \\mid p(p+1)$, skoro $p$ i $q$ to różne liczby pierwsze?",
     "Rozważ drugą podzielność: $q+1 \\mid p(p+1)$. Jakie wspólne dzielniki mogą mieć $p$ i $q+1$? Pamiętaj, że $p$ jest liczbą pierwszą. Wyklucz jedną z możliwości, pokazując, że prowadzi do sprzeczności.",
-    "Wiesz już, że $q+1 \\mid p+1$ oraz z poprzedniej wskazówki, że $q \\mid p+1$. Co z tego wynika na temat podzielności $p+1$? Wyraź $p$ za pomocą $q$, podstaw do $\\frac{1}{2}(p-q)$ i znajdź czynniki."
+    "Z poprzednich kroków wynika, że $p+1$ jest wielokrotnością $q$ oraz $q+1$. Co z tego wynika dla podzielności $p+1$? Wyraź $p$ za pomocą $q$ i pokaż, że liczba $\\frac{1}{2}(p-q)$ jest iloczynem dwóch liczb większych od 1."
   ],
   "skills_required": [
     "prime_factorization",

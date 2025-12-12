@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Policz, ile pól znajduje się w każdym wierszu i każdej kolumnie. Jaki jest minimalny i maksymalny możliwy zbiór wartości, jakie mogą przyjąć wszystkie sumy?",
-    "Masz $2n$ sum, które muszą być różnymi liczbami całkowitymi. Jaki konkretny zbiór wartości muszą one tworzyć? Oblicz sumę wszystkich liczb w tym wymaganym zbiorze.",
-    "Sumę wszystkich $2n$ sum (wierszy i kolumn) można też wyrazić przez $S$, czyli sumę wszystkich liczb wpisanych w pola diagramu. Znajdź tę zależność i porównaj ją z wynikiem z poprzedniego kroku.",
-    "Wyraź sumę $S$ za pomocą liczby jedynek ($N_1$) i całkowitej liczby pól w diagramie. Połącz to z poprzednim wynikiem, aby znaleźć wartość $N_1$. Jaki warunek konieczny dla $n$ z tego wynika?"
+    "Przeanalizuj strukturę diagramu: ile pól jest w $i$-tym wierszu, a ile w $j$-tej kolumnie? Jaka jest najmniejsza, a jaka największa możliwa suma w dowolnym wierszu lub kolumnie?",
+    "Masz $2n$ sum, które muszą być różnymi liczbami całkowitymi. Biorąc pod uwagę ich minimalną i maksymalną możliwą wartość, jaki konkretny zbiór liczb muszą one tworzyć?",
+    "Oblicz sumę wszystkich $2n$ sum na dwa sposoby. Raz, korzystając ze zbioru z poprzedniej wskazówki. Dwa, wyrażając ją przez $S$ - sumę wszystkich liczb w diagramie. Co z tego wynika?",
+    "Wyraź $S$ przez liczbę jedynek $N_1$ i wyznacz $N_1$. To da ci warunek konieczny na $n$. Czy jest on też wystarczający? Spróbuj skonstruować przykład dla małego $n$ spełniającego ten warunek."
   ],
   "prerequisites": [
     "2023_etap1_7"

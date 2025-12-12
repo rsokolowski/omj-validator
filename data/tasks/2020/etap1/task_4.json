@@ -13,9 +13,9 @@
   ],
   "hints": [
     "Narysuj czworokąt. Zauważ, że kąty $120°$ są rozwarte. Co się stanie, jeśli przedłużysz boki $AD$ i $BC$ tak, aby przecięły się, tworząc trójkąt oparty na boku $AB$?",
-    "Niech proste $AD$ i $BC$ przetną się w punkcie $P$. Oblicz kąty w trójkącie $\triangle PAB$. Jakim jest on trójkątem i jakie są długości jego boków?",
-    "Teraz spójrz na większy trójkąt $\triangle PDC$. Wykorzystaj to, co wiesz o punkcie $P$, aby obliczyć długość boku $PC$ i wyrazić długość boku $PD$ za pomocą szukanej długości $AD$.",
-    "W trójkącie $\triangle PDC$ znasz długości dwóch boków ($PC$ i $CD$) oraz miarę kąta $\\angle DPC$. Co możesz wywnioskować o tym trójkącie? Oblicz $PD$, a następnie $AD$."
+    "Niech proste $AD$ i $BC$ przetną się w punkcie $P$. Oblicz kąty w trójkącie $\\triangle PAB$. Jakim jest on trójkątem i jakie są długości jego boków?",
+    "Teraz spójrz na większy trójkąt $\\triangle PDC$. Wykorzystaj to, co wiesz o punkcie $P$, aby obliczyć długość boku $PC$ i wyrazić długość boku $PD$ za pomocą szukanej długości $AD$.",
+    "W trójkącie $\\triangle PDC$ znasz długości dwóch boków ($PC$ i $CD$) oraz miarę kąta $\\angle DPC$. Co możesz wywnioskować o tym trójkącie? Oblicz $PD$, a następnie $AD$."
   ],
   "skills_required": [
     "angle_chasing"

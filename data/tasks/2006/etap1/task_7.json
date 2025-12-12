@@ -16,7 +16,7 @@
     "Aby wykazać istnienie trapezu, musisz znaleźć dwie równoległe cięciwy o różnych wierzchołkach. Oznaczmy wierzchołki 17-kąta liczbami $0, 1, \\dots, 16$. Jaki warunek muszą spełniać indeksy wierzchołków dwóch równoległych cięciw?",
     "Policz, ile cięciw można utworzyć, wybierając 2 wierzchołki spośród 10. Potraktuj te cięciwy jak 'gołębie', a ich 'kierunki' jako 'klatki'. Ile jest możliwych kierunków?",
     "Dwie cięciwy w wielokącie foremnym są równoległe, gdy ich osie symetrii się pokrywają. Zastanów się, jak oś symetrii cięciwy łączącej wierzchołki $i$ oraz $j$ zależy od sumy $i+j$.",
-    "Każdej z $\\binom{10}{2}$ cięciw przypisz sumę jej indeksów (modulo 17). Zastosuj Zasadę Szufladkową. Ile co najmniej cięciw musi mieć tę samą sumę? Wykaż, że wśród nich znajdziesz dwie o rozłącznych zbiorach wierzchołków."
+    "Każdej z $\\binom{10}{2}$ cięciw przypisz sumę jej indeksów (modulo 17). Ile co najmniej cięciw musi mieć tę samą sumę, zgodnie z Zasadą Szufladkową? Zastanów się, czy dwie różne cięciwy o tej samej sumie indeksów mogą mieć wspólny wierzchołek."
   ],
   "skills_required": [
     "pigeonhole",

@@ -15,7 +15,7 @@
     "Zadanie pyta o istnienie, więc wystarczy znaleźć jeden działający przykład. Zastanów się: czy pole ściany bocznej ostrosłupa może być większe od pola jego podstawy?",
     "Rozważ ostrosłup, który jest bardzo wysoki w stosunku do rozmiaru swojej podstawy. Wykaż, że pole jego ściany bocznej może być znacznie większe od pola podstawy.",
     "Skoro już wiesz, że ściana boczna może mieć duże pole, spróbuj skonstruować przekrój, którego pole będzie bardzo bliskie polu tej ściany.",
-    "Poprowadź płaszczyznę przez jedną z krawędzi podstawy i przez punkty na pozostałych krawędziach bocznych, leżące bardzo blisko wierzchołka. Do czego dąży pole przekroju, gdy punkty te zbliżają się do wierzchołka?"
+    "Wybierz ścianę boczną o dużym polu, np. $\\triangle VAB$. Poprowadź płaszczyznę tnącą krawędzie $VC$ i $VD$ bardzo blisko wierzchołka $V$, a krawędzie $VA$ i $VB$ bardzo blisko podstawy. Do czego dąży pole takiego przekroju?"
   ],
   "skills_required": [
     "spatial_3d",

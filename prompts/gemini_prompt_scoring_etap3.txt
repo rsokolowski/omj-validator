@@ -1,0 +1,19 @@
+## Kryteria punktacji dla III etapu - finału (0-6 punktów):
+
+- **6 punktów**: Rozwiązanie poprawne i kompletne. Dowód jest logiczny, precyzyjny i nie zawiera błędów. Wszystkie kluczowe kroki są uzasadnione, terminologia jest poprawna.
+- **5 punktów**: Rozwiązanie prawie poprawne. Główny tok rozumowania jest prawidłowy, ale występuje JEDNA z poniższych usterek:
+  - błąd terminologiczny (np. "kąty przyległe" zamiast "naprzemianległe"), LUB
+  - brak uzasadnienia jednego oczywistego kroku, LUB
+  - nieomówiony przypadek brzegowy (np. nierówność ≥ wykazana jako >, bez dyskusji równości), LUB
+  - drobny błąd rachunkowy niewpływający na tok rozumowania
+- **2 punkty**: Istotny postęp w kierunku rozwiązania. Uczeń ma poprawny pomysł lub podejście, ale rozwiązanie jest niekompletne lub zawiera poważne błędy w realizacji.
+- **0 punktów**: Brak istotnego postępu. Rozwiązanie jest błędne, niezwiązane z zadaniem lub zawiera tylko przepisanie treści.
+
+## Zasady oceny:
+
+1. PRIORYTET: Poprawność logiczna rozumowania. Oceń czy każdy krok wynika z poprzedniego.
+2. Oceń TYLKO to, co uczeń napisał - nie zakładaj, że miał na myśli coś innego.
+3. Dla zadań "Wykaż że" lub "Udowodnij" wymagane jest pełne uzasadnienie, nie tylko przykład.
+4. Dla zadań "Wyznacz wszystkie" wymagane jest znalezienie wszystkich rozwiązań ORAZ uzasadnienie, że nie ma innych.
+5. KONSEKWENCJA: Każda usterka z listy dla 5 punktów powinna ZAWSZE skutkować oceną 5, nie 6. Bądź konsekwentny.
+6. Finał wymaga wyższej precyzji - zwracaj szczególną uwagę na kompletność i ścisłość dowodów.

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie figurę i oznacz $AM = BK = x$. Teza $\\angle CKL = 90^\\circ$ jest równoważna pewnej zależności między długościami boków trójkąta $CKL$. Jakiej?",
-    "Aby wykorzystać warunek $KM=LM$, wyraź $KM^2$ i $LM^2$ w zależności od $x$ i innych długości na bokach trójkąta. Możesz to zrobić, opuszczając wysokości z punktu $M$ na boki $BC$ i $AC$.",
-    "Równość $KM^2=LM^2$ prowadzi do równania. Przekształć je tak, aby grupować wyrazy z $AL$ i $BM$. Spróbuj doprowadzić je do postaci iloczynowej $(...)(...)=0$.",
-    "Rozważ dwa przypadki wynikające z równania. Wykaż, że jeden z nich prowadzi do sprzeczności z założeniem $\\angle KML=90^\\circ$. W drugim przypadku znajdź stosunek $CL/CK$ i udowodnij, że $\\triangle CKL$ jest prostokątny."
+    "Narysuj starannie figurę, oznaczając $AM = BK = x$ oraz $CL=y$. Zauważ, że teza $\\angle CKL = 90^\\circ$ jest równoważna pewnej prostej zależności między długościami $CK$ i $CL$. Jakiej?",
+    "Wykorzystaj warunek $KM=LM$. Wyraź kwadraty długości $KM^2$ i $LM^2$ w zależności od $x$, $y$ oraz długości boku trójkąta $ABC$. Możesz w tym celu opuścić odpowiednie wysokości.",
+    "Równość $KM^2=LM^2$ prowadzi do równania z dwiema niewiadomymi. Upraszczając je, spróbuj doprowadzić je do postaci iloczynowej $(...)(...)=0$, z której wynikają dwie możliwości.",
+    "Przeanalizuj obie możliwości. Pokaż, że jedna z nich jest sprzeczna z założeniem $\\angle KML=90^\\circ$. Wykaż, że druga możliwość jest równoważna tezie zadania."
   ],
   "prerequisites": [
     "2021_etap1_2"

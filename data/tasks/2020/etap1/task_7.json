@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Wyobraź sobie, że patrzysz na bryłę dokładnie z góry. Jakie kształty tworzą rzuty wierzchołków na płaszczyznę podstawy? Zauważ, że cała figura ma dużą symetrię obrotową.",
-    "Zamiast od razu liczyć współrzędne w 3D, skup się na rzucie prostopadłym całej figury na płaszczyznę podstawy. Spróbuj znaleźć położenie rzutów wierzchołków A i B względem środka kwadratowej podstawy.",
-    "Kluczowa obserwacja dotyczy porównania odległości od osi symetrii bryły dla dwóch typów wierzchołków: tych na \"górze\" (jak A) i tych na \"krawędziach\" (jak V). Wyznacz najpierw położenie rzutu wierzchołka V.",
-    "Oblicz odległość rzutu wierzchołka V od środka podstawy. Następnie, korzystając z faktu, że A i V należą do tego samego pięciokąta, udowodnij, że rzut A jest w tej samej odległości od środka. To pozwoli Ci znaleźć odległość A od B."
+    "Wyobraź sobie opisaną bryłę. Ma ona kwadratową podstawę o boku 1, a na każdym boku stoi pięciokąt foremny. Twoim celem jest znalezienie odległości między wierzchołkami A i B, które są \"szczytami\" dwóch przeciwległych pięciokątów.",
+    "Zastosuj twierdzenie Pitagorasa w trójwymiarze. Zauważ, że z symetrii bryły wierzchołki A i B znajdują się na tej samej wysokości. Zadanie sprowadza się więc do znalezienia odległości między ich rzutami A' i B' na płaszczyznę podstawy.",
+    "Odległość $|A'B'|$ jest równa $2|OA'|$, gdzie O to środek podstawy. Aby wyznaczyć $|OA'|$, rozważ także rzuty wierzchołków V, które są wspólne dla sąsiednich pięciokątów. Zapisz zależności między odległościami w rzucie a wysokościami wierzchołków.",
+    "Zapisz układ równań, korzystając ze znanych długości krawędzi (równych 1), np. $|AV|=1$, gdzie V to wierzchołek boczny. Kluczowym uproszczeniem jest fakt, że wszystkie wierzchołki A i V leżą na tej samej wysokości. Rozwiązanie układu pozwoli wyznaczyć szukaną odległość."
   ],
   "skills_required": [
     "angle_chasing",

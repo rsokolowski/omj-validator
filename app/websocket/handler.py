@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 
 from ..config import settings
 from ..db.session import SessionLocal
-from ..db.models import SubmissionStatus
+from ..db.models import SubmissionStatus, IssueType
 from ..db.repositories import SubmissionRepository
 from ..ai import create_ai_provider, AIProviderError
 from ..storage import get_task_pdf_path, get_solution_pdf_path
@@ -124,6 +124,8 @@ async def process_submission_background(
             score=result.score,
             feedback=result.feedback,
             status=SubmissionStatus.COMPLETED,
+            issue_type=IssueType(result.issue_type.value),
+            abuse_score=result.abuse_score,
             scoring_meta=result.scoring_meta,
         )
 

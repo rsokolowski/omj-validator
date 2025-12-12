@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zagięcie, które powoduje pokrycie się boku $CB$ z przekątną $CA$, odbywa się wzdłuż dwusiecznej kąta $\\angle BCA$. Punkt $P$ powstaje na przecięciu tej dwusiecznej z bokiem $AB$. Jaka jest relacja między długościami $AP$ i $AQ$?",
-    "Twoim celem jest dowód, że $AP=AR$. Zastanów się nad położeniem punktu $R$. Jest on odbiciem $C$ względem prostej $PQ$. Jaka jest oś symetrii dla odcinka $PQ$? Co z tego wynika dla położenia punktów $A, C, R$?",
-    "Wiemy już, że punkty $A, R, C$ leżą na jednej prostej. Oznaczmy przez $M$ punkt przecięcia $PQ$ i $AC$. Wyraź długość $AR$ za pomocą długości odcinków na przekątnej $AC$. Jaką własność ma punkt $M$ względem $C$ i $R$?",
-    "Aby udowodnić równość $AP=AR$, wyraź obie długości za pomocą boku rombu $a$ i przekątnej $AC$. Użyj twierdzenia o dwusiecznej, by znaleźć $AP$. Następnie, przez podobieństwo trójkątów, znajdź długość $AM$ i użyj jej do obliczenia $AR$."
+    "Pierwsze zagięcie oznacza, że linie $CP$ i $CQ$ są dwusiecznymi odpowiednich kątów. Wykorzystaj symetrię rombu, aby porównać długości odcinków $AP$ i $AQ$.",
+    "Aby udowodnić, że $AP=AR$, spróbuj pokazać, że trójkąt $\\triangle APR$ jest równoramienny. Drugie zagięcie to odbicie punktu $C$ względem prostej $PQ$. Jaka jest zależność między prostymi $AC$ i $PQ$?",
+    "Niech $M$ będzie punktem przecięcia $AC$ i $PQ$. Zauważ, że $A$ i $C$ leżą po przeciwnych stronach prostej $PQ$. Wyraź kąty $\\angle APR$ i $\\angle ARP$ przy pomocy kątów w trójkątach prostokątnych $\\triangle APM$ i $\\triangle CPM$.",
+    "Odbicie punktu $C$ na $R$ względem prostej $PQ$ oznacza, że $\\triangle CMP \\cong \\triangle RMP$. Wykorzystaj to przystawanie, aby znaleźć miarę $\\angle ARP$. Następnie oblicz $\\angle APR$ jako różnicę kątów przy wierzchołku $P$."
   ],
   "prerequisites": [
     "2020_etap1_7"

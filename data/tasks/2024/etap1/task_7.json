@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Oznacz krawędzie $AB=a$, $AD=b$, $AA'=c$. Wyraź kwadrat długości przekątnej $AC'$ za pomocą $a, b, c$. Następnie wykorzystaj warunek $AC'=a+b$, aby znaleźć kluczową zależność między tymi długościami.",
-    "Aby udowodnić tezę, skorzystaj z twierdzenia odwrotnego do twierdzenia Pitagorasa dla trójkąta $BPB'$. Twoim celem jest obliczenie $BP^2$ i $B'P^2$ i wykazanie, że ich suma jest równa $BB'^2$.",
-    "Zauważ, że krawędź $AB$ jest prostopadła do ściany $BCC'B'$, a krawędź $B'C'$ do ściany $ABB'A'$. Oznacza to, że trójkąty $ABC'$ i $AB'C'$ są prostokątne, a punkt $P$ leży na ich wspólnej przeciwprostokątnej.",
-    "Porównaj długość odcinka $AP$ z długością krawędzi $AB$. Podobnie porównaj $C'P$ z $C'B'$. Jakie dwa trójkąty równoramienne możesz dzięki temu zauważyć? Wykorzystaj je do obliczenia $BP^2$ i $B'P^2$."
+    "Oznacz długości krawędzi jako $a=AB$, $b=AD$, $c=AA'$. Korzystając z podanego warunku i twierdzenia Pitagorasa dla przekątnej prostopadłościanu, znajdź kluczową zależność między $a, b, c$.",
+    "Aby udowodnić, że kąt $\\angle BPB'$ jest prosty, zastosuj twierdzenie odwrotne do twierdzenia Pitagorasa. Twoim celem jest wykazanie, że $BP^2 + B'P^2 = BB'^2$.",
+    "Przyjrzyj się trójkątom $\\triangle ABP$ oraz $\\triangle C'B'P$. Jakie szczególne własności mają te trójkąty, biorąc pod uwagę definicję punktu $P$ oraz wymiary prostopadłościanu?",
+    "W trójkącie $\\triangle ABP$ znasz dwa boki. Aby obliczyć $BP^2$, wyznacz cosinus kąta $\\angle BAP$ z trójkąta prostokątnego $\\triangle ABC'$. Postępuj analogicznie, aby obliczyć $B'P^2$ w trójkącie $\\triangle C'B'P$."
   ],
   "prerequisites": [
     "2020_etap1_2"

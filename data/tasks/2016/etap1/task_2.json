@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Niech O będzie środkiem okręgu opisanego na trójkącie ABC, a K środkiem boku AB. Jaki jest kształt trójkąta AOB, skoro kąt wpisany ACB ma miarę 45°? Co to oznacza dla położenia punktu O względem boku AB?",
-    "Niech M będzie środkiem odcinka DG. Aby udowodnić, że M=O, spróbuj pokazać, że punkt M ma takie same własności geometryczne względem boku AB i jego środka K, jak punkt O.",
-    "Położenie punktów G i D jest zdefiniowane przez kwadraty. Pomyśl o nich w kategoriach obrotów. O jaki kąt i wokół jakiego punktu należy obrócić punkt C, aby otrzymać punkt G? A żeby z punktu C otrzymać D?",
-    "Niech K będzie środkiem AB. Wykorzystaj obroty do opisania położenia punktów D i G, a następnie pokaż, że odcinek KM jest prostopadły do AB i ma długość równą połowie długości AB. Porównaj ten wynik z własnościami odcinka OK."
+    "Niech $O$ będzie środkiem okręgu opisanego na $\triangle ABC$. Korzystając z twierdzenia o kącie środkowym i wpisanym, określ jakim szczególnym rodzajem trójkąta jest $\triangle AOB$.",
+    "Zauważ, że położenie punktów $D$ i $G$ jest określone przez obroty. Rozważ przekształcenie, które najpierw przenosi $D$ na $C$ (obrót wokół $B$), a następnie $C$ na $G$ (obrót wokół $A$).",
+    "Zbadaj złożenie tych dwóch obrotów. Jaki jest jego sumaryczny kąt obrotu? Jakim znanym przekształceniem geometrycznym jest w istocie to złożenie?",
+    "Otrzymane złożenie jest symetrią środkową. Skoro przekształca $D$ w $G$, jej środkiem jest środek odcinka $DG$. Znajdź obraz punktu $B$ w tej symetrii, aby odkryć kluczową własność środka $DG$."
   ],
   "skills_required": [
     "circle_theorems",

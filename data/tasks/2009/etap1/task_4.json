@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj 18-kąt foremny wpisany w okrąg. Zauważ, że podane proste tworzą dwie pary prostych równoległych. Wykorzystaj symetrie wielokąta, aby zbadać ich wzajemne położenie.",
-    "Aby udowodnić, że czworokąt jest prostokątem, znajdź osie symetrii dla obu par prostych równoległych. Pokaż, że te osie (będące średnicami okręgu) są do siebie prostopadłe.",
-    "Jedna para prostych jest prostopadła do średnicy łączącej wierzchołki 18-kąta, a druga do średnicy łączącej środki przeciwległych łuków. Zidentyfikuj te średnice i oblicz kąt między nimi.",
-    "Aby sprawdzić, czy to kwadrat, porównaj jego boki. Długość boku zależy od odległości danej cięciwy od środka okręgu. Czy cięciwy $A_3A_{15}$ i $A_2A_7$ są jednakowo oddalone od środka okręgu?"
+    "Narysuj wierzchołki 18-kąta na okręgu. Aby udowodnić, że czworokąt jest prostokątem, musisz wykazać, że jego przeciwległe boki są równoległe, a sąsiednie boki są prostopadłe.",
+    "Skorzystaj z własności cięciw i łuków w okręgu. Kiedy dwie cięciwy są równoległe? Jak można obliczyć kąt między dwiema przecinającymi się cięciwami, znając miary łuków, które one wycinają?",
+    "Dwie cięciwy są równoległe, jeśli wycinają między sobą łuki o równej długości. Kąt między cięciwami to połowa sumy miar łuków leżących między ich ramionami.",
+    "Aby sprawdzić, czy prostokąt jest kwadratem, poszukaj osi symetrii dla całej konfiguracji czterech prostych. Zastanów się, co dla prostokąta oznacza posiadanie osi symetrii, która nie jest równoległa do jego boków."
   ],
   "prerequisites": [],
   "skills_required": [

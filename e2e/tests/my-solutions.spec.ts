@@ -77,9 +77,9 @@ test.describe('My Solutions Panel', () => {
       await expect(page.getByText('Filtry:')).toBeVisible();
 
       // Should see year and etap dropdowns (MUI Select components)
-      // Use getByLabel for MUI form controls to avoid matching multiple elements
-      await expect(page.getByLabel('Rok')).toBeVisible();
-      await expect(page.getByLabel('Etap')).toBeVisible();
+      // MUI InputLabel creates multiple elements, use .first() to get the label
+      await expect(page.getByText('Rok').first()).toBeVisible();
+      await expect(page.getByText('Etap').first()).toBeVisible();
 
       // Should see "show errors" checkbox
       await expect(page.getByText(/pokaż błędy systemowe/i)).toBeVisible();

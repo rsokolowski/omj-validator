@@ -26,6 +26,13 @@ class HintLevel(str, Enum):
     WSKAZOWKA = "wskazowka"
 
 
+class IssueType(str, Enum):
+    """Type of issue detected in a submission by abuse detection."""
+    NONE = "none"              # No issues detected - normal submission
+    WRONG_TASK = "wrong_task"  # Student submitted solution to different task
+    INJECTION = "injection"    # Prompt injection attempt detected
+
+
 class TaskPdf(BaseModel):
     """PDF file paths for a task (shared across tasks in same etap)."""
     tasks: str  # Path to tasks PDF
@@ -75,6 +82,8 @@ class TaskStats(BaseModel):
 class SubmissionResult(BaseModel):
     score: int
     feedback: str
+    issue_type: IssueType = IssueType.NONE  # Abuse detection result
+    abuse_score: int = 0  # 0-100 confidence in abuse detection
     scoring_meta: Optional[dict] = None  # LLM metadata (model, tokens, cost, timing)
 
 
@@ -99,6 +108,8 @@ class Submission(BaseModel):
     score: Optional[int] = None  # Null if failed
     feedback: Optional[str] = None  # Null if failed
     error_message: Optional[str] = None  # Set if status is FAILED
+    issue_type: IssueType = IssueType.NONE  # Abuse detection result
+    abuse_score: int = 0  # 0-100 confidence in abuse detection
     scoring_meta: Optional[dict] = None  # LLM metadata (model, tokens, cost, timing)
 
 

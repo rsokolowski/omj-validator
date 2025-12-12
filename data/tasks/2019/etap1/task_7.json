@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Narysuj romb z podstawy i oblicz długości jego przekątnych. Zauważ, że rzutem kwadratowego przekroju na płaszczyznę podstawy jest właśnie ten romb.",
-    "Przekątne kwadratu są równe, a przekątne rombu (ich rzuty) nie. Jaki jest związek między długością odcinka w przestrzeni, długością jego rzutu i różnicą wysokości jego końców?",
-    "Zapisz równania wynikające z faktu, że obie przekątne kwadratu mają tę samą długość. Wykorzystaj też związek między bokiem kwadratu ($x$), bokiem rombu ($a$) i wysokościami wierzchołków.",
-    "Rozważ dwa główne przypadki: jeden z diagonalnych kwadratu jest poziomy, lub żaden nie jest. Sprawdź, do jakich wartości na długość boku kwadratu prowadzi każdy z tych przypadków."
+    "Narysuj romb w podstawie i oblicz długości jego przekątnych. Pamiętaj, że ten romb jest rzutem kwadratowego przekroju na płaszczyznę podstawy.",
+    "Wyraź długości boków i przekątnych kwadratu w zależności od długości ich rzutów (czyli boków i przekątnych rombu) oraz różnic wysokości między wierzchołkami. Użyj twierdzenia Pitagorasa.",
+    "Kluczową własnością kwadratu jest prostopadłość jego przekątnych. Ich rzuty (przekątne rombu) też są prostopadłe. Co z tego wynika dla wysokości przeciwległych wierzchołków kwadratu?",
+    "Okazuje się, że jedna z przekątnych kwadratu musi być pozioma. Rozważ dwa przypadki, w zależności od tego, która przekątna rombu jest jej rzutem, i sprawdź, czy oba są geometrycznie możliwe."
   ],
   "prerequisites": [
     "2017_etap1_7"

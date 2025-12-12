@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie rysunek. Punkt $E$ jest odbiciem punktu $B$ względem prostej $CD$. Co ta symetria mówi o trójkątach $CDB$ i $CDE$, a w szczególności o kątach $\\angle CDB$ i $\\angle CDE$?",
-    "Aby wykazać, że punkty $A, D, E$ leżą na jednej prostej, wystarczy udowodnić, że kąt $\\angle ADE$ jest półpełny. Kąt ten jest sumą kątów $\\angle ADC$ i $\\angle CDE$.",
-    "Punkty $A, B, C, D$ leżą na jednym okręgu. Wykorzystaj własności czworokąta $ABDC$ wpisanego w okrąg, aby znaleźć miary kątów z wierzchołkiem w punkcie $D$.",
-    "Jeden z szukanych kątów, $\\angle ADC$, jest równy pewnemu kątowi w trójkącie $ABC$. Drugi, $\\angle CDB$, wraz z innym kątem tego trójkąta sumuje się do $180^\\circ$. Połącz te fakty z własnością symetrii."
+    "Narysuj starannie figurę. Punkt $E$ jest obrazem punktu $B$ w symetrii względem prostej $CD$. Jaka jest więc relacja między kątami $\\angle CDE$ i $\\angle CDB$?",
+    "Aby wykazać, że punkty $A, D, E$ są współliniowe, wystarczy pokazać, że kąt $\\angle ADE$ jest półpełny. Spróbuj obliczyć go jako sumę kątów $\\angle ADC$ i $\\angle CDE$.",
+    "Zauważ, że punkty $A, B, D, C$ leżą na jednym okręgu. Jakie własności mają kąty w czworokącie wpisanym w okrąg? Wykorzystaj je do znalezienia miar kątów $\\angle ADC$ i $\\angle CDB$.",
+    "Kąt $\\angle CDB$ jest oparty na tym samym łuku co jeden z kątów trójkąta $ABC$. Z kolei kąt $\\angle ADC$ jest przeciwległy do innego kąta tego trójkąta w czworokącie $ABDC$."
   ],
   "skills_required": [
     "circle_theorems",

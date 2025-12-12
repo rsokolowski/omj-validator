@@ -13,9 +13,9 @@
   ],
   "hints": [
     "Obwód czworokąta to zamknięta pętla na powierzchni czworościanu. Długość takiej pętli najłatwiej jest mierzyć na siatce (płaskim rozwinięciu) ścian, po których ona przebiega.",
-    "Podziel obwód czworokąta, np. PQRS, na dwie części: drogę P-Q-R oraz drogę R-S-P. Każda z tych dróg przebiega przez dwie sąsiednie ściany czworościanu.",
-    "Rozważ jedną z tych dróg, np. P-Q-R. Rozłóż na płasko dwie ściany, przez które ona przechodzi. Jaki kształt powstanie i jaka jest najkrótsza możliwa długość tej drogi na powstałej siatce?",
-    "Całkowity obwód jest sumą długości dwóch odcinków prostych na dwóch takich samych siatkach (rombach). Minimalna długość takiego odcinka jest równa odległości między przeciwległymi bokami rombu."
+    "Podziel obwód na dwie części, np. $P \\to Q \\to R$ i $R \\to S \\to P$. Długość każdej z tych części jest nie mniejsza niż odległość między jej końcami na odpowiedniej siatce (rombie złożonym z dwóch ścian).",
+    "Wyraź sumę tych dwóch odległości (dolne oszacowanie obwodu) w zależności od położeń punktów $P$ i $R$. Zauważ, że zależy ona tylko od sumy $z = AP+CR$, gdzie $A, C$ to wierzchołki czworościanu.",
+    "Otrzymaną sumę pierwiastków można zinterpretować geometrycznie jako sumę odległości pewnego punktu na prostej od dwóch ustalonych punktów w płaszczyźnie. Kiedy taka suma jest najmniejsza?"
   ],
   "prerequisites": [],
   "skills_required": [

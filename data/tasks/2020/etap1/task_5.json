@@ -15,7 +15,7 @@
     "Iloczyn czterech dodatnich liczb całkowitych jest potęgą liczby 5. Zapisz te cztery liczby jako $5^{x_1}, 5^{x_2}, 5^{x_3}, 5^{x_4}$. Co wiesz o sumie wykładników $x_1+x_2+x_3+x_4$?",
     "Suma tych czterech liczb musi być równa $2^{1002}$. Zbadaj tę sumę, analizując jej resztę z dzielenia przez jakąś małą potęgę dwójki, na przykład 4 lub 8.",
     "Jaka jest reszta z dzielenia $5^k$ przez 8? Zauważ, że zależy ona od parzystości wykładnika $k$. Co to oznacza dla podzielności sumy $5^{x_1}+5^{x_2}+5^{x_3}+5^{x_4}$ przez 8?",
-    "Suma $5^{x_1}+5^{x_2}+5^{x_3}+5^{x_4}$ jest podzielna przez 8 (bo $2^{1002}$ jest) tylko wtedy, gdy liczba nieparzystych wykładników ($x_i$) jest nieparzysta. Porównaj ten wniosek z tym, co wiesz o sumie wykładników."
+    "Suma $5^{x_1}+5^{x_2}+5^{x_3}+5^{x_4}$ musi być podzielna przez 8. Ile spośród wykładników $x_i$ musi być nieparzystych, aby tak było? Porównaj ten wniosek z parzystością sumy $x_1+x_2+x_3+x_4=1002$."
   ],
   "skills_required": [
     "prime_factorization"

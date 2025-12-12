@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj czworokąt $ABCD$ i punkty $K, L, M, N$. Zastanów się, co definicja symetrii mówi o położeniu punktu $A$ względem $K$ i $B$, punktu $B$ względem $L$ i $C$ itd. Jakie odcinki mają równe długości?",
-    "Pole czworokąta $KLMN$ można wyrazić jako sumę pola czworokąta $ABCD$ i pól czterech trójkątów znajdujących się na zewnątrz niego. Spróbuj powiązać pola tych zewnętrznych trójkątów z polem $ABCD$.",
-    "Rozważ trójkąt $\\triangle KBL$ i porównaj jego pole z polem $\\triangle ABC$. Wybierając podstawy na prostej $KB$, zauważysz, że jedna jest dwa razy dłuższa od drugiej. Co możesz powiedzieć o wysokościach opuszczonych na tę prostą?",
-    "Aby porównać wysokości z wierzchołków $L$ i $C$ na prostą $KB$, wykorzystaj fakt, że $B$ jest środkiem odcinka $LC$. Poszukaj przystających trójkątów prostokątnych, które powstaną po narysowaniu tych wysokości."
+    "Narysuj figurę. Z definicji symetrii wynika, że $A$ jest środkiem odcinka $KB$, $B$ jest środkiem $LC$ itd. Co to oznacza dla długości odpowiednich odcinków?",
+    "Pole czworokąta $KLMN$ jest sumą pola $ABCD$ i pól czterech trójkątów \"doczepionych\" do jego boków. Spróbuj obliczyć pola tych zewnętrznych trójkątów, odnosząc je do pola czworokąta $ABCD$.",
+    "Rozważmy jeden z zewnętrznych trójkątów, np. $\\triangle BLK$. Chcemy powiązać jego pole z polem $\\triangle ABC$. Zauważ, że punkty $A$ i $B$ są środkami boków w pewnych większych trójkątach. Jaka jest kluczowa własność mediany (środkowej) związana z polem trójkąta?",
+    "Zastosuj własność mediany w trójkącie $\\triangle KLC$, aby porównać pola $\\triangle KBL$ i $\\triangle KBC$. Następnie zrób to samo w trójkącie $\\triangle KBC$, aby znaleźć związek między polem $\\triangle KBC$ a polem $\\triangle ABC$."
   ],
   "skills_required": [
     "transformations",

@@ -22,9 +22,9 @@
     "spatial_3d"
   ],
   "hints": [
-    "Po zagięciu pięciokąta punkty $A, C, E$ spotykają się w jednym wierzchołku, nazwijmy go $P$. Czworościan ma więc wierzchołki $P, B, D, M$. Pamiętaj, że zagięcie nie zmienia długości boków ani miar kątów w tworzących go trójkątach.",
-    "Zamiast obliczać długości wszystkich krawędzi, poszukaj w płaskim sześciokącie kątów prostych. Zastanów się, co stanie się z tymi kątami po złożeniu figury. Jakie własności mają najdłuższe przekątne sześciokąta foremnego?",
-    "Przekątne $BE$ i $AD$ są średnicami okręgu opisanego na sześciokącie, więc kąty $\\angle BAE$ i $\\angle ADE$ są proste. Po złożeniu figury, co to oznacza dla wzajemnego położenia krawędzi $PM$, $PB$ i $PD$ w czworościanie?",
-    "Odcinek $PM$ jest wysokością czworościanu opuszczoną na podstawę $PBD$. Oblicz długość tej wysokości oraz pole podstawy. Zauważ, że trójkąt $PBD$ jest przystający do trójkąta $BCD$ z płaskiego sześciokąta."
+    "Po zagięciu pięciokąta punkty $A, C, E$ spotykają się w jednym wierzchołku, nazwijmy go $P$. Czworościan ma więc wierzchołki $P, B, D, M$. Pamiętaj, że zagięcie nie zmienia długości odcinków.",
+    "Aby obliczyć objętość, warto znaleźć wysokość czworościanu. Poszukaj w figurze przed złożeniem kątów prostych, które po zagięciu mogą utworzyć krawędź prostopadłą do jednej ze ścian.",
+    "Sprawdź, czy trójkąty $\\triangle ABE$ oraz $\\triangle ADE$ w płaskim sześciokącie są prostokątne. Jaki wniosek płynie z tego dla wzajemnego położenia krawędzi $PM$, $PB$ i $PD$ w powstałym czworościanie?",
+    "Wiesz już, że $PM \\perp PB$ oraz $PM \\perp PD$. Co to oznacza dla położenia krawędzi $PM$ względem płaszczyzny $\\triangle PBD$? Potraktuj czworościan jako ostrosłup o podstawie $\\triangle PBD$ i znajdź jego wysokość."
   ]
 }

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj figurę i oznacz kąty: $\\angle BAE = \\alpha$ oraz $\\angle DAF = \\beta$. Wykorzystaj dane $\\angle EAF = 45^\\circ$ i $\\angle DAB = 90^\\circ$, aby znaleźć zależność między $\\alpha$ i $\\beta$.",
-    "Kluczem do zadania jest sprytne przekształcenie geometryczne. Spróbuj obrócić jeden z trójkątów prostokątnych ($\triangle ABE$ lub $\triangle ADF$) o $90^\\circ$ wokół wierzchołka $A$.",
-    "Obróćmy $\\triangle ADF$ o $90^\\circ$ przeciwnie do ruchu wskazówek zegara wokół punktu $A$. Niech $G$ będzie obrazem punktu $F$. Pokaż, że trójkąty $\\triangle AEF$ i $\\triangle AEG$ są przystające.",
-    "Z przystawania wynika równość pól. Aby obliczyć pole $\\triangle AEG$, zbadaj położenie jego boku $EG$. Co możesz powiedzieć o rzutach punktów $E$ i $G$ na prostą $AD$?"
+    "Narysuj figurę i oznacz kąty $\\angle BAE = \\alpha$ oraz $\\angle DAF = \\beta$. Korzystając z miar kątów w prostokącie, znajdź zależność między $\\alpha$ i $\\beta$.",
+    "Teza dotyczy sumy pól. Spróbuj przekształcić jeden z trójkątów, na przykład $\\triangle ADF$, przez obrót wokół punktu $A$, aby uzyskać figurę, której pole łatwiej porównać z polem $\\triangle AEF$.",
+    "Obróć trójkąt $ADF$ o $90^\\circ$ wokół punktu $A$ zgodnie z ruchem wskazówek zegara. Niech obrazem punktu $F$ będzie punkt $G$. Porównaj trójkąt $AEF$ z nowo powstałym trójkątem $AEG$.",
+    "Wykaż, że $\\triangle AEF \\cong \\triangle AEG$. Użyj własności obrotu do porównania boków oraz zależności między kątami $\\alpha$ i $\\beta$ do wykazania, że $\\angle EAG = 45^\\circ$."
   ],
   "prerequisites": [],
   "skills_required": [
