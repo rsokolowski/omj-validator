@@ -14,9 +14,9 @@
   ],
   "hints": [
     "Oblicz wartość całego wyrażenia $1-2+3-4+\\ldots-100$. Pomocne może być łączenie sąsiednich liczb w pary.",
-    "Oznacz lewą stronę nowego równania jako $L$, a prawą jako $P$. Porównaj sumę $L+P$ z wartością całego początkowego wyrażenia. Czym się różnią?",
-    "Różnica między sumą $L+P$ a wartością początkowego wyrażenia zależy tylko od liczby $k$. Wyraź tę różnicę za pomocą $k$, rozważając osobno przypadek, gdy przed $k$ był znak `+` i gdy był `-`.",
-    "Wykorzystaj warunek $L=P$ w zależności znalezionej w poprzednim kroku, aby otrzymać równanie na $L$. Wartość $L$ (czyli suma do $k-1$) też zależy od $k$. Znajdź tę zależność i rozwiąż równanie."
+    "Niech znak równości zastępuje operację przed liczbą $k$. Wyrażenie po lewej stronie nazwijmy $L$, a po prawej $P$. Jaka jest zależność między wartością całego początkowego wyrażenia, a wartościami $L$ i $P$?",
+    "Zauważ, że zależność z poprzedniego kroku zależy od tego, czy przed liczbą $k$ stał znak `+` czy `-`. Rozważ oba przypadki i wykorzystaj warunek, że nowo powstała równość $L=P$ jest prawdziwa.",
+    "W jednym z przypadków otrzymasz konkretną wartość, jaką musi mieć suma $L$. Oblicz, dla jakiej liczby $k$ suma $1-2+\\ldots \\pm(k-1)$ przyjmuje tę właśnie wartość."
   ],
   "prerequisites": [],
   "skills_required": [

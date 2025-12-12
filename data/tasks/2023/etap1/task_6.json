@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Spróbuj dodać do obu stron równania $ab+b+1=0$ zmienną $a$. Zauważ, że lewą stronę da się teraz zapisać w postaci iloczynu.",
-    "Zapisz w ten sam sposób wszystkie trzy warunki z treści zadania. Twoim celem jest pokazanie, że jeśli dwa pierwsze równania są prawdziwe, to trzecie również musi być.",
-    "Z drugiego przekształconego równania, $(b+1)(c+1)=b$, wyznacz wyrażenie na $b+1$. Podstaw je do pierwszego przekształconego równania.",
-    "Po podstawieniu i uproszczeniu otrzymasz równość $b(a+1)=a(c+1)$. Przekształć ją dalej, aby dojść do wniosku, że $ca+a+1=0$."
+    "Spróbuj przekształcić równanie $ab+b+1=0$, dodając do obu stron $a$. Zauważ, że lewą stronę da się teraz zapisać w postaci iloczynu.",
+    "Zapisz wszystkie trzy warunki w tej nowej, iloczynowej postaci. Przyjmij, że dwa pierwsze warunki są spełnione i spróbuj z nich wywnioskować trzeci, eliminując zmienną $b$.",
+    "Z pierwszego przekształconego równania, $(a+1)(b+1)=a$, wyznacz wyrażenia na $b+1$ oraz na $b$ w zależności od $a$.",
+    "Podstaw wyznaczone wyrażenia do drugiego przekształconego równania, $(b+1)(c+1)=b$. Uprość otrzymaną równość, aby dojść do trzeciego warunku."
   ],
   "skills_required": [
     "algebraic_identities",

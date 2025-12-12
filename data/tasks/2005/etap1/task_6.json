@@ -15,8 +15,8 @@
   "hints": [
     "Gdyby wszystkie 5 monet było prawdziwych, ważyłyby 50 g. Brakuje 2 g, a każda fałszywa moneta jest lżejsza o 1 g. Ile dokładnie jest fałszywych monet?",
     "Masz do rozróżnienia 10 możliwych par fałszywych monet. Zaplanuj trzy ważenia tak, aby każda para dawała unikalną sekwencję trzech wyników (swój własny 'kod').",
-    "Zacznij od zważenia trójki $\\{1, 2, 3\\}$. Zastanów się nad przypadkiem, gdy wynik wskaże obecność dokładnie jednej fałszywej monety w tej grupie (co oznacza, że druga jest w parze $\\{4, 5\\}$).",
-    "Aby rozróżnić kandydatów z poprzedniego kroku, kolejne ważenia muszą sprawdzać konkretne monety z obu grup. Spróbuj w drugim ważeniu użyć pary mieszanej, np. $\\{1, 4\\}$. Dobierz trzecie ważenie analogicznie."
+    "Spróbuj zważyć grupy {1, 2, 3} i {1, 4}. Zauważ, że niektóre pary fałszywych monet, np. {1, 5} i {2, 4}, dadzą te same wyniki w obu ważeniach. Jakie trzecie ważenie je rozróżni?",
+    "Trzecie ważenie musi rozróżnić pary, które dotąd wyglądały tak samo. Aby odróżnić parę {1, 5} od {2, 4}, zważ grupę, która zawiera monetę z jednej z tych par, ale nie z drugiej, np. {3, 4}."
   ],
   "skills_required": [
     "weighing_problems",

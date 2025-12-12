@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Policz, ile pól znajduje się w każdym wierszu i każdej kolumnie. Jakie są minimalne i maksymalne możliwe sumy dla wiersza lub kolumny o $k$ polach?",
-    "Masz $2n$ sum, które muszą być różne. Jaki jest zbiór wszystkich możliwych wartości, jakie te sumy mogą przyjąć? Co z tego wynika na temat wymaganego zbioru sum?",
-    "Skoro znasz dokładny zbiór sum, które muszą wystąpić, oblicz sumę wszystkich tych $2n$ liczb. Czy można w inny sposób wyrazić sumę wszystkich sum wierszy i kolumn?",
-    "Zastanów się, ile razy wartość z każdej komórki jest wliczana do łącznej sumy. Porównując dwa sposoby liczenia tej sumy, znajdziesz warunek na $n$. Pamiętaj, by pokazać, że dla każdego $n$ spełniającego ten warunek istnieje odpowiednie wypełnienie."
+    "Policz, ile pól znajduje się w każdym wierszu i każdej kolumnie. Jaki jest minimalny i maksymalny możliwy zbiór wartości, jakie mogą przyjąć wszystkie sumy?",
+    "Masz $2n$ sum, które muszą być różnymi liczbami całkowitymi. Jaki konkretny zbiór wartości muszą one tworzyć? Oblicz sumę wszystkich liczb w tym wymaganym zbiorze.",
+    "Sumę wszystkich $2n$ sum (wierszy i kolumn) można też wyrazić przez $S$, czyli sumę wszystkich liczb wpisanych w pola diagramu. Znajdź tę zależność i porównaj ją z wynikiem z poprzedniego kroku.",
+    "Wyraź sumę $S$ za pomocą liczby jedynek ($N_1$) i całkowitej liczby pól w diagramie. Połącz to z poprzednim wynikiem, aby znaleźć wartość $N_1$. Jaki warunek konieczny dla $n$ z tego wynika?"
   ],
   "prerequisites": [
     "2023_etap1_7"

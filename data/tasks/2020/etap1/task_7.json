@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Wyobraź sobie, że figura stoi na kwadratowej podstawie. Wierzchołki A i B, których odległość szukamy, znajdują się na dwóch przeciwległych pięciokątach. Zauważ, że cała figura jest symetryczna.",
-    "Najprościej będzie umieścić figurę w układzie współrzędnych. Niech kwadratowa podstawa o boku 1 leży na płaszczyźnie XY. Twoim celem jest znalezienie współrzędnych punktów A i B.",
-    "Aby znaleźć współrzędne A i B, potrzebujesz wiedzieć, jak bardzo pięciokąty są nachylone. Tę informację zdobędziesz, analizując narożnik figury, w którym spotykają się dwa pięciokąty i kwadrat.",
-    "Rozważ wierzchołek V, wspólny dla dwóch sąsiednich pięciokątów. Wyznacz jego współrzędne, korzystając z tego, że jego odległości od trzech wierzchołków kwadratu są znane (dwie wynoszą 1, a jedna jest równa przekątnej pięciokąta)."
+    "Wyobraź sobie, że patrzysz na bryłę dokładnie z góry. Jakie kształty tworzą rzuty wierzchołków na płaszczyznę podstawy? Zauważ, że cała figura ma dużą symetrię obrotową.",
+    "Zamiast od razu liczyć współrzędne w 3D, skup się na rzucie prostopadłym całej figury na płaszczyznę podstawy. Spróbuj znaleźć położenie rzutów wierzchołków A i B względem środka kwadratowej podstawy.",
+    "Kluczowa obserwacja dotyczy porównania odległości od osi symetrii bryły dla dwóch typów wierzchołków: tych na \"górze\" (jak A) i tych na \"krawędziach\" (jak V). Wyznacz najpierw położenie rzutu wierzchołka V.",
+    "Oblicz odległość rzutu wierzchołka V od środka podstawy. Następnie, korzystając z faktu, że A i V należą do tego samego pięciokąta, udowodnij, że rzut A jest w tej samej odległości od środka. To pozwoli Ci znaleźć odległość A od B."
   ],
   "skills_required": [
     "angle_chasing",

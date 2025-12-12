@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Narysuj romb z podstawy i oblicz długości jego przekątnych. Wyobraź sobie, że kwadratowy przekrój jest \"zawieszony\" na krawędziach bocznych. Jaki kształt powstanie, gdy zrzutujesz ten kwadrat na płaszczyznę podstawy?",
-    "Porównaj przekątne kwadratu z przekątnymi jego rzutu (rombu). Przekątne kwadratu są równe, a przekątne rombu nie. Jak to możliwe? Pomyśl o związku między długością odcinka a długością jego rzutu.",
-    "Długość przekątnej kwadratu nie może być mniejsza niż długość jej rzutu. Co by się stało, gdyby długość jednej z przekątnych kwadratu była *równa* długości jej rzutu? Jakie musiałoby być jej położenie w przestrzeni?",
-    "Aby obie przekątne kwadratu były równe, jedna z nich musi być pozioma i odpowiadać dłuższej przekątnej rombu. Wyznacz długość boku kwadratu, znając długość jego przekątnej."
+    "Narysuj romb z podstawy i oblicz długości jego przekątnych. Zauważ, że rzutem kwadratowego przekroju na płaszczyznę podstawy jest właśnie ten romb.",
+    "Przekątne kwadratu są równe, a przekątne rombu (ich rzuty) nie. Jaki jest związek między długością odcinka w przestrzeni, długością jego rzutu i różnicą wysokości jego końców?",
+    "Zapisz równania wynikające z faktu, że obie przekątne kwadratu mają tę samą długość. Wykorzystaj też związek między bokiem kwadratu ($x$), bokiem rombu ($a$) i wysokościami wierzchołków.",
+    "Rozważ dwa główne przypadki: jeden z diagonalnych kwadratu jest poziomy, lub żaden nie jest. Sprawdź, do jakich wartości na długość boku kwadratu prowadzi każdy z tych przypadków."
   ],
   "prerequisites": [
     "2017_etap1_7"

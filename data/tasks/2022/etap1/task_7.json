@@ -22,9 +22,9 @@
     "spatial_3d"
   ],
   "hints": [
-    "Zauważ, że ścianami bocznymi czworościanu są trójkąty $ABM$, $BCD$ i $DEM$ wycięte z sześciokąta. Pamiętaj, że zagięcie kartki zmienia położenie trójkątów w przestrzeni, ale nie zmienia ich wymiarów ani kątów wewnętrznych.",
-    "Zamiast żmudnie obliczać długości wszystkich krawędzi, przeanalizuj miary kątów w trójkątach $ABM$ i $DEM$ na płaszczyźnie. Ile wynosi kąt $\\angle BAM$, wiedząc, że $AE$ jest przekątną sześciokąta?",
-    "Fakt, że $\\angle BAM = 90^\\circ$ (oraz $\\angle DEM = 90^\\circ$) oznacza, że w czworościanie krawędź $PM$ jest prostopadła do krawędzi $PB$ i $PD$. Skoro $PM$ jest prostopadła do dwóch krawędzi podstawy $PBD$, to czym jest ona dla tego czworościanu?",
-    "Oblicz objętość czworościanu, traktując trójkąt $PBD$ jako podstawę, a odcinek $PM$ jako wysokość. Zauważ, że pole podstawy $PBD$ jest równe polu trójkąta $BCD$ z wyjściowego sześciokąta."
+    "Po zagięciu pięciokąta punkty $A, C, E$ spotykają się w jednym wierzchołku, nazwijmy go $P$. Czworościan ma więc wierzchołki $P, B, D, M$. Pamiętaj, że zagięcie nie zmienia długości boków ani miar kątów w tworzących go trójkątach.",
+    "Zamiast obliczać długości wszystkich krawędzi, poszukaj w płaskim sześciokącie kątów prostych. Zastanów się, co stanie się z tymi kątami po złożeniu figury. Jakie własności mają najdłuższe przekątne sześciokąta foremnego?",
+    "Przekątne $BE$ i $AD$ są średnicami okręgu opisanego na sześciokącie, więc kąty $\\angle BAE$ i $\\angle ADE$ są proste. Po złożeniu figury, co to oznacza dla wzajemnego położenia krawędzi $PM$, $PB$ i $PD$ w czworościanie?",
+    "Odcinek $PM$ jest wysokością czworościanu opuszczoną na podstawę $PBD$. Oblicz długość tej wysokości oraz pole podstawy. Zauważ, że trójkąt $PBD$ jest przystający do trójkąta $BCD$ z płaskiego sześciokąta."
   ]
 }

@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Rozważ trzy pola w jednym rzędzie, obok siebie. Można do nich dołączyć czwarte pole (sąsiadujące z środkowym) na dwa sposoby, tworząc dwa różne L-tetramina. Co wynika z faktu, że suma liczb w obu jest zerowa?",
-    "Wykorzystaj obserwację z poprzedniego kroku, aby pokazać, że wartości w każdym wierszu i kolumnie powtarzają się co dwa pola. Oznacza to, że cała tablica powstaje przez powielanie jednego fragmentu 2x2.",
-    "Oznacz liczby w powtarzającym się bloku 2x2 jako $a, b, c, d$. Zapisz, używając tych liter, warunek zerowej sumy dla kilku różnych L-tetramin, które można umieścić na tablicy.",
-    "Z otrzymanych równań znajdź związki między liczbami $a, b, c, d$. Nie musisz wyznaczać ich dokładnych wartości! Zastanów się, jakie liczby znajdą się na przekątnych i oblicz ich sumę."
+    "Rozważ pionowy rząd trzech pól. Dołączając czwarte pole obok środkowego (raz z lewej, raz z prawej), tworzysz dwa L-tetramina. Co wynika z tego, że obie sumy są równe zero?",
+    "Pokaż, że podobna własność zachodzi w poziomie. Wywnioskuj, że cała tablica jest pokryta powtarzającym się wzorem z bloku 2x2.",
+    "Oznacz liczby w bloku 2x2 jako $a, b, c, d$. Zapisz warunki dla sum w L-tetraminach jako równania z tymi zmiennymi. Pamiętaj o różnych orientacjach L-tetramina.",
+    "Rozwiąż układ równań, aby znaleźć związki między $a, b, c, d$. Nie musisz znać ich wartości! Sprawdź, jakie liczby leżą na przekątnych i oblicz ich sumę."
   ],
   "skills_required": [
     "invariants",

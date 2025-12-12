@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj 18-kąt foremny w okręgu. Aby zbadać własności czworokąta, znajdź osie symetrii dla par prostych równoległych: ($A_3A_{15}$, $A_6A_{12}$) oraz ($A_2A_7$, $A_{10}A_{17}$).",
-    "Oś symetrii dla pary równoległych cięciw jest średnicą. Jej końce leżą w połowie łuków między wierzchołkami tych cięciw. Wyznacz w ten sposób obie osie symetrii czworokąta.",
-    "Jedna z osi symetrii łączy wierzchołki 18-kąta, a druga środki łuków między wierzchołkami. Oblicz kąt między tymi osiami, aby udowodnić, że czworokąt jest prostokątem.",
-    "Porównaj długości boków prostokąta. Jeden z nich ma długość równą promieniowi okręgu $R$. Długość drugiego boku można powiązać z długościami przekątnych $A_1A_3$ i $A_1A_5$. Czy boki te mogą być równe?"
+    "Narysuj 18-kąt foremny wpisany w okrąg. Zauważ, że podane proste tworzą dwie pary prostych równoległych. Wykorzystaj symetrie wielokąta, aby zbadać ich wzajemne położenie.",
+    "Aby udowodnić, że czworokąt jest prostokątem, znajdź osie symetrii dla obu par prostych równoległych. Pokaż, że te osie (będące średnicami okręgu) są do siebie prostopadłe.",
+    "Jedna para prostych jest prostopadła do średnicy łączącej wierzchołki 18-kąta, a druga do średnicy łączącej środki przeciwległych łuków. Zidentyfikuj te średnice i oblicz kąt między nimi.",
+    "Aby sprawdzić, czy to kwadrat, porównaj jego boki. Długość boku zależy od odległości danej cięciwy od środka okręgu. Czy cięciwy $A_3A_{15}$ i $A_2A_7$ są jednakowo oddalone od środka okręgu?"
   ],
   "prerequisites": [],
   "skills_required": [

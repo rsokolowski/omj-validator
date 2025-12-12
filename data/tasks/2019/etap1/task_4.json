@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj dokładny rysunek. Oznacz $\\angle BAE = \\alpha$ i $\\angle DAF = \\beta$. Jaka jest zależność między $\\alpha$ i $\\beta$, skoro $\\angle EAF = 45^\\circ$ i $\\angle DAB = 90^\\circ$?",
-    "Aby geometrycznie połączyć kąty $\\alpha$ i $\\beta$, obróć trójkąt $ADF$ o $90^\\circ$ wokół wierzchołka $A$ tak, aby półprosta $AD$ nałożyła się na półprostą $AB$.",
-    "Niech $G$ będzie obrazem punktu $F$ w tym obrocie. Wykaż, że trójkąty $AEF$ i $AEG$ są przystające, porównując ich boki oraz kąt między nimi przy wierzchołku $A$.",
-    "Z przystawania wynika równość pól $\\triangle AEF$ i $\\triangle AEG$. Oblicz pole $\\triangle AEG$, zauważając, że prosta $AB$ dzieli go na dwa trójkąty. Znajdź ich wspólną podstawę na prostej $AB$."
+    "Narysuj figurę i oznacz kąty: $\\angle BAE = \\alpha$ oraz $\\angle DAF = \\beta$. Wykorzystaj dane $\\angle EAF = 45^\\circ$ i $\\angle DAB = 90^\\circ$, aby znaleźć zależność między $\\alpha$ i $\\beta$.",
+    "Kluczem do zadania jest sprytne przekształcenie geometryczne. Spróbuj obrócić jeden z trójkątów prostokątnych ($\triangle ABE$ lub $\triangle ADF$) o $90^\\circ$ wokół wierzchołka $A$.",
+    "Obróćmy $\\triangle ADF$ o $90^\\circ$ przeciwnie do ruchu wskazówek zegara wokół punktu $A$. Niech $G$ będzie obrazem punktu $F$. Pokaż, że trójkąty $\\triangle AEF$ i $\\triangle AEG$ są przystające.",
+    "Z przystawania wynika równość pól. Aby obliczyć pole $\\triangle AEG$, zbadaj położenie jego boku $EG$. Co możesz powiedzieć o rzutach punktów $E$ i $G$ na prostą $AD$?"
   ],
   "prerequisites": [],
   "skills_required": [

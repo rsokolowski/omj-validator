@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie figurę. Z definicji punktu $X$ jako środka łuku $BC$ wynikają dwie ważne własności: jedna dotycząca odcinków $XB$ i $XC$, a druga dotycząca kątów opartych na łukach $BX$ i $CX$. Jakie to własności?",
-    "Głównym celem jest wykazanie, że odległość środka okręgu wpisanego $I$ od prostej $XY$ jest równa promieniowi tego okręgu. Spróbuj powiązać punkty $X$ i $Y$ z punktem $I$, badając ich wzajemne odległości.",
-    "Wykaż, że punkt $X$ jest środkiem okręgu opisanego na trójkącie $BCI$. Możesz to zrobić, obliczając kąty w trójkącie $BXI$ i pokazując, że jest on równoramienny.",
-    "Z poprzedniej wskazówki wynika, że $XC=XI$. Analogicznie $YC=YI$. Co to oznacza dla prostej $XY$ i odcinka $CI$? Wykorzystaj tę własność oraz informację o mierze kąta $\\angle ACB$, aby obliczyć odległość $I$ od prostej $XY$."
+    "Narysuj starannie figurę. Punkt $X$ jest środkiem łuku $BC$, co oznacza, że $XB=XC$. Jaka własność kątów z tego wynika i jak łączy ona punkt $X$ z dwusieczną kąta $\\angle BAC$?",
+    "Aby udowodnić styczność, należy pokazać, że odległość środka okręgu wpisanego $I$ od prostej $XY$ jest równa promieniowi $r$. Kluczem jest zbadanie odległości punktów $X$ i $Y$ od wierzchołków trójkąta oraz od punktu $I$.",
+    "Wykaż, że punkt $X$ jest środkiem okręgu opisanego na trójkącie $BCI$. W tym celu udowodnij kluczową równość $XC=XI$, na przykład poprzez obliczenie miar kątów w trójkącie $BXI$.",
+    "Wiesz już, że $XC=XI$ oraz (analogicznie) $YC=YI$. Jaka jest zatem prosta $XY$ dla odcinka $CI$? Wykorzystaj tę własność, aby powiązać odległość $I$ od $XY$ z długością $IC$. Zrób to samo dla promienia $r$, używając danego kąta $60^\\circ$."
   ],
   "skills_required": [
     "circle_theorems",

@@ -187,3 +187,41 @@ export interface AdminMeResponse {
   is_authenticated: boolean;
   is_admin: boolean;
 }
+
+// User submissions types (Moje rozwiązania)
+export interface UserSubmissionStats {
+  total_submissions: number;
+  completed_count: number;
+  failed_count: number;
+  pending_count: number;
+  avg_score: number | null;
+  best_score: number | null;
+  tasks_attempted: number;
+  tasks_mastered: number;
+}
+
+export interface UserSubmissionListItem {
+  id: string;
+  year: string;
+  etap: string;
+  task_number: number;
+  task_title: string;
+  task_categories: string[];
+  timestamp: string;
+  status: "pending" | "processing" | "completed" | "failed";
+  score: number | null;
+  max_score: number;
+  feedback: string | null;
+  feedback_preview: string | null;
+  error_message?: string | null;
+  images: string[];
+}
+
+export interface UserSubmissionsResponse {
+  submissions: UserSubmissionListItem[];
+  stats: UserSubmissionStats;
+  total_count: number;
+  offset: number;
+  limit: number;
+  has_more: boolean;
+}

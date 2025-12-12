@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie rysunek. Skoro punkt $E$ powstaje przez odbicie $B$ względem prostej $CD$, to trójkąty $CDB$ i $CDE$ są przystające. Co to oznacza dla miar kątów $\\angle CDB$ i $\\angle CDE$?",
-    "Aby wykazać współliniowość punktów $A, D, E$, wystarczy udowodnić, że kąt $\\angle ADE$ ma miarę $180^\\circ$. Zauważ, że kąt ten składa się z dwóch części: $\\angle ADC$ i $\\angle CDE$.",
-    "Wyznacz miary kątów korzystając z własności okręgu. Kąt $\\angle ADC$ jest oparty na tym samym łuku co kąt $\\angle ABC$. Z kolei kąty $\\angle CDB$ i $\\angle CAB$ są przeciwległe w czworokącie wpisanym w okrąg.",
-    "Pamiętając, że trójkąt $ABC$ jest równoboczny ($60^\\circ$), oblicz miarę $\\angle CDB$, a dzięki symetrii także $\\angle CDE$. Dodaj do tego wyznaczony wcześniej $\\angle ADC$ i sprawdź, czy otrzymasz kąt półpełny."
+    "Narysuj starannie rysunek. Punkt $E$ jest odbiciem punktu $B$ względem prostej $CD$. Co ta symetria mówi o trójkątach $CDB$ i $CDE$, a w szczególności o kątach $\\angle CDB$ i $\\angle CDE$?",
+    "Aby wykazać, że punkty $A, D, E$ leżą na jednej prostej, wystarczy udowodnić, że kąt $\\angle ADE$ jest półpełny. Kąt ten jest sumą kątów $\\angle ADC$ i $\\angle CDE$.",
+    "Punkty $A, B, C, D$ leżą na jednym okręgu. Wykorzystaj własności czworokąta $ABDC$ wpisanego w okrąg, aby znaleźć miary kątów z wierzchołkiem w punkcie $D$.",
+    "Jeden z szukanych kątów, $\\angle ADC$, jest równy pewnemu kątowi w trójkącie $ABC$. Drugi, $\\angle CDB$, wraz z innym kątem tego trójkąta sumuje się do $180^\\circ$. Połącz te fakty z własnością symetrii."
   ],
   "skills_required": [
     "circle_theorems",

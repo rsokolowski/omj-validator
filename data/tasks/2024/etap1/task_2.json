@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Przeanalizuj pierwsze zagięcie: skoro boki $CB$ i $CD$ pokrywają się na przekątnej $CA$, to kartka została zagięta wzdłuż dwusiecznych kątów przy wierzchołku $C$. Jaką figurę tworzy teraz papier?",
-    "Skoro punkt $A$ jest równoodległy od wszystkich wierzchołków otrzymanego trójkąta, to jest on środkiem okręgu opisanego na tym trójkącie. Pomyśl, gdzie musi leżeć środek okręgu względem osi symetrii figury.",
-    "Wykorzystaj symetrię rombu względem przekątnej $AC$. Dwa wierzchołki poszukiwanego trójkąta muszą być do siebie symetryczne, a trzeci musi leżeć na osi symetrii.",
-    "Oznacz punkty przecięcia zagięć z bokami rombu jako $P$ i $Q$. Zauważ, że $AP=AQ$. Zastanów się, jak musi wyglądać drugie zagięcie, aby trzeci wierzchołek trójkąta był w tej samej odległości od $A$ co $P$ i $Q$."
+    "Zagięcie, które powoduje pokrycie się boku $CB$ z przekątną $CA$, odbywa się wzdłuż dwusiecznej kąta $\\angle BCA$. Punkt $P$ powstaje na przecięciu tej dwusiecznej z bokiem $AB$. Jaka jest relacja między długościami $AP$ i $AQ$?",
+    "Twoim celem jest dowód, że $AP=AR$. Zastanów się nad położeniem punktu $R$. Jest on odbiciem $C$ względem prostej $PQ$. Jaka jest oś symetrii dla odcinka $PQ$? Co z tego wynika dla położenia punktów $A, C, R$?",
+    "Wiemy już, że punkty $A, R, C$ leżą na jednej prostej. Oznaczmy przez $M$ punkt przecięcia $PQ$ i $AC$. Wyraź długość $AR$ za pomocą długości odcinków na przekątnej $AC$. Jaką własność ma punkt $M$ względem $C$ i $R$?",
+    "Aby udowodnić równość $AP=AR$, wyraź obie długości za pomocą boku rombu $a$ i przekątnej $AC$. Użyj twierdzenia o dwusiecznej, by znaleźć $AP$. Następnie, przez podobieństwo trójkątów, znajdź długość $AM$ i użyj jej do obliczenia $AR$."
   ],
   "prerequisites": [
     "2020_etap1_7"

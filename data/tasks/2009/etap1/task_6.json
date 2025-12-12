@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Obwód przekroju to zamknięta pętla na powierzchni czworościanu. Aby łatwiej ją zmierzyć, wyobraź sobie, że rozcinasz bryłę i rozkładasz jej ściany na płasko.",
-    "Ponieważ przekrój jest czworokątem, pętla biegnie przez wszystkie cztery ściany. Ułóż te cztery trójkąty równoboczne na płaszczyźnie w jednym rzędzie, jeden za drugim.",
-    "Zauważ, że powstała figura to równoległobok złożony z czterech trójkątów. Spójrz na położenie wierzchołka startowego siatki i jego kopii na samym końcu.",
-    "Obwód to odcinek łączący punkt na pierwszym boku z jego odpowiednikiem na ostatnim boku równoległoboku. Oblicz długość tego odcinka – czy zależy ona od miejsca cięcia?"
+    "Obwód czworokąta to zamknięta pętla na powierzchni czworościanu. Długość takiej pętli najłatwiej jest mierzyć na siatce (płaskim rozwinięciu) ścian, po których ona przebiega.",
+    "Podziel obwód czworokąta, np. PQRS, na dwie części: drogę P-Q-R oraz drogę R-S-P. Każda z tych dróg przebiega przez dwie sąsiednie ściany czworościanu.",
+    "Rozważ jedną z tych dróg, np. P-Q-R. Rozłóż na płasko dwie ściany, przez które ona przechodzi. Jaki kształt powstanie i jaka jest najkrótsza możliwa długość tej drogi na powstałej siatce?",
+    "Całkowity obwód jest sumą długości dwóch odcinków prostych na dwóch takich samych siatkach (rombach). Minimalna długość takiego odcinka jest równa odległości między przeciwległymi bokami rombu."
   ],
   "prerequisites": [],
   "skills_required": [

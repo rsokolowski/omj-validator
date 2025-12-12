@@ -1405,6 +1405,107 @@ async def task_history_api(
     }
 
 
+# ==================== User Submissions (Moje rozwiązania) ====================
+
+
+def _get_max_score(etap: str) -> int:
+    """Get max score for an etap (3 for etap1, 6 for etap2/3)."""
+    return 3 if etap == "etap1" else 6
+
+
+@app.get("/api/my-submissions")
+async def my_submissions(
+    request: Request,
+    offset: int = 0,
+    limit: int = 20,
+    year: OptionalType[str] = None,
+    etap: OptionalType[str] = None,
+    hide_errors: bool = False,
+    db: Session = Depends(get_db)
+):
+    """Get current user's submissions with pagination, filters, and aggregate stats.
+
+    Used by "Moje rozwiązania" (My Solutions) panel.
+    """
+    # Require authenticated user (group membership not required for viewing own submissions)
+    if not verify_auth(request):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    user_id = get_current_user_id(request)
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    # Cap limit to prevent abuse
+    limit = min(limit, 100)
+
+    submission_repo = SubmissionRepository(db)
+
+    # Get paginated submissions
+    db_submissions, total_count = submission_repo.get_user_submissions_paginated(
+        user_id=user_id,
+        offset=offset,
+        limit=limit,
+        year_filter=year,
+        etap_filter=etap,
+        hide_errors=hide_errors,
+    )
+
+    # Get aggregate stats (only on first page to avoid recalculating)
+    if offset == 0:
+        stats_dict = submission_repo.get_user_aggregate_stats(user_id)
+    else:
+        # Return minimal stats for subsequent pages
+        stats_dict = {
+            "total_submissions": total_count,
+            "completed_count": 0,
+            "failed_count": 0,
+            "pending_count": 0,
+            "avg_score": None,
+            "best_score": None,
+            "tasks_attempted": 0,
+            "tasks_mastered": 0,
+        }
+
+    # Enrich submissions with task metadata
+    submissions_list = []
+    for sub in db_submissions:
+        # Get task info for title and categories
+        task = get_task(sub.year, sub.etap, sub.task_number)
+        task_title = task.title if task else f"Zadanie {sub.task_number}"
+        task_categories = task.categories if task else []
+
+        # Create feedback preview (first 150 chars)
+        feedback_preview = None
+        if sub.feedback:
+            feedback_preview = sub.feedback[:150] + "..." if len(sub.feedback) > 150 else sub.feedback
+
+        submissions_list.append({
+            "id": sub.id,
+            "year": sub.year,
+            "etap": sub.etap,
+            "task_number": sub.task_number,
+            "task_title": task_title,
+            "task_categories": task_categories,
+            "timestamp": sub.timestamp.isoformat(),
+            "status": sub.status.value,
+            "score": sub.score,
+            "max_score": _get_max_score(sub.etap),
+            "feedback": sub.feedback,
+            "feedback_preview": feedback_preview,
+            "error_message": sub.error_message,
+            "images": sub.images or [],
+        })
+
+    return {
+        "submissions": submissions_list,
+        "stats": stats_dict,
+        "total_count": total_count,
+        "offset": offset,
+        "limit": limit,
+        "has_more": offset + len(submissions_list) < total_count,
+    }
+
+
 # ==================== Admin API Endpoints ====================
 
 

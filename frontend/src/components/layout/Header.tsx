@@ -72,6 +72,23 @@ export function Header() {
               </Typography>
             </Link>
 
+            {/* My solutions link - only visible to authenticated users */}
+            {isAuthenticated && (
+              <Link
+                href="/my-solutions"
+                style={{ textDecoration: "none", color: "#4b5563" }}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: 500,
+                    "&:hover": { color: "primary.main" },
+                  }}
+                >
+                  Moje rozwiazania
+                </Typography>
+              </Link>
+            )}
+
             {/* Admin link - only visible to admins */}
             {isAdmin && (
               <Link

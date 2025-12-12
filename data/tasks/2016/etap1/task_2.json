@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Niech $O$ będzie środkiem okręgu opisanego na trójkącie $ABC$. Jaki jest kształt trójkąta $AOB$, skoro kąt wpisany $ACB$ ma miarę $45^\\circ$? Co to oznacza dla położenia punktu $O$ względem boku $AB$?",
-    "Rozważ obrót o $90^\\circ$ wokół punktu $C$. Zauważ, że z definicji kwadratów, wektor $\\vec{CA}$ przechodzi na $\\vec{CG}$, a wektor $\\vec{CB}$ na $\\vec{CD}$ (lub odwrotnie, w zależności od orientacji). Co to oznacza dla trójkąta $ABC$?",
-    "Obrót wokół $C$ przekształca trójkąt $ABC$ na trójkąt $GDC$. Co w takim razie można powiedzieć o relacji między odcinkami $AB$ i $DG$? A co z ich środkami, punktami $K$ i $M$?",
-    "Udowodnij, że trójkąt $KCM$ (gdzie $K$ to środek $AB$, a $M$ to środek $DG$) jest prostokątny i równoramienny. Porównaj tę własność z własnościami punktu $O$ (środka okręgu opisanego) i jego położeniem względem punktu $K$."
+    "Niech O będzie środkiem okręgu opisanego na trójkącie ABC, a K środkiem boku AB. Jaki jest kształt trójkąta AOB, skoro kąt wpisany ACB ma miarę 45°? Co to oznacza dla położenia punktu O względem boku AB?",
+    "Niech M będzie środkiem odcinka DG. Aby udowodnić, że M=O, spróbuj pokazać, że punkt M ma takie same własności geometryczne względem boku AB i jego środka K, jak punkt O.",
+    "Położenie punktów G i D jest zdefiniowane przez kwadraty. Pomyśl o nich w kategoriach obrotów. O jaki kąt i wokół jakiego punktu należy obrócić punkt C, aby otrzymać punkt G? A żeby z punktu C otrzymać D?",
+    "Niech K będzie środkiem AB. Wykorzystaj obroty do opisania położenia punktów D i G, a następnie pokaż, że odcinek KM jest prostopadły do AB i ma długość równą połowie długości AB. Porównaj ten wynik z własnościami odcinka OK."
   ],
   "skills_required": [
     "circle_theorems",

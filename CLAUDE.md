@@ -8,6 +8,10 @@ OMJ Validator - a web application for validating solutions to Polish Junior Math
 
 **Architecture**: Monorepo with Next.js frontend and FastAPI backend, deployed as separate services.
 
+## Important Rules
+
+**NEVER discard uncommitted changes without explicit user permission.** Do not run commands like `git checkout <file>`, `git restore <file>`, or `git reset --hard` on files with uncommitted changes unless the user explicitly asks you to discard those changes. Always ask first if you see uncommitted changes that seem unrelated to the current task.
+
 ## Development Commands
 
 ```bash

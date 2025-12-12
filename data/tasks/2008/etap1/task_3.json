@@ -16,7 +16,7 @@
     "Narysuj rysunek i zaznacz środek symetrii kwadratu. Zauważ, że punkty $A$ i $C$ są symetryczne względem środka, więc $a=c$ (podobnie $b=d$). Jak upraszcza to równość, którą masz udowodnić?",
     "Poprowadź przez środek kwadratu drugą prostą, prostopadłą do $\\ell$. Zauważ, że odległości punktu $A$ od tych dwóch prostych tworzą przyprostokątne trójkąta prostokątnego o przeciwprostokątnej $OA$.",
     "Wyobraź sobie obrót kwadratu o $90^\\circ$ wokół środka. Pozwoli Ci to zauważyć, że odległość punktu $A$ od dorysowanej prostej jest równa odległości punktu $B$ od prostej $\\ell$, czyli wynosi $b$.",
-    "Zastosuj twierdzenie Pitagorasa do trójkąta z poprzednich wskazówek, aby otrzymać $a^2+b^2 = OA^2$. Oblicz długość $OA$ znając bok kwadratu i zakończ dowód."
+    "Zastosuj twierdzenie Pitagorasa do trójkąta z poprzednich wskazówek, używając zależności odkrytej dzięki obrotowi. Oblicz kwadrat długości odcinka $OA$ i zakończ dowód."
   ],
   "prerequisites": [],
   "skills_required": [
