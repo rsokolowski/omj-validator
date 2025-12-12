@@ -110,42 +110,18 @@ SKILLS_DESCRIPTION = load_skills_description()
 
 
 # Prompt for hint review (extended thinking enabled via MAX_THINKING_TOKENS env var)
-REVIEW_PROMPT_TEMPLATE = """Przeanalizuj BARDZO DOKŁADNIE i KROK PO KROKU poniższe wskazówki do zadania matematycznego.
-Myśl głęboko i systematycznie. Rozważ każdy aspekt starannie.
+# NOTE: Prompt is structured for LLM cache efficiency - static instructions first, dynamic task data last
+REVIEW_PROMPT_TEMPLATE = """Jesteś ekspertem od Olimpiady Matematycznej Juniorów (OMJ).
+Twoim zadaniem jest ocena wskazówek do zadań matematycznych.
 
-ZADANIE DO ANALIZY (rok: {year}, etap: {etap}, nr: {number}):
-Tytuł: {title}
-
-Treść zadania:
-{content}
-
-Trudność: {difficulty}/5
-Kategorie: {categories}
-Umiejętności wymagane: {skills_required}
-
----
-OBECNE WSKAZÓWKI DO OCENY (4 progresywne wskazówki):
-
-[0] ZROZUMIENIE (pomaga zrozumieć/przeformułować problem):
-{hint_0}
-
-[1] STRATEGIA (sugeruje ogólne podejście bez szczegółów):
-{hint_1}
-
-[2] KIERUNEK (naprowadza na kluczowy wgląd):
-{hint_2}
-
-[3] WSKAZÓWKA (konkretna wskazówka bez pełnego rozwiązania):
-{hint_3}
-
----
-
-TWOJE ZADANIE - wykonaj STARANNĄ i DOGŁĘBNĄ analizę:
+================================================================================
+INSTRUKCJE ANALIZY (przeczytaj uważnie przed przystąpieniem do zadania)
+================================================================================
 
 ## KROK 1: Znajdź ELEGANCKIE rozwiązanie (DUCH OJM)
 
-OMJ (Olimpiada Matematyczna Juniorów) ceni ELEGANCKIE, SPRYTNE rozwiązania, nie mechaniczne
-obliczenia. Najpierw SAM rozwiąż zadanie, szukając NAJBARDZIEJ ELEGANCKIEGO podejścia.
+OMJ ceni ELEGANCKIE, SPRYTNE rozwiązania, nie mechaniczne obliczenia.
+Najpierw SAM rozwiąż zadanie, szukając NAJBARDZIEJ ELEGANCKIEGO podejścia.
 
 HIERARCHIA PODEJŚĆ (od najlepszego do najgorszego):
 1. NAJLEPSZE: Sprytna obserwacja, symetria, kluczowy wgląd geometryczny
@@ -221,9 +197,42 @@ Wskazówki WYMAGAJĄ POPRAWY jeśli:
 Jeśli wskazówki prowadzą do rozwiązania poprawnego ALE nieeleganckiego - POPRAW JE
 tak aby prowadziły do rozwiązania w DUCHU OJM.
 
----
+================================================================================
+ROLE WSKAZÓWEK
+================================================================================
 
-ODPOWIEDZ W FORMACIE JSON:
+- [0] ZROZUMIENIE: Pytania pomocnicze, sugestia rysunku, przeformułowanie problemu
+      Przykład: "Narysuj dokładny rysunek i zaznacz wszystkie dane. Co dokładnie masz udowodnić?"
+- [1] STRATEGIA: Ogólne podejście - szukaj symetrii, przystających trójkątów, równych odcinków
+      Przykład: "Poszukaj przystających trójkątów lub wykorzystaj symetrię figury."
+- [2] KIERUNEK: Naprowadź na KLUCZOWY wgląd - tę obserwację która "otwiera" rozwiązanie
+      Przykład: "Zwróć uwagę na trójkąty przy wierzchołku X - co mają wspólnego?"
+- [3] WSKAZÓWKA: Konkretna wskazówka wynikająca z wglądu, ale bez pełnego rozwiązania
+      Przykład: "Wykorzystaj fakt, że punkt P jest równoodległy od trzech innych punktów."
+
+================================================================================
+ZASADY DLA NOWYCH WSKAZÓWEK (jeśli będziesz je pisać)
+================================================================================
+
+1. Pisz po polsku, PROSTYM językiem zrozumiałym dla 12-14 latka
+2. Każda wskazówka to 1-2 zdania, max 300 znaków
+3. NIE dodawaj prefiksów [0], [1] etc. - to tylko czysty tekst wskazówki
+4. Używaj LaTeX dla matematyki: $x^2$, $\\sqrt{{2}}$, $\\frac{{a}}{{b}}$, $\\triangle ABC$
+5. ŻADNYCH spoilerów - nie podawaj wartości liczbowych będących odpowiedzią
+6. ŻADNEJ trygonometrii ani zaawansowanych narzędzi
+7. Każda wskazówka MUSI logicznie prowadzić do następnej
+8. Ostatnia wskazówka zostawia uczniowi pracę do wykonania (nie rozwiązuje za niego)
+
+KLUCZOWE - DUCH OJM:
+9. Wskazówki MUSZĄ prowadzić do ELEGANCKIEGO rozwiązania, nie mechanicznego
+10. UNIKAJ: współrzędnych, "brute force", długich rachunków
+11. PREFERUJ: symetrie, przystawanie trójkątów, kąty wpisane, sprytne obserwacje
+12. Kluczowy WGLĄD powinien być zasugerowany (nie podany wprost) we wskazówce [2] lub [3]
+13. Uczeń po rozwiązaniu powinien czuć się SPRYTNY, nie zmęczony
+
+================================================================================
+FORMAT ODPOWIEDZI (JSON)
+================================================================================
 
 Jeśli wskazówki są DOBRE (review_passed = true):
 {{
@@ -246,34 +255,40 @@ Jeśli wskazówki wymagają POPRAWY (review_passed = false):
   ]
 }}
 
-ZASADY DLA NOWYCH WSKAZÓWEK (jeśli piszesz):
-1. Pisz po polsku, PROSTYM językiem zrozumiałym dla 12-14 latka
-2. Każda wskazówka to 1-2 zdania, max 300 znaków
-3. NIE dodawaj prefiksów [0], [1] etc. - to tylko czysty tekst wskazówki
-4. Używaj LaTeX dla matematyki: $x^2$, $\\sqrt{{2}}$, $\\frac{{a}}{{b}}$, $\\triangle ABC$
-5. ŻADNYCH spoilerów - nie podawaj wartości liczbowych będących odpowiedzią
-6. ŻADNEJ trygonometrii ani zaawansowanych narzędzi
-7. Każda wskazówka MUSI logicznie prowadzić do następnej
-8. Ostatnia wskazówka zostawia uczniowi pracę do wykonania (nie rozwiązuje za niego)
-
-KLUCZOWE - DUCH OJM:
-9. Wskazówki MUSZĄ prowadzić do ELEGANCKIEGO rozwiązania, nie mechanicznego
-10. UNIKAJ: współrzędnych, "brute force", długich rachunków
-11. PREFERUJ: symetrie, przystawanie trójkątów, kąty wpisane, sprytne obserwacje
-12. Kluczowy WGLĄD powinien być zasugerowany (nie podany wprost) we wskazówce [2] lub [3]
-13. Uczeń po rozwiązaniu powinien czuć się SPRYTNY, nie zmęczony
-
-ROLE WSKAZÓWEK:
-- [0] ZROZUMIENIE: Pytania pomocnicze, sugestia rysunku, przeformułowanie problemu
-      Przykład: "Narysuj dokładny rysunek i zaznacz wszystkie dane. Co dokładnie masz udowodnić?"
-- [1] STRATEGIA: Ogólne podejście - szukaj symetrii, przystających trójkątów, równych odcinków
-      Przykład: "Poszukaj przystających trójkątów lub wykorzystaj symetrię figury."
-- [2] KIERUNEK: Naprowadź na KLUCZOWY wgląd - tę obserwację która "otwiera" rozwiązanie
-      Przykład: "Zwróć uwagę na trójkąty przy wierzchołku X - co mają wspólnego?"
-- [3] WSKAZÓWKA: Konkretna wskazówka wynikająca z wglądu, ale bez pełnego rozwiązania
-      Przykład: "Wykorzystaj fakt, że punkt P jest równoodległy od trzech innych punktów."
-
 Odpowiedz TYLKO w formacie JSON.
+
+================================================================================
+ZADANIE DO ANALIZY
+================================================================================
+
+Rok: {year}, Etap: {etap}, Zadanie nr: {number}
+Tytuł: {title}
+Trudność: {difficulty}/5
+Kategorie: {categories}
+Umiejętności: {skills_required}
+
+TREŚĆ ZADANIA:
+{content}
+
+---
+OBECNE WSKAZÓWKI DO OCENY:
+
+[0] ZROZUMIENIE:
+{hint_0}
+
+[1] STRATEGIA:
+{hint_1}
+
+[2] KIERUNEK:
+{hint_2}
+
+[3] WSKAZÓWKA:
+{hint_3}
+
+---
+Przeanalizuj BARDZO DOKŁADNIE i KROK PO KROKU powyższe wskazówki.
+Myśl głęboko i systematycznie. Rozważ każdy aspekt starannie.
+Odpowiedz w formacie JSON.
 """
 
 
@@ -326,33 +341,70 @@ def _get_pricing(model_name: str) -> dict:
 class TokenTracker:
     """Track token usage and costs for Gemini API (thread-safe)."""
 
+    # Cached tokens are charged at 10% of normal input price (90% discount)
+    CACHE_DISCOUNT = 0.10
+
     def __init__(self, model_name: str = "default"):
         self.total_input_tokens = 0
         self.total_output_tokens = 0
+        self.total_cached_tokens = 0
+        self.cache_hits = 0  # Number of requests with cache hits
+        self.total_requests = 0
         self.model_name = model_name
         self._lock = threading.Lock()
 
-    def add(self, input_tokens: int, output_tokens: int):
+    def add(self, input_tokens: int, output_tokens: int, cached_tokens: int = 0):
         with self._lock:
             self.total_input_tokens += input_tokens
             self.total_output_tokens += output_tokens
+            self.total_cached_tokens += cached_tokens
+            self.total_requests += 1
+            if cached_tokens > 0:
+                self.cache_hits += 1
 
     def get_cost(self) -> float:
+        """Get total cost accounting for cache discount."""
         with self._lock:
             pricing = _get_pricing(self.model_name)
-            input_cost = (self.total_input_tokens / 1_000_000) * pricing["input"]
+            # Cached tokens are charged at reduced rate, non-cached at full rate
+            non_cached_input = self.total_input_tokens - self.total_cached_tokens
+            cached_cost = (self.total_cached_tokens / 1_000_000) * pricing["input"] * self.CACHE_DISCOUNT
+            non_cached_cost = (non_cached_input / 1_000_000) * pricing["input"]
             output_cost = (self.total_output_tokens / 1_000_000) * pricing["output"]
-            return input_cost + output_cost
+            return cached_cost + non_cached_cost + output_cost
 
     def get_summary(self) -> str:
         with self._lock:
             pricing = _get_pricing(self.model_name)
-            input_cost = (self.total_input_tokens / 1_000_000) * pricing["input"]
+
+            # Calculate costs
+            non_cached_input = self.total_input_tokens - self.total_cached_tokens
+            cached_cost = (self.total_cached_tokens / 1_000_000) * pricing["input"] * self.CACHE_DISCOUNT
+            non_cached_cost = (non_cached_input / 1_000_000) * pricing["input"]
+            input_cost = cached_cost + non_cached_cost
             output_cost = (self.total_output_tokens / 1_000_000) * pricing["output"]
-            return (
-                f"Tokens: {self.total_input_tokens:,} input + {self.total_output_tokens:,} output\n"
-                f"Cost:   ${input_cost:.4f} (input) + ${output_cost:.4f} (output) = ${input_cost + output_cost:.4f} total"
-            )
+            total_cost = input_cost + output_cost
+
+            # Calculate what cost would have been without caching
+            full_input_cost = (self.total_input_tokens / 1_000_000) * pricing["input"]
+            cost_without_cache = full_input_cost + output_cost
+            savings = cost_without_cache - total_cost
+
+            # Cache statistics
+            cache_rate = (self.total_cached_tokens / self.total_input_tokens * 100) if self.total_input_tokens > 0 else 0
+            hit_rate = (self.cache_hits / self.total_requests * 100) if self.total_requests > 0 else 0
+
+            lines = [
+                f"Tokens: {self.total_input_tokens:,} input + {self.total_output_tokens:,} output",
+                f"Cache:  {self.total_cached_tokens:,} tokens cached ({cache_rate:.1f}% of input)",
+                f"        {self.cache_hits}/{self.total_requests} requests hit cache ({hit_rate:.1f}%)",
+                f"Cost:   ${input_cost:.4f} (input) + ${output_cost:.4f} (output) = ${total_cost:.4f} total",
+            ]
+
+            if savings > 0:
+                lines.append(f"Saved:  ${savings:.4f} from caching (would be ${cost_without_cache:.4f} without cache)")
+
+            return "\n".join(lines)
 
 
 def call_gemini(prompt: str, model_name: str, tracker: TokenTracker, client, max_retries: int = 6) -> tuple[dict | None, list[str]]:
@@ -388,12 +440,12 @@ def call_gemini(prompt: str, model_name: str, tracker: TokenTracker, client, max
                 config=config,
             )
 
-            # Track tokens
+            # Track tokens (including cached tokens for implicit caching)
             if hasattr(response, "usage_metadata") and response.usage_metadata:
-                tracker.add(
-                    getattr(response.usage_metadata, "prompt_token_count", 0) or 0,
-                    getattr(response.usage_metadata, "candidates_token_count", 0) or 0
-                )
+                input_tokens = getattr(response.usage_metadata, "prompt_token_count", 0) or 0
+                output_tokens = getattr(response.usage_metadata, "candidates_token_count", 0) or 0
+                cached_tokens = getattr(response.usage_metadata, "cached_content_token_count", 0) or 0
+                tracker.add(input_tokens, output_tokens, cached_tokens)
 
             response_text = response.text if hasattr(response, "text") else ""
 
@@ -810,7 +862,8 @@ def main():
                 print(line)
             # Show running cost estimate every 10 tasks for Gemini
             if args.use_gemini and tracker and completed_count[0] % 10 == 0:
-                print(f"  [Running cost: ${tracker.get_cost():.4f}]")
+                cache_pct = (tracker.total_cached_tokens / tracker.total_input_tokens * 100) if tracker.total_input_tokens > 0 else 0
+                print(f"  [Running: ${tracker.get_cost():.4f}, cache hit: {cache_pct:.1f}%]")
             print()
 
     # Process tasks (parallel or sequential)
