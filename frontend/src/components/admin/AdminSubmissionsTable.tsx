@@ -20,9 +20,11 @@ import {
 } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import BlockIcon from "@mui/icons-material/Block";
 import Link from "next/link";
 import { fetchAPI } from "@/lib/api/client";
-import { AdminSubmission, AdminSubmissionsResponse, AdminUser } from "@/lib/types";
+import { AdminSubmission, AdminSubmissionsResponse, AdminUser, IssueType } from "@/lib/types";
 import { getMaxScore } from "@/lib/utils/constants";
 import { useInfiniteScroll } from "@/lib/hooks/useInfiniteScroll";
 import { UserAutocomplete } from "./UserAutocomplete";
@@ -41,6 +43,7 @@ export function AdminSubmissionsTable() {
   // Filters
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>("");
+  const [issueTypeFilter, setIssueTypeFilter] = useState<IssueType | "">("");
 
   const fetchSubmissions = useCallback(
     async (newOffset: number, append: boolean = false) => {
@@ -58,6 +61,9 @@ export function AdminSubmissionsTable() {
         }
         if (statusFilter) {
           params.set("status", statusFilter);
+        }
+        if (issueTypeFilter) {
+          params.set("issue_type", issueTypeFilter);
         }
 
         const response = await fetchAPI<AdminSubmissionsResponse>(
@@ -78,7 +84,7 @@ export function AdminSubmissionsTable() {
         setIsLoading(false);
       }
     },
-    [selectedUser, statusFilter]
+    [selectedUser, statusFilter, issueTypeFilter]
   );
 
   // Load initial data and when filters change
@@ -87,7 +93,7 @@ export function AdminSubmissionsTable() {
     setOffset(0);
     setHasMore(true);
     fetchSubmissions(0, false);
-  }, [selectedUser, statusFilter, fetchSubmissions]);
+  }, [selectedUser, statusFilter, issueTypeFilter, fetchSubmissions]);
 
   // Handle load more for infinite scroll
   const handleLoadMore = useCallback(() => {
@@ -118,6 +124,46 @@ export function AdminSubmissionsTable() {
       hour: "2-digit",
       minute: "2-digit",
     }).format(date);
+  };
+
+  const renderIssueChip = (submission: AdminSubmission) => {
+    if (submission.issue_type === "none") return null;
+
+    if (submission.issue_type === "wrong_task") {
+      return (
+        <Chip
+          icon={<ReportProblemIcon sx={{ fontSize: 16 }} />}
+          label="Wrong Task"
+          size="small"
+          sx={{
+            bgcolor: "#fef3c7",
+            color: "#92400e",
+            border: "1px solid #fcd34d",
+            fontWeight: 600,
+            "& .MuiChip-icon": { color: "#92400e" },
+          }}
+        />
+      );
+    }
+
+    if (submission.issue_type === "injection") {
+      return (
+        <Chip
+          icon={<BlockIcon sx={{ fontSize: 16 }} />}
+          label="Injection"
+          size="small"
+          sx={{
+            bgcolor: "#fce7f3",
+            color: "#9d174d",
+            border: "1px solid #f9a8d4",
+            fontWeight: 600,
+            "& .MuiChip-icon": { color: "#9d174d" },
+          }}
+        />
+      );
+    }
+
+    return null;
   };
 
   const renderStatusChip = (submission: AdminSubmission) => {
@@ -227,6 +273,20 @@ export function AdminSubmissionsTable() {
             </Select>
           </FormControl>
 
+          <FormControl size="small" sx={{ minWidth: 150 }}>
+            <InputLabel>Issue Type</InputLabel>
+            <Select
+              value={issueTypeFilter}
+              label="Issue Type"
+              onChange={(e) => setIssueTypeFilter(e.target.value as IssueType | "")}
+            >
+              <MenuItem value="">All</MenuItem>
+              <MenuItem value="none">None</MenuItem>
+              <MenuItem value="wrong_task">Wrong Task</MenuItem>
+              <MenuItem value="injection">Injection</MenuItem>
+            </Select>
+          </FormControl>
+
           <Typography variant="body2" color="text.secondary">
             {totalCount} submission{totalCount !== 1 ? "s" : ""} found
           </Typography>
@@ -299,6 +359,9 @@ export function AdminSubmissionsTable() {
 
                       {/* Status chip */}
                       {renderStatusChip(submission)}
+
+                      {/* Issue chip */}
+                      {renderIssueChip(submission)}
                     </Box>
 
                     <Button size="small" sx={{ minWidth: 0, ml: 2 }}>
@@ -313,6 +376,18 @@ export function AdminSubmissionsTable() {
                         {submission.status === "failed" ? "Error details:" : "Feedback:"}
                       </Typography>
                       {renderFeedback(submission)}
+
+                      {/* Abuse detection details */}
+                      {submission.issue_type !== "none" && (
+                        <Box sx={{ mt: 2, p: 1.5, bgcolor: submission.issue_type === "injection" ? "#fdf2f8" : "#fffbeb", borderRadius: 1 }}>
+                          <Typography variant="subtitle2" sx={{ color: submission.issue_type === "injection" ? "#9d174d" : "#92400e", mb: 0.5 }}>
+                            Issue detected: {submission.issue_type === "wrong_task" ? "Wrong Task" : "Prompt Injection"}
+                          </Typography>
+                          <Typography variant="body2" sx={{ color: "grey.700" }}>
+                            Abuse confidence score: <strong>{Math.max(0, Math.min(100, submission.abuse_score))}%</strong>
+                          </Typography>
+                        </Box>
+                      )}
 
                       {/* Images */}
                       {submission.images && submission.images.length > 0 && (

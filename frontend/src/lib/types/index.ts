@@ -148,6 +148,8 @@ export interface TasksResponse {
 }
 
 // Admin types
+export type IssueType = "none" | "wrong_task" | "injection";
+
 export interface AdminSubmission {
   id: string;
   user_id: string;
@@ -162,6 +164,8 @@ export interface AdminSubmission {
   score: number | null;
   feedback: string | null;
   error_message?: string | null;
+  issue_type: IssueType;
+  abuse_score: number;
 }
 
 export interface AdminSubmissionsResponse {
