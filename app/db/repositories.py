@@ -12,8 +12,8 @@ from typing import Optional
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from .models import UserDB, SubmissionDB, SubmissionStatus
-from ..models import Submission, SubmissionStatus as PydanticSubmissionStatus
+from .models import UserDB, SubmissionDB, SubmissionStatus, IssueType
+from ..models import Submission, SubmissionStatus as PydanticSubmissionStatus, IssueType as PydanticIssueType
 from ..config import settings
 
 logger = logging.getLogger(__name__)
@@ -175,6 +175,8 @@ class SubmissionRepository:
         feedback: Optional[str] = None,
         status: SubmissionStatus = SubmissionStatus.COMPLETED,
         error_message: Optional[str] = None,
+        issue_type: IssueType = IssueType.NONE,
+        abuse_score: int = 0,
         scoring_meta: Optional[dict] = None,
     ) -> SubmissionDB:
         """Create a new submission."""
@@ -189,12 +191,14 @@ class SubmissionRepository:
             feedback=feedback,
             status=status,
             error_message=error_message,
+            issue_type=issue_type,
+            abuse_score=abuse_score,
             scoring_meta=scoring_meta,
         )
         self.db.add(submission)
         self.db.commit()
         self.db.refresh(submission)
-        logger.debug(f"Created submission {id} for user {user_id}")
+        logger.debug(f"Created submission {id} for user {user_id} (issue_type={issue_type.value})")
         return submission
 
     def get_by_id(self, submission_id: str) -> Optional[SubmissionDB]:
@@ -316,6 +320,8 @@ class SubmissionRepository:
             score=db_submission.score,
             feedback=db_submission.feedback,
             error_message=db_submission.error_message,
+            issue_type=PydanticIssueType(db_submission.issue_type.value),
+            abuse_score=db_submission.abuse_score,
             scoring_meta=db_submission.scoring_meta,
         )
 
@@ -346,6 +352,8 @@ class SubmissionRepository:
         score: int,
         feedback: str,
         status: SubmissionStatus = SubmissionStatus.COMPLETED,
+        issue_type: IssueType = IssueType.NONE,
+        abuse_score: int = 0,
         scoring_meta: Optional[dict] = None,
     ) -> Optional[SubmissionDB]:
         """Update submission with final results."""
@@ -355,6 +363,8 @@ class SubmissionRepository:
         submission.status = status
         submission.score = score
         submission.feedback = feedback
+        submission.issue_type = issue_type
+        submission.abuse_score = abuse_score
         if scoring_meta is not None:
             submission.scoring_meta = scoring_meta
         self.db.commit()
@@ -463,6 +473,7 @@ class SubmissionRepository:
         limit: int = 20,
         user_id_filter: Optional[str] = None,
         status_filter: Optional[str] = None,
+        issue_type_filter: Optional[str] = None,
     ) -> tuple[list[SubmissionDB], int]:
         """Get all submissions with pagination and filters.
 
@@ -473,6 +484,7 @@ class SubmissionRepository:
             limit: Maximum number of records to return
             user_id_filter: Filter by user_id (exact match)
             status_filter: Filter by status (pending/processing/completed/failed)
+            issue_type_filter: Filter by issue_type (none/wrong_task/injection)
 
         Returns:
             Tuple of (submissions list, total count matching filters).
@@ -489,6 +501,14 @@ class SubmissionRepository:
                 query = query.filter(SubmissionDB.status == status_enum)
             except ValueError:
                 # Invalid status, ignore filter
+                pass
+
+        if issue_type_filter:
+            try:
+                issue_type_enum = IssueType(issue_type_filter)
+                query = query.filter(SubmissionDB.issue_type == issue_type_enum)
+            except ValueError:
+                # Invalid issue_type, ignore filter
                 pass
 
         # Get total count before pagination

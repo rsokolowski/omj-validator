@@ -14,6 +14,7 @@ from typing import AsyncIterator, Optional, Callable, Any
 from ...config import settings
 from ...models import SubmissionResult
 from ..parsing import parse_ai_response
+from ..prompt_builder import build_prompt
 from ..factory import AIProviderError
 
 try:
@@ -117,9 +118,14 @@ class GeminiProvider:
         return input_cost + output_cost
 
     def _load_prompt(self, etap: str = "etap2") -> str:
-        """Load Gemini-specific prompt from file for given etap."""
-        with open(settings.gemini_prompt_path(etap), "r", encoding="utf-8") as f:
-            return f.read()
+        """Build complete prompt for given etap using prompt builder.
+
+        The prompt is composed from:
+        - Base instructions (role, language)
+        - Etap-specific scoring criteria
+        - Abuse detection instructions and JSON format
+        """
+        return build_prompt(etap)
 
     def get_timeout(self) -> int:
         """Return timeout in seconds for Gemini API."""

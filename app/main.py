@@ -1539,6 +1539,7 @@ async def admin_submissions(
     limit: int = 20,
     user_id: OptionalType[str] = None,
     status: OptionalType[str] = None,
+    issue_type: OptionalType[str] = None,
     db: Session = Depends(get_db)
 ):
     """Get all submissions with pagination and filters (admin only)."""
@@ -1556,6 +1557,7 @@ async def admin_submissions(
         limit=limit,
         user_id_filter=user_id,
         status_filter=status,
+        issue_type_filter=issue_type,
     )
 
     # Batch fetch all users in a single query to avoid N+1
@@ -1580,6 +1582,8 @@ async def admin_submissions(
             "score": sub.score,
             "feedback": sub.feedback,
             "error_message": sub.error_message,
+            "issue_type": sub.issue_type.value,
+            "abuse_score": sub.abuse_score,
         })
 
     return {

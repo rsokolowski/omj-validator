@@ -37,6 +37,13 @@ class SubmissionStatus(str, enum.Enum):
     FAILED = "failed"            # Processing failed
 
 
+class IssueType(str, enum.Enum):
+    """Type of issue detected in a submission by abuse detection."""
+    NONE = "none"              # No issues detected - normal submission
+    WRONG_TASK = "wrong_task"  # Student submitted solution to different task
+    INJECTION = "injection"    # Prompt injection attempt detected
+
+
 class UserDB(Base):
     """User account linked to Google OAuth."""
 
@@ -98,6 +105,15 @@ class SubmissionDB(Base):
 
     # Error tracking
     error_message = Column(Text, nullable=True)
+
+    # Abuse detection
+    issue_type = Column(
+        Enum(IssueType),
+        nullable=False,
+        default=IssueType.NONE,
+        index=True  # For admin filtering
+    )
+    abuse_score = Column(Integer, nullable=False, default=0)  # 0-100 confidence
 
     # LLM metadata (model, tokens, cost, timing, raw response, etc.)
     scoring_meta = Column(JSON, nullable=True)
