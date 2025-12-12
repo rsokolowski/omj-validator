@@ -174,3 +174,46 @@ class PrerequisiteStatus(BaseModel):
     title: str
     status: Literal["mastered", "in_progress"] | None = None  # None for unauthenticated users
     url: str  # e.g., "/task/2023/etap1/2"
+
+
+# ==================== User Submissions (Moje rozwiązania) ====================
+
+
+class UserSubmissionStats(BaseModel):
+    """Aggregate statistics for user's submissions."""
+    total_submissions: int
+    completed_count: int
+    failed_count: int
+    pending_count: int
+    avg_score: Optional[float] = None  # Average of completed submissions
+    best_score: Optional[int] = None
+    tasks_attempted: int  # Unique tasks with at least one submission
+    tasks_mastered: int  # Unique tasks with score >= mastery threshold
+
+
+class UserSubmissionListItem(BaseModel):
+    """Single submission item for user's submission list."""
+    id: str
+    year: str
+    etap: str
+    task_number: int
+    task_title: str
+    task_categories: list[str]
+    timestamp: datetime
+    status: SubmissionStatus
+    score: Optional[int] = None
+    max_score: int  # Based on etap (3 for etap1, 6 for etap2/3)
+    feedback: Optional[str] = None
+    feedback_preview: Optional[str] = None  # First ~150 chars of feedback
+    error_message: Optional[str] = None
+    images: list[str] = []
+
+
+class UserSubmissionsResponse(BaseModel):
+    """Paginated response for user's submissions with stats."""
+    submissions: list[UserSubmissionListItem]
+    stats: UserSubmissionStats
+    total_count: int
+    offset: int
+    limit: int
+    has_more: bool

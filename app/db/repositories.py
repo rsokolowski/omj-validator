@@ -504,3 +504,143 @@ class SubmissionRepository:
         )
 
         return submissions, total_count
+
+    def get_user_submissions_paginated(
+        self,
+        user_id: str,
+        offset: int = 0,
+        limit: int = 20,
+        year_filter: Optional[str] = None,
+        etap_filter: Optional[str] = None,
+        hide_errors: bool = False,
+    ) -> tuple[list[SubmissionDB], int]:
+        """Get user's submissions with pagination and filters.
+
+        Used for "Moje rozwiązania" (My Solutions) panel.
+
+        Args:
+            user_id: User's Google sub
+            offset: Number of records to skip
+            limit: Maximum number of records to return
+            year_filter: Filter by year (e.g., "2024")
+            etap_filter: Filter by etap (etap1/etap2/etap3)
+            hide_errors: If True, exclude failed submissions (default False)
+
+        Returns:
+            Tuple of (submissions list, total count matching filters).
+        """
+        query = self.db.query(SubmissionDB).filter(SubmissionDB.user_id == user_id)
+
+        # Apply filters
+        if year_filter:
+            query = query.filter(SubmissionDB.year == year_filter)
+
+        if etap_filter:
+            query = query.filter(SubmissionDB.etap == etap_filter)
+
+        if hide_errors:
+            query = query.filter(SubmissionDB.status != SubmissionStatus.FAILED)
+
+        # Get total count before pagination
+        total_count = query.count()
+
+        # Apply ordering and pagination
+        submissions = (
+            query
+            .order_by(SubmissionDB.timestamp.desc())
+            .offset(offset)
+            .limit(limit)
+            .all()
+        )
+
+        return submissions, total_count
+
+    def get_user_aggregate_stats(self, user_id: str) -> dict:
+        """Get aggregate statistics for a user's submissions.
+
+        Used for "Moje rozwiązania" dashboard stats cards.
+
+        Args:
+            user_id: User's Google sub
+
+        Returns:
+            Dictionary with:
+            - total_submissions: Total number of submissions
+            - completed_count: Number of completed submissions
+            - failed_count: Number of failed submissions
+            - pending_count: Number of pending/processing submissions
+            - avg_score: Average score of completed submissions (None if no completed)
+            - best_score: Highest score achieved (None if no completed)
+            - tasks_attempted: Number of unique tasks attempted
+            - tasks_mastered: Number of unique tasks with best_score >= mastery threshold
+        """
+        # Count by status
+        status_counts = (
+            self.db.query(
+                SubmissionDB.status,
+                func.count(SubmissionDB.id).label("count")
+            )
+            .filter(SubmissionDB.user_id == user_id)
+            .group_by(SubmissionDB.status)
+            .all()
+        )
+
+        status_map = {row.status: row.count for row in status_counts}
+        total = sum(status_map.values())
+        completed = status_map.get(SubmissionStatus.COMPLETED, 0)
+        failed = status_map.get(SubmissionStatus.FAILED, 0)
+        pending = (
+            status_map.get(SubmissionStatus.PENDING, 0) +
+            status_map.get(SubmissionStatus.PROCESSING, 0)
+        )
+
+        # Score stats (only for completed submissions with score)
+        score_stats = (
+            self.db.query(
+                func.avg(SubmissionDB.score).label("avg_score"),
+                func.max(SubmissionDB.score).label("best_score")
+            )
+            .filter(
+                SubmissionDB.user_id == user_id,
+                SubmissionDB.status == SubmissionStatus.COMPLETED,
+                SubmissionDB.score.isnot(None)
+            )
+            .first()
+        )
+
+        avg_score = round(score_stats.avg_score, 2) if score_stats.avg_score else None
+        best_score = score_stats.best_score
+
+        # Unique tasks attempted (any status)
+        tasks_attempted = (
+            self.db.query(SubmissionDB.year, SubmissionDB.etap, SubmissionDB.task_number)
+            .filter(SubmissionDB.user_id == user_id)
+            .distinct()
+            .count()
+        )
+
+        # Tasks mastered: best score >= mastery threshold per task
+        # etap1: mastery = 2, etap2/etap3: mastery = 5
+        # We use get_user_progress() which already calculates best scores
+        user_progress = self.get_user_progress(user_id)
+        tasks_mastered = 0
+        for task_key, best in user_progress.items():
+            # task_key format: "2024_etap1_3"
+            parts = task_key.split("_")
+            if len(parts) >= 2:
+                etap = parts[1]
+                # Mastery threshold: 2 for etap1, 5 for etap2/3
+                threshold = 2 if etap == "etap1" else 5
+                if best >= threshold:
+                    tasks_mastered += 1
+
+        return {
+            "total_submissions": total,
+            "completed_count": completed,
+            "failed_count": failed,
+            "pending_count": pending,
+            "avg_score": avg_score,
+            "best_score": best_score,
+            "tasks_attempted": tasks_attempted,
+            "tasks_mastered": tasks_mastered,
+        }
