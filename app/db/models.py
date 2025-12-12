@@ -108,7 +108,7 @@ class SubmissionDB(Base):
 
     # Abuse detection
     issue_type = Column(
-        Enum(IssueType),
+        Enum(IssueType, values_callable=lambda x: [e.value for e in x]),
         nullable=False,
         default=IssueType.NONE,
         index=True  # For admin filtering
