@@ -13,6 +13,7 @@ import {
 import { uploadFiles } from "@/lib/api/client";
 import { getMaxScore } from "@/lib/utils/constants";
 import { LoginPrompt } from "@/components/common/LoginPrompt";
+import { MathContent } from "@/components/ui/MathContent";
 
 interface SubmitSectionProps {
   year: string;
@@ -401,9 +402,9 @@ export function SubmitSection({
           <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
             Wynik: {uploadState.result.score} / {uploadState.result.max_score} punktów
           </Typography>
-          <Typography variant="body2" sx={{ whiteSpace: "pre-wrap" }}>
-            {uploadState.result.feedback}
-          </Typography>
+          <Box sx={{ "& .math-content": { fontSize: "0.875rem" } }}>
+            <MathContent content={uploadState.result.feedback} />
+          </Box>
         </Alert>
       )}
 
