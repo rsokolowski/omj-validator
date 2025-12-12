@@ -508,8 +508,8 @@ class SubmissionRepository:
                 issue_type_enum = IssueType(issue_type_filter)
                 query = query.filter(SubmissionDB.issue_type == issue_type_enum)
             except ValueError:
-                # Invalid issue_type, ignore filter
-                pass
+                # Invalid issue_type, ignore filter but log for debugging
+                logger.debug(f"Invalid issue_type filter ignored: {issue_type_filter}")
 
         # Get total count before pagination
         total_count = query.count()
