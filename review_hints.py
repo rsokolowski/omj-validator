@@ -2,28 +2,24 @@
 """
 Review task hints for quality, logical consistency, and grade-appropriateness.
 
-Uses Claude CLI (with extended thinking) or Gemini API to analyze existing hints
-and regenerate them if needed.
+Uses Gemini API to analyze existing hints and regenerate them if needed.
 
 Usage:
     python review_hints.py --year 2024 --etap etap1 --task 1    # Review specific task
     python review_hints.py --year 2024 --etap etap1              # Review all tasks in etap
     python review_hints.py --year 2024                           # Review all tasks in year
     python review_hints.py --dry-run                             # Preview without saving
-    python review_hints.py --use-gemini                          # Use Gemini API instead of Claude
-    python review_hints.py --use-gemini --gemini-model gemini-2.5-pro  # Specific Gemini model
+    python review_hints.py --model gemini-2.5-pro                # Specific Gemini model
 """
 
+import argparse
 import json
 import os
-import subprocess
 import sys
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-import argparse
-from dataclasses import dataclass, field
 
 # Load environment variables from .env (optional)
 try:
@@ -32,7 +28,7 @@ try:
 except ImportError:
     pass  # dotenv not installed, rely on environment variables
 
-# Gemini support (optional) - uses same SDK as app (google-genai)
+# Gemini SDK - uses same SDK as app (google-genai)
 GEMINI_AVAILABLE = False
 genai = None
 types = None
@@ -44,8 +40,6 @@ try:
     GEMINI_AVAILABLE = True
 except ImportError:
     pass
-
-import re
 
 
 def fix_json_escapes(text: str) -> str:
@@ -109,7 +103,7 @@ def load_skills_description() -> str:
 SKILLS_DESCRIPTION = load_skills_description()
 
 
-# Prompt for hint review (extended thinking enabled via MAX_THINKING_TOKENS env var)
+# Prompt for hint review
 # NOTE: Prompt is structured for LLM cache efficiency - static instructions first, dynamic task data last
 REVIEW_PROMPT_TEMPLATE = """Jesteś ekspertem od Olimpiady Matematycznej Juniorów (OMJ).
 Twoim zadaniem jest ocena wskazówek do zadań matematycznych.
@@ -323,7 +317,7 @@ def build_json_schema_dict() -> dict:
 # Schema as dict for Gemini API (response_json_schema)
 JSON_SCHEMA_DICT = build_json_schema_dict()
 
-# Schema as string for Claude CLI (--json-schema flag)
+# Schema as JSON string (for reference/debugging)
 JSON_SCHEMA = json.dumps(JSON_SCHEMA_DICT)
 
 
@@ -490,96 +484,6 @@ def call_gemini(prompt: str, model_name: str, tracker: TokenTracker, client, max
     return None, output_lines
 
 
-def call_claude(prompt: str, model: str = "opus") -> str:
-    """Call Claude CLI with extended thinking enabled."""
-    # Enable extended thinking via environment variable (31999 = ultrathink level)
-    env = os.environ.copy()
-    env["MAX_THINKING_TOKENS"] = "31999"
-
-    try:
-        result = subprocess.run(
-            [
-                "claude", "-p", prompt,
-                "--output-format", "json",
-                "--json-schema", JSON_SCHEMA,
-                "--model", model,
-                "--no-session-persistence"
-            ],
-            capture_output=True,
-            text=True,
-            timeout=600,  # 10 minutes for extended thinking
-            env=env
-        )
-        if result.returncode != 0:
-            print(f"  Claude CLI error (code {result.returncode}):", file=sys.stderr)
-            if result.stderr:
-                print(f"    stderr: {result.stderr[:500]}", file=sys.stderr)
-            if result.stdout:
-                print(f"    stdout: {result.stdout[:500]}", file=sys.stderr)
-            return ""
-        return result.stdout.strip()
-    except subprocess.TimeoutExpired:
-        print("  Claude CLI timeout (10 min)", file=sys.stderr)
-        return ""
-    except FileNotFoundError:
-        print("  Claude CLI not found. Install with: npm install -g @anthropic-ai/claude-code", file=sys.stderr)
-        sys.exit(1)
-
-
-def parse_response(response: str) -> dict | None:
-    """Parse Claude's JSON response."""
-    if not response:
-        return None
-
-    try:
-        cli_response = json.loads(response)
-
-        # Extract structured_output
-        if "structured_output" in cli_response:
-            data = cli_response["structured_output"]
-        elif "result" in cli_response and isinstance(cli_response["result"], dict):
-            data = cli_response["result"]
-        else:
-            print(f"  No structured_output in response")
-            return None
-
-        # Validate required fields
-        review_passed = data.get("review_passed")
-        if not isinstance(review_passed, bool):
-            print(f"  Invalid review_passed: {review_passed}")
-            return None
-
-        issues = data.get("issues", [])
-        if not isinstance(issues, list):
-            issues = []
-
-        analysis = data.get("analysis", "")
-        if not isinstance(analysis, str):
-            analysis = str(analysis)
-
-        new_hints = data.get("new_hints")
-        if new_hints is not None:
-            if not isinstance(new_hints, list) or len(new_hints) != 4:
-                print(f"  Invalid new_hints: expected 4 items, got {len(new_hints) if isinstance(new_hints, list) else 'not a list'}")
-                return None
-            # Ensure all hints are non-empty strings
-            new_hints = [str(h).strip() for h in new_hints if h]
-            if len(new_hints) != 4:
-                print(f"  Some new hints were empty")
-                return None
-
-        return {
-            "review_passed": review_passed,
-            "issues": issues,
-            "analysis": analysis,
-            "new_hints": new_hints
-        }
-    except json.JSONDecodeError as e:
-        print(f"  JSON parse error: {e}")
-        print(f"  Response was: {response[:500]}")
-        return None
-
-
 def has_hints(task: dict) -> bool:
     """Check if task has hints to review."""
     hints = task.get("hints", [])
@@ -661,15 +565,13 @@ def validate_gemini_response(data: dict) -> dict | None:
 def process_task(
     task_path: Path,
     dry_run: bool = False,
-    model: str = "opus",
     verbose: bool = False,
-    use_gemini: bool = False,
     gemini_model: str = "gemini-2.5-flash",
     tracker: TokenTracker | None = None,
     gemini_client=None
 ) -> tuple[bool, bool, list[str]]:
     """
-    Process a single task file.
+    Process a single task file using Gemini API.
 
     Returns: (success, hints_updated, output_lines)
     """
@@ -704,16 +606,12 @@ def process_task(
         hint_3=hints[3] if len(hints) > 3 else "",
     )
 
-    # Call appropriate provider
-    if use_gemini:
-        if tracker is None:
-            tracker = TokenTracker(model_name=gemini_model)
-        gemini_response, gemini_output = call_gemini(prompt, gemini_model, tracker, gemini_client)
-        output_lines.extend(gemini_output)
-        result = validate_gemini_response(gemini_response)
-    else:
-        response = call_claude(prompt, model=model)
-        result = parse_response(response)
+    # Call Gemini API
+    if tracker is None:
+        tracker = TokenTracker(model_name=gemini_model)
+    gemini_response, gemini_output = call_gemini(prompt, gemini_model, tracker, gemini_client)
+    output_lines.extend(gemini_output)
+    result = validate_gemini_response(gemini_response)
 
     if not result:
         output_lines.append("  Failed to parse response")
@@ -751,44 +649,36 @@ def process_task(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Review task hints for quality and grade-appropriateness using Claude CLI or Gemini API"
+        description="Review task hints for quality and grade-appropriateness using Gemini API"
     )
     parser.add_argument("--dry-run", action="store_true", help="Preview without saving changes")
     parser.add_argument("--year", type=str, help="Process only specific year")
     parser.add_argument("--etap", type=str, help="Process only specific etap")
     parser.add_argument("--task", type=int, help="Process only specific task number")
-    parser.add_argument("--model", type=str, default="opus", help="Claude model to use (default: opus)")
     parser.add_argument("--limit", type=int, help="Limit number of tasks to process")
     parser.add_argument("--verbose", "-v", action="store_true", help="Show detailed analysis")
     parser.add_argument("--parallel", type=int, default=1, help="Number of parallel workers (default: 1)")
-    # Gemini options
-    parser.add_argument("--use-gemini", action="store_true", help="Use Gemini API instead of Claude CLI")
-    parser.add_argument("--gemini-model", type=str, default="gemini-2.5-flash",
+    parser.add_argument("--model", type=str, default="gemini-2.5-flash",
                         help="Gemini model to use (default: gemini-2.5-flash)")
     args = parser.parse_args()
 
-    # Configure Gemini if needed
-    tracker = None
-    gemini_client = None
-    if args.use_gemini:
-        if not GEMINI_AVAILABLE:
-            print("Error: google-genai not installed. Run: pip install google-genai")
-            sys.exit(1)
+    # Configure Gemini
+    if not GEMINI_AVAILABLE:
+        print("Error: google-genai not installed. Run: pip install google-genai")
+        sys.exit(1)
 
-        api_key = os.getenv("GEMINI_API_KEY")
-        if not api_key:
-            print("Error: GEMINI_API_KEY not found in environment. Check .env file.")
-            sys.exit(1)
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        print("Error: GEMINI_API_KEY not found in environment. Check .env file.")
+        sys.exit(1)
 
-        # Create Gemini client (new SDK style)
-        gemini_client = genai.Client(api_key=api_key)
-        tracker = TokenTracker(model_name=args.gemini_model)
+    # Create Gemini client
+    gemini_client = genai.Client(api_key=api_key)
+    tracker = TokenTracker(model_name=args.model)
 
-        pricing = _get_pricing(args.gemini_model)
-        print(f"Using Gemini API: {args.gemini_model}")
-        print(f"Pricing: ${pricing['input']:.2f}/1M input, ${pricing['output']:.2f}/1M output")
-    else:
-        print(f"Using Claude CLI: {args.model}")
+    pricing = _get_pricing(args.model)
+    print(f"Using Gemini API: {args.model}")
+    print(f"Pricing: ${pricing['input']:.2f}/1M input, ${pricing['output']:.2f}/1M output")
 
     if args.parallel > 1:
         print(f"Parallel workers: {args.parallel}")
@@ -840,10 +730,8 @@ def main():
         success, updated, output_lines = process_task(
             task_path,
             dry_run=args.dry_run,
-            model=args.model,
             verbose=args.verbose,
-            use_gemini=args.use_gemini,
-            gemini_model=args.gemini_model,
+            gemini_model=args.model,
             tracker=tracker,
             gemini_client=gemini_client
         )
@@ -860,8 +748,8 @@ def main():
             print(f"[{completed_count[0]}/{len(task_files)}] {rel_path}")
             for line in output_lines:
                 print(line)
-            # Show running cost estimate every 10 tasks for Gemini
-            if args.use_gemini and tracker and completed_count[0] % 10 == 0:
+            # Show running cost estimate every 10 tasks
+            if tracker and completed_count[0] % 10 == 0:
                 cache_pct = (tracker.total_cached_tokens / tracker.total_input_tokens * 100) if tracker.total_input_tokens > 0 else 0
                 print(f"  [Running: ${tracker.get_cost():.4f}, cache hit: {cache_pct:.1f}%]")
             print()
@@ -910,8 +798,8 @@ def main():
             else:
                 print(f"  {task_path}")
 
-    # Print cost summary for Gemini
-    if args.use_gemini and tracker:
+    # Print cost summary
+    if tracker:
         print()
         print("Cost Estimation:")
         print(tracker.get_summary())
