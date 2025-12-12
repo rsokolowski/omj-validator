@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, DragEvent, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import {
   Paper,
   Typography,
@@ -71,6 +72,7 @@ export function SubmitSection({
   canSubmit,
   isAuthenticated,
 }: SubmitSectionProps) {
+  const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const [uploadState, setUploadState] = useState<UploadState>({
     status: "idle",
@@ -144,6 +146,8 @@ export function SubmitSection({
                 fileInputRef.current.value = "";
               }
               ws.close();
+              // Refresh the page to update submission history
+              router.refresh();
               break;
 
             case "error":
@@ -169,7 +173,7 @@ export function SubmitSection({
         wsRef.current = null;
       };
     },
-    [etap]
+    [etap, router]
   );
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
