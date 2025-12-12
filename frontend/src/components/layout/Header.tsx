@@ -84,7 +84,7 @@ export function Header() {
                     "&:hover": { color: "primary.main" },
                   }}
                 >
-                  Moje rozwiazania
+                  Moje rozwiązania
                 </Typography>
               </Link>
             )}

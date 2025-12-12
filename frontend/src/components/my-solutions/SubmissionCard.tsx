@@ -52,7 +52,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
       return (
         <Chip
           icon={<ErrorOutlineIcon sx={{ fontSize: 16 }} />}
-          label="Blad"
+          label="Błąd"
           size="small"
           sx={{
             bgcolor: "#fef2f2",
@@ -106,10 +106,10 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
       return (
         <Box sx={{ color: "#991b1b", bgcolor: "#fef2f2", p: 2, borderRadius: 1 }}>
           <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-            Szczegoly bledu:
+            Szczegóły błędu:
           </Typography>
           <Typography variant="body2">
-            {submission.error_message || "Nieznany blad"}
+            {submission.error_message || "Nieznany błąd"}
           </Typography>
         </Box>
       );
@@ -120,7 +120,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
         <Box sx={{ display: "flex", alignItems: "center", gap: 2, color: "#0369a1" }}>
           <CircularProgress size={20} />
           <Typography variant="body2">
-            Rozwiazanie jest przetwarzane...
+            Rozwiązanie jest przetwarzane...
           </Typography>
         </Box>
       );
@@ -236,7 +236,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
         <Box sx={{ p: 2, bgcolor: "grey.50" }}>
           {/* Feedback */}
           <Typography variant="subtitle2" sx={{ color: "grey.600", mb: 1 }}>
-            {submission.status === "failed" ? "Szczegoly bledu:" : "Komentarz:"}
+            {submission.status === "failed" ? "Szczegóły błędu:" : "Komentarz:"}
           </Typography>
           {renderFeedback()}
 
@@ -244,7 +244,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
           {submission.images && submission.images.length > 0 && (
             <Box sx={{ mt: 2 }}>
               <Typography variant="subtitle2" sx={{ color: "grey.600", mb: 1 }}>
-                Przeslane zdjecia:
+                Przesłane zdjęcia:
               </Typography>
               <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
                 {submission.images.map((image, imgIndex) => (
@@ -258,7 +258,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                     <Box
                       component="img"
                       src={`/uploads/${image}`}
-                      alt={`Zdjecie ${imgIndex + 1}`}
+                      alt={`Zdjęcie ${imgIndex + 1}`}
                       sx={{
                         width: 80,
                         height: 80,

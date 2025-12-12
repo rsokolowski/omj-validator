@@ -97,9 +97,9 @@ export function StatisticsCards({ stats }: StatisticsCardsProps) {
         <Grid size={{ xs: 6, sm: 6, md: 3 }}>
           <StatCard
             icon={<CheckCircleIcon fontSize="small" />}
-            label="Ukonczone"
+            label="Ukończone"
             value={stats.completed_count}
-            subtext={`${completionRate}% skutecznosci`}
+            subtext={`${completionRate}% skuteczności`}
             color="#22c55e"
             bgColor="#f0fdf4"
           />
@@ -109,7 +109,7 @@ export function StatisticsCards({ stats }: StatisticsCardsProps) {
         <Grid size={{ xs: 6, sm: 6, md: 3 }}>
           <StatCard
             icon={<StarIcon fontSize="small" />}
-            label="Srednia"
+            label="Średnia"
             value={stats.avg_score !== null ? stats.avg_score.toFixed(1) : "-"}
             subtext={stats.best_score !== null ? `Najlepszy: ${stats.best_score} pkt` : undefined}
             color="#f59e0b"
@@ -123,7 +123,7 @@ export function StatisticsCards({ stats }: StatisticsCardsProps) {
             icon={<EmojiEventsIcon fontSize="small" />}
             label="Opanowane"
             value={stats.tasks_mastered}
-            subtext={`z ${stats.tasks_attempted} probowanych zadan`}
+            subtext={`z ${stats.tasks_attempted} próbowanych zadań`}
             color="#8b5cf6"
             bgColor="#f5f3ff"
           />
@@ -143,10 +143,10 @@ export function StatisticsCards({ stats }: StatisticsCardsProps) {
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}>
             <Typography variant="body2" fontWeight={500}>
-              Postep w nauce
+              Postęp w nauce
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {stats.tasks_mastered} z {stats.tasks_attempted} zadan opanowanych
+              {stats.tasks_mastered} z {stats.tasks_attempted} zadań opanowanych
             </Typography>
           </Box>
           <LinearProgress

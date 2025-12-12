@@ -109,7 +109,7 @@ export function FiltersBar({ filters, onFilterChange, totalCount }: FiltersBarPr
           }
           label={
             <Typography variant="body2" color="text.secondary">
-              Pokaz bledy systemowe
+              Pokaż błędy systemowe
             </Typography>
           }
           sx={{ ml: 1 }}
@@ -122,7 +122,7 @@ export function FiltersBar({ filters, onFilterChange, totalCount }: FiltersBarPr
             onClick={handleClearFilters}
             sx={{ color: "text.secondary" }}
           >
-            Wyczysc
+            Wyczyść
           </Button>
         )}
 
@@ -131,7 +131,7 @@ export function FiltersBar({ filters, onFilterChange, totalCount }: FiltersBarPr
           color="text.secondary"
           sx={{ ml: { sm: "auto" } }}
         >
-          {totalCount} {totalCount === 1 ? "rozwiazanie" : "rozwiazan"}
+          {totalCount} {totalCount === 1 ? "rozwiązanie" : "rozwiązań"}
         </Typography>
       </Stack>
     </Paper>

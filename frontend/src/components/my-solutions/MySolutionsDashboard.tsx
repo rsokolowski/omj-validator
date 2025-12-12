@@ -70,7 +70,7 @@ export function MySolutionsDashboard() {
         setOffset(newOffset);
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : "Nie udalo sie zaladowac danych"
+          err instanceof Error ? err.message : "Nie udało się załadować danych"
         );
       } finally {
         setIsLoading(false);
@@ -145,7 +145,7 @@ export function MySolutionsDashboard() {
           textAlign="center"
           py={2}
         >
-          Koniec listy
+          To już wszystko
         </Typography>
       )}
     </Box>

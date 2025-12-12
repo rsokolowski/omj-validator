@@ -34,13 +34,13 @@ export default async function MySolutionsPage() {
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Paper sx={{ p: 4, textAlign: "center" }}>
           <Alert severity="error" sx={{ mb: 2 }}>
-            Nie udalo sie zaladowac strony
+            Nie udało się załadować strony
           </Alert>
           <Typography variant="body1" color="text.secondary">
             {result.message}
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            Sprobuj ponownie pozniej.
+            Spróbuj ponownie później.
           </Typography>
         </Paper>
       </Container>
@@ -56,10 +56,10 @@ export default async function MySolutionsPage() {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ mb: 3 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          Moje rozwiazania
+          Moje rozwiązania
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Przegladaj historie swoich rozwiazan i sledz postepy.
+          Przeglądaj historię swoich rozwiązań i śledź postępy.
         </Typography>
       </Box>
 
