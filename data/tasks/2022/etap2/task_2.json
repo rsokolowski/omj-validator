@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Wypisz kilka pierwszych par liczb, które można uzyskać. Zwróć uwagę nie tylko na same liczby, ale też na ich sumę i różnicę.",
-    "Aby liczby były kolejne, ich różnica musi wynosić 1. Zastanów się, czy jest jakaś własność różnicy liczb na tablicy, która nie zmienia się w specyficzny sposób po każdym ruchu.",
-    "Niech na tablicy będą liczby $a$ i $b$. Nowa para to $(a, a+b)$ lub $(b, a+b)$. Wyraź nową różnicę między liczbami w zależności od $a$ i $b$.",
-    "Różnica liczb w następnym kroku jest zawsze równa jednej z liczb z kroku poprzedniego. Jakie wartości mogą przyjmować liczby na tablicy? Czy w takim razie ich różnica może kiedykolwiek wynosić 1?"
+    "Wypisz kilka pierwszych par liczb, które można uzyskać z pary $(2, 5)$. Oblicz różnicę liczb w każdej z otrzymanych par.",
+    "Aby liczby były kolejne, ich różnica musi wynosić $1$. Zastanów się, jak różnica liczb w nowym kroku zależy od liczb, które były na tablicy w poprzednim kroku.",
+    "Jeśli na tablicy są liczby $a$ i $b$, w kolejnym kroku otrzymamy parę $(a+b, b)$ lub $(a, a+b)$. Wyznacz różnicę liczb w obu przypadkach.",
+    "Zauważ, że nowa różnica jest zawsze równa jednej z liczb z poprzedniego kroku. Czy biorąc pod uwagę liczby początkowe, na tablicy może kiedykolwiek pojawić się liczba $1$?"
   ],
   "prerequisites": [],
   "skills_required": [

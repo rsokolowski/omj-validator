@@ -13,10 +13,10 @@
     "kombinatoryka"
   ],
   "hints": [
-    "Oznacz punkty jako liczby całkowite na osi liczbowej. Zastanów się, co parzystość sumy odległości od danego punktu mówi o parzystości współrzędnej tego punktu.",
-    "Rozważ podział punktów na parzyste i nieparzyste. Wykorzystaj fakt, że $n$ jest nieparzyste - ile punktów musi być parzystych, a ile nieparzystych?",
-    "Policz sumę odległości od punktu $x$ do pozostałych punktów w zależności od tego, ile z nich jest parzystych, a ile nieparzystych. Kiedy ta suma jest parzysta?",
-    "Wykaż, że wszystkie punkty muszą mieć tę samą parzystość. Jeśli wszystkie są parzyste lub wszystkie nieparzyste, co możesz powiedzieć o parzystości ich różnic?"
+    "Oznacz punkty współrzędnymi całkowitymi. Zauważ, że odległość między dwoma punktami jest nieparzysta wtedy i tylko wtedy, gdy ich współrzędne mają różną parzystość.",
+    "Niech $k$ oznacza liczbę punktów o współrzędnych nieparzystych. Wtedy $n-k$ to liczba punktów o współrzędnych parzystych.",
+    "Wykaż, że suma odległości od punktu parzystego ma taką samą parzystość jak $k$, a od punktu nieparzystego jak $n-k$.",
+    "Skoro wszystkie sumy odległości są parzyste, to czy przy nieparzystym $n$ mogą istnieć jednocześnie punkty parzyste i nieparzyste? Co to oznacza dla odległości między punktami?"
   ],
   "prerequisites": [
     "2020_etap1_6"

@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Przedstaw liczbę $n$ w postaci $10A + b$, gdzie $b$ jest jej cyfrą jedności, a $A$ dodatnią liczbą całkowitą. Jak za pomocą $A$, $b$ i wstawionej cyfry $d$ zapisać nowo powstałą liczbę?",
-    "Zapisz warunek z zadania w postaci równania algebraicznego. Upraszczając je, wyznacz zależność $b$ od $A$ i $d$.",
-    "Twoje równanie powinno mieć postać $b = 8A + 2d$. Pamiętaj, że $b$ i $d$ to cyfry, a $A$ jest dodatnią liczbą całkowitą. Jaką największą wartość może przyjąć lewa strona równania? Co to implikuje dla prawej strony?",
-    "Z nierówności $8A + 2d \\le 9$ oraz faktu, że $A \\ge 1$ i $d \\ge 0$, wyznacz wszystkie możliwe wartości $A$. Dla każdej z nich znajdź $d$ i $b$, a następnie odpowiadającą im liczbę $n$."
+    "Zapisz liczbę $n$ w postaci $10A + b$. Zastanów się, jak zapisać algebraicznie nową liczbę, która powstaje przez wstawienie cyfry $d$ przed cyfrę jedności $b$.",
+    "Zapisz równanie wynikające z treści zadania ($nowa = 6 \\cdot stara$) i przekształć je tak, aby wyznaczyć cyfrę $b$ w zależności od $A$ i $d$.",
+    "Przeanalizuj otrzymaną równość. Pamiętaj, że $b$ jest cyfrą ($b \\le 9$), a $A$ liczbą całkowitą dodatnią. Czy $A$ może być dowolnie duże?",
+    "Wykorzystaj silne ograniczenie na $A$, aby znaleźć jedyny możliwy przypadek. Podstaw wyznaczoną wartość $A$ do równania i znajdź cyfry $d$ oraz $b$."
   ],
   "prerequisites": [],
   "skills_required": [

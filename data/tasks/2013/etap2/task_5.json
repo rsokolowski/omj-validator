@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj punkt $F$ jako obraz punktu $A$ w symetrii względem $E$. Zauważ, że czworokąt $ACFD$ jest równoległobokiem.",
-    "Wykaż, że odcinek $CF$ jest równoległy i równy odcinkowi $DB$. Jaki czworokąt tworzą punkty $D, B, F, C$?",
-    "Korzystając z równoległości boków w uzyskanych czworokątach, pokaż, że $\\angle CAF = \\angle CBF$. Co to mówi o punktach $A, B, F, C$?",
-    "Wykorzystaj własności trapezu wpisanego w okrąg oraz równości odcinków z punktu [2], aby pokazać, że $AC = CD$."
+    "Niech $F$ będzie punktem takim, że $E$ jest środkiem odcinka $AF$. Uzasadnij, że czworokąt $ACFD$ jest równoległobokiem i zauważ, że $CF \nparallel AB$.",
+    "Wykaż, że czworokąt $CDBF$ również jest równoległobokiem. Wywnioskuj stąd, że $CD = FB$ oraz $CD \nparallel FB$.",
+    "Zauważ, że $CF \nparallel AB$, więc $ABFC$ jest trapezem. Korzystając z równoległości $CD \nparallel FB$ i danych zadania, wykaż, że $\\angle CAF = \\angle CBF$.",
+    "Równość $\\angle CAF = \\angle CBF$ oznacza, że trapez $ABFC$ jest równoramienny, zatem $AC = FB$. Połącz ten fakt z równością $FB = CD$, aby zakończyć dowód."
   ],
   "skills_required": [
     "angle_chasing",

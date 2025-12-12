@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Zwróć uwagę na współczynniki $1, 2, 4$ przy niewiadomych w drugim równaniu. Oblicz sumę ich kwadratów i zastanów się, jak ma się ona do pierwszego równania.",
-    "Spróbuj porównać wartość wyrażenia $(a+2b+4c)^2$ z iloczynem $(a^2+b^2+c^2)(1^2+2^2+4^2)$. Czy przypomina Ci to znaną nierówność?",
-    "Zauważ, że różnica $(a^2+b^2+c^2)(1^2+2^2+4^2) - (a+2b+4c)^2$ daje się zapisać jako suma kwadratów (np. $(2a-b)^2 + \\dots$), więc musi być zawsze nieujemna.",
-    "Podstaw liczby z zadania do wyrażenia z poprzedniej wskazówki. Sprawdź, czy warunek nieujemności jest spełniony dla wartości $23 \\cdot 21$ oraz $22^2$. Co to oznacza dla istnienia rozwiązań?"
+    "Zwróć uwagę na współczynniki $1, 2, 4$ przy niewiadomych w drugim równaniu. Oblicz sumę ich kwadratów ($1^2+2^2+4^2$).",
+    "Spróbuj powiązać oba równania, budując sumę kwadratów różnic: $(a-1)^2 + (b-2)^2 + (c-4)^2$.",
+    "Rozpisz powyższą sumę korzystając ze wzorów skróconego mnożenia i podstaw wartości $23$ oraz $22$ z równań w zadaniu.",
+    "Z otrzymanej wartości sumy kwadratów wywnioskuj jedyne możliwe liczby $a, b, c$. Sprawdź, czy spełniają one pierwsze równanie układu."
   ],
   "skills_required": [
     "inequality_manipulation",

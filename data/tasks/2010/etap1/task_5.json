@@ -13,10 +13,10 @@
     "logika"
   ],
   "hints": [
-    "Rozważ pionowy rząd trzech pól. Dołączając czwarte pole obok środkowego (raz z lewej, raz z prawej), tworzysz dwa L-tetramina. Co wynika z tego, że obie sumy są równe zero?",
-    "Pokaż, że podobna własność zachodzi w poziomie. Wywnioskuj, że cała tablica jest pokryta powtarzającym się wzorem z bloku 2x2.",
-    "Oznacz liczby w bloku 2x2 jako $a, b, c, d$. Zapisz warunki dla sum w L-tetraminach jako równania z tymi zmiennymi. Pamiętaj o różnych orientacjach L-tetramina.",
-    "Rozwiąż układ równań, aby znaleźć związki między $a, b, c, d$. Nie musisz znać ich wartości! Sprawdź, jakie liczby leżą na przekątnych i oblicz ich sumę."
+    "Warunek dotyczy każdego L-tetramina. Rozważ najmniejszy możliwy fragment tablicy, w którym można umieścić kilka różnych L-tetramin. Jak wygląda taki fragment?",
+    "Skup się na dowolnym kwadracie $2 \\times 2$. Oznacz liczby w jego polach np. jako $a, b, c, d$. Ile różnych L-tetramin można utworzyć z pól tego kwadratu?",
+    "Zapisz sumy dla wszystkich czterech L-tetramin, które mieszczą się w kwadracie $2 \\times 2$. Każda z tych sum jest równa zero. Co możesz wywnioskować, porównując te równania?",
+    "Porównanie równań powinno pokazać, że wszystkie cztery liczby w kwadracie $2 \\times 2$ są równe. Co to oznacza dla ich wartości, skoro suma trzech z nich jest zerem? Jaki to ma wpływ na całą tablicę?"
   ],
   "skills_required": [
     "invariants",

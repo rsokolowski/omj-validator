@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Obwód czworokąta to zamknięta pętla na powierzchni czworościanu. Długość takiej pętli najłatwiej jest mierzyć na siatce (płaskim rozwinięciu) ścian, po których ona przebiega.",
-    "Podziel obwód na dwie części, np. $P \\to Q \\to R$ i $R \\to S \\to P$. Długość każdej z tych części jest nie mniejsza niż odległość między jej końcami na odpowiedniej siatce (rombie złożonym z dwóch ścian).",
-    "Wyraź sumę tych dwóch odległości (dolne oszacowanie obwodu) w zależności od położeń punktów $P$ i $R$. Zauważ, że zależy ona tylko od sumy $z = AP+CR$, gdzie $A, C$ to wierzchołki czworościanu.",
-    "Otrzymaną sumę pierwiastków można zinterpretować geometrycznie jako sumę odległości pewnego punktu na prostej od dwóch ustalonych punktów w płaszczyźnie. Kiedy taka suma jest najmniejsza?"
+    "Przekrój czworokątny powstaje, gdy płaszczyzna przecina cztery krawędzie czworościanu. Jego obwód to zamknięta łamana na powierzchni. Długość takiej łamanej najłatwiej jest mierzyć na siatce czworościanu.",
+    "Rozważ czworokąt o wierzchołkach $P,Q,R,S$ na krawędziach $AB, AC, CD, BD$. Podziel jego obwód na dwie części: $(PQ+QR)$ oraz $(RS+SP)$. Długość każdej z tych części jest najkrótsza, gdy na odpowiedniej siatce jest odcinkiem.",
+    "Rozwiń ściany $ABC$ i $ACD$ wzdłuż krawędzi $AC$, tworząc romb. Długość łamanej $PQR$ to odległość $PR$ na tej siatce. Podobnie, rozwiń ściany $ABD$ i $BCD$ wzdłuż krawędzi $BD$ dla łamanej $PSR$.",
+    "Oznacz $s = AP+CR$. Wyraź kwadraty odległości $PR$ na obu siatkach w zależności od $s$. Zauważysz, że obie odległości są równe i zależą od $s$ w prosty sposób. Znajdź najmniejszą wartość sumy tych odległości."
   ],
   "prerequisites": [],
   "skills_required": [

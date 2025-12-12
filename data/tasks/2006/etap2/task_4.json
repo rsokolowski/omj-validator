@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zastanów się, co oznacza, że liczba kończy się cyframi \"10\". Przez jaką największą potęgę dwójki jest podzielna? Czy w takim razie jest ona podzielna przez 4?",
-    "Aby iloczyn był parzysty, przynajmniej jeden z jego czynników musi być parzysty. Zastanów się, ile spośród czynników $(a+b)$, $(b+c)$, $(c+d)$, $(d+a)$ może być parzystych.",
-    "Zbadaj sumę czterech czynników: $(a+b)+(b+c)+(c+d)+(d+a)$. Jaka jest jej parzystość i co z tego wynika dla liczby parzystych czynników w tej sumie?",
-    "Jeśli iloczyn ma być parzysty, to ile co najmniej czynników musi być parzystych? Co to oznacza dla podzielności całego iloczynu przez 4? Zestaw ten wniosek z obserwacją z pierwszej wskazówki."
+    "Zastanów się, co oznacza, że liczba kończy się cyframi \"10\". Jaką resztę z dzielenia przez 4 daje taka liczba?",
+    "Zastanów się nad parzystością czterech czynników iloczynu: $(a+b)$, $(b+c)$, $(c+d)$, $(d+a)$. Ile z nich może być liczbami parzystymi?",
+    "Aby odpowiedzieć na poprzednie pytanie, zbadaj sumę tych czterech czynników. Jaka jest jej parzystość i co z tego wynika dla liczby parzystych czynników?",
+    "Wiesz już, że liczba parzystych czynników to 0, 2 lub 4. Jak to pogodzić z warunkiem z pierwszej wskazówki, że iloczyn ma być podzielny przez 2, ale nie przez 4?"
   ],
   "skills_required": [
     "modular_arithmetic",

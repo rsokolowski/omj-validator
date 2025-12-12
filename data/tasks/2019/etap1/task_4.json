@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj figurę i oznacz kąty $\\angle BAE = \\alpha$ oraz $\\angle DAF = \\beta$. Korzystając z miar kątów w prostokącie, znajdź zależność między $\\alpha$ i $\\beta$.",
-    "Teza dotyczy sumy pól. Spróbuj przekształcić jeden z trójkątów, na przykład $\\triangle ADF$, przez obrót wokół punktu $A$, aby uzyskać figurę, której pole łatwiej porównać z polem $\\triangle AEF$.",
-    "Obróć trójkąt $ADF$ o $90^\\circ$ wokół punktu $A$ zgodnie z ruchem wskazówek zegara. Niech obrazem punktu $F$ będzie punkt $G$. Porównaj trójkąt $AEF$ z nowo powstałym trójkątem $AEG$.",
-    "Wykaż, że $\\triangle AEF \\cong \\triangle AEG$. Użyj własności obrotu do porównania boków oraz zależności między kątami $\\alpha$ i $\\beta$ do wykazania, że $\\angle EAG = 45^\\circ$."
+    "Narysuj figurę i oznacz $\\angle BAE = \\alpha$ oraz $\\angle DAF = \\beta$. Jaka jest suma kątów $\\alpha + \\beta$? Wykorzystaj fakt, że kąt wewnętrzny prostokąta ma miarę $90^\\circ$.",
+    "Teza zadania dotyczy równości pól. Spróbuj tak przekształcić figurę, aby suma pól trójkątów $\\triangle ABE$ i $\\triangle ADF$ stała się polem jednego trójkąta. Pomocny może być obrót.",
+    "Obróć trójkąt $\\triangle ADF$ o $90^\\circ$ wokół punktu $A$ zgodnie z ruchem wskazówek zegara. Niech obrazem punktu $F$ będzie $F'$. Co możesz powiedzieć o trójkątach $\\triangle AEF$ i $\\triangle AEF'$?",
+    "Wykaż, że $\\triangle AEF \\cong \\triangle AEF'$, korzystając z cechy bok-kąt-bok. Oznacz boki prostokąta przez $a, b$ i $BE=x$. Oblicz pole $\\triangle AEF'$ i porównaj je z sumą pól $\\triangle ABE$ i $\\triangle ADF$."
   ],
   "prerequisites": [],
   "skills_required": [

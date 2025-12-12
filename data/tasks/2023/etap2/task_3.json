@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj trapez i zaznacz wszystkie podane równości kątów. Co warunek $\\sphericalangle ABC = \\sphericalangle ACB$ mówi o bokach trójkąta $ABC$?",
-    "Wykorzystaj pozostałe równości kątów, aby znaleźć inne pary równych boków. Zwróć uwagę na własności trapezu $ABCD$ oraz trójkąta $BPC$.",
-    "Celem jest wykazanie $AP=CD$. Poszukaj trójkątów, w których boki te występują. Porównaj je, wykorzystując znalezione wcześniej równości boków.",
-    "Wykaż, że trójkąty $\\triangle APB$ i $\\triangle CDA$ są przystające. Znasz już dwie pary równych boków w tych trójkątach. Pozostaje porównać kąty zawarte między nimi."
+    "Narysuj trapez i zaznacz wszystkie podane równości kątów. Co warunek $\\sphericalangle ABC = \\sphericalangle ACB$ mówi o trójkącie $\\triangle ABC$?",
+    "Wykorzystaj pozostałe równości kątów, aby znaleźć inne pary równych boków. Zwróć uwagę na własności trapezu $ABCD$ oraz trójkąta $\\triangle BPC$.",
+    "Chcemy pokazać $AP=CD$. Zauważyłeś już, że $AB=AC$ oraz $BP=AD$. Przyjrzyj się figurom, których częścią są te cztery boki. Czy widzisz jakieś dwa trójkąty, które można by ze sobą porównać?",
+    "Aby pokazać, że wybrane trójkąty są przystające, spróbuj udowodnić równość kątów zawartych między parami równych boków. Oznacz miarę kątów z zadania jako $\\alpha$ i wykonaj obliczenia."
   ],
   "skills_required": [
     "angle_chasing",

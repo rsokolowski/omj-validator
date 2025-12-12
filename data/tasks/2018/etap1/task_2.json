@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zwróć uwagę na miary kątów $\\angle DAB$ i $\\angle ABC$. Ich suma wynosi $90^\\circ$. Co to mówi o wzajemnym położeniu prostych zawierających boki $AD$ i $BC$?",
-    "Skoro proste $AD$ i $BC$ są do siebie prostopadłe, przedłuż je do przecięcia w punkcie $P$. Zauważ, że powstały trójkąt $ABP$ jest prostokątny i równoramienny.",
-    "Wykorzystaj długość przeciwprostokątnej $AB = 7\\sqrt{2}$ oraz własności trójkąta o kątach $45^\\circ, 45^\\circ, 90^\\circ$, aby obliczyć długości przyprostokątnych $PA$ i $PB$.",
-    "Odejmij dane z treści zadania od długości $PA$ i $PB$, aby wyznaczyć przyprostokątne trójkąta $PDC$. Następnie oblicz długość boku $CD$ z twierdzenia Pitagorasa."
+    "Narysuj czworokąt i zaznacz w nim dane kąty. Co sugeruje suma miar kątów przy wierzchołkach $A$ i $B$? Rozważ przedłużenie boków $AD$ i $BC$ do przecięcia.",
+    "Niech proste zawierające boki $AD$ i $BC$ przecinają się w punkcie $P$. Oblicz miarę kąta $APB$ w trójkącie $ABP$. Co możesz powiedzieć o tym trójkącie?",
+    "Skoro znasz już rodzaj trójkąta $ABP$ i długość jego boku $AB$, oblicz długości boków $PA$ i $PB$.",
+    "Wykorzystaj znane długości odcinków $DA$ i $BC$, aby obliczyć długości przyprostokątnych trójkąta $PDC$. Następnie zastosuj twierdzenie Pitagorasa."
   ],
   "skills_required": [
     "coordinate_geometry",

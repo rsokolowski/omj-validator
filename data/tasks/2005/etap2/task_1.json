@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Przypomnij sobie, jak zbudowany jest graniastosłup i ostrosłup. Ile wierzchołków i ścian ma każdy z nich w zależności od kształtu podstawy?",
-    "Wprowadź zmienne na liczbę boków podstawy każdego z wielościanów. Zapisz wzory na liczbę wierzchołków i ścian dla obu brył.",
-    "Wykorzystaj warunek dotyczący wierzchołków, aby znaleźć związek między liczbą boków podstawy graniastosłupa i ostrosłupa.",
-    "Podstaw znalezioną zależność do wzorów na liczbę ścian obu wielościanów i oblicz różnicę."
+    "Przypomnij sobie wzory na liczbę wierzchołków i ścian graniastosłupa oraz ostrosłupa w zależności od liczby boków podstawy.",
+    "Zauważ pożyteczną własność każdego ostrosłupa: jaki jest związek między liczbą jego wierzchołków a liczbą ścian?",
+    "Oznacz liczbę boków podstawy graniastosłupa przez $n$. Wykorzystaj warunek z zadania, aby wyrazić liczbę wierzchołków (a zatem i ścian) ostrosłupa za pomocą $n$.",
+    "Zapisz liczbę ścian graniastosłupa w zależności od $n$ i oblicz, o ile różni się ona od wyznaczonej wcześniej liczby ścian ostrosłupa."
   ],
   "skills_required": [
     "polyhedra",

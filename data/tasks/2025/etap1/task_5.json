@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zauważ, że warunki $AB = BP$ i $DC = CP$ oznaczają, że trójkąty $ABP$ i $DCP$ są równoramienne. Narysuj dokładny rysunek i zaznacz na nim wszystkie dane z zadania.",
-    "Rozwiązanie opiera się na analizie kątów. Zastanów się nad dwiema kluczowymi sumami: sumą kątów wokół punktu $P$ oraz sumą kątów przy ramieniu $BC$ trapezu.",
-    "Suma miar kątów przy ramieniu trapezu wynosi $180^\\circ$. Zapisz tę zależność dla kątów $\\angle ABC$ i $\\angle BCD$, a następnie rozbij je na mniejsze kąty, wykorzystując trójkąt $BPC$.",
-    "Wyraź kąty $\\angle APB$ i $\\angle CPD$ przez kąty $\\angle ABP$ i $\\angle DCP$. Użyj wyniku z poprzedniego kroku oraz sumy kątów wokół punktu $P$, aby znaleźć szukany kąt $\\angle APD$."
+    "Z warunków $AB = BP$ i $DC = CP$ wynikają pewne własności trójkątów $ABP$ i $DCP$. Narysuj staranny rysunek i zaznacz na nim wszystkie równe boki oraz kąt prosty.",
+    "Spróbuj znaleźć szukany kąt, analizując zależności między innymi kątami na rysunku. Wykorzystaj sumę kątów wokół punktu $P$ oraz sumę kątów przy ramieniu trapezu.",
+    "Oznacz kąty przy podstawach trójkątów równoramiennych, np. $\\angle BPA = \\alpha$ i $\\angle CPD = \\beta$. Zauważ, że kąty $\\angle ABP$ i $\\angle DCP$ można wyrazić za pomocą $\\alpha$ i $\\beta$.",
+    "Zapisz sumę kątów przy ramieniu $BC$ trapezu, wykorzystując wprowadzone oznaczenia. Pozwoli Ci to obliczyć wartość $\\alpha + \\beta$. Stąd już tylko krok do znalezienia miary kąta $\\angle APD$."
   ],
   "skills_required": [
     "trapezoid_parallelogram",

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj trapez i zaznacz wszystkie dane. Pamiętaj, że jest to trapez równoramienny, więc $AD=BC$, a kąty przy podstawie $CD$ mają miarę $120^\\circ$.",
-    "Aby wykazać tezę, warto poszukać przystających trójkątów. Spróbuj dorysować na boku $AB$ taki punkt $F$, aby $AF=AD$. Jaki rodzaj trójkąta utworzą punkty $A, D, F$?",
-    "Zauważ, że $\\triangle ADF$ jest równoboczny. Korzystając z własności trapezu, uzasadnij, że pozostały fragment podstawy $FB$ ma długość równą $CD$. Co to oznacza dla trójkąta $FBE$?",
-    "Skoro $FB=EB$ i $\\angle B=60^\\circ$, to $\\triangle FBE$ jest równoboczny. Oblicz miarę kąta $AFE$ i wykaż przystawanie trójkątów $AFE$ oraz $BCD$."
+    "Narysuj duży, dokładny rysunek. Zaznacz równości wynikające z treści zadania: $AD=BC$ oraz $EB=CD$. Pamiętaj, że w trapezie równoramiennym kąty przy krótszej podstawie mają miarę $120^\bullet$.",
+    "Kąty $60^\bullet$ w trapezie sugerują ukryte trójkąty równoboczne. Spróbuj dorysować linię, która podzieli trapez na trójkąt równoboczny i równoległobok, co pozwoli powiązać długości podstaw z ramionami.",
+    "Zaznacz na boku $AB$ punkt $F$ taki, że $AF=AD$. Wykaż, że trójkąt $ADF$ jest równoboczny, a odcinek $FB$ ma długość równą $CD$. Jakie wnioski możesz wyciągnąć o trójkącie $FBE$?",
+    "Skoro $FB=EB$, to trójkąt $FBE$ również jest równoboczny. Aby zakończyć dowód, znajdź trójkąt przystający do $\\triangle BCD$, którego jednym z boków jest odcinek $AE$."
   ],
   "prerequisites": [],
   "skills_required": [

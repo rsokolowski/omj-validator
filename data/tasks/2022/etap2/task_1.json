@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj duży, czytelny rysunek i zaznacz w nim równe kąty. Zauważ, że kąt $\\angle ADC$ jest kątem zewnętrznym dla trójkąta $\\triangle BDC$. Jaką zależność między kątami możesz stąd odczytać?",
-    "Kluczem do zadania jest umiejętne wykorzystanie twierdzenia o kącie zewnętrznym w trójkącie. Zastosuj je dwukrotnie dla odpowiednio dobranych trójkątów i kątów.",
-    "Zastosuj twierdzenie o kącie zewnętrznym najpierw dla trójkąta $\\triangle BDC$ (wyrażając kąt $\\angle ADC$), a następnie dla trójkąta $\\triangle ADE$ (wyrażając kąt $\\angle BDE$).",
-    "Porównaj uzyskane zależności, korzystając z równości kątów podanych w treści zadania. Jaką własność trójkąta $\\triangle ABE$ możesz dzięki temu udowodnić?"
+    "Sporządź rysunek. Zauważ, że aby wykazać $AE=BE$, wystarczy udowodnić, że trójkąt $ABE$ jest równoramienny, czyli $\\angle BAE = \\angle ABE$.",
+    "Przyjrzyj się kątom przy wierzchołku $D$. Zauważ, że $\\angle ADC$ jest kątem zewnętrznym trójkąta $BDC$. Analogicznie, czym dla trójkąta $ADE$ jest kąt $\\angle BDE$?",
+    "Wykorzystaj własność kąta zewnętrznego: jego miara jest równa sumie miar dwóch kątów wewnętrznych nieprzyległych do niego. Zapisz tę zależność dla obu trójkątów: $\\triangle BDC$ i $\\triangle ADE$.",
+    "Podstaw otrzymane sumy do równości $\\angle ADC = \\angle BDE$ i zredukuj wyrazy, pamiętając że $\\angle BCD = \\angle AED$. Jaki wniosek o kątach trójkąta $ABE$ z tego płynie?"
   ],
   "prerequisites": [
     "2021_etap1_5"

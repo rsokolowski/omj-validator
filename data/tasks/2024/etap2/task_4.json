@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Liczba 2025 jest dość duża. Czy da się uprościć pierwiastek $\\sqrt[3]{2025}$? Spróbuj wyłączyć jak największą liczbę całkowitą przed znak pierwiastka, podobnie jak w $\\sqrt[3]{16} = 2\\sqrt[3]{2}$.",
-    "Równanie ma teraz postać $\\sqrt[3]{a} + \\sqrt[3]{b} = k\\sqrt[3]{m}$ dla pewnych liczb $k, m$. Naturalne wydaje się założenie, że $\\sqrt[3]{a}$ i $\\sqrt[3]{b}$ są także wielokrotnościami $\\sqrt[3]{m}$. Spróbuj zapisać $\\sqrt[3]{a} = x\\sqrt[3]{m}$ i $\\sqrt[3]{b} = y\\sqrt[3]{m}$.",
-    "Po podstawieniu otrzymujemy prostą zależność między $x$ i $y$. Zastanów się, jakiego rodzaju liczbami (np. wymiernymi, całkowitymi) muszą być $x$ i $y$, aby $a=x^3 m$ i $b=y^3 m$ były liczbami całkowitymi.",
-    "Zapisz $x=p/q$ i przeanalizuj warunek, aby $a=(p/q)^3 m$ było liczbą całkowitą. Rozkład $m$ na czynniki pierwsze narzuci bardzo silne ograniczenie na mianownik $q$. Znajdź wszystkie możliwe pary dodatnich liczb $(x,y)$."
+    "Zacznij od uproszczenia prawej strony: rozłóż $2025$ na czynniki pierwsze i wyłącz czynnik sześcienny przed znak pierwiastka, uzyskując postać $k\\sqrt[3]{m}$.",
+    "Poszukaj rozwiązania w najprostszej postaci, zakładając, że $\\sqrt[3]{a}$ i $\\sqrt[3]{b}$ są wyrazami podobnymi do prawej strony, czyli mają postać $x\\sqrt[3]{m}$.",
+    "Zauważ, że aby $a = (x\\sqrt[3]{m})^3 = x^3 m$ było liczbą całkowitą (gdy $m$ nie zawiera sześcianów), współczynnik $x$ musi być liczbą całkowitą.",
+    "Znajdź dwie dodatnie liczby całkowite $x, y$, których suma daje współczynnik $k$ z pierwszego kroku, i oblicz dla nich wartości $a$ oraz $b$."
   ],
   "prerequisites": [],
   "skills_required": [

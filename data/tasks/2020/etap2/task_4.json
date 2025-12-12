@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Warunek w zadaniu dotyczy długości boków równoległoboku. Spróbuj wyrazić boki $AB$ i $AD$ za pomocą odcinków związanych z wierzchołkiem $C$ i uprość podaną równość.",
-    "Co uproszczony warunek mówi o trójkącie $\\triangle CKL$? Zastanów się nad własnościami dwusiecznej kąta $\\angle BCD$ w tym trójkącie.",
-    "Jaki jest związek między dwusieczną kąta $\\angle BAD$ a dwusieczną kąta $\\angle BCD$ w równoległoboku? Pomyśl o symetrii tej figury.",
-    "Wiesz już, że dwusieczna kąta $\\angle BCD$ jest prostopadła do prostej $KL$. Wykorzystaj związek między dwusiecznymi, aby dokończyć dowód."
+    "Wykorzystaj fakt, że w równoległoboku przeciwległe boki są równe. Przekształć daną w zadaniu równość tak, aby opisywała związek między długościami odcinków $CK$ i $CL$.",
+    "Jaki wniosek dotyczący trójkąta $\\triangle CKL$ płynie z otrzymanej równości? Zastanów się, jaką szczególną własność ma w tym trójkącie dwusieczna kąta $\\angle KCL$.",
+    "Jaka jest relacja między dwusieczną kąta $\\angle BAD$ (o której mowa w tezie) a dwusieczną kąta $\\angle BCD$ (którą analizowałeś w poprzednim kroku)? Pomyśl o symetrii równoległoboku.",
+    "Połącz teraz dwa fakty: własność dwusiecznej kąta $\\angle BCD$ względem prostej $KL$ oraz relację geometryczną między dwusiecznymi kątów $\\angle BAD$ i $\\angle BCD$."
   ],
   "skills_required": [
     "trapezoid_parallelogram",

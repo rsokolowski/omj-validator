@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj figurę. Z definicji symetrii wynika, że $A$ jest środkiem odcinka $KB$, $B$ jest środkiem $LC$ itd. Co to oznacza dla długości odpowiednich odcinków?",
-    "Pole czworokąta $KLMN$ jest sumą pola $ABCD$ i pól czterech trójkątów \"doczepionych\" do jego boków. Spróbuj obliczyć pola tych zewnętrznych trójkątów, odnosząc je do pola czworokąta $ABCD$.",
-    "Rozważmy jeden z zewnętrznych trójkątów, np. $\\triangle BLK$. Chcemy powiązać jego pole z polem $\\triangle ABC$. Zauważ, że punkty $A$ i $B$ są środkami boków w pewnych większych trójkątach. Jaka jest kluczowa własność mediany (środkowej) związana z polem trójkąta?",
-    "Zastosuj własność mediany w trójkącie $\\triangle KLC$, aby porównać pola $\\triangle KBL$ i $\\triangle KBC$. Następnie zrób to samo w trójkącie $\\triangle KBC$, aby znaleźć związek między polem $\\triangle KBC$ a polem $\\triangle ABC$."
+    "Narysuj starannie figurę. Zauważ, że z definicji symetrii punkt $A$ jest środkiem odcinka $KB$, punkt $B$ jest środkiem $LC$ itd. Jakie równości odcinków z tego wynikają?",
+    "Pole czworokąta $KLMN$ to suma pola $ABCD$ i pól czterech trójkątów na zewnątrz. Spróbuj wyrazić pole każdego z tych zewnętrznych trójkątów za pomocą pól trójkątów, na które przekątne dzielą czworokąt $ABCD$.",
+    "Skup się na jednym z zewnętrznych trójkątów, np. $\\triangle KBL$. Porównaj jego pole z polem $\\triangle ABC$. Jaką własność mają trójkąty o tej samej wysokości i podstawach leżących na jednej prostej?",
+    "Pokaż, że pole $\\triangle ABC$ jest równe polu $\\triangle ABL$. Następnie, korzystając z tego, że $KB = 2 \\cdot AB$, porównaj pole $\\triangle KBL$ z polem $\\triangle ABL$. Zastosuj podobne rozumowanie dla pozostałych trzech zewnętrznych trójkątów."
   ],
   "skills_required": [
     "transformations",

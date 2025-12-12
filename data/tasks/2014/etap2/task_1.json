@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Z pierwszego równania, $a+b=c+d$, wyznacz jedną ze zmiennych w zależności od pozostałych, na przykład $d$.",
-    "Podstaw uzyskane wyrażenie do drugiego równania, $ac=bd$. Uporządkuj wynik, przenosząc wszystkie wyrazy na jedną stronę, aby otrzymać równanie postaci ... = 0.",
-    "Otrzymane równanie można zapisać jako iloczyn dwóch czynników równy zero. Zastanów się, co wiesz o znaku jednego z tych czynników, pamiętając, że $a,b,c,d$ są dodatnie.",
-    "Aby przedstawić wyrażenie w postaci iloczynu, spróbuj pogrupować jego składniki w pary. Z każdej pary wyłącz wspólny czynnik, a następnie wyłącz wspólny czynnik z całego wyrażenia."
+    "Zauważ, że równanie $a+b=c+d$ można przekształcić do postaci różnicowej $a-d = c-b$.",
+    "Oznacz tę wspólną różnicę literą $x$, a następnie wyznacz $c$ oraz $d$ w zależności od $a, b$ i $x$.",
+    "Podstaw uzyskane wyrażenia do równania $ac=bd$. Po wymnożeniu nawiasów wyrazy $ab$ po obu stronach się zredukują.",
+    "Otrzymasz równanie $x(a+b)=0$. Ponieważ $a,b$ są dodatnie, suma $a+b$ jest niezerowa. Co to oznacza dla $x$?"
   ],
   "skills_required": [
     "symmetric_systems",

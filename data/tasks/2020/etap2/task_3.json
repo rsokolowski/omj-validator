@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Zapisz warunek z zadania w języku matematyki: $(a+b) | (5a+3b)$. Przypomnij sobie kluczową własność podzielności: jeśli liczba $d$ dzieli $X$ i $Y$, to dzieli też ich różnicę $X-Y$.",
-    "Spróbuj tak przekształcić wyrażenie $5a+3b$, aby uprościć warunek podzielności. Skoro wiesz, że $(a+b)|(a+b)$, to wiesz też, że $a+b$ dzieli każdą wielokrotność siebie, np. $k(a+b)$.",
-    "Dobierz taką wielokrotność $k(a+b)$, aby po odjęciu jej od $5a+3b$ wynik był jak najprostszy. Spróbuj odjąć na przykład $3(a+b)$ lub $5(a+b)$. Co wtedy otrzymasz?",
-    "Otrzymane w poprzednim kroku podzielności (np. że $a+b$ dzieli pewną wielokrotność $a$) można zamienić na nierówności. Pamiętaj, że $a$ i $b$ są dodatnie. Połącz wnioski płynące z obu możliwych uproszczeń."
+    "Zapisz warunek z zadania: $a+b \\mid 5a+3b$. Pamiętaj, że jeśli liczba dzieli $X$ i $Y$, to dzieli też ich różnicę $X-Y$.",
+    "Zauważ, że $a+b$ dzieli każdą swoją wielokrotność, np. $3(a+b)$. Odejmij tę liczbę od $5a+3b$, aby uprościć warunek podzielności.",
+    "Po uproszczeniu otrzymasz, że $a+b$ dzieli $2a$. Teraz porównaj wielkość dzielnej ($2a$) i dzielnika ($a+b$), pamiętając, że $a,b$ są dodatnie.",
+    "Skoro $b>0$, to $a < a+b$, więc $2a < 2(a+b)$. Jaka jest jedyna liczba całkowita, która może być wynikiem dzielenia $2a$ przez $a+b$?"
   ],
   "skills_required": [
     "divisibility_arguments"

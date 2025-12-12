@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Liczby $p, q, r, s$ tworzą ciąg arytmetyczny. Oznacz jego różnicę ($r-s$) przez $d$. Wyraź $p-s$ za pomocą $d$. Co musisz udowodnić o podzielności $d$, aby teza zadania była prawdziwa?",
-    "Aby pokazać, że $d$ jest podzielne przez 6, należy udowodnić, że dzieli się przez 2 i przez 3. W obu przypadkach kluczowe jest zbadanie reszt z dzielenia, jakie mogą dawać liczby pierwsze.",
-    "Zacznij od najmniejszych liczb pierwszych. Czy najmniejsza z liczb, $s$, może być równa 2? A czy któraś z czterech liczb może być równa 3? Wykluczenie tych możliwości to ważny krok.",
-    "Wiesz już, że wszystkie cztery liczby są nieparzyste. Co to oznacza dla parzystości $d$? Wiesz też, że żadna nie jest podzielna przez 3. Załóż, że $d$ nie dzieli się przez 3 i zobacz, do jakiej sprzeczności to prowadzi."
+    "Liczby $s, r, q, p$ tworzą ciąg arytmetyczny. Oznacz jego różnicę przez $d$ i zapisz $p-s$ za pomocą $d$. Przez jaką liczbę musi dzielić się $d$, aby różnica $p-s$ była podzielna przez 18?",
+    "Aby udowodnić podzielność $d$ przez 6, wykaż oddzielnie podzielność przez 2 i przez 3. Wykorzystaj własności liczb pierwszych oraz analizę reszt z dzielenia.",
+    "Zacznij od parzystości. Gdyby $d$ było nieparzyste, to jakiej parzystości byłyby liczby $s$ i $s+d$? Czy obie mogą być liczbami pierwszymi? Następnie rozważ reszty z dzielenia przez 3 dla liczb $s, s+d, s+2d$.",
+    "Jeśli $d$ nie dzieli się przez 3, to liczby $s, s+d, s+2d$ dają trzy różne reszty z dzielenia przez 3. Wnioskuj, że jedna z nich musi być równa 3. Sprawdź, czy jest to możliwe, biorąc pod uwagę istnienie czwartej liczby pierwszej $p$."
   ],
   "skills_required": [
     "modular_arithmetic",

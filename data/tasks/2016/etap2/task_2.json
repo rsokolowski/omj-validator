@@ -14,8 +14,8 @@
   "hints": [
     "Narysuj trapez $ABCD$ z podstawami $AB$ i $CD$. Zaznacz, że jego przekątne $AC$ i $BD$ są prostopadłe. Celem jest wykazanie nierówności $AB+CD \\le AD+BC$.",
     "Sumę podstaw $AB+CD$ trudno jest analizować bezpośrednio. Spróbuj tak przekształcić figurę, aby otrzymać jeden odcinek o długości $AB+CD$, najlepiej jako bok w nowym, pomocniczym trójkącie.",
-    "Przesuń równolegle przekątną $BD$ tak, aby punkt $D$ znalazł się w punkcie $C$. Niech punkt $B$ przejdzie na punkt $E$. Jaki jest trójkąt $ACE$? Wykorzystaj prostopadłość przekątnych i znajdź długości jego boków.",
-    "Porównaj kwadraty obu stron nierówności. Wykorzystaj zależność wynikającą z konstrukcji z poprzedniej wskazówki. Wyraź długości boków za pomocą odcinków, na które dzieli przekątne ich punkt przecięcia, i poszukaj podobnych trójkątów."
+    "Przesuń równolegle przekątną $BD$ o wektor $\\vec{DC}$. Niech obrazem punktu $B$ będzie punkt $E$. Wykaż, że trójkąt $ACE$ jest prostokątny i znajdź związek między kwadratem sumy podstaw a kwadratami długości przekątnych.",
+    "Porównaj kwadraty obu stron tezy. Wykorzystaj zależność z poprzedniej wskazówki. Wyraź kwadraty długości ramion za pomocą odcinków, na które dzieli przekątne ich punkt przecięcia, i dokończ dowód."
   ],
   "skills_required": [
     "trapezoid_parallelogram",

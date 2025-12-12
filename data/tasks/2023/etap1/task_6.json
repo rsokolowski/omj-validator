@@ -13,9 +13,9 @@
   ],
   "hints": [
     "Spróbuj przekształcić równanie $ab+b+1=0$, dodając do obu stron $a$. Zauważ, że lewą stronę da się teraz zapisać w postaci iloczynu.",
-    "Zapisz wszystkie trzy warunki w tej nowej, iloczynowej postaci. Przyjmij, że dwa pierwsze warunki są spełnione i spróbuj z nich wywnioskować trzeci, eliminując zmienną $b$.",
-    "Z pierwszego przekształconego równania, $(a+1)(b+1)=a$, wyznacz wyrażenia na $b+1$ oraz na $b$ w zależności od $a$.",
-    "Podstaw wyznaczone wyrażenia do drugiego przekształconego równania, $(b+1)(c+1)=b$. Uprość otrzymaną równość, aby dojść do trzeciego warunku."
+    "Zapisz dwa przyjęte założenia w tej nowej, iloczynowej postaci. Celem jest wykazanie trzeciej równości poprzez wyeliminowanie z układu zmiennej $b$.",
+    "Z pierwszego równania można wyznaczyć $b$ w zależności od $a$. Jak można wykorzystać tę zależność w drugim równaniu?",
+    "Podstaw wyznaczone wyrażenie na $b$ do drugiego równania. Po uproszczeniu otrzymasz związek między $a$ i $c$, który jest równoważny trzeciej tezie."
   ],
   "skills_required": [
     "algebraic_identities",

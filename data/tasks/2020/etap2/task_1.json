@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Przenieś wszystkie wyrazy na jedną stronę równania. Co otrzymasz? Spróbuj rozłożyć powstałe wyrażenie na czynniki.",
-    "Po faktoryzacji powinieneś otrzymać iloczyn dwóch czynników równy zero. Rozważ, jakie warunki muszą spełniać $a$ i $b$, aby ten iloczyn był zerem.",
-    "Zauważ, że jeśli $a \\neq b$, to z równości iloczynu wynika konkretna zależność między $a$ i $b$. Jak można wyrazić $b$ przez $a$?",
-    "Jeśli $a + b + 2 = 0$, to $b = -a - 2$. Sprawdź, czy dla całkowitego $a$ wyrażenie to daje liczbę całkowitą."
+    "Przyjrzyj się wyrażeniom $a^2 + 2a$ oraz $b^2 + 2b$. Jaką liczbę należy dodać do obu stron równania, aby każda z nich stała się pełnym kwadratem sumy?",
+    "Skorzystaj ze wzorów skróconego mnożenia, aby zapisać zmodyfikowane równanie w postaci równości dwóch kwadratów.",
+    "Pamiętaj, że równość $x^2 = y^2$ zachodzi w dwóch przypadkach: gdy liczby podnoszone do kwadratu są równe lub gdy są liczbami przeciwnymi.",
+    "Rozpisz oba możliwe przypadki zależności między $a$ i $b$. Sprawdź, czy w każdym z nich całkowitość $a$ gwarantuje całkowitość $b$."
   ],
   "skills_required": [
     "algebraic_identities"

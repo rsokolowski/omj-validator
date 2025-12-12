@@ -16,7 +16,7 @@
     "Masz do rozwiązania układ dwóch równań z trzema niewiadomymi całkowitymi. Zwróć uwagę na strukturę tych równań i poszukaj sposobu na wyeliminowanie jednej ze zmiennych.",
     "Spróbuj pomnożyć każde z równań przez odpowiednią zmienną tak, aby po dodaniu lub odjęciu równań stronami uprościł się pewien skomplikowany człon, na przykład zawierający iloczyn trzech zmiennych.",
     "Prawidłowe przekształcenie doprowadzi cię do równania zawierającego tylko zmienne $x$ i $y$. Spróbuj doprowadzić je do postaci, w której suma kwadratów wyrażeń z $x$ i $y$ jest równa pewnej liczbie.",
-    "Równanie można zapisać w postaci $(2x-1)^2 + (2y-2)^2 = 5$. Znajdź wszystkie pary kwadratów liczb całkowitych, które sumują się do 5, a następnie wyznacz z nich wartości $x$ i $y$."
+    "Pomnóż otrzymane równanie z niewiadomymi $x$ i $y$ przez 4. Ułatwi to zwinięcie wyrażeń do postaci sumy kwadratów liczb całkowitych."
   ],
   "skills_required": [
     "diophantine_equations",

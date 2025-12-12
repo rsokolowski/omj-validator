@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zadanie sprowadza się do znalezienia takiego niepustego i niewszystkiego podzbioru liczb z tablicy, w którym suma liczb niebieskich jest równa sumie liczb żółtych.",
-    "Zamiast rozważać wszystkie $2^{800}$ możliwe podzbiory, spróbuj znaleźć mniejszą, ale dobrze zdefiniowaną kolekcję podzbiorów, do której można zastosować Zasadę Szufladkową Dirichleta.",
-    "Uporządkuj liczby niebieskie w ciąg $(b_1, \\dots, b_{400})$ i żółte w ciąg $(y_1, \\dots, y_{400})$. Rozważ sumy $B_i = \\sum_{k=1}^i b_k$ oraz $Y_j = \\sum_{k=1}^j y_k$ (dla $i,j$ od 0 do 400). Ile różnych różnic postaci $B_i - Y_j$ można utworzyć?",
-    "Możesz utworzyć $401 \\times 401$ różnic $B_i - Y_j$. Jaki jest zakres wartości, które mogą one przyjąć? Zastosuj Zasadę Szufladkową, aby pokazać, że dwie takie różnice muszą być równe, a następnie wykorzystaj tę równość do zbudowania szukanego zbioru liczb."
+    "Zadanie polega na znalezieniu podzbioru liczb niebieskich i podzbioru liczb żółtych o równych sumach. Pamiętaj, że musisz zmazać co najmniej jedną liczbę, ale nie wszystkie (czyli pozostałe na tablicy liczby muszą tworzyć zbiór niepusty i różny od całego zbioru).",
+    "Liczba wszystkich możliwych podzbiorów jest ogromna, ale zakres możliwych sum jest stosunkowo mały. Zamiast rozważać losowe podzbiory, skup się na sumach kolejnych liczb ustawionych w ciągi.",
+    "Ustaw liczby niebieskie w ciąg $b_1, \\dots, b_{400}$, a żółte w ciąg $y_1, \\dots, y_{400}$. Zdefiniuj sumy początkowe $B_i = b_1 + \\dots + b_i$ oraz $Y_j = y_1 + \\dots + y_j$ dla $i, j \\in \\{0, \\dots, 400\\}$. Zastanów się nad różnicami $B_i - Y_j$.",
+    "Porównaj liczbę wszystkich par $(i, j)$ z liczbą możliwych wartości różnicy $B_i - Y_j$. Z Zasady Szufladkowej Dirichleta wynika, że pewne dwie pary dają ten sam wynik. Pokaż, jak z tej równości otrzymać szukane podzbiory."
   ],
   "skills_required": [
     "pigeonhole",

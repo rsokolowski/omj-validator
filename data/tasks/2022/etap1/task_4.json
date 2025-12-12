@@ -24,8 +24,8 @@
   ],
   "hints": [
     "Zastanów się, jaki kolor musi mieć liczba 1. Czy może być sumą dwóch różnych dodatnich liczb całkowitych?",
-    "Rozważ największe liczby w obu kolorach. Która z nich musi być równa $n$? Jaka nierówność łączy największą liczbę niebieską z najmniejszą i największą czerwoną?",
-    "Jaki kolor musi mieć liczba 2? Wykorzystaj tę obserwację, aby znaleźć możliwie najlepsze dolne ograniczenie na najmniejszą liczbę czerwoną.",
-    "Połącz nierówność z drugiej wskazówki z oszacowaniem na najmniejszą liczbę czerwoną. Co możesz wywnioskować o kolorach liczb $n, n-1$ oraz $n-2$?"
+    "Ustal kolor największej liczby $n$. Następnie zapisz dwie kluczowe nierówności dla $b_{max}$: jedną wynikającą z tego, że $b_{max}$ jest różnicą liczb czerwonych, a drugą z tego, że $n$ jest sumą liczb niebieskich.",
+    "Połącz obie nierówności z poprzedniej wskazówki. Jaką zaskakującą relację otrzymasz pomiędzy najmniejszą liczbą czerwoną ($r_{min}$) a drugą co do wielkości liczbą niebieską ($b_{max-1}$)?",
+    "Jaki kolor musi mieć liczba 2 i co z tego wynika dla $r_{min}$? Użyj tej informacji wraz z relacją z poprzedniej wskazówki, by sprawdzić najmniejsze wartości $n$, dla których kolorowanie może istnieć."
   ]
 }

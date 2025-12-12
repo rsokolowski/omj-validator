@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Narysuj romb w podstawie i oblicz długości jego przekątnych. Pamiętaj, że ten romb jest rzutem kwadratowego przekroju na płaszczyznę podstawy.",
-    "Wyraź długości boków i przekątnych kwadratu w zależności od długości ich rzutów (czyli boków i przekątnych rombu) oraz różnic wysokości między wierzchołkami. Użyj twierdzenia Pitagorasa.",
-    "Kluczową własnością kwadratu jest prostopadłość jego przekątnych. Ich rzuty (przekątne rombu) też są prostopadłe. Co z tego wynika dla wysokości przeciwległych wierzchołków kwadratu?",
-    "Okazuje się, że jedna z przekątnych kwadratu musi być pozioma. Rozważ dwa przypadki, w zależności od tego, która przekątna rombu jest jej rzutem, i sprawdź, czy oba są geometrycznie możliwe."
+    "Narysuj podstawę graniastosłupa – romb o boku $a$ i kącie $60^\\circ$. Jakie są długości jego przekątnych? Pomyśl, jak płaszczyzna może przeciąć graniastosłup, aby powstał kwadratowy przekrój.",
+    "Rozważ dwa główne rodzaje położenia płaszczyzny tnącej. Może być ona prostopadła do podstawy (pionowa) lub nachylona względem niej. Zbadaj oba przypadki.",
+    "Jeśli płaszczyzna jest pionowa, przekrój jest prostokątem. Aby był to kwadrat, jego wysokość musi być równa długości boku leżącego w podstawie. Jakie szczególne odcinki w rombie mogą być takimi bokami?",
+    "Jeśli płaszczyzna jest nachylona, wierzchołki kwadratu leżą na czterech krawędziach. Aby jego przekątne były prostopadłe, jedna para przeciwległych wierzchołków musi leżeć na tej samej wysokości. Wykorzystaj tę własność i twierdzenie Pitagorasa."
   ],
   "prerequisites": [
     "2017_etap1_7"

@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, co oznacza, że ułamek jest skracalny. Jaki warunek musi spełniać największy wspólny dzielnik licznika i mianownika?",
-    "Spróbuj zbadać, jak zmienia się NWD$(a+n, b+n)$ w zależności od $n$. Czy istnieje związek między NWD$(a+n, b+n)$ a różnicą $a-b$?",
-    "Zauważ, że jeśli liczba $d$ dzieli zarówno $a+n$ jak i $b+n$, to dzieli również ich różnicę. Co to mówi o możliwych dzielnikach wspólnych?",
-    "Załóż, że $a \\neq b$ i niech $d = |a-b|$. Spróbuj dobrać $n$ tak, aby liczba $a+n$ dawała resztę 1 z dzielenia przez $d$. Czy to możliwe dla odpowiednio dużego $n$?"
+    "Przypomnij sobie definicję ułamka skracalnego. Jaki warunek musi spełniać największy wspólny dzielnik (NWD) licznika i mianownika?",
+    "Skorzystaj z własności NWD: każdy wspólny dzielnik dwóch liczb dzieli także ich różnicę. Oblicz różnicę licznika i mianownika badanego ułamka.",
+    "Zauważ, że NWD$(a+n, b+n)$ musi być dzielnikiem liczby $k = |a-b|$. Jeśli $a \\neq b$, to $k$ jest stałą liczbą dodatnią niezależną od $n$.",
+    "Zastosuj dowód nie wprost. Załóż, że $a \\neq b$ i dobierz $n$ tak, aby liczba $a+n$ dawała resztę 1 z dzielenia przez $k$. Czy wtedy ułamek może być skracalny?"
   ],
   "prerequisites": [
     "2016_etap2_3"

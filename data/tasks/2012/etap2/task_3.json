@@ -13,9 +13,9 @@
   ],
   "hints": [
     "Kluczowe w zadaniu jest założenie, że $a$ i $b$ są liczbami z przedziału $(0, 1)$. Jaka jest relacja między liczbą $x$ a jej pierwiastkiem kwadratowym $\\sqrt{x}$, gdy $0 < x < 1$?",
-    "Spróbuj wykorzystać nierówności wynikające z założenia $a, b \\in (0, 1)$, aby oszacować od dołu dwa pierwsze składniki po lewej stronie nierówności, czyli $a\\sqrt{b}$ oraz $b\\sqrt{a}$.",
-    "Pokaż, że suma $a\\sqrt{b} + b\\sqrt{a}$ jest większa od $2ab$. Co otrzymasz po dodaniu $1$ do obu stron tej nowej nierówności?",
-    "Pozostaje Ci wykazać, że $2ab + 1 > 3ab$. Przekształć tę nierówność i skorzystaj z założeń o liczbach $a$ i $b$, aby uzasadnić jej prawdziwość."
+    "Spróbuj wykorzystać nierówność wynikającą z założenia, aby oszacować od dołu dwa pierwsze składniki po lewej stronie nierówności, czyli $a\\sqrt{b}$ oraz $b\\sqrt{a}$.",
+    "Zsumuj nierówności uzyskane dla $a\\sqrt{b}$ oraz $b\\sqrt{a}$. Co możesz teraz powiedzieć o lewej stronie wyjściowej nierówności, czyli o sumie $a\\sqrt{b} + b\\sqrt{a} + 1$?",
+    "Pozostaje wykazać, że uzyskane przez Ciebie oszacowanie jest większe niż $3ab$. Sprowadza się to do prostszej nierówności. Wykorzystaj założenia o $a$ i $b$, by ją udowodnić."
   ],
   "skills_required": [
     "inequality_manipulation",

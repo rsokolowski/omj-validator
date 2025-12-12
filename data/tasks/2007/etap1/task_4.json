@@ -16,7 +16,7 @@
     "Zapisz liczbę $a$ w postaci $a = 10k + c$, gdzie $c$ jest jej cyfrą jedności, a $k$ to liczba utworzona z pozostałych siedmiu cyfr. Jak, używając $k$ i $c$, zapisać liczbę $b$?",
     "Otrzymałeś dwa wyrażenia, na $a$ i na $b$, które zależą od $k$. Spróbuj znaleźć między nimi związek (nowe równanie), w którym $k$ nie występuje.",
     "Zauważ, że w jednym wyrażeniu występuje $10k$, a w drugim $k$. Pomnóż jedno z wyrażeń przez odpowiednią liczbę, aby móc usunąć $k$ przez odjęcie stronami.",
-    "Zbadaj wyrażenie $10b - a$. Uprość je, a następnie wykaż, że jest ono podzielne przez 101. Pomocna będzie obserwacja, że $10^2 = 100$, co daje resztę $-1$ przy dzieleniu przez 101."
+    "Otrzymane równanie wiąże $a$ i $b$ poprzez wyrażenie z dużą potęgą dziesiątki. Wykaż, że to wyrażenie jest podzielne przez 101. Pomocna będzie obserwacja, że $100$ daje resztę $-1$ przy dzieleniu przez 101."
   ],
   "skills_required": [
     "modular_arithmetic",

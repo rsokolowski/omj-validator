@@ -1,7 +1,7 @@
 {
   "number": 1,
   "title": "Liczby dodatnie $a$, $b$ i niewymierność",
-  "content": "Liczby dodatnie $a$, $b$ spełniają warunek\n$$\\frac{a+b}{2} = \\sqrt{ab} + 3.$$\nWykaż, że co najmniej jedna z liczb $a$, $b$ jest niewymierna.",
+  "content": "Liczby dodatnie $a$, $b$ spełniają warunek\n$$\\frac{a+b}{2} = \\sqrt{ab + 3}.$$\nWykaż, że co najmniej jedna z liczb $a$, $b$ jest niewymierna.",
   "pdf": {
     "tasks": "tasks/2007/etap2/omg03_2.pdf",
     "solutions": "tasks/2007/etap2/omg03_2r.pdf",
@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Równanie zawiera pierwiastek z iloczynu $\\sqrt{ab}$. Aby uprościć analizę, podstaw $a=x^2$ oraz $b=y^2$ (gdzie $x,y>0$). Jak wtedy wygląda to równanie?",
-    "Przekształć otrzymane równanie, przenosząc wszystkie wyrazy na jedną stronę. Czy potrafisz zwinąć je do postaci kwadratu różnicy $(x-y)^2$?",
-    "Powinieneś otrzymać równość $(\\sqrt{a}-\\sqrt{b})^2 = 6$. Spierwiastkuj ją stronami. Co to mówi o różnicy liczb $\\sqrt{a}$ i $\\sqrt{b}$?",
-    "Wiadomo, że $\\sqrt{6}$ jest liczbą niewymierną. Wykorzystaj ten fakt, aby wywnioskować, że liczby $\\sqrt{a}$ i $\\sqrt{b}$ nie mogą być jednocześnie wymierne."
+    "Przekształć równanie mnożąc je stronami przez 2 i przenosząc wszystkie wyrazy na jedną stronę. Zwiń otrzymane wyrażenie do pełnego kwadratu różnicy.",
+    "Powinieneś otrzymać zależność $|\\sqrt{a} - \\sqrt{b}| = \\sqrt{6}$. Aby sprawdzić prawdziwość tezy, spróbuj znaleźć parę liczb wymiernych $a, b$ spełniającą to równanie.",
+    "Zauważ, że jeśli $\\sqrt{b} = \\sqrt{6}$, to $b=6$ jest liczbą wymierną. Podstaw tę wartość do zależności z poprzedniej wskazówki i oblicz $a$.",
+    "Dla $b=6$ otrzymujemy $\\sqrt{a} = 2\\sqrt{6}$, czyli $a=24$. Sprawdź, czy para liczb wymiernych $(24, 6)$ spełnia wyjściowe równanie i jaki wniosek płynie stąd dla tezy zadania."
   ],
   "skills_required": [
     "inequality_manipulation",

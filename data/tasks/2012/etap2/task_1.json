@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Suma liczb $a$ i $b$ jest stała i wynosi 4020. Jaka jest ich średnia arytmetyczna i co ona mówi o położeniu tych liczb względem siebie?",
-    "Zauważ, że $a$ i $b$ są symetrycznie rozmieszczone wokół swojej średniej. Spróbuj wyrazić je za pomocą tej średniej i pewnej dodatniej liczby $k$, która opisuje ich oddalenie od niej.",
-    "Wykorzystaj teraz drugi warunek, $b < 2013$. Jakie ograniczenie dla liczby $k$ wynika z tej nierówności?",
-    "Pamiętaj, że $a$ i $b$ są liczbami całkowitymi. Jakie wartości może przyjmować $k$? Znajdź wszystkie możliwości i wyznacz odpowiadające im pary $(a, b)$."
+    "Oblicz średnią arytmetyczną liczb $a$ i $b$. Skoro ich suma jest stała, a $a < b$, to jak liczba $b$ ma się do tej średniej?",
+    "Zauważ, że wniosek z poprzedniego kroku daje dolne ograniczenie na $b$. Zestaw je z podanym w treści warunkiem $b < 2013$.",
+    "Pamiętając, że $b$ jest liczbą całkowitą, wypisz wszystkie możliwe wartości $b$, które mieszczą się w wyznaczonym przedziale.",
+    "Dla każdej znalezionej wartości $b$ wyznacz odpowiadające jej $a$ i zapisz szukane pary."
   ],
   "skills_required": [
     "inequality_manipulation",

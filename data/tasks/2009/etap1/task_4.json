@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj wierzchołki 18-kąta na okręgu. Aby udowodnić, że czworokąt jest prostokątem, musisz wykazać, że jego przeciwległe boki są równoległe, a sąsiednie boki są prostopadłe.",
-    "Skorzystaj z własności cięciw i łuków w okręgu. Kiedy dwie cięciwy są równoległe? Jak można obliczyć kąt między dwiema przecinającymi się cięciwami, znając miary łuków, które one wycinają?",
-    "Dwie cięciwy są równoległe, jeśli wycinają między sobą łuki o równej długości. Kąt między cięciwami to połowa sumy miar łuków leżących między ich ramionami.",
-    "Aby sprawdzić, czy prostokąt jest kwadratem, poszukaj osi symetrii dla całej konfiguracji czterech prostych. Zastanów się, co dla prostokąta oznacza posiadanie osi symetrii, która nie jest równoległa do jego boków."
+    "Narysuj wierzchołki 18-kąta foremnego na okręgu. Zastanów się, jakie osie symetrii ma ta figura. Czy cała konfiguracja czterech prostych również może być symetryczna?",
+    "Poszukaj osi symetrii dla całej konfiguracji czterech prostych. Sprawdź, jak odbicie względem jednej ze średnic wielokąta (np. tej przechodzącej między wierzchołkami $A_4$ i $A_5$) przekształca te proste.",
+    "Zauważ, że odbicie względem średnicy łączącej środki łuków $A_4A_5$ i $A_{13}A_{14}$ zamienia prostą $A_3A_{15}$ z prostą $A_6A_{12}$, a pozostałe dwie proste pozostawia na miejscu. Co to mówi o czworokącie?",
+    "Skoro czworokąt ma oś symetrii, to jest prostokątem. Aby był kwadratem, musiałby mieć też drugą oś symetrii, prostopadłą do pierwszej. Sprawdź, czy tak jest, badając symetrię względem średnicy $A_9A_{18}$."
   ],
   "prerequisites": [],
   "skills_required": [

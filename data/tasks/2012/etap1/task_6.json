@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Zauważ, że sfera wpisana styka się z każdą ścianą boczną w jednym punkcie. Co wiesz o długościach odcinków łączących wierzchołek $S$ z tymi punktami styczności?",
-    "Przypomnij sobie twierdzenie o odcinkach stycznych do sfery wychodzących z jednego punktu. Zastosuj je do wierzchołka $A$ i punktów styczności na przyległych do niego ścianach $SAB$ i $SDA$.",
-    "Spójrz na trójkąty na ścianach bocznych utworzone przez wierzchołki $S, A$ oraz punkty styczności. Czy trójkąty przylegające do krawędzi $SA$ są przystające?",
-    "Przystawanie trójkątów oznacza równość odpowiednich kątów przy wierzchołku $S$. Podziel kąty ścian (np. $\\angle ASB$) na mniejsze części i sprawdź sumy przeciwległych kątów."
+    "Niech punkty $T_{AB}, T_{BC}, \\dots$ będą punktami styczności sfery ze ścianami bocznymi. Co istnienie sfery wpisanej mówi o położeniu jej środka względem sąsiednich ścian, np. $SAB$ i $SDA$?",
+    "Środek sfery leży na płaszczyźnie dwusiecznej kąta dwuściennego między sąsiednimi ścianami. Jaka symetria jest związana z taką płaszczyzną? Co robi ona ze wspólną krawędzią tych ścian?",
+    "Odbicie względem płaszczyzny dwusiecznej przy krawędzi $SA$ przekształca sferę na siebie, a ścianę $SDA$ na $SAB$. Co z tego wynika dla trójkątów $\\triangle SAT_{DA}$ i $\\triangle SAT_{AB}$?",
+    "Przystawanie trójkątów implikuje równość pewnych kątów przy wierzchołku $S$. Wyraź kąty $\\angle ASB, \\angle BSC, \\dots$ jako sumy mniejszych kątów i zakończ dowód."
   ],
   "skills_required": [
     "spatial_3d",

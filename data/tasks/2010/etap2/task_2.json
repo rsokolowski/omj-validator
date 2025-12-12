@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zapisz założenie ($a^2$ jest podzielne przez $a+b$) używając języka kongruencji (przystawania). Co dokładnie musisz udowodnić na temat $b^2$?",
-    "W arytmetyce modulo $a+b$ suma $a+b$ przystaje do $0$. Jaką prostą równość między $a$ i $b$ (modulo $a+b$) możesz stąd wywnioskować?",
-    "Wykorzystaj znalezioną relację między $a$ i $b$, aby zbadać $a^2$. Co otrzymasz, gdy podniesiesz obie strony tej relacji do kwadratu?",
-    "Skoro wykazałeś, że $a^2 \\equiv b^2 \\pmod{a+b}$, a z treści zadania wiemy, że $a^2 \\equiv 0$, to jaki ostateczny wniosek płynie dla $b^2$?"
+    "Zamiast badać liczbę $b^2$ w izolacji, poszukaj jej związku z liczbą $a^2$. Spróbuj zbadać różnicę tych liczb.",
+    "Rozpisz różnicę $b^2 - a^2$, korzystając ze wzorów skróconego mnożenia.",
+    "Zauważ, że $b^2 - a^2 = (b-a)(b+a)$. Co obecność czynnika $a+b$ mówi o podzielności całego wyrażenia?",
+    "Skoro różnica $b^2 - a^2$ jest podzielna przez $a+b$, a z treści zadania wiemy, że $a^2$ też dzieli się przez $a+b$, to jaki wniosek płynie dla $b^2$?"
   ],
   "skills_required": [
     "divisibility_arguments",

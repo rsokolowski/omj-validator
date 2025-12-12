@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie figurę. Trójkąt $ABC$ jest równoramienny. Jakie są miary jego kątów przy podstawie $AB$?",
-    "Symetria osiowa zachowuje odległości. Zastanów się, które odcinki mają taką samą długość jak boki $AC$ i $BC$. Skup się na punktach, które są równoodległe od wierzchołka $C$.",
-    "Zbadaj trójkąty $\\triangle ACA'$ i $\\triangle BCB'$. Znasz długości ich dwóch boków. Oblicz miarę kąta między nimi, np. $\\angle ACA'$, pamiętając, że prosta odbicia jest dwusieczną odpowiedniego kąta.",
-    "Gdy znasz już własności trójkątów $\\triangle ACA'$ i $\\triangle BCB'$, oblicz kwadraty długości boków $A'B'$, $A'C'$ i $B'C'$. Pomocne będzie zbadanie kątów w trójkątach $\\triangle A'CB'$, $\\triangle C'AA'$ i $\\triangle C'BB'$."
+    "Narysuj rysunek i oznacz $AC=BC=a$. Pamiętaj, że symetrie osiowe zachowują długości. Wypisz wszystkie odcinki na rysunku, które mają długość $a$.",
+    "Skup się na kątach przy wierzchołku $C$. Oblicz miary kątów $\\angle ACA'$ oraz $\\angle A'CB'$. Wykorzystaj te miary, aby określić rodzaj trójkątów $ACA'$ i $A'CB'$ oraz obliczyć długości $AA'$ i $A'B'$.",
+    "Aby obliczyć trzeci bok $A'C'$, rozważ trójkąt $A'AC'$. Znasz już długości boków $AA'$ i $AC'$. Zastanów się, jaki jest kąt między nimi.",
+    "Oblicz miarę kąta $\\angle A'AC'$, sprawdzając jakie kąty tworzą odcinki $AA'$ i $AC'$ z bokiem $AC$. Wykorzystaj to do obliczenia długości $A'C'$."
   ],
   "prerequisites": [
     "2021_etap1_5"

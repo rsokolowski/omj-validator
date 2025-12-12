@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Oznacz $\\angle DAE = \\alpha$, $\\angle EBC = \\beta$, $\\angle ABE = \\gamma$. Z warunku: $\\alpha + \\beta = \\gamma$. W prostokącie przy $B$: $\\gamma + \\beta = 90°$. Wyznacz stąd $\\gamma$ przez $\\beta$.",
-    "Oblicz kąt $\\angle AEB$ w trójkącie $ABE$. Pamiętaj, że $\\angle BAE = 90° - \\alpha$ (kąt prosty przy $A$ minus $\\angle DAE$). Użyj sumy kątów w trójkącie.",
-    "Sprawdź, czy $\\angle AEB = \\angle ABE$. Jeśli tak, to trójkąt $ABE$ jest równoramienny - które boki są równe?",
-    "Skoro $AB = AE$, porównaj $AE$ z $AD$ w trójkącie prostokątnym $ADE$. Przeciwprostokątna jest zawsze nie mniejsza od przyprostokątnej."
+    "Oznacz kąty: $\\angle DAE = \\alpha$, $\\angle EBC = \\beta$ oraz $\\angle ABE = \\gamma$. Zapisz warunek z zadania oraz zależność między kątami przy wierzchołku $B$ prostokąta.",
+    "Wyraź wszystkie kąty w trójkącie $ABE$ w zależności od jednego z nich, na przykład od kąta $\\gamma$.",
+    "Porównaj miary kątów w trójkącie $ABE$. Jakie ma to konsekwencje dla własności tego trójkąta?",
+    "Wykorzystaj uzyskaną równość boków. Rozważ teraz trójkąt $ADE$. Jaka jest relacja między długościami jego boków?"
   ],
   "prerequisites": [
     "2022_etap2_1"

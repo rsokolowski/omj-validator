@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Niech szukana liczba pierwsza to $p$. Zapisz równanie wynikające z treści zadania. Kluczem do rozwiązania jest rozłożenie wyrażenia $n^4+4$ na czynniki.",
-    "Wyrażenie $n^4+4$ przypomina niekompletny kwadrat. Spróbuj dodać i odjąć ten sam składnik, aby użyć wzoru na kwadrat sumy, a następnie na różnicę kwadratów.",
-    "Po rozłożeniu na czynniki otrzymasz równanie postaci $A \\cdot B = 17p$. Zauważ, że dla naturalnego $n$ oba czynniki są liczbami naturalnymi. Który z nich jest zawsze mniejszy?",
-    "Iloczyn dwóch czynników jest równy $17p$. Rozważ wszystkie możliwe pary dzielników liczby $17p$, pamiętając, który z czynników jest mniejszy. Dla każdego przypadku znajdź $n$ i sprawdź, czy uzyskane $p$ jest liczbą pierwszą."
+    "Oznacz szukaną liczbę pierwszą jako $p$. Jakie równanie wiąże $n$ i $p$? Aby ułamek był liczbą całkowitą, jaką własność musi mieć licznik $n^4+4$?",
+    "Równanie $n^4+4 = 17p$ pokazuje, że liczba $n^4+4$ musi mieć w rozkładzie czynniki 17 i $p$. Spróbuj znaleźć rozkład na czynniki pierwsze wyrażenia $n^4+4$.",
+    "Wyrażenie $n^4+4$ można uzupełnić do kwadratu sumy. Spróbuj dodać i odjąć ten sam składnik, aby móc skorzystać ze wzoru na różnicę kwadratów.",
+    "Otrzymałeś iloczyn dwóch liczb naturalnych równy $17p$. Porównaj wielkość obu czynników, a następnie rozważ możliwe przypadki, czemu mogą być równe te czynniki."
   ],
   "skills_required": [
     "algebraic_identities",

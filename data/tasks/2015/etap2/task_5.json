@@ -13,10 +13,10 @@
     "geometria"
   ],
   "hints": [
-    "Zauważ, że przekątne każdego prostokąta wpisanego w okrąg są średnicami tego okręgu. Problem sprowadza się więc do podziału 50 średnic 100-kąta na 25 par.",
-    "Każdą z 50 średnic możesz zaklasyfikować do jednego z trzech typów, zależnie od kolorów jej końców: biało-biała, czerwono-czerwona lub mieszana.",
-    "Zastanów się, jakie dwie średnice utworzą wierzchołki prostokąta o wymaganym układzie kolorów (2 białe, 2 czerwone). Są dwie takie możliwe kombinacje typów średnic.",
-    "Oznacz liczby średnic każdego typu przez zmienne. Wykorzystaj informację o liczbie białych i czerwonych punktów, aby wykazać równość liczby średnic jednolitych obu kolorów."
+    "Zauważ, że przekątne prostokąta wpisanego w okrąg muszą być średnicami tego okręgu. Zadanie sprowadza się więc do podziału 50 średnic 100-kąta na 25 par.",
+    "Podziel wszystkie średnice na trzy typy w zależności od kolorów ich końców: oba białe, oba czerwone lub różnokolorowe.",
+    "Zastanów się, jakie pary typów średnic tworzą prostokąt o dokładnie dwóch białych i dwóch czerwonych wierzchołkach. Są tylko dwie takie pasujące kombinacje.",
+    "Oznacz liczby średnic każdego typu zmiennymi (np. $b, c, m$). Ułóż równania na łączną liczbę białych i czerwonych wierzchołków, aby odkryć kluczową zależność między $b$ i $c$."
   ],
   "skills_required": [
     "transformations",

@@ -12,10 +12,10 @@
     "algebra"
   ],
   "hints": [
-    "Zdefiniujmy funkcję $f(t) = t^2 + t$. Warunek z zadania to $f(x) \\leq y$, a teza to $f(y) \\geq x$. Jaka jest najmniejsza wartość funkcji $f$? Dla jakich argumentów $t$ jest ona rosnąca?",
-    "Masz daną nierówność $y \\geq f(x)$ i chcesz udowodnić $f(y) \\geq x$. Spróbuj wykorzystać fakt, że funkcja $f$ jest rosnąca w pewnym przedziale. Co by się stało, gdybyś do obu stron nierówności $y \\geq f(x)$ zastosował funkcję $f$?",
-    "Funkcja $f(t)$ jest rosnąca dla $t \\geq -1/2$. Aby móc zastosować $f$ do obu stron nierówności $y \\geq f(x)$ i zachować jej zwrot, musisz mieć pewność, że obie strony, czyli $y$ i $f(x)$, są w tym przedziale. Jaka jest minimalna wartość $f(x)$?",
-    "Z nierówności $y \\geq f(x)$ możesz wywnioskować, że $f(y) \\geq f(f(x))$. Dowód będzie zakończony, jeśli pokażesz, że $f(f(x)) \\geq x$ dla dowolnej liczby rzeczywistej $x$. Spróbuj udowodnić tę ostatnią nierówność."
+    "Spróbuj przeprowadzić dowód nie wprost. Załóż, że teza zadania jest fałszywa, co oznacza, że zachodzi nierówność $y^2 + y < x$.",
+    "Masz teraz dwie nierówności: $x^2 + x \\leq y$ (z treści zadania) oraz $y^2 + y < x$ (z zaprzeczenia tezy). Spróbuj wykorzystać je jednocześnie.",
+    "Dodaj te dwie nierówności do siebie stronami. Zredukuj wyrazy $x$ i $y$, które pojawią się po obu stronach.",
+    "Po uproszczeniu powinieneś otrzymać nierówność $x^2 + y^2 < 0$. Czy suma kwadratów liczb rzeczywistych może być ujemna?"
   ],
   "skills_required": [
     "inequality_manipulation",

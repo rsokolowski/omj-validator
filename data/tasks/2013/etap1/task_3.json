@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "W trójkącie równobocznym $AEF$ odcinek $EM$ jest medianą. Jakie inne własności ma ten odcinek? Wyznacz miary kluczowych kątów, w szczególności $\\angle AME$ i $\\angle AEM$.",
-    "Poszukaj w figurze kątów prostych. Zauważ, że zarówno wierzchołek $B$ prostokąta, jak i punkt $M$ 'patrzą' na odcinek $AE$ pod kątem prostym. Co to oznacza dla punktów $A, B, E, M$?",
-    "Skoro punkty $A, B, E, M$ leżą na jednym okręgu, możesz znaleźć miarę kąta $\\angle ABM$, wiążąc go z innym kątem opartym na tym samym łuku.",
-    "Oblicz miarę kąta $\\angle MBC$. Aby zakończyć dowód, wykaż, że $MB=MC$. Wskazówka: Rozważ rzuty prostokątne punktów $A$, $F$ i $M$ na prostą $BC$."
+    "Narysuj dokładny rysunek. Aby wykazać, że trójkąt jest równoboczny, wystarczy udowodnić, że jest on równoramienny i jeden z jego kątów ma miarę $60^\\circ$.",
+    "Zajmijmy się najpierw kątami. Jaki związek ma punkt $M$ z trójkątem równobocznym $AEF$? Wykorzystaj własności mediany w takim trójkącie, aby znaleźć miarę kąta $\\angle AME$.",
+    "Zauważ, że zarówno kąt $\\angle ABE$, jak i kąt $\\angle AME$ są proste. Jaki wniosek płynie z faktu, że punkty $B$ i $M$ 'widzą' odcinek $AE$ pod tym samym kątem? Wykorzystaj to do obliczenia $\\angle ABM$.",
+    "Teraz udowodnij, że $MB=MC$. Zastanów się nad położeniem punktu $M$ względem odcinka $BC$. Pomocne może być rozważenie rzutów prostokątnych punktów $A$ i $F$ na prostą $BC$."
   ],
   "skills_required": [
     "angle_chasing",

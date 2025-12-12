@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj trójkąt i przyjrzyj się nierówności. Zauważ, że występuje w niej liczba $\\sqrt{2}$. Z jaką szczególną figurą geometryczną kojarzy Ci się ta liczba?",
-    "Spróbuj wykorzystać kąt $45°$ do stworzenia trójkąta prostokątnego równoramiennego. Najprostszym sposobem jest często dorysowanie wysokości. Z którego wierzchołka warto ją poprowadzić, aby powstał taki trójkąt?",
-    "Poprowadź wysokość $CH$ z wierzchołka $C$ na bok $AB$. Jaki jest związek między długościami boków $AC$, $AH$ i $CH$ w powstałym trójkącie $AHC$?",
-    "Oznacz $CH=h$ oraz $BH=x$. Zapisz nierówność z zadania używając $h$ i $x$, a następnie ją uprość. Jak warunek o kącie rozwartym przy wierzchołku $C$ wpływa na relację między $h$ i $x$?"
+    "Narysuj trójkąt i zauważ, że liczba $\\sqrt{2}$ w nierówności sugeruje związek z trójkątem prostokątnym równoramiennym. Spróbuj wyodrębnić taki trójkąt na rysunku.",
+    "Poprowadź wysokość $CD$ na bok $AB$. Wykorzystaj kąt $45^\\circ$, aby zauważyć, że trójkąt $ADC$ jest połową kwadratu i wyznacz relacje między jego bokami.",
+    "Wykorzystaj informację o kącie rozwartym $C$, aby oszacować kąt $B$. Jakie ma to konsekwencje dla relacji między długościami przyprostokątnych $CD$ i $DB$ w trójkącie $CDB$?",
+    "Na odcinku $DB$ zaznacz punkt $K$ taki, że $DK = CD$. Wykaż, że $CK = AC$, a następnie skorzystaj z nierówności trójkąta dla punktów $B, C, K$."
   ],
   "prerequisites": [],
   "skills_required": [

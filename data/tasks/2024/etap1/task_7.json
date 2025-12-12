@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Oznacz długości krawędzi jako $a=AB$, $b=AD$, $c=AA'$. Korzystając z podanego warunku i twierdzenia Pitagorasa dla przekątnej prostopadłościanu, znajdź kluczową zależność między $a, b, c$.",
-    "Aby udowodnić, że kąt $\\angle BPB'$ jest prosty, zastosuj twierdzenie odwrotne do twierdzenia Pitagorasa. Twoim celem jest wykazanie, że $BP^2 + B'P^2 = BB'^2$.",
-    "Przyjrzyj się trójkątom $\\triangle ABP$ oraz $\\triangle C'B'P$. Jakie szczególne własności mają te trójkąty, biorąc pod uwagę definicję punktu $P$ oraz wymiary prostopadłościanu?",
-    "W trójkącie $\\triangle ABP$ znasz dwa boki. Aby obliczyć $BP^2$, wyznacz cosinus kąta $\\angle BAP$ z trójkąta prostokątnego $\\triangle ABC'$. Postępuj analogicznie, aby obliczyć $B'P^2$ w trójkącie $\\triangle C'B'P$."
+    "Oznacz krawędzie prostopadłościanu: $a=AB$, $b=AD$, $c=AA'$. Wykorzystaj twierdzenie Pitagorasa dla przekątnej prostopadłościanu i daną w zadaniu równość, aby znaleźć kluczowy związek między $a, b, c$.",
+    "Aby udowodnić, że $\\angle BPB' = 90^\\circ$, najwygodniej jest skorzystać z twierdzenia odwrotnego do twierdzenia Pitagorasa dla trójkąta $\\triangle BPB'$.",
+    "Zauważ, że trójkąty $\\triangle ABP$ oraz $\\triangle C'B'P$ są równoramienne. Aby obliczyć długości ich podstaw, $BP$ i $B'P$, potrzebujesz miar kątów między ich ramionami.",
+    "Wyznacz cosinusy kątów $\\angle BAC'$ i $\\angle AC'B'$ korzystając z faktu, że trójkąty $\\triangle ABC'$ i $\\triangle AB'C'$ są prostokątne. To pozwoli obliczyć kwadraty szukanych długości."
   ],
   "prerequisites": [
     "2020_etap1_2"

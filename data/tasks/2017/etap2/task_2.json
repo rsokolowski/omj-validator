@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Aby porównać pola figur, możemy spróbować je obliczyć. Czasem najprostszym sposobem jest umieszczenie figury w układzie współrzędnych. Kluczem jest sprytny wybór położenia osi.",
-    "Niech $M$ będzie środkiem boku $AB$. Wybierzmy układ współrzędnych tak, aby punkt $M$ był jego początkiem $(0,0)$, a prosta $AB$ była osią OX. Jakie współrzędne będą miały punkty $A$ i $B$ oraz środek okręgu opisanego $O$?",
-    "W przyjętym układzie współrzędnych $A=(-d, 0)$, $B=(d, 0)$, a $O=(0, y_O)$ dla pewnych liczb $d$ i $y_O$. Punkt $K$ jest rzutem prostopadłym $C$ na oś OX. Jeśli $C=(x_C, y_C)$, to jakie współrzędne ma punkt $K$?",
-    "Mając współrzędne wierzchołków $A, K, O, C$ oraz $B, K, O, C$, oblicz pola obu czworokątów. Możesz użyć wzoru na pole wielokąta ze współrzędnych (np. wzoru szewca) i porównać wyniki."
+    "Niech $M$ będzie środkiem boku $AB$. Zauważ, że środek okręgu opisanego $O$ leży na symetralnej $AB$. Jakie jest wzajemne położenie odcinków $OM$ i $CK$?",
+    "Zamiast liczyć pola czworokątów wprost, spróbuj powiązać je z polami trójkątów $AMC$ i $BMC$. Pamiętaj, że środkowa dzieli trójkąt na dwie części o równych polach.",
+    "Zauważ, że odcinki $OM$ i $CK$ są równoległe. Wykorzystaj ten fakt, aby znaleźć trójkąt o wierzchołku $M$, którego pole jest równe polu trójkąta $OKC$.",
+    "Wykorzystując równość pól trójkątów $OKC$ i $MKC$, wykaż, że pole czworokąta $AKOC$ jest równe polu trójkąta $AMC$, a pole $BKOC$ polu trójkąta $BMC$."
   ],
   "skills_required": [
     "triangle_centers",

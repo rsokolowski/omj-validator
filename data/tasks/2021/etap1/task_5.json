@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Narysuj starannie figurę, oznaczając $AM = BK = x$ oraz $CL=y$. Zauważ, że teza $\\angle CKL = 90^\\circ$ jest równoważna pewnej prostej zależności między długościami $CK$ i $CL$. Jakiej?",
-    "Wykorzystaj warunek $KM=LM$. Wyraź kwadraty długości $KM^2$ i $LM^2$ w zależności od $x$, $y$ oraz długości boku trójkąta $ABC$. Możesz w tym celu opuścić odpowiednie wysokości.",
-    "Równość $KM^2=LM^2$ prowadzi do równania z dwiema niewiadomymi. Upraszczając je, spróbuj doprowadzić je do postaci iloczynowej $(...)(...)=0$, z której wynikają dwie możliwości.",
-    "Przeanalizuj obie możliwości. Pokaż, że jedna z nich jest sprzeczna z założeniem $\\angle KML=90^\\circ$. Wykaż, że druga możliwość jest równoważna tezie zadania."
+    "Narysuj starannie figurę. Warunek $AM=BK$ w trójkącie równobocznym silnie sugeruje użycie symetrii lub obrotów. Czy potrafisz znaleźć obrót, który przekształca punkt $M$ na $K$?",
+    "Rozważ obrót o $120^\\circ$ wokół środka $\\triangle ABC$. Pokaż, że obrazem $M$ jest $K$. Niech $L_1$ będzie obrazem $K$ w tym obrocie. Jaki jest kształt $\\triangle MKL_1$? Jaka jest zależność między długościami odcinków $AL_1$ i $CK$?",
+    "Na boku $AC$ leżą teraz dwa punkty: $L$ z zadania i skonstruowany $L_1$. Wykorzystaj warunek $KM=LM$ oraz własności $\\triangle MKL_1$, aby pokazać, że $ML=ML_1$. Co to geometrycznie oznacza dla trójkąta $\\triangle MLL_1$?",
+    "Skoro $L, L_1$ leżą na prostej $AC$ i $ML=ML_1$, to rzut prostopadły $M$ na prostą $AC$ jest środkiem odcinka $LL_1$. Wyznacz położenie tego rzutu, a następnie użyj tego faktu, by znaleźć związek między $AL+AL_1$ a $AM$. To pozwoli Ci udowodnić, że $CL=2CK$."
   ],
   "prerequisites": [
     "2021_etap1_2"

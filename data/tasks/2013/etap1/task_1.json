@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zastanów się, co oznacza wzrost o $1{,}5\\%$. Jak można zapisać $1{,}5\\%$ jako ułamek zwykły? Pamiętaj, że liczba pasażerów musi być liczbą całkowitą.",
-    "Zapisz $1{,}5\\%$ jako ułamek w najprostszej postaci. Jeśli początkowa liczba pasażerów to $n$, to nowa liczba to $n$ powiększone o ten ułamek. Co musi być prawdą o $n$, żeby wynik był liczbą całkowitą?",
-    "Skoro $1{,}5\\% = \\frac{3}{200}$, to nowa liczba pasażerów wynosi $n + \\frac{3n}{200} = \\frac{203n}{200}$. Jakie wartości $n$ dają liczbę całkowitą? Które z nich spełniają ograniczenie pojemności pociągu?",
-    "Liczba $n$ musi być podzielna przez $200$, aby $\\frac{203n}{200}$ było całkowite. Sprawdź, które wielokrotności $200$ nie przekraczają $404$ i dla których nowa liczba pasażerów też mieści się w pociągu."
+    "Liczba pasażerów, zarówno początkowa, jak i po wzroście, musi być liczbą całkowitą. Co to oznacza dla liczby pasażerów, którzy dosiedli się na drugiej stacji? Przetłumacz $1{,}5\\%$ na ułamek zwykły.",
+    "Oznacz początkową liczbę pasażerów jako $n$. Wzrost o $1{,}5\\%$ oznacza, że dosiadło się $n \\cdot \\frac{3}{200}$ osób. Jaki warunek musi spełniać liczba $n$, aby ta wartość była liczbą całkowitą?",
+    "Liczba $n \\cdot \\frac{3}{200}$ jest całkowita. Ponieważ ułamek $\\frac{3}{200}$ jest nieskracalny, co możesz wywnioskować o podzielności liczby $n$?",
+    "Wyznacz wszystkie możliwe wartości początkowej liczby pasażerów $n$. Pamiętaj, że zarówno $n$, jak i liczba pasażerów po wzroście, nie może przekroczyć $404$."
   ],
   "skills_required": [
     "basic_operations",

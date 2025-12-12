@@ -12,10 +12,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Zapisz warunki zadania. Wykorzystaj równość `a+b=175`, aby wyrazić `b` za pomocą `a` i wstawić do warunku o podzielności iloczynu.",
-    "Otrzymałeś warunek, że `175` dzieli `a(175-a)`. Rozwiń ten iloczyn i zobacz, czy możesz uprościć ten warunek podzielności.",
-    "Wyrażenie `a(175-a)` jest równe `175a - a^2`. Całość jest podzielna przez 175, a pierwszy składnik `175a` również. Co to oznacza dla podzielności drugiego składnika, `a^2`?",
-    "Warunek sprowadza się do `175 | a^2`. Wiedząc, że `175 = 5^2 \\cdot 7`, zastanów się, jakie czynniki pierwsze musi zawierać liczba `a`, aby jej kwadrat był podzielny przez 175."
+    "Wykorzystaj równość $a+b=175$, aby wyznaczyć $b$ w zależności od $a$ i wstaw to wyrażenie do warunku podzielności iloczynu $ab$ przez $175$.",
+    "Otrzymane wyrażenie to $a(175-a)$. Zapisz je w postaci różnicy i zbadaj podzielność każdego ze składników przez $175$.",
+    "Zauważ, że $a(175-a) = 175a - a^2$. Skoro $175a$ dzieli się przez $175$, to aby cała różnica była podzielna przez $175$, również $a^2$ musi dzielić się przez $175$.",
+    "Warunek zadania sprowadza się do $175 \\mid a^2$. Rozłóż $175$ na czynniki pierwsze i ustal, przez jakie liczby musi dzielić się $a$, aby jego kwadrat był wielokrotnością $175$."
   ],
   "prerequisites": [
     "2011_etap1_4"

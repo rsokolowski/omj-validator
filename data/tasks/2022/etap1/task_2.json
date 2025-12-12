@@ -13,10 +13,10 @@
     "algebra"
   ],
   "hints": [
-    "Oblicz wartość całego wyrażenia $1-2+3-4+\\ldots-100$. Pomocne może być łączenie sąsiednich liczb w pary.",
-    "Niech znak równości zastępuje operację przed liczbą $k$. Wyrażenie po lewej stronie nazwijmy $L$, a po prawej $P$. Jaka jest zależność między wartością całego początkowego wyrażenia, a wartościami $L$ i $P$?",
-    "Zauważ, że zależność z poprzedniego kroku zależy od tego, czy przed liczbą $k$ stał znak `+` czy `-`. Rozważ oba przypadki i wykorzystaj warunek, że nowo powstała równość $L=P$ jest prawdziwa.",
-    "W jednym z przypadków otrzymasz konkretną wartość, jaką musi mieć suma $L$. Oblicz, dla jakiej liczby $k$ suma $1-2+\\ldots \\pm(k-1)$ przyjmuje tę właśnie wartość."
+    "Oblicz wartość całego wyrażenia $S = 1-2+3-4+\\ldots-100$. Pomocne może być łączenie sąsiednich liczb w pary.",
+    "Niech równość powstaje przez zastąpienie znaku przed liczbą $k$. Oznaczmy lewą stronę równości przez $L$, a prawą przez $R$. Zastanów się, jak cała suma $S$ zależy od $L$ oraz oryginalnych składników od $k$ do 100.",
+    "Rozważ osobno przypadek, gdy $k$ jest nieparzyste (oryginalnie był znak +) i gdy $k$ jest parzyste (oryginalnie był znak -). Porównaj prawą stronę $R$ z oryginalną sumą od $k$ do 100 w obu przypadkach.",
+    "W jednym z przypadków dojdziesz do sprzeczności. W drugim przypadku znajdziesz związek między $S$ i $L$. Oblicz wymaganą wartość $L$, a następnie wyznacz $k$ z zależności $L=1-2+\\ldots\\pm(k-1)$."
   ],
   "prerequisites": [],
   "skills_required": [

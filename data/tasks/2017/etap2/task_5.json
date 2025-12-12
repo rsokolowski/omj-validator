@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Załóżmy dla dowodu nie wprost, że teza jest fałszywa. Oznacza to, że dowolne dwie różne liczby tego samego koloru różnią się o liczbę, która nie jest kwadratem.",
-    "Rozważmy dowolną liczbę $x$. Z naszego założenia wynika, że kolory liczb $x$ i $x+25$ muszą być różne. Co możemy zatem powiedzieć o kolorach liczb $x+9$ i $x+16$?",
-    "Pokaż, że przy naszym założeniu, dla dowolnego $x$, liczby $x+9$ i $x+16$ muszą mieć ten sam kolor. (Wskazówka: rozważ ich kolory względem kolorów $x$ i $x+25$).",
-    "Skoro dla dowolnego $x$ zachodzi $c(x+9)=c(x+16)$, to dla dowolnego $z$ mamy $c(z)=c(z+7)$. Wykorzystaj tę okresowość, aby znaleźć parę liczb w tym samym kolorze, których różnica jest kwadratem, co doprowadzi do sprzeczności."
+    "Załóżmy nie wprost, że teza jest fałszywa. Oznacza to, że różnica dowolnych dwóch liczb tego samego koloru nie jest kwadratem liczby całkowitej.",
+    "Skorzystaj z równości $9+16=25$ (trójka pitagorejska). Rozważ kolory liczb $x, x+9, x+16$ oraz $x+25$. Zauważ, że prawie wszystkie różnice między nimi są kwadratami.",
+    "Liczba $x$ musi mieć inny kolor niż pozostałe trzy (dlaczego?). Zatem liczby $x+9, x+16$ i $x+25$ muszą być pokolorowane przy użyciu tylko dwóch barw. Wykaż, że wymusza to równość kolorów dla pewnej pary liczb.",
+    "Z poprzedniego kroku wynika, że $c(n) = c(n+7)$, czyli kolorowanie jest okresowe. Znajdź taką wielokrotność okresu, która jest kwadratem liczby całkowitej, aby uzyskać sprzeczność."
   ],
   "skills_required": [
     "pigeonhole",

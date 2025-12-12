@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Spróbuj odwrócić rozumowanie. Zamiast szukać punktu przecięcia symetralnych, wybierz punkt $P$ na okręgu opisanym na $\\triangle ABC$, który leży też na symetralnej $AB$. Następnie udowodnij, że ten punkt musi leżeć na symetralnej $DE$.",
-    "Niech $P$ będzie punktem na okręgu opisanym na $\\triangle ABC$ i na symetralnej $AB$. Z definicji $PA=PB$. Aby pokazać, że $P$ leży na symetralnej $DE$, musisz udowodnić, że $PD=PE$.",
-    "Najprostszy sposób na wykazanie $PD=PE$ to znalezienie przystających trójkątów. Rozważ $\\triangle PAE$ i $\\triangle PBD$. Masz już $AE=BD$ (z treści) i $PA=PB$ (z wyboru $P$). Czego brakuje do przystawania bok-kąt-bok (SAS)?",
-    "Potrzebujesz równości kątów $\\angle PAE = \\angle PBD$. Wykorzystaj fakt, że $P$ leży na okręgu opisanym na $\\triangle ABC$. Zwróć uwagę na kąty wpisane oparte na tym samym łuku."
+    "Zamiast szukać punktu przecięcia symetralnych, odwróć problem. Wybierz punkt $P$ na okręgu opisanym, który leży na symetralnej odcinka $AB$ (czyli $PA=PB$). Następnie wykaż, że $P$ leży też na symetralnej odcinka $DE$.",
+    "Na okręgu są dwa takie punkty $P$. Wybierz ten, który leży na łuku $ACB$ (zawierającym punkt $C$). Aby dowieść, że leży on na symetralnej $DE$, wystarczy pokazać, że $PD=PE$.",
+    "Poszukaj przystających trójkątów, których bokami są $PD$ i $PE$. Wykorzystaj równości $PA=PB$ oraz $AE=BD$.",
+    "Aby uzasadnić przystawanie, porównaj kąty $\\angle PAE$ i $\\angle PBD$. Zauważ, że są to kąty wpisane oparte na tym samym łuku $PC$."
   ],
   "skills_required": [
     "circle_theorems",

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Niech $O$ będzie środkiem okręgu opisanego na $\triangle ABC$. Korzystając z twierdzenia o kącie środkowym i wpisanym, określ jakim szczególnym rodzajem trójkąta jest $\triangle AOB$.",
-    "Zauważ, że położenie punktów $D$ i $G$ jest określone przez obroty. Rozważ przekształcenie, które najpierw przenosi $D$ na $C$ (obrót wokół $B$), a następnie $C$ na $G$ (obrót wokół $A$).",
-    "Zbadaj złożenie tych dwóch obrotów. Jaki jest jego sumaryczny kąt obrotu? Jakim znanym przekształceniem geometrycznym jest w istocie to złożenie?",
-    "Otrzymane złożenie jest symetrią środkową. Skoro przekształca $D$ w $G$, jej środkiem jest środek odcinka $DG$. Znajdź obraz punktu $B$ w tej symetrii, aby odkryć kluczową własność środka $DG$."
+    "Narysuj figurę i oznacz środek okręgu opisanego jako $O$. Jaka jest miara kąta środkowego $\\angle AOB$, jeśli kąt wpisany $\\angle ACB = 45°$? Co to mówi o własnościach trójkąta $\\triangle AOB$?",
+    "Rozważ obrót o $90°$ wokół punktu $C$, zgodny z orientacją kwadratu $ACFG$. Zastanów się, na jaki punkt przejdzie wierzchołek $A$. A na jaki punkt przejdzie wierzchołek $B$?",
+    "Niech $R_C^{90°}$ będzie obrotem z poprzedniej wskazówki. Udowodnij, że $R_C^{90°}(\\triangle OAB) = \\triangle GDE$. Co z tego wynika dla odcinków $OA$ i $GD$?",
+    "Zauważ, że obrót przekształca środek okręgu opisanego na $\\triangle OAB$ na środek okręgu opisanego na $\\triangle GDE$. Wykorzystaj tę własność oraz fakt, że $O$ jest wierzchołkiem kąta prostego w $\\triangle OAB$, aby zakończyć dowód."
   ],
   "skills_required": [
     "circle_theorems",

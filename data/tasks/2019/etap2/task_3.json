@@ -13,12 +13,14 @@
     "logika"
   ],
   "hints": [
-    "Załóżmy przeciwnie, że żadna dziewczynka nie wygrała z żadnym chłopcem. Co to oznacza dla porażek chłopców? Z kim wtedy przegrywali?",
-    "Policz na dwa sposoby: ile łącznie jest porażek wśród samych chłopców w meczach między sobą? Porównaj z tym, ile porażek muszą mieć chłopcy łącznie.",
-    "Jeśli jest $k$ chłopców i każdy ma inną liczbę przegranych (co najmniej 1), to jaka jest minimalna suma ich przegranych? Ile meczów rozegrali między sobą?",
-    "Suma $k$ różnych liczb naturalnych dodatnich to co najmniej $1+2+...+k = \\frac{k(k+1)}{2}$. Porównaj to z liczbą meczów między $k$ chłopcami, czyli $\\frac{k(k-1)}{2}$."
+    "Załóżmy nie wprost, że żadna dziewczynka nie wygrała z chłopcem. Oznacza to, że chłopcy ponosili porażki wyłącznie w meczach z innymi chłopcami.",
+    "Niech $k$ oznacza liczbę chłopców. Skoro chłopcy przegrywali tylko między sobą, to z iloma maksymalnie przeciwnikami mógł przegrać dany chłopiec?",
+    "Każdy chłopiec przegrał co najmniej raz. Wypisz zbiór wszystkich możliwych liczb porażek, jakie może mieć pojedynczy chłopiec w grupie $k$ osób.",
+    "Mamy $k$ chłopców i każdy z nich ma inną liczbę porażek. Porównaj liczebność grupy chłopców z liczbą możliwych wartości porażek, które wyznaczyłeś."
   ],
-  "prerequisites": ["2019_etap1_5"],
+  "prerequisites": [
+    "2019_etap1_5"
+  ],
   "skills_required": [
     "graph_theory",
     "pigeonhole",

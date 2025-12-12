@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Wyobraź sobie opisaną bryłę. Ma ona kwadratową podstawę o boku 1, a na każdym boku stoi pięciokąt foremny. Twoim celem jest znalezienie odległości między wierzchołkami A i B, które są \"szczytami\" dwóch przeciwległych pięciokątów.",
-    "Zastosuj twierdzenie Pitagorasa w trójwymiarze. Zauważ, że z symetrii bryły wierzchołki A i B znajdują się na tej samej wysokości. Zadanie sprowadza się więc do znalezienia odległości między ich rzutami A' i B' na płaszczyznę podstawy.",
-    "Odległość $|A'B'|$ jest równa $2|OA'|$, gdzie O to środek podstawy. Aby wyznaczyć $|OA'|$, rozważ także rzuty wierzchołków V, które są wspólne dla sąsiednich pięciokątów. Zapisz zależności między odległościami w rzucie a wysokościami wierzchołków.",
-    "Zapisz układ równań, korzystając ze znanych długości krawędzi (równych 1), np. $|AV|=1$, gdzie V to wierzchołek boczny. Kluczowym uproszczeniem jest fakt, że wszystkie wierzchołki A i V leżą na tej samej wysokości. Rozwiązanie układu pozwoli wyznaczyć szukaną odległość."
+    "Wyobraź sobie powstałą bryłę. Zauważ, że z powodu symetrii odcinek $AB$ jest równoległy do płaszczyzny podstawy. Jego długość jest więc równa odległości między rzutami punktów $A$ i $B$ na tę płaszczyznę.",
+    "Umieść środek kwadratowej podstawy w początku układu współrzędnych. Zadanie sprowadza się do wyznaczenia współrzędnych rzutu punktu $A$ na płaszczyznę podstawy i obliczenia jego odległości od początku układu.",
+    "Położenie wierzchołka $A$ zależy od nachylenia ścian bocznych. To nachylenie jest zdeterminowane przez położenie wierzchołków (nazwijmy je $V$), które są wspólne dla sąsiednich pięciokątów. Spróbuj wyznaczyć współrzędne jednego z takich wierzchołków $V$.",
+    "Położenie punktu $V$ można wyznaczyć z jego odległości od trzech wierzchołków podstawy. Podobnie, położenie punktu $A$ można wyznaczyć z jego odległości od znanych już punktów, np. wierzchołka podstawy i punktu $V$."
   ],
   "skills_required": [
     "angle_chasing",

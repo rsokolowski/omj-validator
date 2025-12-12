@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Jaka jest łączna suma pól wszystkich ośmiu prostokątów? Zastanów się, jakie wartości mogą przyjmować pola pojedynczych prostokątów, biorąc pod uwagę ich wymiary.",
-    "Załóżmy, że wszystkie prostokąty mają różne pola. Jaka jest najmniejsza możliwa suma ośmiu różnych, dodatnich liczb całkowitych?",
-    "Porównaj najmniejszą możliwą sumę różnych pól z całkowitym polem kwadratu. Czy wszystkie pola z tej minimalnej sumy są możliwe do uzyskania przez prostokąty w kwadracie $6 \\times 6$?",
-    "Wypisz osiem najmniejszych *możliwych* do uzyskania pól prostokątów. Oblicz ich sumę i sprawdź, czy prowadzi to do sprzeczności z całkowitym polem kwadratu."
+    "Jaka jest łączna suma pól wszystkich ośmiu prostokątów? Zauważ, że pole każdego z nich jest liczbą całkowitą.",
+    "Załóż nie wprost, że wszystkie prostokąty mają różne pola. Jaka jest najmniejsza możliwa suma ośmiu różnych, dodatnich, całkowitych pól?",
+    "Obliczona minimalna suma pól jest równa polu całego kwadratu. Jakie konkretnie wartości muszą w tej sytuacji przyjmować pola tych ośmiu prostokątów?",
+    "Czy każdy z prostokątów o polach z wyznaczonego zbioru może zmieścić się w kwadracie $6 \\times 6$? Zwróć uwagę na wymiary jednego z nich."
   ],
   "skills_required": [
     "pigeonhole",

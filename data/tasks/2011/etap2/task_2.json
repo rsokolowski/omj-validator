@@ -13,10 +13,10 @@
     "teoria_liczb"
   ],
   "hints": [
-    "Ile łącznie meczów rozegrano w turnieju? Sprawdź, ile punktów sumarycznie otrzymują obie drużyny w przypadku rozstrzygnięcia, a ile w przypadku remisu.",
-    "Oblicz, ile wynosiłaby suma punktów wszystkich drużyn, gdyby każdy mecz zakończył się rozstrzygnięciem. Porównaj ten wynik z liczbą $41$ i wywnioskuj, ile musiało być remisów.",
-    "Spróbuj dowodu nie wprost. Załóż, że w remisach brały udział łącznie co najwyżej 3 drużyny. Zastanów się, ile maksymalnie remisów mogłyby one między sobą rozegrać.",
-    "Pamiętaj, że każda para drużyn gra ze sobą tylko raz. Zestaw liczbę faktycznych remisów (obliczoną w kroku 2) z maksymalną liczbą meczów możliwą między trzema drużynami."
+    "Ile łącznie meczów rozegrano w turnieju? Zauważ, że w przypadku rozstrzygnięcia drużyny zdobywają łącznie 3 punkty, a w przypadku remisu tylko 2 punkty.",
+    "Oblicz, ile wynosiłaby suma punktów wszystkich drużyn, gdyby nie było żadnych remisów. Porównaj ten wynik z liczbą $41$ i ustal, ile dokładnie meczów zakończyło się remisem.",
+    "Spróbuj dowodu nie wprost. Załóż, że w remisach brały udział łącznie co najwyżej 3 drużyny. Oznacza to, że wszystkie remisy musiały odbyć się między nimi.",
+    "Ile maksymalnie meczów mogą rozegrać między sobą 3 drużyny? Porównaj ten wynik z wyznaczoną wcześniej liczbą remisów, aby uzyskać sprzeczność."
   ],
   "prerequisites": [],
   "skills_required": [

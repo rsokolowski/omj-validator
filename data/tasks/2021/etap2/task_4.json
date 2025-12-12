@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Teza dotyczy równości pól. Zapisz pola $P(ABD)$ i $P(ABCE)$ za pomocą pól mniejszych trójkątów, aby znaleźć prostszą, równoważną tezę do udowodnienia.",
-    "Warunki $AC=AD$ i $BD=BE$ oznaczają, że punkty $A$ i $B$ leżą na symetralnych odcinków $CD$ i $DE$. Jaka jest kluczowa własność geometryczna symetralnej?",
-    "Połącz fakt, że symetralne są prostopadłe do odcinków, z warunkiem $\\angle CDE=90^\\circ$. Jakie proste w tej konfiguracji muszą być równoległe? Jak można wykorzystać równoległość do obliczania pól trójkątów?",
-    "Oblicz pola trójkątów $ADE$ i $BCD$, wykorzystując odkryte równoległości. Następnie wstaw uzyskane wyniki do uproszczonej tezy z pierwszej wskazówki, aby zakończyć dowód."
+    "Zauważ, że pole czworokąta $ABCE$ to różnica pola całego pięciokąta i pola trójkąta $CDE$. Zapisz pole pięciokąta jako sumę pól trzech trójkątów: $ABD$, $BCD$ i $ADE$.",
+    "Skorzystaj z faktu, że $A$ i $B$ leżą na symetralnych boków $CD$ i $DE$. Ponieważ $\\angle CDE = 90^\\circ$, zauważ, że symetralna boku $CD$ jest równoległa do prostej $DE$.",
+    "Skoro symetralna $CD$ jest równoległa do $DE$, to odległość punktu $A$ od prostej $DE$ jest równa odległości środka odcinka $CD$ od prostej $DE$. Wyznacz tę odległość.",
+    "Oblicz pola trójkątów $ADE$ i $BCD$ przyjmując $DE$ i $CD$ za podstawy. Wykaż, że suma ich pól równa jest polu trójkąta $CDE$ i wstaw ten wniosek do równości z pierwszej wskazówki."
   ],
   "prerequisites": [],
   "skills_required": [

@@ -12,10 +12,10 @@
     "geometria"
   ],
   "hints": [
-    "Wykonaj rysunek. Rozważ odbicie symetryczne punktu D względem prostej AP. Gdzie znajdzie się obraz tego punktu, punkt D'? Jakie własności (długości boków, miary kątów) ma trójkąt APD'?",
-    "Teza dotyczy równości pól $P_{APCD} = P_{ABP}$. Zauważ, że $P_{APCD} = P_{APD} + P_{PCD}$. Użyj własności odbicia, by zastąpić jedno z pól i w efekcie uprościć tezę.",
-    "Problem sprowadza się do wykazania, że pola trójkątów $PCD$ i $BPD'$ są równe. Aby porównać te trójkąty, oznacz $\\angle PAB = \\alpha$ i wyznacz miary ich kątów wewnętrznych w zależności od $\\alpha$.",
-    "Okazuje się, że trójkąty $PCD$ i $BPD'$ mają takie same kąty, więc są podobne. Jaka jest skala tego podobieństwa? Wykorzystaj fakt, że odbicie symetryczne zachowuje długości odcinków."
+    "Zauważ, że pole czworokąta $APCD$ jest sumą pól trójkątów $APD$ i $PCD$. Przekształć tezę zadania tak, aby porównać sumę tych pól z polem trójkąta $ABP$.",
+    "Odcinek $AP$ jest dwusieczną kąta $BAD$, co oznacza, że prosta $AP$ jest osią symetrii tego kąta. Pomyśl, jak wykorzystać tę symetrię, aby znaleźć wewnątrz trójkąta $ABP$ 'kopię' trójkąta $APD$.",
+    "Odbij punkt $D$ symetrycznie względem prostej $AP$. Niech obrazem będzie punkt $D'$. Uzasadnij, że $D'$ leży na boku $AB$ i oblicz miarę kąta $D'PD$, wiedząc, że $\ne APD = 45^\\circ$.",
+    "Zadanie sprowadza się teraz do wykazania, że $P_{PCD} = P_{BPD'}$. Zauważ, że trójkąty $PCD$ i $BPD'$ są prostokątne i mają równe przeciwprostokątne. Udowodnij ich przystawanie, analizując sumę kątów przy wierzchołku $P$."
   ],
   "skills_required": [
     "trapezoid_parallelogram",
