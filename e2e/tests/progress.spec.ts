@@ -7,6 +7,7 @@
 import { test, expect } from '@playwright/test';
 import { loginAs, logout, TEST_USERS } from './utils/auth';
 import { setGeminiScenario, resetGemini } from './utils/api';
+import { uploadAndSubmit } from './utils/submission';
 import * as path from 'path';
 
 const FIXTURES_DIR = path.join(__dirname, '..', 'fixtures');
@@ -79,9 +80,7 @@ test.describe('Progress Tracking', () => {
 
       // Submit a solution
       await page.goto('/task/2024/etap2/1');
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-      await page.getByRole('button', { name: /prześlij/i }).click();
+      await uploadAndSubmit(page, TEST_IMAGE);
       await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
 
       // Get updated progress
@@ -100,9 +99,7 @@ test.describe('Progress Tracking', () => {
 
       // Submit as user 1
       await page.goto('/task/2024/etap2/1');
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-      await page.getByRole('button', { name: /prześlij/i }).click();
+      await uploadAndSubmit(page, TEST_IMAGE);
       await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
 
       // Get user 1 progress

@@ -7,6 +7,7 @@
 import { test, expect } from '@playwright/test';
 import { loginAs, TEST_USERS } from './utils/auth';
 import { setGeminiScenario, resetGemini, getTranslations } from './utils/api';
+import { uploadAndSubmit } from './utils/submission';
 import * as path from 'path';
 
 const FIXTURES_DIR = path.join(__dirname, '..', 'fixtures');
@@ -41,9 +42,7 @@ test.describe('WebSocket Progress', () => {
     });
 
     // Submit solution
-    const fileInput = page.locator('input[type="file"]');
-    await fileInput.setInputFiles(TEST_IMAGE);
-    await page.getByRole('button', { name: /prześlij/i }).click();
+    await uploadAndSubmit(page, TEST_IMAGE);
 
     // Wait for completion - look for exact score format
     await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
@@ -75,9 +74,7 @@ test.describe('WebSocket Progress', () => {
     });
 
     // Submit
-    const fileInput = page.locator('input[type="file"]');
-    await fileInput.setInputFiles(TEST_IMAGE);
-    await page.getByRole('button', { name: /prześlij/i }).click();
+    await uploadAndSubmit(page, TEST_IMAGE);
 
     // Wait for completion - look for exact score format
     await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
@@ -113,9 +110,7 @@ test.describe('WebSocket Progress', () => {
     });
 
     // Submit
-    const fileInput = page.locator('input[type="file"]');
-    await fileInput.setInputFiles(TEST_IMAGE);
-    await page.getByRole('button', { name: /prześlij/i }).click();
+    await uploadAndSubmit(page, TEST_IMAGE);
 
     // Wait for completion - look for exact score format
     await expect(page.getByText(/Wynik:\s*5\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
@@ -145,9 +140,7 @@ test.describe('WebSocket Progress', () => {
     });
 
     // Submit
-    const fileInput = page.locator('input[type="file"]');
-    await fileInput.setInputFiles(TEST_IMAGE);
-    await page.getByRole('button', { name: /prześlij/i }).click();
+    await uploadAndSubmit(page, TEST_IMAGE);
 
     // Wait for error to appear in UI (error shows "przeciążony" message)
     await expect(
@@ -169,9 +162,7 @@ test.describe('WebSocket Progress', () => {
     await page.goto('/task/2024/etap2/1');
 
     // Submit without waiting for WebSocket
-    const fileInput = page.locator('input[type="file"]');
-    await fileInput.setInputFiles(TEST_IMAGE);
-    await page.getByRole('button', { name: /prześlij/i }).click();
+    await uploadAndSubmit(page, TEST_IMAGE);
 
     // Even if WebSocket was slightly delayed, should still get result
     await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
@@ -196,9 +187,7 @@ test.describe('WebSocket Progress', () => {
     });
 
     // Submit to establish WebSocket
-    const fileInput = page.locator('input[type="file"]');
-    await fileInput.setInputFiles(TEST_IMAGE);
-    await page.getByRole('button', { name: /prześlij/i }).click();
+    await uploadAndSubmit(page, TEST_IMAGE);
 
     // Wait for completion (which includes WebSocket interaction)
     await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
@@ -229,9 +218,7 @@ test.describe('WebSocket Progress', () => {
     });
 
     // Submit solution
-    const fileInput = page.locator('input[type="file"]');
-    await fileInput.setInputFiles(TEST_IMAGE);
-    await page.getByRole('button', { name: /prześlij/i }).click();
+    await uploadAndSubmit(page, TEST_IMAGE);
 
     // Wait for completion
     await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });

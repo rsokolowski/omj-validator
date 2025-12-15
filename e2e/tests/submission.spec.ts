@@ -11,6 +11,7 @@
 import { test, expect } from '@playwright/test';
 import { loginAs, TEST_USERS } from './utils/auth';
 import { setGeminiScenario, resetGemini, GeminiScenario } from './utils/api';
+import { uploadAndSubmit } from './utils/submission';
 import * as path from 'path';
 
 // Path to test fixtures
@@ -35,14 +36,7 @@ test.describe('Submission Flow', () => {
   test.describe('Basic submission', () => {
     test('can upload a single image and submit', async ({ page }) => {
       await page.goto('/task/2024/etap2/1');
-
-      // Find file input and upload
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-
-      // Click submit button
-      const submitButton = page.getByRole('button', { name: /prześlij/i });
-      await submitButton.click();
+      await uploadAndSubmit(page, TEST_IMAGE);
 
       // Wait for submission to start processing
       // UI shows "Przesyłanie zdjęć..." or "Przetwarzanie..." or "Analizuję..."
@@ -53,9 +47,11 @@ test.describe('Submission Flow', () => {
 
     test('can upload multiple images and submit', async ({ page }) => {
       await page.goto('/task/2024/etap2/1');
+      await page.waitForLoadState('networkidle');
 
       // Upload multiple files
       const fileInput = page.locator('input[type="file"]');
+      await expect(fileInput).toBeAttached({ timeout: 10000 });
       await fileInput.setInputFiles([TEST_IMAGE, TEST_IMAGE_2]);
 
       // Should show 2 images uploaded - look for specific text
@@ -63,6 +59,7 @@ test.describe('Submission Flow', () => {
 
       // Submit
       const submitButton = page.getByRole('button', { name: /prześlij/i });
+      await expect(submitButton).toBeEnabled({ timeout: 5000 });
       await submitButton.click();
 
       // Wait for processing
@@ -75,12 +72,7 @@ test.describe('Submission Flow', () => {
       // Use slow_response to ensure progress states are visible
       await setGeminiScenario(request, 'slow_response');
       await page.goto('/task/2024/etap2/1');
-
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-
-      const submitButton = page.getByRole('button', { name: /prześlij/i });
-      await submitButton.click();
+      await uploadAndSubmit(page, TEST_IMAGE);
 
       // Should see various progress states
       // First: uploading
@@ -99,12 +91,7 @@ test.describe('Submission Flow', () => {
     test('displays perfect score (6 points)', async ({ page, request }) => {
       await setGeminiScenario(request, 'success_score_6');
       await page.goto('/task/2024/etap2/1');
-
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-
-      const submitButton = page.getByRole('button', { name: /prześlij/i });
-      await submitButton.click();
+      await uploadAndSubmit(page, TEST_IMAGE);
 
       // Wait for result - look for exact score format "Wynik: 6 / 6 punktów"
       await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
@@ -116,12 +103,7 @@ test.describe('Submission Flow', () => {
     test('displays good score (5 points)', async ({ page, request }) => {
       await setGeminiScenario(request, 'success_score_5');
       await page.goto('/task/2024/etap2/1');
-
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-
-      const submitButton = page.getByRole('button', { name: /prześlij/i });
-      await submitButton.click();
+      await uploadAndSubmit(page, TEST_IMAGE);
 
       // Wait for result - look for exact score format "Wynik: 5 / 6 punktów"
       await expect(page.getByText(/Wynik:\s*5\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
@@ -130,12 +112,7 @@ test.describe('Submission Flow', () => {
     test('displays partial score (2 points)', async ({ page, request }) => {
       await setGeminiScenario(request, 'success_score_2');
       await page.goto('/task/2024/etap2/1');
-
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-
-      const submitButton = page.getByRole('button', { name: /prześlij/i });
-      await submitButton.click();
+      await uploadAndSubmit(page, TEST_IMAGE);
 
       // Wait for result - look for exact score format "Wynik: 2 / 6 punktów"
       await expect(page.getByText(/Wynik:\s*2\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
@@ -147,12 +124,7 @@ test.describe('Submission Flow', () => {
     test('displays zero score (0 points)', async ({ page, request }) => {
       await setGeminiScenario(request, 'success_score_0');
       await page.goto('/task/2024/etap2/1');
-
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-
-      const submitButton = page.getByRole('button', { name: /prześlij/i });
-      await submitButton.click();
+      await uploadAndSubmit(page, TEST_IMAGE);
 
       // Wait for result - look for exact score format "Wynik: 0 / 6 punktów"
       await expect(page.getByText(/Wynik:\s*0\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
@@ -169,12 +141,7 @@ test.describe('Submission Flow', () => {
 
       await setGeminiScenario(request, 'error_timeout');
       await page.goto('/task/2024/etap2/1');
-
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-
-      const submitButton = page.getByRole('button', { name: /prześlij/i });
-      await submitButton.click();
+      await uploadAndSubmit(page, TEST_IMAGE);
 
       // Should eventually show timeout error message
       // Note: use first() to handle multiple error messages appearing simultaneously
@@ -186,12 +153,7 @@ test.describe('Submission Flow', () => {
     test('handles quota exceeded error', async ({ page, request }) => {
       await setGeminiScenario(request, 'error_quota');
       await page.goto('/task/2024/etap2/1');
-
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-
-      const submitButton = page.getByRole('button', { name: /prześlij/i });
-      await submitButton.click();
+      await uploadAndSubmit(page, TEST_IMAGE);
 
       // Should show quota/overload error - add .first() to handle multiple error messages
       await expect(
@@ -202,12 +164,7 @@ test.describe('Submission Flow', () => {
     test('handles safety filter error', async ({ page, request }) => {
       await setGeminiScenario(request, 'error_safety');
       await page.goto('/task/2024/etap2/1');
-
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-
-      const submitButton = page.getByRole('button', { name: /prześlij/i });
-      await submitButton.click();
+      await uploadAndSubmit(page, TEST_IMAGE);
 
       // Should show safety/content error - add .first()
       await expect(
@@ -224,16 +181,12 @@ test.describe('Submission Flow', () => {
 
       // Submit to task 1 - should get 6 points
       await page.goto('/task/2024/etap2/1');
-      let fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-      await page.getByRole('button', { name: /prześlij/i }).click();
+      await uploadAndSubmit(page, TEST_IMAGE);
       await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
 
       // Submit to task 2 - should get 0 points
       await page.goto('/task/2024/etap2/2');
-      fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-      await page.getByRole('button', { name: /prześlij/i }).click();
+      await uploadAndSubmit(page, TEST_IMAGE);
       await expect(page.getByText(/Wynik:\s*0\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
     });
   });
@@ -242,12 +195,7 @@ test.describe('Submission Flow', () => {
     test('shows loading state during slow analysis', async ({ page, request }) => {
       await setGeminiScenario(request, 'slow_response');
       await page.goto('/task/2024/etap2/1');
-
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-
-      const submitButton = page.getByRole('button', { name: /prześlij/i });
-      await submitButton.click();
+      await uploadAndSubmit(page, TEST_IMAGE);
 
       // Should show loading/analyzing state
       await expect(
@@ -264,10 +212,12 @@ test.describe('Submission Flow', () => {
   test.describe('File validation', () => {
     test('rejects files that are too large', async ({ page }) => {
       await page.goto('/task/2024/etap2/1');
+      await page.waitForLoadState('networkidle');
 
       // Create a "large" file in memory (we can't actually create 10MB+ in test)
       // This test verifies the UI handles the case - actual validation happens server-side
       const fileInput = page.locator('input[type="file"]');
+      await expect(fileInput).toBeAttached({ timeout: 10000 });
 
       // Try to upload - UI should have max size validation
       await fileInput.setInputFiles(TEST_IMAGE);
@@ -314,14 +264,13 @@ test.describe('Submission Flow', () => {
     test('submission appears in history after completion without page reload', async ({ page, request }) => {
       await setGeminiScenario(request, 'success_score_6');
       await page.goto('/task/2024/etap2/1');
+      await page.waitForLoadState('networkidle');
 
       // Get initial history count (if history section exists)
       const initialCount = await getHistoryCount(page);
 
       // Submit a solution
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-      await page.getByRole('button', { name: /prześlij/i }).click();
+      await uploadAndSubmit(page, TEST_IMAGE);
 
       // Wait for completion - look for exact score format
       await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
@@ -341,11 +290,7 @@ test.describe('Submission Flow', () => {
     test('submission persists in history after page reload', async ({ page, request }) => {
       await setGeminiScenario(request, 'success_score_6');
       await page.goto('/task/2024/etap2/1');
-
-      // Submit a solution
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-      await page.getByRole('button', { name: /prześlij/i }).click();
+      await uploadAndSubmit(page, TEST_IMAGE);
 
       // Wait for completion - look for exact score format
       await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
@@ -364,32 +309,32 @@ test.describe('Submission Flow', () => {
       await page.goto('/task/2024/etap2/1');
 
       // First submission
-      let fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-      await page.getByRole('button', { name: /prześlij/i }).click();
+      await uploadAndSubmit(page, TEST_IMAGE);
       await expect(page.getByText(/Wynik:\s*2\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
 
       // Wait for UI to be ready for next submission (file input available)
       await setGeminiScenario(request, 'success_score_6');
-      fileInput = page.locator('input[type="file"]');
-      await expect(fileInput).toBeAttached();
+      const fileInput = page.locator('input[type="file"]');
+      await expect(fileInput).toBeAttached({ timeout: 10000 });
       await fileInput.setInputFiles(TEST_IMAGE_2);
-      await page.getByRole('button', { name: /prześlij/i }).click();
+
+      const submitButton = page.getByRole('button', { name: /prześlij/i });
+      await expect(submitButton).toBeEnabled({ timeout: 5000 });
+      await submitButton.click();
       await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
     });
 
     test('history count updates after each submission without reload', async ({ page, request }) => {
       // Using task 2024/etap2/3 to avoid interference with other tests using task 1
       await page.goto('/task/2024/etap2/3');
+      await page.waitForLoadState('networkidle');
 
       // Get initial count using shared helper
       const initialCount = await getHistoryCount(page);
 
       // First submission
       await setGeminiScenario(request, 'success_score_2');
-      let fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-      await page.getByRole('button', { name: /prześlij/i }).click();
+      await uploadAndSubmit(page, TEST_IMAGE);
       await expect(page.getByText(/Wynik:\s*2\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
 
       // Verify history updated to initialCount + 1 without reload
@@ -399,10 +344,13 @@ test.describe('Submission Flow', () => {
 
       // Second submission
       await setGeminiScenario(request, 'success_score_6');
-      fileInput = page.locator('input[type="file"]');
-      await expect(fileInput).toBeAttached();
+      const fileInput = page.locator('input[type="file"]');
+      await expect(fileInput).toBeAttached({ timeout: 10000 });
       await fileInput.setInputFiles(TEST_IMAGE_2);
-      await page.getByRole('button', { name: /prześlij/i }).click();
+
+      const submitButton = page.getByRole('button', { name: /prześlij/i });
+      await expect(submitButton).toBeEnabled({ timeout: 5000 });
+      await submitButton.click();
       await expect(page.getByText(/Wynik:\s*6\s*\/\s*6\s*punktów/)).toBeVisible({ timeout: 30000 });
 
       // Verify history updated to initialCount + 2 without reload
