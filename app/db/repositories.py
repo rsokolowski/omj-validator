@@ -16,6 +16,30 @@ from .models import UserDB, SubmissionDB, SubmissionStatus, IssueType
 from ..models import Submission, SubmissionStatus as PydanticSubmissionStatus, IssueType as PydanticIssueType
 from ..config import settings
 
+
+def ensure_utc(dt: datetime | None) -> datetime | None:
+    """Ensure datetime has UTC timezone for proper frontend localization.
+
+    PostgreSQL DateTime columns without timezone=True return naive datetimes.
+    JavaScript interprets ISO strings without timezone as local time, so we
+    must explicitly add UTC timezone before serialization.
+
+    Note: This codebase stores all timestamps as UTC (using utc_now() default).
+    Naive datetimes are assumed to be UTC and get the UTC timezone attached.
+    Already timezone-aware datetimes are returned unchanged.
+
+    Args:
+        dt: A datetime object (may be naive, timezone-aware, or None)
+
+    Returns:
+        A timezone-aware datetime in UTC, or None if input was None
+    """
+    if dt is None:
+        return dt
+    if dt.tzinfo is None:
+        return dt.replace(tzinfo=timezone.utc)
+    return dt
+
 logger = logging.getLogger(__name__)
 
 # Submissions older than this are considered stale and marked as failed
@@ -314,7 +338,7 @@ class SubmissionRepository:
             year=db_submission.year,
             etap=db_submission.etap,
             task_number=db_submission.task_number,
-            timestamp=db_submission.timestamp,
+            timestamp=ensure_utc(db_submission.timestamp),
             status=PydanticSubmissionStatus(db_submission.status.value),
             images=db_submission.images,
             score=db_submission.score,

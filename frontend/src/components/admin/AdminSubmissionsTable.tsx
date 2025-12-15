@@ -26,6 +26,7 @@ import Link from "next/link";
 import { fetchAPI } from "@/lib/api/client";
 import { AdminSubmission, AdminSubmissionsResponse, AdminUser, IssueType } from "@/lib/types";
 import { getMaxScore } from "@/lib/utils/constants";
+import { formatDate } from "@/lib/utils/dates";
 import { useInfiniteScroll } from "@/lib/hooks/useInfiniteScroll";
 import { UserAutocomplete } from "./UserAutocomplete";
 import { MathContent } from "@/components/ui/MathContent";
@@ -114,17 +115,6 @@ export function AdminSubmissionsTable() {
     if (ratio >= 0.8) return { bg: "#dcfce7", color: "#166534", border: "#86efac" };
     if (ratio >= 0.4) return { bg: "#fef3c7", color: "#92400e", border: "#fcd34d" };
     return { bg: "#fee2e2", color: "#991b1b", border: "#fca5a5" };
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("pl-PL", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(date);
   };
 
   const renderIssueChip = (submission: AdminSubmission) => {

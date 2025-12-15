@@ -6,6 +6,7 @@ import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
 import { Submission } from "@/lib/types";
 import { getMaxScore } from "@/lib/utils/constants";
+import { formatDate } from "@/lib/utils/dates";
 import { MathContent } from "@/components/ui/MathContent";
 
 interface SubmissionHistoryProps {
@@ -21,17 +22,6 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
     if (ratio >= 0.8) return { bg: "#dcfce7", color: "#166534", border: "#86efac" };
     if (ratio >= 0.4) return { bg: "#fef3c7", color: "#92400e", border: "#fcd34d" };
     return { bg: "#fee2e2", color: "#991b1b", border: "#fca5a5" };
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat("pl-PL", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(date);
   };
 
   const renderStatusChip = (submission: Submission, maxScore: number) => {

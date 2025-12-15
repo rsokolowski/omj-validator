@@ -39,6 +39,7 @@ from .auth import (
 from .oauth import oauth
 from .groups import check_group_membership, _get_allowed_emails
 from .db import get_db, UserRepository, SubmissionRepository
+from .db.repositories import ensure_utc
 
 logger = logging.getLogger(__name__)
 
@@ -129,16 +130,6 @@ from datetime import datetime as dt_datetime, timezone as dt_timezone, timedelta
 from typing import Optional as OptionalType
 
 
-def _ensure_timezone_aware(timestamp: OptionalType[dt_datetime]) -> OptionalType[dt_datetime]:
-    """Ensure datetime is timezone-aware (UTC)."""
-    if timestamp is None:
-        return None
-    if timestamp.tzinfo is None:
-        # Naive datetime - assume it's UTC
-        return timestamp.replace(tzinfo=dt_timezone.utc)
-    return timestamp
-
-
 def _calculate_rate_limit_headers(
     limit: int,
     current_count: int,
@@ -161,8 +152,8 @@ def _calculate_rate_limit_headers(
     """
     remaining = max(0, limit - current_count)
 
-    # Ensure timestamp is timezone-aware
-    oldest_timestamp = _ensure_timezone_aware(oldest_timestamp)
+    # Ensure timestamp is timezone-aware (using shared utility)
+    oldest_timestamp = ensure_utc(oldest_timestamp)
 
     # Calculate reset time: when the oldest item in the window ages out
     if oldest_timestamp:
@@ -193,8 +184,8 @@ def _calculate_retry_after(
     Returns:
         Seconds until the rate limit resets (minimum 1 second)
     """
-    # Ensure timestamp is timezone-aware
-    oldest_timestamp = _ensure_timezone_aware(oldest_timestamp)
+    # Ensure timestamp is timezone-aware (using shared utility)
+    oldest_timestamp = ensure_utc(oldest_timestamp)
 
     if oldest_timestamp:
         reset_time = oldest_timestamp + dt_timedelta(hours=window_hours)
@@ -1486,7 +1477,7 @@ async def my_submissions(
             "task_number": sub.task_number,
             "task_title": task_title,
             "task_categories": task_categories,
-            "timestamp": sub.timestamp.isoformat(),
+            "timestamp": ensure_utc(sub.timestamp).isoformat(),
             "status": sub.status.value,
             "score": sub.score,
             "max_score": _get_max_score(sub.etap),
@@ -1576,7 +1567,7 @@ async def admin_submissions(
             "year": sub.year,
             "etap": sub.etap,
             "task_number": sub.task_number,
-            "timestamp": sub.timestamp.isoformat(),
+            "timestamp": ensure_utc(sub.timestamp).isoformat(),
             "status": sub.status.value,
             "images": sub.images,
             "score": sub.score,
