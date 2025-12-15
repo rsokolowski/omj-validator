@@ -25,6 +25,7 @@ import {
   resetUserSubmissions,
   resetAllSubmissions,
 } from './utils/api';
+import { uploadAndSubmit } from './utils/submission';
 import * as path from 'path';
 
 // Path to test fixtures
@@ -286,11 +287,7 @@ test.describe('Rate Limiting', () => {
       // Now try via UI (use task 1 which exists)
       await page.goto('/task/2024/etap2/1');
 
-      const fileInput = page.locator('input[type="file"]');
-      await fileInput.setInputFiles(TEST_IMAGE);
-
-      const submitButton = page.getByRole('button', { name: /prześlij/i });
-      await submitButton.click();
+      await uploadAndSubmit(page, TEST_IMAGE);
 
       // Should show rate limit error message (specific Polish text to avoid matching username)
       await expect(
