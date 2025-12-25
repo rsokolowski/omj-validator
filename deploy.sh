@@ -10,6 +10,7 @@ VM_NAME="omj-validator"
 REMOTE_DIR="~/omj-validator"
 COMPOSE_FILE="docker-compose.prod.yml"
 ENV_FILE=".env.prod"
+SSH_USER=""  # Optional: override SSH user (default: current local user)
 
 # Parse arguments
 SERVICE=""
@@ -29,11 +30,13 @@ show_help() {
     echo "  --logs [SERVICE]   View logs (api, frontend, db, or all)"
     echo "  --status           Show container status"
     echo "  --ssh              Open SSH session to VM"
+    echo "  --user USER        SSH user on VM (default: current local user)"
     echo "  --help, -h         Show this help message"
     echo ""
     echo "Examples:"
     echo "  ./build-and-push.sh && ./deploy.sh   # Build, push, deploy"
     echo "  ./deploy.sh                          # Pull latest and restart"
+    echo "  ./deploy.sh --user rsokolowski       # Deploy as specific user"
     echo "  ./deploy.sh --api                    # Deploy only API"
     echo "  ./deploy.sh --frontend               # Deploy only frontend"
     echo "  ./deploy.sh --logs api               # View API logs"
@@ -41,22 +44,35 @@ show_help() {
     echo "  ./deploy.sh --ssh                    # SSH into VM"
 }
 
-for arg in "$@"; do
-    case $arg in
+while [[ $# -gt 0 ]]; do
+    case $1 in
         --api)
             SERVICE="api"
+            shift
             ;;
         --frontend)
             SERVICE="frontend"
+            shift
             ;;
         --logs)
             LOGS=true
+            shift
             ;;
         --status)
             STATUS=true
+            shift
             ;;
         --ssh)
             SSH_ONLY=true
+            shift
+            ;;
+        --user)
+            SSH_USER="$2"
+            shift 2
+            ;;
+        --user=*)
+            SSH_USER="${1#*=}"
+            shift
             ;;
         --help|-h)
             show_help
@@ -65,11 +81,22 @@ for arg in "$@"; do
         api|frontend|db)
             # Capture service name after --logs
             if [ "$LOGS" = true ]; then
-                SERVICE="$arg"
+                SERVICE="$1"
             fi
+            shift
+            ;;
+        *)
+            shift
             ;;
     esac
 done
+
+# Build SSH target (user@vm or just vm)
+if [ -n "$SSH_USER" ]; then
+    SSH_TARGET="$SSH_USER@$VM_NAME"
+else
+    SSH_TARGET="$VM_NAME"
+fi
 
 # Check gcloud is available
 if ! command -v gcloud &> /dev/null; then
@@ -82,30 +109,30 @@ echo ""
 
 # Handle different modes
 if [ "$SSH_ONLY" = true ]; then
-    echo "Opening SSH session to $VM_NAME..."
-    gcloud compute ssh "$VM_NAME"
+    echo "Opening SSH session to $SSH_TARGET..."
+    gcloud compute ssh "$SSH_TARGET"
     exit 0
 fi
 
 if [ "$STATUS" = true ]; then
     echo "Checking container status..."
-    gcloud compute ssh "$VM_NAME" --command="cd $REMOTE_DIR && sudo docker compose -f $COMPOSE_FILE --env-file $ENV_FILE ps"
+    gcloud compute ssh "$SSH_TARGET" --command="cd $REMOTE_DIR && sudo docker compose -f $COMPOSE_FILE --env-file $ENV_FILE ps"
     exit 0
 fi
 
 if [ "$LOGS" = true ]; then
     if [ -n "$SERVICE" ]; then
         echo "Streaming logs for $SERVICE..."
-        gcloud compute ssh "$VM_NAME" --command="sudo docker logs omj-$SERVICE --tail=100 -f"
+        gcloud compute ssh "$SSH_TARGET" --command="sudo docker logs omj-$SERVICE --tail=100 -f"
     else
         echo "Streaming all logs..."
-        gcloud compute ssh "$VM_NAME" --command="cd $REMOTE_DIR && sudo docker compose -f $COMPOSE_FILE --env-file $ENV_FILE logs -f --tail=100"
+        gcloud compute ssh "$SSH_TARGET" --command="cd $REMOTE_DIR && sudo docker compose -f $COMPOSE_FILE --env-file $ENV_FILE logs -f --tail=100"
     fi
     exit 0
 fi
 
 # Main deployment
-echo "Deploying to VM: $VM_NAME"
+echo "Deploying to VM: $SSH_TARGET"
 echo ""
 
 # Build the deployment command - pull images from ghcr.io then restart
@@ -122,7 +149,7 @@ echo "Running: $DEPLOY_CMD"
 echo ""
 
 # Execute deployment
-gcloud compute ssh "$VM_NAME" --command="$DEPLOY_CMD"
+gcloud compute ssh "$SSH_TARGET" --command="$DEPLOY_CMD"
 
 echo ""
 echo "=== Deployment complete ==="

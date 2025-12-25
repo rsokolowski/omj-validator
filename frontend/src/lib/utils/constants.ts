@@ -72,37 +72,37 @@ export function getMasteryThreshold(etap: string): number {
 }
 
 // Curated list of 23 tasks for Etap 2 preparation
-// Selection criteria: Grade 6 level tasks suitable for building foundational skills
-// before attempting Etap 2. Covers geometry, number theory, and algebra.
+// Selection criteria: Grade 6 level tasks from past etap2 competitions,
+// suitable for building foundational skills. Covers geometry, number theory, and algebra.
 // Source: https://rsokolowski.github.io/omj-6klasa/raport_omj.html
-// Format: {year}_etap{num}_{task_num}
+// Format: {year}_etap2_{task_num}
 // Edition mapping: OMJ XX=2024, XIX=2023, XVIII=2022, XVII=2021, XVI=2020,
 //                  XV=2019, XIV=2018, XIII=2017, XII=2016
 //                  OMG XI=2015, IX=2013, VII=2011, V=2009
 export const ETAP2_PREP_TASKS: string[] = [
-  // Level 1 - 17 easy tasks (grade 6 level)
-  "2024_etap1_1",  // OMJ XX/1 - Geometry
-  "2022_etap1_1",  // OMJ XVIII/1 - Geometry
-  "2022_etap1_3",  // OMJ XVIII/3 - Number Theory
-  "2021_etap1_2",  // OMJ XVII/2 - Number Theory
-  "2020_etap1_2",  // OMJ XVI/2 - Geometry
-  "2020_etap1_3",  // OMJ XVI/3 - Number Theory
-  "2018_etap1_2",  // OMJ XIV/2 - Geometry
-  "2018_etap1_5",  // OMJ XIV/5 - Number Theory
-  "2017_etap1_3",  // OMJ XIII/3 - Algebra
-  "2017_etap1_4",  // OMJ XIII/4 - Geometry
-  "2016_etap1_2",  // OMJ XII/2 - Geometry
-  "2015_etap1_1",  // OMG XI/1 - Number Theory
-  "2015_etap1_2",  // OMG XI/2 - Geometry
-  "2013_etap1_2",  // OMG IX/2 - Geometry
-  "2011_etap1_1",  // OMG VII/1 - Number Theory
-  "2009_etap1_2",  // OMG V/2 - Geometry
-  "2009_etap1_3",  // OMG V/3 - Number Theory
+  // Level 1 - 17 easier tasks (grade 6 level)
+  "2024_etap2_1",  // OMJ XX/1 - Prostokąt ABCD, wykaż AB≥AD
+  "2022_etap2_1",  // OMJ XVIII/1 - Trójkąt ABC, wykaż AE=BE
+  "2022_etap2_3",  // OMJ XVIII/3 - Wpisanie cyfry daje 6n
+  "2021_etap2_2",  // OMJ XVII/2 - Dzielniki a+b+ab=n
+  "2020_etap2_2",  // OMJ XVI/2 - Kwadrat ABCD, przekątna, kąt 90°
+  "2020_etap2_3",  // OMJ XVI/3 - 5a+3b podzielne przez a+b
+  "2018_etap2_2",  // OMJ XIV/2 - Trapez, dwusieczna, pola równe
+  "2018_etap2_5",  // OMJ XIV/5 - Cyfry 1,2,9 w 3n
+  "2017_etap2_3",  // OMJ XIII/3 - Układ x-yz=1, xz+y=2
+  "2017_etap2_4",  // OMJ XIII/4 - Trapez ABCD, kąty równe
+  "2016_etap2_2",  // OMJ XII/2 - Trapez, przekątne prostopadłe
+  "2015_etap2_1",  // OMG XI/1 - Trójki a+b, b+c, c+a pierwsze
+  "2015_etap2_2",  // OMG XI/2 - Równoległobok, CX=CY
+  "2013_etap2_2",  // OMG IX/2 - Trapez, środki podstaw, pola
+  "2011_etap2_1",  // OMG VII/1 - ab|175 i a+b=175
+  "2009_etap2_2",  // OMG V/2 - Trapez, kąty 60°, BD=AE
+  "2009_etap2_3",  // OMG V/3 - n²+n+1 i n²+n+3 pierwsze
   // Level 2 - 6 more challenging tasks
-  "2024_etap1_2",  // OMJ XX/2 - Combinatorics
-  "2023_etap1_1",  // OMJ XIX/1 - Number Theory
-  "2023_etap1_3",  // OMJ XIX/3 - Geometry
-  "2021_etap1_1",  // OMJ XVII/1 - Geometry
-  "2019_etap1_1",  // OMJ XV/1 - Algebra
-  "2019_etap1_2",  // OMJ XV/2 - Geometry
+  "2024_etap2_2",  // OMJ XX/2 - Tablica 5×5, kolory
+  "2023_etap2_1",  // OMJ XIX/1 - Iloczyny kolejne, jeden kwadrat
+  "2023_etap2_3",  // OMJ XIX/3 - Trapez, AP=CD
+  "2021_etap2_1",  // OMJ XVII/1 - Odcinki prostopadłe
+  "2019_etap2_1",  // OMJ XV/1 - a+b, b+c, c+a kolejne
+  "2019_etap2_2",  // OMJ XV/2 - Równoległobok, symetralna
 ];
