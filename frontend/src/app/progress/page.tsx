@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { ProgressStats } from "@/components/progress/ProgressStats";
 import { CategoryFilter } from "@/components/progress/CategoryFilter";
 import { RecommendationsList } from "@/components/progress/RecommendationsList";
+import { Etap2PrepList } from "@/components/progress/Etap2PrepList";
 import { LoginPrompt } from "@/components/common/LoginPrompt";
 
 export const dynamic = "force-dynamic";
@@ -42,9 +43,12 @@ export default async function ProgressPage({ searchParams }: ProgressPageProps) 
 
       {/* Recommendations or Login Prompt */}
       {data.is_authenticated ? (
-        data.recommendations.length > 0 && (
-          <RecommendationsList recommendations={data.recommendations} />
-        )
+        <>
+          {data.recommendations.length > 0 && (
+            <RecommendationsList recommendations={data.recommendations} />
+          )}
+          <Etap2PrepList nodes={data.nodes} />
+        </>
       ) : (
         <LoginPrompt redirectUrl="/progress" />
       )}
