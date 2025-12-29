@@ -29,6 +29,14 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+# Map config strings to MediaResolution enum values
+MEDIA_RESOLUTION_MAP = {
+    "low": "MEDIA_RESOLUTION_LOW",
+    "medium": "MEDIA_RESOLUTION_MEDIUM",
+    "high": "MEDIA_RESOLUTION_HIGH",
+    "ultra_high": "MEDIA_RESOLUTION_ULTRA_HIGH",
+}
+
 
 def _configure_debug_logging():
     """Configure debug logging for Gemini if enabled."""
@@ -123,17 +131,57 @@ class GeminiProvider:
         _configure_debug_logging()
 
         # Support custom API endpoint for testing
+        # Use v1alpha API for per-part media_resolution (Gemini 3 feature)
         if settings.gemini_api_base_url:
-            http_options = types.HttpOptions(base_url=settings.gemini_api_base_url)
+            http_options = types.HttpOptions(
+                base_url=settings.gemini_api_base_url,
+                api_version="v1alpha",
+            )
             self._client = genai.Client(
                 api_key=settings.gemini_api_key,
                 http_options=http_options,
             )
             logger.info(f"[Gemini] Using custom API endpoint: {settings.gemini_api_base_url}")
         else:
-            self._client = genai.Client(api_key=settings.gemini_api_key)
+            http_options = types.HttpOptions(api_version="v1alpha")
+            self._client = genai.Client(
+                api_key=settings.gemini_api_key,
+                http_options=http_options,
+            )
 
         self._model_name = settings.gemini_model
+        self._is_gemini_3 = "gemini-3" in self._model_name.lower()
+
+        # Log media resolution settings
+        logger.info(
+            f"[Gemini] Initialized with model={self._model_name}, "
+            f"media_resolution={settings.gemini_media_resolution}, "
+            f"image_resolution={settings.gemini_media_resolution_images}, "
+            f"is_gemini_3={self._is_gemini_3}"
+        )
+
+    def _get_media_resolution(self, level: str = None):
+        """Get MediaResolution enum value from config string.
+
+        Args:
+            level: Resolution level string ("low", "medium", "high", "ultra_high").
+                   If None, uses gemini_media_resolution from settings.
+
+        Note: Falls back to HIGH if requested level is not available in SDK.
+        """
+        level = level or settings.gemini_media_resolution
+        enum_name = MEDIA_RESOLUTION_MAP.get(level.lower(), "MEDIA_RESOLUTION_HIGH")
+
+        # Check if enum value exists (ULTRA_HIGH may not be available in all SDK versions)
+        if hasattr(types.MediaResolution, enum_name):
+            return getattr(types.MediaResolution, enum_name)
+        else:
+            # Fall back to HIGH if requested level not available
+            logger.warning(
+                f"[Gemini] MediaResolution.{enum_name} not available in SDK, "
+                f"falling back to MEDIA_RESOLUTION_HIGH"
+            )
+            return types.MediaResolution.MEDIA_RESOLUTION_HIGH
 
     def _calculate_cost(self, input_tokens: int, output_tokens: int) -> float:
         """Calculate estimated cost based on token usage."""
@@ -163,8 +211,13 @@ class GeminiProvider:
         task_number: int,
         has_solution_pdf: bool,
         num_images: int,
+        image_paths: list[Path] = None,
     ) -> list:
-        """Build content parts list for API request."""
+        """Build content parts list for API request.
+
+        For Gemini 3 models, student images are wrapped with ULTRA_HIGH
+        media resolution for better handwriting recognition.
+        """
         content_parts = []
         result_idx = 0
 
@@ -188,10 +241,57 @@ class GeminiProvider:
             content_parts.append(solution_file)
             full_prompt += "\n"
 
-        # Student images
+        # Student images - use per-part ULTRA_HIGH resolution for Gemini 3
         full_prompt += "### Rozwiązanie ucznia:\n"
+        image_resolution = self._get_media_resolution(settings.gemini_media_resolution_images)
+
         for i in range(num_images):
             full_prompt += f"Zdjęcie {i + 1}:\n"
+
+            if self._is_gemini_3 and image_paths and i < len(image_paths):
+                # Gemini 3: Use inline bytes with per-part ULTRA_HIGH resolution
+                img_path = image_paths[i]
+                try:
+                    with open(img_path, "rb") as f:
+                        image_bytes = f.read()
+
+                    # Determine MIME type from extension
+                    ext = img_path.suffix.lower()
+                    mime_types = {
+                        ".jpg": "image/jpeg",
+                        ".jpeg": "image/jpeg",
+                        ".png": "image/png",
+                        ".webp": "image/webp",
+                        ".heic": "image/heic",
+                        ".heif": "image/heif",
+                    }
+                    mime_type = mime_types.get(ext, "image/jpeg")
+
+                    # Create Part with per-part resolution
+                    img_part = types.Part.from_bytes(
+                        data=image_bytes,
+                        mime_type=mime_type,
+                        media_resolution=image_resolution,
+                    )
+                    content_parts.append(img_part)
+                    logger.debug(
+                        f"[Gemini] Image {i + 1} using per-part resolution: "
+                        f"{settings.gemini_media_resolution_images}"
+                    )
+                    # Increment index to stay aligned with uploaded_files array.
+                    # Even though we used inline bytes instead of the file reference,
+                    # the file was still uploaded and occupies a slot in uploaded_files.
+                    # This ensures fallback iterations access the correct file.
+                    result_idx += 1
+                    continue
+                except (TypeError, AttributeError) as e:
+                    # SDK doesn't support per-part media_resolution, fall back to file reference
+                    logger.warning(
+                        f"[Gemini] Per-part resolution not supported by SDK "
+                        f"({type(e).__name__}: {e}). "
+                        f"Falling back to file reference for image {i + 1}"
+                    )
+            # Non-Gemini 3 or fallback: use uploaded file reference
             img_file = uploaded_files[result_idx]
             result_idx += 1
             content_parts.append(img_file)
@@ -302,10 +402,11 @@ class GeminiProvider:
                 task_pdf_path, solution_pdf_path, image_paths
             )
 
-            # Build content
+            # Build content (pass image_paths for Gemini 3 per-part resolution)
             prompt_text = self._load_prompt(etap)
             content_parts = self._build_content_parts(
-                prompt_text, uploaded_files, task_number, has_solution_pdf, len(image_paths)
+                prompt_text, uploaded_files, task_number, has_solution_pdf, len(image_paths),
+                image_paths=image_paths,
             )
 
             upload_time = time.time() - start_time
@@ -316,9 +417,7 @@ class GeminiProvider:
 
             # Configure thinking mode based on model version
             # Gemini 3.x uses thinking_level, Gemini 2.x uses thinking_budget
-            is_gemini_3 = "gemini-3" in self._model_name.lower()
-
-            if is_gemini_3:
+            if self._is_gemini_3:
                 thinking_config = types.ThinkingConfig(
                     include_thoughts=True,
                     thinking_level=settings.gemini_thinking_level,  # "low" or "high"
@@ -329,12 +428,18 @@ class GeminiProvider:
                     thinking_budget=8192,
                 )
 
-            logger.debug(f"[Gemini] Using thinking config: {thinking_config}")
+            # Use global media_resolution for PDFs (per-part resolution handles images for Gemini 3)
+            media_resolution = self._get_media_resolution()
+            logger.debug(
+                f"[Gemini] Using thinking config: {thinking_config}, "
+                f"media_resolution: {settings.gemini_media_resolution}"
+            )
 
             config = types.GenerateContentConfig(
                 thinking_config=thinking_config,
                 response_mime_type="application/json",
                 response_json_schema=RESPONSE_JSON_SCHEMA,
+                media_resolution=media_resolution,
             )
 
             response = await asyncio.wait_for(
@@ -458,10 +563,11 @@ class GeminiProvider:
                 task_pdf_path, solution_pdf_path, image_paths
             )
 
-            # Build content
+            # Build content (pass image_paths for Gemini 3 per-part resolution)
             prompt_text = self._load_prompt(etap)
             content_parts = self._build_content_parts(
-                prompt_text, uploaded_files, task_number, has_solution_pdf, len(image_paths)
+                prompt_text, uploaded_files, task_number, has_solution_pdf, len(image_paths),
+                image_paths=image_paths,
             )
 
             upload_time = time.time() - start_time
@@ -476,9 +582,7 @@ class GeminiProvider:
 
             # Configure thinking mode based on model version
             # Gemini 3.x uses thinking_level, Gemini 2.x uses thinking_budget
-            is_gemini_3 = "gemini-3" in self._model_name.lower()
-
-            if is_gemini_3:
+            if self._is_gemini_3:
                 # Gemini 3: use thinking_level (cannot disable thinking)
                 thinking_config = types.ThinkingConfig(
                     include_thoughts=True,
@@ -491,12 +595,18 @@ class GeminiProvider:
                     thinking_budget=8192,  # Enable thinking with reasonable budget
                 )
 
-            logger.debug(f"[Gemini Stream] Using thinking config: {thinking_config}")
+            # Use global media_resolution for PDFs (per-part resolution handles images for Gemini 3)
+            media_resolution = self._get_media_resolution()
+            logger.debug(
+                f"[Gemini Stream] Using thinking config: {thinking_config}, "
+                f"media_resolution: {settings.gemini_media_resolution}"
+            )
 
             config = types.GenerateContentConfig(
                 thinking_config=thinking_config,
                 response_mime_type="application/json",
                 response_json_schema=RESPONSE_JSON_SCHEMA,
+                media_resolution=media_resolution,
             )
 
             # Stream the response with timeout
