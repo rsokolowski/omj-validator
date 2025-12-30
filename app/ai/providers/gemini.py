@@ -153,11 +153,14 @@ class GeminiProvider:
         self._is_gemini_3 = "gemini-3" in self._model_name.lower()
 
         # Log media resolution settings
+        self._disable_file_cache = settings.gemini_disable_file_cache
+
         logger.info(
             f"[Gemini] Initialized with model={self._model_name}, "
             f"media_resolution={settings.gemini_media_resolution}, "
             f"image_resolution={settings.gemini_media_resolution_images}, "
-            f"is_gemini_3={self._is_gemini_3}"
+            f"is_gemini_3={self._is_gemini_3}, "
+            f"file_cache={'disabled' if self._disable_file_cache else 'enabled'}"
         )
 
     def _get_media_resolution(self, level: str = None):
@@ -314,16 +317,17 @@ class GeminiProvider:
         upload_tasks = []
         upload_labels = []
 
-        # Task PDF (cached)
+        # Task PDF (cached unless disabled)
+        use_cache = not self._disable_file_cache
         logger.debug(f"[Gemini Upload] Queueing task PDF: {task_pdf_path}")
-        upload_tasks.append(self._upload_file(task_pdf_path, use_cache=True))
+        upload_tasks.append(self._upload_file(task_pdf_path, use_cache=use_cache))
         upload_labels.append(("task_pdf", task_pdf_path.name))
 
-        # Solution PDF if exists (cached)
+        # Solution PDF if exists (cached unless disabled)
         has_solution_pdf = solution_pdf_path and solution_pdf_path.exists()
         if has_solution_pdf:
             logger.debug(f"[Gemini Upload] Queueing solution PDF: {solution_pdf_path}")
-            upload_tasks.append(self._upload_file(solution_pdf_path, use_cache=True))
+            upload_tasks.append(self._upload_file(solution_pdf_path, use_cache=use_cache))
             upload_labels.append(("solution_pdf", solution_pdf_path.name))
 
         # Student images (NOT cached)
@@ -514,7 +518,7 @@ class GeminiProvider:
                     "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
                 )
         finally:
-            await self._cleanup_files(uploaded_files)
+            await self._cleanup_files(uploaded_files, skip_cached=not self._disable_file_cache)
 
     async def analyze_solution_stream(
         self,
@@ -826,7 +830,7 @@ class GeminiProvider:
                     "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
                 )
         finally:
-            await self._cleanup_files(uploaded_files)
+            await self._cleanup_files(uploaded_files, skip_cached=not self._disable_file_cache)
 
     def _get_file_hash(self, file_path: Path) -> str:
         """Compute MD5 hash of file for cache validation."""

@@ -71,6 +71,7 @@ class Settings(BaseSettings):
     gemini_thinking_level: str = "low"  # Thinking effort: "low" (fast) or "high" (thorough)
     gemini_media_resolution: str = "high"  # Global resolution for PDFs: "low", "medium", "high"
     gemini_media_resolution_images: str = "ultra_high"  # Per-part resolution for student images (Gemini 3 only): "high", "ultra_high"
+    gemini_disable_file_cache: bool = False  # Disable PDF file caching (forces fresh upload each request)
 
     # Google Cloud Translation v2 (for status message translation EN->PL)
     translate_enabled: bool = False  # Enable status message translation
