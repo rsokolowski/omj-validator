@@ -71,6 +71,19 @@ export function Header() {
                 Nauka
               </Typography>
             </Link>
+            <Link
+              href="/practice/etap2"
+              style={{ textDecoration: "none", color: "#4b5563" }}
+            >
+              <Typography
+                sx={{
+                  fontWeight: 500,
+                  "&:hover": { color: "primary.main" },
+                }}
+              >
+                Praktyka
+              </Typography>
+            </Link>
 
             {/* My solutions link - only visible to authenticated users */}
             {isAuthenticated && (

@@ -106,3 +106,40 @@ export const ETAP2_PREP_TASKS: string[] = [
   "2019_etap2_1",  // OMJ XV/1 - a+b, b+c, c+a kolejne
   "2019_etap2_2",  // OMJ XV/2 - Równoległobok, symetralna
 ];
+
+// Mock Etap 2 practice sets - realistic exam simulations
+// Each set contains 5 tasks with typical etap2 difficulty distribution
+// Tasks are NOT included in ETAP2_PREP_TASKS to avoid overlap
+export interface MockEtap2Set {
+  id: string;
+  name: string;
+  tasks: string[];
+}
+
+export const MOCK_ETAP2_SETS: MockEtap2Set[] = [
+  {
+    id: "mock-1",
+    name: "Próbny Etap 2 - I",
+    tasks: [
+      "2020_etap2_1",  // algebra - 2a+a²=2b+b², difficulty 3
+      "2022_etap2_2",  // teoria_liczb - Liczby 2 i 5, niezmienniki, difficulty 3
+      "2020_etap2_4",  // geometria - Równoległobok, dwusieczna ⊥ KL, difficulty 4
+      "2016_etap2_4",  // algebra - √2±1 suma iloczynów = 199, difficulty 4
+      "2020_etap2_5",  // kombinatoryka - Zdalne przyjęcie, teoria grafów, difficulty 4
+    ],
+  },
+  {
+    id: "mock-2",
+    name: "Próbny Etap 2 - II",
+    tasks: [
+      "2017_etap2_1",  // algebra/geometria - Rozszerzenie tw. Pitagorasa, difficulty 3
+      "2016_etap2_1",  // kombinatoryka - Tablica 4×4, potęgi 2, difficulty 3
+      "2017_etap2_2",  // geometria - Trójkąt, środek okręgu opisanego, difficulty 3
+      "2019_etap2_3",  // kombinatoryka/logika - Turniej, difficulty 4
+      "2018_etap2_1",  // algebra - Nierówność x²+x ≤ y, difficulty 4
+    ],
+  },
+];
+
+// Timer duration for etap2 (3 hours in milliseconds)
+export const ETAP2_TIMER_DURATION_MS = 3 * 60 * 60 * 1000;
