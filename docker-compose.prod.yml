@@ -45,7 +45,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-omj}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-omj}
 
       # Public URL for OAuth callbacks (required for Docker deployment)
-      FRONTEND_URL: ${FRONTEND_URL:-https://omj-validator.duckdns.org}
+      FRONTEND_URL: ${FRONTEND_URL:-https://omj-validator.pl}
 
       # Authentication
       AUTH_DISABLED: ${AUTH_DISABLED:-false}

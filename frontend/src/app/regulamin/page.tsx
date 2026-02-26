@@ -33,11 +33,11 @@ export default function RegulaminPage() {
             Niniejszy regulamin określa zasady korzystania z serwisu {APP_NAME}{" "}
             dostępnego pod adresem{" "}
             <MuiLink
-              href="https://omj-validator.duckdns.org"
+              href="https://omj-validator.pl"
               target="_blank"
               rel="noopener"
             >
-              omj-validator.duckdns.org
+              omj-validator.pl
             </MuiLink>
             .
           </Typography>

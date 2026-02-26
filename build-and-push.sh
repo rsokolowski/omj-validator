@@ -16,7 +16,7 @@ FRONTEND_IMAGE="$REGISTRY/omj-validator-frontend"
 
 # Build args for frontend (must match production docker-compose)
 FASTAPI_URL="http://api:8100"
-WS_URL="wss://omj-validator.duckdns.org"
+WS_URL="wss://omj-validator.pl"
 
 # Parse arguments
 BUILD_API=false

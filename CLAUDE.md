@@ -238,13 +238,15 @@ GEMINI_TIMEOUT=90
 
 All services run in Docker with hot-reload enabled. Code changes in `app/` and `frontend/src/` are automatically picked up.
 
-### Production (GCP VM)
+### Production (NUC Server)
 
-Deployed on GCP Compute Engine VM with Docker Compose and Nginx reverse proxy.
+Deployed on a local Intel NUC server with Docker Compose and Cloudflare Tunnel.
 
-**Domain**: https://omj-validator.duckdns.org
+**Domain**: https://omj-validator.pl
 
-**Deployment workflow** (build locally, pull on VM):
+**Server**: Local NUC, connection details configured in `deploy.sh`
+
+**Deployment workflow** (build locally, pull on server):
 ```bash
 # One-time setup: login to GitHub Container Registry
 # 1. Create PAT at https://github.com/settings/tokens with 'write:packages' scope
@@ -253,7 +255,7 @@ Deployed on GCP Compute Engine VM with Docker Compose and Nginx reverse proxy.
 # Build and push images from local machine
 ./build-and-push.sh
 
-# Deploy to VM (pulls images from ghcr.io)
+# Deploy to server (pulls images from ghcr.io)
 ./deploy.sh
 
 # Or build and deploy in one command
@@ -264,7 +266,7 @@ Deployed on GCP Compute Engine VM with Docker Compose and Nginx reverse proxy.
 ```bash
 ./deploy.sh --status        # Check container status
 ./deploy.sh --logs api      # View API logs
-./deploy.sh --ssh           # SSH into VM
+./deploy.sh --ssh           # SSH into server
 ```
 
 See **[docs/production-deployment.md](docs/production-deployment.md)** for complete setup guide, operations, and troubleshooting.
