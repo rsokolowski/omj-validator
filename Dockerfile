@@ -28,8 +28,8 @@ COPY templates/ ./templates/
 # Create data directories
 RUN mkdir -p /app/data/uploads /app/data/submissions
 
-# Create non-root user for security
-RUN adduser --system --uid 1001 appuser && \
+# Create non-root user matching host uid for bind-mount compatibility
+RUN adduser --system --uid 1000 appuser && \
     chown -R appuser /app
 USER appuser
 

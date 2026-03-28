@@ -1,5 +1,5 @@
-# Production Docker Compose for GCP VM deployment
-# Use with Nginx reverse proxy in front
+# Production Docker Compose
+# Nginx routes traffic: WebSocket → API, everything else → frontend
 
 services:
   db:
@@ -104,8 +104,20 @@ services:
     environment:
       # Runtime backend URL (must match build-time for rewrites)
       FASTAPI_URL: http://api:8100
+    # No host port - accessed via nginx only
+    networks:
+      - omj-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: omj-nginx
+    restart: unless-stopped
+    depends_on:
+      - api
+      - frontend
+    volumes:
+      - ./nginx.prod.conf:/etc/nginx/nginx.conf:ro
     ports:
-      # Non-standard port for Nginx proxy
       - "127.0.0.1:3100:3100"
     networks:
       - omj-network
