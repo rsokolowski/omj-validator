@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Box, Card, CardContent, Typography, Grid } from "@mui/material";
 import { EmojiEvents, MilitaryTech, Stars } from "@mui/icons-material";
@@ -11,6 +12,15 @@ export const dynamic = "force-dynamic";
 
 interface YearPageProps {
   params: Promise<{ year: string }>;
+}
+
+export async function generateMetadata({ params }: YearPageProps): Promise<Metadata> {
+  const { year } = await params;
+  return {
+    title: `OMJ ${year} – zadania`,
+    description: `Zadania Olimpiady Matematycznej Juniorów z roku ${year}. Wybierz etap zawodów: eliminacje szkolne, etap wojewódzki lub finał ogólnopolski.`,
+    alternates: { canonical: `/years/${year}` },
+  };
 }
 
 // Etap metadata with colors, icons, and descriptions

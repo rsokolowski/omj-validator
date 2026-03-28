@@ -1,9 +1,17 @@
+import type { Metadata } from "next";
 import { Box } from "@mui/material";
 import { serverFetch } from "@/lib/api/server";
 import { ProgressData, User } from "@/lib/types";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { MockEtap2Section } from "@/components/practice/MockEtap2Section";
 import { LoginPrompt } from "@/components/common/LoginPrompt";
+
+export const metadata: Metadata = {
+  title: "Próbny Etap 2",
+  description:
+    "Sprawdź się w warunkach zbliżonych do prawdziwego Etapu 2 Olimpiady Matematycznej Juniorów. Zestawy 5 zadań z limitem czasowym 3 godzin.",
+  alternates: { canonical: "/practice/etap2" },
+};
 
 export const dynamic = "force-dynamic";
 

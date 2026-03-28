@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Box, Stack } from "@mui/material";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -10,6 +11,23 @@ export const dynamic = "force-dynamic";
 
 interface EtapPageProps {
   params: Promise<{ year: string; etap: string }>;
+}
+
+const ETAP_DESCRIPTIONS: Record<string, string> = {
+  etap1: "eliminacji szkolnych",
+  etap2: "etapu wojewódzkiego",
+  etap3: "finału ogólnopolskiego",
+};
+
+export async function generateMetadata({ params }: EtapPageProps): Promise<Metadata> {
+  const { year, etap } = await params;
+  const etapName = ETAP_NAMES[etap] || etap;
+  const etapDesc = ETAP_DESCRIPTIONS[etap] || etapName;
+  return {
+    title: `${etapName} ${year} – zadania OMJ`,
+    description: `Lista zadań z ${etapDesc} Olimpiady Matematycznej Juniorów ${year}. Rozwiąż zadania i sprawdź swoje rozwiązania z pomocą AI.`,
+    alternates: { canonical: `/years/${year}/${etap}` },
+  };
 }
 
 async function getTasks(year: string, etap: string): Promise<TasksResponse> {

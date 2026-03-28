@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Box, Typography, Paper, Button, Chip, Tooltip, Link as MuiLink } from "@mui/material";
 import { BugReport } from "@mui/icons-material";
 import Link from "next/link";
@@ -11,12 +12,40 @@ import { SubmitSection } from "@/components/task/SubmitSection";
 import { SubmissionHistory } from "@/components/task/SubmissionHistory";
 import { serverFetch } from "@/lib/api/server";
 import { TaskDetailResponse } from "@/lib/types";
-import { ETAP_NAMES, CONTACT_EMAIL } from "@/lib/utils/constants";
+import { ETAP_NAMES, CONTACT_EMAIL, CATEGORY_NAMES } from "@/lib/utils/constants";
 
 export const dynamic = "force-dynamic";
 
 interface TaskPageProps {
   params: Promise<{ year: string; etap: string; num: string }>;
+}
+
+export async function generateMetadata({ params }: TaskPageProps): Promise<Metadata> {
+  const { year, etap, num } = await params;
+  const etapName = ETAP_NAMES[etap] || etap;
+
+  try {
+    const data = await getTask(year, etap, num);
+    const title = data.task.title.replace(/\$[^$]*\$/g, "").trim();
+    const categories = data.task.categories
+      .map((c) => CATEGORY_NAMES[c] || c)
+      .join(", ");
+    const description = `Zadanie ${num} – ${etapName} ${year}. ${categories ? categories + ". " : ""}${title.slice(0, 120)}`;
+
+    return {
+      title: `Zadanie ${num} – ${etapName} ${year}`,
+      description,
+      alternates: { canonical: `/task/${year}/${etap}/${num}` },
+      openGraph: {
+        title: `Zadanie ${num} – ${etapName} ${year} | OMJ`,
+        description,
+      },
+    };
+  } catch {
+    return {
+      title: `Zadanie ${num} – ${etapName} ${year}`,
+    };
+  }
 }
 
 async function getTask(year: string, etap: string, num: string): Promise<TaskDetailResponse> {

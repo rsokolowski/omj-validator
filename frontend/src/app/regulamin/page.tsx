@@ -1,8 +1,14 @@
-"use client";
-
+import type { Metadata } from "next";
 import { Box, Typography, Paper, Link as MuiLink } from "@mui/material";
 import Link from "next/link";
 import { APP_NAME, CONTACT_EMAIL } from "@/lib/utils/constants";
+
+export const metadata: Metadata = {
+  title: "Regulamin",
+  description:
+    "Regulamin serwisu Trener OMJ – zasady korzystania, polityka prywatności, prawa autorskie.",
+  alternates: { canonical: "/regulamin" },
+};
 
 export default function RegulaminPage() {
   return (

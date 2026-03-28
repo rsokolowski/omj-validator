@@ -1,8 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Box, Card, CardContent, Typography, Grid } from "@mui/material";
 import { serverFetch } from "@/lib/api/server";
 import { YearsResponse } from "@/lib/types";
 import { PageHeader } from "@/components/layout/PageHeader";
+
+export const metadata: Metadata = {
+  title: "Archiwum zadań OMJ",
+  description:
+    "Przeglądaj archiwum zadań Olimpiady Matematycznej Juniorów z lat 2005-2025. Ponad 340 zadań z trzech etapów zawodów.",
+  alternates: { canonical: "/years" },
+};
 
 export const dynamic = "force-dynamic";
 

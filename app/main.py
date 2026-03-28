@@ -52,6 +52,7 @@ from .storage import (
     get_task,
     get_task_pdf_path,
     get_solution_pdf_path,
+    _load_all_tasks,
 )
 from .ai import create_ai_provider, AIProviderError
 from .models import SubmissionResult, TaskCategory, TaskStatus
@@ -1236,6 +1237,22 @@ async def years_api(request: Request):
         "years": years,
         "user": user,
         "is_authenticated": user is not None,
+    }
+
+
+@app.get("/api/sitemap-data")
+async def sitemap_data_api():
+    """Return all task identifiers for sitemap generation."""
+    tasks = _load_all_tasks()
+    years = get_available_years()
+    etaps_by_year = {year: get_etaps_for_year(year) for year in years}
+    return {
+        "years": years,
+        "etaps_by_year": etaps_by_year,
+        "tasks": [
+            {"year": t.year, "etap": t.etap, "number": t.number}
+            for t in tasks.values()
+        ],
     }
 
 

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Box } from "@mui/material";
 import { serverFetch } from "@/lib/api/server";
 import { ProgressData, User } from "@/lib/types";
@@ -7,6 +8,13 @@ import { CategoryFilter } from "@/components/progress/CategoryFilter";
 import { RecommendationsList } from "@/components/progress/RecommendationsList";
 import { Etap2PrepList } from "@/components/progress/Etap2PrepList";
 import { LoginPrompt } from "@/components/common/LoginPrompt";
+
+export const metadata: Metadata = {
+  title: "Nauka – ścieżka rozwoju",
+  description:
+    "Śledź swoje postępy w rozwiązywaniu zadań OMJ. Rekomendacje zadań, statystyki i filtrowanie po kategoriach: algebra, geometria, teoria liczb, kombinatoryka.",
+  alternates: { canonical: "/progress" },
+};
 
 export const dynamic = "force-dynamic";
 
