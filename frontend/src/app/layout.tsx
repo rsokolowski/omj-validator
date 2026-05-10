@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     url: SITE_URL,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: APP_TITLE,
     description: APP_DESCRIPTION,
   },
@@ -64,10 +64,6 @@ export default function RootLayout({
     url: SITE_URL,
     description: APP_DESCRIPTION,
     inLanguage: "pl",
-    potentialAction: {
-      "@type": "SearchAction",
-      target: `${SITE_URL}/years`,
-    },
   };
 
   const orgJsonLd = {
