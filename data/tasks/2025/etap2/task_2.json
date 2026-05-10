@@ -1,0 +1,31 @@
+{
+  "number": 2,
+  "pdf": {
+    "tasks": "tasks/2025/etap2/21omj-2etap.pdf",
+    "solutions": "tasks/2025/etap2/21omj-2r.pdf",
+    "statistics": "tasks/2025/etap2/21omj-2st.pdf"
+  },
+  "difficulty": 3,
+  "categories": [
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Zauważ, że wszystkie cyfry liczby $n$ należą do zbioru $\\{1,2,3,4,5,6,7,8,9\\}$ - jest ich tylko 9 różnych. Zastanów się, jakie ograniczenia nakłada warunek podzielności przez każdą cyfrę.",
+    "Rozważ, co się stanie, gdy wśród cyfr pojawi się jednocześnie cyfra $5$ oraz jakaś cyfra parzysta. Co wtedy musiałoby być prawdą o liczbie $n$ i jej ostatniej cyfrze?",
+    "Rozpatrz dwa przypadki: gdy cyfra $5$ występuje wśród cyfr $n$ oraz gdy nie występuje. W pierwszym przypadku zlicz dostępne cyfry. W drugim - przypomnij sobie cechę podzielności przez $9$ i policz sumę pozostałych dostępnych cyfr.",
+    "W przypadku bez piątki cyfry pochodzą ze zbioru $\\{1,2,3,4,6,7,8,9\\}$. Gdyby liczba miała wszystkie $8$ tych cyfr, jaka byłaby ich suma i czy spełniałaby warunek podzielności przez $9$ (która musi być wśród cyfr)?"
+  ],
+  "skills_required": [
+    "divisibility_arguments",
+    "case_analysis",
+    "digit_manipulation"
+  ],
+  "skills_gained": [
+    "divisibility_arguments",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2008_etap3_1",
+    "2025_etap1_2"
+  ]
+}

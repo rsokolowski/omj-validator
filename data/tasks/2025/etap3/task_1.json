@@ -1,0 +1,33 @@
+{
+  "number": 1,
+  "pdf": {
+    "tasks": "tasks/2025/etap3/21omj-3etap.pdf",
+    "solutions": "tasks/2025/etap3/21omj-3r.pdf",
+    "statistics": "tasks/2025/etap3/21omj-3st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "teoria_liczb",
+    "algebra"
+  ],
+  "hints": [
+    "Zapisz warunek z zadania jako równanie. Jeśli $n^2$ ma $k$ cyfr, to dopisanie cyfry $1$ z lewej strony oznacza dodanie $10^k$. Jak więc wygląda zależność między $n^3$ a $n^2$?",
+    "Przekształć otrzymane równanie tak, by po jednej stronie był iloczyn z $n$, a po drugiej potęga liczby $10$. Zastanów się, co to oznacza dla rozkładu na czynniki pierwsze.",
+    "Zauważ, że $n$ oraz $n-1$ to kolejne liczby całkowite, więc nie mają wspólnych dzielników większych niż $1$. Skoro ich iloczyn (z odpowiednią potęgą) jest potęgą liczby $10 = 2 \\cdot 5$, jak mogą się rozdzielić czynniki $2$ i $5$ między $n^2$ a $n-1$?",
+    "Rozważ przypadki: $n^2$ jest potęgą dwójki, a $n-1$ potęgą piątki, lub odwrotnie. Sprawdź każdy przypadek, pamiętając że wykładniki $2$ i $5$ w iloczynie muszą być równe. Nie zapomnij sprawdzić warunku, że dopisana cyfra trafia na właściwą pozycję."
+  ],
+  "skills_required": [
+    "divisibility_arguments",
+    "prime_factorization",
+    "diophantine_equations"
+  ],
+  "skills_gained": [
+    "prime_factorization",
+    "case_analysis"
+  ],
+  "prerequisites": [
+    "2012_etap1_7",
+    "2025_etap1_6",
+    "2020_etap1_5"
+  ]
+}

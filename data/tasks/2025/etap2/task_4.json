@@ -1,0 +1,31 @@
+{
+  "number": 4,
+  "pdf": {
+    "tasks": "tasks/2025/etap2/21omj-2etap.pdf",
+    "solutions": "tasks/2025/etap2/21omj-2r.pdf",
+    "statistics": "tasks/2025/etap2/21omj-2st.pdf"
+  },
+  "difficulty": 3,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj trapez i zaznacz punkty $P$ i $Q$. Co oznacza warunek $AQ = BQ$? Punkt $Q$ jest równo oddalony od $A$ i $B$, więc leży na szczególnej prostej związanej z $AB$. Podobnie pomyśl o $P$.",
+    "Skoro $Q$ jest równo oddalony od końców $AB$, to leży na symetralnej $AB$. Analogicznie $P$ leży na symetralnej $CD$. Wykorzystaj równoległość podstaw i rozważ rzuty prostopadłe punktów na podstawy.",
+    "Zrzutuj $Q$ prostopadle na $AB$ — rzut trafia w środek $AB$. Podobnie rzut $P$ trafia w środek $CD$. Spróbuj wyrazić długości $AP$, $BP$, $CQ$, $DQ$ przez położenia punktów na podstawach.",
+    "Oznacz $|AB|=a$, $|CD|=c$. Wprowadź oś prostopadłą do podstaw przez środek $AB$ i mierz położenia $P$, $Q$, $C$, $D$ względem niej. Zapisz $AP+DQ$ i $BP+CQ$ — sprawdź, że oba wyrażenia upraszczają się do tej samej sumy."
+  ],
+  "skills_required": [
+    "perpendicular_bisector",
+    "trapezoid_parallelogram",
+    "isosceles_triangle"
+  ],
+  "skills_gained": [
+    "perpendicular_bisector",
+    "coordinate_geometry"
+  ],
+  "prerequisites": [
+    "2017_etap1_4",
+    "2019_etap2_2"
+  ]
+}

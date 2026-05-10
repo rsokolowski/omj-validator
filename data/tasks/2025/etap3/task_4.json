@@ -1,0 +1,32 @@
+{
+  "number": 4,
+  "pdf": {
+    "tasks": "tasks/2025/etap3/21omj-3etap.pdf",
+    "solutions": "tasks/2025/etap3/21omj-3r.pdf",
+    "statistics": "tasks/2025/etap3/21omj-3st.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj dokładny rysunek. Zauważ, że $BE$ jest dwusieczną kąta $\\angle ABC$, a proste $AE$ i $AD$ dzielą kąt $\\angle BAC$ na trzy równe części. Oznacz $\\angle BAE = \\angle EAD = \\angle DAC = \\alpha$ oraz $\\angle ABE = \\angle EBC = \\beta$.",
+    "Skoro punkty $A$, $C$, $D$, $E$ leżą na jednym okręgu, powstaje czworokąt wpisany. Wykorzystaj własność: kąty wpisane oparte na tym samym łuku są równe. Sprawdź, jakie pary kątów wpisanych w ten okrąg możesz porównać.",
+    "Porównaj kąty wpisane oparte na łuku $DE$: czy potrafisz powiedzieć coś o $\\angle DAE$ i $\\angle DCE$? Pomyśl też, dlaczego punkt $E$ na dwusiecznej kąta $\\angle ABC$ ma równe odległości od boków $AB$ i $BC$.",
+    "Spróbuj wykazać, że $CE$ jest dwusieczną kąta $\\angle ACB$ (porównaj $\\angle ACE$ z $\\angle DCE$ przez kąty wpisane). Wtedy $E$ leży na dwusiecznych dwóch kątów trójkąta - jakim szczególnym punktem musi być? Co to mówi o prostej $AE$?"
+  ],
+  "skills_required": [
+    "circle_theorems",
+    "angle_chasing",
+    "triangle_centers"
+  ],
+  "skills_gained": [
+    "circle_theorems",
+    "angle_chasing"
+  ],
+  "prerequisites": [
+    "2014_etap2_2",
+    "2011_etap2_5",
+    "2010_etap1_6"
+  ]
+}

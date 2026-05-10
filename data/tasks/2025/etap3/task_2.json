@@ -1,0 +1,33 @@
+{
+  "number": 2,
+  "pdf": {
+    "tasks": "tasks/2025/etap3/21omj-3etap.pdf",
+    "solutions": "tasks/2025/etap3/21omj-3r.pdf",
+    "statistics": "tasks/2025/etap3/21omj-3st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "algebra",
+    "geometria"
+  ],
+  "hints": [
+    "Zapisz, co wiesz o sumie miar kątów w trójkącie. Masz więc dwa warunki łączące $a$, $b$, $c$: jeden liniowy ($a+b+c=180$) i jeden kwadratowy ($a^2+b^2=c^2$). Czego trzeba dowieść? Że każda z liczb $a$, $b$, $c$ jest mniejsza od $90$.",
+    "Zauważ, że warunek $a^2+b^2=c^2$ przypomina twierdzenie Pitagorasa, ale tu dotyczy miar kątów, a nie boków! Spróbuj porównać $c$ z $a+b$ - czy jedna z tych liczb musi być większa od drugiej? Skorzystaj z tego, że $a$ i $b$ są dodatnie.",
+    "Sprawdź najpierw, który z kątów jest największy. Z równości $a^2+b^2=c^2$ wynika, że $c^2 \\geq a^2$ oraz $c^2 \\geq b^2$ - co to mówi o $c$ względem $a$ i $b$? Wystarczy więc pokazać tylko, że największy kąt $c$ jest mniejszy od $90$.",
+    "Porównaj $c^2 = a^2+b^2$ z wyrażeniem $(a+b)^2$. Co dostaniesz po rozwinięciu kwadratu sumy? Jaką nierówność między $c$ a $a+b$ to daje? Teraz wykorzystaj, że $a+b+c = 180$, żeby oszacować samo $c$."
+  ],
+  "skills_required": [
+    "algebraic_identities",
+    "inequality_manipulation",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "inequality_manipulation",
+    "algebraic_identities"
+  ],
+  "prerequisites": [
+    "2025_etap1_7",
+    "2017_etap2_1",
+    "2017_etap1_6"
+  ]
+}

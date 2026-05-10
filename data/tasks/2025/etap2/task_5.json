@@ -1,0 +1,30 @@
+{
+  "number": 5,
+  "pdf": {
+    "tasks": "tasks/2025/etap2/21omj-2etap.pdf",
+    "solutions": "tasks/2025/etap2/21omj-2r.pdf",
+    "statistics": "tasks/2025/etap2/21omj-2st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Co jest dane, a co mamy wykazać? Zauważ, że tezę $\\frac{1}{a}+\\frac{1}{b}+\\frac{1}{c}<1$ można po pomnożeniu przez $abc$ zapisać w postaci nierówności łączącej $abc$ z sumą iloczynów $ab+bc+ca$. Spróbuj zapisać tezę bez ułamków.",
+    "Masz trzy podobne założenia: $ab>a+b+c$, $bc>a+b+c$, $ca>a+b+c$. Pomyśl, jak je sprytnie połączyć (np. mnożąc każde przez odpowiednią zmienną), żeby otrzymać nierówność z wyrazem $abc$ po jednej stronie.",
+    "Pomnóż nierówność $ab>a+b+c$ stronami przez $c$ (wolno, bo $c>0$). Zrób to samo z pozostałymi dwiema nierównościami, mnożąc przez $a$ i przez $b$. Co dostaniesz po dodaniu wszystkich trzech otrzymanych nierówności?",
+    "Po dodaniu otrzymasz $3abc>2(ab+bc+ca)+(a^2+b^2+c^2)$. Skorzystaj teraz ze znanej nierówności $a^2+b^2+c^2\\ge ab+bc+ca$ (wynika ona ze wzoru skróconego mnożenia zastosowanego do $(a-b)^2+(b-c)^2+(c-a)^2$). Co stąd wynika dla porównania $abc$ z $ab+bc+ca$?"
+  ],
+  "skills_required": [
+    "inequality_manipulation",
+    "algebraic_identities"
+  ],
+  "skills_gained": [
+    "inequality_manipulation"
+  ],
+  "prerequisites": [
+    "2022_etap1_5",
+    "2013_etap3_1",
+    "2010_etap1_3"
+  ]
+}

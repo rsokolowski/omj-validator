@@ -1,0 +1,32 @@
+{
+  "number": 3,
+  "pdf": {
+    "tasks": "tasks/2025/etap2/21omj-2etap.pdf",
+    "solutions": "tasks/2025/etap2/21omj-2r.pdf",
+    "statistics": "tasks/2025/etap2/21omj-2st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka",
+    "teoria_liczb"
+  ],
+  "hints": [
+    "Spróbuj prześledzić sytuację dla mniejszej planszy, np. $1 \\times 4$ lub $1 \\times 6$. Czy potrafisz znaleźć startowe pola, z których pionek odwiedzi każde pole dokładnie raz? To pomoże zauważyć prawidłowość.",
+    "Skoro pionek odwiedza wszystkie pola od $1$ do $100$ dokładnie raz, znasz sumę wszystkich odwiedzonych pól. Spróbuj zapisać to jako równanie wiążące $n$ z wyborami kierunków (w prawo lub w lewo) w kolejnych ruchach.",
+    "Niech $p_i$ to pole po $i$-tym ruchu, $\\varepsilon_i = \\pm 1$ to kierunek. Wtedy $p_i = n + \\varepsilon_1 \\cdot 1 + \\dots + \\varepsilon_i \\cdot i$. Zsumuj $p_0, \\dots, p_{99}$ i porównaj z $1+2+\\dots+100$. Pamiętaj, że $p_i \\in \\{1, \\dots, 100\\}$.",
+    "Wyznacz $n$ z równania na sumę pól — pojawi się wyrażenie z $\\sum \\varepsilon_j \\cdot j(100-j)$. Zbadaj jego parzystość. Następnie pomyśl: z których pól da się wykonać ruch o $99$? To mocno ogranicza pozycje na początku i końcu wędrówki."
+  ],
+  "skills_required": [
+    "parity_arguments",
+    "invariants",
+    "case_analysis"
+  ],
+  "skills_gained": [
+    "invariants",
+    "parity_arguments"
+  ],
+  "prerequisites": [
+    "2022_etap1_2",
+    "2022_etap2_2"
+  ]
+}

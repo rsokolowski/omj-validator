@@ -1,0 +1,32 @@
+{
+  "number": 3,
+  "pdf": {
+    "tasks": "tasks/2025/etap3/21omj-3etap.pdf",
+    "solutions": "tasks/2025/etap3/21omj-3r.pdf",
+    "statistics": "tasks/2025/etap3/21omj-3st.pdf"
+  },
+  "difficulty": 4,
+  "categories": [
+    "kombinatoryka"
+  ],
+  "hints": [
+    "Przeczytaj uważnie warunki: ilu uczestników jest w turnieju, ile partii rozegrano łącznie i ile partii rozgrywa każdy uczestnik? Spróbuj zapisać te liczby.",
+    "Załóż na chwilę, że taka sytuacja jest możliwa, i policz pewną wielkość na dwa różne sposoby - to klasyczna metoda w problemach kombinatorycznych. Może doprowadzić Cię do sprzeczności.",
+    "Zastanów się nad sumą wszystkich wygranych partii w turnieju oraz nad sumą wszystkich remisów liczonych z punktu widzenia uczestników. Jak te sumy mają się do liczby partii zakończonych wygraną i liczby partii zremisowanych?",
+    "Każda partia wygrana liczona jest raz w sumie wygranych, a każdy remis liczony jest dwa razy w sumie remisów (raz dla każdego z graczy). Wyraź liczbę wszystkich partii przez liczbę remisów i sprawdź, czy wynik może być liczbą całkowitą."
+  ],
+  "skills_required": [
+    "double_counting",
+    "contradiction",
+    "divisibility_arguments"
+  ],
+  "skills_gained": [
+    "double_counting",
+    "contradiction"
+  ],
+  "prerequisites": [
+    "2008_etap2_4",
+    "2024_etap3_2",
+    "2007_etap3_4"
+  ]
+}

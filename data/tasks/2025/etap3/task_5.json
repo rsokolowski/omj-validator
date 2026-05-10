@@ -1,0 +1,33 @@
+{
+  "number": 5,
+  "pdf": {
+    "tasks": "tasks/2025/etap3/21omj-3etap.pdf",
+    "solutions": "tasks/2025/etap3/21omj-3r.pdf",
+    "statistics": "tasks/2025/etap3/21omj-3st.pdf"
+  },
+  "difficulty": 5,
+  "categories": [
+    "kombinatoryka",
+    "logika"
+  ],
+  "hints": [
+    "Spróbuj zrozumieć warunek: każde pole z wpisaną liczbą $n$ ma dokładnie $n$ sąsiadów z tą samą liczbą. Rozważ osobno pola z każdą wartością i pomyśl, jakie ograniczenia narzuca ten warunek na ich liczbę.",
+    "Pomyśl o podwójnym zliczaniu. Dla ustalonej wartości $n \\geq 1$ rozważ pary sąsiadujących pól, w których obie liczby są równe $n$, i policz takie pary na dwa różne sposoby.",
+    "Dla każdego $n \\in \\{1,2,3,4\\}$ sprawdź parzystość liczby pól z liczbą $n$. Liczba sąsiadujących par pól z liczbą $n$ wynosi (liczba takich pól) $\\cdot\\, n$ podzielone przez $2$ — co to mówi o parzystości liczby pól dla $n=1$ i $n=3$?",
+    "Plansza ma nieparzyście wiele pól. Skoro dla pewnych wartości $n$ udało Ci się pokazać, że liczba pól jest parzysta, spróbuj jeszcze pokazać parzystość liczby pól z liczbą $2$ i $4$, patrząc na strukturę ich wzajemnych połączeń (np. cykle lub składowe)."
+  ],
+  "skills_required": [
+    "double_counting",
+    "parity_arguments",
+    "graph_theory"
+  ],
+  "skills_gained": [
+    "double_counting",
+    "parity_arguments"
+  ],
+  "prerequisites": [
+    "2014_etap1_4",
+    "2012_etap3_5",
+    "2008_etap2_4"
+  ]
+}

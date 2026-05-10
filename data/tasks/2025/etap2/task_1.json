@@ -1,0 +1,28 @@
+{
+  "number": 1,
+  "pdf": {
+    "tasks": "tasks/2025/etap2/21omj-2etap.pdf",
+    "solutions": "tasks/2025/etap2/21omj-2r.pdf",
+    "statistics": "tasks/2025/etap2/21omj-2st.pdf"
+  },
+  "difficulty": 2,
+  "categories": [
+    "geometria"
+  ],
+  "hints": [
+    "Narysuj duży, dokładny rysunek równoległoboku $ABCD$ i zaznacz punkty $X$, $Y$ na boku $CD$. Co wiesz o prostych $AB$ i $CD$? Jaką rolę pełni odcinek $AX$ względem kąta $\\angle DAB$, a odcinek $BY$ względem kąta $\\angle ABC$?",
+    "Skoro $AB \\parallel CD$, to przy przecięciu prostą $AX$ powstają kąty naprzemianległe. Spróbuj znaleźć w powstałych trójkątach $ADX$ i $BCY$ jakąś szczególną własność - może któryś z nich jest wyjątkowego rodzaju?",
+    "Porównaj kąt $\\angle XAD$ z kątem $\\angle AXD$ (pamiętając o równoległości $AB$ i $CD$). Co możesz powiedzieć o trójkącie $ADX$? Analogicznie zbadaj trójkąt $BCY$. Jakie boki w tych trójkątach okazują się równe?",
+    "Pokaż, że $DX = AD$ oraz $CY = BC$. Skorzystaj z tego, że w równoległoboku $AD = BC$ i wyraź długości $CX$ i $DY$ przez długość boku $CD$ pomniejszoną o odpowiednie odcinki."
+  ],
+  "skills_required": [
+    "isosceles_triangle",
+    "angle_chasing",
+    "trapezoid_parallelogram"
+  ],
+  "skills_gained": [
+    "isosceles_triangle",
+    "angle_chasing"
+  ],
+  "prerequisites": []
+}
