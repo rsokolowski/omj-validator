@@ -58,6 +58,7 @@ from .ai import create_ai_provider, AIProviderError
 from .models import SubmissionResult, TaskCategory, TaskStatus
 from .progress import build_progress_data, get_all_categories, get_prerequisite_statuses, compute_user_progress
 from .skills import get_skills_by_ids
+from .scoring import get_max_score
 
 app = FastAPI(title="OMJ Validator", description="Walidator rozwiązań OMJ")
 
@@ -1418,7 +1419,7 @@ async def task_history_api(
 
 def _get_max_score(etap: str) -> int:
     """Get max score for an etap (3 for etap1, 6 for etap2/3)."""
-    return 3 if etap == "etap1" else 6
+    return get_max_score(etap)
 
 
 @app.get("/api/my-submissions")

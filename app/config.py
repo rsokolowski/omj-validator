@@ -79,6 +79,11 @@ class Settings(BaseSettings):
     translate_timeout: float = 2.0  # Translation timeout in seconds
     translate_api_endpoint: Optional[str] = None  # Custom endpoint for e2e testing
 
+    # Telegram notifications (for submission lifecycle alerts)
+    # Feature disabled unless both are set. Token lives only in .env / .env.prod.
+    telegram_bot_token: Optional[str] = None
+    telegram_chat_id: Optional[str] = None
+
     # App Configuration
     upload_max_size_mb: int = 10
 

@@ -69,6 +69,10 @@ services:
       TRANSLATE_API_KEY: ${TRANSLATE_API_KEY:-}
       TRANSLATE_TIMEOUT: ${TRANSLATE_TIMEOUT:-2.0}
 
+      # Telegram notifications (optional)
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+
       # App Configuration
       UPLOAD_MAX_SIZE_MB: ${UPLOAD_MAX_SIZE_MB:-10}
     volumes:

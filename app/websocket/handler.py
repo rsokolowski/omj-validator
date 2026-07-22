@@ -12,9 +12,15 @@ from sqlalchemy.orm import Session
 from ..config import settings
 from ..db.session import SessionLocal
 from ..db.models import SubmissionStatus, IssueType
-from ..db.repositories import SubmissionRepository
+from ..db.repositories import SubmissionRepository, UserRepository
 from ..ai import create_ai_provider, AIProviderError
 from ..storage import get_task_pdf_path, get_solution_pdf_path
+from ..notifications import (
+    send_telegram_message,
+    build_start_message,
+    build_completed_message,
+    build_failed_message,
+)
 from .progress import progress_manager
 
 logger = logging.getLogger(__name__)
@@ -52,12 +58,31 @@ async def process_submission_background(
     # Use SessionLocal directly (not get_db dependency) for background tasks
     db = SessionLocal()
 
+    # User display string for Telegram notifications. Falls back to truncated
+    # user_id if the lookup fails; set early so the except branches can use it.
+    user_display = f"{user_id[:8]}..."
+
     try:
         submission_repo = SubmissionRepository(db)
+
+        # Look up user (user_id is the users.google_sub PK) for notifications
+        try:
+            user = UserRepository(db).get_by_google_sub(user_id)
+            if user:
+                user_display = f"{user.name} <{user.email}>" if user.name else user.email
+        except Exception as e:
+            logger.warning(f"[Submission {submission_id}] User lookup for notification failed: {type(e).__name__}")
 
         # Update status to PROCESSING
         logger.debug(f"[Submission {submission_id}] Updating DB status to PROCESSING")
         submission_repo.update_status(submission_id, SubmissionStatus.PROCESSING)
+
+        # Notify: submission started processing (fire-and-forget)
+        await send_telegram_message(
+            build_start_message(
+                submission_id, user_display, year, etap, task_number, len(image_paths)
+            )
+        )
 
         # Stage 1: Uploading files
         logger.info(f"[Submission {submission_id}] Stage 1: Preparing file upload ({_format_elapsed(start_time)})")
@@ -136,6 +161,13 @@ async def process_submission_background(
             feedback=result.feedback,
         )
 
+        # Notify: submission completed (fire-and-forget)
+        await send_telegram_message(
+            build_completed_message(
+                submission_id, user_display, year, etap, task_number, result.score
+            )
+        )
+
         total_time = time.time() - start_time
         logger.info(
             f"[Submission {submission_id}] COMPLETED - "
@@ -158,6 +190,13 @@ async def process_submission_background(
 
         await progress_manager.send_error(submission_id, error_msg)
 
+        # Notify: submission failed (fire-and-forget)
+        await send_telegram_message(
+            build_failed_message(
+                submission_id, user_display, year, etap, task_number, error_msg
+            )
+        )
+
     except Exception as e:
         error_msg = str(e)
         total_time = time.time() - start_time
@@ -175,6 +214,13 @@ async def process_submission_background(
         await progress_manager.send_error(
             submission_id,
             "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę.",
+        )
+
+        # Notify: submission failed (fire-and-forget)
+        await send_telegram_message(
+            build_failed_message(
+                submission_id, user_display, year, etap, task_number, error_msg
+            )
         )
 
     finally:
