@@ -24,7 +24,7 @@ import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import BlockIcon from "@mui/icons-material/Block";
 import Link from "next/link";
 import { fetchAPI } from "@/lib/api/client";
-import { AdminSubmission, AdminSubmissionsResponse, AdminUser, IssueType } from "@/lib/types";
+import { AdminRerunResponse, AdminSubmission, AdminSubmissionsResponse, AdminUser, IssueType } from "@/lib/types";
 import { getMaxScore } from "@/lib/utils/constants";
 import { formatDate } from "@/lib/utils/dates";
 import { useInfiniteScroll } from "@/lib/hooks/useInfiniteScroll";
@@ -41,6 +41,7 @@ export function AdminSubmissionsTable() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [rerunningIds, setRerunningIds] = useState<Set<string>>(new Set());
 
   // Filters
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
@@ -109,6 +110,35 @@ export function AdminSubmissionsTable() {
     isLoading,
     onLoadMore: handleLoadMore,
   });
+
+  const handleRerun = useCallback(
+    async (submissionId: string) => {
+      setRerunningIds((prev) => new Set(prev).add(submissionId));
+      setError(null);
+
+      try {
+        await fetchAPI<AdminRerunResponse>(
+          `/api/admin/submissions/${submissionId}/rerun`,
+          { method: "POST" }
+        );
+
+        // Reset to first page so the new PROCESSING row appears at top
+        setSubmissions([]);
+        setOffset(0);
+        setHasMore(true);
+        await fetchSubmissions(0, false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to re-run scoring");
+      } finally {
+        setRerunningIds((prev) => {
+          const next = new Set(prev);
+          next.delete(submissionId);
+          return next;
+        });
+      }
+    },
+    [fetchSubmissions]
+  );
 
   const getScoreColor = (score: number, maxScore: number) => {
     const ratio = score / maxScore;
@@ -415,6 +445,28 @@ export function AdminSubmissionsTable() {
                               </a>
                             ))}
                           </Box>
+                        </Box>
+                      )}
+
+                      {/* Re-run scoring */}
+                      {(submission.status === "completed" || submission.status === "failed") && (
+                        <Box sx={{ mt: 2 }}>
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            disabled={rerunningIds.has(submission.id)}
+                            startIcon={
+                              rerunningIds.has(submission.id) ? (
+                                <CircularProgress size={16} color="inherit" />
+                              ) : undefined
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleRerun(submission.id);
+                            }}
+                          >
+                            Re-run scoring
+                          </Button>
                         </Box>
                       )}
                     </Box>

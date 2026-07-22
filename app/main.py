@@ -1640,3 +1640,86 @@ async def admin_me(request: Request):
         "is_authenticated": user is not None,
         "is_admin": _is_admin(request),
     }
+
+
+@app.post("/api/admin/submissions/{submission_id}/rerun")
+async def admin_rerun_submission(
+    request: Request,
+    submission_id: str,
+    db: Session = Depends(get_db),
+):
+    """Re-run AI scoring for an existing submission (admin only).
+
+    Creates a new submission reusing the original's images and dispatches
+    the background worker, leaving the original submission untouched.
+    """
+    _require_admin(request)
+
+    submission_repo = SubmissionRepository(db)
+
+    original = submission_repo.get_by_id(submission_id)
+    if not original:
+        raise HTTPException(status_code=404, detail="Submission not found")
+
+    # Reconstruct absolute image paths from stored relative paths
+    relative_images = original.images or []
+    if not relative_images:
+        raise HTTPException(
+            status_code=409,
+            detail="Submission has no images to re-run",
+        )
+
+    image_paths = [settings.uploads_dir / rel for rel in relative_images]
+    missing = [str(rel) for rel, p in zip(relative_images, image_paths) if not p.exists()]
+    if missing:
+        raise HTTPException(
+            status_code=409,
+            detail=f"Image files no longer available on disk: {', '.join(missing)}",
+        )
+
+    # Validate task PDF exists (same check as submit endpoint)
+    task_pdf = get_task_pdf_path(original.year, original.etap)
+    if not task_pdf or not task_pdf.exists():
+        raise HTTPException(
+            status_code=409,
+            detail="Nie znaleziono pliku z zadaniami",
+        )
+
+    from .db.models import SubmissionStatus
+    from .websocket.progress import progress_manager
+    from .websocket.handler import process_submission_background
+
+    new_id = str(uuid.uuid4())[:8]
+
+    submission_repo.create(
+        id=new_id,
+        user_id=original.user_id,
+        year=original.year,
+        etap=original.etap,
+        task_number=original.task_number,
+        images=list(relative_images),
+        status=SubmissionStatus.PENDING,
+    )
+
+    # Initialize progress tracking (handler.py will set first status)
+    await progress_manager.create_submission(new_id)
+
+    # Start background task for AI processing with proper lifecycle tracking
+    task = asyncio.create_task(
+        process_submission_background(
+            submission_id=new_id,
+            user_id=original.user_id,
+            year=original.year,
+            etap=original.etap,
+            task_number=original.task_number,
+            image_paths=image_paths,
+        )
+    )
+    _background_tasks.add(task)
+    task.add_done_callback(_background_tasks.discard)
+
+    return {
+        "success": True,
+        "submission_id": new_id,
+        "status": "pending",
+    }

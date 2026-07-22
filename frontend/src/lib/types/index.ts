@@ -176,6 +176,12 @@ export interface AdminSubmissionsResponse {
   has_more: boolean;
 }
 
+export interface AdminRerunResponse {
+  success: boolean;
+  submission_id: string;
+  status: string;
+}
+
 export interface AdminUser {
   google_sub: string;
   email: string;
