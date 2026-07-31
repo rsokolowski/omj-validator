@@ -29,13 +29,21 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-# Map config strings to MediaResolution enum values
-MEDIA_RESOLUTION_MAP = {
-    "low": "MEDIA_RESOLUTION_LOW",
-    "medium": "MEDIA_RESOLUTION_MEDIUM",
-    "high": "MEDIA_RESOLUTION_HIGH",
-    "ultra_high": "MEDIA_RESOLUTION_ULTRA_HIGH",
-}
+# Media resolution levels, lowest to highest. Not every level exists in every
+# google-genai release (ULTRA_HIGH is absent as of 2.13.0), so a configured level
+# degrades to the highest one the installed SDK actually offers.
+MEDIA_RESOLUTION_LADDER = [
+    ("low", "MEDIA_RESOLUTION_LOW"),
+    ("medium", "MEDIA_RESOLUTION_MEDIUM"),
+    ("high", "MEDIA_RESOLUTION_HIGH"),
+    ("ultra_high", "MEDIA_RESOLUTION_ULTRA_HIGH"),
+]
+MEDIA_RESOLUTION_MAP = dict(MEDIA_RESOLUTION_LADDER)
+
+# Config levels / models already warned about, so a bad setting is reported once
+# at startup instead of on every single request.
+_resolution_warned: set[str] = set()
+_pricing_warned: set[str] = set()
 
 
 def _configure_debug_logging():
@@ -73,10 +81,23 @@ _CACHE_TTL_SECONDS = 24 * 60 * 60  # 24 hours
 
 # Gemini pricing per 1M tokens (USD)
 # See https://ai.google.dev/gemini-api/docs/pricing
+#
+# "output" covers response AND thinking tokens - Gemini bills thoughts at the
+# output rate, so _calculate_cost must be given output + thoughts.
+#
+# Models with long-context tiers carry "long_input"/"long_output", applied when
+# the prompt exceeds "long_threshold" tokens.
 GEMINI_PRICING = {
-    # Gemini 3 series
+    # Gemini 3.x series
+    "gemini-3.1-pro-preview": {
+        "input": 2.00, "output": 12.00,
+        "long_threshold": 200_000, "long_input": 4.00, "long_output": 18.00,
+    },
     "gemini-3-pro-preview": {"input": 2.00, "output": 12.00},
     "gemini-3-pro": {"input": 2.00, "output": 12.00},
+    "gemini-3.6-flash": {"input": 1.50, "output": 7.50},
+    "gemini-3.5-flash": {"input": 1.50, "output": 9.00},
+    "gemini-3-flash-preview": {"input": 1.50, "output": 9.00},
     # Gemini 2.5 series
     "gemini-2.5-pro": {"input": 1.25, "output": 10.00},
     "gemini-2.5-flash": {"input": 0.30, "output": 2.50},
@@ -155,10 +176,19 @@ class GeminiProvider:
         # Log media resolution settings
         self._disable_file_cache = settings.gemini_disable_file_cache
 
+        # Resolve up front so an unsupported level is reported at startup rather
+        # than on the first submission, and log what is actually sent.
+        effective_pdf = self._get_media_resolution().name
+        effective_img = self._get_media_resolution(
+            settings.gemini_media_resolution_images
+        ).name
+
         logger.info(
             f"[Gemini] Initialized with model={self._model_name}, "
-            f"media_resolution={settings.gemini_media_resolution}, "
-            f"image_resolution={settings.gemini_media_resolution_images}, "
+            f"media_resolution={settings.gemini_media_resolution} "
+            f"(effective: {effective_pdf}), "
+            f"image_resolution={settings.gemini_media_resolution_images} "
+            f"(effective: {effective_img}), "
             f"is_gemini_3={self._is_gemini_3}, "
             f"file_cache={'disabled' if self._disable_file_cache else 'enabled'}"
         )
@@ -170,28 +200,82 @@ class GeminiProvider:
             level: Resolution level string ("low", "medium", "high", "ultra_high").
                    If None, uses gemini_media_resolution from settings.
 
-        Note: Falls back to HIGH if requested level is not available in SDK.
+        Note: Degrades to the highest level the installed SDK supports if the
+        requested one is unavailable, warning once per level.
         """
-        level = level or settings.gemini_media_resolution
-        enum_name = MEDIA_RESOLUTION_MAP.get(level.lower(), "MEDIA_RESOLUTION_HIGH")
-
-        # Check if enum value exists (ULTRA_HIGH may not be available in all SDK versions)
-        if hasattr(types.MediaResolution, enum_name):
-            return getattr(types.MediaResolution, enum_name)
-        else:
-            # Fall back to HIGH if requested level not available
-            logger.warning(
-                f"[Gemini] MediaResolution.{enum_name} not available in SDK, "
-                f"falling back to MEDIA_RESOLUTION_HIGH"
-            )
+        level = (level or settings.gemini_media_resolution).lower()
+        enum_name = MEDIA_RESOLUTION_MAP.get(level)
+        if enum_name is None:
+            if level not in _resolution_warned:
+                _resolution_warned.add(level)
+                logger.warning(
+                    f"[Gemini] Unknown media resolution '{level}', using 'high'. "
+                    f"Valid levels: {', '.join(n for n, _ in MEDIA_RESOLUTION_LADDER)}"
+                )
             return types.MediaResolution.MEDIA_RESOLUTION_HIGH
 
-    def _calculate_cost(self, input_tokens: int, output_tokens: int) -> float:
-        """Calculate estimated cost based on token usage."""
-        pricing = GEMINI_PRICING.get(self._model_name, GEMINI_PRICING["default"])
-        input_cost = (input_tokens / 1_000_000) * pricing["input"]
-        output_cost = (output_tokens / 1_000_000) * pricing["output"]
+        if hasattr(types.MediaResolution, enum_name):
+            return getattr(types.MediaResolution, enum_name)
+
+        # Requested level missing from this SDK - step down to the best available.
+        idx = [n for n, _ in MEDIA_RESOLUTION_LADDER].index(level)
+        for name, candidate in reversed(MEDIA_RESOLUTION_LADDER[:idx]):
+            if hasattr(types.MediaResolution, candidate):
+                if level not in _resolution_warned:
+                    _resolution_warned.add(level)
+                    logger.warning(
+                        f"[Gemini] Media resolution '{level}' is NOT supported by "
+                        f"google-genai {getattr(genai, '__version__', '?')} - "
+                        f"actually sending '{name}'. This setting has no effect; "
+                        f"either upgrade the SDK or set it to '{name}'."
+                    )
+                return getattr(types.MediaResolution, candidate)
+
+        raise AIProviderError(
+            f"No usable MediaResolution found in google-genai for level '{level}'"
+        )
+
+    def _calculate_cost(
+        self, input_tokens: int, output_tokens: int, thoughts_tokens: int = 0
+    ) -> float:
+        """Calculate estimated cost based on token usage.
+
+        Thinking tokens are billed at the output rate, so they must be counted
+        with output_tokens - omitting them understates the true cost several-fold
+        on high thinking_level models.
+        """
+        pricing = GEMINI_PRICING.get(self._model_name)
+        if pricing is None:
+            pricing = GEMINI_PRICING["default"]
+            if self._model_name not in _pricing_warned:
+                _pricing_warned.add(self._model_name)
+                logger.warning(
+                    f"[Gemini] No pricing entry for model '{self._model_name}', "
+                    f"cost estimates use fallback rates and will be inaccurate. "
+                    f"Add it to GEMINI_PRICING."
+                )
+
+        threshold = pricing.get("long_threshold")
+        if threshold and input_tokens > threshold:
+            in_rate = pricing.get("long_input", pricing["input"])
+            out_rate = pricing.get("long_output", pricing["output"])
+        else:
+            in_rate, out_rate = pricing["input"], pricing["output"]
+
+        input_cost = (input_tokens / 1_000_000) * in_rate
+        output_cost = ((output_tokens + thoughts_tokens) / 1_000_000) * out_rate
         return input_cost + output_cost
+
+    @staticmethod
+    def _read_usage(usage_metadata) -> tuple[int, int, int]:
+        """Extract (input, output, thoughts) token counts from usage metadata."""
+        if not usage_metadata:
+            return 0, 0, 0
+        return (
+            getattr(usage_metadata, "prompt_token_count", 0) or 0,
+            getattr(usage_metadata, "candidates_token_count", 0) or 0,
+            getattr(usage_metadata, "thoughts_token_count", 0) or 0,
+        )
 
     def _load_prompt(self, etap: str = "etap2") -> str:
         """Build complete prompt for given etap using prompt builder.
@@ -458,15 +542,17 @@ class GeminiProvider:
             api_time = time.time() - api_start_time
 
             # Log response metadata and usage
-            input_tokens = 0
-            output_tokens = 0
             if hasattr(response, "usage_metadata") and response.usage_metadata:
-                input_tokens = getattr(response.usage_metadata, "prompt_token_count", 0) or 0
-                output_tokens = getattr(response.usage_metadata, "candidates_token_count", 0) or 0
-                estimated_cost = self._calculate_cost(input_tokens, output_tokens)
+                input_tokens, output_tokens, thoughts_tokens = self._read_usage(
+                    response.usage_metadata
+                )
+                estimated_cost = self._calculate_cost(
+                    input_tokens, output_tokens, thoughts_tokens
+                )
                 logger.info(
                     f"[Gemini Response] api_time={api_time:.1f}s, "
                     f"input_tokens={input_tokens:,}, output_tokens={output_tokens:,}, "
+                    f"thoughts_tokens={thoughts_tokens:,}, "
                     f"estimated_cost=${estimated_cost:.4f}"
                 )
             else:
@@ -760,16 +846,18 @@ class GeminiProvider:
             total_time = time.time() - start_time
 
             # Log response with usage stats
-            input_tokens = 0
-            output_tokens = 0
             if usage_metadata:
-                input_tokens = getattr(usage_metadata, "prompt_token_count", 0) or 0
-                output_tokens = getattr(usage_metadata, "candidates_token_count", 0) or 0
-                estimated_cost = self._calculate_cost(input_tokens, output_tokens)
+                input_tokens, output_tokens, thoughts_tokens = self._read_usage(
+                    usage_metadata
+                )
+                estimated_cost = self._calculate_cost(
+                    input_tokens, output_tokens, thoughts_tokens
+                )
                 logger.info(
                     f"[Gemini Stream Response] api_time={api_time:.1f}s, "
                     f"total_time={total_time:.1f}s, "
                     f"input_tokens={input_tokens:,}, output_tokens={output_tokens:,}, "
+                    f"thoughts_tokens={thoughts_tokens:,}, "
                     f"estimated_cost=${estimated_cost:.4f}, "
                     f"thinking_chars={len(thinking_text)}, feedback_chars={len(feedback_text)}"
                 )
