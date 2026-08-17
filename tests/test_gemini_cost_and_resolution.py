@@ -7,10 +7,13 @@ Both of these failed silently in production before:
     exist in the SDK, so images were sent at HIGH with only a per-request warning.
 """
 
+from datetime import date
+
 import pytest
 
 from google.genai import types
 
+import app.ai.providers.gemini as gemini_module
 from app.ai.providers.gemini import (
     GEMINI_PRICING,
     MEDIA_RESOLUTION_LADDER,
@@ -59,6 +62,36 @@ class TestCost:
         # Rate doubles on input past 200k, so cost more than doubles per token.
         assert above / 201_000 > below / 199_000 * 1.9
 
+    def test_prod_model_has_explicit_pricing_for_flash(self):
+        assert "gemini-3.7-flash" in GEMINI_PRICING
+
+    def test_promo_rate_applies_before_expiry_and_lapses_after(self, provider, monkeypatch):
+        """Flash is half-price through 2026-12-31; the table must not overstate
+        cost now, nor understate it once the promo lapses."""
+        provider._model_name = "gemini-3.7-flash"
+        entry = GEMINI_PRICING["gemini-3.7-flash"]
+
+        class _FrozenDate(date):
+            _today = date(2026, 8, 17)
+
+            @classmethod
+            def today(cls):
+                return cls._today
+
+        monkeypatch.setattr(gemini_module, "date", _FrozenDate)
+        promo = provider._calculate_cost(1_000_000, 0, 1_000_000)
+        assert promo == pytest.approx(entry["promo_input"] + entry["promo_output"])
+
+        _FrozenDate._today = date(2027, 1, 1)
+        after = provider._calculate_cost(1_000_000, 0, 1_000_000)
+        assert after == pytest.approx(entry["input"] + entry["output"])
+        assert after > promo
+
+    def test_promo_does_not_apply_to_long_context_tier(self, provider):
+        """Models with a long-context tier must keep using its absolute rates."""
+        provider._model_name = "gemini-3.1-pro-preview"
+        assert "promo_until" not in GEMINI_PRICING["gemini-3.1-pro-preview"]
+
     def test_flash_is_cheaper_than_pro_on_identical_usage(self, provider):
         pro = provider._calculate_cost(10_000, 200, 2000)
         provider._model_name = "gemini-3.6-flash"
@@ -105,3 +138,83 @@ class TestMediaResolution:
         assert [n for n, _ in MEDIA_RESOLUTION_LADDER] == [
             "low", "medium", "high", "ultra_high",
         ]
+
+
+class TestLatexEscapeRepair:
+    """The feedback prompt now demands heavy LaTeX; JSON escaping must survive it."""
+
+    def test_mangled_macros_are_restored(self):
+        from app.ai.parsing import repair_latex_escapes
+
+        # What json.loads produces from an unescaped "$90^\text{o}$".
+        assert repair_latex_escapes("$90^\text{o}$") == "$90^\\text{o}$"
+        assert repair_latex_escapes("$\frac{1}{2}$") == "$\\frac{1}{2}$"
+        assert repair_latex_escapes("$a \neq b$") == "$a \\neq b$"
+
+    def test_short_macros_are_restored(self):
+        """Enumerating macro names missed \\ne, \\to, \\beta and friends."""
+        from app.ai.parsing import repair_latex_escapes
+
+        assert repair_latex_escapes("$a \ne b$") == "$a \\ne b$"
+        assert repair_latex_escapes("$x \to 0$") == "$x \\to 0$"
+        assert repair_latex_escapes("$\beta$") == "$\\beta$"
+        assert repair_latex_escapes("$n \bmod 2$") == "$n \\bmod 2$"
+
+    def test_genuine_whitespace_is_preserved(self):
+        from app.ai.parsing import repair_latex_escapes
+
+        text = "Pierwszy akapit.\n\nDrugi akapit zaczyna się od słowa eq? Nie."
+        assert repair_latex_escapes(text) == text
+        assert repair_latex_escapes("koniec zdania.\nNastępne zdanie.") == (
+            "koniec zdania.\nNastępne zdanie."
+        )
+
+    def test_unmatched_dollar_does_not_eat_the_feedback(self):
+        from app.ai.parsing import repair_latex_escapes
+
+        text = "Koszt to $50 zł.\nNa przyszłość zapisuj jednostki."
+        assert repair_latex_escapes(text) == text
+
+    def test_unescaped_latex_still_parses(self):
+        """A lone backslash must not cost the student their whole score."""
+        from app.ai.parsing import _extract_json_from_text
+
+        raw = '{"score": 5, "feedback": "Kąt $90^\\circ$ oraz $a \\ge b$."}'
+        parsed = _extract_json_from_text(raw)
+        assert parsed is not None
+        assert parsed["score"] == 5
+        assert "\\circ" in parsed["feedback"]
+
+    def test_partially_escaped_latex_still_parses(self):
+        """The realistic case: the model doubles some backslashes but not all."""
+        from app.ai.parsing import _extract_json_from_text
+
+        # "\\\\circ" is a correctly escaped macro; "\\ge" is a lone one.
+        raw = '{"score": 5, "feedback": "Kąt $90^\\\\circ$ oraz $a \\ge b$."}'
+        parsed = _extract_json_from_text(raw)
+        assert parsed is not None
+        assert "\\circ" in parsed["feedback"]
+        assert "\\ge" in parsed["feedback"]
+
+    def test_unicode_escape_is_not_mistaken_for_a_macro(self):
+        from app.ai.parsing import _escape_lone_backslashes
+
+        assert _escape_lone_backslashes(r'"°"') == r'"°"'
+        # \underline is a macro, not a unicode escape, so it must be doubled.
+        assert _escape_lone_backslashes(r'"\underline{x}"') == r'"\\underline{x}"'
+
+    def test_repair_reaches_fenced_and_prefixed_json(self):
+        """Strategies 2-4 must repair too, or those responses still score 0."""
+        from app.ai.parsing import _extract_json_from_text
+
+        fenced = '```json\n{"score": 3, "feedback": "$a \\ge b$"}\n```'
+        assert _extract_json_from_text(fenced)["score"] == 3
+
+        prefixed = 'Oto ocena:\n{"score": 6, "feedback": "$\\alpha + \\beta$"}'
+        assert _extract_json_from_text(prefixed)["score"] == 6
+
+    def test_valid_json_is_untouched(self):
+        from app.ai.parsing import _extract_json_from_text
+
+        parsed = _extract_json_from_text('{"score": 3, "feedback": "Linia1\\nLinia2"}')
+        assert parsed["feedback"] == "Linia1\nLinia2"

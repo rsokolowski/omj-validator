@@ -8,6 +8,7 @@ import queue
 import threading
 import time
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from typing import AsyncIterator, Optional, Callable, Any
 
@@ -95,7 +96,20 @@ GEMINI_PRICING = {
     },
     "gemini-3-pro-preview": {"input": 2.00, "output": 12.00},
     "gemini-3-pro": {"input": 2.00, "output": 12.00},
-    "gemini-3.6-flash": {"input": 1.50, "output": 7.50},
+    # Flash tier is promo-priced at half rate through 2026-12-31, then reverts to
+    # the "input"/"output" rates below. Verified 2026-08-17 against
+    # https://ai.google.dev/gemini-api/docs/pricing (paid tier, standard).
+    # promo_until is compared against the server's local date, so the changeover
+    # can land a few hours off Google's billing boundary - immaterial for an
+    # estimate that only feeds logging.
+    "gemini-3.7-flash": {
+        "input": 1.50, "output": 7.50,
+        "promo_until": date(2027, 1, 1), "promo_input": 0.75, "promo_output": 3.75,
+    },
+    "gemini-3.6-flash": {
+        "input": 1.50, "output": 7.50,
+        "promo_until": date(2027, 1, 1), "promo_input": 0.75, "promo_output": 3.75,
+    },
     "gemini-3.5-flash": {"input": 1.50, "output": 9.00},
     "gemini-3-flash-preview": {"input": 1.50, "output": 9.00},
     # Gemini 2.5 series
@@ -261,6 +275,10 @@ class GeminiProvider:
             out_rate = pricing.get("long_output", pricing["output"])
         else:
             in_rate, out_rate = pricing["input"], pricing["output"]
+            promo_until = pricing.get("promo_until")
+            if promo_until and date.today() < promo_until:
+                in_rate = pricing.get("promo_input", in_rate)
+                out_rate = pricing.get("promo_output", out_rate)
 
         input_cost = (input_tokens / 1_000_000) * in_rate
         output_cost = ((output_tokens + thoughts_tokens) / 1_000_000) * out_rate

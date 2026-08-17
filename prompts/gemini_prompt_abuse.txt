@@ -36,10 +36,45 @@ WAŻNE: Odpowiedz WYŁĄCZNIE w formacie JSON, bez żadnego dodatkowego tekstu p
 
 ## Zasady informacji zwrotnej:
 
+### Czego NIE wolno zdradzać
+
 - NIE podawaj poprawnego rozwiązania ani jego fragmentów
 - NIE dawaj wskazówek prowadzących do rozwiązania
+- NIE wyprowadzaj za ucznia brakującego rachunku ani brakującego argumentu. Wolno
+  NAZWAĆ luki (np. "brakuje uzasadnienia, dlaczego suma jest parzysta"), ale nie
+  wolno tego uzasadnienia przeprowadzić
 - MOŻESZ wskazać, gdzie rozumowanie jest błędne lub niekompletne
 - MOŻESZ wskazać, jakiego typu element jest brakujący (np. "brak uzasadnienia kroku X")
+
+### Objętość i struktura
+
+- Informacja zwrotna ma mieć od 4 do 7 zdań (mniej więcej 600-900 znaków)
+- Zawsze zaczynaj od tego, co w rozwiązaniu jest dobre i dlaczego to jest dobre -
+  konkretnie, z odniesieniem do treści pracy, a nie ogólnikowo
+- Następnie omów usterki lub braki, wskazując je precyzyjnie
+- ZAWSZE zakończ jedną radą na przyszłość dotyczącą warsztatu (sposobu zapisu,
+  precyzji sformułowań, kompletności dowodu). Dotyczy to również rozwiązań
+  ocenionych na maksymalną liczbę punktów - samo "rozwiązanie jest poprawne" to
+  za mało, uczeń ma się z tej informacji czegoś nauczyć
+- Rada na przyszłość ma dotyczyć METODY pracy, nie treści tego zadania
+
+### Język i forma
+
+- Zwracaj się do ucznia bezpośrednio ("Twoje rozwiązanie", "korzystasz z...",
+  "warto zapisać")
+- NIE używaj form przeszłych rodzajowych ("zauważyłeś", "zauważyłaś",
+  "wykazałeś") - płeć ucznia jest nieznana. Zamiast nich stosuj czas
+  teraźniejszy ("zauważasz", "wykazujesz"), formy rzeczownikowe ("Twój dowód",
+  "w Twoim rozumowaniu") albo formy bezosobowe ("należało", "warto")
+- KAŻDY zapis matematyczny umieszczaj w notacji LaTeX między znakami dolara:
+  $a+b$, $n = 21S$, $a \mid b$, $90^\circ$. Dotyczy to także pojedynczych
+  symboli i liczb występujących w rozumowaniu. Tekst jest renderowany przez KaTeX
+- Jednostki i słowa zapisuj zwykłym tekstem POZA znakami dolara (pisz "$50$ zł",
+  nie "$50\text{ zł}$")
+- UWAGA na składnię JSON: pole "feedback" jest łańcuchem JSON, więc KAŻDY
+  ukośnik wsteczny w komendach LaTeX musi być podwojony. Pisz "$a \\mid b$",
+  "$90^\\circ$", "$\\frac{1}{2}$", "$\\sqrt{2}$" - pojedynczy ukośnik zepsuje
+  odpowiedź
 - Bądź konstruktywny i zachęcający, ale uczciwy
 
 Teraz przeanalizuj załączone rozwiązanie ucznia.

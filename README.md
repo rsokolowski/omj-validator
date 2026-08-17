@@ -40,7 +40,7 @@ Zmienne środowiskowe (`.env`):
 |---------|------|
 | `AUTH_KEY` | Klucz dostępu do aplikacji |
 | `GEMINI_API_KEY` | Klucz API Google Gemini do analizy rozwiązań |
-| `GEMINI_MODEL` | Model do użycia (domyślnie: `gemini-3-pro-preview`) |
+| `GEMINI_MODEL` | Model do użycia (domyślnie: `gemini-3.7-flash`) |
 | `AI_PROVIDER` | Dostawca AI (obecnie tylko `gemini`) |
 
 ## Źródła materiałów

@@ -64,7 +64,7 @@ class Settings(BaseSettings):
 
     # Gemini API Configuration
     gemini_api_key: Optional[str] = None
-    gemini_model: str = "gemini-3-pro-preview"
+    gemini_model: str = "gemini-3.7-flash"
     gemini_timeout: int = 90
     gemini_api_base_url: Optional[str] = None  # Custom API endpoint for testing
     gemini_debug_logs: bool = False  # Enable verbose debug logging for Gemini API

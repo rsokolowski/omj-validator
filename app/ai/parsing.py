@@ -67,6 +67,67 @@ def normalize_omj_score(score: int, etap: str = "etap2") -> int:
             return 6
 
 
+# A LaTeX macro whose name starts with b/f/n/r/t forms a *valid* JSON escape when
+# the model emits a single backslash, so json.loads silently decodes "$\text{o}$"
+# into TAB + "ext{o}$" instead of failing - the damage is invisible until the
+# student reads it. Enumerating macro names does not work (\ne, \to, \beta, \rho
+# and friends are all affected), so instead repair any of these control
+# characters when it sits inside a $...$ span and is followed by a letter, where
+# no legitimate whitespace can occur.
+_JSON_ESCAPE_CONTROL_CHARS = {"\b": "b", "\f": "f", "\n": "n", "\r": "r", "\t": "t"}
+
+# Bounded so an unmatched "$" cannot swallow the rest of the feedback.
+_MATH_SPAN_PATTERN = re.compile(r"\$[^$]{1,300}\$")
+_MANGLED_MACRO_PATTERN = re.compile(r"[\b\f\n\r\t](?=[A-Za-z])")
+
+# One valid JSON escape, or a lone backslash. Matching the valid form first is
+# what stops a correctly written "\\circ" from being mangled into "\\\\circ".
+_JSON_ESCAPE_OR_LONE_BACKSLASH = re.compile(r'\\(?:u[0-9a-fA-F]{4}|["\\/bfnrt])|\\')
+
+
+def repair_latex_escapes(text: str) -> str:
+    """Restore LaTeX macros mangled by JSON escape decoding.
+
+    The prompt tells the model to double its backslashes, but compliance is
+    partial, and the non-compliant cases decode into control characters rather
+    than failing the parse.
+    """
+    if not text:
+        return text
+
+    def _repair_span(match: re.Match) -> str:
+        return _MANGLED_MACRO_PATTERN.sub(
+            lambda m: "\\" + _JSON_ESCAPE_CONTROL_CHARS[m.group()], match.group()
+        )
+
+    return _MATH_SPAN_PATTERN.sub(_repair_span, text)
+
+
+def _escape_lone_backslashes(text: str) -> str:
+    """Double backslashes that do not start a valid JSON escape sequence.
+
+    "$90^\\circ$" emitted with a single backslash makes the whole object
+    unparseable, which costs the submission its score. Escaping only the invalid
+    sequences lets it parse; correctly escaped ones are passed through untouched,
+    which matters because the model usually escapes some but not all of them.
+    """
+    return _JSON_ESCAPE_OR_LONE_BACKSLASH.sub(
+        lambda m: m.group() if len(m.group()) > 1 else "\\\\", text
+    )
+
+
+def _loads_repaired(candidate: str) -> Optional[dict]:
+    """json.loads a candidate, retrying once with LaTeX backslashes escaped."""
+    try:
+        return json.loads(candidate)
+    except json.JSONDecodeError:
+        pass
+    try:
+        return json.loads(_escape_lone_backslashes(candidate))
+    except json.JSONDecodeError:
+        return None
+
+
 def _extract_json_from_text(text: str) -> Optional[dict]:
     """
     Extract JSON object from AI response text.
@@ -86,11 +147,12 @@ def _extract_json_from_text(text: str) -> Optional[dict]:
     text_stripped = text.strip()
 
     # Strategy 1: Try direct JSON parse (for clean responses)
+    # Every strategy parses via _loads_repaired: unescaped LaTeX ("$a \ge b$")
+    # would otherwise drop the whole submission to a score of 0.
     if text_stripped.startswith("{"):
-        try:
-            return json.loads(text_stripped)
-        except json.JSONDecodeError:
-            pass
+        parsed = _loads_repaired(text_stripped)
+        if parsed is not None:
+            return parsed
 
     # Strategy 2: Extract from markdown code blocks
     # Handles: ```json {...} ``` or ``` {...} ```
@@ -101,10 +163,9 @@ def _extract_json_from_text(text: str) -> Optional[dict]:
     for pattern in code_block_patterns:
         match = re.search(pattern, text)
         if match:
-            try:
-                return json.loads(match.group(1))
-            except json.JSONDecodeError:
-                continue
+            parsed = _loads_repaired(match.group(1))
+            if parsed is not None:
+                return parsed
 
     # Strategy 3: Find balanced JSON object containing "score"
     # This handles nested objects like {"score": 5, "feedback": "text with {braces}"}
@@ -155,10 +216,9 @@ def _extract_json_from_text(text: str) -> Optional[dict]:
 
     balanced_json = find_balanced_json(text)
     if balanced_json:
-        try:
-            return json.loads(balanced_json)
-        except json.JSONDecodeError:
-            pass
+        parsed = _loads_repaired(balanced_json)
+        if parsed is not None:
+            return parsed
 
     # Strategy 4: Simple regex fallback for flat JSON (no nested braces)
     patterns = [
@@ -168,10 +228,9 @@ def _extract_json_from_text(text: str) -> Optional[dict]:
     for pattern in patterns:
         match = re.search(pattern, text, re.DOTALL)
         if match:
-            try:
-                return json.loads(match.group())
-            except json.JSONDecodeError:
-                continue
+            parsed = _loads_repaired(match.group())
+            if parsed is not None:
+                return parsed
 
     # Log a snippet of the response for debugging
     logger.debug(f"Failed to extract JSON from response (first 500 chars): {text[:500]}")
@@ -225,7 +284,9 @@ def parse_ai_response(
 
         # Extract basic fields
         score = int(result_json.get("score", 0))
-        feedback = result_json.get("feedback", "Brak informacji zwrotnej.")
+        feedback = repair_latex_escapes(
+            result_json.get("feedback", "Brak informacji zwrotnej.")
+        )
 
         # Parse abuse detection fields (optional, defaults for backward compatibility)
         issue_type_str = result_json.get("issue_type", "none")
