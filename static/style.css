@@ -548,6 +548,13 @@ h1, h2, h3, h4 {
     border-bottom: 1px solid var(--color-gray-200);
 }
 
+.task-content-missing {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--color-gray-600);
+    font-style: italic;
+}
+
 .task-content {
     font-size: 1rem;
     line-height: 1.8;

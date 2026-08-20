@@ -140,6 +140,45 @@ def _translate_sync(text: str) -> str:
         raise TranslationError(f"Translation error: {e}")
 
 
+async def translate_to_polish_optional(text: str) -> Optional[str]:
+    """Translate English text to Polish, or return None if that did not happen.
+
+    Callers that must never show English text need to tell "the translation is
+    the same string" apart from "no translation happened". Comparing the result
+    to the input cannot do that: a one-word heading or a proper noun can
+    legitimately translate to itself, and treating that as a failure silently
+    throws away a perfectly good status.
+
+    Returns None when translation is disabled, when the text is empty, and on
+    any timeout or error. Never raises.
+    """
+    if not text or not text.strip():
+        return None
+
+    if not settings.translate_enabled:
+        return None
+
+    try:
+        return await asyncio.wait_for(
+            asyncio.to_thread(_translate_sync, text),
+            timeout=settings.translate_timeout,
+        )
+
+    except asyncio.TimeoutError:
+        logger.warning(
+            f"Translation timeout ({settings.translate_timeout}s) for: '{text[:50]}...'"
+        )
+        return None
+
+    except TranslationError as e:
+        logger.warning(f"Translation failed: {e}, using original text")
+        return None
+
+    except Exception as e:
+        logger.warning(f"Unexpected translation error: {e}, using original text")
+        return None
+
+
 async def translate_to_polish(text: str) -> str:
     """
     Translate English text to Polish asynchronously.
@@ -155,29 +194,5 @@ async def translate_to_polish(text: str) -> str:
     Returns:
         Translated Polish text, or original text on any error/timeout
     """
-    if not text or not text.strip():
-        return text
-
-    if not settings.translate_enabled:
-        return text
-
-    try:
-        translated = await asyncio.wait_for(
-            asyncio.to_thread(_translate_sync, text),
-            timeout=settings.translate_timeout,
-        )
-        return translated
-
-    except asyncio.TimeoutError:
-        logger.warning(
-            f"Translation timeout ({settings.translate_timeout}s) for: '{text[:50]}...'"
-        )
-        return text
-
-    except TranslationError as e:
-        logger.warning(f"Translation failed: {e}, using original text")
-        return text
-
-    except Exception as e:
-        logger.warning(f"Unexpected translation error: {e}, using original text")
-        return text
+    translated = await translate_to_polish_optional(text)
+    return translated if translated else text

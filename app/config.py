@@ -83,6 +83,11 @@ class Settings(BaseSettings):
     # Feature disabled unless both are set. Token lives only in .env / .env.prod.
     telegram_bot_token: Optional[str] = None
     telegram_chat_id: Optional[str] = None
+    # Optional secret salt. When set, notifications carry a short irreversible
+    # HMAC pseudonym so an admin can tell concurrent submissions apart. Leave
+    # unset (default) to send no user identifier at all - notifications must
+    # never contain a child's name or e-mail, see app/notifications.py.
+    telegram_pseudonym_salt: Optional[str] = None
 
     # App Configuration
     upload_max_size_mb: int = 10
@@ -91,6 +96,34 @@ class Settings(BaseSettings):
     rate_limit_new_users_per_day: int = 50           # Max new user registrations per 24h
     rate_limit_submissions_per_user_per_day: int = 30  # Max submissions per user per 24h
     rate_limit_submissions_global_per_day: int = 500   # Max total submissions per 24h
+
+    # Data retention (RODO art. 5(1)(e) - storage limitation)
+    # Submissions belong to children, so nothing may be kept "just in case".
+    # Both periods can be set to 0 (or None) to disable expiry entirely, which
+    # is what local dev wants - never do that on a public deployment.
+    #
+    # Full submission = DB row + the uploaded photos of the handwritten work.
+    # 24 months spans the two school years an OMJ cohort runs across, so a
+    # student keeps their progress history for as long as it is useful to them.
+    retention_submission_months: Optional[int] = 24
+    # The raw model "thinking" trace inside submissions.scoring_meta reproduces
+    # the student's work verbatim and is a large blob. It is only useful for
+    # short-term debugging of scoring quality, so it is stripped much earlier
+    # than the submission itself. The rest of scoring_meta (model name, token
+    # counts, cost, timings) is non-personal and stays for cost accounting.
+    retention_scoring_thinking_days: Optional[int] = 90
+    # An account with no sign-in and no submission for this long is deleted with
+    # everything attached to it. Purging submissions alone would leave an empty
+    # account holding a child's Google id, e-mail and name forever. Longer than
+    # retention_submission_months so a returning student still finds their work.
+    retention_inactive_account_months: Optional[int] = 36
+    # Admin access audit trail (RODO art. 5(2)). Long enough to investigate a
+    # complaint, short enough not to become an archive of who looked at whom.
+    retention_admin_audit_months: Optional[int] = 12
+    # Run the retention passes from inside the app once a day. The production
+    # image runs a single gunicorn worker, so exactly one loop exists. Set to
+    # False when scaling out and run scripts/purge_expired_data.py from cron.
+    retention_auto_purge: bool = True
 
     # Database
     database_url: Optional[str] = None  # Override with DATABASE_URL env var
@@ -114,11 +147,26 @@ class Settings(BaseSettings):
 
     @property
     def tasks_data_dir(self) -> Path:
+        """Task metadata (difficulty, categories, hints, ...) - tracked in git."""
         return self.base_dir / "data" / "tasks"
+
+    @property
+    def task_content_dir(self) -> Path:
+        """Task statements (title + content) transcribed from the OMJ PDFs.
+
+        This is competition material owned by the OMJ organiser, so it is NOT
+        part of the repository. It is generated locally by fix_latex_content.py
+        and may legitimately be missing - see app/storage.py for the fallback.
+        """
+        return self.base_dir / "data" / "task_content"
 
     def task_data_path(self, year: str, etap: str, number: int) -> Path:
         """Path to individual task metadata file."""
         return self.tasks_data_dir / year / etap / f"task_{number}.json"
+
+    def task_content_path(self, year: str, etap: str) -> Path:
+        """Path to the generated statement file for a whole year/etap."""
+        return self.task_content_dir / year / f"{etap}.json"
 
     @property
     def submissions_dir(self) -> Path:

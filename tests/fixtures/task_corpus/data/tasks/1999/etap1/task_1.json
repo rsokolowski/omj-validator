@@ -1,0 +1,25 @@
+{
+  "number": 1,
+  "pdf": {
+    "tasks": "tasks/1999/etap1/zadania.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": 2,
+  "categories": [
+    "algebra"
+  ],
+  "hints": [
+    "Podstaw najmniejszą wartość.",
+    "Rozważ parzystość.",
+    "Zsumuj obie strony.",
+    "Sprawdź brzegi."
+  ],
+  "prerequisites": [],
+  "skills_required": [
+    "fixture_skill_a"
+  ],
+  "skills_gained": [
+    "fixture_skill_b"
+  ]
+}

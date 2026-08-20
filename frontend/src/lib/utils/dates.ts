@@ -21,6 +21,7 @@ export function formatDate(dateString: string): string {
     return dateString;
   }
   return new Intl.DateTimeFormat("pl-PL", {
+    timeZone: "Europe/Warsaw",
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -42,6 +43,7 @@ export function formatDateShort(dateString: string): string {
     return dateString;
   }
   return new Intl.DateTimeFormat("pl-PL", {
+    timeZone: "Europe/Warsaw",
     day: "2-digit",
     month: "2-digit",
     year: "numeric",

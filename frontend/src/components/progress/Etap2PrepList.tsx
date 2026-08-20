@@ -66,7 +66,7 @@ export function Etap2PrepList({ nodes }: Etap2PrepListProps) {
           borderColor: "grey.200",
         }}
       >
-        <Typography variant="h6" sx={{ color: "grey.700" }}>
+        <Typography variant="h6" component="h2" sx={{ color: "grey.700" }}>
           Przygotowanie do 2 etapu
         </Typography>
         <Chip

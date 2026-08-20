@@ -44,6 +44,7 @@ export function Footer() {
           <Box>
             <Typography
               variant="subtitle2"
+              component="h2"
               sx={{ fontWeight: 600, mb: 1.5, color: "grey.800" }}
             >
               O projekcie
@@ -69,6 +70,7 @@ export function Footer() {
           <Box>
             <Typography
               variant="subtitle2"
+              component="h2"
               sx={{ fontWeight: 600, mb: 1.5, color: "grey.800" }}
             >
               Linki
@@ -115,6 +117,7 @@ export function Footer() {
           <Box>
             <Typography
               variant="subtitle2"
+              component="h2"
               sx={{ fontWeight: 600, mb: 1.5, color: "grey.800" }}
             >
               Kontakt

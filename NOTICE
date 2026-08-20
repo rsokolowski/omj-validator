@@ -1,0 +1,95 @@
+OMJ Validator - zakres licencji / scope of the licence
+=====================================================
+
+WERSJA POLSKA
+-------------
+
+Licencja MIT (plik LICENSE) obejmuje:
+
+  * kod źródłowy tego projektu (backend FastAPI, frontend Next.js, skrypty
+    pomocnicze, konfiguracja, testy),
+  * dokumentację napisaną przez autora projektu,
+  * wygenerowane przez autora metadane zadań w katalogu `data/tasks/`, czyli
+    poziom trudności, kategorie, wskazówki (hints), wymagania wstępne
+    (prerequisites), umiejętności (skills) oraz ścieżki do plików PDF.
+
+Licencja MIT NIE obejmuje materiałów Olimpiady Matematycznej Juniorów:
+
+  * treści zadań konkursowych,
+  * rozwiązań i schematów oceniania,
+  * statystyk zawodów,
+  * plików PDF publikowanych na stronie omj.edu.pl.
+
+Materiały te są własnością ich autorów oraz organizatora Olimpiady, którym jest
+Stowarzyszenie na rzecz Edukacji Matematycznej (https://omj.edu.pl). Autor tego
+projektu nie posiada praw do udzielania na nie jakiejkolwiek licencji i nie
+udziela ich. Nie ma też publicznej licencji zezwalającej na ich redystrybucję.
+
+Dlatego materiały OMJ NIE są częścią tego repozytorium i nie są wraz z nim
+rozpowszechniane:
+
+  * katalog `tasks/` (pliki PDF) jest wyłączony z repozytorium (.gitignore).
+    Każdy, kto uruchamia aplikację, pobiera je samodzielnie z oficjalnego
+    źródła poleceniem `python download_tasks.py --all-etaps`;
+  * katalog `data/task_content/` (treści zadań przepisane z tych PDF-ów do
+    LaTeX-a) jest wyłączony z repozytorium. Powstaje lokalnie poleceniem
+    `python fix_latex_content.py --all`.
+
+Aplikacja działa bez tych materiałów: pokazuje własne metadane zadania oraz
+odnośnik do oficjalnego PDF-u, jeśli został pobrany.
+
+Ten projekt jest niezależnym narzędziem edukacyjnym i nie jest powiązany ze
+Stowarzyszeniem na rzecz Edukacji Matematycznej ani z Olimpiadą Matematyczną
+Juniorów.
+
+Uwaga historyczna: pliki PDF oraz treści zadań były śledzone przez git we
+wcześniejszych commitach i pozostają dostępne w historii tego repozytorium.
+Usunięcie ich z historii wymaga jej przepisania i wymuszonego pusha, co jest
+osobną decyzją właściciela repozytorium.
+
+
+ENGLISH VERSION
+---------------
+
+The MIT licence (see LICENSE) covers:
+
+  * the source code of this project (FastAPI backend, Next.js frontend, helper
+    scripts, configuration, tests),
+  * documentation written by the project author,
+  * the author-generated task metadata in `data/tasks/`: difficulty ratings,
+    categories, hints, prerequisites, skills and PDF paths.
+
+The MIT licence does NOT cover the materials of the Polish Junior Mathematical
+Olympiad (Olimpiada Matematyczna Juniorow):
+
+  * competition task statements,
+  * official solutions and marking schemes,
+  * competition statistics,
+  * the PDF files published at omj.edu.pl.
+
+Those materials are the property of their authors and of the competition
+organiser, Stowarzyszenie na rzecz Edukacji Matematycznej
+(https://omj.edu.pl). The author of this project holds no right to license them
+and does not license them. No public redistribution licence exists for them.
+
+For that reason the OMJ materials are NOT part of this repository and are not
+distributed with it:
+
+  * the `tasks/` directory (PDF files) is git-ignored; whoever runs the
+    application downloads them from the official source themselves with
+    `python download_tasks.py --all-etaps`,
+  * the `data/task_content/` directory (task statements transcribed from those
+    PDFs into LaTeX) is git-ignored; it is produced locally with
+    `python fix_latex_content.py --all`.
+
+The application runs without these materials: it shows its own task metadata and
+a link to the official PDF where one has been downloaded.
+
+This project is an independent educational tool and is not affiliated with
+Stowarzyszenie na rzecz Edukacji Matematycznej or with the Olimpiada
+Matematyczna Juniorow.
+
+Historical note: the PDF files and task statements were tracked by git in
+earlier commits and remain reachable in this repository's history. Removing them
+from the history requires rewriting it and force-pushing, which is a separate
+decision for the repository owner.

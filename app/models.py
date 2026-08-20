@@ -44,8 +44,14 @@ class TaskInfo(BaseModel):
     year: str
     etap: str
     number: int
+    # Statement of the task (title + content) as printed in the OMJ PDF.
+    # This text belongs to the competition organiser and is NOT part of the
+    # repository - it is generated locally by fix_latex_content.py into
+    # data/task_content/. When it has not been generated, `content` is None and
+    # `title` falls back to "Zadanie {number}" (see app/storage.py); clients
+    # should then link to the task PDF instead of rendering the statement.
     title: str
-    content: str
+    content: Optional[str] = None
     pdf: TaskPdf
     difficulty: Optional[int] = Field(default=None, ge=1, le=5)  # 1=easy, 5=very hard
     categories: list[str] = []  # Values from TaskCategory enum
@@ -62,6 +68,12 @@ class TaskInfo(BaseModel):
     skills_required: list[str] = []
     # Skills developed by mastering this task
     skills_gained: list[str] = []
+
+    @computed_field
+    @property
+    def has_content(self) -> bool:
+        """True when the locally generated statement is available."""
+        return bool(self.content and self.content.strip())
 
     @computed_field
     @property
@@ -228,3 +240,23 @@ class UserSubmissionsResponse(BaseModel):
     offset: int
     limit: int
     has_more: bool
+
+
+# ==================== Account deletion (RODO art. 17) ====================
+
+
+# Exact phrase the user must type to confirm erasure. Kept ASCII-only so it can
+# be typed on any keyboard, and shown verbatim in the UI dialog.
+ACCOUNT_DELETE_CONFIRMATION = "USUWAM KONTO"
+
+
+class DeleteAccountRequest(BaseModel):
+    """Body of POST /api/account/delete - guards against accidental calls."""
+    confirmation: str
+
+
+class DeleteAccountResponse(BaseModel):
+    """What was actually erased, so the UI can confirm it to the user."""
+    success: bool
+    deleted_submissions: int
+    deleted_files: int

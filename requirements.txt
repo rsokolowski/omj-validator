@@ -11,6 +11,9 @@ pydantic-settings>=2.1.0
 
 # Image processing
 Pillow>=10.0.0
+# HEIF/HEIC decoder for Pillow. Required to strip EXIF (incl. GPS) from
+# iPhone uploads - without it those photos cannot be sanitized and are refused.
+pillow-heif>=0.15.0
 
 # AI Providers
 google-genai>=2.13.0

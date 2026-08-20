@@ -57,7 +57,9 @@ function StatCard({ icon, label, value, subtext, color, bgColor }: StatCardProps
           {label}
         </Typography>
       </Box>
-      <Typography variant="h4" fontWeight={700} color={color}>
+      {/* Sama liczba nie jest naglowkiem: zachowujemy rozmiar, zmieniamy
+          element na akapit (WCAG 1.3.1). */}
+      <Typography variant="h4" component="p" fontWeight={700} color={color}>
         {value}
       </Typography>
       {subtext && (
@@ -88,7 +90,7 @@ export function StatisticsCards({ stats }: StatisticsCardsProps) {
             label="Wszystkie"
             value={stats.total_submissions}
             subtext={`${stats.pending_count} w trakcie`}
-            color="#3b82f6"
+            color="primary.main"
             bgColor="#eff6ff"
           />
         </Grid>
@@ -100,7 +102,7 @@ export function StatisticsCards({ stats }: StatisticsCardsProps) {
             label="Ukończone"
             value={stats.completed_count}
             subtext={`${completionRate}% skuteczności`}
-            color="#22c55e"
+            color="success.main"
             bgColor="#f0fdf4"
           />
         </Grid>
@@ -112,7 +114,7 @@ export function StatisticsCards({ stats }: StatisticsCardsProps) {
             label="Średnia"
             value={stats.avg_score !== null ? stats.avg_score.toFixed(1) : "-"}
             subtext={stats.best_score !== null ? `Najlepszy: ${stats.best_score} pkt` : undefined}
-            color="#f59e0b"
+            color="warning.main"
             bgColor="#fffbeb"
           />
         </Grid>
@@ -124,7 +126,7 @@ export function StatisticsCards({ stats }: StatisticsCardsProps) {
             label="Opanowane"
             value={stats.tasks_mastered}
             subtext={`z ${stats.tasks_attempted} próbowanych zadań`}
-            color="#8b5cf6"
+            color="accent.main"
             bgColor="#f5f3ff"
           />
         </Grid>
@@ -158,7 +160,10 @@ export function StatisticsCards({ stats }: StatisticsCardsProps) {
               bgcolor: "#f3f4f6",
               "& .MuiLinearProgress-bar": {
                 borderRadius: 4,
-                background: "linear-gradient(90deg, #8b5cf6 0%, #a78bfa 100%)",
+                // WCAG 1.4.11: pasek niesie informacje, wiec musi miec >= 3:1
+                // wobec sciezki #f3f4f6. Poprzedni gradient konczyl sie na
+                // #a78bfa = 2,47:1; ponizszy ma 6,46:1 -> 5,18:1.
+                background: "linear-gradient(90deg, #6d28d9 0%, #7c3aed 100%)",
               },
             }}
           />

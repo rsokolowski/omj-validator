@@ -4,6 +4,8 @@ Repositories abstract database operations and convert between
 SQLAlchemy models and Pydantic models.
 """
 
+import hashlib
+import hmac
 import json
 import logging
 from datetime import datetime, timezone, timedelta
@@ -12,9 +14,10 @@ from typing import Optional
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from .models import UserDB, SubmissionDB, SubmissionStatus, IssueType
+from .models import AdminAccessLogDB, DeletedAccountQuotaDB, UserDB, SubmissionDB, SubmissionStatus, IssueType
 from ..models import Submission, SubmissionStatus as PydanticSubmissionStatus, IssueType as PydanticIssueType
 from ..config import settings
+from ..privacy import mask_email, mask_user_id
 
 
 def ensure_utc(dt: datetime | None) -> datetime | None:
@@ -44,6 +47,197 @@ logger = logging.getLogger(__name__)
 
 # Submissions older than this are considered stale and marked as failed
 SUBMISSION_TIMEOUT_SECONDS = settings.gemini_timeout + 60  # AI timeout + buffer
+
+
+def hash_user_id(user_id: str) -> str:
+    """Irreversible, salted digest of a Google sub.
+
+    Used for the rate-limit tombstone left behind by account erasure: it must be
+    possible to recognise the same person coming back within the window, but the
+    stored value must not identify anyone on its own. HMAC (not a plain hash)
+    so that guessing candidate ids cannot reproduce the digest without the
+    server-side key.
+    """
+    key = (settings.session_secret_key or "").encode("utf-8")
+    return hmac.new(key, user_id.encode("utf-8"), hashlib.sha256).hexdigest()
+
+
+class AdminAccessLogRepository:
+    """Audit trail of admin access to other users' data (see AdminAccessLogDB)."""
+
+    def __init__(self, db: Session):
+        self.db = db
+
+    def record(
+        self,
+        admin_email: str,
+        resource: str,
+        subject_user_id: Optional[str] = None,
+        resource_id: Optional[str] = None,
+        admin_user_id: Optional[str] = None,
+    ) -> Optional[AdminAccessLogDB]:
+        """Record one admin access. Returns None when nothing was recorded.
+
+        An admin looking at their own submissions is noise, not an audit event,
+        so it is skipped. Failures are swallowed and logged: an audit write must
+        never break the page an admin is trying to open.
+        """
+        if subject_user_id and admin_user_id and subject_user_id == admin_user_id:
+            return None
+
+        try:
+            entry = AdminAccessLogDB(
+                admin_email=admin_email,
+                subject_user_id=subject_user_id,
+                resource=resource,
+                resource_id=resource_id,
+            )
+            self.db.add(entry)
+            self.db.commit()
+            return entry
+        except Exception as e:
+            self.db.rollback()
+            logger.warning(f"Admin access audit write failed: {type(e).__name__}: {e}")
+            return None
+
+    def pseudonymize_subject(self, user_id: str) -> int:
+        """Replace a subject's raw id with an irreversible digest.
+
+        Called when that user erases their account: the accountability record of
+        "an admin looked at somebody's data" survives, but the identifier of the
+        erased account does not. Returns the number of rows updated.
+        """
+        return (
+            self.db.query(AdminAccessLogDB)
+            .filter(AdminAccessLogDB.subject_user_id == user_id)
+            .update({AdminAccessLogDB.subject_user_id: hash_user_id(user_id)})
+        )
+
+
+class DeletedAccountQuotaRepository:
+    """Rate-limit tombstones for erased accounts (see DeletedAccountQuotaDB)."""
+
+    def __init__(self, db: Session):
+        self.db = db
+
+    def record_deletion(
+        self,
+        user_id: str,
+        submission_count: int,
+        oldest_submission_at: Optional[datetime],
+        newest_submission_at: Optional[datetime] = None,
+        window_hours: int = 24,
+    ) -> Optional[DeletedAccountQuotaDB]:
+        """Remember how much quota an erased account had already used.
+
+        No-op when the account made no submissions inside the window - there is
+        nothing to carry over and no reason to store anything.
+
+        Expiry is anchored on the NEWEST submission, not the oldest. The whole
+        count is carried as one block, so anchoring it on the oldest would hand
+        every slot back at once well before a surviving account would have got
+        them: 30 submissions spread across the window, oldest at T-23h, would
+        release all 30 at T+1h instead of trickling out until T+24h. Anchoring
+        on the newest errs the other way - conservative, which is the right
+        direction for an abuse guard.
+
+        oldest_submission_at is still stored, because that is what the reset /
+        Retry-After headers should point at (when the FIRST slot frees up).
+        """
+        if submission_count <= 0:
+            return None
+
+        now = datetime.now(timezone.utc)
+        anchor = ensure_utc(newest_submission_at) or ensure_utc(oldest_submission_at) or now
+        expires_at = (anchor + timedelta(hours=window_hours)).replace(tzinfo=None)
+        user_hash = hash_user_id(user_id)
+
+        tombstone = (
+            self.db.query(DeletedAccountQuotaDB)
+            .filter(DeletedAccountQuotaDB.user_hash == user_hash)
+            .first()
+        )
+        if tombstone:
+            # Same person deleting again inside the window - quota accumulates
+            tombstone.submission_count += submission_count
+            if tombstone.expires_at < expires_at:
+                tombstone.expires_at = expires_at
+            # Reset headers should still point at the earliest counted submission
+            new_oldest = ensure_utc(oldest_submission_at)
+            if new_oldest is not None:
+                naive_oldest = new_oldest.replace(tzinfo=None)
+                if tombstone.oldest_submission_at is None or naive_oldest < tombstone.oldest_submission_at:
+                    tombstone.oldest_submission_at = naive_oldest
+        else:
+            tombstone = DeletedAccountQuotaDB(
+                user_hash=user_hash,
+                submission_count=submission_count,
+                oldest_submission_at=(
+                    ensure_utc(oldest_submission_at).replace(tzinfo=None)
+                    if oldest_submission_at
+                    else None
+                ),
+                expires_at=expires_at,
+            )
+            self.db.add(tombstone)
+
+        self.db.commit()
+        logger.info(
+            f"Recorded rate-limit tombstone for erased account "
+            f"({submission_count} submissions, expires {expires_at})"
+        )
+        return tombstone
+
+    def get_user_carryover(self, user_id: str) -> tuple[int, Optional[datetime]]:
+        """(count, expires_at) still counting against a returning user.
+
+        The second element is when the carried-over quota is released, NOT the
+        oldest submission behind it. The whole count is one block that expires
+        at once (see record_deletion), so expires_at is the only moment at which
+        anything actually frees up - which is what Retry-After has to report.
+        """
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
+        tombstone = (
+            self.db.query(DeletedAccountQuotaDB)
+            .filter(
+                DeletedAccountQuotaDB.user_hash == hash_user_id(user_id),
+                DeletedAccountQuotaDB.expires_at > now,
+            )
+            .first()
+        )
+        if not tombstone:
+            return 0, None
+        return tombstone.submission_count, tombstone.expires_at
+
+    def get_global_carryover_blocks(self) -> list[tuple[int, datetime]]:
+        """Every live tombstone as a (count, expires_at) block.
+
+        Kept as separate blocks rather than one sum, because each is released at
+        its own moment and the reset calculation needs them individually.
+        """
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
+        rows = (
+            self.db.query(
+                DeletedAccountQuotaDB.submission_count,
+                DeletedAccountQuotaDB.expires_at,
+            )
+            .filter(DeletedAccountQuotaDB.expires_at > now)
+            .all()
+        )
+        return [(int(count or 0), expires_at) for count, expires_at in rows]
+
+    def purge_expired(self) -> int:
+        """Delete tombstones whose window has closed. Returns how many went."""
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
+        count = (
+            self.db.query(DeletedAccountQuotaDB)
+            .filter(DeletedAccountQuotaDB.expires_at <= now)
+            .delete()
+        )
+        if count:
+            self.db.commit()
+            logger.debug(f"Purged {count} expired rate-limit tombstones")
+        return count
 
 
 class UserRepository:
@@ -78,7 +272,7 @@ class UserRepository:
             user.email = email
             user.name = name
             user.updated_at = datetime.now(timezone.utc)
-            logger.debug(f"Updated user: {email}")
+            logger.debug(f"Updated user: {mask_email(email)}")
         else:
             # Create new user
             user = UserDB(
@@ -87,7 +281,7 @@ class UserRepository:
                 name=name,
             )
             self.db.add(user)
-            logger.info(f"Created new user: {email}")
+            logger.info(f"Created new user: {mask_email(email)}")
 
         self.db.commit()
         self.db.refresh(user)
@@ -99,7 +293,7 @@ class UserRepository:
         if user:
             self.db.delete(user)
             self.db.commit()
-            logger.info(f"Deleted user: {user.email}")
+            logger.info(f"Deleted user: {mask_email(user.email)}")
             return True
         return False
 
@@ -222,7 +416,10 @@ class SubmissionRepository:
         self.db.add(submission)
         self.db.commit()
         self.db.refresh(submission)
-        logger.debug(f"Created submission {id} for user {user_id} (issue_type={issue_type.value})")
+        logger.debug(
+            f"Created submission {id} for user {mask_user_id(user_id)} "
+            f"(issue_type={issue_type.value})"
+        )
         return submission
 
     def get_by_id(self, submission_id: str) -> Optional[SubmissionDB]:
@@ -432,6 +629,61 @@ class SubmissionRepository:
         oldest = result[1]
         return count, oldest
 
+    def get_user_submission_timestamps(
+        self, user_id: str, hours: int = 24
+    ) -> list[datetime]:
+        """Ascending timestamps of a user's submissions inside the window.
+
+        Only needed when a deleted-account carryover is in play, so the ordinary
+        submit path never pays for it.
+        """
+        threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
+        rows = (
+            self.db.query(SubmissionDB.timestamp)
+            .filter(
+                SubmissionDB.user_id == user_id,
+                SubmissionDB.timestamp >= threshold,
+            )
+            .order_by(SubmissionDB.timestamp)
+            .all()
+        )
+        return [row[0] for row in rows]
+
+    def get_all_submission_timestamps(self, hours: int = 24) -> list[datetime]:
+        """Ascending timestamps of all submissions inside the window."""
+        threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
+        rows = (
+            self.db.query(SubmissionDB.timestamp)
+            .filter(SubmissionDB.timestamp >= threshold)
+            .order_by(SubmissionDB.timestamp)
+            .all()
+        )
+        return [row[0] for row in rows]
+
+    def get_user_rate_limit_window(
+        self, user_id: str, hours: int = 24
+    ) -> tuple[int, Optional[datetime], Optional[datetime]]:
+        """(count, oldest, newest) submission timestamps inside the window.
+
+        Like get_user_rate_limit_info, but also returns the newest timestamp -
+        needed when erasing an account, because that is when the last of the
+        carried-over quota would have aged out had the account survived.
+        """
+        threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
+        result = (
+            self.db.query(
+                func.count(SubmissionDB.id),
+                func.min(SubmissionDB.timestamp),
+                func.max(SubmissionDB.timestamp),
+            )
+            .filter(
+                SubmissionDB.user_id == user_id,
+                SubmissionDB.timestamp >= threshold,
+            )
+            .first()
+        )
+        return (result[0] or 0), result[1], result[2]
+
     def count_recent_submissions(self, hours: int = 24) -> int:
         """Count all submissions in the last N hours (for rate limiting)."""
         threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
@@ -475,7 +727,7 @@ class SubmissionRepository:
             .delete()
         )
         self.db.commit()
-        logger.info(f"Deleted {count} submissions for user {user_id}")
+        logger.info(f"Deleted {count} submissions for user {mask_user_id(user_id)}")
         return count
 
     def delete_all_submissions(self) -> int:

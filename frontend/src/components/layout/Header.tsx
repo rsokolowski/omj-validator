@@ -28,12 +28,25 @@ export function Header() {
       }}
     >
       <Container maxWidth="lg">
-        <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
-          {/* Logo */}
+        {/* WCAG 1.4.10 (Reflow): pasek musi sie zmiescic w 320 px CSS, wiec
+            zawija sie zamiast wypychac strone w poziomie. */}
+        <Toolbar
+          disableGutters
+          sx={{
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            rowGap: 1,
+            py: { xs: 1, sm: 0 },
+          }}
+        >
+          {/* Logo - wyglada jak h6, ale naglowkiem nie jest: naglowek poziomu 6
+              przed <h1> psul hierarchie dokumentu (WCAG 1.3.1). */}
           <Link href="/" style={{ textDecoration: "none" }}>
             <Typography
               variant="h6"
+              component="span"
               sx={{
+                display: "block",
                 fontWeight: 700,
                 color: "grey.900",
                 "&:hover": { color: "primary.main" },
@@ -43,8 +56,19 @@ export function Header() {
             </Typography>
           </Link>
 
-          {/* Navigation */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
+          {/* Navigation - punkt orientacyjny <nav> (WCAG 2.4.1) */}
+          <Box
+            component="nav"
+            aria-label="Nawigacja główna"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              flexWrap: "wrap",
+              rowGap: 1,
+              gap: { xs: 1.5, sm: 3 },
+              fontSize: { xs: "0.875rem", sm: "1rem" },
+            }}
+          >
             <Link
               href="/years"
               style={{ textDecoration: "none", color: "#4b5563" }}
@@ -112,10 +136,10 @@ export function Header() {
                   label="Admin"
                   size="small"
                   sx={{
-                    bgcolor: "#7c3aed",
-                    color: "white",
+                    bgcolor: "accent.main",
+                    color: "accent.contrastText",
                     fontWeight: 600,
-                    "&:hover": { bgcolor: "#6d28d9" },
+                    "&:hover": { bgcolor: "accent.dark" },
                     cursor: "pointer",
                   }}
                 />
@@ -165,7 +189,9 @@ export function Header() {
                           sx={{
                             height: 20,
                             fontSize: "0.6875rem",
-                            bgcolor: "#ff9800",
+                            // bialy na #ff9800 to bylo 2,16:1;
+                            // warning.main (#b45309) daje 5,02:1 (WCAG 1.4.3)
+                            bgcolor: "warning.main",
                             color: "white",
                             fontWeight: 600,
                             textTransform: "uppercase",
@@ -174,9 +200,10 @@ export function Header() {
                       )}
                     </Box>
                     {/* Use regular anchor to avoid Next.js prefetch triggering logout */}
+                    {/* Kolor #9ca3af dawal 2,54:1; #4b5563 daje 7,56:1 (WCAG 1.4.3) */}
                     <a
                       href="/logout"
-                      style={{ textDecoration: "none", color: "#9ca3af" }}
+                      style={{ textDecoration: "none", color: "#4b5563" }}
                     >
                       <Typography sx={{ fontSize: "0.875rem" }}>
                         Wyloguj

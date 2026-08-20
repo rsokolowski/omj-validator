@@ -21,11 +21,13 @@ data/tasks/
 
 ## JSON Schema
 
+The metadata file holds only this project's own work. The task statement (its
+title and text) is OMJ material, is not tracked in git, and lives in a separate
+generated file - see [Task statements](#task-statements) below and [NOTICE](../NOTICE).
+
 ```json
 {
   "number": 1,
-  "title": "Task title with $LaTeX$ notation",
-  "content": "Full task content with $inline$ and $$display$$ math",
   "pdf": {
     "tasks": "tasks/2024/etap1/20omj-1etap.pdf",
     "solutions": "tasks/2024/etap1/20omj-1etap-r.pdf",
@@ -192,13 +194,40 @@ This task requires mastering 2023 Etap II Task 1 (score >= 5), plus any tasks th
 - Cross-year/etap prerequisites are allowed
 - Tasks with no prerequisites are "root" tasks (always unlocked)
 
+## Task statements
+
+The statement of a task - its title and full text - is competition material owned
+by Stowarzyszenie na rzecz Edukacji Matematycznej, so it is **not** stored in the
+metadata file and **not** tracked in git. It is transcribed from the official PDF
+by `fix_latex_content.py` into one file per etap:
+
+`data/task_content/{year}/{etap}.json`
+
+```json
+{
+  "year": "2024",
+  "etap": "etap1",
+  "tasks": {
+    "1": {
+      "title": "Title with $LaTeX$ notation",
+      "content": "Full task text with $inline$ and $$display$$ math"
+    }
+  }
+}
+```
+
+`app/storage.py` joins the two halves when loading a task. When the statement is
+missing - the normal state of a fresh clone - the task still loads: `content` is
+`null`, `has_content` is `false`, `title` falls back to `"Zadanie {number}"`, and
+the UI links to the task PDF instead.
+
 ## Example Complete Task
+
+Metadata only; the statement lives in the generated file described above.
 
 ```json
 {
   "number": 1,
-  "title": "Punkt $E$ na boku $CD$ prostokata $ABCD$",
-  "content": "Punkt $E$ lezy na boku $CD$ prostokata $ABCD$, przy czym\n$$\\angle DAE + \\angle EBC = \\angle ABE.$$\nWykaz, ze $AB \\geqslant AD$.",
   "pdf": {
     "tasks": "tasks/2024/etap2/20omj-2etap.pdf",
     "solutions": "tasks/2024/etap2/20omj-2r.pdf",

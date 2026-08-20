@@ -12,6 +12,8 @@ OMJ Validator - a web application for validating solutions to Polish Junior Math
 
 **NEVER discard uncommitted changes without explicit user permission.** Do not run commands like `git checkout <file>`, `git restore <file>`, or `git reset --hard` on files with uncommitted changes unless the user explicitly asks you to discard those changes. Always ask first if you see uncommitted changes that seem unrelated to the current task.
 
+**NEVER commit OMJ competition material.** The task PDFs (`tasks/`) and the task statements transcribed from them (`data/task_content/`) belong to Stowarzyszenie na rzecz Edukacji Matematycznej, not to this project. Both are git-ignored and must stay that way - never `git add -f` them, never paste a task statement into a tracked file, and never add `title`/`content` back into `data/tasks/**/task_*.json`. What IS ours and stays MIT-licensed: the code and the generated task metadata (difficulty, categories, hints, prerequisites, skills). See [NOTICE](NOTICE); `tests/test_task_content_split.py` guards the rule.
+
 ## Development Commands
 
 ```bash
@@ -38,17 +40,29 @@ docker compose logs -f            # All services
 docker compose logs -f api        # Backend only
 docker compose logs -f frontend   # Frontend only
 
-# Download task PDFs from omj.edu.pl (run outside Docker)
-python download_tasks.py
+# Download task PDFs from omj.edu.pl (run outside Docker; idempotent)
+# Required on a fresh clone - the PDFs are not in the repository.
+python download_tasks.py --all-etaps          # Everything (~170 PDFs, ~80 MB)
+python download_tasks.py --year 2026          # One edition
+python download_tasks.py --all-etaps --force  # Re-download existing files
 
-# Update task content with LaTeX from PDFs (uses Claude CLI)
+# Generate task statements (title + content) from the PDFs (uses Claude CLI).
+# Optional - without it the app shows metadata plus a link to the task PDF.
+# Writes data/task_content/{year}/{etap}.json, which is git-ignored.
 python fix_latex_content.py 2024 etap1        # Specific year/etap
-python fix_latex_content.py --all             # All tasks
+python fix_latex_content.py --all --skip-existing   # Only what is missing
+
+# One-shot: move statements out of tracked metadata files (already applied)
+python scripts/split_task_content.py --dry-run
 
 # Generate/update task metadata (difficulty, categories, hints)
 python populate_metadata.py                    # Uses Claude CLI
 python populate_metadata.py --year 2024 --force
 python populate_metadata_gemini.py             # Alternative using Gemini API
+
+# Delete data past its retention period (RODO art. 5(1)(e))
+./venv/bin/python scripts/purge_expired_data.py --dry-run   # report only
+./venv/bin/python scripts/purge_expired_data.py             # actually delete
 ```
 
 **Note**: Development uses Docker Compose for the full stack. Google OAuth is disabled by default (`AUTH_DISABLED=true`) since it requires an external URL for callbacks.
@@ -86,9 +100,12 @@ omj-validator/
 │       └── providers/
 │           └── gemini.py   # Gemini API integration
 ├── data/                    # Runtime data
-│   ├── tasks/              # Task metadata JSON files
+│   ├── tasks/              # Task metadata JSON files (tracked, MIT)
+│   ├── task_content/       # Task statements from the PDFs (git-ignored, generated)
 │   └── uploads/            # User-submitted images
-├── tasks/                   # Downloaded task PDFs (2005-2025)
+├── tasks/                   # Downloaded task PDFs 2005-2025 (git-ignored)
+├── task_content.py          # Statement file access for the root-level scripts
+├── NOTICE                   # What the MIT licence covers and what it does not
 ├── alembic/                # Database migrations
 ├── prompts/                # AI prompts for analysis
 ├── docker-compose.yml      # Development Docker Compose (full stack)
@@ -138,6 +155,7 @@ GET  /api/task/{year}/{etap}/{num}   # Task detail
 GET  /api/task/{year}/{etap}/{num}/history  # Submission history
 GET  /api/progress/data              # Task progression data
 POST /task/{year}/{etap}/{num}/submit       # Submit solution
+POST /api/account/delete             # Erase own account + submissions + photos (RODO art. 17)
 ```
 
 **Auth routes**:
@@ -158,6 +176,10 @@ GET  /uploads/{path}                 # Serve uploaded images
 **Tables**:
 - `users` - Google OAuth users (google_sub PK, email, name)
 - `submissions` - Solution submissions (user_id FK, year, etap, task_number, score, feedback)
+- `deleted_account_quota` - Short-lived, pseudonymous rate-limit tombstones left by
+  self-service account deletion, so erasing an account cannot reset the daily limit
+- `admin_access_log` - Audit trail of admin access to other users' data (RODO art. 5(2));
+  identifiers and a resource label only, never content
 
 **Local**: PostgreSQL 16 via Docker on port 5433 (`postgresql://omj:omj@localhost:5433/omj`)
 
@@ -165,21 +187,39 @@ GET  /uploads/{path}                 # Serve uploaded images
 
 ### Key Data Flows
 
-1. **Task Loading**: Per-task JSON files at `data/tasks/{year}/{etap}/task_{num}.json`. All 342 task files scanned on startup and cached.
+1. **Task Loading**: a task is assembled from two halves, joined in exactly one
+   place - `_load_all_tasks()` in `app/storage.py`. All 352 tasks are scanned on
+   startup and cached.
 
-   Task JSON structure:
+   **Half one - metadata**, `data/tasks/{year}/{etap}/task_{num}.json`, tracked in git:
    ```json
    {
      "number": 1,
-     "title": "Task title with $LaTeX$",
-     "content": "Full task content with $LaTeX$ notation",
      "pdf": {"tasks": "...", "solutions": "...", "statistics": "..."},
      "difficulty": 3,
      "categories": ["geometria", "algebra"],
      "hints": ["hint1", "hint2", "hint3", "hint4"],
-     "prerequisites": ["2023_etap1_2"]
+     "prerequisites": ["2023_etap1_2"],
+     "skills_required": [], "skills_gained": []
    }
    ```
+
+   **Half two - statement**, `data/task_content/{year}/{etap}.json`, git-ignored,
+   generated by `fix_latex_content.py`, one file per etap:
+   ```json
+   {
+     "year": "2024",
+     "etap": "etap1",
+     "tasks": {"1": {"title": "Title with $LaTeX$", "content": "Full text with $LaTeX$"}}
+   }
+   ```
+
+   **Degradation when the statement is missing** (the normal state of a fresh
+   clone): the task still loads with all of its metadata, `content` is `None`,
+   `has_content` is `false` and `title` falls back to `"Zadanie {number}"`, so
+   every consumer of `title` (progress graph, submission history, notifications)
+   keeps working. Clients must render a link to the task PDF instead of the
+   statement. This is never an error and must not raise.
 
    Valid categories: `algebra`, `geometria`, `teoria_liczb`, `kombinatoryka`, `logika`, `arytmetyka`
 
@@ -212,6 +252,14 @@ SESSION_SECRET_KEY=dev-secret-key-change-in-production
 # OR (when PUBLIC_ACCESS=false, only these users get full access)
 # GOOGLE_GROUP_EMAIL=your-group@googlegroups.com
 # GOOGLE_SERVICE_ACCOUNT_JSON={...}
+
+# Data retention (RODO art. 5(1)(e) - storage limitation)
+# 0 disables a pass; docker-compose.yml disables both for local dev.
+RETENTION_SUBMISSION_MONTHS=24        # Submission row + uploaded photos
+RETENTION_SCORING_THINKING_DAYS=90    # Raw AI "thinking" trace in scoring_meta
+RETENTION_INACTIVE_ACCOUNT_MONTHS=36  # Accounts with no login and no submission
+RETENTION_ADMIN_AUDIT_MONTHS=12       # Admin access audit trail
+RETENTION_AUTO_PURGE=true             # Daily in-app run (single-worker only)
 
 # AI
 AI_PROVIDER=gemini
@@ -261,6 +309,19 @@ Deployed on a local Intel NUC server with Docker Compose and Cloudflare Tunnel.
 # Or build and deploy in one command
 ./build-and-push.sh && ./deploy.sh
 ```
+
+**Where the tasks come from in production**: the OMJ PDFs and the generated
+statements are not in the repository, so they are **baked into the API image at
+build time** from the working copy of the machine running `build-and-push.sh`.
+That machine must have run `python download_tasks.py --all-etaps` (and, for the
+statements, `python fix_latex_content.py --all --skip-existing`) first;
+`build-and-push.sh` refuses to build the API image when `tasks/` is empty and
+warns when `data/task_content/` is. The server itself pulls a finished image and
+needs nothing extra. Consequence: **the published image contains OMJ material, so
+the ghcr.io package must not be public.** The alternative - bind-mounting
+`./tasks` and `./data/task_content` from the server in `docker-compose.prod.yml`
+- would require putting the corpus on the NUC and is not what the current
+deployment does.
 
 **Useful commands**:
 ```bash

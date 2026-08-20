@@ -12,8 +12,9 @@ from sqlalchemy.orm import Session
 from ..config import settings
 from ..db.session import SessionLocal
 from ..db.models import SubmissionStatus, IssueType
-from ..db.repositories import SubmissionRepository, UserRepository
+from ..db.repositories import SubmissionRepository
 from ..ai import create_ai_provider, AIProviderError
+from ..privacy import mask_user_id
 from ..storage import get_task_pdf_path, get_solution_pdf_path
 from ..notifications import (
     send_telegram_message,
@@ -50,7 +51,7 @@ async def process_submission_background(
 
     logger.info(
         f"[Submission {submission_id}] STARTED - "
-        f"user={user_id[:8]}..., task={year}/{etap}/{task_number}, "
+        f"user={mask_user_id(user_id)}, task={year}/{etap}/{task_number}, "
         f"images=[{image_info}]"
     )
 
@@ -58,20 +59,10 @@ async def process_submission_background(
     # Use SessionLocal directly (not get_db dependency) for background tasks
     db = SessionLocal()
 
-    # User display string for Telegram notifications. Falls back to truncated
-    # user_id if the lookup fails; set early so the except branches can use it.
-    user_display = f"{user_id[:8]}..."
-
+    # NOTE: Telegram notifications deliberately carry no user name or e-mail -
+    # see the privacy note in app/notifications.py before changing this.
     try:
         submission_repo = SubmissionRepository(db)
-
-        # Look up user (user_id is the users.google_sub PK) for notifications
-        try:
-            user = UserRepository(db).get_by_google_sub(user_id)
-            if user:
-                user_display = f"{user.name} <{user.email}>" if user.name else user.email
-        except Exception as e:
-            logger.warning(f"[Submission {submission_id}] User lookup for notification failed: {type(e).__name__}")
 
         # Update status to PROCESSING
         logger.debug(f"[Submission {submission_id}] Updating DB status to PROCESSING")
@@ -80,7 +71,7 @@ async def process_submission_background(
         # Notify: submission started processing (fire-and-forget)
         await send_telegram_message(
             build_start_message(
-                submission_id, user_display, year, etap, task_number, len(image_paths)
+                submission_id, user_id, year, etap, task_number, len(image_paths)
             )
         )
 
@@ -164,7 +155,7 @@ async def process_submission_background(
         # Notify: submission completed (fire-and-forget)
         await send_telegram_message(
             build_completed_message(
-                submission_id, user_display, year, etap, task_number, result.score
+                submission_id, user_id, year, etap, task_number, result.score
             )
         )
 
@@ -193,7 +184,7 @@ async def process_submission_background(
         # Notify: submission failed (fire-and-forget)
         await send_telegram_message(
             build_failed_message(
-                submission_id, user_display, year, etap, task_number, error_msg
+                submission_id, user_id, year, etap, task_number, error_msg
             )
         )
 
@@ -219,7 +210,7 @@ async def process_submission_background(
         # Notify: submission failed (fire-and-forget)
         await send_telegram_message(
             build_failed_message(
-                submission_id, user_display, year, etap, task_number, error_msg
+                submission_id, user_id, year, etap, task_number, error_msg
             )
         )
 

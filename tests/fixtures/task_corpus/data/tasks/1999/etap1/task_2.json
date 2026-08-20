@@ -1,0 +1,21 @@
+{
+  "number": 2,
+  "pdf": {
+    "tasks": "tasks/1999/etap1/zadania.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": 4,
+  "categories": [
+    "geometria",
+    "logika"
+  ],
+  "hints": [
+    "Narysuj rysunek pomocniczy."
+  ],
+  "prerequisites": [
+    "1999_etap1_1"
+  ],
+  "skills_required": [],
+  "skills_gained": []
+}

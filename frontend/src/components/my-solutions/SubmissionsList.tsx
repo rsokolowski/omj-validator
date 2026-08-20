@@ -45,7 +45,7 @@ export function SubmissionsList({
         >
           <AssignmentIcon sx={{ fontSize: 40, color: "grey.400" }} />
         </Box>
-        <Typography variant="h6" color="text.secondary" gutterBottom>
+        <Typography variant="h6" component="h2" color="text.secondary" gutterBottom>
           Brak rozwiązań
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>

@@ -40,9 +40,25 @@ npx playwright install chromium
 ./run-e2e.sh
 
 # Or manually:
+python generate_task_fixtures.py          # synthetic task corpus (see below)
 docker compose -f ../docker-compose.e2e.yml up -d --build
 npm test
 ```
+
+## Task Data
+
+The e2e stack does **not** use the real OMJ materials - the competition PDFs and
+the task statements transcribed from them are not part of this repository (see
+[NOTICE](../NOTICE)). Instead, `e2e/generate_task_fixtures.py` fabricates, from
+the tracked task metadata:
+
+- `e2e/fixtures/task_corpus/tasks/` - one small synthetic PDF per referenced file,
+- `e2e/fixtures/task_corpus/task_content/` - invented statements per etap.
+
+`docker-compose.e2e.yml` mounts both over `/app/tasks` and `/app/data/task_content`
+in the API container. `run-e2e.sh` regenerates them on every run, and the tree is
+git-ignored. This means the e2e suite passes on a fresh clone, with no download
+step, and never asserts on OMJ text.
 
 ## Test Commands
 

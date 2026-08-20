@@ -23,10 +23,14 @@ export function CategoryFilter({ currentCategory }: CategoryFilterProps) {
 
   return (
     <Paper sx={{ p: 2, mb: 3 }}>
-      <Typography variant="subtitle2" sx={{ color: "grey.600", mb: 1.5 }}>
+      <Typography id="filtr-kategorii-etykieta" variant="subtitle2" component="p" sx={{ color: "grey.600", mb: 1.5 }}>
         Filtruj według kategorii:
       </Typography>
-      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+      <Box
+        role="group"
+        aria-labelledby="filtr-kategorii-etykieta"
+        sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}
+      >
         <Chip
           label="Wszystkie"
           size="small"

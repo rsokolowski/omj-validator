@@ -8,6 +8,21 @@
   --color-success: #059669;
   --color-warning: #d97706;
   --color-error: #dc2626;
+  /* Warianty do TEKSTU. Kolory marki wyzej sa za jasne na bialym tle:
+     #d97706 = 3,19:1, #059669 = 3,77:1 przy wymaganych 4,5:1 (WCAG 1.4.3 AA).
+     Ponizsze przechodza prog zarowno na #fff (5,02:1 / 5,48:1),
+     jak i na tle strony #f9fafb (4,81:1 / 5,25:1). */
+  --color-success-text: #047857;
+  --color-warning-text: #b45309;
+  --color-error-text: #dc2626;
+  --color-primary-text: #2563eb;
+  /* Skala trudnosci - odcienie dobrane tak, by kazdy mial >= 4,5:1
+     na bialym tle karty i na tle strony #f9fafb. */
+  --color-difficulty-1: #15803d;
+  --color-difficulty-2: #4d7c0f;
+  --color-difficulty-3: #a16207;
+  --color-difficulty-4: #c2410c;
+  --color-difficulty-5: #b91c1c;
   --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
   --color-gray-200: #e5e7eb;
@@ -50,18 +65,18 @@ body {
   min-height: 100vh;
 }
 
-/* Score Colors */
+/* Score Colors (WCAG 1.4.3 - wszystkie >= 4,5:1 na #fff i na #f9fafb) */
 .score-0 { color: var(--color-gray-500); }
-.score-2 { color: var(--color-warning); }
-.score-5 { color: var(--color-primary); }
-.score-6 { color: var(--color-success); }
+.score-2 { color: var(--color-warning-text); }
+.score-5 { color: var(--color-primary-text); }
+.score-6 { color: var(--color-success-text); }
 
-/* Difficulty Colors */
-.difficulty-1 { color: #22c55e; }
-.difficulty-2 { color: #84cc16; }
-.difficulty-3 { color: #eab308; }
-.difficulty-4 { color: #f97316; }
-.difficulty-5 { color: #ef4444; }
+/* Difficulty Colors (WCAG 1.4.3 - patrz komentarz przy tokenach) */
+.difficulty-1 { color: var(--color-difficulty-1); }
+.difficulty-2 { color: var(--color-difficulty-2); }
+.difficulty-3 { color: var(--color-difficulty-3); }
+.difficulty-4 { color: var(--color-difficulty-4); }
+.difficulty-5 { color: var(--color-difficulty-5); }
 
 /* Category Badge Colors */
 .category-algebra { background: #dbeafe; color: #1e40af; }
@@ -74,6 +89,9 @@ body {
 /* Math content styling */
 .math-content {
   line-height: 1.8;
+  /* WCAG 1.4.10 (Reflow): dlugie slowa i adresy nie moga wypychac strony poza
+     szerokosc 320 px CSS. */
+  overflow-wrap: break-word;
 }
 
 .math-content .katex {
@@ -84,4 +102,42 @@ body {
 .katex-display {
   overflow-x: auto;
   overflow-y: hidden;
+}
+
+/* UWAGA przy pracy nad reflow: nie ustawiaj tu `white-space` ani `width` na
+   `.katex .base`. KaTeX ustawia tam `white-space: nowrap; width: min-content`
+   i obie wartosci sa konieczne - zmiana ktorejkolwiek rozsypuje wzory wpisane
+   w tekst na pionowy slupek liter (sprawdzone w przegladarce). Wzory blokowe
+   maja wlasne `overflow-x: auto` na `.katex-display` powyzej. */
+
+/* Link "przejdz do tresci" - WCAG 2.4.1. Ukryty do czasu otrzymania fokusu. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 2000;
+  background: #fff;
+  color: var(--color-primary-dark);
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  font-weight: 600;
+}
+
+/* WCAG 2.2.2 / 2.3.3: uszanuj systemowa preferencje ograniczenia ruchu. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -17,7 +17,7 @@ export function LoginPrompt({
 
   return (
     <Paper sx={{ p: 3, mb: 3, textAlign: "center" }}>
-      <Typography variant="h6" sx={{ color: "grey.700", mb: 1 }}>
+      <Typography variant="h6" component="h2" sx={{ color: "grey.700", mb: 1 }}>
         {title}
       </Typography>
       <Typography variant="body2" sx={{ color: "grey.600", mb: 3 }}>

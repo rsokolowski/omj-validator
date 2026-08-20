@@ -54,7 +54,7 @@ export function MockEtap2SetCard({ set, nodeMap }: MockEtap2SetCardProps) {
           borderColor: "grey.200",
         }}
       >
-        <Typography variant="h6" sx={{ color: "grey.800", fontWeight: 600 }}>
+        <Typography variant="h6" component="h2" sx={{ color: "grey.800", fontWeight: 600 }}>
           {set.name}
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

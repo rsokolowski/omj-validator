@@ -12,14 +12,52 @@ from .models import TaskInfo, TaskPdf, TaskStats, Submission
 logger = logging.getLogger(__name__)
 
 
+def _fallback_title(number: int) -> str:
+    """Title shown when the generated statement is unavailable."""
+    return f"Zadanie {number}"
+
+
+def _load_etap_statements(year: str, etap: str) -> dict[str, dict]:
+    """Load the locally generated statements for one year/etap.
+
+    The statements (title + content) are transcribed from the OMJ PDFs, belong
+    to the competition organiser and are therefore NOT distributed with this
+    repository - see NOTICE. They are produced by fix_latex_content.py into
+    data/task_content/{year}/{etap}.json and are expected to be missing on a
+    fresh checkout, which is not an error.
+    """
+    path = settings.task_content_path(year, etap)
+    if not path.exists():
+        return {}
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, IOError) as e:
+        logger.warning(f"Failed to load task content file {path}: {e}")
+        return {}
+
+    statements = data.get("tasks")
+    if not isinstance(statements, dict):
+        logger.warning(f"Task content file {path} has no 'tasks' object - ignoring")
+        return {}
+    return statements
+
+
 @lru_cache(maxsize=1)
 def _load_all_tasks() -> dict[str, TaskInfo]:
-    """Scan data/tasks/{year}/{etap}/task_*.json and load all tasks (cached)."""
+    """Scan data/tasks/{year}/{etap}/task_*.json and load all tasks (cached).
+
+    This is the single place where the two halves of a task are joined:
+    the metadata tracked in git and the statement generated locally from the
+    OMJ PDF. A task without a statement still loads with all of its metadata.
+    """
     tasks = {}
     tasks_dir = settings.tasks_data_dir
 
     if not tasks_dir.exists():
         return tasks
+
+    missing_statements = 0
 
     for year_dir in sorted(tasks_dir.iterdir()):
         if not year_dir.is_dir():
@@ -27,19 +65,43 @@ def _load_all_tasks() -> dict[str, TaskInfo]:
         for etap_dir in sorted(year_dir.iterdir()):
             if not etap_dir.is_dir():
                 continue
+            statements = _load_etap_statements(year_dir.name, etap_dir.name)
             for task_file in sorted(etap_dir.glob("task_*.json")):
                 try:
                     with open(task_file, "r", encoding="utf-8") as f:
                         data = json.load(f)
-                    key = get_task_key(year_dir.name, etap_dir.name, data["number"])
+                    number = data["number"]
+                    # A statement file must never override metadata, and metadata
+                    # files are not supposed to carry a statement any more; if an
+                    # old one still does, the generated file wins.
+                    statement = statements.get(str(number))
+                    if not isinstance(statement, dict):
+                        statement = {}
+                    title = statement.get("title") or data.get("title")
+                    content = statement.get("content") or data.get("content")
+                    if not (content or "").strip():
+                        content = None
+                        missing_statements += 1
+                    data.pop("title", None)
+                    data.pop("content", None)
+                    key = get_task_key(year_dir.name, etap_dir.name, number)
                     tasks[key] = TaskInfo(
                         year=year_dir.name,
                         etap=etap_dir.name,
+                        title=title or _fallback_title(number),
+                        content=content,
                         **data
                     )
                 except (json.JSONDecodeError, KeyError, IOError) as e:
                     logger.warning(f"Failed to load task file {task_file}: {e}")
                     continue
+
+    if missing_statements:
+        logger.info(
+            f"{missing_statements}/{len(tasks)} tasks have no generated statement. "
+            f"The app serves the task PDF instead. Run fix_latex_content.py to "
+            f"generate them into {settings.task_content_dir}."
+        )
 
     return tasks
 

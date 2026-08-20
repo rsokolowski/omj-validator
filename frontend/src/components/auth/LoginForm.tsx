@@ -60,11 +60,17 @@ export function LoginForm({ googleLoginUrl }: LoginFormProps) {
           label={
             <Typography variant="body2" sx={{ color: "grey.700" }}>
               Akceptuję{" "}
-              <Link href="/regulamin" target="_blank" style={{ textDecoration: "none" }}>
-                <MuiLink component="span" sx={{ color: "primary.main" }}>
-                  regulamin serwisu
-                </MuiLink>
-              </Link>{" "}
+              {/* Jeden prawdziwy odnośnik zamiast <a> z zagnieżdżonym <span>
+                  udającym odnośnik (WCAG 4.1.2) */}
+              <MuiLink
+                component={Link}
+                href="/regulamin"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ color: "primary.main" }}
+              >
+                regulamin serwisu
+              </MuiLink>{" "}
               i zgadzam się na przetwarzanie moich danych zgodnie z polityką
               prywatności.
             </Typography>

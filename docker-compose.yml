@@ -70,8 +70,17 @@ services:
       TRANSLATE_TIMEOUT: ${TRANSLATE_TIMEOUT:-2.0}
 
       # Telegram notifications (optional)
+      # Never carry a user's name or e-mail - see app/notifications.py
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
       TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+      TELEGRAM_PSEUDONYM_SALT: ${TELEGRAM_PSEUDONYM_SALT:-}
+
+      # Data retention - disabled locally so dev data is never silently deleted
+      RETENTION_SUBMISSION_MONTHS: ${RETENTION_SUBMISSION_MONTHS:-0}
+      RETENTION_SCORING_THINKING_DAYS: ${RETENTION_SCORING_THINKING_DAYS:-0}
+      RETENTION_INACTIVE_ACCOUNT_MONTHS: ${RETENTION_INACTIVE_ACCOUNT_MONTHS:-0}
+      RETENTION_ADMIN_AUDIT_MONTHS: ${RETENTION_ADMIN_AUDIT_MONTHS:-0}
+      RETENTION_AUTO_PURGE: ${RETENTION_AUTO_PURGE:-false}
 
       # App Configuration
       UPLOAD_MAX_SIZE_MB: ${UPLOAD_MAX_SIZE_MB:-10}
@@ -82,6 +91,9 @@ services:
       - ./prompts:/app/prompts
       - ./tasks:/app/tasks
       - ./data/tasks:/app/data/tasks
+      # Generated locally, not in the repository (see NOTICE). Missing content
+      # is handled gracefully - the app then links to the task PDF.
+      - ./data/task_content:/app/data/task_content
       - ./data/skills.json:/app/data/skills.json
       - ./static:/app/static
       - ./templates:/app/templates

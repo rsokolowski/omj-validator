@@ -244,7 +244,7 @@ export function AdminSubmissionsTable() {
     if (submission.status === "failed") {
       return (
         <Box sx={{ color: "#991b1b", bgcolor: "#fef2f2", p: 2, borderRadius: 1 }}>
-          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+          <Typography variant="subtitle2" component="p" sx={{ mb: 0.5 }}>
             Error details:
           </Typography>
           <Typography variant="body2">
@@ -342,13 +342,11 @@ export function AdminSubmissionsTable() {
                       p: 2,
                       bgcolor: "grey.50",
                       borderRadius: 1,
-                      cursor: "pointer",
                       transition: "background-color 0.15s",
                       "&:hover": {
                         bgcolor: "grey.100",
                       },
                     }}
-                    onClick={() => setExpandedId(isExpanded ? null : submission.id)}
                   >
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap", flex: 1, minWidth: 0 }}>
                       {/* User info */}
@@ -385,15 +383,24 @@ export function AdminSubmissionsTable() {
                       {renderIssueChip(submission)}
                     </Box>
 
-                    <Button size="small" sx={{ minWidth: 0, ml: 2 }}>
+                    {/* Sterowanie na przycisku, nie na <div> z onClick
+                        (WCAG 2.1.1, 4.1.2) */}
+                    <Button
+                      size="small"
+                      sx={{ minWidth: 0, ml: 2 }}
+                      onClick={() => setExpandedId(isExpanded ? null : submission.id)}
+                      aria-expanded={isExpanded}
+                      aria-controls={`admin-panel-${submission.id}`}
+                      aria-label={`${isExpanded ? "Collapse" : "Expand"} submission ${submission.year}/${submission.etap}/${submission.task_number}`}
+                    >
                       {isExpanded ? "Collapse" : "Expand"}
                     </Button>
                   </Box>
 
                   <Collapse in={isExpanded}>
-                    <Box sx={{ p: 2, pt: 1, bgcolor: "grey.50", borderRadius: "0 0 8px 8px", mt: -0.5 }}>
+                    <Box id={`admin-panel-${submission.id}`} sx={{ p: 2, pt: 1, bgcolor: "grey.50", borderRadius: "0 0 8px 8px", mt: -0.5 }}>
                       <Divider sx={{ mb: 2 }} />
-                      <Typography variant="subtitle2" sx={{ color: "grey.600", mb: 1 }}>
+                      <Typography variant="subtitle2" component="p" sx={{ color: "grey.600", mb: 1 }}>
                         {submission.status === "failed" ? "Error details:" : "Feedback:"}
                       </Typography>
                       {renderFeedback(submission)}
@@ -401,7 +408,7 @@ export function AdminSubmissionsTable() {
                       {/* Abuse detection details */}
                       {submission.issue_type !== "none" && (
                         <Box sx={{ mt: 2, p: 1.5, bgcolor: submission.issue_type === "injection" ? "#fdf2f8" : "#fffbeb", borderRadius: 1 }}>
-                          <Typography variant="subtitle2" sx={{ color: submission.issue_type === "injection" ? "#9d174d" : "#92400e", mb: 0.5 }}>
+                          <Typography variant="subtitle2" component="p" sx={{ color: submission.issue_type === "injection" ? "#9d174d" : "#92400e", mb: 0.5 }}>
                             Issue detected: {submission.issue_type === "wrong_task" ? "Wrong Task" : "Prompt Injection"}
                           </Typography>
                           <Typography variant="body2" sx={{ color: "grey.700" }}>
@@ -413,7 +420,7 @@ export function AdminSubmissionsTable() {
                       {/* Images */}
                       {submission.images && submission.images.length > 0 && (
                         <Box sx={{ mt: 2 }}>
-                          <Typography variant="subtitle2" sx={{ color: "grey.600", mb: 1 }}>
+                          <Typography variant="subtitle2" component="p" sx={{ color: "grey.600", mb: 1 }}>
                             Submitted images:
                           </Typography>
                           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>

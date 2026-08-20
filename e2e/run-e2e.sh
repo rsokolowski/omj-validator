@@ -44,6 +44,17 @@ if ! npx playwright --version > /dev/null 2>&1; then
     npx playwright install chromium
 fi
 
+# The OMJ task PDFs and statements are not part of the repository (see NOTICE),
+# so e2e runs against a synthetic corpus generated from the tracked metadata.
+# Regenerated every run; docker-compose.e2e.yml mounts it into the API container.
+echo -e "${YELLOW}Generating synthetic task corpus...${NC}"
+if [ -x "$PROJECT_ROOT/venv/bin/python" ]; then
+    PYTHON="$PROJECT_ROOT/venv/bin/python"
+else
+    PYTHON="python3"
+fi
+"$PYTHON" "$SCRIPT_DIR/generate_task_fixtures.py"
+
 # Always rebuild and restart services to ensure we test latest code
 # Docker layer caching makes this cheap when nothing changed
 echo -e "${YELLOW}Building and starting E2E services...${NC}"

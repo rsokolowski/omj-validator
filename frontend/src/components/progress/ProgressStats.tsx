@@ -11,10 +11,11 @@ interface ProgressStatsProps {
 
 export function ProgressStats({ stats }: ProgressStatsProps) {
   const items = [
-    { label: "Wszystkie zadania", value: stats.total, color: "grey.600" },
-    { label: "Opanowane", value: stats.mastered, color: "#22c55e" },
-    { label: "Do rozwiązania", value: stats.unlocked, color: "#3b82f6" },
-    { label: "Sugerowane później", value: stats.locked, color: "#9ca3af" },
+    // Kolory z motywu - kazdy spelnia 4,5:1 na bialym tle karty (WCAG 1.4.3).
+    { label: "Wszystkie zadania", value: stats.total, color: "grey.700" },
+    { label: "Opanowane", value: stats.mastered, color: "success.main" },
+    { label: "Do rozwiązania", value: stats.unlocked, color: "primary.main" },
+    { label: "Sugerowane później", value: stats.locked, color: "grey.500" },
   ];
 
   const progressPercent = stats.total > 0 ? Math.round((stats.mastered / stats.total) * 100) : 0;
@@ -25,8 +26,11 @@ export function ProgressStats({ stats }: ProgressStatsProps) {
         {items.map((item) => (
           <Grid key={item.label} size={{ xs: 6, sm: 3 }}>
             <Box sx={{ textAlign: "center" }}>
+              {/* Sama liczba nie jest naglowkiem - zachowujemy rozmiar
+                  (variant), ale renderujemy akapit (WCAG 1.3.1). */}
               <Typography
                 variant="h3"
+                component="p"
                 sx={{ fontWeight: 700, color: item.color, mb: 0.5 }}
               >
                 {item.value}
@@ -50,6 +54,11 @@ export function ProgressStats({ stats }: ProgressStatsProps) {
           </Typography>
         </Box>
         <Box
+          role="progressbar"
+          aria-valuenow={progressPercent}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={`Opanowane zadania: ${stats.mastered} z ${stats.total}`}
           sx={{
             height: 8,
             bgcolor: "grey.200",
@@ -61,7 +70,8 @@ export function ProgressStats({ stats }: ProgressStatsProps) {
             sx={{
               height: "100%",
               width: `${progressPercent}%`,
-              bgcolor: "#22c55e",
+              // 4,05:1 wobec grey.200 - pasek niesie informacje (WCAG 1.4.11).
+              bgcolor: "success.main",
               borderRadius: 1,
               transition: "width 0.3s ease",
             }}

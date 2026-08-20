@@ -134,6 +134,7 @@ export default async function YearPage({ params }: YearPageProps) {
                     {/* Title */}
                     <Typography
                       variant="h5"
+                      component="h2"
                       sx={{
                         fontWeight: 700,
                         color: meta.color,

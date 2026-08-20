@@ -36,6 +36,7 @@ function getScoreColor(score: number, maxScore: number) {
 
 export function SubmissionCard({ submission }: SubmissionCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const panelId = `rozwiazanie-panel-${submission.id}`;
 
   const renderStatusChip = () => {
     if (submission.status === "failed") {
@@ -95,7 +96,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
     if (submission.status === "failed") {
       return (
         <Box sx={{ color: "#991b1b", bgcolor: "#fef2f2", p: 2, borderRadius: 1 }}>
-          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+          <Typography variant="subtitle2" component="p" sx={{ mb: 0.5 }}>
             Szczegóły błędu:
           </Typography>
           <Typography variant="body2">
@@ -137,15 +138,14 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
         },
       }}
     >
-      {/* Header Row */}
+      {/* Header Row - sterowanie na przycisku, nie na <div> z onClick
+          (WCAG 2.1.1, 4.1.2) */}
       <Box
         sx={{
           p: 2,
-          cursor: "pointer",
           transition: "background-color 0.15s",
           "&:hover": { bgcolor: "grey.50" },
         }}
-        onClick={() => setIsExpanded(!isExpanded)}
       >
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -206,8 +206,16 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
           {/* Right side: Status + Expand */}
           <Stack direction="row" spacing={1.5} alignItems="center">
             {renderStatusChip()}
+            {/* Przycisk zawiera samą ikonę (MUI nadaje jej aria-hidden), więc
+                bez aria-label jego nazwa dostępna byłaby pusta, a na liście
+                kilkudziesięciu rozwiązań - nie do odróżnienia (WCAG 4.1.2,
+                2.4.6). */}
             <Button
               size="small"
+              onClick={() => setIsExpanded(!isExpanded)}
+              aria-expanded={isExpanded}
+              aria-controls={panelId}
+              aria-label={`${isExpanded ? "Zwiń" : "Rozwiń"} szczegóły rozwiązania zadania ${submission.task_number} z ${submission.year}`}
               sx={{
                 minWidth: 0,
                 p: 0.5,
@@ -223,9 +231,9 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
       {/* Expanded Content */}
       <Collapse in={isExpanded}>
         <Divider />
-        <Box sx={{ p: 2, bgcolor: "grey.50" }}>
+        <Box id={panelId} sx={{ p: 2, bgcolor: "grey.50" }}>
           {/* Feedback */}
-          <Typography variant="subtitle2" sx={{ color: "grey.600", mb: 1 }}>
+          <Typography variant="subtitle2" component="p" sx={{ color: "grey.600", mb: 1 }}>
             {submission.status === "failed" ? "Szczegóły błędu:" : "Komentarz:"}
           </Typography>
           {renderFeedback()}
@@ -233,7 +241,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
           {/* Images */}
           {submission.images && submission.images.length > 0 && (
             <Box sx={{ mt: 2 }}>
-              <Typography variant="subtitle2" sx={{ color: "grey.600", mb: 1 }}>
+              <Typography variant="subtitle2" component="p" sx={{ color: "grey.600", mb: 1 }}>
                 Przesłane zdjęcia:
               </Typography>
               <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
@@ -248,7 +256,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                     <Box
                       component="img"
                       src={`/uploads/${image}`}
-                      alt={`Zdjęcie ${imgIndex + 1}`}
+                      alt={`Fotografia ${imgIndex + 1} z ${submission.images!.length} przesłanego rozwiązania — otwiera się w nowej karcie`}
                       sx={{
                         width: 80,
                         height: 80,

@@ -43,6 +43,7 @@ export const ALLOWED_FILE_TYPES = [
   "image/png",
   "image/webp",
   "image/heic",
+  "image/heif",
 ];
 
 export const ETAP_NAMES: Record<string, string> = {

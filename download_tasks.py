@@ -1,15 +1,24 @@
 #!/usr/bin/env python3
 """
-Script to download OMJ/OMG competition tasks from https://omj.edu.pl/zadania
-Downloads all three stages (etap1, etap2, etap3/finals) and organizes them by year.
+Download the OMJ/OMG competition PDFs from https://omj.edu.pl/zadania.
 
-Directory structure: <year>/<etap>/<file>.pdf
-Example: 2024/etap2/20omj-2etap.pdf
+These PDFs are the property of Stowarzyszenie na rzecz Edukacji Matematycznej
+and are NOT redistributed with this repository (see NOTICE). This script is the
+supported way to obtain them: everything the application needs about a task,
+apart from its own metadata, comes from here.
+
+Directory structure: tasks/<year>/<etap>/<file>.pdf
+Example: tasks/2024/etap2/20omj-2etap.pdf
+
+The script is idempotent - a file already on disk is left alone, so it is safe
+to re-run after a new edition is published.
 
 Usage:
-    python download_tasks.py              # Download etap2 only (default)
-    python download_tasks.py --etap 3     # Download etap3 only
-    python download_tasks.py --all-etaps  # Download all etaps
+    python download_tasks.py                      # Etap 2 only (default)
+    python download_tasks.py --all-etaps          # Everything (what a fresh setup needs)
+    python download_tasks.py --etap 3             # Etap 3 only
+    python download_tasks.py --year 2024          # One edition only
+    python download_tasks.py --all-etaps --force  # Re-download even if present
 """
 
 import argparse
@@ -95,6 +104,8 @@ def get_etap2_filenames(edition: Edition) -> list[str]:
             filenames.extend([
                 f"2etap{etap2_year_suffix}r.pdf",
                 f"2etap{etap2_year_suffix}-r.pdf",
+                # Some editions publish the solutions under a doubled suffix
+                f"2etap{etap2_year_suffix}rr.pdf",
             ])
             filenames.extend([
                 f"2etap{etap2_year_suffix}st.pdf",
@@ -166,6 +177,8 @@ def get_etap3_filenames(edition: Edition) -> list[str]:
             filenames.extend([
                 f"3etap{etap3_year_suffix}r.pdf",
                 f"3etap{etap3_year_suffix}-r.pdf",
+                # Some editions publish the solutions under a doubled suffix
+                f"3etap{etap3_year_suffix}rr.pdf",
             ])
             filenames.extend([
                 f"3etap{etap3_year_suffix}st.pdf",
@@ -237,6 +250,9 @@ def get_etap1_filenames(edition: Edition) -> list[str]:
             filenames.extend([
                 f"1etap{etap1_year_suffix}r.pdf",
                 f"1etap{etap1_year_suffix}-r.pdf",
+                # Some editions publish the solutions under a doubled suffix
+                # (e.g. 1etap21rr.pdf for edition XVII)
+                f"1etap{etap1_year_suffix}rr.pdf",
             ])
             filenames.extend([
                 f"1etap{etap1_year_suffix}st.pdf",
@@ -282,13 +298,28 @@ def download_file(url: str, output_path: Path) -> bool:
         return False
 
 
-def download_etap_for_edition(edition: Edition, output_dir: Path, etap: int) -> list[str]:
+class Result(NamedTuple):
+    """How one etap of one edition turned out."""
+    fetched: int    # newly downloaded in this run
+    existing: int   # already on disk, left untouched
+
+    @property
+    def total(self) -> int:
+        return self.fetched + self.existing
+
+
+def download_etap_for_edition(
+    edition: Edition, output_dir: Path, etap: int, force: bool = False
+) -> Result:
     """
     Download all files for a given edition and etap.
-    Returns list of successfully downloaded files.
+
+    Several naming conventions are tried per etap because omj.edu.pl changed
+    them over the years; a 404 for one candidate is expected, not an error.
     """
     year_dir = output_dir / str(edition.year_start) / f"etap{etap}"
-    downloaded = []
+    fetched = 0
+    existing = 0
 
     if etap == 1:
         filenames = get_etap1_filenames(edition)
@@ -297,30 +328,27 @@ def download_etap_for_edition(edition: Edition, output_dir: Path, etap: int) -> 
     elif etap == 3:
         filenames = get_etap3_filenames(edition)
     else:
-        return []
+        return Result(0, 0)
 
     for filename in filenames:
         url = f"{BASE_URL}/{filename}"
         output_path = year_dir / filename
 
-        # Skip if already downloaded
-        if output_path.exists():
-            print(f"  Already exists: {filename}")
-            downloaded.append(str(output_path))
+        # Idempotent: never re-fetch what is already on disk unless asked to
+        if output_path.exists() and not force:
+            print(f"    Already have: {filename}")
+            existing += 1
             continue
 
         if download_file(url, output_path):
-            print(f"  Downloaded: {filename}")
-            downloaded.append(str(output_path))
+            print(f"    Downloaded:   {filename}")
+            fetched += 1
 
-    return downloaded
+    return Result(fetched, existing)
 
 
-def download_etap2_for_edition(edition: Edition, output_dir: Path) -> list[str]:
-    """
-    Download all etap 2 files for a given edition.
-    Returns list of successfully downloaded files.
-    """
+def download_etap2_for_edition(edition: Edition, output_dir: Path) -> Result:
+    """Download all etap 2 files for a given edition."""
     return download_etap_for_edition(edition, output_dir, 2)
 
 
@@ -333,6 +361,10 @@ def main():
                         help="Download all etaps (1, 2, and 3)")
     parser.add_argument("--year", type=int,
                         help="Download only specific year")
+    parser.add_argument("--output-dir", type=Path, default=OUTPUT_DIR,
+                        help=f"Where to write the PDFs (default: {OUTPUT_DIR})")
+    parser.add_argument("--force", action="store_true",
+                        help="Re-download files that are already on disk")
     args = parser.parse_args()
 
     # Default to etap 2 if no option specified
@@ -347,10 +379,12 @@ def main():
     print(f"OMJ/OMG Task Downloader - {etap_names}")
     print("=" * 40)
 
-    output_dir = OUTPUT_DIR
-    output_dir.mkdir(exist_ok=True)
+    output_dir = args.output_dir
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-    total_downloaded = 0
+    total_fetched = 0
+    total_existing = 0
+    empty_etaps = []
 
     # Filter editions by year if specified
     editions_to_process = EDITIONS
@@ -358,7 +392,7 @@ def main():
         editions_to_process = [e for e in EDITIONS if e.year_start == args.year]
         if not editions_to_process:
             print(f"No edition found for year {args.year}")
-            return
+            return 1
 
     for edition in editions_to_process:
         comp_type = "OMJ" if edition.is_omj else "OMG"
@@ -366,16 +400,34 @@ def main():
 
         for etap in etaps:
             print(f"  Etap {etap}:")
-            downloaded = download_etap_for_edition(edition, output_dir, etap)
-            total_downloaded += len(downloaded)
+            result = download_etap_for_edition(edition, output_dir, etap, args.force)
+            total_fetched += result.fetched
+            total_existing += result.existing
 
-            if not downloaded:
+            if result.total == 0:
                 print(f"    No files found")
+                empty_etaps.append(f"{edition.year_start}/etap{etap}")
+
+    on_disk = sum(1 for _ in output_dir.rglob("*.pdf"))
 
     print(f"\n{'=' * 40}")
-    print(f"Total files downloaded: {total_downloaded}")
-    print(f"Files saved to: {output_dir.absolute()}")
+    print(f"Downloaded now:      {total_fetched}")
+    print(f"Already on disk:     {total_existing}")
+    print(f"Total PDFs in tree:  {on_disk}")
+    print(f"Location:            {output_dir.absolute()}")
+
+    if empty_etaps:
+        print()
+        print(f"No PDF found for {len(empty_etaps)} etap(s): {', '.join(empty_etaps)}")
+        print("Either the edition was never published under a known filename, or")
+        print("omj.edu.pl changed its naming - check https://omj.edu.pl/zadania and")
+        print("extend get_etap{1,2,3}_filenames() in this script.")
+
+    if total_fetched == 0 and total_existing == 0:
+        print("\nNothing was downloaded. Is omj.edu.pl reachable?")
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

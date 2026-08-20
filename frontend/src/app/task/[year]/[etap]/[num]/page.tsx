@@ -6,6 +6,7 @@ import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { MathContent } from "@/components/ui/MathContent";
 import { DifficultyStars } from "@/components/ui/DifficultyStars";
 import { CategoryBadge } from "@/components/ui/CategoryBadge";
+import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
 import { HintsSection } from "@/components/task/HintsSection";
 import { SkillsSection } from "@/components/task/SkillsSection";
 import { SubmitSection } from "@/components/task/SubmitSection";
@@ -46,6 +47,11 @@ export async function generateMetadata({ params }: TaskPageProps): Promise<Metad
       title: `Zadanie ${num} – ${etapName} ${year}`,
     };
   }
+}
+
+/** Tytuł zadania bez notacji LaTeX - do nazw dostępnych (WCAG 2.4.4). */
+function stripLatex(title: string): string {
+  return title.replace(/\$[^$]*\$/g, "").replace(/\s+/g, " ").trim();
 }
 
 async function getTask(year: string, etap: string, num: string): Promise<TaskDetailResponse> {
@@ -98,6 +104,15 @@ export default async function TaskPage({ params }: TaskPageProps) {
             {prerequisite_statuses.map((prereq) => {
               const isMastered = prereq.status === "mastered";
               const hasStatus = prereq.status !== null;
+              // Status jest widoczny jako kolor tła i znak ✓/○ - jedno i drugie
+              // jest dla czytnika ekranu nieczytelne, więc powtarzamy je
+              // słowami w nazwie linku (WCAG 1.4.1, 2.4.4).
+              const statusLabel = !hasStatus
+                ? ""
+                : isMastered
+                  ? " — opanowane"
+                  : " — do rozwiązania";
+              const prereqTitle = stripLatex(prereq.title);
               return (
                 <Tooltip
                   key={prereq.key}
@@ -107,9 +122,14 @@ export default async function TaskPage({ params }: TaskPageProps) {
                   <Link
                     href={prereq.url}
                     style={{ textDecoration: "none" }}
+                    aria-label={`Zadanie ${prereq.number} z ${prereq.year}${prereqTitle ? `: ${prereqTitle}` : ""}${statusLabel}`}
                   >
                     <Chip
-                      icon={hasStatus ? <span>{isMastered ? "✓" : "○"}</span> : undefined}
+                      icon={
+                        hasStatus ? (
+                          <span aria-hidden="true">{isMastered ? "✓" : "○"}</span>
+                        ) : undefined
+                      }
                       label={`Zad. ${prereq.number} (${prereq.year})`}
                       size="small"
                       sx={{
@@ -127,14 +147,29 @@ export default async function TaskPage({ params }: TaskPageProps) {
             })}
           </Box>
         )}
+
+        {/* Jedno oznaczenie AI obejmujące tytuł i wszystkie metadane zadania
+            (trudność, kategorie, powiązania, umiejętności z sekcji poniżej) */}
+        <AiGeneratedNotice variant="taskMetadata" display="inline" style={{ marginTop: "12px" }} />
       </Box>
 
       {/* Task Content */}
       <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" sx={{ color: "grey.700", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}>
+        <Typography variant="h6" component="h2" sx={{ color: "grey.700", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}>
           Treść zadania
         </Typography>
-        <MathContent content={task.content} className="text-gray-800" />
+        {task.has_content ? (
+          <>
+            <AiGeneratedNotice variant="taskContent" style={{ marginBottom: "16px" }} />
+            <MathContent content={task.content!} className="text-gray-800" />
+          </>
+        ) : (
+          <Typography sx={{ color: "grey.600", fontStyle: "italic" }}>
+            Treść tego zadania nie jest częścią tego repozytorium &mdash; to
+            materiał Olimpiady Matematycznej Juniorów. Otwórz oficjalny PDF
+            poniżej.
+          </Typography>
+        )}
 
         {/* PDF Links and Report Error */}
         <Box sx={{ mt: 3, pt: 2, borderTop: 1, borderColor: "grey.200", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 1.5 }}>

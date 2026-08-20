@@ -8,6 +8,7 @@ import { Submission } from "@/lib/types";
 import { getMaxScore } from "@/lib/utils/constants";
 import { formatDate } from "@/lib/utils/dates";
 import { MathContent } from "@/components/ui/MathContent";
+import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
 
 interface SubmissionHistoryProps {
   submissions: Submission[];
@@ -82,7 +83,7 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
     if (submission.status === "failed") {
       return (
         <Box sx={{ color: "#991b1b", bgcolor: "#fef2f2", p: 2, borderRadius: 1 }}>
-          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+          <Typography variant="subtitle2" component="p" sx={{ mb: 0.5 }}>
             Wystąpił błąd podczas przetwarzania:
           </Typography>
           <Typography variant="body2">
@@ -112,9 +113,11 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
 
   return (
     <Paper sx={{ p: 3, mb: 3 }}>
-      <Typography variant="h6" sx={{ color: "grey.700", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}>
+      <Typography variant="h6" component="h2" sx={{ color: "grey.700", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}>
         Historia rozwiązań ({totalCount})
       </Typography>
+
+      <AiGeneratedNotice variant="evaluation" style={{ marginBottom: "16px" }} />
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
         {submissions.map((submission, index) => {
@@ -123,6 +126,9 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
 
           return (
             <Box key={submission.id}>
+              {/* Sterowanie na przycisku, nie na otaczającym <div>: div z
+                  onClick nie ma roli ani obsługi klawiatury (WCAG 2.1.1,
+                  4.1.2). */}
               <Box
                 sx={{
                   display: "flex",
@@ -131,13 +137,11 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
                   p: 2,
                   bgcolor: "grey.50",
                   borderRadius: 1,
-                  cursor: "pointer",
                   transition: "background-color 0.15s",
                   "&:hover": {
                     bgcolor: "grey.100",
                   },
                 }}
-                onClick={() => setExpandedId(isExpanded ? null : submission.id)}
               >
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                   <Typography variant="body2" sx={{ color: "grey.500", minWidth: 24 }}>
@@ -148,22 +152,29 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
                     {formatDate(submission.timestamp)}
                   </Typography>
                 </Box>
-                <Button size="small" sx={{ minWidth: 0 }}>
+                <Button
+                  size="small"
+                  sx={{ minWidth: 0 }}
+                  onClick={() => setExpandedId(isExpanded ? null : submission.id)}
+                  aria-expanded={isExpanded}
+                  aria-controls={`historia-panel-${submission.id}`}
+                  aria-label={`${isExpanded ? "Zwiń" : "Rozwiń"} szczegóły rozwiązania numer ${totalCount - index}`}
+                >
                   {isExpanded ? "Zwiń" : "Rozwiń"}
                 </Button>
               </Box>
 
               <Collapse in={isExpanded}>
-                <Box sx={{ p: 2, pt: 1, bgcolor: "grey.50", borderRadius: "0 0 8px 8px", mt: -0.5 }}>
+                <Box id={`historia-panel-${submission.id}`} sx={{ p: 2, pt: 1, bgcolor: "grey.50", borderRadius: "0 0 8px 8px", mt: -0.5 }}>
                   <Divider sx={{ mb: 2 }} />
-                  <Typography variant="subtitle2" sx={{ color: "grey.600", mb: 1 }}>
+                  <Typography variant="subtitle2" component="p" sx={{ color: "grey.600", mb: 1 }}>
                     {submission.status === "failed" ? "Szczegóły błędu:" : "Ocena:"}
                   </Typography>
                   {renderFeedback(submission)}
 
                   {submission.images && submission.images.length > 0 && (
                     <Box sx={{ mt: 2 }}>
-                      <Typography variant="subtitle2" sx={{ color: "grey.600", mb: 1 }}>
+                      <Typography variant="subtitle2" component="p" sx={{ color: "grey.600", mb: 1 }}>
                         Przesłane zdjęcia:
                       </Typography>
                       <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
@@ -177,7 +188,7 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
                             <Box
                               component="img"
                               src={`/uploads/${image}`}
-                              alt={`Rozwiązanie ${imgIndex + 1}`}
+                              alt={`Fotografia ${imgIndex + 1} z ${submission.images.length} przesłanego rozwiązania — otwiera się w nowej karcie`}
                               sx={{
                                 width: 80,
                                 height: 80,

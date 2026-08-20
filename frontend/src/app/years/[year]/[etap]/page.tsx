@@ -3,6 +3,7 @@ import { Box, Stack } from "@mui/material";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { TaskCard } from "@/components/task/TaskCard";
+import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
 import { serverFetch } from "@/lib/api/server";
 import { TasksResponse } from "@/lib/types";
 import { ETAP_NAMES } from "@/lib/utils/constants";
@@ -56,6 +57,9 @@ export default async function EtapPage({ params }: EtapPageProps) {
       >
         <Breadcrumb items={breadcrumbItems} />
       </PageHeader>
+
+      {/* Jedno oznaczenie AI na całą listę zadań */}
+      <AiGeneratedNotice variant="taskListing" style={{ marginBottom: "16px" }} />
 
       <Stack spacing={2}>
         {data.tasks.map((task) => (

@@ -134,3 +134,83 @@ class SubmissionDB(Base):
 
     def __repr__(self) -> str:
         return f"<Submission {self.id} task={self.year}/{self.etap}/{self.task_number} score={self.score}>"
+
+
+class DeletedAccountQuotaDB(Base):
+    """Rate-limit residue left behind when a user erases their account.
+
+    Deleting an account removes its submissions, and the submission rows are
+    what the 24h rate limits count. Without this table a user who hit the daily
+    cap could delete the account, sign in again with the same Google account and
+    get a fresh budget - repeatedly, until the whole global daily budget (and
+    the Gemini bill that goes with it) was gone.
+
+    So erasure leaves a tombstone: an HMAC of the Google sub (irreversible, and
+    useless without the server-side salt), how many submissions were inside the
+    window, and when the window ends. It carries no name, no e-mail, no readable
+    identifier, and it is deleted as soon as the window closes - typically 24h.
+    """
+
+    __tablename__ = "deleted_account_quota"
+
+    # HMAC-SHA256 of the user's google_sub, hex - see repositories.hash_user_id
+    user_hash = Column(String(64), primary_key=True)
+
+    # Submissions the deleted account made inside the rate limit window
+    submission_count = Column(Integer, nullable=False, default=0)
+
+    # Oldest counted submission, used for Retry-After / reset headers
+    oldest_submission_at = Column(DateTime, nullable=True)
+
+    # When this tombstone stops counting and may be deleted
+    expires_at = Column(DateTime, nullable=False, index=True)
+
+    created_at = Column(DateTime, nullable=False, default=utc_now)
+
+    def __repr__(self) -> str:
+        return (
+            f"<DeletedAccountQuota {self.user_hash[:8]}... "
+            f"count={self.submission_count} expires={self.expires_at}>"
+        )
+
+
+class AdminAccessLogDB(Base):
+    """Who looked at whose data in the admin panel (RODO art. 5(2)).
+
+    An admin can read every submission, every uploaded photo and search users.
+    Without a record of that there is no way to demonstrate accountability or to
+    notice an admin browsing a particular child's work.
+
+    Deliberately minimal: it stores identifiers and a resource label, never any
+    content - no feedback text, no scores, no file bytes - so the audit trail
+    cannot become the next place personal data leaks from. It is not exposed
+    through any API; it is read directly from the database during an audit, and
+    it expires like everything else (retention_admin_audit_months).
+    """
+
+    __tablename__ = "admin_access_log"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+
+    # The admin who looked. Staff acting in a professional capacity, and the
+    # whole point of the record is that they are identifiable.
+    admin_email = Column(String(255), nullable=False, index=True)
+
+    # Whose data was looked at. NULL for listings not scoped to one user.
+    # Replaced with an irreversible digest if that user later erases the account.
+    subject_user_id = Column(String(255), nullable=True, index=True)
+
+    # What was accessed, e.g. "admin_submissions_list", "upload", "user_search"
+    resource = Column(String(64), nullable=False)
+
+    # Optional identifier of the concrete object (submission id, upload path).
+    # Never free-form user input - a search query would itself be personal data.
+    resource_id = Column(String(255), nullable=True)
+
+    created_at = Column(DateTime, nullable=False, default=utc_now, index=True)
+
+    def __repr__(self) -> str:
+        return (
+            f"<AdminAccessLog {self.resource} by {self.admin_email} "
+            f"at {self.created_at}>"
+        )

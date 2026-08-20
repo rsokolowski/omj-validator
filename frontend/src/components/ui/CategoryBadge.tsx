@@ -21,7 +21,13 @@ export function CategoryBadge({ category, size = "medium" }: CategoryBadgeProps)
   const colors = CATEGORY_COLORS[category] || { bg: "#f3f4f6", color: "#374151" };
 
   return (
-    <Tooltip title={tooltip} arrow>
+    // `describeChild`: opis kategorii jest opisem, nie nazwą. Bez tego MUI
+    // nadpisuje nazwę dostępną plakietki i czytnik ekranu zamiast widocznego
+    // "Geometria" czyta cały opis - a to łamie 2.5.3 (Etykieta w nazwie).
+    // Z `describeChild` MUI zostawia opis w atrybucie `title`, więc dociera on
+    // do czytnika ekranu bez dokładania plakietkom przystanków tabulacji
+    // (na liście zadań byłoby ich kilkanaście na stronę).
+    <Tooltip title={tooltip} arrow describeChild>
       <Chip
         label={name}
         size={size}

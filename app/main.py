@@ -17,7 +17,7 @@ logging.getLogger("google_genai").setLevel(logging.WARNING)
 import asyncio
 from fastapi import FastAPI, Request, UploadFile, File, HTTPException, status, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from PIL import Image
+from PIL import Image, ImageOps
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -37,11 +37,47 @@ from .auth import (
     is_group_member_async,
 )
 from .oauth import oauth
+from .privacy import mask_email, mask_user_id
 from .groups import check_group_membership, _get_allowed_emails
-from .db import get_db, UserRepository, SubmissionRepository
+from .db import (
+    get_db,
+    UserRepository,
+    SubmissionRepository,
+    DeletedAccountQuotaRepository,
+    AdminAccessLogRepository,
+)
 from .db.repositories import ensure_utc
 
 logger = logging.getLogger(__name__)
+
+
+def _register_heif_decoder() -> bool:
+    """Teach Pillow to read HEIC/HEIF, returning whether it worked.
+
+    iPhones upload HEIC. We must be able to DECODE it, because that is the only
+    way to strip its EXIF - and HEIC from a phone routinely carries GPS
+    coordinates, i.e. the child's home address, which used to be written to disk
+    and forwarded to Google untouched.
+
+    pillow-heif is treated as optional: if it is missing or fails to register,
+    the app still starts and HEIC uploads degrade to the explicit refusal in
+    _normalize_uploaded_image instead of taking the whole service down.
+    """
+    try:
+        import pillow_heif
+
+        pillow_heif.register_heif_opener()
+        return True
+    except Exception as e:
+        logger.warning(
+            f"HEIF decoder unavailable ({type(e).__name__}: {e}) - HEIC uploads "
+            "will be refused, because their EXIF/GPS cannot be stripped. "
+            "Install pillow-heif to accept them."
+        )
+        return False
+
+
+HEIF_SUPPORTED = _register_heif_decoder()
 
 # Track background tasks for proper lifecycle management
 _background_tasks: set[asyncio.Task] = set()
@@ -55,7 +91,14 @@ from .storage import (
     _load_all_tasks,
 )
 from .ai import create_ai_provider, AIProviderError
-from .models import SubmissionResult, TaskCategory, TaskStatus
+from .models import (
+    ACCOUNT_DELETE_CONFIRMATION,
+    DeleteAccountRequest,
+    DeleteAccountResponse,
+    SubmissionResult,
+    TaskCategory,
+    TaskStatus,
+)
 from .progress import build_progress_data, get_all_categories, get_prerequisite_statuses, compute_user_progress
 from .skills import get_skills_by_ids
 from .scoring import get_max_score
@@ -174,6 +217,57 @@ def _calculate_rate_limit_headers(
     }
 
 
+def _rate_limit_reset_anchor(
+    live_timestamps: list[dt_datetime],
+    carryover_blocks: list[tuple[int, dt_datetime]],
+    limit: int,
+    window_hours: int = 24,
+) -> OptionalType[dt_datetime]:
+    """Anchor to feed the header helpers when a deleted-account carryover exists.
+
+    The helpers below all compute `anchor + window`, which normally means "the
+    oldest request leaves the window". That breaks once a carryover is in play:
+    the carried-over quota is one block released at its tombstone's expires_at,
+    so taking the oldest submission behind it points at a moment when nothing
+    frees. A user with 30 submissions between T-23h and T-1h who deletes their
+    account and signs back in would be told to retry in an hour - and get 429
+    again, every hour, for 22 hours.
+
+    So the moment the caller can actually submit again is computed by replaying
+    the releases in order: each live submission frees one slot at
+    `timestamp + window`, each tombstone frees its whole count at `expires_at`.
+    The first moment the total drops below the limit is the answer, and the
+    anchor returned is that moment minus the window, so the existing
+    `anchor + window` arithmetic lands exactly on it.
+
+    Returns None when nothing is counted, which leaves the callers' "no items in
+    window" behaviour untouched.
+    """
+    releases: list[tuple[dt_datetime, int]] = [
+        (ensure_utc(ts) + dt_timedelta(hours=window_hours), 1) for ts in live_timestamps
+    ]
+    releases += [
+        (ensure_utc(expires_at), count)
+        for count, expires_at in carryover_blocks
+        if expires_at and count > 0
+    ]
+    if not releases:
+        return None
+
+    releases.sort(key=lambda item: item[0])
+    remaining = len(live_timestamps) + sum(
+        count for count, expires_at in carryover_blocks if expires_at and count > 0
+    )
+
+    for when, freed in releases:
+        remaining -= freed
+        if remaining < limit:
+            return when - dt_timedelta(hours=window_hours)
+
+    # Below the limit only once everything has gone
+    return releases[-1][0] - dt_timedelta(hours=window_hours)
+
+
 def _calculate_retry_after(
     oldest_timestamp: OptionalType[dt_datetime], window_hours: int = 24
 ) -> int:
@@ -249,6 +343,57 @@ def warm_ai_provider():
         logger.info(f"AI provider warmed up: {type(provider).__name__}")
     except Exception as e:
         logger.warning(f"Failed to warm AI provider: {e}")
+
+
+def _run_retention_once() -> None:
+    """One retention pass with its own DB session (blocking - run in a thread)."""
+    from .db import SessionLocal
+    from .retention import run_retention
+
+    db = SessionLocal()
+    try:
+        run_retention(db)
+    finally:
+        db.close()
+
+
+@app.on_event("startup")
+async def start_retention_task():
+    """Expire old submissions, photos and AI traces once a day.
+
+    RODO art. 5(1)(e): nothing may be kept indefinitely. The production image
+    runs a single gunicorn worker, so exactly one loop exists. If you scale to
+    several workers, set RETENTION_AUTO_PURGE=false and run
+    scripts/purge_expired_data.py from cron instead.
+    """
+    if not settings.retention_auto_purge:
+        logger.info("Automatic data retention disabled (RETENTION_AUTO_PURGE=false)")
+        return
+
+    if not any(
+        (
+            settings.retention_submission_months,
+            settings.retention_scoring_thinking_days,
+            settings.retention_inactive_account_months,
+            settings.retention_admin_audit_months,
+        )
+    ):
+        logger.info("Automatic data retention disabled (no retention periods configured)")
+        return
+
+    async def retention_loop():
+        # Let the app finish booting before touching the database
+        await asyncio.sleep(120)
+        while True:
+            try:
+                await asyncio.to_thread(_run_retention_once)
+            except Exception as e:
+                logger.warning(f"Data retention run failed: {type(e).__name__}: {e}")
+            await asyncio.sleep(24 * 60 * 60)  # once a day
+
+    task = asyncio.create_task(retention_loop())
+    _background_tasks.add(task)
+    task.add_done_callback(_background_tasks.discard)
 
 
 # --- Authentication Routes ---
@@ -348,7 +493,7 @@ async def google_auth_callback(request: Request, db: Session = Depends(get_db)):
                 if recent_users >= settings.rate_limit_new_users_per_day:
                     logger.warning(
                         f"New user rate limit exceeded: {recent_users}/{settings.rate_limit_new_users_per_day} "
-                        f"(blocked: {user_info['email'][:3]}***@***)"
+                        f"(blocked: {mask_email(user_info['email'])})"
                     )
                     return RedirectResponse(
                         url="/login?error=rate_limit_new_users",
@@ -384,7 +529,8 @@ async def google_auth_callback(request: Request, db: Session = Depends(get_db)):
         }
 
         logger.info(
-            f"User logged in: {user_info['email']} (has_access: {has_access}, allowlisted: {is_allowlisted})"
+            f"User logged in: {mask_email(user_info['email'])} "
+            f"(has_access: {has_access}, allowlisted: {is_allowlisted})"
         )
 
         # Redirect to the original page or default to /years
@@ -570,7 +716,7 @@ async def etap_detail(request: Request, year: str, etap: str, db: Session = Depe
         task_data = {
             "number": task_info.number,
             "title": task_info.title,
-            "has_content": True,
+            "has_content": task_info.has_content,
             "difficulty": task_info.difficulty,
             "categories": task_info.categories,
             "submission_count": 0,
@@ -669,48 +815,146 @@ def _validate_path_params(year: str, etap: str) -> bool:
 MAX_IMAGE_DIMENSION = 2048
 
 
-def _resize_image_if_needed(file_path: Path) -> None:
-    """Resize image if it exceeds maximum dimensions."""
+def _discard_uploads(saved_paths: list[Path], current: OptionalType[Path] = None) -> None:
+    """Remove every file written by a submission request that ends in an error.
+
+    A rejected request must not leave a child's photo on disk with no DB row
+    pointing at it - nothing else would ever look at it again, and with
+    retention disabled (the local default) it would sit there forever.
+    Only paths produced by this request are touched.
+    """
+    for path in list(saved_paths) + ([current] if current else []):
+        try:
+            path.unlink(missing_ok=True)
+        except OSError as e:
+            logger.warning(f"Could not discard rejected upload: {type(e).__name__}: {e}")
+    saved_paths.clear()
+
+
+HEIF_EXTENSIONS = {".heic", ".heif"}
+
+
+def _unprocessable_image_message(filename: OptionalType[str], ext: str) -> str:
+    """Polish error for a photo we could not sanitize, aimed at a 10-15 year old."""
+    name = filename or "zdjęcie"
+    if ext in HEIF_EXTENSIONS and not HEIF_SUPPORTED:
+        # Server-side gap, not the child's fault - say what to do about it
+        return (
+            f"Nie umiemy teraz przetworzyć pliku {name} (format HEIC z iPhone'a). "
+            "Zapisz zdjęcie jako JPG i prześlij ponownie."
+        )
+    return (
+        f"Nie udało się przetworzyć pliku {name}. "
+        "Prześlij zdjęcie w formacie JPG lub PNG."
+    )
+
+
+def _flatten_transparency(img: Image.Image) -> Image.Image:
+    """Return an RGB image, compositing any transparency onto WHITE.
+
+    JPEG has no alpha channel, and Image.convert("RGB") drops it without
+    compositing: a fully transparent pixel keeps whatever RGB value it happened
+    to carry. For the standard "export with transparent background" from a
+    tablet note-taking app that value is (0, 0, 0), so the entire page turns
+    black - the student sends a correct solution and gets zero points with a
+    comment about a blank sheet, having burnt one of their daily submissions.
+    The same happens to a palette PNG carrying `transparency` in info.
+
+    White, because a sheet of paper is white: the model then sees what the
+    student saw on screen, dark handwriting on a light background.
+    """
+    # Covers RGBA and LA (alpha band present), PA, and palette images whose
+    # transparency lives in info rather than in a band.
+    has_alpha = "A" in img.getbands() or (
+        img.mode in ("P", "PA") and "transparency" in img.info
+    )
+    if not has_alpha:
+        return img.convert("RGB")
+
+    rgba = img.convert("RGBA")
+    background = Image.new("RGBA", rgba.size, (255, 255, 255, 255))
+    return Image.alpha_composite(background, rgba).convert("RGB")
+
+
+def _normalize_uploaded_image(file_path: Path) -> OptionalType[Path]:
+    """Strip metadata, fix orientation and downscale an uploaded photo.
+
+    Returns the path the normalized image ended up at - it is NOT always the
+    input path, because everything is re-encoded as JPEG. Callers must use the
+    returned path, otherwise the DB would reference a file that no longer
+    exists. Returns None when the image could not be sanitized at all; the
+    caller must then reject the upload rather than store it.
+
+    Why every image and not just the big ones: these are phone photos of a
+    child's handwriting, and the EXIF block routinely carries GPS coordinates -
+    in practice the child's home address - which we would otherwise store on
+    disk and forward to Google. Metadata used to be dropped only as a side
+    effect of re-encoding during a resize, so a cropped photo, a screenshot or
+    an older camera's output kept its EXIF. Privacy must not depend on the
+    camera's resolution.
+
+    Orientation is applied BEFORE the metadata is dropped (ImageOps.exif_transpose
+    handles all 8 orientation values, not just the three the old code knew), so
+    portrait photos do not end up sideways once the EXIF flag is gone.
+
+    HEIC/HEIF goes through the same path as everything else thanks to
+    pillow-heif (registered at import, see _register_heif_decoder): decode,
+    orient, drop metadata, re-encode as JPEG. If that decoder is unavailable,
+    HEIC lands in the failure branch below.
+
+    Transparency is composited onto white rather than discarded - see
+    _flatten_transparency for why that is not optional.
+
+    A file Pillow cannot decode cannot have its metadata removed either, so it
+    is refused instead of being stored as-is - storing an un-sanitizable photo
+    would defeat the whole point of this function.
+    """
+    tmp_path = file_path.with_name(file_path.name + ".tmp.jpg")
+    target_path = file_path.with_suffix(".jpg")
+
     try:
         with Image.open(file_path) as img:
-            # Check if resizing is needed
-            if img.width <= MAX_IMAGE_DIMENSION and img.height <= MAX_IMAGE_DIMENSION:
-                return
+            # Camera rotation flag first, metadata removal second
+            oriented = ImageOps.exif_transpose(img) or img
 
-            # Calculate new dimensions preserving aspect ratio
-            ratio = min(MAX_IMAGE_DIMENSION / img.width, MAX_IMAGE_DIMENSION / img.height)
-            new_size = (int(img.width * ratio), int(img.height * ratio))
+            # Flatten BEFORE resizing: resampling an RGBA image blends the RGB
+            # values hiding under transparent pixels into their neighbours, which
+            # would leave a dark halo around the handwriting.
+            flattened = _flatten_transparency(oriented)
 
-            # Resize and save
-            resized = img.resize(new_size, Image.Resampling.LANCZOS)
+            if flattened.width > MAX_IMAGE_DIMENSION or flattened.height > MAX_IMAGE_DIMENSION:
+                ratio = min(
+                    MAX_IMAGE_DIMENSION / flattened.width,
+                    MAX_IMAGE_DIMENSION / flattened.height,
+                )
+                new_size = (
+                    max(1, int(flattened.width * ratio)),
+                    max(1, int(flattened.height * ratio)),
+                )
+                flattened = flattened.resize(new_size, Image.Resampling.LANCZOS)
 
-            # Handle EXIF orientation
-            if hasattr(img, '_getexif') and img._getexif():
-                from PIL import ExifTags
-                for orientation in ExifTags.TAGS.keys():
-                    if ExifTags.TAGS[orientation] == 'Orientation':
-                        break
-                exif = img._getexif()
-                if exif and orientation in exif:
-                    # Apply orientation correction
-                    if exif[orientation] == 3:
-                        resized = resized.rotate(180, expand=True)
-                    elif exif[orientation] == 6:
-                        resized = resized.rotate(270, expand=True)
-                    elif exif[orientation] == 8:
-                        resized = resized.rotate(90, expand=True)
+            # A fresh JPEG written from pixel data only: no EXIF, no GPS, no XMP.
+            # Written to a temp file first so a failure mid-encode cannot destroy
+            # the upload we already have.
+            flattened.save(tmp_path, "JPEG", quality=85)
+    except Exception as e:
+        tmp_path.unlink(missing_ok=True)
+        logger.warning(
+            f"Image normalization failed for {file_path.suffix}: "
+            f"{type(e).__name__}: {e} - upload refused (metadata cannot be stripped)"
+        )
+        return None
 
-            # Save as JPEG for consistency
-            resized_path = file_path.with_suffix('.jpg')
-            resized.convert('RGB').save(resized_path, 'JPEG', quality=85)
+    try:
+        tmp_path.replace(target_path)
+        if target_path != file_path:
+            file_path.unlink(missing_ok=True)
+    except OSError as e:
+        tmp_path.unlink(missing_ok=True)
+        logger.warning(f"Could not replace {file_path.name} with normalized image: {e}")
+        return None
 
-            # Remove original if different
-            if resized_path != file_path:
-                file_path.unlink(missing_ok=True)
-
-    except Exception:
-        # If resize fails, keep original - AI will report the error
-        pass
+    return target_path
 
 
 @app.post("/task/{year}/{etap}/{num}/submit")
@@ -756,6 +1000,23 @@ async def submit_solution(
     user_submission_count, user_oldest_submission = submission_repo.get_user_rate_limit_info(
         user_id, hours=24
     )
+
+    # Quota already used by an account this person erased inside the window.
+    # Without this, deleting the account would hand out a fresh daily budget -
+    # see DeletedAccountQuotaDB.
+    quota_repo = DeletedAccountQuotaRepository(db)
+    carryover_count, carryover_expires_at = quota_repo.get_user_carryover(user_id)
+    user_submission_count += carryover_count
+    if carryover_count and carryover_expires_at:
+        # Reset/Retry-After must point at a moment when quota actually frees;
+        # the carried-over block is released in one go at expires_at, so the
+        # anchor is computed from the real release schedule.
+        user_oldest_submission = _rate_limit_reset_anchor(
+            submission_repo.get_user_submission_timestamps(user_id, hours=24),
+            [(carryover_count, carryover_expires_at)],
+            limit=settings.rate_limit_submissions_per_user_per_day,
+            window_hours=24,
+        ) or user_oldest_submission
     rate_limit_headers = _calculate_rate_limit_headers(
         limit=settings.rate_limit_submissions_per_user_per_day,
         current_count=user_submission_count,
@@ -767,7 +1028,7 @@ async def submit_solution(
         # Check per-user submission limit
         if user_submission_count >= settings.rate_limit_submissions_per_user_per_day:
             logger.warning(
-                f"User submission rate limit exceeded: {user_id[:8]}... "
+                f"User submission rate limit exceeded: {mask_user_id(user_id)} "
                 f"{user_submission_count}/{settings.rate_limit_submissions_per_user_per_day}"
             )
             retry_after = _calculate_retry_after(user_oldest_submission, window_hours=24)
@@ -784,6 +1045,17 @@ async def submit_solution(
         global_submission_count, global_oldest_submission = submission_repo.get_global_rate_limit_info(
             hours=24
         )
+        # Erased accounts also freed global quota - count it back
+        carryover_blocks = quota_repo.get_global_carryover_blocks()
+        global_submission_count += sum(count for count, _ in carryover_blocks)
+        if carryover_blocks:
+            # Same reasoning as the per-user branch above
+            global_oldest_submission = _rate_limit_reset_anchor(
+                submission_repo.get_all_submission_timestamps(hours=24),
+                carryover_blocks,
+                limit=settings.rate_limit_submissions_global_per_day,
+                window_hours=24,
+            ) or global_oldest_submission
         if global_submission_count >= settings.rate_limit_submissions_global_per_day:
             logger.warning(
                 f"Global submission rate limit exceeded: {global_submission_count}/{settings.rate_limit_submissions_global_per_day}"
@@ -823,7 +1095,15 @@ async def submit_solution(
         )
 
     # Validate file types
-    allowed_types = {"image/jpeg", "image/png", "image/webp", "image/heic"}
+    # HEIC/HEIF included: pillow-heif decodes them so their EXIF (incl. GPS)
+    # can be stripped like any other format - see _register_heif_decoder.
+    allowed_types = {
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/heic",
+        "image/heif",
+    }
     for img in images:
         if img.content_type not in allowed_types:
             return JSONResponse(
@@ -835,23 +1115,31 @@ async def submit_solution(
     upload_dir = settings.uploads_dir / user_id / year / etap / str(num)
     upload_dir.mkdir(parents=True, exist_ok=True)
 
-    saved_paths = []
+    saved_paths: list[Path] = []
     max_size = settings.upload_max_size_mb * 1024 * 1024
-    allowed_extensions = {".jpg", ".jpeg", ".png", ".webp", ".heic"}
+    allowed_extensions = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"}
 
-    for img in images:
-        # Validate and normalize extension
-        ext = Path(img.filename).suffix.lower() if img.filename else ".jpg"
-        if ext not in allowed_extensions:
-            ext = ".jpg"  # Default to jpg for safety
+    # File currently being written - not yet in saved_paths, but just as much an
+    # orphan as the rest if this request ends without creating a submission row.
+    in_progress: OptionalType[Path] = None
 
-        filename = f"{uuid.uuid4().hex[:12]}{ext}"
-        file_path = upload_dir / filename
+    # One guard around the whole loop: every exit between "bytes hit the disk"
+    # and "the DB row exists" must clean up after itself, otherwise a child's
+    # photo stays on disk with nothing referencing it (see _discard_uploads).
+    try:
+        for img in images:
+            # Validate and normalize extension
+            ext = Path(img.filename).suffix.lower() if img.filename else ".jpg"
+            if ext not in allowed_extensions:
+                ext = ".jpg"  # Default to jpg for safety
 
-        # Read file in chunks with size limit check
-        total_size = 0
-        CHUNK_SIZE = 64 * 1024  # 64KB chunks
-        try:
+            filename = f"{uuid.uuid4().hex[:12]}{ext}"
+            file_path = upload_dir / filename
+            in_progress = file_path
+
+            # Read file in chunks with size limit check
+            total_size = 0
+            CHUNK_SIZE = 64 * 1024  # 64KB chunks
             with open(file_path, "wb") as f:
                 while True:
                     chunk = await img.read(CHUNK_SIZE)
@@ -860,28 +1148,38 @@ async def submit_solution(
                     total_size += len(chunk)
                     if total_size > max_size:
                         f.close()
-                        file_path.unlink(missing_ok=True)
+                        _discard_uploads(saved_paths, file_path)
                         return JSONResponse(
                             {"error": f"Plik {img.filename} jest za duży (max {settings.upload_max_size_mb}MB)"},
                             status_code=status.HTTP_400_BAD_REQUEST,
                         )
                     f.write(chunk)
-        except Exception:
-            file_path.unlink(missing_ok=True)
-            raise
 
-        # Resize if too large for AI API
-        _resize_image_if_needed(file_path)
+            # Strip EXIF/GPS, fix orientation, downscale. Returns the final path -
+            # normalization always re-encodes to JPEG, so the name can change.
+            normalized_path = _normalize_uploaded_image(file_path)
+            if normalized_path is None:
+                # Could not be decoded, so its metadata could not be removed
+                # either. Storing it would ship the photo's GPS coordinates to
+                # disk and to Google, so the upload is refused instead.
+                _discard_uploads(saved_paths, file_path)
+                return JSONResponse(
+                    {"error": _unprocessable_image_message(img.filename, ext)},
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
 
-        # Update path if extension changed (e.g., PNG -> JPG after resize)
-        if not file_path.exists():
-            file_path = file_path.with_suffix('.jpg')
-
-        saved_paths.append(file_path)
+            saved_paths.append(normalized_path)
+            in_progress = None
+    except Exception:
+        _discard_uploads(saved_paths, in_progress)
+        raise
 
     # Get PDF paths - validate early
     task_pdf = get_task_pdf_path(year, etap)
     if not task_pdf or not task_pdf.exists():
+        # No submission row will be created, so the photos already on disk would
+        # be orphans forever (retention is off by default in dev).
+        _discard_uploads(saved_paths)
         return JSONResponse(
             {"error": "Nie znaleziono pliku z zadaniami"},
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -983,7 +1281,7 @@ async def websocket_submission_progress(
                 user = session_data.get(SESSION_USER_KEY)
                 if user:
                     user_id = user.get("google_sub")
-                    logger.info(f"[WebSocket] Session decoded, user_id={user_id[:8]}...")
+                    logger.info(f"[WebSocket] Session decoded, user_id={mask_user_id(user_id)}")
                 else:
                     logger.warning(f"[WebSocket] No user in session data")
             else:
@@ -1002,7 +1300,10 @@ async def websocket_submission_progress(
     # Verify user owns this submission (unless auth disabled)
     if not settings.auth_disabled:
         if not user_id or user_id != submission.user_id:
-            logger.warning(f"[WebSocket] Auth failed: user_id={user_id}, submission.user_id={submission.user_id[:8] if submission.user_id else None}...")
+            logger.warning(
+                f"[WebSocket] Auth failed: user_id={mask_user_id(user_id)}, "
+                f"submission.user_id={mask_user_id(submission.user_id)}"
+            )
             await websocket.close(code=4003, reason="Not authorized")
             return
 
@@ -1119,6 +1420,21 @@ async def serve_upload(request: Request, path: str):
     except ValueError:
         raise HTTPException(status_code=403, detail="Forbidden")
 
+    # Admin looking at somebody else's photo - the widest read privilege in the
+    # app, so it is audited. Own uploads are not (that is every normal request).
+    # Audited here, after validation, so the table records real accesses rather
+    # than 404s and rejected traversal attempts.
+    if is_admin and path_parts[0] != user_id:
+        # The path starts with the owner's Google sub, which subject_user_id
+        # already carries and which must disappear when that account is erased -
+        # so only the part below the user directory is stored.
+        await _record_admin_access(
+            request,
+            resource="upload",
+            subject_user_id=path_parts[0],
+            resource_id="/".join(path_parts[1:])[:255],
+        )
+
     from fastapi.responses import FileResponse
 
     return FileResponse(file_path)
@@ -1170,7 +1486,9 @@ async def reset_user_submissions(
     submission_repo = SubmissionRepository(db)
     deleted_count = submission_repo.delete_all_user_submissions(user_id)
 
-    logger.info(f"E2E: Reset {deleted_count} submissions for user {user.get('email')}")
+    logger.info(
+        f"E2E: Reset {deleted_count} submissions for user {mask_email(user.get('email'))}"
+    )
 
     return {
         "success": True,
@@ -1226,6 +1544,11 @@ async def get_current_user_api(request: Request):
         "user": user,
         "is_authenticated": user is not None,
         "is_admin": _is_admin(request),
+        # Whether POST /api/account/delete would work for this session, so the
+        # UI does not offer a button that always answers 403 (dev mode, admins)
+        "can_delete_account": _can_delete_account(request),
+        # Single source of truth for the phrase the confirmation dialog asks for
+        "account_delete_confirmation": ACCOUNT_DELETE_CONFIRMATION,
     }
 
 
@@ -1296,7 +1619,10 @@ async def etap_detail_api(
             "etap": task_info.etap,
             "number": task_info.number,
             "title": task_info.title,
+            # None when the statement has not been generated locally - clients
+            # must fall back to the task PDF, see app/storage.py.
             "content": task_info.content,
+            "has_content": task_info.has_content,
             "pdf": task_info.pdf.model_dump() if task_info.pdf else None,
             "difficulty": task_info.difficulty,
             "categories": task_info.categories,
@@ -1515,6 +1841,91 @@ async def my_submissions(
     }
 
 
+# ==================== Account Deletion (RODO art. 17) ====================
+
+
+def _can_delete_account(request: Request) -> bool:
+    """Whether this session may erase its own account.
+
+    Local dev shares one "anonymous" account that is only recreated on restart,
+    and admins would lock themselves out of the panel with one stray click.
+    """
+    if not verify_auth(request) or not get_current_user_id(request):
+        return False
+    if settings.auth_disabled:
+        return False
+    return not _is_admin(request)
+
+
+@app.post("/api/account/delete", response_model=DeleteAccountResponse)
+async def delete_my_account(
+    request: Request,
+    payload: DeleteAccountRequest,
+    db: Session = Depends(get_db),
+):
+    """Permanently erase the current user's account, submissions and photos.
+
+    RODO art. 17 (right to erasure): a user must be able to do this themselves,
+    without writing to an administrator. The session is invalidated afterwards
+    so the deleted account cannot keep browsing.
+    """
+    if not verify_auth(request):
+        raise HTTPException(status_code=401, detail="Nieautoryzowany dostęp")
+
+    # Always the *caller's own* id from the session - a user can never name
+    # somebody else's account here.
+    user_id = get_current_user_id(request)
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Nieautoryzowany dostęp")
+
+    # Local dev shares one "anonymous" account that is only recreated on
+    # restart; deleting it would break the whole instance.
+    if settings.auth_disabled:
+        raise HTTPException(
+            status_code=403,
+            detail="Usuwanie konta jest niedostępne, gdy uwierzytelnianie jest wyłączone (tryb deweloperski).",
+        )
+
+    # Admins would lock themselves out of the panel with one stray click, and
+    # their account is not a child's account this right was written for.
+    if _is_admin(request):
+        raise HTTPException(
+            status_code=403,
+            detail="Konta administratora nie można usunąć w ten sposób. Usuń swój adres z ADMIN_EMAILS i spróbuj ponownie.",
+        )
+
+    if payload.confirmation.strip() != ACCOUNT_DELETE_CONFIRMATION:
+        raise HTTPException(
+            status_code=400,
+            detail=f'Aby potwierdzić, wpisz dokładnie: "{ACCOUNT_DELETE_CONFIRMATION}".',
+        )
+
+    from .retention import erase_user_data
+
+    # Carry the used quota over the deletion, otherwise erasing the account is a
+    # free rate limit reset (see DeletedAccountQuotaDB). Recorded first: if the
+    # erasure then fails, we have over-counted a still-existing account by its
+    # own submissions, which is safe. The reverse order would not be.
+    submission_repo = SubmissionRepository(db)
+    used_count, used_oldest, used_newest = submission_repo.get_user_rate_limit_window(
+        user_id, hours=24
+    )
+    quota_repo = DeletedAccountQuotaRepository(db)
+    quota_repo.purge_expired()
+    quota_repo.record_deletion(user_id, used_count, used_oldest, used_newest)
+
+    report = erase_user_data(db, user_id)
+
+    # Invalidate the session (clears the cookie on the response)
+    request.session.clear()
+
+    return DeleteAccountResponse(
+        success=True,
+        deleted_submissions=report.submissions_deleted,
+        deleted_files=report.files_deleted,
+    )
+
+
 # ==================== Admin API Endpoints ====================
 
 
@@ -1541,6 +1952,61 @@ def _require_admin(request: Request) -> None:
         raise HTTPException(status_code=403, detail="Admin access required")
 
 
+def _write_admin_access(
+    admin: OptionalType[dict],
+    resource: str,
+    subject_user_id: OptionalType[str] = None,
+    resource_id: OptionalType[str] = None,
+) -> None:
+    """Blocking audit write on its own short-lived session.
+
+    Deliberately NOT the request's session: the repository commits, and
+    committing the request session expires every ORM object the endpoint has
+    already loaded. The next attribute access on them would re-SELECT one row at
+    a time (N+1), and a row deleted meanwhile would raise ObjectDeletedError -
+    a 500 from a read-only admin page because of a bookkeeping write.
+    """
+    if not admin:
+        return
+
+    from .db import SessionLocal
+
+    audit_db = SessionLocal()
+    try:
+        AdminAccessLogRepository(audit_db).record(
+            admin_email=admin.get("email", ""),
+            resource=resource,
+            subject_user_id=subject_user_id,
+            resource_id=resource_id,
+            admin_user_id=admin.get("google_sub"),
+        )
+    finally:
+        audit_db.close()
+
+
+async def _record_admin_access(
+    request: Request,
+    resource: str,
+    subject_user_id: OptionalType[str] = None,
+    resource_id: OptionalType[str] = None,
+) -> None:
+    """Write an audit entry for an admin reading somebody else's data.
+
+    RODO art. 5(2): admin access to a child's submissions and photos has to be
+    demonstrable after the fact. Access to the admin's own data is skipped -
+    that is noise, not an audit event. Never raises: see the repository.
+
+    Runs in a worker thread so the commit does not block the event loop.
+    """
+    await asyncio.to_thread(
+        _write_admin_access,
+        get_current_user(request),
+        resource,
+        subject_user_id,
+        resource_id,
+    )
+
+
 @app.get("/api/admin/submissions")
 async def admin_submissions(
     request: Request,
@@ -1553,6 +2019,14 @@ async def admin_submissions(
 ):
     """Get all submissions with pagination and filters (admin only)."""
     _require_admin(request)
+
+    # One audit entry per request, not per row - the row count would only add
+    # noise, and the filter already records whose data was asked for.
+    await _record_admin_access(
+        request,
+        resource="admin_submissions_list",
+        subject_user_id=user_id,
+    )
 
     # Cap limit to prevent abuse
     limit = min(limit, 100)
@@ -1620,6 +2094,17 @@ async def admin_users_search(
     user_repo = UserRepository(db)
     users = user_repo.search_by_email(q, limit=limit)
 
+    # Recorded unconditionally, including zero results: an admin probing for an
+    # address that is not in the database is exactly the access worth having a
+    # trace of, and a gap in the trail undermines the point of the table.
+    # The query itself is a fragment of somebody's e-mail, so it is NOT stored -
+    # only the fact that a search happened and how many people it surfaced.
+    await _record_admin_access(
+        request,
+        resource="admin_user_search",
+        resource_id=f"{len(users)} results",
+    )
+
     return {
         "users": [
             {
@@ -1661,6 +2146,13 @@ async def admin_rerun_submission(
     original = submission_repo.get_by_id(submission_id)
     if not original:
         raise HTTPException(status_code=404, detail="Submission not found")
+
+    await _record_admin_access(
+        request,
+        resource="admin_submission_rerun",
+        subject_user_id=original.user_id,
+        resource_id=submission_id,
+    )
 
     # Reconstruct absolute image paths from stored relative paths
     relative_images = original.images or []

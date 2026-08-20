@@ -4,6 +4,20 @@ import { ThemeProvider as MuiThemeProvider, createTheme } from "@mui/material/st
 import CssBaseline from "@mui/material/CssBaseline";
 import { ReactNode } from "react";
 
+// Dodatkowa rola koloru w palecie (fiolet akcentowy). Trzymamy ja w motywie,
+// zeby komponenty nie zapisywaly wartosci szesnastkowych u siebie.
+declare module "@mui/material/styles" {
+  interface Palette {
+    accent: Palette["primary"];
+  }
+  interface PaletteOptions {
+    accent?: PaletteOptions["primary"];
+  }
+}
+
+// UWAGA (WCAG 1.4.3 / 1.4.11): wartosci ponizej sa dobrane tak, zeby tekst
+// w tym kolorze mial co najmniej 4,5:1 na bialym tle karty (#fff) oraz na tle
+// strony (#f9fafb). Przy zmianie odcienia przelicz kontrast, zanim wdrozysz.
 const theme = createTheme({
   palette: {
     primary: {
@@ -17,13 +31,23 @@ const theme = createTheme({
       dark: "#4b5563",
     },
     error: {
+      // 4,83:1 na bialym
       main: "#dc2626",
     },
     warning: {
-      main: "#d97706",
+      // 5,02:1 na bialym (bylo #d97706 = 3,19:1)
+      main: "#b45309",
     },
     success: {
-      main: "#059669",
+      // 5,48:1 na bialym (bylo #059669 = 3,77:1)
+      main: "#047857",
+    },
+    accent: {
+      // 7,10:1 na bialym; bialy tekst na tym tle 7,10:1
+      main: "#6d28d9",
+      light: "#f5f3ff",
+      dark: "#5b21b6",
+      contrastText: "#ffffff",
     },
     grey: {
       50: "#f9fafb",

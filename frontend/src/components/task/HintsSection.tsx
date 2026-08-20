@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Paper, Typography, Box, Button, Collapse, IconButton } from "@mui/material";
 import { MathContent } from "@/components/ui/MathContent";
+import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
 
 interface HintsSectionProps {
   hints: string[];
@@ -24,7 +25,7 @@ export function HintsSection({ hints }: HintsSectionProps) {
   return (
     <Paper sx={{ p: 3, mb: 3 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}>
-        <Typography variant="h6" sx={{ color: "grey.700" }}>
+        <Typography variant="h6" component="h2" sx={{ color: "grey.700" }}>
           Wskazówki ({revealedCount}/{hints.length})
         </Typography>
         <Box sx={{ display: "flex", gap: 1 }}>
@@ -40,6 +41,8 @@ export function HintsSection({ hints }: HintsSectionProps) {
           )}
         </Box>
       </Box>
+
+      <AiGeneratedNotice variant="hints" style={{ marginBottom: "16px" }} />
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         {hints.map((hint, index) => (

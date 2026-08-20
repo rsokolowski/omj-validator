@@ -5,8 +5,13 @@ for data access.
 """
 
 from .session import engine, SessionLocal, get_db, init_db, Base
-from .models import UserDB, SubmissionDB, SubmissionStatus
-from .repositories import UserRepository, SubmissionRepository
+from .models import UserDB, SubmissionDB, SubmissionStatus, DeletedAccountQuotaDB, AdminAccessLogDB
+from .repositories import (
+    UserRepository,
+    SubmissionRepository,
+    DeletedAccountQuotaRepository,
+    AdminAccessLogRepository,
+)
 
 __all__ = [
     # Session management
@@ -19,7 +24,11 @@ __all__ = [
     "UserDB",
     "SubmissionDB",
     "SubmissionStatus",
+    "DeletedAccountQuotaDB",
+    "AdminAccessLogDB",
     # Repositories
     "UserRepository",
     "SubmissionRepository",
+    "DeletedAccountQuotaRepository",
+    "AdminAccessLogRepository",
 ]

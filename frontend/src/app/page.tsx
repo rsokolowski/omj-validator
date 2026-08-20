@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import {
   Box,
@@ -18,6 +19,8 @@ import {
   AccountTree,
   EmojiEvents,
   TipsAndUpdates,
+  PlayArrow,
+  Pause,
 } from "@mui/icons-material";
 import { DifficultyStars } from "@/components/ui/DifficultyStars";
 import { CategoryBadge } from "@/components/ui/CategoryBadge";
@@ -267,6 +270,7 @@ function HowItWorksSection() {
         </Box>
         <Typography
           variant="h6"
+          component="h3"
           sx={{
             fontWeight: 700,
             mb: 1.5,
@@ -366,27 +370,86 @@ function HowItWorksSection() {
         >
           Zobacz jak to wygląda w praktyce:
         </Typography>
-        <Box
-          sx={{
-            borderRadius: 3,
-            overflow: "hidden",
-            boxShadow: "0 8px 32px -8px rgba(0, 0, 0, 0.2)",
-            display: "inline-block",
-            border: "1px solid",
-            borderColor: "grey.200",
+        <DemoAnimation />
+      </Box>
+    </Box>
+  );
+}
+
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+function subscribeToReducedMotion(onChange: () => void) {
+  const query = window.matchMedia(REDUCED_MOTION_QUERY);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+function getReducedMotion() {
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+}
+
+function getReducedMotionOnServer() {
+  // Na serwerze nie znamy preferencji, więc zakładamy wariant bezpieczny:
+  // render trafia do przeglądarki z nieruchomą klatką, nie z animacją.
+  return true;
+}
+
+/**
+ * Animowana prezentacja aplikacji.
+ *
+ * WCAG 2.2.2 (Pauza, zatrzymanie, ukrycie): GIF trwa 18,7 s i zapętla się bez
+ * końca, więc musi mieć kontrolkę zatrzymania. GIF-a nie da się zatrzymać
+ * skryptem, więc przełączamy źródło między animacją a nieruchomą pierwszą
+ * klatką.
+ *
+ * WCAG 2.3.3: przy systemowym ustawieniu "ogranicz ruch" animacja nie startuje
+ * wcale. Renderowanie serwerowe i pierwszy render klienta dają ten sam wynik
+ * (nieruchoma klatka), więc nie ma niezgodności hydracji.
+ */
+function DemoAnimation() {
+  const prefersReducedMotion = useSyncExternalStore(
+    subscribeToReducedMotion,
+    getReducedMotion,
+    getReducedMotionOnServer
+  );
+  // `null` = użytkownik nie decydował, obowiązuje preferencja systemowa.
+  const [override, setOverride] = useState<boolean | null>(null);
+  const isPlaying = override ?? !prefersReducedMotion;
+
+  return (
+    <Box>
+      <Box
+        sx={{
+          borderRadius: 3,
+          overflow: "hidden",
+          boxShadow: "0 8px 32px -8px rgba(0, 0, 0, 0.2)",
+          display: "inline-block",
+          border: "1px solid",
+          borderColor: "grey.200",
+        }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={isPlaying ? "/images/omj-demo.gif" : "/images/omj-demo-still.png"}
+          alt="Demo pokazujący jak korzystać z aplikacji"
+          width={1221}
+          height={1218}
+          style={{
+            display: "block",
+            maxWidth: "100%",
+            height: "auto",
           }}
+        />
+      </Box>
+      <Box sx={{ mt: 1.5 }}>
+        <Button
+          variant="outlined"
+          size="small"
+          startIcon={isPlaying ? <Pause /> : <PlayArrow />}
+          onClick={() => setOverride(!isPlaying)}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/omj-demo.gif"
-            alt="Demo pokazujący jak korzystać z aplikacji"
-            style={{
-              display: "block",
-              maxWidth: "100%",
-              height: "auto",
-            }}
-          />
-        </Box>
+          {isPlaying ? "Zatrzymaj animację" : "Odtwórz animację"}
+        </Button>
       </Box>
     </Box>
   );
@@ -499,6 +562,7 @@ function FeaturesSection() {
                 <Box>
                   <Typography
                     variant="h6"
+                    component="h3"
                     sx={{
                       fontWeight: 700,
                       mb: 0.5,

@@ -63,6 +63,7 @@ export default async function YearsPage() {
                 <CardContent sx={{ py: 3 }}>
                   <Typography
                     variant="h5"
+                    component="h2"
                     sx={{ fontWeight: 700, color: "grey.900" }}
                   >
                     {year}

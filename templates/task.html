@@ -54,7 +54,16 @@
 
     <div class="task-content-box">
         <h2>Treść zadania</h2>
+        {% if task.has_content %}
         <div class="task-content math-content">{{ task.content | nl2br_safe }}</div>
+        {% else %}
+        {# Statement not generated locally - it is OMJ material and is not shipped
+           with the repository (see NOTICE). Point the user at the official PDF. #}
+        <p class="task-content-missing">
+            Treść tego zadania nie jest częścią tego repozytorium &ndash; to materiał
+            Olimpiady Matematycznej Juniorów. Otwórz oficjalny PDF z zadaniami poniżej.
+        </p>
+        {% endif %}
         {% if pdf_links %}
         <div class="pdf-links">
             {% if pdf_links.tasks %}

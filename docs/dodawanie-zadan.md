@@ -61,7 +61,7 @@ python create_tasks.py --etap etap3 --all
 
 Pliki JSON są tworzone w `data/tasks/<rok>/<etap>/task_<numer>.json`.
 
-### 3. Uzupełnij treść zadań z PDF (LaTeX)
+### 3. Wygeneruj treść zadań z PDF (LaTeX)
 
 ```bash
 source venv/bin/activate
@@ -69,8 +69,8 @@ source venv/bin/activate
 # Dla konkretnego roku i etapu:
 python fix_latex_content.py <ROK> <ETAP>
 
-# Dla wszystkich etapów:
-python fix_latex_content.py --all
+# Dla wszystkich etapów (pomija już wygenerowane):
+python fix_latex_content.py --all --skip-existing
 
 # Podgląd zmian:
 python fix_latex_content.py <ROK> <ETAP> --dry-run
@@ -80,7 +80,13 @@ python fix_latex_content.py <ROK> <ETAP> --dry-run
 - Czyta PDF z zadaniami
 - Wyciąga treść każdego zadania
 - Formatuje matematykę w notacji LaTeX (`$...$`)
-- Aktualizuje pliki JSON
+- Zapisuje `data/task_content/<ROK>/<ETAP>.json`
+
+**Ważne:** to jedyne miejsce, w którym trzymamy treści zadań OMJ. Katalog
+`data/task_content/` jest wyłączony z repozytorium (`.gitignore`) i nigdy nie
+trafia do gita — patrz [NOTICE](../NOTICE). Metadane (`data/tasks/`) zostają
+śledzone. Krok jest opcjonalny: bez niego aplikacja pokazuje metadane zadania
+i odnośnik do PDF-u.
 
 **Wymaga:** Zalogowana sesja Claude CLI (`claude login`).
 
@@ -304,11 +310,14 @@ omj-validator/
 
 ## Struktura pliku task_*.json
 
+Plik metadanych zawiera wyłącznie własną twórczość autora projektu. Treść zadania
+(`title` + `content`) to materiał OMJ — nie jest śledzona przez gita i trafia do
+osobnego pliku `data/task_content/{rok}/{etap}.json`, generowanego przez
+`fix_latex_content.py` (patrz [NOTICE](../NOTICE)).
+
 ```json
 {
   "number": 1,
-  "title": "Tytuł zadania z $LaTeX$",
-  "content": "Pełna treść zadania z $notacją$ matematyczną...",
   "pdf": {
     "tasks": "tasks/2024/etap3/20omj-3etap.pdf",
     "solutions": "tasks/2024/etap3/20omj-3r.pdf",

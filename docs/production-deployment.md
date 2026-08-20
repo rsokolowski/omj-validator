@@ -246,6 +246,39 @@ sudo docker exec omj-db pg_dump -U omj omj > backup_$(date +%Y%m%d).sql
 tar -czf uploads_$(date +%Y%m%d).tar.gz data/uploads/
 ```
 
+## OMJ Task Materials
+
+The competition PDFs (`tasks/`) and the generated task statements
+(`data/task_content/`) are **not part of the repository** - they belong to
+Stowarzyszenie na rzecz Edukacji Matematycznej (see [NOTICE](../NOTICE)).
+
+They reach production by being **baked into the API image at build time**, from
+the working copy of the machine that runs `./build-and-push.sh`. Before building:
+
+```bash
+python download_tasks.py --all-etaps                 # ~170 PDFs, ~80 MB
+python fix_latex_content.py --all --skip-existing    # statements (optional, slow)
+```
+
+`build-and-push.sh` aborts the API build when `tasks/` holds no PDF and warns
+when `data/task_content/` is empty. The server pulls the finished image and needs
+no extra setup.
+
+Two consequences:
+
+1. **The published image contains OMJ material, so the ghcr.io package must stay
+   private.** Making it public would redistribute the competition materials just
+   as committing them did.
+2. If the statements are missing from the image, the deployment still works: each
+   task shows its metadata (difficulty, categories, hints) and a link to the task
+   PDF instead of the statement. Scoring is unaffected - the model reads the PDFs,
+   not the transcribed text.
+
+An alternative not used today would be to keep the corpus on the server and bind
+mount `./tasks:/app/tasks:ro` and `./data/task_content:/app/data/task_content:ro`
+in `docker-compose.prod.yml`. That keeps the image free of OMJ material at the
+cost of a manual download step on the NUC.
+
 ## Data Storage
 
 All persistent data is stored in `~/omj-validator/data/` via bind mounts:

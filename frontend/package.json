@@ -14,8 +14,6 @@
     "@mui/icons-material": "^7.3.6",
     "@mui/material": "^7.3.6",
     "@mui/material-nextjs": "^7.3.6",
-    "@types/cytoscape": "^3.21.9",
-    "cytoscape": "^3.33.1",
     "date-fns": "^4.1.0",
     "katex": "^0.16.27",
     "marked": "^17.0.1",
@@ -33,6 +31,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.0.7",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

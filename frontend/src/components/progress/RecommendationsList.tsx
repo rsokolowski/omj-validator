@@ -13,7 +13,7 @@ interface RecommendationsListProps {
 export function RecommendationsList({ recommendations }: RecommendationsListProps) {
   return (
     <Paper sx={{ p: 3, mb: 3 }}>
-      <Typography variant="h6" sx={{ color: "grey.700", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}>
+      <Typography variant="h6" component="h2" sx={{ color: "grey.700", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}>
         Polecane zadania
       </Typography>
       <Typography variant="body2" sx={{ color: "grey.600", mb: 2 }}>
@@ -42,7 +42,7 @@ export function RecommendationsList({ recommendations }: RecommendationsListProp
             >
               <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1 }}>
                 <Box>
-                  <Typography variant="subtitle2" sx={{ color: "grey.800", fontWeight: 600 }}>
+                  <Typography variant="subtitle2" component="h3" sx={{ color: "grey.800", fontWeight: 600 }}>
                     Zadanie {task.number}
                   </Typography>
                   <Typography variant="caption" sx={{ color: "grey.500" }}>

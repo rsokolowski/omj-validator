@@ -24,7 +24,12 @@ COPY app/ ./app/
 COPY alembic/ ./alembic/
 COPY alembic.ini .
 COPY prompts/ ./prompts/
+# OMJ materials are not in the repository (see NOTICE). Both directories exist
+# but hold only a .gitkeep on a fresh clone, so this COPY always succeeds - the
+# image simply ships without the PDFs/statements unless the machine running the
+# build fetched them first (python download_tasks.py --all-etaps).
 COPY tasks/ ./tasks/
+COPY data/task_content/ ./data/task_content/
 COPY data/tasks/ ./data/tasks/
 COPY data/skills.json ./data/skills.json
 COPY static/ ./static/

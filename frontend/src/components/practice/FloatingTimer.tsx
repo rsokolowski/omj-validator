@@ -71,8 +71,10 @@ export function FloatingTimer() {
         >
           Próbny Etap 2{isPaused && " — PAUZA"}
         </Typography>
+        {/* Odliczanie nie jest naglowkiem sekcji (WCAG 1.3.1) */}
         <Typography
           variant="h6"
+          component="p"
           sx={{
             fontFamily: "monospace",
             fontWeight: 700,

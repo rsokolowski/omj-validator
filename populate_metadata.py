@@ -19,6 +19,8 @@ import argparse
 import re
 from dataclasses import dataclass, field
 
+from task_content import missing_statement_message, statement_for
+
 # Valid categories based on OMJ problem analysis
 VALID_CATEGORIES = [
     "algebra",        # Systems of equations, algebraic identities, inequalities
@@ -447,12 +449,19 @@ def process_task(task_path: Path, dry_run: bool = False, model: str = "opus", fo
     year = parts[-3]
     etap = parts[-2]
 
+    # The statement lives outside the repository (see task_content.py) - without
+    # it there is nothing for the model to reason about, so skip the task.
+    statement = statement_for(year, etap, task["number"])
+    if not (statement.get("content") or "").strip():
+        print(f"  Skipped: {missing_statement_message(year, etap)}")
+        return False
+
     prompt = PROMPT_TEMPLATE.format(
         year=year,
         etap=etap,
         number=task["number"],
-        title=task["title"],
-        content=task["content"],
+        title=statement.get("title", ""),
+        content=statement["content"],
         skills_list=SKILLS_DESCRIPTION
     )
 

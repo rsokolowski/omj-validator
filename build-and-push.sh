@@ -93,6 +93,29 @@ echo ""
 
 # Build API
 if [ "$BUILD_API" = true ]; then
+    # The OMJ PDFs and the generated statements are not in the repository (see
+    # NOTICE); they are baked into the image from this machine's working copy.
+    # A build on a fresh clone would produce a technically working but
+    # content-less deployment, so make that impossible to miss.
+    PDF_COUNT=$(find tasks -name '*.pdf' 2>/dev/null | wc -l)
+    CONTENT_COUNT=$(find data/task_content -name '*.json' 2>/dev/null | wc -l)
+    echo "Task PDFs in build context:       $PDF_COUNT"
+    echo "Statement files in build context: $CONTENT_COUNT"
+    if [ "$PDF_COUNT" -eq 0 ]; then
+        echo ""
+        echo "ERROR: tasks/ holds no PDF - the image would ship without any task."
+        echo "       Run: python download_tasks.py --all-etaps"
+        echo "       (or pass --frontend to build only the frontend)"
+        exit 1
+    fi
+    if [ "$CONTENT_COUNT" -eq 0 ]; then
+        echo ""
+        echo "WARNING: data/task_content/ is empty - deployed tasks will show only"
+        echo "         metadata and a link to the PDF."
+        echo "         Run: python fix_latex_content.py --all --skip-existing"
+        echo ""
+    fi
+
     echo "Building API image: $API_IMAGE:$TAG"
     docker build -t "$API_IMAGE:$TAG" -f Dockerfile .
 

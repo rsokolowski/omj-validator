@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Migrate tasks.json to year-based structure with index."""
+"""Migrate tasks.json to year-based structure with index.
+
+HISTORICAL, DO NOT RUN. This one-shot predates two later changes: `data/tasks.json`
+no longer exists, and task statements ("title"/"content") were moved out of the
+tracked metadata files into the git-ignored data/task_content/ (see NOTICE and
+scripts/split_task_content.py). Running it as-is would write OMJ material back
+into tracked files. Kept only as a record of the original migration.
+"""
 
 import json
 from pathlib import Path

@@ -9,6 +9,7 @@ import {
   UserSubmissionsResponse,
 } from "@/lib/types";
 import { useInfiniteScroll } from "@/lib/hooks/useInfiniteScroll";
+import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
 import { StatisticsCards } from "./StatisticsCards";
 import { FiltersBar } from "./FiltersBar";
 import { SubmissionsList } from "./SubmissionsList";
@@ -121,6 +122,11 @@ export function MySolutionsDashboard() {
         <Alert severity="error" sx={{ mb: 3 }}>
           {error}
         </Alert>
+      )}
+
+      {/* Oznaczenie AI - jedno na całą listę, nie na każdej karcie */}
+      {submissions.length > 0 && (
+        <AiGeneratedNotice variant="evaluation" style={{ marginBottom: "16px" }} />
       )}
 
       {/* Submissions List */}

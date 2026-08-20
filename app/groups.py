@@ -9,6 +9,7 @@ from typing import Optional, Set
 from cachetools import TTLCache
 
 from .config import settings
+from .privacy import mask_email
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +69,7 @@ def _check_membership_impl(user_email: str, group_email: str) -> bool:
         ).execute()
 
         is_member = result.get("isMember", False)
-        logger.info(f"Group membership check: {user_email[:3]}***@*** = {is_member}")
+        logger.info(f"Group membership check: {mask_email(user_email)} = {is_member}")
         return is_member
 
     except Exception as e:
@@ -120,20 +121,20 @@ async def check_group_membership(user_email: str, group_email: Optional[str] = N
         # Check allowlist for logging purposes
         allowed_emails = _get_allowed_emails()
         if allowed_emails and email_lower in allowed_emails:
-            logger.info(f"Access granted (public + allowlisted): {email_lower[:3]}***@***")
+            logger.info(f"Access granted (public + allowlisted): {mask_email(email_lower)}")
         else:
-            logger.info(f"Access granted (public access): {email_lower[:3]}***@***")
+            logger.info(f"Access granted (public access): {mask_email(email_lower)}")
         return True
 
     # Method 1: Check email allowlist (fastest, no API needed)
     allowed_emails = _get_allowed_emails()
     if allowed_emails:
         if email_lower in allowed_emails:
-            logger.info(f"Access granted via allowlist: {email_lower[:3]}***@***")
+            logger.info(f"Access granted via allowlist: {mask_email(email_lower)}")
             return True
         # If allowlist is configured but user not in it, deny immediately
         # (don't fall through to Google Groups API)
-        logger.info(f"Access denied - not in allowlist: {email_lower[:3]}***@***")
+        logger.info(f"Access denied - not in allowlist: {mask_email(email_lower)}")
         return False
 
     # Method 2: Check Google Groups API (if service account configured)

@@ -19,7 +19,8 @@ export interface TaskInfo {
   etap: string;
   number: number;
   title: string;
-  content: string;
+  content: string | null;
+  has_content: boolean;
   pdf: TaskPdf;
   difficulty?: number;
   categories: string[];
@@ -234,4 +235,11 @@ export interface UserSubmissionsResponse {
   offset: number;
   limit: number;
   has_more: boolean;
+}
+
+// Account deletion (RODO art. 17)
+export interface AccountDeleteResponse {
+  success: boolean;
+  deleted_submissions: number;
+  deleted_files: number;
 }

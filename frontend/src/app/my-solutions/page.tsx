@@ -3,10 +3,15 @@ import { Box, Paper, Alert, Typography } from "@mui/material";
 import { serverFetch, APIError } from "@/lib/api/server";
 import { MySolutionsDashboard } from "@/components/my-solutions/MySolutionsDashboard";
 import { PageHeader } from "@/components/layout/PageHeader";
+import { DeleteAccountSection } from "@/components/account/DeleteAccountSection";
 
 interface AuthResponse {
   user: { email: string; name: string } | null;
   is_authenticated: boolean;
+  // Backend decides whether self-service deletion is available for this session
+  // (wyłączone w trybie deweloperskim i dla administratorów)
+  can_delete_account?: boolean;
+  account_delete_confirmation?: string;
 }
 
 type AuthStatusResult =
@@ -61,6 +66,13 @@ export default async function MySolutionsPage() {
         subtitle="Przeglądaj historię swoich rozwiązań i śledź postępy."
       />
       <MySolutionsDashboard />
+      {/* Obie wartości muszą przyjść z API: pusta fraza sprawiłaby, że przycisk
+          potwierdzenia byłby aktywny przy pustym polu. */}
+      {result.data.can_delete_account && result.data.account_delete_confirmation && (
+        <DeleteAccountSection
+          confirmationPhrase={result.data.account_delete_confirmation}
+        />
+      )}
     </Box>
   );
 }

@@ -56,8 +56,19 @@ if ! grep -qE "^GEMINI_API_KEY=.+" .env 2>/dev/null; then
 fi
 
 # Create data directories and files if they don't exist
-mkdir -p data/uploads data/tasks
+mkdir -p data/uploads data/tasks data/task_content tasks
 touch data/skills.json 2>/dev/null || true
+
+# The OMJ materials are not part of the repository (see NOTICE) - they are
+# downloaded/generated locally. The app starts without them, but every task will
+# only show its metadata, so say so once instead of letting it look broken.
+if [ -z "$(find tasks -name '*.pdf' -print -quit 2>/dev/null)" ]; then
+    echo "WARNING: no task PDFs in tasks/ - run: python download_tasks.py --all-etaps"
+fi
+if [ -z "$(find data/task_content -name '*.json' -print -quit 2>/dev/null)" ]; then
+    echo "WARNING: no task statements in data/task_content/ - tasks will link to the PDF only."
+    echo "         To generate them: python fix_latex_content.py --all --skip-existing"
+fi
 
 # Build arguments
 BUILD_ARG=""

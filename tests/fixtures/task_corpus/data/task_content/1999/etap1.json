@@ -1,0 +1,10 @@
+{
+  "year": "1999",
+  "etap": "etap1",
+  "tasks": {
+    "1": {
+      "title": "Suma dwóch liczb testowych",
+      "content": "Wyznacz wszystkie pary liczb całkowitych $a, b$ takie, że $a + b = 7$ oraz $a \\cdot b = 12$."
+    }
+  }
+}

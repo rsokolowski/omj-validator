@@ -1,0 +1,16 @@
+{
+  "number": 1,
+  "pdf": {
+    "tasks": "tasks/1999/etap2/zadania.pdf",
+    "solutions": null,
+    "statistics": null
+  },
+  "difficulty": 5,
+  "categories": [
+    "kombinatoryka"
+  ],
+  "hints": [],
+  "prerequisites": [],
+  "skills_required": [],
+  "skills_gained": []
+}

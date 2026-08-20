@@ -11,6 +11,7 @@ import {
   APP_DESCRIPTION,
   SITE_URL,
 } from "@/lib/utils/constants";
+import "katex/dist/katex.min.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -78,12 +79,6 @@ export default function RootLayout({
   return (
     <html lang="pl">
       <head>
-        {/* KaTeX CSS */}
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
-          crossOrigin="anonymous"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -94,11 +89,16 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col">
+        {/* WCAG 2.4.1: pierwszy element w kolejnosci tabulacji, widoczny
+            dopiero po otrzymaniu fokusu (style w globals.css). */}
+        <a href="#tresc-glowna" className="skip-link">
+          Przejdź do treści głównej
+        </a>
         <AppRouterCacheProvider>
           <ThemeProvider>
             <TimerProvider>
               <Header />
-              <main className="flex-1 py-8">
+              <main id="tresc-glowna" tabIndex={-1} className="flex-1 py-8">
                 <div className="max-w-[1200px] mx-auto px-6">
                   {children}
                 </div>

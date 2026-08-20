@@ -26,6 +26,8 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
+from task_content import missing_statement_message, statement_for
+
 # Load environment variables from .env (optional)
 try:
     from dotenv import load_dotenv
@@ -603,12 +605,19 @@ def process_task(
 
     hints = task.get("hints", [])
 
+    # The statement lives outside the repository (see task_content.py); hints
+    # cannot be judged without it.
+    statement = statement_for(year, etap, task.get("number", 0))
+    if not (statement.get("content") or "").strip():
+        output_lines.append(f"  Skipped: {missing_statement_message(year, etap)}")
+        return True, False, output_lines
+
     prompt = REVIEW_PROMPT_TEMPLATE.format(
         year=year,
         etap=etap,
         number=task.get("number", "?"),
-        title=task.get("title", ""),
-        content=task.get("content", ""),
+        title=statement.get("title", ""),
+        content=statement.get("content", ""),
         difficulty=task.get("difficulty", "?"),
         categories=", ".join(task.get("categories", [])),
         skills_required=", ".join(task.get("skills_required", [])),

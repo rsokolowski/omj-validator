@@ -14,6 +14,7 @@ import { uploadFiles } from "@/lib/api/client";
 import { getMaxScore } from "@/lib/utils/constants";
 import { LoginPrompt } from "@/components/common/LoginPrompt";
 import { MathContent } from "@/components/ui/MathContent";
+import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
 
 interface SubmitSectionProps {
   year: string;
@@ -32,6 +33,23 @@ interface SubmitResponse {
 }
 
 type SubmitStatus = "idle" | "processing" | "completed" | "failed";
+
+/**
+ * Technika "visually hidden": element zostaje w drzewie dostepnosci
+ * (inaczej niz przy `display: none`, ktore usuwa go takze z kolejnosci
+ * tabulacji), ale nie jest widoczny.
+ */
+const visuallyHidden = {
+  position: "absolute",
+  width: 1,
+  height: 1,
+  padding: 0,
+  margin: -1,
+  overflow: "hidden",
+  clip: "rect(0 0 0 0)",
+  whiteSpace: "nowrap",
+  border: 0,
+} as const;
 
 interface UploadState {
   status: SubmitStatus;
@@ -80,6 +98,12 @@ export function SubmitSection({
     statusMessage: "",
   });
   const [isDragging, setIsDragging] = useState(false);
+  // Komunikat dla czytnika ekranu. Celowo NIE jest to `statusMessage`:
+  // backend przysyla nowy status przy kazdej zmianie naglowka w strumieniu
+  // rozumowania modelu, a ogloszenie kazdego z nich zamienia region zywy
+  // w halas. Ogłaszamy wylacznie zmiany fazy (WCAG 4.1.3).
+  const [liveMessage, setLiveMessage] = useState("");
+  const announcedAnalysisRef = useRef(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const wsRef = useRef<WebSocket | null>(null);
 
@@ -125,6 +149,12 @@ export function SubmitSection({
 
           switch (msg.type) {
             case "status":
+              if (!announcedAnalysisRef.current) {
+                announcedAnalysisRef.current = true;
+                setLiveMessage(
+                  "Rozwiązanie zostało przesłane. Trwa ocenianie, może to potrwać kilkanaście sekund."
+                );
+              }
               setUploadState((prev) => ({
                 ...prev,
                 statusMessage: msg.message,
@@ -132,6 +162,8 @@ export function SubmitSection({
               break;
 
             case "completed":
+              // Wynik oglasza <Alert role="alert"> - nie dublujemy go tutaj.
+              setLiveMessage("");
               const maxScore = getMaxScore(etap);
               setUploadState({
                 status: "completed",
@@ -152,6 +184,8 @@ export function SubmitSection({
               break;
 
             case "error":
+              // Blad oglasza <Alert severity="error"> (role="alert").
+              setLiveMessage("");
               setUploadState({
                 status: "failed",
                 statusMessage: "",
@@ -218,10 +252,12 @@ export function SubmitSection({
     if (files.length === 0) return;
 
     // Reset state
+    announcedAnalysisRef.current = false;
     setUploadState({
       status: "processing",
       statusMessage: "Przesyłanie zdjęć...",
     });
+    setLiveMessage("Przesyłanie zdjęć rozwiązania. Proszę czekać.");
 
     try {
       // Step 1: Upload files via POST
@@ -237,6 +273,7 @@ export function SubmitSection({
       // Step 2: Connect WebSocket for progress
       connectWebSocket(result.ws_path);
     } catch (error) {
+      setLiveMessage("");
       setUploadState({
         status: "failed",
         statusMessage: "",
@@ -268,6 +305,7 @@ export function SubmitSection({
       <Paper sx={{ p: 3, mb: 3 }}>
         <Typography
           variant="h6"
+          component="h2"
           sx={{ color: "grey.700", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}
         >
           Prześlij rozwiązanie
@@ -282,58 +320,100 @@ export function SubmitSection({
   }
 
   const isProcessing = uploadState.status === "processing";
+  const hasResult = uploadState.status === "completed" && Boolean(uploadState.result);
+
+  // Jedno oznaczenie AI na sekcję: przy wyniku, jeśli wynik jest widoczny,
+  // w przeciwnym razie tuż pod nagłówkiem (uprzedza, kto oceni rozwiązanie).
+  const aiNotice = <AiGeneratedNotice variant="evaluation" style={{ marginBottom: "16px" }} />;
 
   return (
-    <Paper sx={{ p: 3, mb: 3 }}>
+    <Paper sx={{ p: 3, mb: 3 }} aria-busy={isProcessing}>
       <Typography
         variant="h6"
+        component="h2"
         sx={{ color: "grey.700", mb: 2, pb: 1.5, borderBottom: 1, borderColor: "grey.200" }}
       >
         Prześlij rozwiązanie
       </Typography>
 
-      {/* Drag and Drop Zone */}
+      {/* Region zywy dla przebiegu oceniania (WCAG 4.1.3). Jest w DOM zawsze,
+          takze gdy nic sie nie dzieje - region dodany do drzewa razem z
+          trescia bywa przez czytniki pomijany. Wynik i blad maja wlasny
+          role="alert" w <Alert>, wiec ich tu nie powtarzamy. */}
+      <Box role="status" aria-live="polite" aria-atomic="true" sx={visuallyHidden}>
+        {liveMessage}
+      </Box>
+
+      {!hasResult && aiNotice}
+
+      {/* Wybor plikow.
+          Glowna droga to prawdziwy przycisk-etykieta: dziala z klawiatury,
+          ma nazwe dostepna i widoczny pierscien fokusu (WCAG 2.1.1, 3.3.2,
+          4.1.2). Pole <input type="file"> jest ukryte technika "visually
+          hidden", a nie `display: none`, ktore usuwalo je z kolejnosci
+          tabulacji. Przeciaganie i upuszczanie zostaje jako udogodnienie dla
+          myszy - nie jest jedynym sposobem dzialania, wiec obszar nie
+          potrzebuje wlasnej roli ani obslugi klawiatury. */}
       <Box
         sx={{
           mb: 2,
           p: 3,
           border: 2,
           borderStyle: "dashed",
-          borderColor: isDragging ? "primary.main" : "grey.300",
+          // grey.500 zamiast grey.300: 4,63:1 wobec tla grey.50 (WCAG 1.4.11)
+          borderColor: isDragging ? "primary.main" : "grey.500",
           borderRadius: 2,
           bgcolor: isDragging ? "primary.50" : "grey.50",
           textAlign: "center",
-          cursor: isProcessing ? "not-allowed" : "pointer",
           transition: "all 0.2s ease",
           opacity: isProcessing ? 0.6 : 1,
-          "&:hover": isProcessing
-            ? {}
-            : {
-                borderColor: "primary.main",
-                bgcolor: "grey.100",
-              },
         }}
         onDragOver={isProcessing ? undefined : handleDragOver}
         onDragLeave={isProcessing ? undefined : handleDragLeave}
         onDrop={isProcessing ? undefined : handleDrop}
-        onClick={isProcessing ? undefined : () => fileInputRef.current?.click()}
       >
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleFileSelect}
-          style={{ display: "none" }}
-          disabled={isProcessing}
-        />
         <Typography
           variant="body1"
-          sx={{ color: isDragging ? "primary.main" : "grey.600", mb: 0.5 }}
+          sx={{ color: isDragging ? "primary.main" : "grey.700", mb: 1.5 }}
         >
-          {isDragging ? "Upuść zdjęcia tutaj" : "Przeciągnij zdjęcia lub kliknij, aby wybrać"}
+          {isDragging
+            ? "Upuść zdjęcia tutaj"
+            : "Przeciągnij tutaj zdjęcia rozwiązania albo wybierz je przyciskiem poniżej."}
         </Typography>
-        <Typography variant="caption" sx={{ color: "grey.500" }}>
+        {/* `role={undefined}` i `tabIndex={-1}`: gdyby etykieta udawala przycisk
+            (domyslne role="button" z MUI), ButtonBase przechwytywalby Enter
+            i wywolywal wylacznie reactowy onClick - natywne "klikniecie w
+            etykiete otwiera wybor pliku" nigdy by nie zadzialalo (sprawdzone
+            w przegladarce). Fokusowalne jest wiec samo pole pliku: to jeden
+            przystanek tabulacji, ktory reaguje na Enter i na spacje. */}
+        <Button
+          component="label"
+          role={undefined}
+          tabIndex={-1}
+          variant="outlined"
+          disabled={isProcessing}
+          sx={{
+            // Fokus trafia na ukryte pole, wiec pierscien fokusu musi pokazac
+            // przycisk (WCAG 2.4.7).
+            "&:has(input:focus-visible)": {
+              outline: "3px solid",
+              outlineColor: "primary.main",
+              outlineOffset: "2px",
+            },
+          }}
+        >
+          Wybierz zdjęcia rozwiązania
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleFileSelect}
+            disabled={isProcessing}
+            style={visuallyHidden}
+          />
+        </Button>
+        <Typography variant="caption" component="p" sx={{ color: "grey.600", mt: 1.5 }}>
           Akceptowane formaty: JPG, PNG
         </Typography>
       </Box>
@@ -365,6 +445,7 @@ export function SubmitSection({
                 color="error"
                 onClick={() => handleRemoveFile(index)}
                 disabled={isProcessing}
+                aria-label={`Usuń plik ${file.name}`}
               >
                 Usuń
               </Button>
@@ -394,18 +475,21 @@ export function SubmitSection({
       )}
 
       {/* Result */}
-      {uploadState.status === "completed" && uploadState.result && (
-        <Alert
-          severity={getScoreColor(uploadState.result.score, uploadState.result.max_score)}
-          sx={{ mb: 2 }}
-        >
-          <Typography variant="subtitle2" sx={{ fontWeight: 600, mb: 1 }}>
-            Wynik: {uploadState.result.score} / {uploadState.result.max_score} punktów
-          </Typography>
-          <Box sx={{ "& .math-content": { fontSize: "0.875rem" } }}>
-            <MathContent content={uploadState.result.feedback} />
-          </Box>
-        </Alert>
+      {hasResult && uploadState.result && (
+        <>
+          {aiNotice}
+          <Alert
+            severity={getScoreColor(uploadState.result.score, uploadState.result.max_score)}
+            sx={{ mb: 2 }}
+          >
+            <Typography variant="subtitle2" component="p" sx={{ fontWeight: 600, mb: 1 }}>
+              Wynik: {uploadState.result.score} / {uploadState.result.max_score} punktów
+            </Typography>
+            <Box sx={{ "& .math-content": { fontSize: "0.875rem" } }}>
+              <MathContent content={uploadState.result.feedback} />
+            </Box>
+          </Alert>
+        </>
       )}
 
       {/* Error */}

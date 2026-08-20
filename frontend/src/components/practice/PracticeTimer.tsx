@@ -60,8 +60,10 @@ export function PracticeTimer() {
           <Typography variant="body2" sx={{ color: "grey.600" }}>
             Czas na rozwiązanie (3 godziny){isPaused && " — PAUZA"}
           </Typography>
+          {/* Odliczanie nie jest naglowkiem sekcji (WCAG 1.3.1) */}
           <Typography
             variant="h5"
+            component="p"
             sx={{
               fontFamily: "monospace",
               fontWeight: 600,

@@ -15,6 +15,8 @@ import argparse
 from pathlib import Path
 from collections import defaultdict
 
+from task_content import statement_for
+
 
 def get_task_id(year: str, etap: str, number: int) -> str:
     """Generate task identifier in format: year_etap_number."""
@@ -38,7 +40,9 @@ def load_all_tasks(data_dir: Path) -> dict[str, dict]:
         task_id = get_task_id(year, etap, number)
 
         tasks_by_year[year][task_id] = {
-            "content": task.get("content", ""),
+            # Statement comes from the generated file, not from the metadata
+            # (see task_content.py); empty when it has not been generated.
+            "content": statement_for(year, etap, number).get("content", ""),
             "difficulty": task.get("difficulty"),
             "skills_required": task.get("skills_required", []),
             "skills_gained": task.get("skills_gained", [])

@@ -14,7 +14,7 @@ from .messages import (
     CompletedMessage,
     ErrorMessage,
 )
-from ..translate import translate_to_polish
+from ..translate import translate_to_polish_optional
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +42,11 @@ class SubmissionProgress:
     error: Optional[str] = None
     # Timestamp for TTL-based cleanup
     created_at: float = field(default_factory=time.time)
+
+
+# Shown instead of an English heading when translation is off or failed.
+# Matches the wording the pipeline already uses for the analysis stage.
+UNTRANSLATED_STATUS_FALLBACK = "Analizuję rozwiązanie..."
 
 
 def extract_latest_heading(text: str) -> Optional[str]:
@@ -160,8 +165,18 @@ class ProgressManager:
 
         # Translate and broadcast outside the lock to avoid blocking
         if should_broadcast and new_heading:
-            # Translate heading from English to Polish (falls back to original on error)
-            translated_heading = await translate_to_polish(new_heading)
+            # Returns None when translation is disabled (TRANSLATE_ENABLED=false,
+            # the production default) or when the call failed - explicitly, so a
+            # heading that legitimately translates to itself (one word, a proper
+            # noun) is still shown instead of being mistaken for a failure.
+            translated_heading = await translate_to_polish_optional(new_heading)
+
+            # The heading is the model's own English wording, so showing it
+            # verbatim would put English text in front of a Polish 12-year-old -
+            # and it is a fragment of reasoning about their work. A stable Polish
+            # status is the better degradation.
+            if not translated_heading:
+                translated_heading = UNTRANSLATED_STATUS_FALLBACK
 
             # Update stored status with translated heading
             async with self._lock:

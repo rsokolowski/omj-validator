@@ -8,6 +8,7 @@ import { CategoryFilter } from "@/components/progress/CategoryFilter";
 import { RecommendationsList } from "@/components/progress/RecommendationsList";
 import { Etap2PrepList } from "@/components/progress/Etap2PrepList";
 import { LoginPrompt } from "@/components/common/LoginPrompt";
+import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
 
 export const metadata: Metadata = {
   title: "Nauka – ścieżka rozwoju",
@@ -48,6 +49,10 @@ export default async function ProgressPage({ searchParams }: ProgressPageProps) 
 
       {/* Category Filter */}
       <CategoryFilter currentCategory={category} />
+
+      {/* Jedno oznaczenie AI na całą stronę - rekomendacje i graf opierają się
+          na trudności, kategoriach i powiązaniach wyznaczonych przez AI */}
+      <AiGeneratedNotice variant="progress" style={{ marginBottom: "24px" }} />
 
       {/* Recommendations or Login Prompt */}
       {data.is_authenticated ? (

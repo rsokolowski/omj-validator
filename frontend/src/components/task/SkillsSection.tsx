@@ -9,6 +9,8 @@ interface SkillsSectionProps {
   skillsGained: SkillInfo[];
 }
 
+const PANEL_ID = "umiejetnosci-panel";
+
 export function SkillsSection({ skillsRequired, skillsGained }: SkillsSectionProps) {
   const [expanded, setExpanded] = useState(false);
 
@@ -16,28 +18,34 @@ export function SkillsSection({ skillsRequired, skillsGained }: SkillsSectionPro
 
   return (
     <Paper sx={{ p: 3, mb: 3 }}>
+      {/* Sterowanie siedzi na samym przycisku, a nie na otaczającym <div>:
+          div z onClick nie ma roli ani obsługi klawiatury (WCAG 2.1.1, 4.1.2).
+          aria-expanded/aria-controls ogłaszają stan sekcji. */}
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          cursor: "pointer",
         }}
-        onClick={() => setExpanded(!expanded)}
       >
-        <Typography variant="h6" sx={{ color: "grey.700" }}>
+        <Typography variant="h6" component="h2" sx={{ color: "grey.700" }}>
           Umiejętności ({totalSkills})
         </Typography>
-        <Button size="small">
-          {expanded ? "Zwiń" : "Rozwiń"}
+        <Button
+          size="small"
+          onClick={() => setExpanded(!expanded)}
+          aria-expanded={expanded}
+          aria-controls={PANEL_ID}
+        >
+          {expanded ? "Zwiń" : "Rozwiń"} umiejętności
         </Button>
       </Box>
 
       <Collapse in={expanded}>
-        <Box sx={{ mt: 2, pt: 1.5, borderTop: 1, borderColor: "grey.200" }}>
+        <Box id={PANEL_ID} sx={{ mt: 2, pt: 1.5, borderTop: 1, borderColor: "grey.200" }}>
           {skillsRequired.length > 0 && (
             <Box sx={{ mb: skillsGained.length > 0 ? 3 : 0 }}>
-              <Typography variant="subtitle2" sx={{ color: "grey.600", mb: 1.5, fontWeight: 600 }}>
+              <Typography variant="subtitle2" component="h3" sx={{ color: "grey.600", mb: 1.5, fontWeight: 600 }}>
                 Wymagane umiejętności:
               </Typography>
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
@@ -63,7 +71,7 @@ export function SkillsSection({ skillsRequired, skillsGained }: SkillsSectionPro
 
           {skillsGained.length > 0 && (
             <Box>
-              <Typography variant="subtitle2" sx={{ color: "grey.600", mb: 1.5, fontWeight: 600 }}>
+              <Typography variant="subtitle2" component="h3" sx={{ color: "grey.600", mb: 1.5, fontWeight: 600 }}>
                 Zdobywane umiejętności:
               </Typography>
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
