@@ -139,14 +139,14 @@ test.describe('Navigation', () => {
     test('shows correct breadcrumbs on task page', async ({ page }) => {
       await page.goto('/task/2024/etap2/1');
 
-      // Should have breadcrumb links
-      const breadcrumb = page.locator('nav[aria-label="breadcrumb"]').or(
-        page.locator('.breadcrumb')
-      );
+      // Scope to the breadcrumb landmark: task pages also link to related
+      // tasks, whose accessible names legitimately contain the etap.
+      const breadcrumb = page.getByRole('navigation', { name: 'Ścieżka nawigacji' });
+      await expect(breadcrumb).toBeVisible();
 
       // Should contain links to parent pages
-      await expect(page.getByRole('link', { name: /2024/ })).toBeVisible();
-      await expect(page.getByRole('link', { name: /etap/i })).toBeVisible();
+      await expect(breadcrumb.getByRole('link', { name: /2024/ })).toBeVisible();
+      await expect(breadcrumb.getByRole('link', { name: /etap/i })).toBeVisible();
     });
 
     test('can navigate back via breadcrumbs', async ({ page }) => {

@@ -14,6 +14,7 @@ interface BreadcrumbProps {
 export function Breadcrumb({ items }: BreadcrumbProps) {
   return (
     <Breadcrumbs
+      aria-label="Ścieżka nawigacji"
       separator={<NavigateNextIcon fontSize="small" sx={{ color: "grey.300" }} />}
       sx={{ mb: 3 }}
     >

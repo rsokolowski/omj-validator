@@ -333,7 +333,7 @@ ani udostępniania danych podmiotom komercyjnym.
 | Pseudonimowy znacznik limitu po usunięciu konta (`deleted_account_quota`) | do zamknięcia okna limitu, czyli **maks. 24 godziny** od ostatniego zgłoszenia | okno limitu (24 h) | usuwany automatycznie; powstaje tylko wtedy, gdy konto miało zgłoszenia w oknie |
 | Pliki osierocone (bez odpowiadającego zgłoszenia) | usuwane przy każdym przebiegu retencji | `RETENTION_AUTO_PURGE` (przebieg dobowy) | zabezpieczenie na wypadek niepowodzenia usunięcia plików |
 | Cookie sesyjne | 30 dni (wartość zaszyta w kodzie) | — | |
-| Dzienniki aplikacji (dziennik kontenera) | **brak zdefiniowanego okresu** | — | rotacja dzienników Dockera nie jest skonfigurowana — zob. R13 |
+| Dzienniki aplikacji (dziennik kontenera) | **ograniczone objętościowo**: 50 MB × 5 plików na usługę (250 MB), najstarsze wpisy nadpisywane | `docker-compose.prod.yml` (`x-logging`) | rotacja wdrożona; przy obecnym ruchu odpowiada to kilku miesiącom, ale jest to limit objętości, a nie gwarantowany okres — zob. R13 |
 | Kopie zapasowe bazy | [UZUPEŁNIĆ] | — | usunięcie danych musi obejmować także kopie po upływie cyklu ich rotacji |
 | Dane po samodzielnym usunięciu konta przez użytkownika | usuwane niezwłocznie | funkcja usunięcia konta | usuwane są: konto, wszystkie zgłoszenia (kaskadowo) i wszystkie pliki; w dzienniku dostępu administratora identyfikator jest zastępowany nieodwracalnym skrótem; pozostaje wyłącznie znacznik limitu opisany wyżej; kopie zapasowe — po cyklu rotacji |
 | Dane po wygaszeniu serwisu (wariant A) | usunięcie całości nie później niż [UZUPEŁNIĆ] od zamknięcia serwisu | — | użytkownicy informowani z wyprzedzeniem [UZUPEŁNIĆ: np. 30 dni] |
@@ -349,8 +349,12 @@ ani udostępniania danych podmiotom komercyjnym.
    ustawić krótszej retencji dla samych zdjęć bez zmiany w kodzie. Fotografia jest najbardziej
    nadmiarowym elementem zbioru (sekcja 3.1), więc rozdzielenie tych okresów pozostaje wartym
    rozważenia usprawnieniem.
-3. **Dzienniki aplikacji są jedyną kategorią bez ustalonego okresu.** Nie należy deklarować
-   w dokumentach żadnej wartości, dopóki rotacja nie zostanie skonfigurowana (R13).
+3. **Dzienniki aplikacji są ograniczone objętościowo, a nie czasowo.** Rotacja Dockera
+   (50 MB × 5 plików na usługę) daje twardy sufit na ich rozmiar, ale nie gwarantuje
+   konkretnego okresu: przy niskim ruchu wpis może przetrwać dłużej, niż sugerowałaby
+   deklaracja czasowa. Dlatego w dokumentach opisuje się mechanizm, a nie liczbę dni.
+   Gdyby wymagany był ścisły okres, potrzebna byłaby rotacja czasowa poza sterownikiem
+   `json-file`, który jej nie obsługuje (R13).
 
 ### 2.8 Przetwarzanie zautomatyzowane i profilowanie
 
@@ -810,15 +814,17 @@ kosmetyczna, a usuwa cały strumień danych); w wariancie B — domyślnie wył�
 Dzienniki kontenera zawierają informacje o logowaniach, nazwy i rozmiary plików, wyniki
 punktowe i treści błędów. **Adresy e-mail i identyfikatory użytkowników są w nich maskowane**
 (`app/privacy.py`: `jan***@***`), co usuwa główny problem — w dziennikach nie ma już danych
-wprost identyfikujących dziecko. Pozostaje jednak to, że **dla dzienników nie skonfigurowano
-rotacji ani okresu przechowywania**: gromadzą się poza mechanizmem retencji bazy danych, a
-maskowany prefiks trzech znaków wraz z kontekstem może w małej grupie pozwolić na powiązanie
-z osobą.
+wprost identyfikujących dziecko. **Rotacja dzienników została skonfigurowana** — sterownik
+`json-file` z limitem 50 MB × 5 plików na usługę (`docker-compose.prod.yml`, kotwica
+`x-logging`) — więc dzienniki nie gromadzą się już bez końca. Pozostaje ograniczenie tego
+rozwiązania: jest to limit **objętości, a nie czasu**, więc przy niskim ruchu wpis może
+przetrwać dłużej, niż wynikałoby z deklarowanego okresu; dodatkowo maskowany prefiks trzech
+znaków wraz z kontekstem może w małej grupie pozwolić na powiązanie z osobą.
 
 Środki: **[WDROŻONE]** maskowanie adresów e-mail i identyfikatorów w dziennikach;
-**[DO WDROŻENIA]** skonfigurowanie rotacji i limitu retencji dzienników Dockera
-([UZUPEŁNIĆ: np. 30 dni] — do czasu ustalenia tej wartości **nie należy deklarować żadnego
-okresu w klauzulach i regulaminach**); ograniczenie dostępu do dzienników do osób upoważnionych.
+**[WDROŻONE]** rotacja dzienników z twardym limitem objętości; **[DO ROZWAŻENIA]** rotacja
+czasowa poza sterownikiem `json-file`, gdyby administrator chciał deklarować ścisły okres
+przechowywania; ograniczenie dostępu do dzienników do osób upoważnionych.
 
 ---
 
@@ -893,8 +899,9 @@ zamyka wcześniejszą lukę polegającą na tym, że po usunięciu zgłoszeń zo
 z identyfikatorem Google, adresem e-mail i nazwiskiem dziecka. Aktywność liczona jako późniejsza
 z dat: ostatniego logowania i ostatniego zgłoszenia.
 
-**Pozostała luka:** dzienniki aplikacji (R13) i kopie zapasowe nadal nie mają ustalonego okresu,
-dlatego ryzyko szczątkowe wynosi **2 (niskie)** zamiast możliwego 1.
+**Pozostała luka:** kopie zapasowe nadal nie mają ustalonego okresu, a dzienniki aplikacji są
+ograniczone objętościowo, a nie czasowo (R13) — dlatego ryzyko szczątkowe wynosi **2 (niskie)**
+zamiast możliwego 1.
 
 ---
 
@@ -930,7 +937,7 @@ ochrony danych szkoły i czy poinformowano IOD.
 | R10 | Przejęcie sesji | 2 niskie | 2 niskie |
 | R11 | Powiadomienia poza EOG | 2 niskie | 1 niskie |
 | R12 | Tłumaczenie komunikatów przez usługę zewnętrzną | 2 niskie | 1 niskie |
-| R13 | Dane osobowe w dziennikach | 3 średnie | 2 niskie (maskowanie wdrożone; brak rotacji) |
+| R13 | Dane osobowe w dziennikach | 3 średnie | 1 niskie (maskowanie i rotacja wdrożone) |
 | R14 | Zmiana administratora i wygaszenie serwisu | 2 niskie | 1 niskie |
 | R15 | Brak weryfikacji wieku i zgody rodzica (wariant A) | **6 wysokie** | 4 średnie |
 | R16 | Przechowywanie bezterminowe | **6 wysokie** | 2 niskie (retencja i wygasanie kont wdrożone) |

@@ -79,8 +79,8 @@ dokumenty korzystają.
   w serwisie publicznym: zgłoszenia wraz ze zdjęciami **24 miesiące**, surowy zapis rozumowania
   modelu **90 dni**, konta nieaktywne **36 miesięcy**, dziennik dostępu administratora
   **12 miesięcy**, pseudonimowy znacznik limitu po usunięciu konta **maks. 24 godziny**.
-  Dzienniki serwera **nie mają** ustalonego okresu — nie wpisywać żadnej wartości, dopóki
-  rotacja nie zostanie skonfigurowana,
+  Dzienniki serwera są ograniczone **objętościowo** (50 MB × 5 plików na usługę), a nie
+  czasowo — opisywać mechanizm, nie liczbę dni,
 - limity liczby zgłoszeń dobrane do liczebności grupy,
 - daty, wersje, podpisy.
 
@@ -115,7 +115,8 @@ dokumenty korzystają.
 - ograniczyć listę kont administracyjnych i wystawić upoważnienia z art. 29 RODO,
 - ustalić, kto i jak często przegląda **dziennik dostępu administratora** (`admin_access_log`) —
   sam dziennik nikogo nie powstrzymuje, dopóki nikt do niego nie zagląda,
-- ustawić rotację i retencję dzienników aplikacji (adresy e-mail są już w nich maskowane),
+- rozważyć rotację **czasową** dzienników, gdyby potrzebny był ścisły okres przechowywania —
+  rotacja objętościowa i maskowanie adresów są już wdrożone,
 - skonfigurować i **przetestować** szyfrowane kopie zapasowe.
 
 ### Uzupełnić dokumentację poza tym katalogiem

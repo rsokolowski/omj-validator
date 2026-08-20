@@ -1,11 +1,22 @@
 # Production Docker Compose
 # Nginx routes traffic: WebSocket → API, everything else → frontend
 
+# Log rotation. Docker's json-file driver has NO size cap by default, so
+# container logs grow until the disk fills, and data in them outlives the
+# retention policy applied to the database (RODO art. 5(1)(e)).
+# 50m x 5 = 250 MB per service - months of history at current traffic.
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "50m"
+    max-file: "5"
+
 services:
   db:
     image: postgres:16-alpine
     container_name: omj-db
     restart: unless-stopped
+    logging: *default-logging
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-omj}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
@@ -26,6 +37,7 @@ services:
     image: ghcr.io/rsokolowski/omj-validator-api:latest
     container_name: omj-api
     restart: unless-stopped
+    logging: *default-logging
     depends_on:
       db:
         condition: service_healthy
@@ -105,6 +117,7 @@ services:
     image: ghcr.io/rsokolowski/omj-validator-frontend:latest
     container_name: omj-frontend
     restart: unless-stopped
+    logging: *default-logging
     depends_on:
       api:
         condition: service_healthy
@@ -124,6 +137,7 @@ services:
     image: nginx:alpine
     container_name: omj-nginx
     restart: unless-stopped
+    logging: *default-logging
     depends_on:
       - api
       - frontend

@@ -7,6 +7,10 @@ for comprehensive testing.
 
 Endpoints implemented:
 - POST /upload/v1beta/files - Upload file
+
+Every versioned route is also served under /v1alpha. The app pins
+api_version="v1alpha" because per-part media_resolution exists only there,
+so a v1beta-only fake answers 404 to every submission.
 - GET /v1beta/files/{name} - Get file info
 - DELETE /v1beta/files/{name} - Delete file
 - POST /v1beta/models/{model}:generateContent - Generate content (non-streaming)
@@ -323,6 +327,7 @@ def make_file_response(stored_file: StoredFile) -> dict:
 
 
 @app.post("/upload/v1beta/files")
+@app.post("/upload/v1alpha/files")
 async def create_file(request: Request):
     """
     Create a file upload session (resumable upload protocol).
@@ -401,7 +406,9 @@ async def create_file(request: Request):
 
 
 @app.post("/upload/v1beta/files/{upload_id}")
+@app.post("/upload/v1alpha/files/{upload_id}")
 @app.put("/upload/v1beta/files/{upload_id}")
+@app.put("/upload/v1alpha/files/{upload_id}")
 async def complete_upload(upload_id: str, request: Request):
     """
     Complete a resumable upload by receiving the file data.
@@ -551,6 +558,7 @@ def parse_multipart_related(body: bytes, boundary: str) -> tuple[dict, bytes, st
 
 
 @app.get("/v1beta/files/{file_id}")
+@app.get("/v1alpha/files/{file_id}")
 async def get_file(request: Request, file_id: str):
     """
     Get file metadata.
@@ -567,6 +575,7 @@ async def get_file(request: Request, file_id: str):
 
 
 @app.delete("/v1beta/files/{file_id}")
+@app.delete("/v1alpha/files/{file_id}")
 async def delete_file(request: Request, file_id: str):
     """
     Delete a file.
@@ -645,6 +654,7 @@ def get_scenario_for_request(request_body: dict) -> ScenarioType:
 
 
 @app.post("/v1beta/models/{model}:generateContent")
+@app.post("/v1alpha/models/{model}:generateContent")
 async def generate_content(model: str, request: Request):
     """
     Generate content (non-streaming).
@@ -707,6 +717,7 @@ async def generate_content(model: str, request: Request):
 
 
 @app.post("/v1beta/models/{model}:streamGenerateContent")
+@app.post("/v1alpha/models/{model}:streamGenerateContent")
 async def stream_generate_content(
     model: str,
     request: Request,

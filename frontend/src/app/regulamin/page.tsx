@@ -482,9 +482,11 @@ export default function RegulaminPage() {
               <strong>Ciasteczko sesyjne</strong> &ndash; 30 dni.
             </li>
             <li>
-              <strong>Dzienniki techniczne serwera</strong> &ndash; nie mają
-              ustalonego z góry okresu przechowywania; są nadpisywane w miarę
-              pracy serwera. Nie zawierają zdjęć ani treści rozwiązań, a adresy
+              <strong>Dzienniki techniczne serwera</strong> &ndash;
+              przechowywane w ograniczonej objętości (do 250 MB na usługę), po
+              przekroczeniu której najstarsze wpisy są nadpisywane; przy obecnym
+              ruchu odpowiada to kilku miesiącom. Nie zawierają zdjęć ani
+              treści rozwiązań, a adresy
               e-mail są w nich skracane tak, by nie identyfikowały osoby
               (np. &bdquo;jan***@***&rdquo;).
             </li>
