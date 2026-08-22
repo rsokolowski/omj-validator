@@ -227,7 +227,7 @@ function HowItWorksSection() {
       icon: <CheckCircle sx={{ fontSize: 40 }} />,
       title: "3. Otrzymaj feedback",
       description:
-        "AI oceni Twoje rozwiązanie zgodnie z oficjalnymi kryteriami i wskaże błędy do poprawy.",
+        "AI oceni Twoje rozwiązanie poglądowo, w skali stosowanej w OMJ, i wskaże błędy do poprawy.",
     },
   ];
 
@@ -461,7 +461,7 @@ function FeaturesSection() {
       icon: <Psychology sx={{ fontSize: 32 }} />,
       title: "Ocena AI",
       description:
-        "Sztuczna inteligencja analizuje Twoje rozwiązanie i porównuje z oficjalnymi kryteriami punktacji OMJ.",
+        "Sztuczna inteligencja analizuje Twoje rozwiązanie i odnosi je do skali punktowej stosowanej w OMJ.",
       color: "#2563eb",
       bgColor: "#dbeafe",
     },
@@ -483,9 +483,9 @@ function FeaturesSection() {
     },
     {
       icon: <EmojiEvents sx={{ fontSize: 32 }} />,
-      title: "Oficjalna punktacja",
+      title: "Punktacja poglądowa",
       description:
-        "Oceny zgodne z systemem OMJ: 0, 2, 5 lub 6 punktów. Przygotuj się jak na prawdziwą olimpiadę.",
+        "Serwis stara się odzwierciedlić skalę punktową OMJ, ale kryteria oceniania nie są publikowane, więc ocena jest wyłącznie poglądowa.",
       color: "#7c3aed",
       bgColor: "#f3e8ff",
     },

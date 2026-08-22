@@ -134,8 +134,20 @@ export default function RegulaminPage() {
           <Typography paragraph>
             {APP_NAME} to <strong>trenażer</strong>. Rozwiązujesz zadanie
             olimpijskie na kartce, robisz zdjęcie i wysyłasz. Program czyta
-            zdjęcie, przyznaje orientacyjną liczbę punktów według kryteriów OMJ i
-            pisze kilka zdań o tym, co jest dobre, a czego brakuje.
+            zdjęcie, przyznaje orientacyjną liczbę punktów w skali stosowanej w
+            OMJ i pisze kilka zdań o tym, co jest dobre, a czego brakuje.
+          </Typography>
+          <Typography paragraph>
+            Serwis stara się odzwierciedlić punktację OMJ, ale{" "}
+            <strong>
+              szczegółowe kryteria oceniania nie są publikowane przez
+              organizatora
+            </strong>{" "}
+            &ndash; jawne są zadania i rozwiązania, a nie sposób punktowania prac.
+            Punktacja w serwisie jest więc rekonstrukcją opartą na ogólnie
+            znanych zasadach, a nie zastosowaniem oficjalnych kryteriów, i ma
+            charakter wyłącznie poglądowy. Sama skala zależy dodatkowo od etapu
+            zawodów.
           </Typography>
           <Typography paragraph>
             <strong>

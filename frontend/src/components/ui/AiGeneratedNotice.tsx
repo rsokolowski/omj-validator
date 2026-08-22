@@ -31,7 +31,8 @@ export type AiNoticeVariant =
 
 /** Teksty po polsku, zrozumiałe dla 12-latka. */
 const NOTICE_TEXTS: Record<AiNoticeVariant, string> = {
-  evaluation: "Ocena i komentarz wygenerowane przez AI — mogą zawierać błędy.",
+  evaluation:
+    "Ocena i komentarz wygenerowane przez AI — mogą zawierać błędy. Punktacja jest poglądowa: OMJ nie publikuje kryteriów oceniania.",
   hints: "Wskazówki wygenerowane przez AI — mogą zawierać błędy.",
   taskContent:
     "Treść zadania przepisana z PDF-u przez AI — w razie wątpliwości sprawdź oryginalny PDF.",
