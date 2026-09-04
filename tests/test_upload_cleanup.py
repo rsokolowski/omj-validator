@@ -104,6 +104,10 @@ def image_part(name: str, data: bytes, content_type: str = "image/jpeg"):
     return ("images", (name, data, content_type))
 
 
+def text_part(name: str, text: str, content_type: str = "text/plain"):
+    return ("images", (name, text.encode("utf-8"), content_type))
+
+
 class TestSuccessfulSubmissionKeepsFiles:
     def test_accepted_upload_is_stored_and_referenced(self, client, db):
         response = submit(client, [image_part("a.jpg", jpeg_bytes())])
@@ -113,6 +117,24 @@ class TestSuccessfulSubmissionKeepsFiles:
         assert len(stored.images) == 1
         # Every stored path must point at a file that actually exists
         assert files_left() == sorted(stored.images)
+
+    def test_txt_upload_is_stored_and_referenced(self, client, db):
+        response = submit(client, [text_part("rozwiazanie.txt", "Dowód: ...")])
+
+        assert response.status_code == 200, response.text
+        stored = db.query(SubmissionDB).one()
+        assert len(stored.images) == 1
+        path = settings.uploads_dir / stored.images[0]
+        assert path.suffix == ".txt"
+        assert path.read_text(encoding="utf-8") == "Dowód: ..."
+
+    def test_txt_with_generic_mime_type_is_accepted(self, client):
+        response = submit(
+            client,
+            [text_part("rozwiazanie.txt", "Treść rozwiązania", "application/octet-stream")],
+        )
+
+        assert response.status_code == 200, response.text
 
 
 class TestHeicUploadIsAccepted:
@@ -162,6 +184,13 @@ class TestHeicUploadIsAccepted:
 
 
 class TestRejectedSubmissionLeavesNothing:
+    def test_empty_txt_is_rejected_and_removed(self, client, db):
+        response = submit(client, [text_part("puste.txt", "   \n")])
+
+        assert response.status_code == 400
+        assert db.query(SubmissionDB).count() == 0
+        assert files_left() == []
+
     def test_unprocessable_second_image_discards_the_first(self, client, db):
         """The regression this guards: the good file was already on disk."""
         response = submit(

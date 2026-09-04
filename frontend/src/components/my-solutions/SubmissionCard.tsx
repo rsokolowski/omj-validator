@@ -238,40 +238,47 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
           </Typography>
           {renderFeedback()}
 
-          {/* Images */}
+          {/* Submitted files */}
           {submission.images && submission.images.length > 0 && (
             <Box sx={{ mt: 2 }}>
               <Typography variant="subtitle2" component="p" sx={{ color: "grey.600", mb: 1 }}>
-                Przesłane zdjęcia:
+                Przesłane pliki:
               </Typography>
               <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                {submission.images.map((image, imgIndex) => (
-                  <a
-                    key={imgIndex}
-                    href={`/uploads/${image}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <Box
-                      component="img"
-                      src={`/uploads/${image}`}
-                      alt={`Fotografia ${imgIndex + 1} z ${submission.images!.length} przesłanego rozwiązania — otwiera się w nowej karcie`}
-                      sx={{
-                        width: 80,
-                        height: 80,
-                        objectFit: "cover",
-                        borderRadius: 1,
-                        border: "1px solid",
-                        borderColor: "grey.200",
-                        transition: "transform 0.15s",
-                        "&:hover": {
-                          transform: "scale(1.05)",
-                        },
-                      }}
-                    />
-                  </a>
-                ))}
+                {submission.images.map((image, imgIndex) => {
+                  const isTextFile = image.toLowerCase().endsWith(".txt");
+                  return (
+                    <a
+                      key={imgIndex}
+                      href={`/uploads/${image}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {isTextFile ? (
+                        <Button variant="outlined" size="small" component="span">
+                          Otwórz tekst rozwiązania
+                        </Button>
+                      ) : (
+                        <Box
+                          component="img"
+                          src={`/uploads/${image}`}
+                          alt={`Fotografia ${imgIndex + 1} z ${submission.images!.length} przesłanego rozwiązania — otwiera się w nowej karcie`}
+                          sx={{
+                            width: 80,
+                            height: 80,
+                            objectFit: "cover",
+                            borderRadius: 1,
+                            border: "1px solid",
+                            borderColor: "grey.200",
+                            transition: "transform 0.15s",
+                            "&:hover": { transform: "scale(1.05)" },
+                          }}
+                        />
+                      )}
+                    </a>
+                  );
+                })}
               </Stack>
             </Box>
           )}

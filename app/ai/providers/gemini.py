@@ -346,14 +346,15 @@ class GeminiProvider:
             content_parts.append(solution_file)
             full_prompt += "\n"
 
-        # Student images - use per-part ULTRA_HIGH resolution for Gemini 3
+        # Student solution files - images use per-part ULTRA_HIGH resolution for Gemini 3
         full_prompt += "### Rozwiązanie ucznia:\n"
         image_resolution = self._get_media_resolution(settings.gemini_media_resolution_images)
 
         for i in range(num_images):
-            full_prompt += f"Zdjęcie {i + 1}:\n"
+            is_text_file = bool(image_paths and i < len(image_paths) and image_paths[i].suffix.lower() == ".txt")
+            full_prompt += f"{'Plik tekstowy' if is_text_file else 'Zdjęcie'} {i + 1}:\n"
 
-            if self._is_gemini_3 and image_paths and i < len(image_paths):
+            if self._is_gemini_3 and image_paths and i < len(image_paths) and not is_text_file:
                 # Gemini 3: Use inline bytes with per-part ULTRA_HIGH resolution
                 img_path = image_paths[i]
                 try:
