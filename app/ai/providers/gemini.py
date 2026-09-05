@@ -88,6 +88,11 @@ _CACHE_TTL_SECONDS = 24 * 60 * 60  # 24 hours
 #
 # Models with long-context tiers carry "long_input"/"long_output", applied when
 # the prompt exceeds "long_threshold" tokens.
+_FLASH_PRICING = {
+    "input": 1.50, "output": 7.50,
+    "promo_until": date(2027, 1, 1), "promo_input": 0.75, "promo_output": 3.75,
+}
+
 GEMINI_PRICING = {
     # Gemini 3.x series
     "gemini-3.1-pro-preview": {
@@ -96,20 +101,16 @@ GEMINI_PRICING = {
     },
     "gemini-3-pro-preview": {"input": 2.00, "output": 12.00},
     "gemini-3-pro": {"input": 2.00, "output": 12.00},
-    # Flash tier is promo-priced at half rate through 2026-12-31, then reverts to
-    # the "input"/"output" rates below. Verified 2026-08-17 against
+    # Flash tier (3.6 / 3.7 / 3.8) shares one price list, promo-priced at half
+    # rate through 2026-12-31, then reverting to the "input"/"output" rates.
+    # Verified 2026-08-17 (3.6, 3.7) and 2026-09-05 (3.8) against
     # https://ai.google.dev/gemini-api/docs/pricing (paid tier, standard).
     # promo_until is compared against the server's local date, so the changeover
     # can land a few hours off Google's billing boundary - immaterial for an
     # estimate that only feeds logging.
-    "gemini-3.7-flash": {
-        "input": 1.50, "output": 7.50,
-        "promo_until": date(2027, 1, 1), "promo_input": 0.75, "promo_output": 3.75,
-    },
-    "gemini-3.6-flash": {
-        "input": 1.50, "output": 7.50,
-        "promo_until": date(2027, 1, 1), "promo_input": 0.75, "promo_output": 3.75,
-    },
+    "gemini-3.8-flash": _FLASH_PRICING,
+    "gemini-3.7-flash": _FLASH_PRICING,
+    "gemini-3.6-flash": _FLASH_PRICING,
     "gemini-3.5-flash": {"input": 1.50, "output": 9.00},
     "gemini-3-flash-preview": {"input": 1.50, "output": 9.00},
     # Gemini 2.5 series
@@ -121,6 +122,42 @@ GEMINI_PRICING = {
     # Default fallback (gemini-2.5-flash-lite pricing)
     "default": {"input": 0.10, "output": 0.40},
 }
+
+
+def estimate_cost(
+    model_name: str, input_tokens: int, output_tokens: int, thoughts_tokens: int = 0
+) -> float:
+    """Estimated USD cost of one call, from GEMINI_PRICING.
+
+    Thinking tokens are billed at the output rate. Unknown models fall back to
+    the "default" entry with a one-time warning. Shared by the provider and the
+    offline eval scripts so both report the same number.
+    """
+    pricing = GEMINI_PRICING.get(model_name)
+    if pricing is None:
+        pricing = GEMINI_PRICING["default"]
+        if model_name not in _pricing_warned:
+            _pricing_warned.add(model_name)
+            logger.warning(
+                f"[Gemini] No pricing entry for model '{model_name}', "
+                f"cost estimates use fallback rates and will be inaccurate. "
+                f"Add it to GEMINI_PRICING."
+            )
+
+    threshold = pricing.get("long_threshold")
+    if threshold and input_tokens > threshold:
+        in_rate = pricing.get("long_input", pricing["input"])
+        out_rate = pricing.get("long_output", pricing["output"])
+    else:
+        in_rate, out_rate = pricing["input"], pricing["output"]
+        promo_until = pricing.get("promo_until")
+        if promo_until and date.today() < promo_until:
+            in_rate = pricing.get("promo_input", in_rate)
+            out_rate = pricing.get("promo_output", out_rate)
+
+    input_cost = (input_tokens / 1_000_000) * in_rate
+    output_cost = ((output_tokens + thoughts_tokens) / 1_000_000) * out_rate
+    return input_cost + output_cost
 
 # JSON schema for structured output - forces Gemini to return valid JSON
 RESPONSE_JSON_SCHEMA = {
@@ -258,31 +295,7 @@ class GeminiProvider:
         with output_tokens - omitting them understates the true cost several-fold
         on high thinking_level models.
         """
-        pricing = GEMINI_PRICING.get(self._model_name)
-        if pricing is None:
-            pricing = GEMINI_PRICING["default"]
-            if self._model_name not in _pricing_warned:
-                _pricing_warned.add(self._model_name)
-                logger.warning(
-                    f"[Gemini] No pricing entry for model '{self._model_name}', "
-                    f"cost estimates use fallback rates and will be inaccurate. "
-                    f"Add it to GEMINI_PRICING."
-                )
-
-        threshold = pricing.get("long_threshold")
-        if threshold and input_tokens > threshold:
-            in_rate = pricing.get("long_input", pricing["input"])
-            out_rate = pricing.get("long_output", pricing["output"])
-        else:
-            in_rate, out_rate = pricing["input"], pricing["output"]
-            promo_until = pricing.get("promo_until")
-            if promo_until and date.today() < promo_until:
-                in_rate = pricing.get("promo_input", in_rate)
-                out_rate = pricing.get("promo_output", out_rate)
-
-        input_cost = (input_tokens / 1_000_000) * in_rate
-        output_cost = ((output_tokens + thoughts_tokens) / 1_000_000) * out_rate
-        return input_cost + output_cost
+        return estimate_cost(self._model_name, input_tokens, output_tokens, thoughts_tokens)
 
     @staticmethod
     def _read_usage(usage_metadata) -> tuple[int, int, int]:

@@ -23,16 +23,13 @@ from app.config import settings  # noqa: E402
 
 
 def _usage(resp):
-    """Pull token counts off a GenerateContentResponse, tolerating missing fields."""
+    """Token counts of a GenerateContentResponse, read the way prod reads them."""
     um = getattr(resp, "usage_metadata", None)
     if not um:
-        return {}
-    return {
-        "input_tokens": getattr(um, "prompt_token_count", 0) or 0,
-        "output_tokens": getattr(um, "candidates_token_count", 0) or 0,
-        "thoughts_tokens": getattr(um, "thoughts_token_count", 0) or 0,
-        "total_tokens": getattr(um, "total_token_count", 0) or 0,
-    }
+        return {}  # ab_compare.py excludes such calls from cost instead of pricing them at 0
+    inp, out, thoughts = GeminiProvider._read_usage(um)
+    return {"input_tokens": inp, "output_tokens": out, "thoughts_tokens": thoughts,
+            "total_tokens": inp + out + thoughts}
 
 
 async def main(subs_path: str, out_path: str):
@@ -71,6 +68,7 @@ async def main(subs_path: str, out_path: str):
             )
             row = {
                 "id": s["id"],
+                "model": provider._model_name,
                 "year": year, "etap": etap, "task_number": num,
                 "prod_score": s["score"],
                 "prod_issue_type": s["issue_type"],
@@ -82,7 +80,7 @@ async def main(subs_path: str, out_path: str):
                 "usage": captured[-1] if captured else {},
             }
         except Exception as e:  # keep going; one failure shouldn't kill the run
-            row = {"id": s["id"], "year": year, "etap": etap,
+            row = {"id": s["id"], "model": provider._model_name, "year": year, "etap": etap,
                    "task_number": num, "prod_score": s["score"], "error": str(e)}
 
         results.append(row)
