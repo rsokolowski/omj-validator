@@ -304,6 +304,7 @@ function initTaskPage(year, etap, taskNumber) {
     const form = document.getElementById('submit-form');
     const fileInput = document.getElementById('images');
     const filePreview = document.getElementById('file-preview');
+    const solutionText = document.getElementById('solution-text');
     const submitBtn = document.getElementById('submit-btn');
     const resultContainer = document.getElementById('result-container');
 
@@ -322,9 +323,14 @@ function initTaskPage(year, etap, taskNumber) {
             const item = document.createElement('div');
             item.className = 'file-preview-item';
 
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(file);
-            img.alt = file.name;
+            const preview = document.createElement(file.name.toLowerCase().endsWith('.txt') ? 'span' : 'img');
+            if (preview.tagName === 'IMG') {
+                preview.src = URL.createObjectURL(file);
+                preview.alt = file.name;
+            } else {
+                preview.className = 'file-preview-name';
+                preview.textContent = file.name;
+            }
 
             const removeBtn = document.createElement('button');
             removeBtn.className = 'file-preview-remove';
@@ -337,7 +343,7 @@ function initTaskPage(year, etap, taskNumber) {
                 updateFilePreview();
             };
 
-            item.appendChild(img);
+            item.appendChild(preview);
             item.appendChild(removeBtn);
             filePreview.appendChild(item);
         });
@@ -350,8 +356,9 @@ function initTaskPage(year, etap, taskNumber) {
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        if (selectedFiles.length === 0) {
-            alert('Wybierz przynajmniej jedno zdjęcie rozwiązania.');
+        const typedSolution = solutionText.value.trim();
+        if (selectedFiles.length === 0 && !typedSolution) {
+            alert('Dodaj plik lub wpisz rozwiązanie.');
             return;
         }
 
@@ -371,6 +378,12 @@ function initTaskPage(year, etap, taskNumber) {
             selectedFiles.forEach(file => {
                 formData.append('images', file);
             });
+            if (typedSolution) {
+                formData.append(
+                    'images',
+                    new File([typedSolution], 'rozwiazanie.txt', { type: 'text/plain' })
+                );
+            }
 
             const response = await fetch(`/task/${year}/${etap}/${taskNumber}/submit`, {
                 method: 'POST',
@@ -395,6 +408,7 @@ function initTaskPage(year, etap, taskNumber) {
                 // Clear selected files
                 selectedFiles = [];
                 fileInput.value = '';
+                solutionText.value = '';
                 updateFilePreview();
 
                 // Scroll to result

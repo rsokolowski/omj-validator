@@ -148,18 +148,24 @@
     <div class="submit-section">
         <h2>Prześlij rozwiązanie</h2>
         {% if can_submit %}
-        <p class="submit-info">Prześlij zdjęcia swojego ręcznie napisanego rozwiązania. Możesz przesłać wiele zdjęć.</p>
+        <p class="submit-info">Prześlij zdjęcia lub plik TXT. Możesz też wpisać rozwiązanie poniżej.</p>
 
         <form id="submit-form" class="submit-form" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="images" class="file-label">
-                    <span class="file-label-text">Wybierz zdjęcia</span>
-                    <span class="file-label-hint">JPG, PNG, WebP (max {{ config.upload_max_size_mb if config else 10 }}MB każde)</span>
+                    <span class="file-label-text">Wybierz pliki</span>
+                    <span class="file-label-hint">JPG, PNG, WebP, TXT (max {{ config.upload_max_size_mb if config else 10 }}MB każdy)</span>
                 </label>
                 <input type="file" id="images" name="images" multiple
-                       accept="image/jpeg,image/png,image/webp,image/heic"
+                       accept="image/jpeg,image/png,image/webp,image/heic,.txt,text/plain"
                        class="file-input">
                 <div id="file-preview" class="file-preview"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="solution-text">Lub wpisz rozwiązanie</label>
+                <textarea id="solution-text" rows="8" maxlength="50000"
+                          placeholder="Wpisz tutaj swoje rozwiązanie..."></textarea>
             </div>
 
             <button type="submit" class="btn btn-primary" id="submit-btn">

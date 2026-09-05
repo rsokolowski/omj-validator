@@ -967,7 +967,7 @@ async def submit_solution(
     db: Session = Depends(get_db),
 ):
     """
-    Submit solution images for analysis (requires group membership).
+    Submit solution files for analysis (requires group membership).
 
     Returns immediately with submission_id. Client should connect to
     WebSocket at /ws/submissions/{submission_id} for progress updates.
@@ -1082,22 +1082,22 @@ async def submit_solution(
 
     if not images:
         return JSONResponse(
-            {"error": "Nie przesłano żadnych zdjęć"},
+            {"error": "Nie przesłano żadnego rozwiązania"},
             status_code=status.HTTP_400_BAD_REQUEST,
         )
 
-    # Limit number of images
-    MAX_IMAGES = 10
-    if len(images) > MAX_IMAGES:
+    # Limit number of files
+    MAX_FILES = 10
+    if len(images) > MAX_FILES:
         return JSONResponse(
-            {"error": f"Maksymalnie {MAX_IMAGES} zdjęć na raz"},
+            {"error": f"Maksymalnie {MAX_FILES} plików na raz"},
             status_code=status.HTTP_400_BAD_REQUEST,
         )
 
     # Validate file types
     # HEIC/HEIF included: pillow-heif decodes them so their EXIF (incl. GPS)
     # can be stripped like any other format - see _register_heif_decoder.
-    allowed_types = {
+    image_types = {
         "image/jpeg",
         "image/png",
         "image/webp",
@@ -1105,7 +1105,13 @@ async def submit_solution(
         "image/heif",
     }
     for img in images:
-        if img.content_type not in allowed_types:
+        ext = Path(img.filename).suffix.lower() if img.filename else ""
+        valid_type = (
+            img.content_type in {"text/plain", "application/octet-stream"}
+            if ext == ".txt"
+            else img.content_type in image_types
+        )
+        if not valid_type:
             return JSONResponse(
                 {"error": f"Niedozwolony typ pliku: {img.content_type}"},
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -1117,7 +1123,7 @@ async def submit_solution(
 
     saved_paths: list[Path] = []
     max_size = settings.upload_max_size_mb * 1024 * 1024
-    allowed_extensions = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"}
+    allowed_extensions = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif", ".txt"}
 
     # File currently being written - not yet in saved_paths, but just as much an
     # orphan as the rest if this request ends without creating a submission row.
@@ -1155,18 +1161,35 @@ async def submit_solution(
                         )
                     f.write(chunk)
 
-            # Strip EXIF/GPS, fix orientation, downscale. Returns the final path -
-            # normalization always re-encodes to JPEG, so the name can change.
-            normalized_path = _normalize_uploaded_image(file_path)
-            if normalized_path is None:
-                # Could not be decoded, so its metadata could not be removed
-                # either. Storing it would ship the photo's GPS coordinates to
-                # disk and to Google, so the upload is refused instead.
-                _discard_uploads(saved_paths, file_path)
-                return JSONResponse(
-                    {"error": _unprocessable_image_message(img.filename, ext)},
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                )
+            if ext == ".txt":
+                try:
+                    text = file_path.read_text(encoding="utf-8")
+                except UnicodeDecodeError:
+                    _discard_uploads(saved_paths, file_path)
+                    return JSONResponse(
+                        {"error": f"Plik {img.filename} musi być zapisany w UTF-8"},
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                    )
+                if not text.strip():
+                    _discard_uploads(saved_paths, file_path)
+                    return JSONResponse(
+                        {"error": f"Plik {img.filename} jest pusty"},
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                    )
+                normalized_path = file_path
+            else:
+                # Strip EXIF/GPS, fix orientation, downscale. Returns the final path -
+                # normalization always re-encodes to JPEG, so the name can change.
+                normalized_path = _normalize_uploaded_image(file_path)
+                if normalized_path is None:
+                    # Could not be decoded, so its metadata could not be removed
+                    # either. Storing it would ship the photo's GPS coordinates to
+                    # disk and to Google, so the upload is refused instead.
+                    _discard_uploads(saved_paths, file_path)
+                    return JSONResponse(
+                        {"error": _unprocessable_image_message(img.filename, ext)},
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                    )
 
             saved_paths.append(normalized_path)
             in_progress = None

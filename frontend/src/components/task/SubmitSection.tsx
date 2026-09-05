@@ -9,6 +9,7 @@ import {
   Button,
   Alert,
   CircularProgress,
+  TextField,
 } from "@mui/material";
 import { uploadFiles } from "@/lib/api/client";
 import { getMaxScore } from "@/lib/utils/constants";
@@ -93,6 +94,7 @@ export function SubmitSection({
 }: SubmitSectionProps) {
   const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
+  const [solutionText, setSolutionText] = useState("");
   const [uploadState, setUploadState] = useState<UploadState>({
     status: "idle",
     statusMessage: "",
@@ -175,6 +177,7 @@ export function SubmitSection({
                 },
               });
               setFiles([]);
+              setSolutionText("");
               if (fileInputRef.current) {
                 fileInputRef.current.value = "";
               }
@@ -218,8 +221,10 @@ export function SubmitSection({
   };
 
   const addFiles = (newFiles: File[]) => {
-    const imageFiles = newFiles.filter((file) => file.type.startsWith("image/"));
-    setFiles((prev) => [...prev, ...imageFiles]);
+    const acceptedFiles = newFiles.filter(
+      (file) => file.type.startsWith("image/") || file.name.toLowerCase().endsWith(".txt")
+    );
+    setFiles((prev) => [...prev, ...acceptedFiles]);
     setUploadState({
       status: "idle",
       statusMessage: "",
@@ -249,21 +254,26 @@ export function SubmitSection({
   };
 
   const handleSubmit = async () => {
-    if (files.length === 0) return;
+    const typedSolution = solutionText.trim();
+    if (files.length === 0 && !typedSolution) return;
+
+    const submittedFiles = typedSolution
+      ? [...files, new File([typedSolution], "rozwiazanie.txt", { type: "text/plain" })]
+      : files;
 
     // Reset state
     announcedAnalysisRef.current = false;
     setUploadState({
       status: "processing",
-      statusMessage: "Przesyłanie zdjęć...",
+      statusMessage: "Przesyłanie rozwiązania...",
     });
-    setLiveMessage("Przesyłanie zdjęć rozwiązania. Proszę czekać.");
+    setLiveMessage("Przesyłanie rozwiązania. Proszę czekać.");
 
     try {
       // Step 1: Upload files via POST
       const result = await uploadFiles<SubmitResponse>(
         `/api/task/${year}/${etap}/${num}/submit`,
-        files
+        submittedFiles
       );
 
       if (!result.success || !result.submission_id) {
@@ -377,8 +387,8 @@ export function SubmitSection({
           sx={{ color: isDragging ? "primary.main" : "grey.700", mb: 1.5 }}
         >
           {isDragging
-            ? "Upuść zdjęcia tutaj"
-            : "Przeciągnij tutaj zdjęcia rozwiązania albo wybierz je przyciskiem poniżej."}
+            ? "Upuść pliki tutaj"
+            : "Przeciągnij tutaj zdjęcia lub plik TXT albo wybierz je przyciskiem poniżej."}
         </Typography>
         {/* `role={undefined}` i `tabIndex={-1}`: gdyby etykieta udawala przycisk
             (domyslne role="button" z MUI), ButtonBase przechwytywalby Enter
@@ -402,11 +412,11 @@ export function SubmitSection({
             },
           }}
         >
-          Wybierz zdjęcia rozwiązania
+          Wybierz pliki rozwiązania
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*"
+            accept="image/*,.txt,text/plain"
             multiple
             onChange={handleFileSelect}
             disabled={isProcessing}
@@ -414,9 +424,24 @@ export function SubmitSection({
           />
         </Button>
         <Typography variant="caption" component="p" sx={{ color: "grey.600", mt: 1.5 }}>
-          Akceptowane formaty: JPG, PNG
+          Akceptowane formaty: JPG, PNG, TXT
         </Typography>
       </Box>
+
+      <Typography variant="body2" sx={{ color: "grey.700", mb: 1 }}>
+        Możesz też wpisać rozwiązanie:
+      </Typography>
+      <TextField
+        value={solutionText}
+        onChange={(event) => setSolutionText(event.target.value)}
+        placeholder="Wpisz tutaj swoje rozwiązanie..."
+        multiline
+        minRows={6}
+        fullWidth
+        disabled={isProcessing}
+        inputProps={{ maxLength: 50000 }}
+        sx={{ mb: 2 }}
+      />
 
       {/* Selected Files */}
       {files.length > 0 && (
@@ -503,7 +528,7 @@ export function SubmitSection({
       <Button
         variant="contained"
         fullWidth
-        disabled={files.length === 0 || isProcessing}
+        disabled={(files.length === 0 && !solutionText.trim()) || isProcessing}
         onClick={handleSubmit}
         sx={{ py: 1.5 }}
       >
