@@ -110,16 +110,52 @@ export const ETAP2_PREP_TASKS: string[] = [
   "2019_etap2_2",  // OMJ XV/2 - Równoległobok, symetralna
 ];
 
-// Mock Etap 2 practice sets - realistic exam simulations
-// Each set contains 5 tasks with typical etap2 difficulty distribution
-// Tasks are NOT included in ETAP2_PREP_TASKS to avoid overlap
-export interface MockEtap2Set {
+// Curated list of tasks for Etap 1 preparation
+// Selection criteria: the easiest etap1 tasks (difficulty 2 - the corpus has no
+// difficulty-1 etap1 tasks), covering the basic techniques: parity, divisibility,
+// digits, casework, pigeonhole, invariants, areas, simple identities and counting.
+// Two difficulty-3 tasks are included on purpose because no easier task covers
+// angle chasing or the triangle inequality.
+// Must stay disjoint from MOCK_ETAP1_SETS so a mock set is never spoiled.
+// Format: {year}_etap1_{task_num}
+export const ETAP1_PREP_TASKS: string[] = [
+  "2005_etap1_5",  // kombinatoryka - 121 jabłek w 15 wiadrach, difficulty 2
+  "2005_etap1_7",  // geometria - B środkiem AC, policz CD, difficulty 2
+  "2009_etap1_1",  // teoria_liczb - pierwsze a, b, c z a²=b²+c, difficulty 2
+  "2010_etap1_1",  // algebra - symetryczny układ równań kwadratowych, difficulty 2
+  "2011_etap1_1",  // algebra - czy pierwiastki mogą równać się x+y, difficulty 2
+  "2011_etap1_3",  // geometria - równe pola i obwody, równe przekątne, difficulty 2
+  "2012_etap1_1",  // teoria_liczb - cykl cyfr jedności potęg n, difficulty 2
+  "2012_etap1_4",  // kombinatoryka - bal, szuflady, dwie równe liczby, difficulty 2
+  "2013_etap1_1",  // arytmetyka - wzrost o 1,5% przy limicie 404, difficulty 2
+  "2013_etap1_2",  // algebra - cztery różnice jako kolejne liczby, difficulty 2
+  "2014_etap1_1",  // algebra - 50 zł na 13 monet 1/2/5, difficulty 2
+  "2015_etap1_1",  // teoria_liczb - nieskończenie wiele trójek, z(y-x)=6, difficulty 2
+  "2017_etap1_1",  // algebra - z dwóch zależności wynika a²+b²=c², difficulty 2
+  "2018_etap1_1",  // teoria_liczb - cyfra jedności ilorazu 999^1000 przez 3, difficulty 2
+  "2020_etap1_1",  // teoria_liczb - kolejne pary cyfr jako kwadraty, difficulty 2
+  "2020_etap1_2",  // geometria - dwie wysokości trójkąta równoramiennego, pole, difficulty 2
+  "2020_etap1_3",  // algebra - |a-b|=2|b-c|=3|c-a| wymusza równość, difficulty 2
+  "2022_etap1_1",  // algebra - prostokąt 1:2 o polu równym obwodowi, difficulty 2
+  "2023_etap1_4",  // teoria_liczb - pierwsza jako różnica sześcianów pierwszych, difficulty 2
+  "2023_etap1_5",  // geometria - koło i pierścień o równych polach, difficulty 2
+  "2024_etap1_1",  // geometria - odległości od boków kwadratu, kolejne liczby, difficulty 2
+  "2025_etap1_2",  // teoria_liczb - n = 21 razy suma cyfr, 9|n, difficulty 2
+  "2025_etap1_3",  // kombinatoryka - pięć osób, liczby znajomych, difficulty 2
+  "2017_etap1_4",  // geometria - trapez, symetralne boków, kąty, difficulty 3 (wyjątek)
+  "2025_etap1_7",  // geometria - nierówność trójkąta dla miar kątów, difficulty 3 (wyjątek)
+];
+
+// Mock practice sets - realistic exam simulations
+// Tasks are NOT included in the matching prep list to avoid overlap
+export interface MockSet {
   id: string;
   name: string;
   tasks: string[];
 }
 
-export const MOCK_ETAP2_SETS: MockEtap2Set[] = [
+// Each set contains 5 tasks with typical etap2 difficulty distribution
+export const MOCK_ETAP2_SETS: MockSet[] = [
   {
     id: "mock-1",
     name: "Próbny Etap 2 - I",
@@ -144,5 +180,98 @@ export const MOCK_ETAP2_SETS: MockEtap2Set[] = [
   },
 ];
 
-// Timer duration for etap2 (3 hours in milliseconds)
+// Each set contains 7 tasks, matching the "część zadaniowa" of the real etap 1
+// (100 minutes, 3 points per task). Difficulty ramp and category mix copy the
+// shape of the 2022-2025 papers; every set has difficulties 2,2,3,3,3,3,4.
+export const MOCK_ETAP1_SETS: MockSet[] = [
+  {
+    id: "mock-etap1-1",
+    name: "Zestaw 1",
+    tasks: [
+      "2022_etap1_2",  // arytmetyka - gdzie wstawić "=" w 1-2+3-...-100, difficulty 2
+      "2019_etap1_1",  // teoria_liczb - dopisanie cyfry daje 13n, difficulty 2
+      "2019_etap1_2",  // geometria - łańcuch trójkątów równoramiennych, kąty, difficulty 3
+      "2016_etap1_5",  // teoria_liczb - a, b lub a+b jako różnica kwadratów, difficulty 3
+      "2019_etap1_5",  // kombinatoryka - turniej 8 osób, najmniej remisów, difficulty 3
+      "2018_etap1_5",  // geometria - równoległobok, AP=BD, kąt prosty, difficulty 3
+      "2022_etap1_5",  // algebra - nierówność a+b+c ≥ 3abc/4, difficulty 4
+    ],
+  },
+  {
+    id: "mock-etap1-2",
+    name: "Zestaw 2",
+    tasks: [
+      "2021_etap1_1",  // arytmetyka - średnia klasy a wynik ucznia, difficulty 2
+      "2020_etap1_5",  // teoria_liczb - suma 2^1002, iloczyn 5^1002, difficulty 2
+      "2020_etap1_4",  // geometria - czworokąt z kątami 120°, difficulty 3
+      "2019_etap1_3",  // algebra - symetryczny układ xy(x+y)=yz(y+z)=zx(z+x), difficulty 3
+      "2024_etap1_4",  // kombinatoryka - 100 kamieni, usuwanie po 25, difficulty 3
+      "2021_etap1_2",  // geometria - prostokąt o stosunku √2, kąt BXD, difficulty 3
+      "2015_etap1_3",  // teoria_liczb - kiedy (n⁴+4)/17 jest pierwsza, difficulty 4
+    ],
+  },
+  {
+    id: "mock-etap1-3",
+    name: "Zestaw 3",
+    tasks: [
+      "2025_etap1_1",  // kombinatoryka - monety 2 i 5 zł, wybór 50 zł, difficulty 2
+      "2024_etap1_3",  // algebra - trzy różnice bezwzględne między 1 a 2, difficulty 2
+      "2023_etap1_2",  // geometria - pięć równych odcinków, miara kąta AMB, difficulty 3
+      "2018_etap1_4",  // teoria_liczb - cykl reszt daje c=4, difficulty 3
+      "2022_etap1_6",  // kombinatoryka - rozcięcie kwadratu na plusy i minusy, difficulty 3
+      "2024_etap1_7",  // geometria - prostopadłościan, kąt BPB' prosty, difficulty 3
+      "2021_etap1_7",  // teoria_liczb - cyfry, podzielność przez 7, 6|n, difficulty 4
+    ],
+  },
+];
+
+// Timer durations
+// Etap 1 "część zadaniowa": 100 minut. Etap 2: 3 godziny.
+export const ETAP1_TIMER_DURATION_MS = 100 * 60 * 1000;
 export const ETAP2_TIMER_DURATION_MS = 3 * 60 * 60 * 1000;
+
+export type MockEtap = "etap1" | "etap2";
+
+export interface MockEtapConfig {
+  label: string;
+  path: string;
+  timerMs: number;
+  tasksPerSet: number;
+  pointsPerTask: number;
+  description: string;
+}
+
+export const MOCK_ETAP_CONFIG: Record<MockEtap, MockEtapConfig> = {
+  etap1: {
+    label: "Próbny Etap 1",
+    path: "/practice/etap1",
+    timerMs: ETAP1_TIMER_DURATION_MS,
+    tasksPerSet: 7,
+    pointsPerTask: 3,
+    description: "7 zadań otwartych, 100 minut, 3 punkty za zadanie (21 punktów).",
+  },
+  etap2: {
+    label: "Próbny Etap 2",
+    path: "/practice/etap2",
+    timerMs: ETAP2_TIMER_DURATION_MS,
+    tasksPerSet: 5,
+    pointsPerTask: 6,
+    description: "5 zadań, 3 godziny, 6 punktów za zadanie (30 punktów).",
+  },
+};
+
+// Czas trwania w formie tekstowej, np. "100 minut" / "3 godziny"
+export const MOCK_ETAP_DURATION_LABELS: Record<MockEtap, string> = {
+  etap1: "100 minut",
+  etap2: "3 godziny",
+};
+
+export const MOCK_SETS: Record<MockEtap, MockSet[]> = {
+  etap1: MOCK_ETAP1_SETS,
+  etap2: MOCK_ETAP2_SETS,
+};
+
+export const MOCK_PREP_TASKS: Record<MockEtap, string[]> = {
+  etap1: ETAP1_PREP_TASKS,
+  etap2: ETAP2_PREP_TASKS,
+};

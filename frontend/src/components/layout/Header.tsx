@@ -96,7 +96,7 @@ export function Header() {
               </Typography>
             </Link>
             <Link
-              href="/practice/etap2"
+              href="/practice"
               style={{ textDecoration: "none", color: "#4b5563" }}
             >
               <Typography

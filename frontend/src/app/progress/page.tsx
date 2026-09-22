@@ -6,8 +6,9 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { ProgressStats } from "@/components/progress/ProgressStats";
 import { CategoryFilter } from "@/components/progress/CategoryFilter";
 import { RecommendationsList } from "@/components/progress/RecommendationsList";
-import { Etap2PrepList } from "@/components/progress/Etap2PrepList";
+import { PrepList } from "@/components/progress/PrepList";
 import { LoginPrompt } from "@/components/common/LoginPrompt";
+import { ETAP1_PREP_TASKS, ETAP2_PREP_TASKS } from "@/lib/utils/constants";
 import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
 
 export const metadata: Metadata = {
@@ -60,7 +61,16 @@ export default async function ProgressPage({ searchParams }: ProgressPageProps) 
           {data.recommendations.length > 0 && (
             <RecommendationsList recommendations={data.recommendations} />
           )}
-          <Etap2PrepList nodes={data.nodes} />
+          <PrepList
+            nodes={data.nodes}
+            tasks={ETAP1_PREP_TASKS}
+            title="Przygotowanie do 1 etapu"
+          />
+          <PrepList
+            nodes={data.nodes}
+            tasks={ETAP2_PREP_TASKS}
+            title="Przygotowanie do 2 etapu"
+          />
         </>
       ) : (
         <LoginPrompt redirectUrl="/progress" />

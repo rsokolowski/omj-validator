@@ -14,24 +14,23 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { GraphNode } from "@/lib/types";
 import { DifficultyStars } from "@/components/ui/DifficultyStars";
 import { MathContent } from "@/components/ui/MathContent";
-import {
-  ETAP2_PREP_TASKS,
-  getMaxScore,
-  getMasteryThreshold,
-} from "@/lib/utils/constants";
+import { getMaxScore, getMasteryThreshold } from "@/lib/utils/constants";
 
-interface Etap2PrepListProps {
+interface PrepListProps {
   nodes: GraphNode[];
+  /** Task keys ({year}_{etap}_{num}) making up the curated prep list. */
+  tasks: string[];
+  title: string;
 }
 
-export function Etap2PrepList({ nodes }: Etap2PrepListProps) {
+export function PrepList({ nodes, tasks, title }: PrepListProps) {
   const [hideCompleted, setHideCompleted] = useState(false);
 
   // Create a map for quick lookup
   const nodeMap = new Map(nodes.map((n) => [n.key, n]));
 
   // Get prep tasks that exist in the nodes, sorted by difficulty (ascending)
-  const allPrepTasks = ETAP2_PREP_TASKS.map((key) => nodeMap.get(key))
+  const allPrepTasks = tasks.map((key) => nodeMap.get(key))
     .filter((n): n is GraphNode => n !== undefined)
     .toSorted((a, b) => (a.difficulty || 3) - (b.difficulty || 3));
 
@@ -67,7 +66,7 @@ export function Etap2PrepList({ nodes }: Etap2PrepListProps) {
         }}
       >
         <Typography variant="h6" component="h2" sx={{ color: "grey.700" }}>
-          Przygotowanie do 2 etapu
+          {title}
         </Typography>
         <Chip
           label={`${completedCount}/${totalCount}`}

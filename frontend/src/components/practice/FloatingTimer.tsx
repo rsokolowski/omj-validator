@@ -7,13 +7,14 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import TimerIcon from "@mui/icons-material/Timer";
 import { useTimer } from "@/lib/contexts/TimerContext";
 import { formatTime } from "@/lib/utils/formatTime";
+import { MOCK_ETAP_CONFIG } from "@/lib/utils/constants";
 
 export function FloatingTimer() {
-  const { isRunning, isPaused, remainingMs, isHydrated, pauseTimer, resumeTimer, resetTimer } = useTimer();
+  const { etap, isRunning, isPaused, remainingMs, isHydrated, pauseTimer, resumeTimer, resetTimer } = useTimer();
 
   // Don't show until hydrated (prevents hydration mismatch)
   // Don't show if timer is not active (running or paused)
-  if (!isHydrated || (!isRunning && !isPaused)) return null;
+  if (!isHydrated || (!isRunning && !isPaused) || !etap) return null;
 
   const isLowTime = remainingMs < 600000; // Less than 10 minutes
 
@@ -69,7 +70,8 @@ export function FloatingTimer() {
           variant="caption"
           sx={{ color: "grey.600", display: "block", lineHeight: 1 }}
         >
-          Próbny Etap 2{isPaused && " — PAUZA"}
+          {MOCK_ETAP_CONFIG[etap].label}
+          {isPaused && " — PAUZA"}
         </Typography>
         {/* Odliczanie nie jest naglowkiem sekcji (WCAG 1.3.1) */}
         <Typography

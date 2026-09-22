@@ -10,16 +10,24 @@ import {
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { GraphNode } from "@/lib/types";
-import { MockEtap2Set, getMaxScore, getMasteryThreshold } from "@/lib/utils/constants";
+import {
+  MockEtap,
+  MockSet,
+  MOCK_ETAP_CONFIG,
+  getMaxScore,
+  getMasteryThreshold,
+} from "@/lib/utils/constants";
 import { DifficultyStars } from "@/components/ui/DifficultyStars";
 import { MathContent } from "@/components/ui/MathContent";
 
-interface MockEtap2SetCardProps {
-  set: MockEtap2Set;
+interface MockSetCardProps {
+  set: MockSet;
+  etap: MockEtap;
   nodeMap: Map<string, GraphNode>;
 }
 
-export function MockEtap2SetCard({ set, nodeMap }: MockEtap2SetCardProps) {
+export function MockSetCard({ set, etap, nodeMap }: MockSetCardProps) {
+  const config = MOCK_ETAP_CONFIG[etap];
   // Get tasks for this set
   const tasks = set.tasks
     .map((key) => nodeMap.get(key))
@@ -27,12 +35,12 @@ export function MockEtap2SetCard({ set, nodeMap }: MockEtap2SetCardProps) {
 
   // Calculate total score
   const totalScore = tasks.reduce((sum, task) => sum + task.best_score, 0);
-  const maxScore = tasks.length * 6; // 6 points per task
+  const maxScore = tasks.length * config.pointsPerTask;
 
   // Calculate progress percentage
   const progressPercent = maxScore > 0 ? (totalScore / maxScore) * 100 : 0;
 
-  // Check if task is mastered (score >= 5)
+  // Check if task is mastered (score >= mastery threshold for its etap)
   const isTaskMastered = (task: GraphNode): boolean => {
     const threshold = getMasteryThreshold(task.etap);
     return task.best_score >= threshold;
@@ -59,8 +67,8 @@ export function MockEtap2SetCard({ set, nodeMap }: MockEtap2SetCardProps) {
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <Chip
-            label={`${masteredCount}/5 zaliczone`}
-            color={masteredCount === 5 ? "success" : "default"}
+            label={`${masteredCount}/${config.tasksPerSet} zaliczone`}
+            color={masteredCount === config.tasksPerSet ? "success" : "default"}
             size="small"
           />
           <Chip
@@ -147,7 +155,7 @@ export function MockEtap2SetCard({ set, nodeMap }: MockEtap2SetCardProps) {
                     flexShrink: 0,
                   }}
                 >
-                  {task.year} E2
+                  {task.year} {etap === "etap1" ? "E1" : "E2"}
                 </Typography>
 
                 {/* Difficulty */}

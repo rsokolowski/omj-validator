@@ -8,9 +8,10 @@ import {
   useCallback,
   ReactNode,
 } from "react";
-import { ETAP2_TIMER_DURATION_MS } from "@/lib/utils/constants";
+import { MockEtap, MOCK_ETAP_CONFIG } from "@/lib/utils/constants";
 
 interface TimerState {
+  etap: MockEtap | null; // etap the timer runs for; null when idle
   isRunning: boolean;
   isPaused: boolean;
   endTime: number | null; // Unix timestamp when timer ends (only when running)
@@ -18,11 +19,18 @@ interface TimerState {
 }
 
 interface TimerContextValue {
+  /**
+   * Etap the timer belongs to: running, paused or just expired.
+   * null only when there is no timer at all (idle or after reset).
+   */
+  etap: MockEtap | null;
+  /** Full duration of the timer that is set up, 0 when idle. */
+  durationMs: number;
   isRunning: boolean;
   isPaused: boolean;
   remainingMs: number;
   isHydrated: boolean;
-  startTimer: () => void;
+  startTimer: (etap: MockEtap) => void;
   pauseTimer: () => void;
   resumeTimer: () => void;
   resetTimer: () => void;
@@ -32,14 +40,21 @@ const TimerContext = createContext<TimerContextValue | null>(null);
 
 const STORAGE_KEY = "omj-practice-timer";
 
+const IDLE_STATE: TimerState = {
+  etap: null,
+  isRunning: false,
+  isPaused: false,
+  endTime: null,
+  remainingMs: 0,
+};
+
+function isMockEtap(value: unknown): value is MockEtap {
+  return value === "etap1" || value === "etap2";
+}
+
 export function TimerProvider({ children }: { children: ReactNode }) {
   const [isHydrated, setIsHydrated] = useState(false);
-  const [state, setState] = useState<TimerState>({
-    isRunning: false,
-    isPaused: false,
-    endTime: null,
-    remainingMs: ETAP2_TIMER_DURATION_MS,
-  });
+  const [state, setState] = useState<TimerState>(IDLE_STATE);
 
   // Load timer state from localStorage after hydration
   useEffect(() => {
@@ -47,19 +62,23 @@ export function TimerProvider({ children }: { children: ReactNode }) {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
-        const parsed = JSON.parse(stored) as TimerState;
-        if (parsed.isPaused && parsed.remainingMs > 0) {
+        const parsed = JSON.parse(stored) as Partial<TimerState>;
+        // Payloads written before Próbny Etap 1 existed have no etap.
+        const etap: MockEtap = isMockEtap(parsed.etap) ? parsed.etap : "etap2";
+        if (parsed.isPaused && (parsed.remainingMs ?? 0) > 0) {
           // Restore paused state
           setState({
+            etap,
             isRunning: false,
             isPaused: true,
             endTime: null,
-            remainingMs: parsed.remainingMs,
+            remainingMs: parsed.remainingMs as number,
           });
         } else if (parsed.isRunning && parsed.endTime) {
           const remaining = parsed.endTime - Date.now();
           if (remaining > 0) {
             setState({
+              etap,
               isRunning: true,
               isPaused: false,
               endTime: parsed.endTime,
@@ -84,12 +103,13 @@ export function TimerProvider({ children }: { children: ReactNode }) {
     const interval = setInterval(() => {
       const remaining = endTime - Date.now();
       if (remaining <= 0) {
-        setState({
+        setState((prev) => ({
+          etap: prev.etap,
           isRunning: false,
           isPaused: false,
           endTime: null,
           remainingMs: 0,
-        });
+        }));
         localStorage.removeItem(STORAGE_KEY);
       } else {
         setState((prev) => ({
@@ -102,13 +122,14 @@ export function TimerProvider({ children }: { children: ReactNode }) {
     return () => clearInterval(interval);
   }, [state.isRunning, state.endTime]);
 
-  const startTimer = useCallback(() => {
-    const endTime = Date.now() + ETAP2_TIMER_DURATION_MS;
+  const startTimer = useCallback((etap: MockEtap) => {
+    const durationMs = MOCK_ETAP_CONFIG[etap].timerMs;
     const newState: TimerState = {
+      etap,
       isRunning: true,
       isPaused: false,
-      endTime,
-      remainingMs: ETAP2_TIMER_DURATION_MS,
+      endTime: Date.now() + durationMs,
+      remainingMs: durationMs,
     };
     setState(newState);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
@@ -117,6 +138,7 @@ export function TimerProvider({ children }: { children: ReactNode }) {
   const pauseTimer = useCallback(() => {
     setState((prev) => {
       const newState: TimerState = {
+        etap: prev.etap,
         isRunning: false,
         isPaused: true,
         endTime: null,
@@ -129,11 +151,11 @@ export function TimerProvider({ children }: { children: ReactNode }) {
 
   const resumeTimer = useCallback(() => {
     setState((prev) => {
-      const endTime = Date.now() + prev.remainingMs;
       const newState: TimerState = {
+        etap: prev.etap,
         isRunning: true,
         isPaused: false,
-        endTime,
+        endTime: Date.now() + prev.remainingMs,
         remainingMs: prev.remainingMs,
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
@@ -142,18 +164,17 @@ export function TimerProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const resetTimer = useCallback(() => {
-    setState({
-      isRunning: false,
-      isPaused: false,
-      endTime: null,
-      remainingMs: ETAP2_TIMER_DURATION_MS,
-    });
+    setState(IDLE_STATE);
     localStorage.removeItem(STORAGE_KEY);
   }, []);
+
+  const durationMs = state.etap ? MOCK_ETAP_CONFIG[state.etap].timerMs : 0;
 
   return (
     <TimerContext.Provider
       value={{
+        etap: state.etap,
+        durationMs,
         isRunning: state.isRunning,
         isPaused: state.isPaused,
         remainingMs: state.remainingMs,

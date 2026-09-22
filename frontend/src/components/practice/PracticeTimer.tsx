@@ -7,12 +7,30 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import TimerIcon from "@mui/icons-material/Timer";
 import { useTimer } from "@/lib/contexts/TimerContext";
 import { formatTime } from "@/lib/utils/formatTime";
-import { ETAP2_TIMER_DURATION_MS } from "@/lib/utils/constants";
+import {
+  MockEtap,
+  MOCK_ETAP_CONFIG,
+  MOCK_ETAP_DURATION_LABELS,
+} from "@/lib/utils/constants";
 
-export function PracticeTimer() {
-  const { isRunning, isPaused, remainingMs, isHydrated, startTimer, pauseTimer, resumeTimer, resetTimer } = useTimer();
+interface PracticeTimerProps {
+  etap: MockEtap;
+}
 
-  const isActive = isRunning || isPaused;
+export function PracticeTimer({ etap }: PracticeTimerProps) {
+  const {
+    etap: timerEtap,
+    isRunning,
+    isPaused,
+    remainingMs,
+    isHydrated,
+    startTimer,
+    pauseTimer,
+    resumeTimer,
+    resetTimer,
+  } = useTimer();
+
+  const config = MOCK_ETAP_CONFIG[etap];
 
   // Show loading state until hydrated
   if (!isHydrated) {
@@ -37,6 +55,72 @@ export function PracticeTimer() {
     );
   }
 
+  // Timer uruchomiony dla drugiego etapu - nie pozwalamy go tu sterowac,
+  // pokazujemy tylko czyj to czas i przycisk Reset.
+  const otherEtap =
+    (isRunning || isPaused) && timerEtap !== null && timerEtap !== etap
+      ? timerEtap
+      : null;
+
+  if (otherEtap) {
+    const otherConfig = MOCK_ETAP_CONFIG[otherEtap];
+    return (
+      <Paper
+        sx={{
+          p: 2,
+          mb: 3,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 2,
+          flexWrap: "wrap",
+          bgcolor: "grey.50",
+          border: 1,
+          borderColor: "grey.300",
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <TimerIcon sx={{ color: "grey.500" }} />
+          <Box>
+            <Typography variant="body2" sx={{ color: "grey.600" }}>
+              {otherConfig.label}
+              {isPaused && " — PAUZA"}
+            </Typography>
+            {/* Odliczanie nie jest naglowkiem sekcji (WCAG 1.3.1) */}
+            <Typography
+              variant="h5"
+              component="p"
+              sx={{
+                fontFamily: "monospace",
+                fontWeight: 600,
+                color: "grey.700",
+              }}
+            >
+              {formatTime(remainingMs)}
+            </Typography>
+            <Typography variant="caption" sx={{ color: "grey.600" }}>
+              Trwa odliczanie dla innego zestawu. Zresetuj je, aby zacząć{" "}
+              {config.label}.
+            </Typography>
+          </Box>
+        </Box>
+        <Button
+          variant="outlined"
+          startIcon={<RestartAltIcon />}
+          onClick={resetTimer}
+          size="small"
+        >
+          Reset
+        </Button>
+      </Paper>
+    );
+  }
+
+  const isActive = isRunning || isPaused;
+  // Gdy timer nie dotyczy tego etapu, pokazujemy pelny czas do rozpoczecia.
+  const displayedMs = timerEtap === etap ? remainingMs : config.timerMs;
+  const isExpired = timerEtap === etap && !isActive && remainingMs === 0;
+
   return (
     <Paper
       sx={{
@@ -58,7 +142,8 @@ export function PracticeTimer() {
         <TimerIcon sx={{ color: isActive ? (isRunning ? "primary.main" : "warning.main") : "grey.500" }} />
         <Box>
           <Typography variant="body2" sx={{ color: "grey.600" }}>
-            Czas na rozwiązanie (3 godziny){isPaused && " — PAUZA"}
+            Czas na rozwiązanie ({MOCK_ETAP_DURATION_LABELS[etap]})
+            {isPaused && " — PAUZA"}
           </Typography>
           {/* Odliczanie nie jest naglowkiem sekcji (WCAG 1.3.1) */}
           <Typography
@@ -68,7 +153,7 @@ export function PracticeTimer() {
               fontFamily: "monospace",
               fontWeight: 600,
               color: isRunning
-                ? remainingMs < 600000 // Less than 10 minutes
+                ? displayedMs < 600000 // Less than 10 minutes
                   ? "error.main"
                   : "primary.main"
                 : isPaused
@@ -76,7 +161,7 @@ export function PracticeTimer() {
                   : "grey.700",
             }}
           >
-            {formatTime(remainingMs)}
+            {formatTime(displayedMs)}
           </Typography>
         </Box>
       </Box>
@@ -105,9 +190,9 @@ export function PracticeTimer() {
           <Button
             variant="contained"
             startIcon={<PlayArrowIcon />}
-            onClick={startTimer}
+            onClick={() => startTimer(etap)}
             size="small"
-            disabled={remainingMs === 0}
+            disabled={isExpired}
           >
             Start
           </Button>
@@ -117,7 +202,7 @@ export function PracticeTimer() {
           startIcon={<RestartAltIcon />}
           onClick={resetTimer}
           size="small"
-          disabled={!isActive && remainingMs === ETAP2_TIMER_DURATION_MS}
+          disabled={!isActive && timerEtap !== etap}
         >
           Reset
         </Button>
