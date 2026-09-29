@@ -93,6 +93,7 @@ omj-validator/
 │   ├── rate_limits.py      # Rolling 24h limits (submissions; AI calls via ai_usage)
 │   ├── retention.py        # Data retention + account erasure (RODO)
 │   ├── private_tasks/      # "Moje zadania": router (routes.py) + files/limits (service.py)
+│   ├── patterns/           # "Wzorce": routes, service, srs.py (scheduling), linking.py
 │   ├── db/                 # Database layer
 │   │   ├── session.py      # SQLAlchemy engine, get_db dependency
 │   │   ├── models.py       # ORM: UserDB, SubmissionDB, PrivateTaskDB, AIUsageDB, ...
@@ -136,6 +137,7 @@ frontend/src/
 │   ├── task/[year]/[etap]/[num]/page.tsx  # Task detail with submission
 │   ├── progress/page.tsx            # Task progression graph
 │   ├── moje-zadania/                # Private tasks: list, nowe (add), [id] (task)
+│   ├── wzorce/                      # Patterns: list, nowy, [id], powtorka (review)
 │   └── login/page.tsx               # Google OAuth login
 ├── components/
 │   ├── layout/                      # Header, Footer, Breadcrumb
@@ -175,6 +177,20 @@ DELETE /api/private-tasks/{id}               # Task + submissions + photos
 POST   /api/private-tasks/{id}/hints/{n}     # Reveal hint n (in order)
 POST   /api/private-tasks/{id}/regenerate-hints
 POST   /api/private-tasks/{id}/submit        # Solution photos and/or solution_text -> grading over the WebSocket
+
+# Patterns ("Wzorce") - owner only, someone else's id is a 404
+POST   /api/patterns/refine                  # Guided refine round (AI): 2-3 versions, verdict, questions
+POST   /api/patterns/suggest                 # Patterns worth remembering from a graded submission (AI)
+POST   /api/patterns                         # Save (+ source task link, round history)
+GET    /api/patterns                         # List (?category, archived, task_key, private_task_id)
+GET    /api/patterns/queue                   # Due today, categories interleaved
+GET    /api/patterns/{id}                    # Detail + links + reviews
+PATCH  /api/patterns/{id}                    # Edit, append a round, pause/resume
+DELETE /api/patterns/{id}
+POST   /api/patterns/{id}/suggest-links      # AI picks OMJ tasks from server-chosen candidates
+POST   /api/patterns/{id}/links              # Link a task by hand; PATCH/DELETE .../links/{link_id}
+POST   /api/patterns/{id}/review             # Self-rated recall card (409 unless due)
+GET    /api/patterns/{id}/practice           # Linked task to solve instead of a recall card
 ```
 
 **Auth routes**:
@@ -203,7 +219,10 @@ GET  /uploads/{path}                 # Serve uploaded images
   `submissions` reference EITHER an OMJ task (`year`, `etap`, `task_number`) OR a
   private task (`private_task_id`) - check constraint `ck_submissions_task_ref`.
   Any new OMJ aggregate over `submissions` must filter `private_task_id IS NULL`.
-- `ai_usage` - Content-free log of non-submission AI calls (extraction, hints), for rate limits
+- `ai_usage` - Content-free log of non-submission AI calls (extraction, hints, patterns), for rate limits
+- `patterns`, `pattern_links`, `pattern_reviews` - Student-written problem-solving patterns
+  ("Wzorce") with spaced repetition, linked tasks and a review log; owner-only.
+  `submissions.pattern_id` (SET NULL) marks a solution submitted as practice of a pattern.
 
 **Local**: PostgreSQL 16 via Docker on port 5433 (`postgresql://omj:omj@localhost:5433/omj`)
 
@@ -270,7 +289,16 @@ GET  /uploads/{path}                 # Serve uploaded images
    WebSocket; the graded text is kept in `scoring_meta["task_snapshot"]`. Never commit real
    task statements in fixtures - the fake Gemini uses invented problems.
 
-5. **LaTeX Rendering**: Frontend uses KaTeX via `MathContent` component, which HTML-escapes
+5. **Patterns ("Wzorce")**: the student writes "kiedy w treści widzę X, to warto spróbować Y"
+   (or asks `suggest_patterns` for ideas from a graded solution), refines it in guided rounds
+   (`refine_pattern`, schema-constrained, 2-3 versions to pick from), and `link_pattern_tasks`
+   picks OMJ tasks from candidates `app/patterns/linking.py` chose (skills/category; the model
+   never sees statements). Reviews: self-rated recall cards, and graded practice - a submission
+   carrying `pattern_id` is turned into a review by `apply_practice_result` in the grading
+   worker. Scheduling is pure (`app/patterns/srs.py`): levels 1-3 with intervals (1,4),
+   (7,14), (30,90) days, then 180-day maintenance.
+
+6. **LaTeX Rendering**: Frontend uses KaTeX via `MathContent` component, which HTML-escapes
    all non-math text (private task statements are user/AI controlled). `npm test` covers it.
    The typed-solution editor (`SolutionTextEditor`) previews through the same component with `indexMath` for click-to-edit; MathLive and Excalidraw fonts are copied into `frontend/public/{mathlive,excalidraw}` (git-ignored) by `frontend/scripts/copy-editor-assets.mjs` on install/dev/build - nothing is fetched from a CDN.
 
@@ -302,12 +330,16 @@ RETENTION_INACTIVE_ACCOUNT_MONTHS=36  # Accounts with no login and no submission
 RETENTION_ADMIN_AUDIT_MONTHS=12       # Admin access audit trail
 RETENTION_PRIVATE_TASK_MONTHS=24      # Private tasks, counted from last activity
 RETENTION_AI_USAGE_DAYS=90            # ai_usage rows (rate limiting only)
+RETENTION_PATTERN_MONTHS=24           # Patterns, counted from last activity
 RETENTION_AUTO_PURGE=true             # Daily in-app run (single-worker only)
 
 # Private task limits (grading shares the submission limits)
 # RATE_LIMIT_PRIVATE_TASKS_PER_USER_PER_DAY=10
 # RATE_LIMIT_PRIVATE_EXTRACTS_PER_USER_PER_DAY=15
 # RATE_LIMIT_AI_USAGE_GLOBAL_PER_DAY=1000
+# RATE_LIMIT_PATTERN_REFINES_PER_USER_PER_DAY=30
+# RATE_LIMIT_PATTERN_SUGGESTS_PER_USER_PER_DAY=10
+# RATE_LIMIT_PATTERN_LINKS_PER_USER_PER_DAY=10
 
 # Typed solutions: cap in code points, mirrored in frontend/src/lib/utils/constants.ts
 # SUBMISSION_TEXT_MAX_CHARS=20000

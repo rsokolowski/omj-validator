@@ -328,3 +328,107 @@ export interface RevealHintResponse {
   hint: string;
   hints_revealed: number;
 }
+
+// Patterns ("Wzorce")
+export interface PatternVariant {
+  trigger: string;
+  action: string;
+  example: string;
+}
+
+export interface PatternDraft {
+  trigger: string;
+  action: string;
+  example: string;
+  raw: string;
+}
+
+export type PatternVerdict = "ok" | "za_ogolny" | "bledny" | "to_nie_wzorzec";
+
+export interface RefineRound {
+  draft: PatternDraft;
+  answer: string | null;
+  variants: PatternVariant[];
+  questions: string[];
+  verdict: PatternVerdict;
+  comment: string;
+  category?: string | null;
+  skills?: string[];
+  chosen: number | null;
+}
+
+export interface PatternSuggestion extends PatternVariant {
+  why: string;
+}
+
+export interface PatternSource {
+  task_key?: string;
+  private_task_id?: string;
+}
+
+export interface PatternLink {
+  id: number;
+  role: "source" | "practice";
+  origin: "ai" | "manual";
+  status: "suggested" | "accepted" | "rejected";
+  reason: string | null;
+  task_key: string | null;
+  private_task_id: string | null;
+  kind: "omj" | "private";
+  title: string;
+  label?: string;
+  url: string | null;
+  difficulty?: number | null;
+  available: boolean;
+}
+
+export interface PatternReview {
+  id: number;
+  kind: "recall" | "task";
+  outcome: "fail" | "hard" | "ok";
+  recall_text: string | null;
+  submission_id: string | null;
+  level_before: number;
+  level_after: number;
+  due_after: string;
+  created_at: string;
+}
+
+export interface Pattern {
+  id: string;
+  trigger: string;
+  action: string;
+  example: string | null;
+  category: string | null;
+  skills: string[];
+  origin: "own" | "ai_suggested";
+  level: number;
+  streak: number;
+  due_on: string;
+  is_due: boolean;
+  review_count: number;
+  lapse_count: number;
+  archived: boolean;
+  created_at: string;
+  last_reviewed_at: string | null;
+  links_count: number;
+  suggested_links_count: number;
+}
+
+export interface PatternDetail extends Pattern {
+  links: PatternLink[];
+  refinement: (RefineRound & { at?: string })[];
+  reviews: PatternReview[];
+}
+
+export interface PatternQueue {
+  items: Pattern[];
+  due_total: number;
+}
+
+export interface PracticeTask {
+  kind: "omj" | "private";
+  ref: string;
+  title: string;
+  url: string;
+}

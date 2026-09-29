@@ -31,6 +31,7 @@ from app.retention import (  # noqa: E402
     delete_inactive_accounts,
     purge_expired_admin_audit,
     purge_expired_ai_usage,
+    purge_expired_patterns,
     purge_expired_private_tasks,
     purge_expired_quota_tombstones,
     purge_expired_submissions,
@@ -75,6 +76,12 @@ def main() -> int:
         type=int,
         default=None,
         help="Override RETENTION_PRIVATE_TASK_MONTHS (0 = skip this pass)",
+    )
+    parser.add_argument(
+        "--pattern-months",
+        type=int,
+        default=None,
+        help="Override RETENTION_PATTERN_MONTHS (0 = skip this pass)",
     )
     parser.add_argument(
         "--ai-usage-days",
@@ -126,6 +133,11 @@ def main() -> int:
         if args.private_task_months is None
         else args.private_task_months
     )
+    pattern_months = (
+        settings.retention_pattern_months
+        if args.pattern_months is None
+        else args.pattern_months
+    )
     ai_usage_days = (
         settings.retention_ai_usage_days
         if args.ai_usage_days is None
@@ -135,6 +147,7 @@ def main() -> int:
     print(
         f"Retention periods: submissions={months or 'disabled'} months, "
         f"private tasks={private_months or 'disabled'} months idle, "
+        f"patterns={pattern_months or 'disabled'} months idle, "
         f"AI usage log={ai_usage_days or 'disabled'} days, "
         f"thinking trace={thinking_days or 'disabled'} days, "
         f"inactive accounts={inactive_months or 'disabled'} months, "
@@ -152,6 +165,9 @@ def main() -> int:
         )
         report.merge(
             purge_expired_private_tasks(db, months=private_months, dry_run=args.dry_run)
+        )
+        report.merge(
+            purge_expired_patterns(db, months=pattern_months, dry_run=args.dry_run)
         )
         report.merge(
             strip_expired_scoring_thinking(db, days=thinking_days, dry_run=args.dry_run)

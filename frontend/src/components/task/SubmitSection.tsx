@@ -19,6 +19,7 @@ import { countChars, formatCount, normalizeSolutionText } from "@/lib/utils/solu
 import { LoginPrompt } from "@/components/common/LoginPrompt";
 import { MathContent } from "@/components/ui/MathContent";
 import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
+import { useHintsUsage } from "./HintsUsageContext";
 import { DrawingDialog } from "./DrawingDialog";
 import { SolutionTextEditor } from "./SolutionTextEditor";
 
@@ -37,6 +38,8 @@ interface SubmitSectionProps {
   /** Submission already sent from another page ("Odczytaj zadanie i oceń") -
    *  follow its grading from the moment this section mounts */
   resumeSubmissionId?: string;
+  /** Solution practises this pattern ("Rozwiąż zadanie" on a pattern card) */
+  patternId?: string;
 }
 
 interface SubmitResponse {
@@ -116,8 +119,10 @@ export function SubmitSection({
   pagePath,
   onCompleted,
   resumeSubmissionId,
+  patternId,
 }: SubmitSectionProps) {
   const router = useRouter();
+  const hintsUsage = useHintsUsage();
   const [files, setFiles] = useState<SelectedFile[]>([]);
   // Thumbnail URLs still to revoke on clear/unmount - kept current after each render
   const filesRef = useRef<SelectedFile[]>([]);
@@ -351,11 +356,15 @@ export function SubmitSection({
 
     try {
       // Step 1: Upload files via POST
+      const fields: Record<string, string> = {};
+      if (patternId) fields.pattern_id = patternId;
+      // OMJ hints are revealed in the browser only; private tasks count them server-side
+      if (!submitUrl && hintsUsage) fields.hints_used = String(hintsUsage.used);
       const result = await uploadFiles<SubmitResponse>(
         submitUrl ?? `/api/task/${year}/${etap}/${num}/submit`,
         files.map((f) => f.file),
         undefined,
-        normalizedText ? { solution_text: solutionText } : undefined
+        normalizedText ? { ...fields, solution_text: solutionText } : fields
       );
 
       if (!result.success || !result.submission_id) {

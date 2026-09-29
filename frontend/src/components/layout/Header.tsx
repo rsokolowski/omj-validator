@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   AppBar,
   Toolbar,
@@ -10,12 +12,35 @@ import {
   Chip,
   Button,
   Container,
+  Badge,
 } from "@mui/material";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { APP_NAME } from "@/lib/utils/constants";
+import { patternsApi } from "@/lib/api/patterns";
+
+/** Number of patterns due today - refreshed on every navigation. */
+function usePatternsDue(enabled: boolean): number {
+  const pathname = usePathname();
+  const [due, setDue] = useState(0);
+  useEffect(() => {
+    if (!enabled) return;
+    let cancelled = false;
+    patternsApi
+      .queue(0)
+      .then((data) => {
+        if (!cancelled) setDue(data.due_total);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [enabled, pathname]);
+  return enabled ? due : 0;
+}
 
 export function Header() {
   const { user, isAuthenticated, isGroupMember, isAdmin, isLoading } = useAuth();
+  const patternsDue = usePatternsDue(isAuthenticated && isGroupMember);
 
   return (
     <AppBar
@@ -123,6 +148,26 @@ export function Header() {
                 >
                   Moje zadania
                 </Typography>
+              </Link>
+            )}
+
+            {/* Patterns (Wzorce) - badge = patterns due for review today */}
+            {isAuthenticated && isGroupMember && (
+              <Link
+                href="/wzorce"
+                style={{ textDecoration: "none", color: "#4b5563" }}
+                aria-label={patternsDue ? `Wzorce, do powtórki: ${patternsDue}` : undefined}
+              >
+                <Badge badgeContent={patternsDue} color="warning" max={99}>
+                  <Typography
+                    sx={{
+                      fontWeight: 500,
+                      "&:hover": { color: "primary.main" },
+                    }}
+                  >
+                    Wzorce
+                  </Typography>
+                </Badge>
               </Link>
             )}
 

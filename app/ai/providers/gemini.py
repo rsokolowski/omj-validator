@@ -13,7 +13,23 @@ from pathlib import Path
 from typing import AsyncIterator, Optional, Callable, Any
 
 from ...config import settings
-from ...models import PrivateExtractionResult, PrivateTaskMeta, SubmissionResult
+from ...models import (
+    LinkResult,
+    PrivateExtractionResult,
+    PrivateTaskMeta,
+    RefineResult,
+    SubmissionResult,
+    SuggestResult,
+)
+from ...skills import get_all_skills
+from ..pattern_parsing import (
+    PATTERN_LINK_SCHEMA,
+    PATTERN_REFINE_SCHEMA,
+    PATTERN_SUGGEST_SCHEMA,
+    parse_link_response,
+    parse_refine_response,
+    parse_suggest_response,
+)
 from ..parsing import parse_ai_response
 from ..prompt_builder import (
     CLOSING_LINE,
@@ -1148,6 +1164,91 @@ class GeminiProvider:
         )
         text, meta = await self._generate_json([prompt], META_SCHEMA)
         result = parse_meta_response(text)
+        result.meta = meta
+        return result
+
+    # ------------------------------------------------------------ patterns
+
+    @staticmethod
+    def _student_text(text: Optional[str]) -> str:
+        """Student-controlled text as fenced data (the fence cannot be closed early)."""
+        cleaned = (text or "").replace("<<<", "").replace(">>>", "").strip()
+        return f"<<<\n{cleaned or '(brak)'}\n>>>"
+
+    @staticmethod
+    def _draft_text(draft: dict) -> str:
+        if draft.get("trigger") or draft.get("action"):
+            lines = [
+                f"Wyzwalacz: {draft.get('trigger', '')}",
+                f"Akcja: {draft.get('action', '')}",
+            ]
+            if draft.get("example"):
+                lines.append(f"Przykład: {draft['example']}")
+            if draft.get("raw"):
+                lines.append(f"Notatka: {draft['raw']}")
+            return "\n".join(lines)
+        return draft.get("raw", "")
+
+    async def refine_pattern(
+        self,
+        draft: dict,
+        source_text: Optional[str],
+        history: list[dict],
+        answer: Optional[str],
+    ) -> RefineResult:
+        """One guided refine round: 2-3 versions to pick from, verdict, questions."""
+        skills = get_all_skills()
+        skill_lines = "\n".join(f"- {s.id}: {s.name}" for s in skills)
+        history_lines = []
+        for index, round_ in enumerate(history, 1):
+            chosen = round_.get("chosen") or {}
+            history_lines.append(
+                f"Runda {index}: wybrana wersja: {chosen.get('trigger', '')} -> {chosen.get('action', '')}; "
+                f"pytania: {' / '.join(round_.get('questions') or [])}; "
+                f"odpowiedź ucznia: {round_.get('answer') or '(brak)'}"
+            )
+        prompt = (
+            f"{load_private_prompt('pattern_refine')}\n\n"
+            f"## Lista umiejętności (skills)\n{skill_lines}\n\n"
+            f"## Szkic wzorca ucznia\n{self._student_text(self._draft_text(draft))}\n\n"
+            f"## Zadanie, przy którym uczeń zauważył wzorzec\n{self._student_text(source_text)}\n\n"
+            f"## Poprzednie rundy\n{self._student_text(chr(10).join(history_lines))}\n\n"
+            f"## Odpowiedź ucznia na Twoje pytania\n{self._student_text(answer)}\n"
+        )
+        text, meta = await self._generate_json([prompt], PATTERN_REFINE_SCHEMA)
+        result = parse_refine_response(text, {s.id for s in skills})
+        result.meta = meta
+        return result
+
+    async def suggest_patterns(self, task_text: str, feedback: str, draft: Optional[str]) -> SuggestResult:
+        """1-3 patterns worth remembering from a graded solution."""
+        prompt = (
+            f"{load_private_prompt('pattern_suggest')}\n\n"
+            f"## Treść zadania\n{self._student_text(task_text)}\n\n"
+            f"## Ocena rozwiązania ucznia\n{self._student_text(feedback)}\n\n"
+            f"## Szkic wzorca ucznia\n{self._student_text(draft)}\n"
+        )
+        text, meta = await self._generate_json([prompt], PATTERN_SUGGEST_SCHEMA)
+        result = parse_suggest_response(text)
+        result.meta = meta
+        return result
+
+    async def link_pattern_tasks(self, pattern: dict, candidates: list[dict]) -> LinkResult:
+        """Up to 5 of the server's candidate OMJ tasks that exercise the pattern."""
+        lines = []
+        for c in candidates:
+            hints = " | ".join(c.get("hints") or [])
+            lines.append(
+                f"- {c['task_key']} | trudność {c.get('difficulty') or '?'} | "
+                f"{', '.join(c.get('categories') or [])} | {hints}"
+            )
+        prompt = (
+            f"{load_private_prompt('pattern_link')}\n\n"
+            f"## Wzorzec ucznia\n{self._student_text(self._draft_text(pattern))}\n\n"
+            f"## Kandydaci\n" + "\n".join(lines) + "\n"
+        )
+        text, meta = await self._generate_json([prompt], PATTERN_LINK_SCHEMA)
+        result = parse_link_response(text, {c["task_key"] for c in candidates})
         result.meta = meta
         return result
 

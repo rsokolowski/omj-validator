@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Paper, Typography, Box, Button, Collapse, IconButton } from "@mui/material";
 import { MathContent } from "@/components/ui/MathContent";
 import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
+import { useHintsUsage } from "./HintsUsageContext";
 
 interface HintsSectionProps {
   hints: string[];
@@ -11,10 +12,12 @@ interface HintsSectionProps {
 
 export function HintsSection({ hints }: HintsSectionProps) {
   const [revealedCount, setRevealedCount] = useState(0);
+  const usage = useHintsUsage();
 
   const revealNext = () => {
     if (revealedCount < hints.length) {
       setRevealedCount(revealedCount + 1);
+      usage?.report(revealedCount + 1);
     }
   };
 

@@ -110,6 +110,11 @@ class Settings(BaseSettings):
     # abuse_score (0-100) at or above which extraction / hint generation is
     # treated as a manipulation attempt and nothing is saved
     private_abuse_threshold: int = 70
+    # Patterns ("Wzorce"): AI calls while writing a pattern (ai_usage kinds
+    # pattern_refine / pattern_suggest / pattern_link). Recall reviews make none.
+    rate_limit_pattern_refines_per_user_per_day: int = 30   # Guided refine rounds
+    rate_limit_pattern_suggests_per_user_per_day: int = 10  # "Podpowiedz wzorzec"
+    rate_limit_pattern_links_per_user_per_day: int = 10     # OMJ task suggestions
 
     # Data retention (RODO art. 5(1)(e) - storage limitation)
     # Submissions belong to children, so nothing may be kept "just in case".
@@ -138,6 +143,9 @@ class Settings(BaseSettings):
     # deleted this long after its last activity - create, edit or submission.
     # Same horizon as submissions: two school years of an OMJ cohort.
     retention_private_task_months: Optional[int] = 24
+    # A pattern (text, refine history, typed recall answers, review log) is
+    # deleted this long after its last activity - edit, refine round or review.
+    retention_pattern_months: Optional[int] = 24
     # ai_usage rows only exist for rate limiting and cost accounting; 90 days
     # covers the 24h window many times over plus a billing period.
     retention_ai_usage_days: Optional[int] = 90

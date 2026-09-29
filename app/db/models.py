@@ -24,6 +24,9 @@ from sqlalchemy import (
     Enum,
     JSON,
     CheckConstraint,
+    Date,
+    SmallInteger,
+    UniqueConstraint,
 )
 from sqlalchemy.orm import relationship
 
@@ -65,6 +68,7 @@ class UserDB(Base):
     submissions = relationship("SubmissionDB", back_populates="user", cascade="all, delete-orphan")
     private_tasks = relationship("PrivateTaskDB", back_populates="user", cascade="all, delete-orphan")
     ai_usage = relationship("AIUsageDB", cascade="all, delete-orphan")
+    patterns = relationship("PatternDB", back_populates="user", cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
         return f"<User {self.email}>"
@@ -111,6 +115,15 @@ class SubmissionDB(Base):
     # How many hints of a private task the student had revealed before this
     # submission (0 for OMJ tasks, whose hints are revealed client-side only)
     hints_used = Column(Integer, nullable=False, default=0, server_default="0")
+
+    # Pattern practised by this submission ("Rozwiąż zadanie" on a pattern
+    # card); the grading result then counts as a review of that pattern
+    pattern_id = Column(
+        String(12),
+        ForeignKey("patterns.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
 
     # Submission data
     timestamp = Column(DateTime, nullable=False, default=utc_now)
@@ -224,6 +237,11 @@ class PrivateTaskDB(Base):
         back_populates="private_task",
         cascade="all, delete-orphan",
     )
+    pattern_links = relationship(
+        "PatternLinkDB",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
 
     __table_args__ = (
         Index("ix_private_tasks_user_activity", "user_id", "last_activity_at"),
@@ -258,6 +276,153 @@ class AIUsageDB(Base):
 
     def __repr__(self) -> str:
         return f"<AIUsage {self.kind} at {self.created_at}>"
+
+
+# A pattern link points at exactly one task: an OMJ one or a private one
+PATTERN_LINK_REF_CHECK = (
+    "(task_key IS NOT NULL AND private_task_id IS NULL) OR "
+    "(task_key IS NULL AND private_task_id IS NOT NULL)"
+)
+
+
+class PatternDB(Base):
+    """A problem-solving pattern a student wrote down ("Wzorce").
+
+    "When I see <trigger> in a problem, try <action>". Private to its owner,
+    reviewed with spaced repetition (app/patterns/srs.py) and linked to tasks
+    that exercise it. Expires with retention_pattern_months after the last
+    activity.
+    """
+
+    __tablename__ = "patterns"
+
+    # secrets.token_urlsafe(9) - 12 URL-safe chars, unguessable
+    id = Column(String(12), primary_key=True)
+    user_id = Column(
+        String(255),
+        ForeignKey("users.google_sub", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+
+    trigger = Column(Text, nullable=False)
+    action = Column(Text, nullable=False)
+    example = Column(Text, nullable=True)
+    category = Column(String(20), nullable=True)
+    # Up to 3 ids from data/skills.json - used to find OMJ tasks to link
+    skills = Column(JSON, nullable=False, default=list)
+    origin = Column(String(16), nullable=False)  # "own" | "ai_suggested"
+    # Refine rounds with the AI (at most 10, oldest dropped first)
+    refinement = Column(JSON, nullable=False, default=list)
+
+    # Spaced repetition: level 1-3, 4 = maintenance; streak = successes in a
+    # row at this level (0/1); due_on = Europe/Warsaw calendar day
+    srs_level = Column(SmallInteger, nullable=False, default=1, server_default="1")
+    srs_streak = Column(SmallInteger, nullable=False, default=0, server_default="0")
+    due_on = Column(Date, nullable=False, index=True)
+    review_count = Column(Integer, nullable=False, default=0, server_default="0")
+    lapse_count = Column(Integer, nullable=False, default=0, server_default="0")
+    last_reviewed_at = Column(DateTime, nullable=True)
+    # Paused: kept, but out of the review queue
+    archived_at = Column(DateTime, nullable=True)
+
+    created_at = Column(DateTime, nullable=False, default=utc_now)
+    updated_at = Column(DateTime, nullable=False, default=utc_now, onupdate=utc_now)
+    # Bumped by edits, refine rounds, reviews and practice results - drives retention
+    last_activity_at = Column(DateTime, nullable=False, default=utc_now, index=True)
+
+    user = relationship("UserDB", back_populates="patterns")
+    links = relationship(
+        "PatternLinkDB",
+        back_populates="pattern",
+        cascade="all, delete-orphan",
+        order_by="PatternLinkDB.id",
+    )
+    reviews = relationship(
+        "PatternReviewDB",
+        back_populates="pattern",
+        cascade="all, delete-orphan",
+        order_by="PatternReviewDB.id",
+    )
+    # Submissions keep their row when the pattern goes (FK SET NULL)
+    submissions = relationship("SubmissionDB", passive_deletes=True)
+
+    __table_args__ = (Index("ix_patterns_user_due", "user_id", "due_on"),)
+
+    def __repr__(self) -> str:
+        return f"<Pattern {self.id}>"
+
+
+class PatternLinkDB(Base):
+    """A task connected to a pattern: where it came from, or where to practise it."""
+
+    __tablename__ = "pattern_links"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    pattern_id = Column(
+        String(12),
+        ForeignKey("patterns.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    # Both indexed: "patterns of this task" lists and the private task cascade
+    task_key = Column(String(32), nullable=True, index=True)  # OMJ "{year}_{etap}_{num}"
+    private_task_id = Column(
+        String(12),
+        ForeignKey("private_tasks.id", ondelete="CASCADE"),
+        nullable=True,
+        index=True,
+    )
+    role = Column(String(10), nullable=False)  # "source" | "practice"
+    origin = Column(String(8), nullable=False)  # "ai" | "manual"
+    # "rejected" rows stay so the AI never suggests the same task again
+    status = Column(String(10), nullable=False)  # "suggested" | "accepted" | "rejected"
+    reason = Column(Text, nullable=True)
+    created_at = Column(DateTime, nullable=False, default=utc_now)
+
+    pattern = relationship("PatternDB", back_populates="links")
+
+    __table_args__ = (
+        CheckConstraint(PATTERN_LINK_REF_CHECK, name="ck_pattern_links_ref"),
+        UniqueConstraint("pattern_id", "task_key", name="uq_pattern_links_task_key"),
+        UniqueConstraint("pattern_id", "private_task_id", name="uq_pattern_links_private_task"),
+    )
+
+
+class PatternReviewDB(Base):
+    """One review of a pattern: a recall card or a graded practice task."""
+
+    __tablename__ = "pattern_reviews"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    pattern_id = Column(
+        String(12),
+        ForeignKey("patterns.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    user_id = Column(
+        String(255),
+        ForeignKey("users.google_sub", ondelete="CASCADE"),
+        nullable=False,
+    )
+    kind = Column(String(8), nullable=False)  # "recall" | "task"
+    outcome = Column(String(8), nullable=False)  # "fail" | "hard" | "ok"
+    # What the student typed from memory (recall reviews only)
+    recall_text = Column(Text, nullable=True)
+    submission_id = Column(
+        String(8),
+        ForeignKey("submissions.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+    level_before = Column(SmallInteger, nullable=False)
+    level_after = Column(SmallInteger, nullable=False)
+    due_before = Column(Date, nullable=False)
+    due_after = Column(Date, nullable=False)
+    created_at = Column(DateTime, nullable=False, default=utc_now)
+
+    pattern = relationship("PatternDB", back_populates="reviews")
 
 
 class DeletedAccountQuotaDB(Base):

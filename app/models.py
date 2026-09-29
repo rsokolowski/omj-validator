@@ -1,6 +1,6 @@
 from pydantic import BaseModel, computed_field, Field, field_validator
 from datetime import datetime
-from typing import Optional, Literal
+from typing import Annotated, Optional, Literal
 from enum import Enum
 
 
@@ -118,6 +118,8 @@ class Submission(BaseModel):
     # Set instead of the OMJ fields for a private task submission
     private_task_id: Optional[str] = None
     hints_used: int = 0
+    # Pattern this solution practised (graded practice from a pattern card)
+    pattern_id: Optional[str] = None
     timestamp: datetime
     status: SubmissionStatus = SubmissionStatus.COMPLETED
     images: list[str]  # paths to uploaded images (relative to uploads_dir)
@@ -368,3 +370,191 @@ class UpdatePrivateTaskRequest(BaseModel):
         if value is not None and value not in PRIVATE_TASK_CATEGORIES:
             raise ValueError("Nieznana kategoria")
         return value
+
+
+# --------------------------------------------------------------------------
+# Patterns ("Wzorce")
+# --------------------------------------------------------------------------
+
+PATTERN_TRIGGER_MIN = 5
+PATTERN_TRIGGER_MAX = 300
+PATTERN_ACTION_MIN = 5
+PATTERN_ACTION_MAX = 600
+PATTERN_EXAMPLE_MAX = 1000
+PATTERN_RAW_MAX = 1000
+PATTERN_ANSWER_MAX = 1000
+PATTERN_REASON_MAX = 300
+PATTERN_COMMENT_MAX = 500
+PATTERN_QUESTION_MAX = 300
+PATTERN_QUESTIONS = 2
+PATTERN_SKILLS_MAX = 3
+PATTERN_ROUNDS_MAX = 10
+RECALL_TEXT_MIN = 10
+RECALL_TEXT_MAX = 1000
+
+
+class PatternVariant(BaseModel):
+    """One wording of a pattern: when you see <trigger>, try <action>."""
+
+    trigger: str = Field(max_length=PATTERN_TRIGGER_MAX)
+    action: str = Field(max_length=PATTERN_ACTION_MAX)
+    example: str = Field(default="", max_length=PATTERN_EXAMPLE_MAX)
+
+
+class RefineResult(BaseModel):
+    """A refine round from the AI: versions to pick from, verdict, questions."""
+
+    variants: list[PatternVariant] = []
+    questions: list[str] = []
+    verdict: str = "ok"
+    comment: str = ""
+    category: Optional[str] = None
+    skills: list[str] = []
+    abuse_score: int = 0
+    meta: dict = {}
+
+
+class PatternSuggestion(PatternVariant):
+    why: str = Field(default="", max_length=PATTERN_REASON_MAX)
+
+
+class SuggestResult(BaseModel):
+    suggestions: list[PatternSuggestion] = []
+    abuse_score: int = 0
+    meta: dict = {}
+
+
+class LinkSuggestion(BaseModel):
+    task_key: str
+    reason: str = ""
+
+
+class LinkResult(BaseModel):
+    links: list[LinkSuggestion] = []
+    abuse_score: int = 0
+    meta: dict = {}
+
+
+class PatternDraft(BaseModel):
+    """A pattern being written: split into trigger/action, or one free sentence."""
+
+    trigger: str = Field(default="", max_length=PATTERN_TRIGGER_MAX)
+    action: str = Field(default="", max_length=PATTERN_ACTION_MAX)
+    example: str = Field(default="", max_length=PATTERN_EXAMPLE_MAX)
+    raw: str = Field(default="", max_length=PATTERN_RAW_MAX)
+
+
+class PatternSource(BaseModel):
+    task_key: Optional[str] = Field(default=None, max_length=32)
+    private_task_id: Optional[str] = Field(default=None, max_length=12)
+
+
+class RefineRoundIn(BaseModel):
+    """A refine round as the client keeps it and sends it back to be stored."""
+
+    draft: PatternDraft = PatternDraft()
+    answer: Optional[str] = Field(default=None, max_length=PATTERN_ANSWER_MAX)
+    variants: list[PatternVariant] = Field(default=[], max_length=3)
+    questions: list[str] = Field(default=[], max_length=PATTERN_QUESTIONS)
+    verdict: str = Field(default="ok", max_length=20)
+    comment: str = Field(default="", max_length=PATTERN_COMMENT_MAX)
+    chosen: Optional[int] = Field(default=None, ge=0, le=2)
+    # The AI's category / skills proposal from this round (filtered on save)
+    category: Optional[str] = Field(default=None, max_length=20)
+    skills: list[Annotated[str, Field(max_length=64)]] = Field(default=[], max_length=10)
+
+    @field_validator("questions")
+    @classmethod
+    def _clip_questions(cls, value: list[str]) -> list[str]:
+        return [q[:PATTERN_QUESTION_MAX] for q in value]
+
+
+def _last_rounds(value: list) -> list:
+    """A long refine session keeps its most recent rounds instead of being refused."""
+    return value[-PATTERN_ROUNDS_MAX:]
+
+
+def _pattern_category(value: Optional[str]) -> Optional[str]:
+    if value is None or value == "":
+        return None
+    if value not in PRIVATE_TASK_CATEGORIES:
+        raise ValueError("Nieznana kategoria")
+    return value
+
+
+class CreatePatternRequest(BaseModel):
+    trigger: str = Field(min_length=PATTERN_TRIGGER_MIN, max_length=PATTERN_TRIGGER_MAX)
+    action: str = Field(min_length=PATTERN_ACTION_MIN, max_length=PATTERN_ACTION_MAX)
+    example: Optional[str] = Field(default=None, max_length=PATTERN_EXAMPLE_MAX)
+    category: Optional[str] = None
+    skills: list[str] = Field(default=[], max_length=10)
+    origin: Literal["own", "ai_suggested"] = "own"
+    source: Optional[PatternSource] = None
+    refinement: list[RefineRoundIn] = Field(default=[], max_length=100)
+
+    _keep_last_rounds = field_validator("refinement")(_last_rounds)
+
+    @field_validator("trigger", "action")
+    @classmethod
+    def _strip_required(cls, value: str) -> str:
+        value = value.strip()
+        if len(value) < PATTERN_TRIGGER_MIN:
+            raise ValueError("Za krótki tekst")
+        return value
+
+    @field_validator("category")
+    @classmethod
+    def _check_category(cls, value: Optional[str]) -> Optional[str]:
+        return _pattern_category(value)
+
+
+class UpdatePatternRequest(BaseModel):
+    trigger: Optional[str] = Field(default=None, min_length=PATTERN_TRIGGER_MIN, max_length=PATTERN_TRIGGER_MAX)
+    action: Optional[str] = Field(default=None, min_length=PATTERN_ACTION_MIN, max_length=PATTERN_ACTION_MAX)
+    example: Optional[str] = Field(default=None, max_length=PATTERN_EXAMPLE_MAX)
+    category: Optional[str] = None
+    skills: Optional[list[str]] = Field(default=None, max_length=10)
+    append_round: Optional[RefineRoundIn] = None
+    archived: Optional[bool] = None
+
+    @field_validator("category")
+    @classmethod
+    def _check_category(cls, value: Optional[str]) -> Optional[str]:
+        return _pattern_category(value)
+
+
+class ManualLinkRequest(BaseModel):
+    task_key: Optional[str] = Field(default=None, max_length=32)
+    private_task_id: Optional[str] = Field(default=None, max_length=12)
+
+
+class LinkStatusRequest(BaseModel):
+    status: Literal["accepted", "rejected"]
+
+
+class ReviewRequest(BaseModel):
+    recall_text: str = Field(min_length=RECALL_TEXT_MIN, max_length=RECALL_TEXT_MAX)
+    outcome: Literal["fail", "hard", "ok"]
+
+    @field_validator("recall_text")
+    @classmethod
+    def _strip(cls, value: str) -> str:
+        value = value.strip()
+        if len(value) < RECALL_TEXT_MIN:
+            raise ValueError("Napisz przynajmniej jedno krótkie zdanie")
+        return value
+
+
+class RefineRequest(BaseModel):
+    draft: PatternDraft = PatternDraft()
+    source: Optional[PatternSource] = None
+    history: list[RefineRoundIn] = Field(default=[], max_length=100)
+
+    _keep_last_rounds = field_validator("history")(_last_rounds)
+    answer: Optional[str] = Field(default=None, max_length=PATTERN_ANSWER_MAX)
+    pattern_id: Optional[str] = Field(default=None, max_length=12)
+
+
+class SuggestPatternRequest(BaseModel):
+    submission_id: str = Field(max_length=8)
+    draft: Optional[str] = Field(default=None, max_length=PATTERN_RAW_MAX)

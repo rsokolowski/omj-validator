@@ -287,3 +287,34 @@ export const MOCK_PREP_TASKS: Record<MockEtap, string[]> = {
   etap1: ETAP1_PREP_TASKS,
   etap2: ETAP2_PREP_TASKS,
 };
+
+// Patterns (Wzorce) - limits mirror the backend (app/models.py)
+export const PATTERN_TRIGGER_MIN = 5;
+export const PATTERN_TRIGGER_MAX = 300;
+export const PATTERN_ACTION_MIN = 5;
+export const PATTERN_ACTION_MAX = 600;
+export const PATTERN_EXAMPLE_MAX = 1000;
+export const PATTERN_RAW_MAX = 1000;
+export const PATTERN_ANSWER_MAX = 1000;
+export const RECALL_TEXT_MIN = 10;
+export const RECALL_TEXT_MAX = 1000;
+
+export const PATTERN_LEVEL_NAMES: Record<number, string> = {
+  1: "Poziom 1",
+  2: "Poziom 2",
+  3: "Poziom 3",
+  4: "Utrwalony",
+};
+
+export const PATTERN_VERDICTS: Record<string, { label: string; color: "success" | "warning" | "error" | "info" }> = {
+  ok: { label: "Dobry wzorzec", color: "success" },
+  za_ogolny: { label: "Za ogólny", color: "warning" },
+  bledny: { label: "Coś się nie zgadza", color: "error" },
+  to_nie_wzorzec: { label: "To jeszcze nie wzorzec", color: "info" },
+};
+
+export const REVIEW_OUTCOMES: Record<string, string> = {
+  fail: "Nie pamiętałem",
+  hard: "Z trudem",
+  ok: "Pamiętałem",
+};

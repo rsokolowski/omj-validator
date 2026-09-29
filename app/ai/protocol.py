@@ -3,7 +3,14 @@
 from pathlib import Path
 from typing import Optional, Protocol, runtime_checkable
 
-from ..models import PrivateExtractionResult, PrivateTaskMeta, SubmissionResult
+from ..models import (
+    LinkResult,
+    PrivateExtractionResult,
+    PrivateTaskMeta,
+    RefineResult,
+    SubmissionResult,
+    SuggestResult,
+)
 
 
 @runtime_checkable
@@ -53,6 +60,20 @@ class AIProvider(Protocol):
         solution_text: Optional[str] = None,
     ) -> SubmissionResult:
         """Grade a solution to a private task (no official solution exists)."""
+        ...
+
+    async def refine_pattern(
+        self, draft: dict, source_text: Optional[str], history: list[dict], answer: Optional[str]
+    ) -> RefineResult:
+        """One guided refine round for a pattern (versions, verdict, questions)."""
+        ...
+
+    async def suggest_patterns(self, task_text: str, feedback: str, draft: Optional[str]) -> SuggestResult:
+        """Patterns worth remembering, from a graded solution's feedback."""
+        ...
+
+    async def link_pattern_tasks(self, pattern: dict, candidates: list[dict]) -> LinkResult:
+        """Pick the candidate OMJ tasks that exercise a pattern."""
         ...
 
     def get_timeout(self) -> int:

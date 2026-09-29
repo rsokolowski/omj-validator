@@ -23,7 +23,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
-from fastapi import Depends
+from fastapi import Depends, Form
 from sqlalchemy.orm import Session
 
 from .config import settings
@@ -103,8 +103,11 @@ from .scoring import get_max_score
 app = FastAPI(title="OMJ Validator", description="Walidator rozwiązań OMJ")
 
 from .private_tasks import router as private_tasks_router  # noqa: E402
+from .patterns.routes import router as patterns_router  # noqa: E402
+from .patterns import service as pattern_service  # noqa: E402
 
 app.include_router(private_tasks_router)
+app.include_router(patterns_router)
 
 # Determine if we're in split deployment mode (frontend on different domain)
 is_split_deployment = bool(settings.frontend_url)
@@ -703,6 +706,8 @@ async def submit_solution(
     num: int,
     images: list[UploadFile] = File(default=[]),
     solution_text: OptionalType[str] = Form(default=None),
+    pattern_id: OptionalType[str] = Form(None),
+    hints_used: OptionalType[int] = Form(None),
     db: Session = Depends(get_db),
 ):
     """
@@ -712,6 +717,10 @@ async def submit_solution(
     PNG photos), a typed text (``solution_text``, plain text with $LaTeX$) or
     both - at least one of them. Returns immediately with submission_id;
     the client connects to /ws/submissions/{submission_id} for progress.
+
+    ``pattern_id`` (one of the user's patterns) marks the solution as practice
+    of that pattern; ``hints_used`` is the number of hints the task page
+    revealed (OMJ hints are shown client-side), clamped to the task's hints.
     """
     # Check if user is authenticated
     if not verify_auth(request):
@@ -781,6 +790,8 @@ async def submit_solution(
 
     submission_id = str(uuid.uuid4())[:8]
 
+    omj = pattern_service.omj_task(f"{year}_{etap}_{num}")
+    hints_available = len(omj.hints) if omj is not None else 0
     submission = submission_repo.create(
         id=submission_id,
         user_id=user_id,
@@ -790,6 +801,8 @@ async def submit_solution(
         images=[str(p.relative_to(settings.uploads_dir)) for p in saved_paths],
         solution_text=solution_text,
         status=SubmissionStatus.PENDING,
+        pattern_id=pattern_service.owned_pattern_id(db, user_id, pattern_id),
+        hints_used=max(0, min(hints_used or 0, hints_available)),
     )
 
     # Initialize progress tracking (handler.py will set first status)
@@ -1111,6 +1124,44 @@ async def reset_user_submissions(
         "deleted_count": deleted_count,
         "user_email": user.get("email"),
     }
+
+
+@app.post("/api/test/reset-user-patterns")
+async def reset_user_patterns(request: Request, db: Session = Depends(get_db)):
+    """Delete all of the current user's patterns (E2E_MODE only)."""
+    if not settings.e2e_mode:
+        raise HTTPException(status_code=404, detail="Not found")
+    user = get_current_user(request)
+    if not user or not user.get("google_sub"):
+        raise HTTPException(status_code=401, detail="Authentication required")
+
+    from .db.models import PatternDB
+
+    patterns = db.query(PatternDB).filter(PatternDB.user_id == user["google_sub"]).all()
+    for pattern in patterns:
+        db.delete(pattern)
+    db.commit()
+    return {"success": True, "deleted_count": len(patterns)}
+
+
+@app.post("/api/test/patterns/{pattern_id}/make-due")
+async def make_pattern_due(pattern_id: str, request: Request, db: Session = Depends(get_db)):
+    """Move one of the current user's patterns to today (E2E_MODE only)."""
+    if not settings.e2e_mode:
+        raise HTTPException(status_code=404, detail="Not found")
+    user = get_current_user(request)
+    if not user or not user.get("google_sub"):
+        raise HTTPException(status_code=401, detail="Authentication required")
+
+    from .db.patterns import PatternRepository
+    from .patterns import srs
+
+    pattern = PatternRepository(db).get_owned(pattern_id, user["google_sub"])
+    if pattern is None:
+        raise HTTPException(status_code=404, detail="Not found")
+    pattern.due_on = srs.today_warsaw()
+    db.commit()
+    return {"success": True, "due_on": pattern.due_on.isoformat()}
 
 
 @app.post("/api/test/reset-all-submissions")
