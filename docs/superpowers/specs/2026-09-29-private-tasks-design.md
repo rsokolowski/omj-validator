@@ -46,7 +46,8 @@ student's external notebook, reference-solution upload, OIJ/programming tasks.
 | `category` | `String(20)`, nullable | one of the six existing categories |
 | `difficulty` | `Integer`, nullable | 1–5 |
 | `hints` | `JSON` | list of 0–4 strings |
-| `pending_hints_used` | `Integer`, default 0 | hints revealed since the last submission |
+| `hints_revealed` | `Integer`, default 0 | highest hint number ever revealed (reload shows these) |
+| `pending_hints_used` | `Integer`, default 0 | highest hint revealed since the last submission |
 | `source_images` | `JSON` | relative paths, `uploads/{user}/private/{task_id}/source/*.jpg`; `[]` for typed |
 | `origin` | `String(10)` | `photo` \| `typed` |
 | `extraction_meta` | `JSON`, nullable | model, tokens, cost, raw thinking (thinking stripped after 90 days) |
@@ -85,7 +86,7 @@ links. Relying on NULL non-matching is not accepted.
 |---|---|
 | `id` | PK |
 | `user_id` | FK users, `ondelete=CASCADE`, indexed |
-| `kind` | `private_extract` \| `private_meta` |
+| `kind` | `private_extract` \| `private_create` \| `private_regen` |
 | `created_at` | indexed |
 | `meta` | JSON: model, tokens, cost (no content) |
 
@@ -107,6 +108,7 @@ The existing `analyze_solution*` path is untouched.
    (photo and typed) and for "regenerate hints".
    Prompt: `prompts/private_task_meta.txt`.
 3. `analyze_private_solution_stream(task_title, task_content, images)`
+   Student images are sent inline (`Part.from_bytes`), no File API upload.
    Mirrors `analyze_solution_stream` (same streaming events and return shape
    `{score, feedback, issue_type, abuse_score}`) so `parse_ai_response`,
    OMJ score snapping, `process_submission_background`, the WebSocket
@@ -142,13 +144,13 @@ Client-side editor with live preview → `POST /api/private-tasks` with
 
 ### Rate limits (all configurable in `app/config.py`)
 
-- `rate_limit_private_tasks_per_user_per_day = 10` — counts created tasks.
+- `rate_limit_private_tasks_per_user_per_day = 10` — counts `private_create` + `private_regen` rows.
 - `rate_limit_private_extracts_per_user_per_day = 15` — counts extraction calls.
 - Grading private tasks shares the existing per-user submission limit (30/day)
   and global limit, since they are `submissions` rows.
 - A global daily cap on `ai_usage` rows (`rate_limit_ai_usage_global_per_day = 1000`).
 - `ALLOWED_EMAILS` bypass applies as today. Deleted-account quota tombstones
-  also carry the new counters.
+  also carry the new counters (new column `deleted_account_quota.ai_usage_count`).
 - Values are initial placeholders to tune in production.
 
 ## 3. API and frontend
@@ -160,14 +162,14 @@ POST   /api/private-tasks/extract               photos -> {draft_id, problems[]}
 POST   /api/private-tasks                       create from draft selections or typed -> [task]
 GET    /api/private-tasks                       list (paginated): title, source_label, category,
                                                 difficulty, best_score, attempts, last_activity_at
-GET    /api/private-tasks/{id}                  detail, hint count but NOT hint text
+GET    /api/private-tasks/{id}                  detail + submission history; hint count and the
+                                                text of already revealed hints only
 PATCH  /api/private-tasks/{id}                  title, content, source_label, category, difficulty
 POST   /api/private-tasks/{id}/hints/{n}        reveal hint n (only n <= revealed+1) -> text;
                                                 increments pending_hints_used
 POST   /api/private-tasks/{id}/regenerate-hints
 DELETE /api/private-tasks/{id}                  task + submissions + all photos
-GET    /api/private-tasks/{id}/history          submissions for this task
-POST   /private-task/{id}/submit                solution photos -> {submission_id, ws_path}
+POST   /api/private-tasks/{id}/submit           solution photos -> {submission_id, ws_path}
 ```
 
 On submit, `pending_hints_used` is copied to `submissions.hints_used` and
