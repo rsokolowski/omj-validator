@@ -39,7 +39,8 @@ test("indexMath wraps each formula with its source index, in findMathSpans order
   assert.deepEqual(indices, [0, 1, 2, 3]);
   assert.equal(findMathSpans(text).length, 4);
   assert.ok(html.includes('class="math-src math-src--display" data-math-index="2"'), html);
-  assert.ok(html.includes('role="button" tabindex="0" aria-label="Popraw wzór"'), html);
+  assert.ok(html.includes('role="button" tabindex="0" aria-label="Popraw wzór 1"'), html);
+  assert.ok(html.includes('data-math-index="3" role="button" tabindex="0" aria-label="Popraw wzór 4"'), html);
 });
 
 test("without indexMath there is no wrapper", () => {

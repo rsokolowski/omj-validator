@@ -249,7 +249,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
           {submission.images && submission.images.length > 0 && (
             <Box sx={{ mt: 2 }}>
               <Typography variant="subtitle2" component="p" sx={{ color: "grey.600", mb: 1 }}>
-                Przesłane zdjęcia:
+                Zdjęcia i rysunki:
               </Typography>
               <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
                 {submission.images.map((image, imgIndex) => (
@@ -263,7 +263,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
                     <Box
                       component="img"
                       src={`/uploads/${image}`}
-                      alt={`Fotografia ${imgIndex + 1} z ${submission.images!.length} przesłanego rozwiązania — otwiera się w nowej karcie`}
+                      alt={`Załącznik ${imgIndex + 1} z ${submission.images!.length} przesłanego rozwiązania — otwiera się w nowej karcie`}
                       sx={{
                         width: 80,
                         height: 80,

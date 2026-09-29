@@ -42,6 +42,8 @@ test.describe('Typed solutions', () => {
     await expect(submit).toBeEnabled();
     await submit.click();
     await expect(page.getByText(/Wynik: 6 \/ 6 punktów/)).toBeVisible({ timeout: 30000 });
+    // The typed text survives the result, so the student can fix it and resubmit
+    await expect(page.getByLabel('Tekst rozwiązania')).toHaveValue(SOLUTION);
 
     // The history below refreshes with the graded submission and shows the text
     // (wait for the refetch: clicking before it would expand an older entry)

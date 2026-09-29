@@ -237,7 +237,6 @@ export function SubmitSection({
                 },
               });
               clearFiles();
-              setSolutionText("");
               if (fileInputRef.current) {
                 fileInputRef.current.value = "";
               }
@@ -297,12 +296,16 @@ export function SubmitSection({
 
   const addFiles = (newFiles: File[]) => {
     const imageFiles = newFiles.filter((file) => file.type.startsWith("image/"));
+    const notImages = newFiles.length - imageFiles.length;
     const kept = imageFiles.slice(0, Math.max(0, MAX_UPLOAD_FILES - files.length));
     const dropped = imageFiles.length - kept.length;
     setFiles([...files, ...kept.map((file) => ({ file, url: URL.createObjectURL(file) }))]);
-    setFilesNotice(
-      dropped > 0 ? `Można dodać najwyżej ${MAX_UPLOAD_FILES} zdjęć i rysunków – pominięto ${dropped}.` : ""
-    );
+    const notices: string[] = [];
+    if (notImages > 0) notices.push(`Pominięto pliki, które nie są zdjęciami: ${notImages}.`);
+    if (dropped > 0) {
+      notices.push(`Można dodać najwyżej ${MAX_UPLOAD_FILES} zdjęć i rysunków – pominięto ${dropped}.`);
+    }
+    setFilesNotice(notices.join(" "));
     resetOutcome();
   };
 

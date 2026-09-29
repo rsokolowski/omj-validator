@@ -90,7 +90,7 @@ export function renderMathHtml(content: string, options: RenderMathOptions = {})
       const cls = segment.display ? "math-src math-src--display" : "math-src";
       html +=
         `<span class="${cls}" data-math-index="${mathIndex}" role="button" tabindex="0" ` +
-        `aria-label="Popraw wzór">${rendered}</span>`;
+        `aria-label="Popraw wzór ${mathIndex + 1}">${rendered}</span>`;
     } else {
       html += rendered;
     }
