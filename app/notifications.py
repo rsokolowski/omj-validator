@@ -66,13 +66,14 @@ def build_start_message(
     etap: str,
     task_number: int,
     image_count: int,
+    text_chars: int = 0,
 ) -> str:
     """Build the notification text for a submission that started processing."""
     return (
         f"📥 New submission {submission_id}\n"
         f"{_pseudonym_line(user_id)}"
         f"Task: {year}/{etap}/zad {task_number}\n"
-        f"Images: {image_count}"
+        f"Images: {image_count}, text: {text_chars} chars"
     )
 
 

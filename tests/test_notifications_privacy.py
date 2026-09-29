@@ -56,6 +56,14 @@ class TestNoIdentity:
         for message in _all_messages():
             assert "User:" not in message
 
+    def test_text_submission_message_carries_length_only(self):
+        message = build_start_message("ab12cd34", USER_ID, "2024", "etap1", 3, 0, 1234)
+        assert "Images: 0, text: 1234 chars" in message
+        # The signature takes a count, never the text: nothing to leak
+        import inspect
+
+        assert inspect.signature(build_start_message).parameters["text_chars"].annotation is int
+
     def test_operational_data_is_kept(self):
         start = build_start_message("ab12cd34", USER_ID, "2024", "etap1", 3, 2)
         assert "ab12cd34" in start
