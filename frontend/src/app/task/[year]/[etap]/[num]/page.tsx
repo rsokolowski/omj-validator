@@ -11,14 +11,31 @@ import { HintsSection } from "@/components/task/HintsSection";
 import { SkillsSection } from "@/components/task/SkillsSection";
 import { SubmitSection } from "@/components/task/SubmitSection";
 import { SubmissionHistory } from "@/components/task/SubmissionHistory";
+import { HintsUsageProvider } from "@/components/task/HintsUsageContext";
+import { PracticeBanner } from "@/components/patterns/PracticeBanner";
+import { SavePatternBox } from "@/components/patterns/SavePatternBox";
 import { serverFetch } from "@/lib/api/server";
-import { TaskDetailResponse } from "@/lib/types";
+import { Pattern, TaskDetailResponse } from "@/lib/types";
 import { ETAP_NAMES, CONTACT_EMAIL, CATEGORY_NAMES } from "@/lib/utils/constants";
 
 export const dynamic = "force-dynamic";
 
 interface TaskPageProps {
   params: Promise<{ year: string; etap: string; num: string }>;
+  searchParams?: Promise<{ wzorzec?: string | string[] }>;
+}
+
+const PATTERN_ID = /^[A-Za-z0-9_-]{12}$/;
+
+/** The pattern being practised (?wzorzec=), or null - never an error. */
+async function getPracticedPattern(raw: string | string[] | undefined): Promise<Pattern | null> {
+  if (typeof raw !== "string" || !PATTERN_ID.test(raw)) return null;
+  try {
+    const { pattern } = await serverFetch<{ pattern: Pattern }>(`/api/patterns/${raw}`);
+    return pattern;
+  } catch {
+    return null;
+  }
 }
 
 export async function generateMetadata({ params }: TaskPageProps): Promise<Metadata> {
@@ -58,10 +75,12 @@ async function getTask(year: string, etap: string, num: string): Promise<TaskDet
   return serverFetch<TaskDetailResponse>(`/api/task/${year}/${etap}/${num}`);
 }
 
-export default async function TaskPage({ params }: TaskPageProps) {
+export default async function TaskPage({ params, searchParams }: TaskPageProps) {
   const { year, etap, num } = await params;
+  const { wzorzec } = (await searchParams) ?? {};
   const data = await getTask(year, etap, num);
   const { task, pdf_links, can_submit, skills_required, skills_gained, prerequisite_statuses, submissions, stats } = data;
+  const practiced = can_submit ? await getPracticedPattern(wzorzec) : null;
 
   const etapName = ETAP_NAMES[etap] || etap;
   const breadcrumbItems = [
@@ -220,19 +239,32 @@ export default async function TaskPage({ params }: TaskPageProps) {
         <SkillsSection skillsRequired={skills_required} skillsGained={skills_gained} />
       )}
 
-      {/* Hints Section */}
-      {task.hints.length > 0 && (
-        <HintsSection hints={task.hints} />
-      )}
+      {practiced && <PracticeBanner pattern={practiced} />}
 
-      {/* Submit Section */}
-      <SubmitSection
-        year={year}
-        etap={etap}
-        num={parseInt(num)}
-        canSubmit={can_submit}
-        isAuthenticated={data.is_authenticated}
-      />
+      <HintsUsageProvider>
+        {/* Hints Section */}
+        {task.hints.length > 0 && (
+          <HintsSection hints={task.hints} />
+        )}
+
+        {/* Submit Section */}
+        <SubmitSection
+          year={year}
+          etap={etap}
+          num={parseInt(num)}
+          canSubmit={can_submit}
+          isAuthenticated={data.is_authenticated}
+          patternId={practiced?.id}
+        />
+      </HintsUsageProvider>
+
+      {/* Patterns (Wzorce) noticed while solving this task */}
+      {can_submit && data.is_authenticated && (
+        <SavePatternBox
+          source={{ task_key: `${year}_${etap}_${num}` }}
+          latestSubmissionId={submissions.find((s) => s.status === "completed")?.id ?? null}
+        />
+      )}
 
       {/* Submission History */}
       {can_submit && submissions.length > 0 && (

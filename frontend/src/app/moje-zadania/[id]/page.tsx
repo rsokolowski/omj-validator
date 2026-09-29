@@ -11,8 +11,10 @@ import { SubmissionHistory } from "@/components/task/SubmissionHistory";
 import { PrivateHintsSection } from "@/components/private-tasks/PrivateHintsSection";
 import { PrivateTaskActions } from "@/components/private-tasks/PrivateTaskActions";
 import { SourcePhotos } from "@/components/private-tasks/SourcePhotos";
+import { PracticeBanner } from "@/components/patterns/PracticeBanner";
+import { SavePatternBox } from "@/components/patterns/SavePatternBox";
 import { APIError, serverFetch } from "@/lib/api/server";
-import { PrivateTaskDetailResponse } from "@/lib/types";
+import { Pattern, PrivateTaskDetailResponse } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -25,16 +27,28 @@ export const metadata: Metadata = {
 
 interface PageProps {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ ocena?: string | string[] }>;
+  searchParams: Promise<{ ocena?: string | string[]; wzorzec?: string | string[] }>;
 }
 
 // Submission ids are the first 8 characters of a uuid4
 const SUBMISSION_ID = /^[0-9a-f]{8}$/;
+const PATTERN_ID = /^[A-Za-z0-9_-]{12}$/;
+
+/** The pattern being practised (?wzorzec=), or null - never an error. */
+async function getPracticedPattern(raw: string | string[] | undefined): Promise<Pattern | null> {
+  if (typeof raw !== "string" || !PATTERN_ID.test(raw)) return null;
+  try {
+    const { pattern } = await serverFetch<{ pattern: Pattern }>(`/api/patterns/${raw}`);
+    return pattern;
+  } catch {
+    return null;
+  }
+}
 
 export default async function PrivateTaskPage({ params, searchParams }: PageProps) {
   const { id } = await params;
   // Set by "Odczytaj zadanie i oceń", which sends the solution before coming here
-  const { ocena } = await searchParams;
+  const { ocena, wzorzec } = await searchParams;
   const resumeSubmissionId = typeof ocena === "string" && SUBMISSION_ID.test(ocena) ? ocena : undefined;
   let data: PrivateTaskDetailResponse;
   try {
@@ -50,6 +64,7 @@ export default async function PrivateTaskPage({ params, searchParams }: PageProp
   }
 
   const { task, submissions, stats } = data;
+  const practiced = await getPracticedPattern(wzorzec);
 
   return (
     <Box>
@@ -102,12 +117,20 @@ export default async function PrivateTaskPage({ params, searchParams }: PageProp
         </Typography>
       </Paper>
 
+      {practiced && <PracticeBanner pattern={practiced} />}
+
       <SubmitSection
         canSubmit
         isAuthenticated
         submitUrl={`/api/private-tasks/${task.id}/submit`}
         pagePath={`/moje-zadania/${task.id}`}
         resumeSubmissionId={resumeSubmissionId}
+        patternId={practiced?.id}
+      />
+
+      <SavePatternBox
+        source={{ private_task_id: task.id }}
+        latestSubmissionId={submissions.find((s) => s.status === "completed")?.id ?? null}
       />
 
       {submissions.length > 0 && (

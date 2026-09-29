@@ -15,6 +15,7 @@ import { getMaxScore } from "@/lib/utils/constants";
 import { LoginPrompt } from "@/components/common/LoginPrompt";
 import { MathContent } from "@/components/ui/MathContent";
 import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
+import { useHintsUsage } from "./HintsUsageContext";
 
 interface SubmitSectionProps {
   year?: string;
@@ -31,6 +32,8 @@ interface SubmitSectionProps {
   /** Submission already sent from another page ("Odczytaj zadanie i oceń") -
    *  follow its grading from the moment this section mounts */
   resumeSubmissionId?: string;
+  /** Solution practises this pattern ("Rozwiąż zadanie" on a pattern card) */
+  patternId?: string;
 }
 
 interface SubmitResponse {
@@ -103,8 +106,10 @@ export function SubmitSection({
   pagePath,
   onCompleted,
   resumeSubmissionId,
+  patternId,
 }: SubmitSectionProps) {
   const router = useRouter();
+  const hintsUsage = useHintsUsage();
   const [files, setFiles] = useState<File[]>([]);
   const [uploadState, setUploadState] = useState<UploadState>({
     status: "idle",
@@ -289,9 +294,15 @@ export function SubmitSection({
 
     try {
       // Step 1: Upload files via POST
+      const fields: Record<string, string> = {};
+      if (patternId) fields.pattern_id = patternId;
+      // OMJ hints are revealed in the browser only; private tasks count them server-side
+      if (!submitUrl && hintsUsage) fields.hints_used = String(hintsUsage.used);
       const result = await uploadFiles<SubmitResponse>(
         submitUrl ?? `/api/task/${year}/${etap}/${num}/submit`,
-        files
+        files,
+        undefined,
+        fields
       );
 
       if (!result.success || !result.submission_id) {
