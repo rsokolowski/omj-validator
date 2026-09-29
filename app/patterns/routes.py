@@ -13,8 +13,10 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
+from ..ai import AIContentBlockedError, AIProviderError, create_ai_provider
+from ..config import settings
 from ..db import get_db
-from ..db.models import PatternDB, PatternLinkDB, PrivateTaskDB
+from ..db.models import PatternDB, PatternLinkDB, PrivateTaskDB, SubmissionDB, SubmissionStatus
 from ..db.patterns import PatternRepository
 from ..db.private_tasks import PrivateTaskRepository
 from ..db.repositories import ensure_utc
@@ -25,14 +27,17 @@ from ..models import (
     LinkStatusRequest,
     ManualLinkRequest,
     PatternSource,
+    RefineRequest,
     RefineRoundIn,
     ReviewRequest,
+    SuggestPatternRequest,
     UpdatePatternRequest,
 )
+from ..privacy import mask_user_id
 from ..private_tasks import routes as private_routes
 from ..private_tasks import service as private_service
 from ..skills import get_skill
-from . import service, srs
+from . import linking, service, srs
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +46,8 @@ router = APIRouter(prefix="/api/patterns", tags=["patterns"])
 NOT_FOUND = "Nie znaleziono wzorca"
 TASK_NOT_FOUND = "Nie znaleziono zadania"
 NOT_DUE = "Ten wzorzec nie czeka dziś na powtórkę."
+REFUSED = "Tej treści nie możemy przetworzyć."
+AI_FAILED = "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
 
 
 def _now() -> datetime:
@@ -364,3 +371,147 @@ async def practice_task(request: Request, pattern_id: str, db: Session = Depends
     else:
         url = f"/moje-zadania/{chosen.ref}"
     return {"task": {"kind": chosen.kind, "ref": chosen.ref, "title": chosen.title, "url": url}}
+
+
+# ------------------------------------------------------------------------- AI
+
+
+def _reserve(db: Session, request: Request, user_id: str, kind: str, limit: int):
+    [row] = private_service.reserve_ai_calls(db, user_id, kind, {kind}, limit, is_allowlisted(request))
+    return row
+
+
+async def _call(db: Session, usage_row, user_id: str, call):
+    """Run an AI call; blocked or abusive -> 422, failure -> 502. The call counts either way."""
+    try:
+        result = await call
+    except AIContentBlockedError:
+        raise HTTPException(status_code=422, detail=REFUSED)
+    except AIProviderError as e:
+        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=str(e))
+    except Exception:
+        logger.exception("Pattern AI call crashed")
+        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=AI_FAILED)
+    usage_row.meta = result.meta or None
+    db.commit()
+    if result.abuse_score >= settings.private_abuse_threshold:
+        logger.warning(f"Pattern text flagged as manipulation for user {mask_user_id(user_id)}")
+        raise HTTPException(status_code=422, detail=REFUSED)
+    return result
+
+
+def _source_text(db: Session, source: Optional[dict]) -> Optional[str]:
+    if not source:
+        return None
+    if source.get("task_key"):
+        return service.omj_task_text(source["task_key"])
+    task = db.get(PrivateTaskDB, source["private_task_id"])
+    return service.private_task_text(task) if task is not None else None
+
+
+def _pattern_source(pattern: PatternDB) -> Optional[dict]:
+    for link in pattern.links:
+        if link.role == "source":
+            if link.task_key:
+                return {"task_key": link.task_key}
+            return {"private_task_id": link.private_task_id}
+    return None
+
+
+@router.post("/refine")
+async def refine_pattern(request: Request, payload: RefineRequest, db: Session = Depends(get_db)):
+    """One guided round: 2-3 versions to pick from, a verdict and questions back."""
+    user_id = await current_member_id(request)
+    draft = payload.draft.model_dump()
+    history = [r.model_dump() for r in payload.history]
+    if payload.pattern_id:
+        pattern = owned_pattern(db, payload.pattern_id, user_id)
+        if not (draft["trigger"] or draft["action"] or draft["raw"]):
+            draft.update(trigger=pattern.trigger, action=pattern.action, example=pattern.example or "")
+        source = _pattern_source(pattern)
+        history = list(pattern.refinement or []) + history
+    else:
+        source = resolve_source(db, payload.source, user_id)
+    if not (draft["raw"].strip() or (draft["trigger"].strip() and draft["action"].strip())):
+        raise HTTPException(status_code=422, detail="Napisz najpierw swój pomysł na wzorzec.")
+
+    usage_row = _reserve(db, request, user_id, service.KIND_REFINE,
+                         settings.rate_limit_pattern_refines_per_user_per_day)
+    result = await _call(db, usage_row, user_id, create_ai_provider().refine_pattern(
+        draft, _source_text(db, source), service.compact_history(history), payload.answer,
+    ))
+    if len(result.variants) < 2:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Nie udało się zaproponować wersji. Spróbuj jeszcze raz.",
+        )
+    return {
+        "round": {
+            "draft": draft,
+            "answer": payload.answer,
+            "variants": [v.model_dump() for v in result.variants],
+            "questions": result.questions,
+            "verdict": result.verdict,
+            "comment": result.comment,
+            "category": result.category,
+            "skills": result.skills,
+        }
+    }
+
+
+@router.post("/suggest")
+async def suggest_patterns(request: Request, payload: SuggestPatternRequest, db: Session = Depends(get_db)):
+    """"Podpowiedz wzorzec": patterns worth remembering from a graded solution."""
+    user_id = await current_member_id(request)
+    submission = db.get(SubmissionDB, payload.submission_id)
+    if submission is None or submission.user_id != user_id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Nie znaleziono rozwiązania")
+    if submission.status != SubmissionStatus.COMPLETED or not submission.feedback:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="To rozwiązanie nie zostało jeszcze ocenione.")
+    if submission.private_task_id:
+        task_text = _source_text(db, {"private_task_id": submission.private_task_id})
+    else:
+        task_text = service.omj_task_text(f"{submission.year}_{submission.etap}_{submission.task_number}")
+
+    usage_row = _reserve(db, request, user_id, service.KIND_SUGGEST,
+                         settings.rate_limit_pattern_suggests_per_user_per_day)
+    result = await _call(db, usage_row, user_id, create_ai_provider().suggest_patterns(
+        task_text or "", submission.feedback, payload.draft,
+    ))
+    if not result.suggestions:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Nie udało się zaproponować wzorca. Spróbuj jeszcze raz.",
+        )
+    return {"suggestions": [s.model_dump() for s in result.suggestions]}
+
+
+@router.post("/{pattern_id}/suggest-links")
+async def suggest_links(request: Request, pattern_id: str, db: Session = Depends(get_db)):
+    """AI picks OMJ tasks that exercise the pattern, from candidates the server chose."""
+    user_id = await current_member_id(request)
+    pattern = owned_pattern(db, pattern_id, user_id)
+    candidates = linking.select_candidates(
+        service.all_omj_tasks(),
+        skills=list(pattern.skills or []),
+        category=pattern.category,
+        excluded_keys={l.task_key for l in pattern.links if l.task_key},
+        solved_keys=service.solved_omj_keys(db, user_id),
+    )
+    if not candidates:
+        return {"links": []}
+
+    usage_row = _reserve(db, request, user_id, service.KIND_LINK,
+                         settings.rate_limit_pattern_links_per_user_per_day)
+    result = await _call(db, usage_row, user_id, create_ai_provider().link_pattern_tasks(
+        {"trigger": pattern.trigger, "action": pattern.action, "example": pattern.example or ""},
+        [linking.candidate_payload(t) for t in candidates],
+    ))
+    repo = PatternRepository(db)
+    created = []
+    for suggestion in result.links:
+        link = repo.add_link(pattern, task_key=suggestion.task_key, role="practice", origin="ai",
+                             status="suggested", reason=suggestion.reason or None)
+        if link is not None:
+            created.append(serialize_link(db, link))
+    return {"links": created}

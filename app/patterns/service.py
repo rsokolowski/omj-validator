@@ -152,3 +152,42 @@ def apply_practice_result(db: Session, submission_id: str) -> None:
         f"Pattern {pattern.id} of user {mask_user_id(submission.user_id)}: practice {outcome} "
         f"(level {level}, next {due.isoformat()})"
     )
+
+
+def all_omj_tasks() -> list:
+    """Every loaded OMJ task (metadata; statements may be missing)."""
+    return list(storage._load_all_tasks().values())
+
+
+def solved_omj_keys(db: Session, user_id: str) -> set[str]:
+    """OMJ task keys the user has a graded submission for."""
+    rows = (
+        db.query(SubmissionDB.year, SubmissionDB.etap, SubmissionDB.task_number)
+        .filter(
+            SubmissionDB.user_id == user_id,
+            SubmissionDB.private_task_id.is_(None),
+            SubmissionDB.status == SubmissionStatus.COMPLETED,
+        )
+        .distinct()
+        .all()
+    )
+    return {f"{y}_{e}_{n}" for y, e, n in rows}
+
+
+# Refine rounds sent back to the model (the rest only costs tokens)
+HISTORY_ROUNDS_SENT = 3
+
+
+def compact_history(rounds: list[dict]) -> list[dict]:
+    """Stored/client rounds -> what the model sees: chosen version, questions, answer."""
+    compacted = []
+    for round_ in rounds[-HISTORY_ROUNDS_SENT:]:
+        variants = round_.get("variants") or []
+        chosen = round_.get("chosen")
+        picked = variants[chosen] if isinstance(chosen, int) and 0 <= chosen < len(variants) else {}
+        compacted.append({
+            "chosen": dict(picked),
+            "questions": list(round_.get("questions") or []),
+            "answer": round_.get("answer"),
+        })
+    return compacted
