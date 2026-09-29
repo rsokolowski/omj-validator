@@ -442,6 +442,7 @@ class SubmissionRepository:
             self.db.query(SubmissionDB)
             .filter(
                 SubmissionDB.user_id == user_id,
+                SubmissionDB.private_task_id.is_(None),
                 SubmissionDB.year == year,
                 SubmissionDB.etap == etap,
                 SubmissionDB.task_number == task_number,
@@ -494,6 +495,8 @@ class SubmissionRepository:
             )
             .filter(
                 SubmissionDB.user_id == user_id,
+                # Private tasks are not part of the OMJ progression graph
+                SubmissionDB.private_task_id.is_(None),
                 SubmissionDB.status == SubmissionStatus.COMPLETED,
                 SubmissionDB.score.isnot(None),
             )
@@ -535,6 +538,8 @@ class SubmissionRepository:
             year=db_submission.year,
             etap=db_submission.etap,
             task_number=db_submission.task_number,
+            private_task_id=db_submission.private_task_id,
+            hints_used=db_submission.hints_used or 0,
             timestamp=ensure_utc(db_submission.timestamp),
             status=PydanticSubmissionStatus(db_submission.status.value),
             images=db_submission.images,
@@ -827,7 +832,12 @@ class SubmissionRepository:
         """
         query = self.db.query(SubmissionDB).filter(SubmissionDB.user_id == user_id)
 
-        # Apply filters
+        # Apply filters. A year/etap filter is an OMJ filter - private tasks
+        # have neither, so they are excluded explicitly rather than by NULL
+        # happening not to match.
+        if year_filter or etap_filter:
+            query = query.filter(SubmissionDB.private_task_id.is_(None))
+
         if year_filter:
             query = query.filter(SubmissionDB.year == year_filter)
 
@@ -907,13 +917,26 @@ class SubmissionRepository:
         avg_score = round(score_stats.avg_score, 2) if score_stats.avg_score else None
         best_score = score_stats.best_score
 
-        # Unique tasks attempted (any status)
-        tasks_attempted = (
+        # Unique tasks attempted (any status): OMJ tasks plus private tasks
+        omj_attempted = (
             self.db.query(SubmissionDB.year, SubmissionDB.etap, SubmissionDB.task_number)
-            .filter(SubmissionDB.user_id == user_id)
+            .filter(
+                SubmissionDB.user_id == user_id,
+                SubmissionDB.private_task_id.is_(None),
+            )
             .distinct()
             .count()
         )
+        private_attempted = (
+            self.db.query(SubmissionDB.private_task_id)
+            .filter(
+                SubmissionDB.user_id == user_id,
+                SubmissionDB.private_task_id.isnot(None),
+            )
+            .distinct()
+            .count()
+        )
+        tasks_attempted = omj_attempted + private_attempted
 
         # Tasks mastered: best score >= mastery threshold per task
         # etap1: mastery = 2, etap2/etap3: mastery = 5
@@ -929,6 +952,23 @@ class SubmissionRepository:
                 threshold = 2 if etap == "etap1" else 5
                 if best >= threshold:
                     tasks_mastered += 1
+
+        # Private tasks are graded on the 0/2/5/6 ladder, mastery = 5
+        private_best = (
+            self.db.query(
+                SubmissionDB.private_task_id,
+                func.max(SubmissionDB.score).label("best_score"),
+            )
+            .filter(
+                SubmissionDB.user_id == user_id,
+                SubmissionDB.private_task_id.isnot(None),
+                SubmissionDB.status == SubmissionStatus.COMPLETED,
+                SubmissionDB.score.isnot(None),
+            )
+            .group_by(SubmissionDB.private_task_id)
+            .all()
+        )
+        tasks_mastered += sum(1 for row in private_best if row.best_score >= 5)
 
         return {
             "total_submissions": total,

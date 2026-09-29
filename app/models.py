@@ -111,9 +111,13 @@ class Submission(BaseModel):
     """Student solution submission with AI scoring."""
     id: str
     user_id: str  # Google sub of the user who submitted
-    year: str
-    etap: str
-    task_number: int
+    # OMJ task reference - all three are None for a private task submission
+    year: Optional[str] = None
+    etap: Optional[str] = None
+    task_number: Optional[int] = None
+    # Set instead of the OMJ fields for a private task submission
+    private_task_id: Optional[str] = None
+    hints_used: int = 0
     timestamp: datetime
     status: SubmissionStatus = SubmissionStatus.COMPLETED
     images: list[str]  # paths to uploaded images (relative to uploads_dir)

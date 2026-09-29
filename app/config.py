@@ -97,6 +97,16 @@ class Settings(BaseSettings):
     rate_limit_submissions_per_user_per_day: int = 30  # Max submissions per user per 24h
     rate_limit_submissions_global_per_day: int = 500   # Max total submissions per 24h
 
+    # Private tasks ("Moje zadania"). Grading a private task is a submission and
+    # shares the limits above; these cover the AI calls made while CREATING a
+    # task, which have no submission row (counted in the ai_usage table).
+    rate_limit_private_tasks_per_user_per_day: int = 10     # Tasks created + hint regenerations
+    rate_limit_private_extracts_per_user_per_day: int = 15  # Photo -> text extractions
+    rate_limit_ai_usage_global_per_day: int = 1000          # All non-submission AI calls
+    # abuse_score (0-100) at or above which extraction / hint generation is
+    # treated as a manipulation attempt and nothing is saved
+    private_abuse_threshold: int = 70
+
     # Data retention (RODO art. 5(1)(e) - storage limitation)
     # Submissions belong to children, so nothing may be kept "just in case".
     # Both periods can be set to 0 (or None) to disable expiry entirely, which
@@ -120,6 +130,13 @@ class Settings(BaseSettings):
     # Admin access audit trail (RODO art. 5(2)). Long enough to investigate a
     # complaint, short enough not to become an archive of who looked at whom.
     retention_admin_audit_months: Optional[int] = 12
+    # A private task (statement, photos of the problem, its submissions) is
+    # deleted this long after its last activity - create, edit or submission.
+    # Same horizon as submissions: two school years of an OMJ cohort.
+    retention_private_task_months: Optional[int] = 24
+    # ai_usage rows only exist for rate limiting and cost accounting; 90 days
+    # covers the 24h window many times over plus a billing period.
+    retention_ai_usage_days: Optional[int] = 90
     # Run the retention passes from inside the app once a day. The production
     # image runs a single gunicorn worker, so exactly one loop exists. Set to
     # False when scaling out and run scripts/purge_expired_data.py from cron.
