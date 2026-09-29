@@ -10,11 +10,15 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material";
+import BrushIcon from "@mui/icons-material/Brush";
 import { uploadFiles } from "@/lib/api/client";
-import { getMaxScore } from "@/lib/utils/constants";
+import { MAX_UPLOAD_FILES, SUBMISSION_TEXT_MAX_CHARS, getMaxScore } from "@/lib/utils/constants";
+import { countChars, formatCount, normalizeSolutionText } from "@/lib/utils/solutionText";
 import { LoginPrompt } from "@/components/common/LoginPrompt";
 import { MathContent } from "@/components/ui/MathContent";
 import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
+import { DrawingDialog } from "./DrawingDialog";
+import { SolutionTextEditor } from "./SolutionTextEditor";
 
 interface SubmitSectionProps {
   year?: string;
@@ -22,7 +26,7 @@ interface SubmitSectionProps {
   num?: number;
   canSubmit: boolean;
   isAuthenticated: boolean;
-  /** Endpoint to POST photos to - defaults to the OMJ task's submit route */
+  /** Endpoint to POST photos and/or text to - defaults to the OMJ task's submit route */
   submitUrl?: string;
   /** Page to return to after login - defaults to the OMJ task page */
   pagePath?: string;
@@ -106,6 +110,14 @@ export function SubmitSection({
 }: SubmitSectionProps) {
   const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
+  const [solutionText, setSolutionText] = useState("");
+  const [drawingOpen, setDrawingOpen] = useState(false);
+  // Numbers drawings within this visit: rysunek-1.png, rysunek-2.png, ...
+  const drawingCounterRef = useRef(0);
+  const normalizedText = normalizeSolutionText(solutionText);
+  const textCount = countChars(normalizedText);
+  const textTooLong = textCount > SUBMISSION_TEXT_MAX_CHARS;
+  const hasSomething = files.length > 0 || normalizedText.length > 0;
   const [uploadState, setUploadState] = useState<UploadState>({
     status: "idle",
     statusMessage: "",
@@ -188,6 +200,7 @@ export function SubmitSection({
                 },
               });
               setFiles([]);
+              setSolutionText("");
               if (fileInputRef.current) {
                 fileInputRef.current.value = "";
               }
@@ -247,11 +260,13 @@ export function SubmitSection({
 
   const addFiles = (newFiles: File[]) => {
     const imageFiles = newFiles.filter((file) => file.type.startsWith("image/"));
-    setFiles((prev) => [...prev, ...imageFiles]);
-    setUploadState({
-      status: "idle",
-      statusMessage: "",
-    });
+    setFiles((prev) => [...prev, ...imageFiles].slice(0, MAX_UPLOAD_FILES));
+    setUploadState({ status: "idle", statusMessage: "" });
+  };
+
+  const addDrawing = (png: Blob) => {
+    drawingCounterRef.current += 1;
+    addFiles([new File([png], `rysunek-${drawingCounterRef.current}.png`, { type: "image/png" })]);
   };
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
@@ -277,21 +292,23 @@ export function SubmitSection({
   };
 
   const handleSubmit = async () => {
-    if (files.length === 0) return;
+    if (!hasSomething || textTooLong) return;
 
     // Reset state
     announcedAnalysisRef.current = false;
     setUploadState({
       status: "processing",
-      statusMessage: "Przesyłanie zdjęć...",
+      statusMessage: "Przesyłanie rozwiązania...",
     });
-    setLiveMessage("Przesyłanie zdjęć rozwiązania. Proszę czekać.");
+    setLiveMessage("Przesyłanie rozwiązania. Proszę czekać.");
 
     try {
       // Step 1: Upload files via POST
       const result = await uploadFiles<SubmitResponse>(
         submitUrl ?? `/api/task/${year}/${etap}/${num}/submit`,
-        files
+        files,
+        undefined,
+        normalizedText ? { solution_text: solutionText } : undefined
       );
 
       if (!result.success || !result.submission_id) {
@@ -349,6 +366,12 @@ export function SubmitSection({
 
   const isProcessing = uploadState.status === "processing";
   const hasResult = uploadState.status === "completed" && Boolean(uploadState.result);
+  const canSend = hasSomething && !textTooLong && !isProcessing;
+  const helper = !hasSomething
+    ? "Prześlij zdjęcia, rysunek albo wpisz rozwiązanie."
+    : textTooLong
+      ? `Skróć tekst do ${formatCount(SUBMISSION_TEXT_MAX_CHARS)} znaków.`
+      : null;
 
   // Jedno oznaczenie AI na sekcję: przy wyniku, jeśli wynik jest widoczny,
   // w przeciwnym razie tuż pod nagłówkiem (uprzedza, kto oceni rozwiązanie).
@@ -414,44 +437,54 @@ export function SubmitSection({
             etykiete otwiera wybor pliku" nigdy by nie zadzialalo (sprawdzone
             w przegladarce). Fokusowalne jest wiec samo pole pliku: to jeden
             przystanek tabulacji, ktory reaguje na Enter i na spacje. */}
-        <Button
-          component="label"
-          role={undefined}
-          tabIndex={-1}
-          variant="outlined"
-          disabled={isProcessing}
-          sx={{
-            // Fokus trafia na ukryte pole, wiec pierscien fokusu musi pokazac
-            // przycisk (WCAG 2.4.7).
-            "&:has(input:focus-visible)": {
-              outline: "3px solid",
-              outlineColor: "primary.main",
-              outlineOffset: "2px",
-            },
-          }}
-        >
-          Wybierz zdjęcia rozwiązania
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleFileSelect}
+        <Box sx={{ display: "flex", gap: 1, justifyContent: "center", flexWrap: "wrap" }}>
+          <Button
+            component="label"
+            role={undefined}
+            tabIndex={-1}
+            variant="outlined"
             disabled={isProcessing}
-            style={visuallyHidden}
-          />
-        </Button>
+            sx={{
+              // Fokus trafia na ukryte pole, wiec pierscien fokusu musi pokazac
+              // przycisk (WCAG 2.4.7).
+              "&:has(input:focus-visible)": {
+                outline: "3px solid",
+                outlineColor: "primary.main",
+                outlineOffset: "2px",
+              },
+            }}
+          >
+            Wybierz zdjęcia rozwiązania
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFileSelect}
+              disabled={isProcessing}
+              style={visuallyHidden}
+            />
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<BrushIcon />}
+            onClick={() => setDrawingOpen(true)}
+            disabled={isProcessing || files.length >= MAX_UPLOAD_FILES}
+          >
+            Dodaj rysunek
+          </Button>
+        </Box>
         <Typography variant="caption" component="p" sx={{ color: "grey.600", mt: 1.5 }}>
-          Akceptowane formaty: JPG, PNG
+          Akceptowane formaty: JPG, PNG, HEIC
         </Typography>
       </Box>
 
       {/* Selected Files */}
+      <Typography variant="body2" sx={{ color: "grey.700", mb: files.length ? 1 : 2 }}>
+        Zdjęcia i rysunki: {files.length} / {MAX_UPLOAD_FILES}
+      </Typography>
       {files.length > 0 && (
         <Box sx={{ mb: 2 }}>
-          <Typography variant="body2" sx={{ color: "grey.600", mb: 1 }}>
-            Wybrano {files.length} {files.length === 1 ? "plik" : files.length < 5 ? "pliki" : "plików"}:
-          </Typography>
           {files.map((file, index) => (
             <Box
               key={index}
@@ -481,6 +514,24 @@ export function SubmitSection({
           ))}
         </Box>
       )}
+
+      <Typography variant="subtitle1" component="h3" sx={{ color: "grey.800", mt: 1 }}>
+        Albo wpisz rozwiązanie
+      </Typography>
+      <Typography variant="body2" sx={{ color: "grey.600", mb: 1.5 }}>
+        Możesz połączyć tekst ze zdjęciami lub rysunkami – np. opisać rozumowanie i dołączyć szkic.
+      </Typography>
+      <Box sx={{ mb: 2 }}>
+        <SolutionTextEditor
+          value={solutionText}
+          onChange={(next) => {
+            setSolutionText(next);
+            if (uploadState.status === "failed") setUploadState({ status: "idle", statusMessage: "" });
+          }}
+          maxChars={SUBMISSION_TEXT_MAX_CHARS}
+          disabled={isProcessing}
+        />
+      </Box>
 
       {/* Processing Status */}
       {isProcessing && (
@@ -536,12 +587,19 @@ export function SubmitSection({
       <Button
         variant="contained"
         fullWidth
-        disabled={files.length === 0 || isProcessing}
+        disabled={!canSend}
         onClick={handleSubmit}
         sx={{ py: 1.5 }}
       >
         {isProcessing ? "Przetwarzanie..." : "Prześlij rozwiązanie"}
       </Button>
+      {helper && !isProcessing && (
+        <Typography variant="caption" component="p" sx={{ color: "grey.600", mt: 1, textAlign: "center" }}>
+          {helper}
+        </Typography>
+      )}
+
+      <DrawingDialog open={drawingOpen} onClose={() => setDrawingOpen(false)} onAdd={addDrawing} />
     </Paper>
   );
 }

@@ -102,7 +102,7 @@ test.describe('Moje zadania', () => {
     await page.getByRole('button', { name: 'Pokaż wskazówkę 1' }).click();
     await expect(page.getByText('Zapisz obie liczby za pomocą jednej zmiennej.')).toBeVisible();
 
-    await page.locator('input[type="file"]').setInputFiles(SOLUTION_PHOTO);
+    await page.locator('input[type="file"][accept="image/*"]').setInputFiles(SOLUTION_PHOTO);
     await page.getByRole('button', { name: 'Prześlij rozwiązanie' }).click();
     await expect(page.getByText(/Wynik: 6 \/ 6 punktów/)).toBeVisible({ timeout: 30000 });
     await expect(page.getByRole('heading', { name: /Historia rozwiązań \(1\)/ })).toBeVisible({ timeout: 15000 });
