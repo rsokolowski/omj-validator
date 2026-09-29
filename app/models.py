@@ -1,4 +1,4 @@
-from pydantic import BaseModel, computed_field, Field
+from pydantic import BaseModel, computed_field, Field, field_validator
 from datetime import datetime
 from typing import Optional, Literal
 from enum import Enum
@@ -294,3 +294,73 @@ class PrivateTaskMeta(BaseModel):
     difficulty: Optional[int] = None
     abuse_score: int = 0
     meta: dict = {}
+
+
+PRIVATE_TITLE_MAX = 120
+PRIVATE_CONTENT_MIN = 20
+PRIVATE_CONTENT_MAX = 10_000
+PRIVATE_SOURCE_LABEL_MAX = 120
+PRIVATE_TASKS_PER_REQUEST = 8
+
+
+def _clean_optional_text(value: Optional[str]) -> Optional[str]:
+    if value is None:
+        return None
+    value = value.strip()
+    return value or None
+
+
+class PrivateTaskInput(BaseModel):
+    """One task to create - text the student confirmed or typed."""
+    title: str = Field(min_length=1, max_length=PRIVATE_TITLE_MAX)
+    content: str = Field(min_length=PRIVATE_CONTENT_MIN, max_length=PRIVATE_CONTENT_MAX)
+    source_label: Optional[str] = Field(default=None, max_length=PRIVATE_SOURCE_LABEL_MAX)
+    category: Optional[str] = None
+    difficulty: Optional[int] = Field(default=None, ge=1, le=5)
+
+    @field_validator("title", "content", mode="before")
+    @classmethod
+    def _strip(cls, value):
+        return value.strip() if isinstance(value, str) else value
+
+    @field_validator("source_label", mode="before")
+    @classmethod
+    def _blank_label_is_none(cls, value):
+        return _clean_optional_text(value) if isinstance(value, str) else value
+
+    @field_validator("category")
+    @classmethod
+    def _known_category(cls, value):
+        if value is not None and value not in PRIVATE_TASK_CATEGORIES:
+            raise ValueError("Nieznana kategoria")
+        return value
+
+
+class CreatePrivateTasksRequest(BaseModel):
+    # Draft from POST /api/private-tasks/extract; absent for a typed task
+    draft_id: Optional[str] = Field(default=None, pattern=r"^[0-9a-f]{16}$")
+    tasks: list[PrivateTaskInput] = Field(min_length=1, max_length=PRIVATE_TASKS_PER_REQUEST)
+
+
+class UpdatePrivateTaskRequest(BaseModel):
+    """PATCH body - only the fields present are changed."""
+    title: Optional[str] = Field(default=None, min_length=1, max_length=PRIVATE_TITLE_MAX)
+    content: Optional[str] = Field(
+        default=None, min_length=PRIVATE_CONTENT_MIN, max_length=PRIVATE_CONTENT_MAX
+    )
+    # "" clears the label
+    source_label: Optional[str] = Field(default=None, max_length=PRIVATE_SOURCE_LABEL_MAX)
+    category: Optional[str] = None
+    difficulty: Optional[int] = Field(default=None, ge=1, le=5)
+
+    @field_validator("title", "content", mode="before")
+    @classmethod
+    def _strip(cls, value):
+        return value.strip() if isinstance(value, str) else value
+
+    @field_validator("category")
+    @classmethod
+    def _known_category(cls, value):
+        if value is not None and value not in PRIVATE_TASK_CATEGORIES:
+            raise ValueError("Nieznana kategoria")
+        return value

@@ -415,9 +415,9 @@ class SubmissionRepository:
         self,
         id: str,
         user_id: str,
-        year: str,
-        etap: str,
-        task_number: int,
+        year: Optional[str],
+        etap: Optional[str],
+        task_number: Optional[int],
         images: list[str],
         score: Optional[int] = None,
         feedback: Optional[str] = None,
@@ -426,14 +426,22 @@ class SubmissionRepository:
         issue_type: IssueType = IssueType.NONE,
         abuse_score: int = 0,
         scoring_meta: Optional[dict] = None,
+        private_task_id: Optional[str] = None,
+        hints_used: int = 0,
     ) -> SubmissionDB:
-        """Create a new submission."""
+        """Create a new submission.
+
+        Pass year/etap/task_number for an OMJ task, or leave them None and pass
+        private_task_id for a private task (ck_submissions_task_ref).
+        """
         submission = SubmissionDB(
             id=id,
             user_id=user_id,
             year=year,
             etap=etap,
             task_number=task_number,
+            private_task_id=private_task_id,
+            hints_used=hints_used,
             images=images,
             score=score,
             feedback=feedback,

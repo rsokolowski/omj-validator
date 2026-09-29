@@ -254,6 +254,66 @@ def delete_user_upload_tree(user_id: str, report: RetentionReport, dry_run: bool
         report.dirs_removed += 1
 
 
+# A private task id (secrets.token_urlsafe(9)) - never a path fragment
+_SAFE_PRIVATE_TASK_ID = re.compile(r"^[A-Za-z0-9_-]{12}$")
+# Sub-directory of a user's upload tree holding private task photos
+PRIVATE_UPLOAD_DIR = "private"
+# ...and, below it, the unconfirmed extraction drafts
+PRIVATE_DRAFTS_DIR = "_drafts"
+
+
+def _delete_tree(directory: Path, report: RetentionReport, dry_run: bool) -> None:
+    """Delete every file below directory, then the empty directories."""
+    for path in sorted(directory.rglob("*"), key=lambda p: len(p.parts), reverse=True):
+        if path.is_file() or path.is_symlink():
+            if path in report._counted_paths:
+                continue
+            try:
+                size = path.stat().st_size
+            except OSError:
+                size = 0
+            if not dry_run:
+                try:
+                    path.unlink()
+                except OSError as e:
+                    logger.warning(f"Retention: could not delete {path}: {e}")
+                    continue
+            report.files_deleted += 1
+            report.bytes_freed += size
+            report._counted_paths.add(path)
+        elif path.is_dir():
+            if not dry_run:
+                try:
+                    path.rmdir()
+                except OSError:
+                    continue
+            report.dirs_removed += 1
+
+    if dry_run:
+        report.dirs_removed += 1
+        return
+    try:
+        directory.rmdir()
+        report.dirs_removed += 1
+    except OSError as e:
+        logger.warning(f"Retention: could not remove directory {directory}: {e}")
+    _prune_empty_parents(directory.parent, report, dry_run)
+
+
+def delete_private_task_files(
+    user_id: str, task_id: str, report: RetentionReport, dry_run: bool = False
+) -> None:
+    """Delete a private task's whole upload folder: problem photos + solutions."""
+    if not _SAFE_USER_ID.match(user_id or "") or not _SAFE_PRIVATE_TASK_ID.match(task_id or ""):
+        report.files_skipped_unsafe += 1
+        logger.warning("Retention: refusing unsafe private task path")
+        return
+    task_dir = resolve_upload_path(f"{user_id}/{PRIVATE_UPLOAD_DIR}/{task_id}")
+    if task_dir is None or not task_dir.is_dir():
+        return
+    _delete_tree(task_dir, report, dry_run)
+
+
 # --- Retention passes --------------------------------------------------------
 
 
