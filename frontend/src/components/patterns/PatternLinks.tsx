@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Alert,
   Box,
@@ -73,6 +74,8 @@ export function PatternLinks({ patternId, initialLinks, autoSuggest }: PatternLi
   const [privateTasks, setPrivateTasks] = useState<{ id: string; title: string }[] | null>(null);
   const [privateId, setPrivateId] = useState("");
   const suggested = useRef(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   const run = async (action: () => Promise<void>) => {
     setBusy(true);
@@ -97,6 +100,8 @@ export function PatternLinks({ patternId, initialLinks, autoSuggest }: PatternLi
   useEffect(() => {
     if (autoSuggest && !suggested.current) {
       suggested.current = true;
+      // Drop ?nowy=1 so a reload or "back" does not ask the AI again
+      router.replace(pathname, { scroll: false });
       suggest();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

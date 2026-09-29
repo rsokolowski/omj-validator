@@ -57,7 +57,7 @@ export function NewPatternForm({ source, sourceLabel, initialDraft }: NewPattern
         skills,
         origin: initialDraft ? "ai_suggested" : "own",
         source: source ?? null,
-        refinement: rounds,
+        refinement: rounds.slice(-10),
       });
       router.push(`/wzorce/${pattern.id}?nowy=1`);
     } catch (e) {

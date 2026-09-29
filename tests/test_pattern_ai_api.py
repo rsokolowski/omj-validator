@@ -258,3 +258,24 @@ class TestSuggestLinks:
         provider.links = LinkResult(links=[LinkSuggestion(task_key="2023_etap1_2")], abuse_score=90)
         assert client.post(f"/api/patterns/{p['id']}/suggest-links").status_code == 422
         assert db.query(PatternLinkDB).filter_by(origin="ai").count() == 0
+
+
+class TestLongSessions:
+    def test_refine_with_many_rounds_of_history(self, client, provider):
+        history = [{"draft": {"raw": "x"}, "variants": [V1.model_dump(), V2.model_dump()],
+                    "questions": [], "answer": None, "chosen": 0}] * 14
+        assert refine(client, history=history).status_code == 200
+
+
+def test_history_pairs_each_answer_with_the_questions_it_answers():
+    # A round stores the answer sent to REQUEST it - the reply to the round before
+    rounds = [
+        {"variants": [V1.model_dump()], "chosen": 0, "questions": ["Q0?"], "answer": None},
+        {"variants": [V2.model_dump()], "chosen": 0, "questions": ["Q1?"], "answer": "odpowiedź na Q0"},
+    ]
+    compacted = service.compact_history(rounds, current_answer="odpowiedź na Q1")
+    assert [(r["questions"], r["answer"]) for r in compacted] == [
+        (["Q0?"], "odpowiedź na Q0"),
+        (["Q1?"], "odpowiedź na Q1"),
+    ]
+    assert compacted[1]["chosen"] == V2.model_dump()

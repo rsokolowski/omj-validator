@@ -2,14 +2,14 @@
 
 import logging
 import re
-from datetime import datetime, timezone
+from datetime import datetime, time, timezone
 from typing import Optional
 
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from .. import storage
-from ..db.models import PatternDB, PrivateTaskDB, SubmissionDB, SubmissionStatus
+from ..db.models import PatternDB, PatternReviewDB, PrivateTaskDB, SubmissionDB, SubmissionStatus
 from ..db.patterns import PatternRepository
 from ..privacy import mask_user_id
 from ..scoring import get_max_score
@@ -118,6 +118,21 @@ def practice_candidates(db: Session, pattern: PatternDB, user_id: str) -> list[s
     return candidates
 
 
+def _task_review_on(db: Session, pattern: PatternDB, day) -> bool:
+    """Was a graded practice of this pattern already counted on ``day`` (Warsaw)?"""
+    start = datetime.combine(day, time.min, tzinfo=srs._WARSAW).astimezone(timezone.utc).replace(tzinfo=None)
+    return (
+        db.query(PatternReviewDB.id)
+        .filter(
+            PatternReviewDB.pattern_id == pattern.id,
+            PatternReviewDB.kind == "task",
+            PatternReviewDB.created_at >= start,
+        )
+        .first()
+        is not None
+    )
+
+
 def apply_practice_result(db: Session, submission_id: str) -> None:
     """Count a graded practice submission as a review of its pattern.
 
@@ -133,10 +148,16 @@ def apply_practice_result(db: Session, submission_id: str) -> None:
     pattern = repo.get_owned(submission.pattern_id, submission.user_id)
     if pattern is None or repo.has_review_for_submission(submission_id):
         return
+    today = srs.today_warsaw()
+    if _task_review_on(db, pattern, today):
+        # Solving the same task again the same afternoon is not spaced
+        # repetition: only the first graded practice of a day counts
+        logger.info(f"Pattern {pattern.id}: practice already counted today, submission {submission_id} ignored")
+        return
 
     max_score = PRIVATE_MAX_SCORE if submission.private_task_id else get_max_score(submission.etap)
     outcome = srs.outcome_from_grade(submission.score, max_score, submission.hints_used or 0)
-    level, streak, due = srs.schedule(pattern.srs_level, pattern.srs_streak, outcome, srs.today_warsaw())
+    level, streak, due = srs.schedule(pattern.srs_level, pattern.srs_streak, outcome, today)
     repo.apply_review(
         pattern,
         seen_due_on=pattern.due_on,
@@ -178,16 +199,23 @@ def solved_omj_keys(db: Session, user_id: str) -> set[str]:
 HISTORY_ROUNDS_SENT = 3
 
 
-def compact_history(rounds: list[dict]) -> list[dict]:
-    """Stored/client rounds -> what the model sees: chosen version, questions, answer."""
+def compact_history(rounds: list[dict], current_answer: Optional[str] = None) -> list[dict]:
+    """Stored/client rounds -> what the model sees: chosen version, questions, answer.
+
+    A round stores the answer sent to REQUEST it, which replied to the round
+    before. So round i's questions pair with round i+1's answer, and the last
+    round's questions with the answer sent now.
+    """
     compacted = []
-    for round_ in rounds[-HISTORY_ROUNDS_SENT:]:
+    recent = rounds[-HISTORY_ROUNDS_SENT:]
+    for index, round_ in enumerate(recent):
         variants = round_.get("variants") or []
         chosen = round_.get("chosen")
         picked = variants[chosen] if isinstance(chosen, int) and 0 <= chosen < len(variants) else {}
+        reply = recent[index + 1].get("answer") if index + 1 < len(recent) else current_answer
         compacted.append({
             "chosen": dict(picked),
             "questions": list(round_.get("questions") or []),
-            "answer": round_.get("answer"),
+            "answer": reply,
         })
     return compacted

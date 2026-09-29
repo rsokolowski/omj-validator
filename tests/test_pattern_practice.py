@@ -232,3 +232,20 @@ def test_worker_applies_practice_result(factory, monkeypatch, tmp_path):
     db = factory()
     assert db.get(PatternDB, pattern_id).srs_level == 2
     db.close()
+
+
+class TestOnePracticePerDay:
+    def test_second_graded_practice_on_the_same_day_does_not_count(self, db, monkeypatch):
+        from datetime import datetime as real_datetime
+
+        monkeypatch.setattr(srs, "today_warsaw", lambda: real_datetime.now(srs._WARSAW).date())
+        p = make_pattern(db, level=1, streak=1)
+        omj_submission(db, "sub00001", p.id, 6)
+        omj_submission(db, "sub00002", p.id, 6)
+
+        service.apply_practice_result(db, "sub00001")
+        service.apply_practice_result(db, "sub00002")
+
+        db.refresh(p)
+        assert (p.srs_level, p.srs_streak) == (2, 0)
+        assert len(p.reviews) == 1

@@ -351,3 +351,35 @@ class TestE2EEndpoints:
         assert client.post(f"/api/test/patterns/{p['id']}/make-due").status_code == 404
         current_user["id"] = USER_ID
         assert client.post("/api/test/reset-user-patterns").json()["deleted_count"] == 1
+
+
+class TestLongRefineSessions:
+    ROUND = {"draft": {"raw": "szkic"}, "variants": [{"trigger": "W1 wyzwalacz", "action": "A1 akcja"}],
+             "questions": [], "verdict": "ok", "comment": "", "chosen": 0}
+
+    def test_create_keeps_the_last_rounds_instead_of_refusing(self, client):
+        rounds = [dict(self.ROUND, comment=f"r{i}") for i in range(12)]
+        p = create(client, refinement=rounds)
+        stored = client.get(f"/api/patterns/{p['id']}").json()["pattern"]["refinement"]
+        assert [r["comment"] for r in stored] == [f"r{i}" for i in range(2, 12)]
+
+
+class TestRefineSavedPattern:
+    def test_picked_round_fills_missing_category_and_skills(self, client):
+        from app.skills import get_all_skills
+
+        skill = get_all_skills()[0].id
+        p = create(client, category=None)
+        round_ = {"draft": {"raw": "szkic"}, "variants": [{"trigger": "W1 wyzwalacz", "action": "A1 akcja"}],
+                  "questions": [], "verdict": "ok", "comment": "", "chosen": 0,
+                  "category": "teoria_liczb", "skills": [skill, "made_up"]}
+        body = client.patch(f"/api/patterns/{p['id']}", json={"append_round": round_}).json()["pattern"]
+        assert body["category"] == "teoria_liczb"
+        assert body["skills"] == [skill]
+
+    def test_picked_round_keeps_existing_category(self, client):
+        p = create(client, category="algebra")
+        round_ = {"draft": {"raw": "szkic"}, "variants": [{"trigger": "W1 wyzwalacz", "action": "A1 akcja"}],
+                  "chosen": 0, "category": "teoria_liczb", "skills": []}
+        body = client.patch(f"/api/patterns/{p['id']}", json={"append_round": round_}).json()["pattern"]
+        assert body["category"] == "algebra"

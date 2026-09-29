@@ -23,6 +23,7 @@ from ..db.repositories import ensure_utc
 from ..models import (
     PATTERN_ROUNDS_MAX,
     PATTERN_SKILLS_MAX,
+    PRIVATE_TASK_CATEGORIES,
     CreatePatternRequest,
     LinkStatusRequest,
     ManualLinkRequest,
@@ -272,6 +273,13 @@ async def update_pattern(
     if payload.append_round is not None:
         rounds = list(pattern.refinement or []) + [stored_round(payload.append_round)]
         fields["refinement"] = rounds[-PATTERN_ROUNDS_MAX:]
+        # The round's proposal fills what the pattern lacks: without skills or a
+        # category, "Znajdź więcej zadań" has no candidates to offer the AI
+        proposed_category = payload.append_round.category
+        if not pattern.category and "category" not in fields and proposed_category in PRIVATE_TASK_CATEGORIES:
+            fields["category"] = proposed_category
+        if not pattern.skills and "skills" not in fields:
+            fields["skills"] = known_skills(payload.append_round.skills)
     if payload.archived is not None:
         fields["archived_at"] = _now() if payload.archived else None
 
@@ -438,7 +446,7 @@ async def refine_pattern(request: Request, payload: RefineRequest, db: Session =
     usage_row = _reserve(db, request, user_id, service.KIND_REFINE,
                          settings.rate_limit_pattern_refines_per_user_per_day)
     result = await _call(db, usage_row, user_id, create_ai_provider().refine_pattern(
-        draft, _source_text(db, source), service.compact_history(history), payload.answer,
+        draft, _source_text(db, source), service.compact_history(history, payload.answer), payload.answer,
     ))
     if len(result.variants) < 2:
         raise HTTPException(

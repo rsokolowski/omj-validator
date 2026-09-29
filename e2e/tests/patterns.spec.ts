@@ -62,13 +62,20 @@ test.describe('Wzorce', () => {
 
     // 4. Save - the pattern page asks the AI for OMJ tasks right away
     await page.getByRole('button', { name: 'Zapisz wzorzec' }).click();
-    await expect(page).toHaveURL(/\/wzorce\/[A-Za-z0-9_-]{12}\?nowy=1/, { timeout: 30000 });
+    await expect(page).toHaveURL(/\/wzorce\/[A-Za-z0-9_-]{12}(\?nowy=1)?$/, { timeout: 30000 });
     const patternId = new URL(page.url()).pathname.split('/').pop()!;
     const proposals = page.getByTestId('link-proposals');
     await expect(proposals).toContainText('Ćwiczy ten sam pomysł z parzystością.', { timeout: 30000 });
     await proposals.getByRole('button', { name: 'Przyjmij propozycję' }).first().click();
     await expect(page.getByTestId('link-proposals')).toHaveCount(0);
     await expect(page.getByTestId('pattern-level')).toHaveText('Poziom 1');
+
+    // A reload does not ask the AI again (each ask uses the daily limit)
+    await expect(page).toHaveURL(new RegExp(`/wzorce/${patternId}$`));
+    await page.reload();
+    await expect(page.getByRole('region', { name: 'Zadania do tego wzorca' })).toBeVisible();
+    await page.waitForTimeout(1500);
+    await expect(page.getByTestId('link-proposals')).toHaveCount(0);
 
     // 5. Due today -> the header badge and a recall card
     const due = await page.request.post(`/api/test/patterns/${patternId}/make-due`);

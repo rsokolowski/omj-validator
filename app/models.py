@@ -457,11 +457,19 @@ class RefineRoundIn(BaseModel):
     verdict: str = Field(default="ok", max_length=20)
     comment: str = Field(default="", max_length=PATTERN_COMMENT_MAX)
     chosen: Optional[int] = Field(default=None, ge=0, le=2)
+    # The AI's category / skills proposal from this round (filtered on save)
+    category: Optional[str] = Field(default=None, max_length=20)
+    skills: list[str] = Field(default=[], max_length=10)
 
     @field_validator("questions")
     @classmethod
     def _clip_questions(cls, value: list[str]) -> list[str]:
         return [q[:PATTERN_QUESTION_MAX] for q in value]
+
+
+def _last_rounds(value: list) -> list:
+    """A long refine session keeps its most recent rounds instead of being refused."""
+    return value[-PATTERN_ROUNDS_MAX:]
 
 
 def _pattern_category(value: Optional[str]) -> Optional[str]:
@@ -480,7 +488,9 @@ class CreatePatternRequest(BaseModel):
     skills: list[str] = Field(default=[], max_length=10)
     origin: Literal["own", "ai_suggested"] = "own"
     source: Optional[PatternSource] = None
-    refinement: list[RefineRoundIn] = Field(default=[], max_length=PATTERN_ROUNDS_MAX)
+    refinement: list[RefineRoundIn] = Field(default=[], max_length=100)
+
+    _keep_last_rounds = field_validator("refinement")(_last_rounds)
 
     @field_validator("trigger", "action")
     @classmethod
@@ -536,7 +546,9 @@ class ReviewRequest(BaseModel):
 class RefineRequest(BaseModel):
     draft: PatternDraft = PatternDraft()
     source: Optional[PatternSource] = None
-    history: list[RefineRoundIn] = Field(default=[], max_length=PATTERN_ROUNDS_MAX)
+    history: list[RefineRoundIn] = Field(default=[], max_length=100)
+
+    _keep_last_rounds = field_validator("history")(_last_rounds)
     answer: Optional[str] = Field(default=None, max_length=PATTERN_ANSWER_MAX)
     pattern_id: Optional[str] = Field(default=None, max_length=12)
 

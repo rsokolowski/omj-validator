@@ -41,7 +41,7 @@ export function RefinePanel({ draft, rounds, onRoundsChange, onPick, source, pat
       const { round } = await patternsApi.refine({
         draft,
         source: patternId ? undefined : source,
-        history: rounds,
+        history: rounds.slice(-10),
         answer: answer.trim() || null,
         pattern_id: patternId,
       });
