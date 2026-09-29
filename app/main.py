@@ -23,7 +23,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
-from fastapi import Depends
+from fastapi import Depends, Form
 from sqlalchemy.orm import Session
 
 from .config import settings
@@ -104,6 +104,7 @@ app = FastAPI(title="OMJ Validator", description="Walidator rozwiązań OMJ")
 
 from .private_tasks import router as private_tasks_router  # noqa: E402
 from .patterns.routes import router as patterns_router  # noqa: E402
+from .patterns import service as pattern_service  # noqa: E402
 
 app.include_router(private_tasks_router)
 app.include_router(patterns_router)
@@ -704,10 +705,16 @@ async def submit_solution(
     etap: str,
     num: int,
     images: list[UploadFile] = File(...),
+    pattern_id: OptionalType[str] = Form(None),
+    hints_used: OptionalType[int] = Form(None),
     db: Session = Depends(get_db),
 ):
     """
     Submit solution images for analysis (requires group membership).
+
+    ``pattern_id`` (one of the user's patterns) marks the solution as practice
+    of that pattern; ``hints_used`` is the number of hints the task page
+    revealed (OMJ hints are shown client-side), clamped to the task's hints.
 
     Returns immediately with submission_id. Client should connect to
     WebSocket at /ws/submissions/{submission_id} for progress updates.
@@ -778,6 +785,8 @@ async def submit_solution(
 
     submission_id = str(uuid.uuid4())[:8]
 
+    omj = pattern_service.omj_task(f"{year}_{etap}_{num}")
+    hints_available = len(omj.hints) if omj is not None else 0
     submission = submission_repo.create(
         id=submission_id,
         user_id=user_id,
@@ -786,6 +795,8 @@ async def submit_solution(
         task_number=num,
         images=[str(p.relative_to(settings.uploads_dir)) for p in saved_paths],
         status=SubmissionStatus.PENDING,
+        pattern_id=pattern_service.owned_pattern_id(db, user_id, pattern_id),
+        hints_used=max(0, min(hints_used or 0, hints_available)),
     )
 
     # Initialize progress tracking (handler.py will set first status)

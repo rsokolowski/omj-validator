@@ -14,7 +14,7 @@ import uuid
 from pathlib import Path
 from typing import Optional
 
-from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
@@ -35,6 +35,7 @@ from ..db.private_tasks import (
 )
 from ..db.repositories import SubmissionRepository, ensure_utc
 from ..groups import _get_allowed_emails
+from ..patterns.service import owned_pattern_id
 from ..models import (
     CreatePrivateTasksRequest,
     PrivateTaskInput,
@@ -479,9 +480,14 @@ async def submit_private_solution(
     request: Request,
     task_id: str,
     images: list[UploadFile] = File(default=[]),
+    pattern_id: Optional[str] = Form(None),
     db: Session = Depends(get_db),
 ):
-    """Submit solution photos; grading runs in the background (WebSocket)."""
+    """Submit solution photos; grading runs in the background (WebSocket).
+
+    ``pattern_id`` (one of the user's patterns) marks it as practice of that
+    pattern. Hints used are tracked here, never taken from the client.
+    """
     user_id = await current_member_id(request)
     task = _owned_task(db, task_id, user_id)
 
@@ -514,6 +520,7 @@ async def submit_private_solution(
         status=SubmissionStatus.PENDING,
         private_task_id=task.id,
         hints_used=hints_used,
+        pattern_id=owned_pattern_id(db, user_id, pattern_id),
     )
 
     await progress_manager.create_submission(submission_id)
