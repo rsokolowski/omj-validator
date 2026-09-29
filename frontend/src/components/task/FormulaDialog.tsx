@@ -66,6 +66,11 @@ export function FormulaDialog({ open, initialLatex, initialDisplay, mode, onClos
       fullWidth
       maxWidth="sm"
       aria-labelledby="formula-dialog-title"
+      // MathLive focuses a sink inside <math-field>'s shadow root, which the
+      // focus trap's contains() check cannot see, so an enforced trap pulls
+      // focus straight back out of the field (and the virtual keyboard lives
+      // outside the dialog anyway). Auto-focus and focus restore still apply.
+      disableEnforceFocus
     >
       <DialogTitle id="formula-dialog-title">{mode === "edit" ? "Popraw wzór" : "Wstaw wzór"}</DialogTitle>
       <DialogContent>

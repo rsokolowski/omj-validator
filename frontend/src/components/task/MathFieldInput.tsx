@@ -41,8 +41,11 @@ export function MathFieldInput({ initialLatex, onChange }: MathFieldInputProps) 
     field.value = initialLatex;
     const handleInput = () => onChangeRef.current(field.value);
     field.addEventListener("input", handleInput);
-    field.focus();
+    // Deferred: the dialog's focus trap (a parent, so its effect runs after
+    // this one) moves focus to the dialog container when it opens
+    const focusFrame = requestAnimationFrame(() => field.focus());
     return () => {
+      cancelAnimationFrame(focusFrame);
       field.removeEventListener("input", handleInput);
       // The virtual keyboard is a global panel; it must not outlive the dialog
       window.mathVirtualKeyboard?.hide();
