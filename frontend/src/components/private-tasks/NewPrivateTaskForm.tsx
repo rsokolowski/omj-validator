@@ -41,6 +41,7 @@ const PHASE_TEXT: Record<Phase, { title: string; detail: string }> = {
   },
 };
 
+// Pass through `style`, never `sx`: in sx, width/height 1 mean 100%
 const visuallyHidden = {
   position: "absolute",
   width: 1,
@@ -288,7 +289,7 @@ export function NewPrivateTaskForm() {
 
   return (
     <Paper sx={{ p: 3 }} aria-busy={busy}>
-      <Box role="status" aria-live="polite" aria-atomic="true" sx={visuallyHidden}>
+      <Box role="status" aria-live="polite" aria-atomic="true" style={visuallyHidden}>
         {status}
       </Box>
 

@@ -58,7 +58,8 @@ interface SelectedFile {
 /**
  * Technika "visually hidden": element zostaje w drzewie dostepnosci
  * (inaczej niz przy `display: none`, ktore usuwa go takze z kolejnosci
- * tabulacji), ale nie jest widoczny.
+ * tabulacji), ale nie jest widoczny. Tylko przez `style`, nie `sx`: w sx
+ * width/height 1 oznacza 100%.
  */
 const visuallyHidden = {
   position: "absolute",
@@ -434,7 +435,7 @@ export function SubmitSection({
           takze gdy nic sie nie dzieje - region dodany do drzewa razem z
           trescia bywa przez czytniki pomijany. Wynik i blad maja wlasny
           role="alert" w <Alert>, wiec ich tu nie powtarzamy. */}
-      <Box role="status" aria-live="polite" aria-atomic="true" sx={visuallyHidden}>
+      <Box role="status" aria-live="polite" aria-atomic="true" style={visuallyHidden}>
         {liveMessage}
       </Box>
 
