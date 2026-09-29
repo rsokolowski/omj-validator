@@ -225,6 +225,11 @@ class TestExtract:
         monkeypatch.setattr(routes, "_get_allowed_emails", lambda: {f"{USER_ID}@example.com"})
         assert extract(client).status_code == 200
 
+    def test_extract_without_images_is_400(self, client):
+        response = client.post("/api/private-tasks/extract", files=[])
+        assert response.status_code == 400
+        assert response.json()["error"] == "Nie przesłano żadnych zdjęć"
+
 
 # ---------------------------------------------------------------------- create
 

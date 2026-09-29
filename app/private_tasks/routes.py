@@ -161,6 +161,13 @@ async def extract_tasks(
 ):
     """Read problem statements off photos. Returns a draft; nothing is saved yet."""
     user_id = await current_member_id(request)
+    # Extraction needs at least one photo - the shared helper no longer refuses
+    # an empty batch, because a solution may now be text only.
+    if not images:
+        return JSONResponse(
+            {"error": "Nie przesłano żadnych zdjęć"},
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
     batch_error = validate_image_batch(images)
     if batch_error is not None:
         return batch_error
@@ -492,6 +499,12 @@ async def submit_private_solution(
     if limit_error is not None:
         return limit_error
 
+    # Until solution_text arrives (Task 5) a private submission still needs a photo
+    if not images:
+        return JSONResponse(
+            {"error": "Nie przesłano żadnych zdjęć"},
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
     batch_error = validate_image_batch(images)
     if batch_error is not None:
         return batch_error
