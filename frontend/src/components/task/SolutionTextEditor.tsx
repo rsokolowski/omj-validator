@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent, type MouseEvent } from "react";
+import { useEffect, useId, useRef, useState, type ChangeEvent, type KeyboardEvent, type MouseEvent } from "react";
 import {
   Alert,
   Box,
@@ -25,8 +25,7 @@ import {
   insertFormula,
   normalizeSolutionText,
   readSolutionFile,
-  replaceMathSpan,
-  type MathSpan,
+  replaceMathAt,
 } from "@/lib/utils/solutionText";
 
 export interface SolutionTextEditorProps {
@@ -48,7 +47,13 @@ const visuallyHidden = {
   border: 0,
 } as const;
 
-type FormulaTarget = { kind: "insert"; start: number; end: number } | { kind: "edit"; span: MathSpan };
+// The formula dialog does not trap focus (MathLive's keyboard lives outside
+// it), so the student can still change the text while it is open. An edited
+// formula is therefore remembered by its index and source, and an insert
+// position only holds while the text it was taken from is unchanged.
+type FormulaTarget =
+  | { kind: "insert"; start: number; end: number; base: string }
+  | { kind: "edit"; index: number; source: string; display: boolean };
 
 function mathIndexOf(target: EventTarget | null): number | null {
   const hit = (target as HTMLElement | null)?.closest?.("[data-math-index]");
@@ -73,6 +78,7 @@ export function SolutionTextEditor({ value, onChange, maxChars, disabled = false
   const [caret, setCaret] = useState<{ at: number } | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [pendingFileText, setPendingFileText] = useState<string | null>(null);
+  const counterId = useId();
 
   const count = countChars(normalizeSolutionText(value));
   const over = count > maxChars;
@@ -85,28 +91,34 @@ export function SolutionTextEditor({ value, onChange, maxChars, disabled = false
     el.setSelectionRange(caret.at, caret.at);
   }, [caret]);
 
-  const openInsert = () => {
+  const selection = () => {
     const el = inputRef.current;
-    const start = el?.selectionStart ?? value.length;
-    const end = el?.selectionEnd ?? start;
-    setTarget({ kind: "insert", start, end });
+    const start = Math.min(el?.selectionStart ?? value.length, value.length);
+    const end = Math.min(el?.selectionEnd ?? start, value.length);
+    return { start, end };
   };
+
+  const openInsert = () => setTarget({ kind: "insert", ...selection(), base: value });
 
   const openEdit = (index: number) => {
     const span = findMathSpans(value)[index];
-    if (span) setTarget({ kind: "edit", span });
+    if (span) setTarget({ kind: "edit", index, source: span.source, display: span.display });
   };
 
   const applyFormula = (latex: string, display: boolean) => {
     if (!target) return;
-    if (target.kind === "insert") {
-      const result = insertFormula(value, target.start, target.end, latex, display);
-      onChange(result.text);
-      setCaret({ at: result.cursor });
-    } else {
-      onChange(replaceMathSpan(value, target.span, latex, display));
-      setCaret({ at: target.span.start });
+    let result =
+      target.kind === "edit" ? replaceMathAt(value, target.index, target.source, latex, display) : null;
+    if (!result) {
+      // A new formula, or the edited one is no longer there. Replace the saved
+      // selection only while the text is unchanged; otherwise insert at the
+      // current caret without replacing anything
+      const fresh = target.kind === "insert" && target.base === value;
+      const { start, end } = fresh ? target : { start: selection().end, end: selection().end };
+      result = insertFormula(value, start, end, latex, display);
     }
+    onChange(result.text);
+    setCaret({ at: result.cursor });
     setTarget(null);
   };
 
@@ -187,10 +199,13 @@ export function SolutionTextEditor({ value, onChange, maxChars, disabled = false
             fullWidth
             placeholder="Wpisz swoje rozwiązanie. Wzory wstawisz przyciskiem „Wstaw wzór”."
             inputRef={inputRef}
-            slotProps={{ htmlInput: { "aria-label": "Tekst rozwiązania", spellCheck: false } }}
+            slotProps={{
+              htmlInput: { "aria-label": "Tekst rozwiązania", "aria-describedby": counterId, spellCheck: false },
+            }}
             error={over}
           />
           <Typography
+            id={counterId}
             variant="caption"
             component="p"
             sx={{ textAlign: "right", mt: 0.5, color: over ? "error.main" : "grey.600", fontWeight: over ? 600 : 400 }}
@@ -241,8 +256,8 @@ export function SolutionTextEditor({ value, onChange, maxChars, disabled = false
       <FormulaDialog
         open={target !== null}
         mode={target?.kind === "edit" ? "edit" : "insert"}
-        initialLatex={target?.kind === "edit" ? target.span.source : ""}
-        initialDisplay={target?.kind === "edit" ? target.span.display : false}
+        initialLatex={target?.kind === "edit" ? target.source : ""}
+        initialDisplay={target?.kind === "edit" ? target.display : false}
         onClose={() => setTarget(null)}
         onSubmit={applyFormula}
       />

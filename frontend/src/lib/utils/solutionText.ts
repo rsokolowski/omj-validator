@@ -94,6 +94,25 @@ export function replaceMathSpan(text: string, span: MathSpan, latex: string, dis
 }
 
 /**
+ * Replace the index-th formula of the current text, provided it is still the
+ * one the student opened (same source). The text can change while the formula
+ * dialog is open, so offsets taken earlier are not trusted. Returns null when
+ * that formula is gone or another one took its place - the caller then inserts
+ * the result instead of overwriting something else.
+ */
+export function replaceMathAt(
+  text: string,
+  index: number,
+  expectedSource: string,
+  latex: string,
+  display: boolean
+): { text: string; cursor: number } | null {
+  const span = findMathSpans(text)[index];
+  if (!span || span.source !== expectedSource) return null;
+  return { text: replaceMathSpan(text, span, latex, display), cursor: span.start };
+}
+
+/**
  * The minimal .tex reading (see the spec, section 1.2): body of the document if
  * there is one, % comments and title boilerplate dropped, \section* text kept,
  * \[..\] -> $$..$$ and \(..\) -> $..$, runs of blank lines collapsed. Anything

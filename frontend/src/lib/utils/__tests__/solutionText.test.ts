@@ -10,6 +10,7 @@ import {
   insertFormula,
   normalizeSolutionText,
   readSolutionFile,
+  replaceMathAt,
   replaceMathSpan,
   sanitizeLatex,
   stripPlaceholders,
@@ -100,6 +101,21 @@ test("replaceMathSpan replaces exactly one span and leaves neighbours intact", (
   assert.equal(replaceMathSpan(text, spans[1], "B", true), "p $a$ q $$B$$ r $c$");
   assert.equal(replaceMathSpan(text, spans[1], "B", false), "p $a$ q $B$ r $c$");
   assert.equal(replaceMathSpan(text, spans[2], "C", false), "p $a$ q $$b$$ r $C$");
+});
+
+test("replaceMathAt re-resolves the formula by index in the current text", () => {
+  // The student typed before the formula while the dialog was open: offsets moved
+  const text = "nowy wstęp. p $a$ q $$b$$ r";
+  assert.deepEqual(replaceMathAt(text, 1, "b", "B", true), {
+    text: "nowy wstęp. p $a$ q $$B$$ r",
+    cursor: 20,
+  });
+});
+
+test("replaceMathAt refuses when the formula is gone or no longer the same", () => {
+  assert.equal(replaceMathAt("p $a$ q", 1, "b", "B", true), null);
+  // A formula was deleted, so index 1 now points at a different one
+  assert.equal(replaceMathAt("p $a$ r $c$", 1, "b", "B", false), null);
 });
 
 test("extractTexBody keeps the document body and rewrites bracket delimiters", () => {
