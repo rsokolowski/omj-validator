@@ -512,6 +512,34 @@ class TestSubmit:
         response = client.post(f"/api/private-tasks/{task['id']}/submit", files=[])
         assert response.status_code in (400, 422)
 
+    def test_text_only_submit(self, client, db, started):
+        text = "Niech $n$ będzie liczbą całkowitą. Wtedy $n(n+1)$ jest parzyste."
+        task = typed_task(client)
+
+        response = client.post(
+            f"/api/private-tasks/{task['id']}/submit", data={"solution_text": text}
+        )
+
+        assert response.status_code == 200, response.text
+        sub = db.get(SubmissionDB, response.json()["submission_id"])
+        assert sub.images == []
+        assert sub.solution_text == text
+        assert files_under(USER_ID, "private", task["id"]) == []
+        assert started[0]["solution_text"] == text
+        assert started[0]["image_paths"] == []
+
+        detail = client.get(f"/api/private-tasks/{task['id']}").json()
+        assert detail["submissions"][0]["solution_text"] == text
+
+    def test_submit_with_neither_photos_nor_text_is_400(self, client, db):
+        task = typed_task(client)
+        response = client.post(
+            f"/api/private-tasks/{task['id']}/submit", data={"solution_text": "   "}
+        )
+        assert response.status_code == 400
+        assert response.json()["error"] == "Prześlij zdjęcia, rysunek albo wpisz rozwiązanie"
+        assert db.query(SubmissionDB).count() == 0
+
     def test_submit_bumps_last_activity(self, client, db):
         task = typed_task(client)
         stored = db.get(PrivateTaskDB, task["id"])
