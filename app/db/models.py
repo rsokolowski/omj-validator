@@ -360,11 +360,13 @@ class PatternLinkDB(Base):
         nullable=False,
         index=True,
     )
-    task_key = Column(String(32), nullable=True)  # OMJ "{year}_{etap}_{num}"
+    # Both indexed: "patterns of this task" lists and the private task cascade
+    task_key = Column(String(32), nullable=True, index=True)  # OMJ "{year}_{etap}_{num}"
     private_task_id = Column(
         String(12),
         ForeignKey("private_tasks.id", ondelete="CASCADE"),
         nullable=True,
+        index=True,
     )
     role = Column(String(10), nullable=False)  # "source" | "practice"
     origin = Column(String(8), nullable=False)  # "ai" | "manual"

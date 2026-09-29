@@ -238,10 +238,17 @@ async def list_patterns(
 
 @router.get("/queue")
 async def review_queue(request: Request, limit: int = 10, db: Session = Depends(get_db)):
-    """Patterns to review today, most overdue first, categories interleaved."""
+    """Patterns to review today, most overdue first, categories interleaved.
+
+    ``limit=0`` returns only the count (the header badge polls it).
+    """
     user_id = await current_member_id(request)
-    limit = max(1, min(limit, 50))
-    due = PatternRepository(db).due(user_id, srs.today_warsaw())
+    repo = PatternRepository(db)
+    today = srs.today_warsaw()
+    if limit <= 0:
+        return {"items": [], "due_total": repo.count_due(user_id, today)}
+    limit = min(limit, 50)
+    due = repo.due(user_id, today)
     ordered = srs.interleave(due, key=lambda p: p.category)
     return {"items": [serialize_pattern(db, p) for p in ordered[:limit]], "due_total": len(due)}
 

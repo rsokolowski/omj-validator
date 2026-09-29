@@ -39,7 +39,7 @@ test.describe('Wzorce', () => {
 
   test('from a graded task to a practised pattern', async ({ page }) => {
     // 1. A graded private task
-    const taskId = await createTypedTask(page, 'Kolejne liczby');
+    const taskId = await createTypedTask(page, 'Kolejne liczby $n$ i $n+1$');
     await page.goto(`/moje-zadania/${taskId}`);
     await submitSolution(page);
     await page.reload();
@@ -69,6 +69,10 @@ test.describe('Wzorce', () => {
     await proposals.getByRole('button', { name: 'Przyjmij propozycję' }).first().click();
     await expect(page.getByTestId('link-proposals')).toHaveCount(0);
     await expect(page.getByTestId('pattern-level')).toHaveText('Poziom 1');
+    // Task titles with math are rendered, not shown as raw $...$
+    const tasks = page.getByRole('region', { name: 'Zadania do tego wzorca' });
+    await expect(tasks.locator('.katex').first()).toBeVisible();
+    await expect(tasks).not.toContainText('$n$');
 
     // A reload does not ask the AI again (each ask uses the daily limit)
     await expect(page).toHaveURL(new RegExp(`/wzorce/${patternId}$`));

@@ -132,7 +132,9 @@ export function ReviewSession() {
               Zamiast przypominania rozwiąż zadanie, w którym ten wzorzec się przydaje. Ocena
               rozwiązania zaliczy się jako powtórka.
             </Alert>
-            <Typography sx={{ mb: 2, fontWeight: 600 }}>{practice.title}</Typography>
+            <Box sx={{ mb: 2, fontWeight: 600 }}>
+              <MathContent content={practice.title} />
+            </Box>
             <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
               <Button variant="contained" component={Link} href={`${practice.url}?wzorzec=${current.id}`}>
                 Rozwiąż zadanie

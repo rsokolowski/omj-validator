@@ -5,8 +5,8 @@ import secrets
 from datetime import date, datetime, timezone
 from typing import Optional
 
-from sqlalchemy import update
-from sqlalchemy.orm import Session
+from sqlalchemy import func, update
+from sqlalchemy.orm import Session, selectinload
 
 from .models import PatternDB, PatternLinkDB, PatternReviewDB
 from ..privacy import mask_user_id
@@ -111,20 +111,32 @@ class PatternRepository:
             else:
                 link = link.filter(PatternLinkDB.private_task_id == private_task_id)
             query = query.filter(PatternDB.id.in_(link))
-        return query.order_by(PatternDB.due_on, PatternDB.created_at).all()
-
-    def due(self, user_id: str, today: date) -> list[PatternDB]:
-        """Patterns to review today, most overdue first."""
         return (
-            self.db.query(PatternDB)
-            .filter(
-                PatternDB.user_id == user_id,
-                PatternDB.archived_at.is_(None),
-                PatternDB.due_on <= today,
-            )
+            query.options(selectinload(PatternDB.links))
             .order_by(PatternDB.due_on, PatternDB.created_at)
             .all()
         )
+
+    def _due_filter(self, user_id: str, today: date):
+        return (
+            PatternDB.user_id == user_id,
+            PatternDB.archived_at.is_(None),
+            PatternDB.due_on <= today,
+        )
+
+    def due(self, user_id: str, today: date) -> list[PatternDB]:
+        """Patterns to review today, most overdue first (links loaded in one query)."""
+        return (
+            self.db.query(PatternDB)
+            .options(selectinload(PatternDB.links))
+            .filter(*self._due_filter(user_id, today))
+            .order_by(PatternDB.due_on, PatternDB.created_at)
+            .all()
+        )
+
+    def count_due(self, user_id: str, today: date) -> int:
+        """How many patterns wait for review today - one COUNT query."""
+        return self.db.query(func.count(PatternDB.id)).filter(*self._due_filter(user_id, today)).scalar() or 0
 
     def update_fields(self, pattern: PatternDB, **fields) -> PatternDB:
         unknown = set(fields) - EDITABLE_FIELDS

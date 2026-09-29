@@ -26,7 +26,7 @@ function usePatternsDue(enabled: boolean): number {
     if (!enabled) return;
     let cancelled = false;
     patternsApi
-      .queue(1)
+      .queue(0)
       .then((data) => {
         if (!cancelled) setDue(data.due_total);
       })

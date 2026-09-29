@@ -383,3 +383,65 @@ class TestRefineSavedPattern:
                   "chosen": 0, "category": "teoria_liczb", "skills": []}
         body = client.patch(f"/api/patterns/{p['id']}", json={"append_round": round_}).json()["pattern"]
         assert body["category"] == "algebra"
+
+
+class TestQueryCounts:
+    """List and queue must not run one query per pattern (the header polls the queue)."""
+
+    @pytest.fixture
+    def selects(self, db):
+        from sqlalchemy import event
+
+        engine = db.get_bind()
+        seen = []
+
+        def count(conn, cursor, statement, *args):
+            if statement.lstrip().upper().startswith("SELECT"):
+                seen.append(statement)
+
+        event.listen(engine, "before_cursor_execute", count)
+        yield seen
+        event.remove(engine, "before_cursor_execute", count)
+
+    def make_patterns(self, client, db, n):
+        for i in range(n):
+            p = create(client, source={"task_key": "2024_etap1_1"})
+            make_due(db, p["id"])
+        db.expire_all()
+
+    def test_list_does_not_grow_with_patterns(self, client, db, selects):
+        self.make_patterns(client, db, 2)
+        selects.clear()
+        client.get("/api/patterns")
+        few = len(selects)
+
+        self.make_patterns(client, db, 6)
+        selects.clear()
+        client.get("/api/patterns")
+        assert len(selects) == few
+
+    def test_queue_does_not_grow_with_patterns(self, client, db, selects):
+        self.make_patterns(client, db, 2)
+        selects.clear()
+        client.get("/api/patterns/queue")
+        few = len(selects)
+
+        self.make_patterns(client, db, 6)
+        selects.clear()
+        client.get("/api/patterns/queue")
+        assert len(selects) == few
+
+    def test_count_only_queue_loads_no_patterns(self, client, db, selects):
+        self.make_patterns(client, db, 3)
+        selects.clear()
+        body = client.get("/api/patterns/queue", params={"limit": 0}).json()
+        assert body == {"items": [], "due_total": 3}
+        assert not any("FROM patterns" in s and "count" not in s.lower() for s in selects)
+
+
+def test_link_lookups_are_indexed():
+    from app.db.models import PatternLinkDB
+
+    indexed = {tuple(c.name for c in index.columns) for index in PatternLinkDB.__table__.indexes}
+    assert ("private_task_id",) in indexed
+    assert ("task_key",) in indexed

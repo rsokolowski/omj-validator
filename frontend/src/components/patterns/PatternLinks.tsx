@@ -17,6 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Check, Close, DeleteOutline } from "@mui/icons-material";
+import { MathContent } from "@/components/ui/MathContent";
 import { fetchAPI } from "@/lib/api/client";
 import { patternsApi } from "@/lib/api/patterns";
 import { PatternLink, PrivateTaskListResponse } from "@/lib/types";
@@ -40,8 +41,10 @@ function LinkRow({ link, practiceHref, children }: {
       <Box sx={{ flex: 1, minWidth: 0 }}>
         {link.available && link.url ? (
           <Link href={link.url} style={{ fontWeight: 600 }}>
-            {link.label ? `${link.label} - ` : ""}
-            {link.title}
+            {/* Titles may hold $LaTeX$ (private tasks, OMJ statements) */}
+            <Box component="span" sx={{ "& .math-content": { display: "inline" } }}>
+              <MathContent content={link.label ? `${link.label} - ${link.title}` : link.title} />
+            </Box>
           </Link>
         ) : (
           <Typography sx={{ color: "grey.500" }}>Zadanie niedostępne</Typography>

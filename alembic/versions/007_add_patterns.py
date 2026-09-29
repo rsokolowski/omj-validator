@@ -83,6 +83,8 @@ def upgrade() -> None:
         sa.UniqueConstraint("pattern_id", "private_task_id", name="uq_pattern_links_private_task"),
     )
     op.create_index("ix_pattern_links_pattern_id", "pattern_links", ["pattern_id"])
+    op.create_index("ix_pattern_links_task_key", "pattern_links", ["task_key"])
+    op.create_index("ix_pattern_links_private_task_id", "pattern_links", ["private_task_id"])
 
     op.add_column("submissions", sa.Column("pattern_id", sa.String(length=12), nullable=True))
     op.create_foreign_key(
@@ -127,6 +129,8 @@ def downgrade() -> None:
     op.drop_constraint("fk_submissions_pattern_id", "submissions", type_="foreignkey")
     op.drop_column("submissions", "pattern_id")
 
+    op.drop_index("ix_pattern_links_private_task_id", table_name="pattern_links")
+    op.drop_index("ix_pattern_links_task_key", table_name="pattern_links")
     op.drop_index("ix_pattern_links_pattern_id", table_name="pattern_links")
     op.drop_table("pattern_links")
 

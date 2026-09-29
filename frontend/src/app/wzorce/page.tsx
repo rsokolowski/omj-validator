@@ -25,7 +25,7 @@ export default async function PatternsPage({ searchParams }: PageProps) {
   try {
     [{ patterns }, queue] = await Promise.all([
       serverFetch<{ patterns: Pattern[] }>(`/api/patterns${archived ? "?archived=true" : ""}`),
-      serverFetch<PatternQueue>("/api/patterns/queue?limit=1"),
+      serverFetch<PatternQueue>("/api/patterns/queue?limit=0"),
     ]);
   } catch (error) {
     if (error instanceof APIError && error.status === 401) {
