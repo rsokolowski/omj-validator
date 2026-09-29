@@ -18,6 +18,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import app.main as main
+import app.websocket.handler as handler
 from app.config import settings
 from app.db import get_db
 from app.db.models import SubmissionDB, UserDB
@@ -96,8 +97,14 @@ def files_left() -> list[str]:
     return sorted(str(p.relative_to(root)) for p in root.rglob("*") if p.is_file())
 
 
-def submit(client, files):
-    return client.post("/task/2024/etap1/1/submit", files=files)
+def submit(client, files, solution_text=None):
+    """POST photos and/or the typed text.
+
+    With files the request is multipart (text as a plain field); with no files
+    httpx sends a urlencoded form, which FastAPI's Form/File params accept too.
+    """
+    data = {"solution_text": solution_text} if solution_text is not None else None
+    return client.post("/task/2024/etap1/1/submit", files=files or None, data=data)
 
 
 def image_part(name: str, data: bytes, content_type: str = "image/jpeg"):
@@ -232,3 +239,79 @@ class TestRejectedSubmissionLeavesNothing:
         submit(client, [image_part("broken.jpg", b"not an image")])
 
         assert (other / "theirs.jpg").is_file()
+
+
+class TestTypedSolution:
+    TEXT = "Niech $n$ będzie liczbą całkowitą. Wtedy $n(n+1)$ jest parzyste."
+
+    @pytest.fixture(autouse=True)
+    def no_grading(self, monkeypatch):
+        """Grading has its own tests; the real worker would reach for PostgreSQL."""
+
+        async def fake_process(**kwargs):
+            return None
+
+        monkeypatch.setattr(handler, "process_submission_background", fake_process)
+
+    def test_text_only_creates_row_without_files_or_folder(self, client, db):
+        response = submit(client, [], solution_text=self.TEXT)
+
+        assert response.status_code == 200, response.text
+        stored = db.query(SubmissionDB).one()
+        assert stored.images == []
+        assert stored.solution_text == self.TEXT
+        assert files_left() == []
+        assert not (settings.uploads_dir / USER_ID).exists()
+
+    def test_text_and_photo(self, client, db):
+        response = submit(client, [image_part("a.jpg", jpeg_bytes())], solution_text=self.TEXT)
+
+        assert response.status_code == 200, response.text
+        stored = db.query(SubmissionDB).one()
+        assert len(stored.images) == 1
+        assert stored.solution_text == self.TEXT
+
+    def test_neither_is_400(self, client, db):
+        response = submit(client, [], solution_text="")
+        assert response.status_code == 400
+        assert response.json()["error"] == "Prześlij zdjęcia, rysunek albo wpisz rozwiązanie"
+        assert db.query(SubmissionDB).count() == 0
+
+    def test_whitespace_only_is_400(self, client, db):
+        response = submit(client, [], solution_text="  \n\t ")
+        assert response.status_code == 400
+        assert db.query(SubmissionDB).count() == 0
+
+    def test_over_cap_is_400_and_writes_nothing(self, client, db, monkeypatch):
+        monkeypatch.setattr(settings, "submission_text_max_chars", 10)
+        response = submit(client, [image_part("a.jpg", jpeg_bytes())], solution_text="x" * 11)
+        assert response.status_code == 400
+        assert response.json()["error"] == "Rozwiązanie jest za długie (maksymalnie 10 znaków)"
+        assert db.query(SubmissionDB).count() == 0
+        assert files_left() == []
+
+    def test_control_characters_stripped_and_newlines_normalised(self, client, db):
+        submit(client, [], solution_text="a\r\nb\x00c\rd")
+        assert db.query(SubmissionDB).one().solution_text == "a\nbc\nd"
+
+    def test_eleven_files_keep_the_old_message(self, client, db):
+        files = [image_part(f"{i}.jpg", jpeg_bytes()) for i in range(11)]
+        response = submit(client, files, solution_text=self.TEXT)
+        assert response.status_code == 400
+        assert response.json()["error"] == "Maksymalnie 10 zdjęć na raz"
+        assert files_left() == []
+
+    def test_history_and_list_expose_the_text(self, client, monkeypatch):
+        submit(client, [], solution_text=self.TEXT)
+
+        async def member(request):
+            return True
+
+        monkeypatch.setattr(main, "is_group_member_async", member)
+        history = client.get("/api/task/2024/etap1/1/history")
+        assert history.status_code == 200, history.text
+        assert history.json()["submissions"][0]["solution_text"] == self.TEXT
+
+        mine = client.get("/api/my-submissions")
+        assert mine.status_code == 200, mine.text
+        assert mine.json()["submissions"][0]["solution_text"] == self.TEXT

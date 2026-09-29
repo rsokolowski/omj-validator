@@ -75,7 +75,7 @@ i jest odnotowane w ryzyku R16.
 ### 2.1 Do czego służy narzędzie
 
 Uczeń wybiera archiwalne zadanie olimpijskie, rozwiązuje je odręcznie na kartce, fotografuje
-kartkę telefonem i przesyła zdjęcia przez przeglądarkę. System przesyła te zdjęcia razem z PDF-em
+kartkę telefonem i przesyła zdjęcia przez przeglądarkę. Zamiast zdjęcia (albo obok niego) uczeń może wpisać rozwiązanie w przeglądarce jako tekst ze wzorami i dołączyć rysunek wykonany w przeglądarce (wysyłany jako obraz PNG). System przesyła te zdjęcia razem z PDF-em
 zawierającym treści zadań i PDF-em z rozwiązaniami wzorcowymi do modelu Google Gemini wraz
 z instrukcją odtwarzającą oficjalne kryteria punktacji OMJ. Model zwraca:
 
@@ -116,6 +116,7 @@ Wynik jest zapisywany, a uczeń widzi go w historii swoich prób i na grafie pos
 | `timestamp`, `created_at` | kiedy |
 | `status` | pending / processing / completed / failed |
 | `images` | lista ścieżek do plików ze zdjęciami |
+| `solution_text` | treść rozwiązania wpisana przez ucznia (tekst ze wzorami LaTeX); pusta przy samych zdjęciach |
 | `score` | liczba punktów przyznana przez model |
 | `feedback` | pełna treść informacji zwrotnej po polsku |
 | `error_message` | treść błędu, jeśli analiza się nie powiodła |
@@ -211,7 +212,8 @@ i najsłabiej kontrolowana. Uczniowie odruchowo podpisują prace. Realnie na zdj
 się: imię i nazwisko, klasa, nazwa szkoły, data, charakter pisma (dana biometryczna w sensie
 potocznym, ale nie w rozumieniu art. 4 pkt 14 RODO — nie służy identyfikacji technicznej),
 notatki na marginesie niezwiązane z matematyką, fragmenty innych prac, a w tle kadru — elementy
-mieszkania lub inne osoby.
+mieszkania lub inne osoby. Wpisany w przeglądarce tekst rozwiązania może zawierać ten sam
+nadmiar (podpis imieniem i nazwiskiem, klasę, szkołę, dopiski niezwiązane z zadaniem).
 
 **Sesja (cookie).** Podpisane kryptograficznie ciasteczko sesyjne Starlette, ważne 30 dni,
 przechowuje: `google_sub`, `email`, `name`, adres URL zdjęcia profilowego Google,
@@ -307,10 +309,10 @@ zadaniu. Konsekwencje, które trzeba przyjąć świadomie:
 | Podmiot | Rola | Co otrzymuje | Ramy prawne |
 |---|---|---|---|
 | Google Ireland Ltd. / Google LLC — usługa logowania (OAuth 2.0) | odrębny administrator dla swojego konta użytkownika | fakt logowania do naszej aplikacji; my otrzymujemy `sub`, e-mail, imię i nazwisko, adres zdjęcia profilowego | zakres `openid email profile` |
-| Google — Gemini API (płatny poziom usługi) | podmiot przetwarzający | **fotografie pracy ucznia**, PDF zadań, PDF rozwiązań wzorcowych, instrukcja oceniania; przy zadaniach prywatnych także **zdjęcie strony z zadaniem** (odczyt treści) i **treść zadania** (wskazówki, ocena) — zdjęcia zwykle przesyłane w treści zapytania, a zestawy powyżej 14 MB przez File API i usuwane zaraz po analizie; **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Gemini API Additional Terms + Google Cloud Data Processing Addendum; transfer: EU-US Data Privacy Framework |
+| Google — Gemini API (płatny poziom usługi) | podmiot przetwarzający | **fotografie pracy ucznia i/lub wpisany przez ucznia tekst rozwiązania** (w tym rysunki wykonane w przeglądarce), PDF zadań, PDF rozwiązań wzorcowych, instrukcja oceniania; przy zadaniach prywatnych także **zdjęcie strony z zadaniem** (odczyt treści) i **treść zadania** (wskazówki, ocena) — zdjęcia zwykle przesyłane w treści zapytania, a zestawy powyżej 14 MB przez File API i usuwane zaraz po analizie; **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Gemini API Additional Terms + Google Cloud Data Processing Addendum; transfer: EU-US Data Privacy Framework |
 | Google — Cloud Translation API v2 (funkcja opcjonalna, `TRANSLATE_ENABLED`) | podmiot przetwarzający | krótkie nagłówki toku rozumowania modelu tłumaczone z angielskiego na polski — **dotyczą treści pracy ucznia** | jw. |
 | Cloudflare, Inc. | podmiot przetwarzający | ruch HTTPS między użytkownikiem a serwerem (tunel, terminacja TLS) | [DO USTALENIA: potwierdzić zawarcie DPA / warunki Cloudflare i wpisać do rejestru] |
-| Telegram FZ-LLC | odbiorca powiadomień technicznych | komunikaty operacyjne: identyfikator zgłoszenia, oznaczenie zadania, liczba zdjęć, wynik punktowy, treść błędu. **Bez imienia, nazwiska, e-maila i identyfikatora użytkownika.** Funkcja wyłączana konfiguracją | brak umowy powierzenia — zob. R12; **w wariancie B zalecane wyłączenie** |
+| Telegram FZ-LLC | odbiorca powiadomień technicznych | komunikaty operacyjne: identyfikator zgłoszenia, oznaczenie zadania, liczba zdjęć, liczba znaków wpisanego tekstu (nigdy sam tekst), wynik punktowy, treść błędu. **Bez imienia, nazwiska, e-maila i identyfikatora użytkownika.** Funkcja wyłączana konfiguracją | brak umowy powierzenia — zob. R12; **w wariancie B zalecane wyłączenie** |
 | Dostawca hostingu / miejsce serwera | — | całość danych | wariant A: serwer własny autora; wariant B: [UZUPEŁNIĆ: infrastruktura szkoły / dostawca] |
 
 **Poziom płatny Gemini API — dlaczego to ma znaczenie.** Produkcja korzysta z płatnego klucza API.
@@ -634,6 +636,8 @@ System kontroluje, jakie pola bazy zbiera, ale nie kontroluje, co dziecko sfotog
 W praktyce na zdjęciach pojawiają się: imię i nazwisko oraz klasa (uczniowie odruchowo podpisują
 prace), nazwa szkoły, notatki na marginesie niezwiązane z zadaniem, fragmenty innych prac,
 przedmioty i osoby w tle kadru. Zdarza się, że margines zeszytu zawiera treści osobiste.
+To samo dotyczy tekstu rozwiązania wpisanego w przeglądarce: uczeń może go podpisać albo dopisać
+treści niezwiązane z zadaniem, a tekst trafia do modelu AI tak samo jak zdjęcie.
 
 Dodatkowo: fotografie o wymiarach poniżej 2048 px **nie są przetwarzane ponownie i zachowują
 oryginalne metadane EXIF**, które w zdjęciach z telefonu regularnie zawierają współrzędne GPS

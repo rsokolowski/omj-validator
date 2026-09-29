@@ -30,6 +30,7 @@ import { formatDate } from "@/lib/utils/dates";
 import { useInfiniteScroll } from "@/lib/hooks/useInfiniteScroll";
 import { UserAutocomplete } from "./UserAutocomplete";
 import { MathContent } from "@/components/ui/MathContent";
+import { SolutionTextBlock } from "@/components/task/SolutionTextBlock";
 
 const PAGE_SIZE = 20;
 
@@ -432,7 +433,7 @@ export function AdminSubmissionsTable() {
                       {submission.images && submission.images.length > 0 && (
                         <Box sx={{ mt: 2 }}>
                           <Typography variant="subtitle2" component="p" sx={{ color: "grey.600", mb: 1 }}>
-                            Submitted images:
+                            Images and drawings:
                           </Typography>
                           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
                             {submission.images.map((image, imgIndex) => (
@@ -446,7 +447,7 @@ export function AdminSubmissionsTable() {
                                 <Box
                                   component="img"
                                   src={`/uploads/${image}`}
-                                  alt={`Solution ${imgIndex + 1}`}
+                                  alt={`Attachment ${imgIndex + 1}`}
                                   sx={{
                                     width: 80,
                                     height: 80,
@@ -465,6 +466,7 @@ export function AdminSubmissionsTable() {
                           </Box>
                         </Box>
                       )}
+                      {submission.solution_text && <SolutionTextBlock text={submission.solution_text} />}
 
                       {/* Re-run scoring */}
                       {(submission.status === "completed" || submission.status === "failed") && (

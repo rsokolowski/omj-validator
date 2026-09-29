@@ -36,6 +36,7 @@ Stores student solution submissions with AI scoring results.
 | `timestamp` | TIMESTAMP | NOT NULL | Submission time (UTC) |
 | `status` | ENUM | NOT NULL | Processing status (see below) |
 | `images` | JSON | NOT NULL | Array of uploaded image paths |
+| `solution_text` | TEXT | NULL | Typed solution text with `$LaTeX$`; NULL when the student sent photos only. Immutable after submit |
 | `score` | INTEGER | NULL | AI-assigned score (0, 2, 5, or 6) |
 | `feedback` | TEXT | NULL | AI-generated feedback text |
 | `error_message` | TEXT | NULL | Error details if processing failed |

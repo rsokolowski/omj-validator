@@ -9,6 +9,7 @@ import { getMaxScore } from "@/lib/utils/constants";
 import { formatDate } from "@/lib/utils/dates";
 import { MathContent } from "@/components/ui/MathContent";
 import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
+import { SolutionTextBlock } from "@/components/task/SolutionTextBlock";
 
 interface SubmissionHistoryProps {
   submissions: Submission[];
@@ -175,7 +176,7 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
                   {submission.images && submission.images.length > 0 && (
                     <Box sx={{ mt: 2 }}>
                       <Typography variant="subtitle2" component="p" sx={{ color: "grey.600", mb: 1 }}>
-                        Przesłane zdjęcia:
+                        Zdjęcia i rysunki:
                       </Typography>
                       <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
                         {submission.images.map((image, imgIndex) => (
@@ -188,7 +189,7 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
                             <Box
                               component="img"
                               src={`/uploads/${image}`}
-                              alt={`Fotografia ${imgIndex + 1} z ${submission.images.length} przesłanego rozwiązania — otwiera się w nowej karcie`}
+                              alt={`Załącznik ${imgIndex + 1} z ${submission.images.length} przesłanego rozwiązania — otwiera się w nowej karcie`}
                               sx={{
                                 width: 80,
                                 height: 80,
@@ -207,6 +208,7 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
                       </Box>
                     </Box>
                   )}
+                  {submission.solution_text && <SolutionTextBlock text={submission.solution_text} />}
                 </Box>
               </Collapse>
             </Box>

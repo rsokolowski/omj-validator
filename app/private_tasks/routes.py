@@ -14,7 +14,7 @@ import uuid
 from pathlib import Path
 from typing import Optional
 
-from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
@@ -43,7 +43,7 @@ from ..models import (
 )
 from ..privacy import mask_user_id
 from ..rate_limits import calculate_rate_limit_headers, check_submission_limits
-from ..uploads import discard_uploads, save_uploaded_images, validate_image_batch
+from ..uploads import discard_uploads, save_uploaded_images, validate_image_batch, validate_submission_input
 from ..websocket.handler import process_submission_background
 from ..websocket.progress import progress_manager
 from . import service
@@ -161,6 +161,13 @@ async def extract_tasks(
 ):
     """Read problem statements off photos. Returns a draft; nothing is saved yet."""
     user_id = await current_member_id(request)
+    # Extraction needs at least one photo - the shared helper no longer refuses
+    # an empty batch, because a solution may now be text only.
+    if not images:
+        return JSONResponse(
+            {"error": "Nie przesłano żadnych zdjęć"},
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
     batch_error = validate_image_batch(images)
     if batch_error is not None:
         return batch_error
@@ -479,9 +486,10 @@ async def submit_private_solution(
     request: Request,
     task_id: str,
     images: list[UploadFile] = File(default=[]),
+    solution_text: Optional[str] = Form(default=None),
     db: Session = Depends(get_db),
 ):
-    """Submit solution photos; grading runs in the background (WebSocket)."""
+    """Submit solution photos and/or typed text; grading runs in the background (WebSocket)."""
     user_id = await current_member_id(request)
     task = _owned_task(db, task_id, user_id)
 
@@ -492,9 +500,11 @@ async def submit_private_solution(
     if limit_error is not None:
         return limit_error
 
-    batch_error = validate_image_batch(images)
-    if batch_error is not None:
-        return batch_error
+    # Normalise the text and check there is something to grade - before any
+    # file is written, so a rejected request leaves nothing to clean up.
+    solution_text, input_error = validate_submission_input(images, solution_text)
+    if input_error is not None:
+        return input_error
 
     saved, upload_error = await save_uploaded_images(images, service.task_dir(user_id, task.id))
     if upload_error is not None:
@@ -511,6 +521,7 @@ async def submit_private_solution(
         etap=None,
         task_number=None,
         images=[service.relative_upload_path(p) for p in saved],
+        solution_text=solution_text,
         status=SubmissionStatus.PENDING,
         private_task_id=task.id,
         hints_used=hints_used,
@@ -526,6 +537,7 @@ async def submit_private_solution(
             task_number=None,
             image_paths=saved,
             private_task={"id": task.id, "title": task.title, "content": task.content},
+            solution_text=solution_text,
         )
     )
     _background_tasks.add(job)

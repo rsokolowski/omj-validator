@@ -40,6 +40,7 @@ async def process_submission_background(
     task_number: Optional[int],
     image_paths: list[Path],
     private_task: Optional[dict] = None,
+    solution_text: Optional[str] = None,
 ) -> None:
     """
     Process submission in background with progress updates.
@@ -51,6 +52,10 @@ async def process_submission_background(
     private task's text; year/etap/task_number are then None. The text graded
     against is stored in scoring_meta["task_snapshot"], so a later edit of the
     task cannot change what an old score refers to.
+
+    ``solution_text`` is the typed solution (already normalised by the
+    endpoint); it is passed to the provider untouched and never logged - only
+    its length.
     """
     if private_task is not None:
         # Notifications and logs identify the task only as "private" - its title
@@ -62,7 +67,7 @@ async def process_submission_background(
     logger.info(
         f"[Submission {submission_id}] STARTED - "
         f"user={mask_user_id(user_id)}, task={year}/{etap}/{task_number}, "
-        f"images=[{image_info}]"
+        f"images=[{image_info}], text_chars={len(solution_text or '')}"
     )
 
     # Get a new database session for the background task
@@ -81,13 +86,16 @@ async def process_submission_background(
         # Notify: submission started processing (fire-and-forget)
         await send_telegram_message(
             build_start_message(
-                submission_id, user_id, year, etap, task_number, len(image_paths)
+                submission_id, user_id, year, etap, task_number, len(image_paths),
+                len(solution_text or ""),
             )
         )
 
         # Stage 1: Uploading files
         logger.info(f"[Submission {submission_id}] Stage 1: Preparing file upload ({_format_elapsed(start_time)})")
-        await progress_manager.send_status(submission_id, "Przesyłam pliki...")
+        await progress_manager.send_status(
+            submission_id, "Przesyłam pliki..." if image_paths else "Przesyłam rozwiązanie..."
+        )
 
         if private_task is None:
             # Get PDF paths
@@ -133,6 +141,7 @@ async def process_submission_background(
                 on_thinking=on_thinking,
                 on_feedback=None,  # We don't stream feedback anymore
                 on_upload_complete=on_upload_complete,
+                solution_text=solution_text,
             )
         else:
             logger.info(f"[Submission {submission_id}] Calling analyze_private_solution_stream ({_format_elapsed(start_time)})")
@@ -142,6 +151,7 @@ async def process_submission_background(
                 image_paths=image_paths,
                 on_thinking=on_thinking,
                 on_upload_complete=on_upload_complete,
+                solution_text=solution_text,
             )
             result.scoring_meta = {
                 **(result.scoring_meta or {}),
