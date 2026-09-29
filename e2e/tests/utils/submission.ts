@@ -20,7 +20,7 @@ export async function uploadAndSubmit(
 ) {
   await page.waitForLoadState('networkidle');
 
-  const fileInput = page.locator('input[type="file"]');
+  const fileInput = page.locator('input[type="file"][accept="image/*"]');
   await expect(fileInput).toBeAttached({ timeout: 10000 });
   await fileInput.setInputFiles(files);
 

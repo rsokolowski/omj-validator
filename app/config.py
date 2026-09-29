@@ -91,6 +91,10 @@ class Settings(BaseSettings):
 
     # App Configuration
     upload_max_size_mb: int = 10
+    # Typed solutions ("solution_text" form field): cap in Unicode code points,
+    # i.e. len(). Mirrored by SUBMISSION_TEXT_MAX_CHARS in
+    # frontend/src/lib/utils/constants.ts - keep the two in sync by hand.
+    submission_text_max_chars: int = 20000
 
     # Rate Limiting (rolling 24h windows)
     rate_limit_new_users_per_day: int = 50           # Max new user registrations per 24h

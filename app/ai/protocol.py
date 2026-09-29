@@ -24,6 +24,7 @@ class AIProvider(Protocol):
         image_paths: list[Path],
         task_number: int,
         etap: str = "etap2",
+        solution_text: Optional[str] = None,
     ) -> SubmissionResult:
         """
         Analyze a student's solution.
@@ -34,6 +35,7 @@ class AIProvider(Protocol):
             image_paths: Paths to uploaded images of student's solution
             task_number: The task number (1-7 for etap1, 1-5 for etap2/etap3)
             etap: The competition stage ("etap1", "etap2", or "etap3")
+            solution_text: Typed solution, plain text with $LaTeX$; None when photos only
 
         Returns:
             SubmissionResult with score and feedback
@@ -55,6 +57,7 @@ class AIProvider(Protocol):
         image_paths: list[Path],
         on_thinking=None,
         on_upload_complete=None,
+        solution_text: Optional[str] = None,
     ) -> SubmissionResult:
         """Grade a solution to a private task (no official solution exists)."""
         ...

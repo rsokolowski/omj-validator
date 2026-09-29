@@ -141,7 +141,7 @@ frontend/src/
 │   └── login/page.tsx               # Google OAuth login
 ├── components/
 │   ├── layout/                      # Header, Footer, Breadcrumb
-│   ├── task/                        # TaskCard, SubmitSection, HintsSection
+│   ├── task/                        # TaskCard, SubmitSection, SolutionTextEditor, FormulaDialog (MathLive), DrawingDialog (Excalidraw), HintsSection
 │   ├── progress/                    # ProgressGraph, CategoryFilter
 │   ├── private-tasks/               # NewPrivateTaskForm, ProblemEditor, hints, actions
 │   └── ui/                          # DifficultyStars, CategoryBadge, MathContent
@@ -164,7 +164,7 @@ GET  /api/years/{year}/{etap}        # Tasks for etap
 GET  /api/task/{year}/{etap}/{num}   # Task detail
 GET  /api/task/{year}/{etap}/{num}/history  # Submission history
 GET  /api/progress/data              # Task progression data
-POST /task/{year}/{etap}/{num}/submit       # Submit solution
+POST /task/{year}/{etap}/{num}/submit       # Submit solution: images (photos/drawings) and/or solution_text
 POST /api/account/delete             # Erase own account + submissions + photos (RODO art. 17)
 
 # Private tasks ("Moje zadania") - owner only, someone else's id is a 404
@@ -176,7 +176,7 @@ PATCH  /api/private-tasks/{id}               # Edit
 DELETE /api/private-tasks/{id}               # Task + submissions + photos
 POST   /api/private-tasks/{id}/hints/{n}     # Reveal hint n (in order)
 POST   /api/private-tasks/{id}/regenerate-hints
-POST   /api/private-tasks/{id}/submit        # Solution photos -> grading over the WebSocket
+POST   /api/private-tasks/{id}/submit        # Solution photos and/or solution_text -> grading over the WebSocket
 
 # Patterns ("Wzorce") - owner only, someone else's id is a 404
 POST   /api/patterns/refine                  # Guided refine round (AI): 2-3 versions, verdict, questions
@@ -267,8 +267,14 @@ GET  /uploads/{path}                 # Serve uploaded images
    Valid categories: `algebra`, `geometria`, `teoria_liczb`, `kombinatoryka`, `logika`, `arytmetyka`
 
 2. **Submission Flow**:
-   - Images uploaded to `data/uploads/{user_id}/{year}/{etap}/{task_num}/`
-   - AI analyzes task PDF + solution PDF + student images
+   - A solution is photos (`images`; drawings made in the browser arrive as PNG photos),
+     a typed text (`solution_text`: plain text + `$LaTeX$`, at most `SUBMISSION_TEXT_MAX_CHARS`
+     code points) or both - `app/uploads.py::validate_submission_input` decides before any
+     file is written. Photos go to `data/uploads/{user_id}/{year}/{etap}/{task_num}/`; the
+     text is stored on `submissions.solution_text` (no file, immutable after submit)
+   - AI analyzes task PDF + solution PDF + student images + the typed text, which is sent
+     after the photos as a fenced `<rozwiazanie_ucznia>` block
+     (`app/ai/prompt_builder.py::solution_text_block`); logs and Telegram carry its length only
    - Results stored in PostgreSQL `submissions` table
    - OMJ scoring: 0, 2, 5, or 6 points
 
@@ -294,6 +300,7 @@ GET  /uploads/{path}                 # Serve uploaded images
 
 6. **LaTeX Rendering**: Frontend uses KaTeX via `MathContent` component, which HTML-escapes
    all non-math text (private task statements are user/AI controlled). `npm test` covers it.
+   The typed-solution editor (`SolutionTextEditor`) previews through the same component with `indexMath` for click-to-edit; MathLive and Excalidraw fonts are copied into `frontend/public/{mathlive,excalidraw}` (git-ignored) by `frontend/scripts/copy-editor-assets.mjs` on install/dev/build - nothing is fetched from a CDN.
 
 ### Configuration
 
@@ -317,7 +324,7 @@ SESSION_SECRET_KEY=dev-secret-key-change-in-production
 
 # Data retention (RODO art. 5(1)(e) - storage limitation)
 # 0 disables a pass; docker-compose.yml disables both for local dev.
-RETENTION_SUBMISSION_MONTHS=24        # Submission row + uploaded photos
+RETENTION_SUBMISSION_MONTHS=24        # Submission row + uploaded photos + typed text
 RETENTION_SCORING_THINKING_DAYS=90    # Raw AI "thinking" trace in scoring_meta
 RETENTION_INACTIVE_ACCOUNT_MONTHS=36  # Accounts with no login and no submission
 RETENTION_ADMIN_AUDIT_MONTHS=12       # Admin access audit trail
@@ -333,6 +340,9 @@ RETENTION_AUTO_PURGE=true             # Daily in-app run (single-worker only)
 # RATE_LIMIT_PATTERN_REFINES_PER_USER_PER_DAY=30
 # RATE_LIMIT_PATTERN_SUGGESTS_PER_USER_PER_DAY=10
 # RATE_LIMIT_PATTERN_LINKS_PER_USER_PER_DAY=10
+
+# Typed solutions: cap in code points, mirrored in frontend/src/lib/utils/constants.ts
+# SUBMISSION_TEXT_MAX_CHARS=20000
 
 # AI
 AI_PROVIDER=gemini

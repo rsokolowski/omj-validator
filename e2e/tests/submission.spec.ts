@@ -12,6 +12,7 @@ import { test, expect } from '@playwright/test';
 import { loginAs, TEST_USERS } from './utils/auth';
 import { setGeminiScenario, resetGemini, GeminiScenario } from './utils/api';
 import { uploadAndSubmit } from './utils/submission';
+import * as fs from 'fs';
 import * as path from 'path';
 
 // Path to test fixtures
@@ -39,7 +40,7 @@ test.describe('Submission Flow', () => {
       await uploadAndSubmit(page, TEST_IMAGE);
 
       // Wait for submission to start processing
-      // UI shows "Przesyłanie zdjęć..." or "Przetwarzanie..." or "Analizuję..."
+      // UI shows "Przesyłanie rozwiązania..." or "Przetwarzanie..." or "Analizuję..."
       await expect(
         page.getByText(/przesyłanie/i).or(page.getByText(/przetwarzanie/i)).or(page.getByText(/analizuję/i)).first()
       ).toBeVisible({ timeout: 10000 });
@@ -50,12 +51,12 @@ test.describe('Submission Flow', () => {
       await page.waitForLoadState('networkidle');
 
       // Upload multiple files
-      const fileInput = page.locator('input[type="file"]');
+      const fileInput = page.locator('input[type="file"][accept="image/*"]');
       await expect(fileInput).toBeAttached({ timeout: 10000 });
       await fileInput.setInputFiles([TEST_IMAGE, TEST_IMAGE_2]);
 
       // Should show 2 images uploaded - look for specific text
-      await expect(page.getByText(/Wybrano 2 plik/i)).toBeVisible();
+      await expect(page.getByText(/Zdjęcia i rysunki: 2 \/ 10/)).toBeVisible();
 
       // Submit
       const submitButton = page.getByRole('button', { name: /prześlij/i });
@@ -216,20 +217,20 @@ test.describe('Submission Flow', () => {
 
       // Create a "large" file in memory (we can't actually create 10MB+ in test)
       // This test verifies the UI handles the case - actual validation happens server-side
-      const fileInput = page.locator('input[type="file"]');
+      const fileInput = page.locator('input[type="file"][accept="image/*"]');
       await expect(fileInput).toBeAttached({ timeout: 10000 });
 
       // Try to upload - UI should have max size validation
       await fileInput.setInputFiles(TEST_IMAGE);
 
       // File should be accepted (it's small)
-      await expect(page.locator('[data-testid="image-preview"]').or(page.getByText(/test-solution/i))).toBeVisible();
+      await expect(page.locator('[data-testid="image-preview"]').or(page.getByText(/test-solution/i)).first()).toBeVisible();
     });
 
     test('rejects non-image files', async ({ page }) => {
       await page.goto('/task/2024/etap2/1');
 
-      const fileInput = page.locator('input[type="file"]');
+      const fileInput = page.locator('input[type="file"][accept="image/*"]');
 
       // The input should have accept attribute limiting to images
       const acceptAttr = await fileInput.getAttribute('accept');
@@ -239,14 +240,25 @@ test.describe('Submission Flow', () => {
     test('limits number of images', async ({ page }) => {
       await page.goto('/task/2024/etap2/1');
 
-      const fileInput = page.locator('input[type="file"]');
+      const fileInput = page.locator('input[type="file"][accept="image/*"]');
 
-      // Try uploading more than max allowed (10)
-      // For now just verify we can upload multiple
-      await fileInput.setInputFiles([TEST_IMAGE, TEST_IMAGE_2]);
+      // Choose more than the maximum (10): the extra ones are dropped with a notice
+      const eleven = Array.from({ length: 11 }, (_, i) => ({
+        name: `strona-${i + 1}.jpg`,
+        mimeType: 'image/jpeg',
+        buffer: fs.readFileSync(TEST_IMAGE),
+      }));
+      await fileInput.setInputFiles(eleven);
 
-      // Should show both images
-      expect(await page.locator('[data-testid="image-preview"]').count()).toBeLessThanOrEqual(10);
+      await expect(page.locator('[data-testid="image-preview"]')).toHaveCount(10);
+      await expect(page.getByText(/Zdjęcia i rysunki: 10 \/ 10/)).toBeVisible();
+      await expect(page.getByRole('status').filter({ hasText: /pominięto 1\./ })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Dodaj rysunek' })).toBeDisabled();
+
+      // Removing one frees a place and clears the notice
+      await page.getByRole('button', { name: 'Usuń strona-1.jpg' }).click();
+      await expect(page.locator('[data-testid="image-preview"]')).toHaveCount(9);
+      await expect(page.getByText(/pominięto/)).toHaveCount(0);
     });
   });
 
@@ -314,7 +326,7 @@ test.describe('Submission Flow', () => {
 
       // Wait for UI to be ready for next submission (file input available)
       await setGeminiScenario(request, 'success_score_6');
-      const fileInput = page.locator('input[type="file"]');
+      const fileInput = page.locator('input[type="file"][accept="image/*"]');
       await expect(fileInput).toBeAttached({ timeout: 10000 });
       await fileInput.setInputFiles(TEST_IMAGE_2);
 
@@ -344,7 +356,7 @@ test.describe('Submission Flow', () => {
 
       // Second submission
       await setGeminiScenario(request, 'success_score_6');
-      const fileInput = page.locator('input[type="file"]');
+      const fileInput = page.locator('input[type="file"][accept="image/*"]');
       await expect(fileInput).toBeAttached({ timeout: 10000 });
       await fileInput.setInputFiles(TEST_IMAGE_2);
 

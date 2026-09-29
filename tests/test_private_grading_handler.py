@@ -24,9 +24,10 @@ class StubProvider:
         self.calls = []
 
     async def analyze_private_solution_stream(
-        self, task_title, task_content, image_paths, on_thinking=None, on_upload_complete=None
+        self, task_title, task_content, image_paths, on_thinking=None,
+        on_upload_complete=None, solution_text=None,
     ):
-        self.calls.append((task_title, task_content, list(image_paths)))
+        self.calls.append((task_title, task_content, list(image_paths), solution_text))
         if on_upload_complete:
             await on_upload_complete()
         if on_thinking:
@@ -60,7 +61,7 @@ def session_factory(monkeypatch):
     return factory
 
 
-def run(provider, monkeypatch, image_paths):
+def run(provider, monkeypatch, image_paths, solution_text=None):
     monkeypatch.setattr(handler, "create_ai_provider", lambda: provider)
     sent = []
 
@@ -78,6 +79,7 @@ def run(provider, monkeypatch, image_paths):
             image_paths=image_paths,
             private_task={"id": TASK_ID, "title": "Parzystość",
                           "content": "Wykaż, że $n^2+n$ jest parzyste."},
+            solution_text=solution_text,
         )
     )
     return sent
@@ -111,3 +113,19 @@ def test_private_submission_failure_is_recorded(session_factory, monkeypatch, tm
     sub = db.query(SubmissionDB).one()
     assert sub.status == SubmissionStatus.FAILED
     assert "zbyt długo" in sub.error_message
+
+
+def test_text_only_private_submission_reaches_the_provider(session_factory, monkeypatch):
+    text = "Niech $n$ będzie liczbą całkowitą. Wtedy $n^2+n = n(n+1)$ jest parzyste."
+    provider = StubProvider()
+
+    sent = run(provider, monkeypatch, [], solution_text=text)
+
+    db = session_factory()
+    sub = db.query(SubmissionDB).one()
+    assert sub.status == SubmissionStatus.COMPLETED
+    assert provider.calls[0][2] == []
+    assert provider.calls[0][3] == text
+    # Only the length leaves the server
+    assert sent and all("Niech" not in message for message in sent)
+    assert any("text: " in message and "chars" in message for message in sent)

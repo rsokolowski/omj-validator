@@ -123,6 +123,7 @@ class Submission(BaseModel):
     timestamp: datetime
     status: SubmissionStatus = SubmissionStatus.COMPLETED
     images: list[str]  # paths to uploaded images (relative to uploads_dir)
+    solution_text: Optional[str] = None  # typed solution ($LaTeX$ text), None when photos only
     score: Optional[int] = None  # Null if failed
     feedback: Optional[str] = None  # Null if failed
     error_message: Optional[str] = None  # Set if status is FAILED
@@ -238,6 +239,7 @@ class UserSubmissionListItem(BaseModel):
     feedback_preview: Optional[str] = None  # First ~150 chars of feedback
     error_message: Optional[str] = None
     images: list[str] = []
+    solution_text: Optional[str] = None  # typed solution ($LaTeX$ text), None when photos only
 
 
 class UserSubmissionsResponse(BaseModel):

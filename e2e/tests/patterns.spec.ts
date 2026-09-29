@@ -24,7 +24,7 @@ async function createTypedTask(page: Page, title: string): Promise<string> {
 }
 
 async function submitSolution(page: Page) {
-  await page.locator('input[type="file"]').setInputFiles(SOLUTION_PHOTO);
+  await page.getByLabel('Wybierz zdjęcia rozwiązania').setInputFiles(SOLUTION_PHOTO);
   await page.getByRole('button', { name: 'Prześlij rozwiązanie' }).click();
   await expect(page.getByText(/Wynik: 6 \/ 6 punktów/)).toBeVisible({ timeout: 30000 });
 }

@@ -11,8 +11,8 @@ them with the AI, links them to tasks and reviews them on a schedule.
 * submissions.pattern_id: the pattern a solution practised; SET NULL when the
   pattern is deleted, the submission itself stays.
 
-Revision ID: 007
-Revises: 006
+Revision ID: 008
+Revises: 007
 Create Date: 2026-09-29
 """
 from typing import Sequence, Union
@@ -22,8 +22,8 @@ import sqlalchemy as sa
 
 
 # Revision identifiers, used by Alembic.
-revision: str = "007"
-down_revision: Union[str, None] = "006"
+revision: str = "008"
+down_revision: Union[str, None] = "007"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

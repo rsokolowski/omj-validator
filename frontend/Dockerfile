@@ -7,6 +7,7 @@ WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json* ./
+COPY scripts ./scripts
 RUN npm ci
 
 # Build the application

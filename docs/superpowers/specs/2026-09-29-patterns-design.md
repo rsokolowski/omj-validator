@@ -47,7 +47,7 @@ wording. Hence recall + graded application.
 - Free-form chat.
 - OIJ / programming content from the notebook.
 
-## 1. Data model (Alembic `007_add_patterns.py`)
+## 1. Data model (Alembic `008_add_patterns.py`; renumbered after `007_add_solution_text.py` landed on main)
 
 ### New table `patterns`
 

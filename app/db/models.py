@@ -135,6 +135,11 @@ class SubmissionDB(Base):
 
     # Image paths stored as JSON array
     images = Column(JSON, nullable=False)
+    # Typed solution: plain text with $LaTeX$ (max settings.submission_text_max_chars
+    # code points). A row has images, solution_text or both; images stays NOT NULL
+    # ([] for a text-only submission). Never edited after submit, so the column
+    # is its own snapshot - nothing goes into scoring_meta for it.
+    solution_text = Column(Text, nullable=True)
 
     # Scoring results (nullable for failed submissions)
     score = Column(Integer, nullable=True)

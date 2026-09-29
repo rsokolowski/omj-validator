@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Fonts copied from node_modules by scripts/copy-editor-assets.mjs
+/public/mathlive/
+/public/excalidraw/

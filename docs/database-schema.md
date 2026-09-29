@@ -36,6 +36,7 @@ Stores student solution submissions with AI scoring results.
 | `timestamp` | TIMESTAMP | NOT NULL | Submission time (UTC) |
 | `status` | ENUM | NOT NULL | Processing status (see below) |
 | `images` | JSON | NOT NULL | Array of uploaded image paths |
+| `solution_text` | TEXT | NULL | Typed solution text with `$LaTeX$`; NULL when the student sent photos only. Immutable after submit |
 | `score` | INTEGER | NULL | AI-assigned score (0, 2, 5, or 6) |
 | `feedback` | TEXT | NULL | AI-generated feedback text |
 | `error_message` | TEXT | NULL | Error details if processing failed |
@@ -63,7 +64,7 @@ stats) additionally filters `private_task_id IS NULL` explicitly.
 **Foreign Keys:**
 - `user_id` → `users.google_sub` with `ON DELETE CASCADE`
 - `private_task_id` → `private_tasks.id` with `ON DELETE CASCADE`
-- `pattern_id` → `patterns.id` with `ON DELETE SET NULL` (migration 007): the
+- `pattern_id` → `patterns.id` with `ON DELETE SET NULL` (migration 008): the
   pattern a solution practised; the submission outlives the pattern
 
 ### private_tasks

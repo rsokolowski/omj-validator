@@ -7,6 +7,7 @@ were first written.
 """
 
 import logging
+import unicodedata
 import uuid
 from pathlib import Path
 from typing import Callable, Optional as OptionalType
@@ -206,12 +207,10 @@ MAX_IMAGES = 10
 
 
 def validate_image_batch(images: list[UploadFile]) -> OptionalType[JSONResponse]:
-    """400 response for an empty, oversized or wrongly typed batch, else None."""
-    if not images:
-        return JSONResponse(
-            {"error": "Nie przesłano żadnych zdjęć"},
-            status_code=status.HTTP_400_BAD_REQUEST,
-        )
+    """400 response for an oversized or wrongly typed batch, else None.
+
+    Emptiness is validate_submission_input's business.
+    """
     if len(images) > MAX_IMAGES:
         return JSONResponse(
             {"error": f"Maksymalnie {MAX_IMAGES} zdjęć na raz"},
@@ -224,6 +223,55 @@ def validate_image_batch(images: list[UploadFile]) -> OptionalType[JSONResponse]
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
     return None
+
+
+def normalize_solution_text(raw: OptionalType[str]) -> OptionalType[str]:
+    """Canonical form of a typed solution, or None when there is nothing in it.
+
+    Line endings become "\\n"; every other control character (Unicode category
+    Cc - this includes the NUL byte PostgreSQL refuses in a text column) is
+    dropped except tab; surrounding whitespace is stripped. The frontend applies
+    the same rule (normalizeSolutionText in lib/utils/solutionText.ts), so the
+    counter a student sees and the cap the server enforces agree.
+    """
+    if raw is None:
+        return None
+    text = raw.replace("\r\n", "\n").replace("\r", "\n")
+    text = "".join(
+        ch for ch in text if ch in ("\n", "\t") or unicodedata.category(ch) != "Cc"
+    )
+    text = text.strip()
+    return text or None
+
+
+def validate_submission_input(
+    images: list[UploadFile], solution_text: OptionalType[str]
+) -> tuple[OptionalType[str], OptionalType[JSONResponse]]:
+    """Normalise the typed text and check the submission has something to grade.
+
+    Returns (text, None) on success - text is None for a photos-only
+    submission - or (None, 400 response). Runs before anything is written to
+    disk, so a rejected request leaves nothing to clean up. Shared by the OMJ
+    and the private task submit endpoints.
+    """
+    text = normalize_solution_text(solution_text)
+    if not images and text is None:
+        return None, JSONResponse(
+            {"error": "Prześlij zdjęcia, rysunek albo wpisz rozwiązanie"},
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+    if text is not None and len(text) > settings.submission_text_max_chars:
+        # "20 000", the way the counter in the browser formats it
+        limit = f"{settings.submission_text_max_chars:,}".replace(",", " ")
+        return None, JSONResponse(
+            {"error": f"Rozwiązanie jest za długie (maksymalnie {limit} znaków)"},
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
+    if images:
+        batch_error = validate_image_batch(images)
+        if batch_error is not None:
+            return None, batch_error
+    return text, None
 
 
 async def save_uploaded_images(
@@ -241,8 +289,6 @@ async def save_uploaded_images(
     so tests can substitute it.
     """
     normalize = normalize or (lambda p: normalize_uploaded_image(p))
-    upload_dir.mkdir(parents=True, exist_ok=True)
-
     saved_paths: list[Path] = []
     max_size = settings.upload_max_size_mb * 1024 * 1024
 
@@ -267,6 +313,7 @@ async def save_uploaded_images(
             # Read file in chunks with size limit check
             total_size = 0
             CHUNK_SIZE = 64 * 1024  # 64KB chunks
+            upload_dir.mkdir(parents=True, exist_ok=True)
             with open(file_path, "wb") as f:
                 while True:
                     chunk = await img.read(CHUNK_SIZE)

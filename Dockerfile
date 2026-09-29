@@ -44,4 +44,7 @@ EXPOSE 8100
 # Run with gunicorn
 # Single worker required - progress_manager uses in-memory state (see app/websocket/progress.py)
 # Scale horizontally via container replicas with sticky sessions instead
-CMD ["sh", "-c", "alembic upgrade head && gunicorn app.main:app --workers 1 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8100"]
+# --no-control-socket: gunicorn 26 otherwise tries to create $HOME/.gunicorn/gunicorn.ctl
+# for its admin CLI, which we don't use - appuser's HOME is /nonexistent, so it logs
+# "Control server error: Permission denied" on every start.
+CMD ["sh", "-c", "alembic upgrade head && gunicorn app.main:app --workers 1 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8100 --no-control-socket"]

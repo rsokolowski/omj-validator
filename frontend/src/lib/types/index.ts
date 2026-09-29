@@ -56,6 +56,7 @@ export interface Submission {
   timestamp: string;
   status: "pending" | "processing" | "completed" | "failed";
   images: string[];
+  solution_text?: string | null; // typed solution ($LaTeX$ text), null when photos only
   score: number | null;
   feedback: string | null;
   error_message?: string;
@@ -167,6 +168,7 @@ export interface AdminSubmission {
   timestamp: string;
   status: "pending" | "processing" | "completed" | "failed";
   images: string[];
+  solution_text?: string | null;
   score: number | null;
   feedback: string | null;
   error_message?: string | null;
@@ -232,6 +234,7 @@ export interface UserSubmissionListItem {
   feedback_preview: string | null;
   error_message?: string | null;
   images: string[];
+  solution_text?: string | null;
 }
 
 export interface UserSubmissionsResponse {

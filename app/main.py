@@ -15,7 +15,7 @@ logging.getLogger("httpcore").setLevel(logging.WARNING)
 logging.getLogger("google_genai").setLevel(logging.WARNING)
 
 import asyncio
-from fastapi import FastAPI, Request, UploadFile, File, HTTPException, status, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Request, UploadFile, File, Form, HTTPException, status, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image, ImageOps
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
@@ -63,7 +63,7 @@ from .uploads import (
     flatten_transparency as _flatten_transparency,
     normalize_uploaded_image,
     save_uploaded_images,
-    validate_image_batch,
+    validate_submission_input,
 )
 from .rate_limits import (
     calculate_rate_limit_headers as _calculate_rate_limit_headers,
@@ -704,20 +704,23 @@ async def submit_solution(
     year: str,
     etap: str,
     num: int,
-    images: list[UploadFile] = File(...),
+    images: list[UploadFile] = File(default=[]),
+    solution_text: OptionalType[str] = Form(default=None),
     pattern_id: OptionalType[str] = Form(None),
     hints_used: OptionalType[int] = Form(None),
     db: Session = Depends(get_db),
 ):
     """
-    Submit solution images for analysis (requires group membership).
+    Submit a solution for analysis (requires group membership).
+
+    A solution is photos (``images``, drawings made in the browser arrive as
+    PNG photos), a typed text (``solution_text``, plain text with $LaTeX$) or
+    both - at least one of them. Returns immediately with submission_id;
+    the client connects to /ws/submissions/{submission_id} for progress.
 
     ``pattern_id`` (one of the user's patterns) marks the solution as practice
     of that pattern; ``hints_used`` is the number of hints the task page
     revealed (OMJ hints are shown client-side), clamped to the task's hints.
-
-    Returns immediately with submission_id. Client should connect to
-    WebSocket at /ws/submissions/{submission_id} for progress updates.
     """
     # Check if user is authenticated
     if not verify_auth(request):
@@ -754,9 +757,11 @@ async def submit_solution(
             status_code=status.HTTP_400_BAD_REQUEST,
         )
 
-    batch_error = validate_image_batch(images)
-    if batch_error is not None:
-        return batch_error
+    # Normalise the text and check there is something to grade - before any
+    # file is written, so a rejected request leaves nothing to clean up.
+    solution_text, input_error = validate_submission_input(images, solution_text)
+    if input_error is not None:
+        return input_error
 
     # Save uploaded images (per-user directory structure). The normaliser is
     # resolved through this module at call time - see _normalize_uploaded_image.
@@ -794,6 +799,7 @@ async def submit_solution(
         etap=etap,
         task_number=num,
         images=[str(p.relative_to(settings.uploads_dir)) for p in saved_paths],
+        solution_text=solution_text,
         status=SubmissionStatus.PENDING,
         pattern_id=pattern_service.owned_pattern_id(db, user_id, pattern_id),
         hints_used=max(0, min(hints_used or 0, hints_available)),
@@ -811,6 +817,7 @@ async def submit_solution(
             etap=etap,
             task_number=num,
             image_paths=saved_paths,
+            solution_text=solution_text,
         )
     )
     _background_tasks.add(task)
@@ -1510,6 +1517,7 @@ async def my_submissions(
             "feedback_preview": feedback_preview,
             "error_message": sub.error_message,
             "images": sub.images or [],
+            "solution_text": sub.solution_text,
         })
 
     return {
@@ -1759,6 +1767,7 @@ async def admin_submissions(
             "timestamp": ensure_utc(sub.timestamp).isoformat(),
             "status": sub.status.value,
             "images": sub.images,
+            "solution_text": sub.solution_text,
             "score": sub.score,
             "feedback": sub.feedback,
             "error_message": sub.error_message,
@@ -1833,8 +1842,9 @@ async def admin_rerun_submission(
 ):
     """Re-run AI scoring for an existing submission (admin only).
 
-    Creates a new submission reusing the original's images and dispatches
-    the background worker, leaving the original submission untouched.
+    Creates a new submission reusing the original's images and typed text
+    and dispatches the background worker, leaving the original submission
+    untouched.
     """
     _require_admin(request)
 
@@ -1853,10 +1863,10 @@ async def admin_rerun_submission(
 
     # Reconstruct absolute image paths from stored relative paths
     relative_images = original.images or []
-    if not relative_images:
+    if not relative_images and not original.solution_text:
         raise HTTPException(
             status_code=409,
-            detail="Submission has no images to re-run",
+            detail="Submission has no images or text to re-run",
         )
 
     image_paths = [settings.uploads_dir / rel for rel in relative_images]
@@ -1899,6 +1909,7 @@ async def admin_rerun_submission(
         etap=original.etap,
         task_number=original.task_number,
         images=list(relative_images),
+        solution_text=original.solution_text,
         status=SubmissionStatus.PENDING,
         private_task_id=original.private_task_id,
         hints_used=original.hints_used or 0,
@@ -1917,6 +1928,7 @@ async def admin_rerun_submission(
             task_number=original.task_number,
             image_paths=image_paths,
             private_task=private_task,
+            solution_text=original.solution_text,
         )
     )
     _background_tasks.add(task)

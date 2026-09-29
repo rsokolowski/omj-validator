@@ -38,6 +38,11 @@ export const HINT_ICONS = ["💡", "🎯", "🧭", "🔑"];
 
 export const MAX_UPLOAD_FILES = 10;
 export const MAX_FILE_SIZE_MB = 10;
+
+// Typed solutions: mirrors settings.submission_text_max_chars (app/config.py),
+// counted in code points on both sides
+export const SUBMISSION_TEXT_MAX_CHARS = 20000;
+
 export const ALLOWED_FILE_TYPES = [
   "image/jpeg",
   "image/png",

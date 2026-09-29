@@ -31,7 +31,14 @@ from ..pattern_parsing import (
     parse_suggest_response,
 )
 from ..parsing import parse_ai_response
-from ..prompt_builder import build_prompt, build_private_scoring_prompt, load_private_prompt
+from ..prompt_builder import (
+    CLOSING_LINE,
+    build_prompt,
+    build_private_scoring_prompt,
+    load_private_prompt,
+    solution_shape_line,
+    solution_text_block,
+)
 from ..private_parsing import (
     EXTRACTION_SCHEMA,
     META_SCHEMA,
@@ -357,11 +364,14 @@ class GeminiProvider:
         has_solution_pdf: bool,
         num_images: int,
         image_paths: list[Path] = None,
+        solution_text: Optional[str] = None,
     ) -> list:
         """Build content parts list for API request.
 
-        For Gemini 3 models, student images are wrapped with ULTRA_HIGH
-        media resolution for better handwriting recognition.
+        Order: prompt text, task PDF, optional solution PDF, the photos, the
+        typed solution block (if any) and always the closing instruction last.
+        For Gemini 3 models, student images are wrapped with ULTRA_HIGH media
+        resolution for better handwriting recognition.
         """
         content_parts = []
         result_idx = 0
@@ -388,6 +398,7 @@ class GeminiProvider:
 
         # Student images - use per-part ULTRA_HIGH resolution for Gemini 3
         full_prompt += "### Rozwiązanie ucznia:\n"
+        full_prompt += solution_shape_line(num_images, bool(solution_text))
         image_resolution = self._get_media_resolution(settings.gemini_media_resolution_images)
 
         for i in range(num_images):
@@ -441,7 +452,11 @@ class GeminiProvider:
             result_idx += 1
             content_parts.append(img_file)
 
-        full_prompt += "\n\nOceń rozwiązanie i odpowiedz WYŁĄCZNIE w formacie JSON."
+        # Typed text goes after the photos; the closing instruction is always the
+        # last part so nothing the student wrote can come after it.
+        if solution_text:
+            content_parts.append(solution_text_block(solution_text))
+        content_parts.append(CLOSING_LINE)
 
         # Prepend prompt text to content
         content_parts.insert(0, full_prompt)
@@ -516,6 +531,7 @@ class GeminiProvider:
         image_paths: list[Path],
         task_number: int,
         etap: str = "etap2",
+        solution_text: Optional[str] = None,
     ) -> SubmissionResult:
         """
         Analyze a student's solution using Gemini API (non-streaming).
@@ -526,6 +542,7 @@ class GeminiProvider:
             image_paths: Paths to uploaded images of student's solution
             task_number: The task number (1-7 for etap1, 1-5 for etap2/etap3)
             etap: The competition stage ("etap1", "etap2", or "etap3")
+            solution_text: Typed solution, plain text with $LaTeX$; None when photos only
 
         Returns:
             SubmissionResult with score and feedback
@@ -539,6 +556,7 @@ class GeminiProvider:
         logger.info(
             f"[Gemini Request] model={self._model_name}, etap={etap}, "
             f"task={task_number}, images={len(image_paths)}, "
+            f"text_chars={len(solution_text or '')}, "
             f"total_image_size={total_image_size_kb:.1f}KB"
         )
 
@@ -553,6 +571,7 @@ class GeminiProvider:
             content_parts = self._build_content_parts(
                 prompt_text, uploaded_files, task_number, has_solution_pdf, len(image_paths),
                 image_paths=image_paths,
+                solution_text=solution_text,
             )
 
             upload_time = time.time() - start_time
@@ -654,8 +673,8 @@ class GeminiProvider:
                 )
             elif "safety" in error_msg.lower() or "blocked" in error_msg.lower():
                 raise AIProviderError(
-                    "Nie udało się przetworzyć zdjęcia. Upewnij się, że zdjęcie "
-                    "zawiera tylko rozwiązanie zadania."
+                    "Nie udało się przetworzyć rozwiązania. Upewnij się, że zawiera "
+                    "tylko rozwiązanie zadania."
                 )
             else:
                 raise AIProviderError(
@@ -674,6 +693,7 @@ class GeminiProvider:
         on_thinking: Optional[Callable[[str], Any]] = None,
         on_feedback: Optional[Callable[[str], Any]] = None,
         on_upload_complete: Optional[Callable[[], Any]] = None,
+        solution_text: Optional[str] = None,
     ) -> SubmissionResult:
         """
         Analyze a student's solution with streaming response.
@@ -689,6 +709,7 @@ class GeminiProvider:
             on_thinking: Callback for thinking text chunks
             on_feedback: Callback for feedback text chunks
             on_upload_complete: Callback when file upload is complete (before AI analysis)
+            solution_text: Typed solution, plain text with $LaTeX$; None when photos only
 
         Returns:
             SubmissionResult with score and feedback
@@ -702,6 +723,7 @@ class GeminiProvider:
         logger.info(
             f"[Gemini Stream Request] model={self._model_name}, etap={etap}, "
             f"task={task_number}, images={len(image_paths)}, "
+            f"text_chars={len(solution_text or '')}, "
             f"total_image_size={total_image_size_kb:.1f}KB"
         )
 
@@ -716,6 +738,7 @@ class GeminiProvider:
             content_parts = self._build_content_parts(
                 prompt_text, uploaded_files, task_number, has_solution_pdf, len(image_paths),
                 image_paths=image_paths,
+                solution_text=solution_text,
             )
 
             upload_time = time.time() - start_time
@@ -803,8 +826,8 @@ class GeminiProvider:
                 )
             elif "safety" in error_msg.lower() or "blocked" in error_msg.lower():
                 raise AIProviderError(
-                    "Nie udało się przetworzyć zdjęcia. Upewnij się, że zdjęcie "
-                    "zawiera tylko rozwiązanie zadania."
+                    "Nie udało się przetworzyć rozwiązania. Upewnij się, że zawiera "
+                    "tylko rozwiązanie zadania."
                 )
             else:
                 raise AIProviderError(
@@ -1063,8 +1086,8 @@ class GeminiProvider:
             )
         if "safety" in message or "blocked" in message:
             return AIContentBlockedError(
-                "Nie udało się przetworzyć zdjęcia. Upewnij się, że zdjęcie "
-                "zawiera tylko treść zadania lub rozwiązanie."
+                "Nie udało się przetworzyć rozwiązania. Upewnij się, że zawiera "
+                "tylko treść zadania lub rozwiązanie."
             )
         return AIProviderError("Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę.")
 
@@ -1236,11 +1259,13 @@ class GeminiProvider:
         image_paths: list[Path],
         on_thinking: Optional[Callable[[str], Any]] = None,
         on_upload_complete: Optional[Callable[[], Any]] = None,
+        solution_text: Optional[str] = None,
     ) -> SubmissionResult:
         """Grade a solution to a private task - no PDF, no official solution."""
         start_time = time.time()
         logger.info(
-            f"[Gemini Private Stream] model={self._model_name}, images={len(image_paths)}"
+            f"[Gemini Private Stream] model={self._model_name}, images={len(image_paths)}, "
+            f"text_chars={len(solution_text or '')}"
         )
         uploaded: list = []
         try:
@@ -1248,14 +1273,16 @@ class GeminiProvider:
                 f"{build_private_scoring_prompt()}\n\n"
                 f"## Treść zadania (tekst podany przez ucznia)\n"
                 f"### {task_title}\n{task_content}\n\n"
-                f"### Rozwiązanie ucznia:\n"
+                f"### Rozwiązanie ucznia:\n{solution_shape_line(len(image_paths), bool(solution_text))}"
             )
             image_parts, uploaded = await self._image_parts(image_paths)
             contents = [prompt]
             for index, part in enumerate(image_parts, 1):
                 contents.append(f"Zdjęcie {index}:")
                 contents.append(part)
-            contents.append("Oceń rozwiązanie i odpowiedz WYŁĄCZNIE w formacie JSON.")
+            if solution_text:
+                contents.append(solution_text_block(solution_text))
+            contents.append(CLOSING_LINE)
 
             if on_upload_complete:
                 if asyncio.iscoroutinefunction(on_upload_complete):

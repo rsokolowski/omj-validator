@@ -166,7 +166,8 @@ class TestPracticeCandidates:
 
 class StubProvider:
     async def analyze_private_solution_stream(self, task_title, task_content, image_paths,
-                                              on_thinking=None, on_upload_complete=None):
+                                              on_thinking=None, on_upload_complete=None,
+                                              solution_text=None):
         return SubmissionResult(score=6, feedback="Dobrze", scoring_meta={"model": "stub"})
 
 

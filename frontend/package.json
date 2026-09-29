@@ -3,21 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/copy-editor-assets.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/copy-editor-assets.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node --experimental-strip-types --test src/lib/utils/__tests__/*.test.ts"
+    "test": "node --experimental-strip-types --test src/lib/utils/__tests__/*.test.ts",
+    "postinstall": "node scripts/copy-editor-assets.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@excalidraw/excalidraw": "0.18.1",
     "@mui/icons-material": "^7.3.6",
     "@mui/material": "^7.3.6",
     "@mui/material-nextjs": "^7.3.6",
     "date-fns": "^4.1.0",
     "katex": "^0.16.27",
     "marked": "^17.0.1",
+    "mathlive": "0.110.0",
     "next": "16.0.7",
     "react": "19.2.0",
     "react-dom": "19.2.0",
