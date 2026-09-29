@@ -33,6 +33,9 @@ PRIVATE_SCORING_PROMPT_FILE = "gemini_prompt_scoring_private.txt"
 PRIVATE_PROMPT_FILES = {
     "extract": "private_task_extract.txt",
     "meta": "private_task_meta.txt",
+    "pattern_refine": "pattern_refine.txt",
+    "pattern_suggest": "pattern_suggest.txt",
+    "pattern_link": "pattern_link.txt",
 }
 
 

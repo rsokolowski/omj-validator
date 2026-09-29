@@ -368,3 +368,66 @@ class UpdatePrivateTaskRequest(BaseModel):
         if value is not None and value not in PRIVATE_TASK_CATEGORIES:
             raise ValueError("Nieznana kategoria")
         return value
+
+
+# --------------------------------------------------------------------------
+# Patterns ("Wzorce")
+# --------------------------------------------------------------------------
+
+PATTERN_TRIGGER_MIN = 5
+PATTERN_TRIGGER_MAX = 300
+PATTERN_ACTION_MIN = 5
+PATTERN_ACTION_MAX = 600
+PATTERN_EXAMPLE_MAX = 1000
+PATTERN_RAW_MAX = 1000
+PATTERN_ANSWER_MAX = 1000
+PATTERN_REASON_MAX = 300
+PATTERN_COMMENT_MAX = 500
+PATTERN_QUESTION_MAX = 300
+PATTERN_QUESTIONS = 2
+PATTERN_SKILLS_MAX = 3
+PATTERN_ROUNDS_MAX = 10
+RECALL_TEXT_MIN = 10
+RECALL_TEXT_MAX = 1000
+
+
+class PatternVariant(BaseModel):
+    """One wording of a pattern: when you see <trigger>, try <action>."""
+
+    trigger: str = Field(max_length=PATTERN_TRIGGER_MAX)
+    action: str = Field(max_length=PATTERN_ACTION_MAX)
+    example: str = Field(default="", max_length=PATTERN_EXAMPLE_MAX)
+
+
+class RefineResult(BaseModel):
+    """A refine round from the AI: versions to pick from, verdict, questions."""
+
+    variants: list[PatternVariant] = []
+    questions: list[str] = []
+    verdict: str = "ok"
+    comment: str = ""
+    category: Optional[str] = None
+    skills: list[str] = []
+    abuse_score: int = 0
+    meta: dict = {}
+
+
+class PatternSuggestion(PatternVariant):
+    why: str = Field(default="", max_length=PATTERN_REASON_MAX)
+
+
+class SuggestResult(BaseModel):
+    suggestions: list[PatternSuggestion] = []
+    abuse_score: int = 0
+    meta: dict = {}
+
+
+class LinkSuggestion(BaseModel):
+    task_key: str
+    reason: str = ""
+
+
+class LinkResult(BaseModel):
+    links: list[LinkSuggestion] = []
+    abuse_score: int = 0
+    meta: dict = {}
