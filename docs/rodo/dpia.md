@@ -75,7 +75,7 @@ i jest odnotowane w ryzyku R16.
 ### 2.1 Do czego służy narzędzie
 
 Uczeń wybiera archiwalne zadanie olimpijskie, rozwiązuje je odręcznie na kartce, fotografuje
-kartkę telefonem i przesyła zdjęcia przez przeglądarkę. System przesyła te zdjęcia razem z PDF-em
+kartkę telefonem i przesyła zdjęcia przez przeglądarkę. Zamiast zdjęcia (albo obok niego) uczeń może wpisać rozwiązanie w przeglądarce jako tekst ze wzorami i dołączyć rysunek wykonany w przeglądarce (wysyłany jako obraz PNG). System przesyła te zdjęcia razem z PDF-em
 zawierającym treści zadań i PDF-em z rozwiązaniami wzorcowymi do modelu Google Gemini wraz
 z instrukcją odtwarzającą oficjalne kryteria punktacji OMJ. Model zwraca:
 
@@ -116,6 +116,7 @@ Wynik jest zapisywany, a uczeń widzi go w historii swoich prób i na grafie pos
 | `timestamp`, `created_at` | kiedy |
 | `status` | pending / processing / completed / failed |
 | `images` | lista ścieżek do plików ze zdjęciami |
+| `solution_text` | treść rozwiązania wpisana przez ucznia (tekst ze wzorami LaTeX); pusta przy samych zdjęciach |
 | `score` | liczba punktów przyznana przez model |
 | `feedback` | pełna treść informacji zwrotnej po polsku |
 | `error_message` | treść błędu, jeśli analiza się nie powiodła |
@@ -307,7 +308,7 @@ zadaniu. Konsekwencje, które trzeba przyjąć świadomie:
 | Podmiot | Rola | Co otrzymuje | Ramy prawne |
 |---|---|---|---|
 | Google Ireland Ltd. / Google LLC — usługa logowania (OAuth 2.0) | odrębny administrator dla swojego konta użytkownika | fakt logowania do naszej aplikacji; my otrzymujemy `sub`, e-mail, imię i nazwisko, adres zdjęcia profilowego | zakres `openid email profile` |
-| Google — Gemini API (płatny poziom usługi) | podmiot przetwarzający | **fotografie pracy ucznia**, PDF zadań, PDF rozwiązań wzorcowych, instrukcja oceniania; przy zadaniach prywatnych także **zdjęcie strony z zadaniem** (odczyt treści) i **treść zadania** (wskazówki, ocena) — zdjęcia zwykle przesyłane w treści zapytania, a zestawy powyżej 14 MB przez File API i usuwane zaraz po analizie; **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Gemini API Additional Terms + Google Cloud Data Processing Addendum; transfer: EU-US Data Privacy Framework |
+| Google — Gemini API (płatny poziom usługi) | podmiot przetwarzający | **fotografie pracy ucznia i/lub wpisany przez ucznia tekst rozwiązania** (w tym rysunki wykonane w przeglądarce), PDF zadań, PDF rozwiązań wzorcowych, instrukcja oceniania; przy zadaniach prywatnych także **zdjęcie strony z zadaniem** (odczyt treści) i **treść zadania** (wskazówki, ocena) — zdjęcia zwykle przesyłane w treści zapytania, a zestawy powyżej 14 MB przez File API i usuwane zaraz po analizie; **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Gemini API Additional Terms + Google Cloud Data Processing Addendum; transfer: EU-US Data Privacy Framework |
 | Google — Cloud Translation API v2 (funkcja opcjonalna, `TRANSLATE_ENABLED`) | podmiot przetwarzający | krótkie nagłówki toku rozumowania modelu tłumaczone z angielskiego na polski — **dotyczą treści pracy ucznia** | jw. |
 | Cloudflare, Inc. | podmiot przetwarzający | ruch HTTPS między użytkownikiem a serwerem (tunel, terminacja TLS) | [DO USTALENIA: potwierdzić zawarcie DPA / warunki Cloudflare i wpisać do rejestru] |
 | Telegram FZ-LLC | odbiorca powiadomień technicznych | komunikaty operacyjne: identyfikator zgłoszenia, oznaczenie zadania, liczba zdjęć, wynik punktowy, treść błędu. **Bez imienia, nazwiska, e-maila i identyfikatora użytkownika.** Funkcja wyłączana konfiguracją | brak umowy powierzenia — zob. R12; **w wariancie B zalecane wyłączenie** |

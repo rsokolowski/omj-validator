@@ -71,7 +71,7 @@ export default function RegulaminPage() {
             rekrutację. To trenażer.
           </li>
           <li>
-            <strong>Twoje zdjęcie kartki jest wysyłane do firmy Google</strong>,
+            <strong>Twoje zdjęcie kartki albo wpisany tekst rozwiązania (i rysunek) są wysyłane do firmy Google</strong>,
             żeby program mógł je przeczytać i ocenić. Nie wysyłamy tam Twojego
             imienia, nazwiska ani adresu e-mail.
           </li>
@@ -387,8 +387,8 @@ export default function RegulaminPage() {
         <Section title="7. Komu przekazujemy dane">
           <Typography paragraph>
             <strong>Google &ndash; analiza rozwiązania (Gemini API).</strong>{" "}
-            Twoje zdjęcia razem z treścią zadania i rozwiązaniem wzorcowym są
-            przesyłane do usługi Google Gemini, która wykonuje ocenę. Ważne
+            Twoje zdjęcia i wpisany tekst rozwiązania razem z treścią zadania i
+            rozwiązaniem wzorcowym są przesyłane do usługi Google Gemini, która wykonuje ocenę. Ważne
             szczegóły:
           </Typography>
           <Box component="ul" sx={{ pl: 3, mb: 2 }}>
@@ -397,8 +397,8 @@ export default function RegulaminPage() {
                 nie przekazujemy tam Twojego imienia, nazwiska, adresu e-mail ani
                 identyfikatora konta
               </strong>{" "}
-              &ndash; wysyłane jest samo zdjęcie pracy i treść zadania, a nazwy
-              plików są losowe,
+              &ndash; wysyłane jest samo zdjęcie pracy lub wpisany tekst
+              rozwiązania i treść zadania, a nazwy plików są losowe,
             </li>
             <li>
               pliki są <strong>usuwane</strong> z infrastruktury Google zaraz po
