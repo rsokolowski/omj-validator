@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Alert, Box, Button, Paper, Typography } from "@mui/material";
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -43,7 +42,7 @@ export default async function MyTasksPage() {
       />
 
       <Box sx={{ mb: 3 }}>
-        <Button component={Link} href="/moje-zadania/nowe" variant="contained">
+        <Button href="/moje-zadania/nowe" variant="contained">
           Dodaj zadanie
         </Button>
       </Box>
