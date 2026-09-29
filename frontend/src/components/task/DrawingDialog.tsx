@@ -112,8 +112,9 @@ export function DrawingDialog({ open, onClose, onAdd }: DrawingDialogProps) {
             </EditorLoadBoundary>
           </div>
         </DialogContent>
-        <DialogActions sx={{ px: 2, gap: 1 }}>
-          <Typography variant="caption" sx={{ color: "grey.600", flex: 1 }}>
+        <DialogActions sx={{ px: 2, gap: 1, flexWrap: "wrap" }}>
+          {/* On a phone the note takes its own row instead of a narrow column */}
+          <Typography variant="caption" sx={{ color: "grey.600", flex: 1, flexBasis: { xs: "100%", sm: 0 } }}>
             Rysunek zostanie dołączony jako obraz. Po dodaniu nie da się go edytować – można go
             usunąć i narysować od nowa.
           </Typography>
