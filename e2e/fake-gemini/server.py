@@ -82,6 +82,8 @@ class ServerConfig:
     streaming_chunk_delay_ms: int = 50  # Delay between streaming chunks
     # Task-specific scenarios: task_key -> scenario
     task_scenarios: dict = field(default_factory=dict)
+    # How many of PRIVATE_EXTRACTION_RESPONSE's problems extraction returns
+    extraction_problems: int = 2
 
     @classmethod
     def from_env(cls) -> "ServerConfig":
@@ -292,6 +294,13 @@ async def clear_task_scenario(task_key: str):
         del config.task_scenarios[task_key]
         logger.info(f"Cleared scenario for task {task_key}")
     return {"status": "ok"}
+
+
+@app.post("/config/private-extraction")
+async def set_private_extraction(problems: int):
+    """Make private-task extraction return only the first `problems` problems."""
+    config.extraction_problems = max(1, min(problems, len(PRIVATE_EXTRACTION_RESPONSE["problems"])))
+    return {"status": "ok", "problems": config.extraction_problems}
 
 
 @app.post("/config/reset")
@@ -720,7 +729,13 @@ async def generate_content(model: str, request: Request):
     kind = private_call_kind(body)
     if kind is not None:
         await asyncio.sleep(config.response_delay_ms / 1000)
-        payload = PRIVATE_EXTRACTION_RESPONSE if kind == "extract" else PRIVATE_META_RESPONSE
+        if kind == "extract":
+            payload = {
+                **PRIVATE_EXTRACTION_RESPONSE,
+                "problems": PRIVATE_EXTRACTION_RESPONSE["problems"][:config.extraction_problems],
+            }
+        else:
+            payload = PRIVATE_META_RESPONSE
         logger.info(f"generateContent: model={model}, private call={kind}")
         return {
             "candidates": [{

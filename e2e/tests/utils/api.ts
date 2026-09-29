@@ -66,6 +66,17 @@ export async function resetGemini(request: APIRequestContext): Promise<void> {
 }
 
 /**
+ * Make private-task extraction return only the first `problems` invented problems
+ * (default 2). Undone by resetGemini.
+ */
+export async function setExtractionProblems(request: APIRequestContext, problems: number): Promise<void> {
+  const response = await request.post(`${FAKE_GEMINI_URL}/config/private-extraction?problems=${problems}`);
+  if (!response.ok()) {
+    throw new Error(`Failed to set extraction problems: ${await response.text()}`);
+  }
+}
+
+/**
  * Get current fake Gemini configuration.
  */
 export async function getGeminiConfig(request: APIRequestContext): Promise<{

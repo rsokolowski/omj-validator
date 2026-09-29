@@ -8,7 +8,7 @@
 
 import { test, expect, Page } from '@playwright/test';
 import { loginAs, TEST_USERS } from './utils/auth';
-import { resetGemini } from './utils/api';
+import { resetGemini, setExtractionProblems } from './utils/api';
 import * as path from 'path';
 
 const FIXTURES_DIR = path.join(__dirname, '..', 'fixtures');
@@ -34,8 +34,8 @@ test.describe('Moje zadania', () => {
 
   test('photo with two problems: pick both and save two tasks', async ({ page }) => {
     await page.goto('/moje-zadania/nowe');
-    await page.locator('input[type="file"]').setInputFiles(PROBLEM_PHOTO);
-    await page.getByRole('button', { name: 'Odczytaj zadanie' }).click();
+    await page.getByLabel('Wybierz zdjęcia zadania').setInputFiles(PROBLEM_PHOTO);
+    await page.getByRole('button', { name: 'Odczytaj zadanie', exact: true }).click();
 
     const first = page.getByRole('checkbox', { name: /Suma dwóch kolejnych liczb/ });
     const second = page.getByRole('checkbox', { name: /Obwód kwadratu/ });
@@ -52,6 +52,41 @@ test.describe('Moje zadania', () => {
     await expect(page).toHaveURL(/\/moje-zadania$/, { timeout: 30000 });
     await expect(page.getByRole('link', { name: /Suma dwóch kolejnych liczb/ }).first()).toBeVisible();
     await expect(page.getByRole('link', { name: /Obwód kwadratu/ }).first()).toBeVisible();
+  });
+
+  test('read and grade: one problem goes straight to the score', async ({ page, request }) => {
+    await setExtractionProblems(request, 1);
+    await page.goto('/moje-zadania/nowe');
+    await page.getByLabel('Wybierz zdjęcia zadania').setInputFiles(PROBLEM_PHOTO);
+    await page.getByLabel('Wybierz zdjęcia rozwiązania').setInputFiles(SOLUTION_PHOTO);
+    await page.getByRole('button', { name: 'Odczytaj zadanie i oceń' }).click();
+
+    // ?ocena= is dropped once the task page picks the grading up
+    await expect(page).toHaveURL(/\/moje-zadania\/[A-Za-z0-9_-]{12}$/, { timeout: 30000 });
+    await expect(page.getByRole('heading', { name: /Suma dwóch kolejnych liczb/ })).toBeVisible();
+    await expect(page.getByText(/Wynik: 6 \/ 6 punktów/)).toBeVisible({ timeout: 30000 });
+    await expect(page.getByRole('heading', { name: /Historia rozwiązań \(1\)/ })).toBeVisible({ timeout: 15000 });
+  });
+
+  test('read and grade: several problems stop for picking exactly one', async ({ page }) => {
+    await page.goto('/moje-zadania/nowe');
+    await page.getByLabel('Wybierz zdjęcia zadania').setInputFiles(PROBLEM_PHOTO);
+    await page.getByLabel('Wybierz zdjęcia rozwiązania').setInputFiles(SOLUTION_PHOTO);
+    await page.getByRole('button', { name: 'Odczytaj zadanie i oceń' }).click();
+
+    const first = page.getByRole('checkbox', { name: /Suma dwóch kolejnych liczb/ });
+    const second = page.getByRole('checkbox', { name: /Obwód kwadratu/ });
+    await expect(first).toBeVisible({ timeout: 30000 });
+    const gradeButton = page.getByRole('button', { name: 'Zapisz i oceń' });
+    await expect(gradeButton).toBeDisabled();
+    await first.check();
+    await second.check();
+    await expect(gradeButton).toBeDisabled();
+    await second.uncheck();
+
+    await gradeButton.click();
+    await expect(page).toHaveURL(/\/moje-zadania\/[A-Za-z0-9_-]{12}$/, { timeout: 30000 });
+    await expect(page.getByText(/Wynik: 6 \/ 6 punktów/)).toBeVisible({ timeout: 30000 });
   });
 
   test('typed task: reveal a hint, submit and get a score', async ({ page }) => {

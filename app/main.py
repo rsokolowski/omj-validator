@@ -843,6 +843,7 @@ async def websocket_submission_progress(
     from itsdangerous import TimestampSigner
     import base64
     import json
+    from .db.models import SubmissionStatus
     from .websocket.handler import websocket_submission_handler
     from .websocket.progress import progress_manager
 
@@ -890,6 +891,30 @@ async def websocket_submission_progress(
             )
             await websocket.close(code=4003, reason="Not authorized")
             return
+
+    # Already graded: answer from the database. The in-memory progress entry
+    # is dropped once a completed submission has no listener, and a client
+    # that connects late (the task page after "Odczytaj zadanie i oceń")
+    # would otherwise wait forever for a result that was already sent.
+    if submission.status in (SubmissionStatus.COMPLETED, SubmissionStatus.FAILED):
+        from .websocket.messages import CompletedMessage, ErrorMessage
+
+        await websocket.accept()
+        if submission.status == SubmissionStatus.COMPLETED:
+            message = CompletedMessage(
+                submission_id=submission_id,
+                score=submission.score or 0,
+                feedback=submission.feedback or "",
+            )
+        else:
+            # error_message may hold a raw exception, never shown to the student
+            message = ErrorMessage(
+                submission_id=submission_id,
+                error="Nie udało się ocenić rozwiązania. Spróbuj przesłać je ponownie.",
+            )
+        await websocket.send_json(message.model_dump())
+        await websocket.close()
+        return
 
     # Handle the WebSocket connection
     await websocket_submission_handler(

@@ -25,10 +25,17 @@ export const metadata: Metadata = {
 
 interface PageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ ocena?: string | string[] }>;
 }
 
-export default async function PrivateTaskPage({ params }: PageProps) {
+// Submission ids are the first 8 characters of a uuid4
+const SUBMISSION_ID = /^[0-9a-f]{8}$/;
+
+export default async function PrivateTaskPage({ params, searchParams }: PageProps) {
   const { id } = await params;
+  // Set by "Odczytaj zadanie i oceń", which sends the solution before coming here
+  const { ocena } = await searchParams;
+  const resumeSubmissionId = typeof ocena === "string" && SUBMISSION_ID.test(ocena) ? ocena : undefined;
   let data: PrivateTaskDetailResponse;
   try {
     data = await serverFetch<PrivateTaskDetailResponse>(`/api/private-tasks/${encodeURIComponent(id)}`);
@@ -100,6 +107,7 @@ export default async function PrivateTaskPage({ params }: PageProps) {
         isAuthenticated
         submitUrl={`/api/private-tasks/${task.id}/submit`}
         pagePath={`/moje-zadania/${task.id}`}
+        resumeSubmissionId={resumeSubmissionId}
       />
 
       {submissions.length > 0 && (

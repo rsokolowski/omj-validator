@@ -124,6 +124,9 @@ The report has four parts. Read them in this order:
    Check that each model names the actual gap (the one in your note), does
    not hallucinate a step the student never wrote, and does not leak the
    official solution. This is where most differences between models show up.
+   Also check the Polish text itself: 3.8-flash once produced corrupted words
+   in prod ("Ŵe", "żee" for "że"), see
+   [model-ab-2026-09-05.md](model-ab-2026-09-05.md#production-observations).
 3. **Cost and latency.** Thinking tokens dominate cost at `thinking_level=high`.
    Watch the max latency against `GEMINI_TIMEOUT` in prod (`.env.prod`);
    a model that occasionally thinks for 100 s is one that will time out for

@@ -28,6 +28,9 @@ interface SubmitSectionProps {
   pagePath?: string;
   /** Called after a graded result arrives (default: refresh the page) */
   onCompleted?: () => void;
+  /** Submission already sent from another page ("Odczytaj zadanie i oceń") -
+   *  follow its grading from the moment this section mounts */
+  resumeSubmissionId?: string;
 }
 
 interface SubmitResponse {
@@ -99,6 +102,7 @@ export function SubmitSection({
   submitUrl,
   pagePath,
   onCompleted,
+  resumeSubmissionId,
 }: SubmitSectionProps) {
   const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
@@ -223,6 +227,17 @@ export function SubmitSection({
     },
     [etap, router, onCompleted]
   );
+
+  useEffect(() => {
+    if (!resumeSubmissionId) return;
+    // Drop ?ocena= from the address: the result is delivered to the first
+    // WebSocket only, so after a reload the history below shows it instead
+    window.history.replaceState(null, "", window.location.pathname);
+    announcedAnalysisRef.current = true;
+    setUploadState({ status: "processing", statusMessage: "Oceniam rozwiązanie..." });
+    setLiveMessage("Rozwiązanie zostało przesłane. Trwa ocenianie, może to potrwać do minuty.");
+    connectWebSocket(`/ws/submissions/${encodeURIComponent(resumeSubmissionId)}`);
+  }, [resumeSubmissionId, connectWebSocket]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -481,9 +496,14 @@ export function SubmitSection({
           }}
         >
           <CircularProgress size={24} />
-          <Typography variant="body2" sx={{ color: "grey.700" }}>
-            {uploadState.statusMessage || "Przetwarzanie..."}
-          </Typography>
+          <Box>
+            <Typography variant="body2" sx={{ color: "grey.700" }}>
+              {uploadState.statusMessage || "Przetwarzanie..."}
+            </Typography>
+            <Typography variant="caption" component="p" sx={{ color: "grey.600" }}>
+              Ocena trwa zwykle do minuty, przy trudniejszych rozwiązaniach dłużej.
+            </Typography>
+          </Box>
         </Box>
       )}
 
