@@ -103,8 +103,10 @@ from .scoring import get_max_score
 app = FastAPI(title="OMJ Validator", description="Walidator rozwiązań OMJ")
 
 from .private_tasks import router as private_tasks_router  # noqa: E402
+from .patterns.routes import router as patterns_router  # noqa: E402
 
 app.include_router(private_tasks_router)
+app.include_router(patterns_router)
 
 # Determine if we're in split deployment mode (frontend on different domain)
 is_split_deployment = bool(settings.frontend_url)
