@@ -9,6 +9,7 @@ import { getMaxScore } from "@/lib/utils/constants";
 import { formatDate } from "@/lib/utils/dates";
 import { MathContent } from "@/components/ui/MathContent";
 import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
+import { SolutionTextBlock } from "@/components/task/SolutionTextBlock";
 
 interface SubmissionHistoryProps {
   submissions: Submission[];
@@ -207,6 +208,7 @@ export function SubmissionHistory({ submissions, totalCount }: SubmissionHistory
                       </Box>
                     </Box>
                   )}
+                  {submission.solution_text && <SolutionTextBlock text={submission.solution_text} />}
                 </Box>
               </Collapse>
             </Box>

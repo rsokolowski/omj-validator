@@ -35,6 +35,15 @@ test.describe('Typed solutions', () => {
     await expect(submit).toBeEnabled();
     await submit.click();
     await expect(page.getByText(/Wynik: 6 \/ 6 punktów/)).toBeVisible({ timeout: 30000 });
+
+    // The history below refreshes with the graded submission and shows the text
+    await expect(page.getByRole('heading', { name: /Historia rozwiązań/ })).toBeVisible({ timeout: 15000 });
+    await page.getByRole('button', { name: /Rozwiń szczegóły rozwiązania numer/ }).first().click();
+    const toggle = page.getByRole('button', { name: /Wpisany tekst rozwiązania \(\d+ znaków\)/ });
+    await expect(toggle).toBeVisible();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await toggle.click();
+    await expect(page.getByText(/jedna z liczb/)).toBeVisible();
   });
 
   test('the editors never call a third-party host', async ({ page }) => {

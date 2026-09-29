@@ -22,6 +22,7 @@ import { UserSubmissionListItem } from "@/lib/types";
 import { ETAP_NAMES, CATEGORY_NAMES } from "@/lib/utils/constants";
 import { formatDate } from "@/lib/utils/dates";
 import { MathContent } from "@/components/ui/MathContent";
+import { SolutionTextBlock } from "@/components/task/SolutionTextBlock";
 
 interface SubmissionCardProps {
   submission: UserSubmissionListItem;
@@ -281,6 +282,7 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
               </Stack>
             </Box>
           )}
+          {submission.solution_text && <SolutionTextBlock text={submission.solution_text} />}
         </Box>
       </Collapse>
     </Box>

@@ -30,6 +30,7 @@ import { formatDate } from "@/lib/utils/dates";
 import { useInfiniteScroll } from "@/lib/hooks/useInfiniteScroll";
 import { UserAutocomplete } from "./UserAutocomplete";
 import { MathContent } from "@/components/ui/MathContent";
+import { SolutionTextBlock } from "@/components/task/SolutionTextBlock";
 
 const PAGE_SIZE = 20;
 
@@ -465,6 +466,7 @@ export function AdminSubmissionsTable() {
                           </Box>
                         </Box>
                       )}
+                      {submission.solution_text && <SolutionTextBlock text={submission.solution_text} />}
 
                       {/* Re-run scoring */}
                       {(submission.status === "completed" || submission.status === "failed") && (
