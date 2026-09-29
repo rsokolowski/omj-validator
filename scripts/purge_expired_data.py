@@ -30,6 +30,8 @@ from app.retention import (  # noqa: E402
     RetentionReport,
     delete_inactive_accounts,
     purge_expired_admin_audit,
+    purge_expired_ai_usage,
+    purge_expired_private_tasks,
     purge_expired_quota_tombstones,
     purge_expired_submissions,
     strip_expired_scoring_thinking,
@@ -67,6 +69,18 @@ def main() -> int:
         type=int,
         default=None,
         help="Override RETENTION_ADMIN_AUDIT_MONTHS (0 = skip this pass)",
+    )
+    parser.add_argument(
+        "--private-task-months",
+        type=int,
+        default=None,
+        help="Override RETENTION_PRIVATE_TASK_MONTHS (0 = skip this pass)",
+    )
+    parser.add_argument(
+        "--ai-usage-days",
+        type=int,
+        default=None,
+        help="Override RETENTION_AI_USAGE_DAYS (0 = skip this pass)",
     )
     parser.add_argument(
         "--max-accounts",
@@ -107,8 +121,21 @@ def main() -> int:
         else args.admin_audit_months
     )
 
+    private_months = (
+        settings.retention_private_task_months
+        if args.private_task_months is None
+        else args.private_task_months
+    )
+    ai_usage_days = (
+        settings.retention_ai_usage_days
+        if args.ai_usage_days is None
+        else args.ai_usage_days
+    )
+
     print(
         f"Retention periods: submissions={months or 'disabled'} months, "
+        f"private tasks={private_months or 'disabled'} months idle, "
+        f"AI usage log={ai_usage_days or 'disabled'} days, "
         f"thinking trace={thinking_days or 'disabled'} days, "
         f"inactive accounts={inactive_months or 'disabled'} months, "
         f"admin audit={audit_months or 'disabled'} months"
@@ -124,7 +151,13 @@ def main() -> int:
             purge_expired_submissions(db, months=months, dry_run=args.dry_run)
         )
         report.merge(
+            purge_expired_private_tasks(db, months=private_months, dry_run=args.dry_run)
+        )
+        report.merge(
             strip_expired_scoring_thinking(db, days=thinking_days, dry_run=args.dry_run)
+        )
+        report.merge(
+            purge_expired_ai_usage(db, days=ai_usage_days, dry_run=args.dry_run)
         )
         report.merge(purge_expired_quota_tombstones(db, dry_run=args.dry_run))
         report.merge(

@@ -257,6 +257,8 @@ async def start_retention_task():
             settings.retention_scoring_thinking_days,
             settings.retention_inactive_account_months,
             settings.retention_admin_audit_months,
+            settings.retention_private_task_months,
+            settings.retention_ai_usage_days,
         )
     ):
         logger.info("Automatic data retention disabled (no retention periods configured)")
@@ -1492,9 +1494,20 @@ async def delete_my_account(
     used_count, used_oldest, used_newest = submission_repo.get_user_rate_limit_window(
         user_id, hours=24
     )
+    # Same for AI calls made while creating private tasks (ai_usage rows)
+    from .db import AIUsageRepository
+
+    ai_count, _, ai_newest = AIUsageRepository(db).user_total_window(user_id, hours=24)
     quota_repo = DeletedAccountQuotaRepository(db)
     quota_repo.purge_expired()
-    quota_repo.record_deletion(user_id, used_count, used_oldest, used_newest)
+    quota_repo.record_deletion(
+        user_id,
+        used_count,
+        used_oldest,
+        used_newest,
+        ai_usage_count=ai_count,
+        ai_usage_newest_at=ai_newest,
+    )
 
     report = erase_user_data(db, user_id)
 

@@ -29,7 +29,14 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from .config import settings
-from .db.models import AdminAccessLogDB, DeletedAccountQuotaDB, SubmissionDB, UserDB
+from .db.models import (
+    AIUsageDB,
+    AdminAccessLogDB,
+    DeletedAccountQuotaDB,
+    PrivateTaskDB,
+    SubmissionDB,
+    UserDB,
+)
 from .privacy import mask_user_id
 
 logger = logging.getLogger(__name__)
@@ -58,6 +65,8 @@ class RetentionReport:
     tombstones_purged: int = 0
     accounts_deleted: int = 0
     audit_entries_purged: int = 0
+    private_tasks_deleted: int = 0
+    ai_usage_purged: int = 0
     files_deleted: int = 0
     files_missing: int = 0  # already gone - fine, keeps the run idempotent
     files_skipped_unsafe: int = 0  # path escaped uploads_dir - never touched
@@ -76,6 +85,8 @@ class RetentionReport:
         self.tombstones_purged += other.tombstones_purged
         self.accounts_deleted += other.accounts_deleted
         self.audit_entries_purged += other.audit_entries_purged
+        self.private_tasks_deleted += other.private_tasks_deleted
+        self.ai_usage_purged += other.ai_usage_purged
         self.files_deleted += other.files_deleted
         self.files_missing += other.files_missing
         self.files_skipped_unsafe += other.files_skipped_unsafe
@@ -97,7 +108,9 @@ class RetentionReport:
             f"stripped thinking from {self.thinking_stripped} submissions, "
             f"purged {self.tombstones_purged} rate-limit tombstones, "
             f"deleted {self.accounts_deleted} inactive accounts, "
-            f"purged {self.audit_entries_purged} admin audit entries "
+            f"purged {self.audit_entries_purged} admin audit entries, "
+            f"deleted {self.private_tasks_deleted} idle private tasks, "
+            f"purged {self.ai_usage_purged} AI usage rows "
             f"(missing files: {self.files_missing}, unsafe paths skipped: "
             f"{self.files_skipped_unsafe})"
         )
@@ -490,6 +503,27 @@ def strip_expired_scoring_thinking(
         # page forward instead of re-querying from the start.
         offset += len(batch)
 
+    # Private tasks: same rule for any trace kept from the extraction call
+    tasks = (
+        db.query(PrivateTaskDB)
+        .filter(
+            PrivateTaskDB.created_at < naive_cutoff,
+            PrivateTaskDB.extraction_meta.isnot(None),
+        )
+        .all()
+    )
+    changed = False
+    for task in tasks:
+        meta = task.extraction_meta
+        if not isinstance(meta, dict) or THINKING_KEY not in meta:
+            continue
+        report.thinking_stripped += 1
+        if not dry_run:
+            task.extraction_meta = {k: v for k, v in meta.items() if k != THINKING_KEY}
+            changed = True
+    if changed:
+        db.commit()
+
     return report
 
 
@@ -512,15 +546,26 @@ def sweep_orphan_upload_files(
     if not uploads_root.is_dir():
         return report
 
-    # Safety net: an empty submissions table usually means the DB is not the one
-    # that belongs to this uploads dir (wrong DATABASE_URL / DATA_DIR). Sweeping
-    # then would delete every photo we have, so refuse instead.
-    if db.query(SubmissionDB.id).limit(1).first() is None:
-        logger.info("Retention: no submissions in DB, skipping orphan sweep")
+    # Safety net: an empty database usually means the DB is not the one that
+    # belongs to this uploads dir (wrong DATABASE_URL / DATA_DIR). Sweeping then
+    # would delete every photo we have, so refuse instead.
+    if (
+        db.query(SubmissionDB.id).limit(1).first() is None
+        and db.query(PrivateTaskDB.id).limit(1).first() is None
+    ):
+        logger.info("Retention: no submissions or private tasks in DB, skipping orphan sweep")
         return report
 
     referenced: set[Path] = set()
     for (images,) in db.query(SubmissionDB.images).all():
+        for relative_path in images or []:
+            path = resolve_upload_path(relative_path)
+            if path is not None:
+                referenced.add(path)
+    # Photos of the problem itself, kept by each private task. Unconfirmed
+    # extraction drafts are referenced by nothing, so they go after the grace
+    # period like any other orphan.
+    for (images,) in db.query(PrivateTaskDB.source_images).all():
         for relative_path in images or []:
             path = resolve_upload_path(relative_path)
             if path is not None:
@@ -543,6 +588,78 @@ def sweep_orphan_upload_files(
     if orphans:
         logger.info(f"Retention: found {len(orphans)} orphaned upload files")
     delete_upload_files(orphans, report, dry_run=dry_run)
+    return report
+
+
+def purge_expired_private_tasks(
+    db: Session,
+    months: Optional[int] = None,
+    dry_run: bool = False,
+    batch_size: int = 200,
+) -> RetentionReport:
+    """Delete private tasks idle for the whole period: row, photos, submissions.
+
+    "Idle" is last_activity_at, bumped on create, edit and every submission, so
+    a task the student keeps working on is never taken away.
+    """
+    report = RetentionReport(dry_run=dry_run)
+    months = settings.retention_private_task_months if months is None else months
+    cutoff = _cutoff_from_months(months)
+    if cutoff is None:
+        logger.info("Retention: private task expiry disabled (retention_private_task_months unset/0)")
+        return report
+
+    naive_cutoff = cutoff.replace(tzinfo=None)
+    offset = 0
+    while True:
+        batch = (
+            db.query(PrivateTaskDB)
+            .filter(PrivateTaskDB.last_activity_at < naive_cutoff)
+            .order_by(PrivateTaskDB.last_activity_at)
+            .offset(offset)
+            .limit(batch_size)
+            .all()
+        )
+        if not batch:
+            break
+
+        for task in batch:
+            # Files first, row second - see purge_expired_submissions
+            delete_private_task_files(task.user_id, task.id, report, dry_run=dry_run)
+            report.submissions_deleted += len(task.submissions)
+            report.private_tasks_deleted += 1
+            if not dry_run:
+                db.delete(task)  # cascade removes its submissions
+
+        if dry_run:
+            offset += len(batch)
+        else:
+            db.commit()
+
+    return report
+
+
+def purge_expired_ai_usage(
+    db: Session,
+    days: Optional[int] = None,
+    dry_run: bool = False,
+) -> RetentionReport:
+    """Delete AI usage rows past their retention period."""
+    report = RetentionReport(dry_run=dry_run)
+    days = settings.retention_ai_usage_days if days is None else days
+    cutoff = _cutoff_from_days(days)
+    if cutoff is None:
+        logger.info("Retention: AI usage expiry disabled")
+        return report
+
+    query = db.query(AIUsageDB).filter(AIUsageDB.created_at < cutoff.replace(tzinfo=None))
+    if dry_run:
+        report.ai_usage_purged = query.count()
+        return report
+
+    report.ai_usage_purged = query.delete()
+    if report.ai_usage_purged:
+        db.commit()
     return report
 
 
@@ -683,11 +800,13 @@ def run_retention(db: Session, dry_run: bool = False) -> RetentionReport:
     """Run every retention pass and return the combined report."""
     report = RetentionReport(dry_run=dry_run)
     report.merge(purge_expired_submissions(db, dry_run=dry_run))
+    report.merge(purge_expired_private_tasks(db, dry_run=dry_run))
     report.merge(strip_expired_scoring_thinking(db, dry_run=dry_run))
     # After the purge, so files freed above are not re-scanned as orphans
     report.merge(sweep_orphan_upload_files(db, dry_run=dry_run))
     report.merge(purge_expired_quota_tombstones(db, dry_run=dry_run))
     report.merge(purge_expired_admin_audit(db, dry_run=dry_run))
+    report.merge(purge_expired_ai_usage(db, dry_run=dry_run))
     # Last: it deletes whole accounts, so it should see the state the passes
     # above left behind rather than racing them
     report.merge(delete_inactive_accounts(db, dry_run=dry_run))
