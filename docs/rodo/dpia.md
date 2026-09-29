@@ -123,6 +123,41 @@ Wynik jest zapisywany, a uczeń widzi go w historii swoich prób i na grafie pos
 | `abuse_score` | 0–100, pewność powyższej klasyfikacji |
 | `scoring_meta` | metadane wywołania modelu: nazwa modelu, liczba tokenów, szacowany koszt, czas, surowa odpowiedź modelu |
 
+**Tabela `private_tasks`** („Moje zadania” — zadania dodane przez ucznia spoza archiwum OMJ,
+np. z broszury lub zbioru; od września 2026):
+
+| Pole | Treść |
+|---|---|
+| `id` | 12-znakowy losowy identyfikator |
+| `user_id` | właściciel (`google_sub`); zadanie widzi **wyłącznie** właściciel, API zwraca 404 każdemu innemu |
+| `title`, `content` | tytuł i treść zadania — wpisane przez ucznia albo odczytane przez model ze zdjęcia i zatwierdzone przez ucznia |
+| `source_label`, `category`, `difficulty` | źródło (np. „IKOMJ 4.3”), kategoria, trudność |
+| `hints` | 0–4 wskazówki wygenerowane przez model |
+| `hints_revealed`, `pending_hints_used` | ile wskazówek uczeń odkrył (łącznie / przed następnym rozwiązaniem) |
+| `source_images` | ścieżki do zdjęć strony z zadaniem (puste, gdy treść wpisano) |
+| `origin` | `photo` / `typed` |
+| `extraction_meta` | metadane wywołania modelu (model, tokeny, koszt, czas) — bez treści |
+| `created_at`, `updated_at`, `last_activity_at` | znaczniki czasu; `last_activity_at` steruje retencją |
+
+Zgłoszenia do zadań prywatnych trafiają do tej samej tabeli `submissions`: zamiast `year`,
+`etap`, `task_number` mają ustawione `private_task_id` (ograniczenie bazy wymusza dokładnie jedno
+z dwóch), a `hints_used` zapisuje liczbę odkrytych wskazówek. W `scoring_meta` zapisywana jest
+kopia treści zadania, według której oceniono rozwiązanie (`task_snapshot`).
+
+**Tabela `ai_usage`** (licznik wywołań modelu niebędących zgłoszeniem — odczyt zadania ze
+zdjęcia, generowanie wskazówek):
+
+| Pole | Treść |
+|---|---|
+| `user_id` | kto wywołał |
+| `kind` | `private_extract` / `private_create` / `private_regen` |
+| `created_at` | kiedy |
+| `meta` | model, liczba tokenów, szacowany koszt, czas — **bez treści** |
+
+Służy wyłącznie limitom dziennym i rozliczeniu kosztów (cel A4, zob. R8). Tabela
+`deleted_account_quota` ma dodatkowe pole `ai_usage_count`, przenoszące ten licznik przez
+usunięcie konta tak samo jak liczbę zgłoszeń.
+
 **Tabela `admin_access_log`** (dziennik dostępu administratora, wdrożony jako środek
 rozliczalności — art. 5 ust. 2 RODO):
 
@@ -163,6 +198,13 @@ identyfikator konta Google**. Limity: maksymalnie 10 plików na zgłoszenie, 10 
 dozwolone typy JPEG/PNG/WebP/HEIC. Zdjęcia większe niż 2048 px w którymkolwiek wymiarze są
 zmniejszane i zapisywane ponownie jako JPEG (co usuwa metadane EXIF); **zdjęcia mniejsze
 zachowują oryginalne metadane EXIF, w tym potencjalnie współrzędne GPS** — zob. ryzyko R4.
+
+**Pliki zadań prywatnych:** `data/uploads/{google_sub}/private/{id_zadania}/source/` (zdjęcia
+strony z zadaniem, osobna kopia dla każdego zadania) i `data/uploads/{google_sub}/private/{id_zadania}/`
+(zdjęcia rozwiązań). Zdjęcia wysłane do odczytu, ale niezatwierdzone jako zadanie, leżą
+w `.../private/_drafts/{id_szkicu}/` i są usuwane przy zatwierdzeniu albo przez przebieg
+retencji po 24 godzinach. Wszystkie przechodzą ten sam proces co zdjęcia rozwiązań
+(usunięcie EXIF, w tym GPS, ponowne zapisanie jako JPEG).
 
 **Dane, które faktycznie znajdują się na fotografii kartki** — kategoria najbardziej wrażliwa
 i najsłabiej kontrolowana. Uczniowie odruchowo podpisują prace. Realnie na zdjęciach pojawiają
@@ -265,7 +307,7 @@ zadaniu. Konsekwencje, które trzeba przyjąć świadomie:
 | Podmiot | Rola | Co otrzymuje | Ramy prawne |
 |---|---|---|---|
 | Google Ireland Ltd. / Google LLC — usługa logowania (OAuth 2.0) | odrębny administrator dla swojego konta użytkownika | fakt logowania do naszej aplikacji; my otrzymujemy `sub`, e-mail, imię i nazwisko, adres zdjęcia profilowego | zakres `openid email profile` |
-| Google — Gemini API (płatny poziom usługi) | podmiot przetwarzający | **fotografie pracy ucznia**, PDF zadań, PDF rozwiązań wzorcowych, instrukcja oceniania; **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Gemini API Additional Terms + Google Cloud Data Processing Addendum; transfer: EU-US Data Privacy Framework |
+| Google — Gemini API (płatny poziom usługi) | podmiot przetwarzający | **fotografie pracy ucznia**, PDF zadań, PDF rozwiązań wzorcowych, instrukcja oceniania; przy zadaniach prywatnych także **zdjęcie strony z zadaniem** (odczyt treści) i **treść zadania** (wskazówki, ocena) — zdjęcia przesyłane w treści zapytania, bez File API; **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Gemini API Additional Terms + Google Cloud Data Processing Addendum; transfer: EU-US Data Privacy Framework |
 | Google — Cloud Translation API v2 (funkcja opcjonalna, `TRANSLATE_ENABLED`) | podmiot przetwarzający | krótkie nagłówki toku rozumowania modelu tłumaczone z angielskiego na polski — **dotyczą treści pracy ucznia** | jw. |
 | Cloudflare, Inc. | podmiot przetwarzający | ruch HTTPS między użytkownikiem a serwerem (tunel, terminacja TLS) | [DO USTALENIA: potwierdzić zawarcie DPA / warunki Cloudflare i wpisać do rejestru] |
 | Telegram FZ-LLC | odbiorca powiadomień technicznych | komunikaty operacyjne: identyfikator zgłoszenia, oznaczenie zadania, liczba zdjęć, wynik punktowy, treść błędu. **Bez imienia, nazwiska, e-maila i identyfikatora użytkownika.** Funkcja wyłączana konfiguracją | brak umowy powierzenia — zob. R12; **w wariancie B zalecane wyłączenie** |
@@ -313,6 +355,11 @@ danych osobowych.
     │  6a. (opcjonalnie) nagłówki toku rozumowania EN→PL
     ├──────────────────────────────────────► [Google Cloud Translation — USA / DPF]
     │
+    │  5a. zadania prywatne: zdjęcie strony z zadaniem → odczyt treści,
+    │      treść zadania → wskazówki; przy ocenie treść zadania jako tekst
+    │      zamiast PDF (zdjęcia w treści zapytania, bez File API)
+    ├──────────────────────────────────────► [Google Gemini — USA / DPF]
+    │
     │  7. zapis wyniku w PostgreSQL (w tym surowa odpowiedź modelu w scoring_meta)
     │  8. przesłanie wyniku do przeglądarki ucznia przez WebSocket
     │  9. powiadomienie techniczne bez tożsamości
@@ -329,6 +376,9 @@ ani udostępniania danych podmiotom komercyjnym.
 | Zgłoszenie (wiersz w bazie) **wraz z fotografiami pracy** | **24 miesiące** od utworzenia | `RETENTION_SUBMISSION_MONTHS` | mechanizm usuwa wiersz i pliki łącznie; ustawienie 0 lub braku wartości **wyłącza** wygasanie — niedopuszczalne we wdrożeniu produkcyjnym. Okres dobrany tak, by objąć dwa lata szkolne, przez które biegnie cykl olimpijski |
 | Surowy zapis toku rozumowania modelu w `scoring_meta` | **90 dni** od utworzenia | `RETENTION_SCORING_THINKING_DAYS` | zapis odtwarza treść pracy ucznia dosłownie, dlatego jest usuwany znacznie wcześniej niż samo zgłoszenie; pozostałe metadane (nazwa modelu, liczba tokenów, koszt, czasy) nie są danymi osobowymi i zostają |
 | Konto użytkownika (`users`) wraz ze wszystkim, co do niego należy | **36 miesięcy** bez logowania i bez zgłoszenia | `RETENTION_INACTIVE_ACCOUNT_MONTHS` | aktywność liczona jako późniejsza z dwóch dat: ostatniego logowania i ostatniego zgłoszenia (sesja trwa 30 dni, więc sam znacznik logowania byłby mylący). Pomijane są konta administracyjne i konto deweloperskie. Okres dłuższy niż retencja zgłoszeń, by wracający uczeń zastał swoją historię |
+| Zadanie prywatne (`private_tasks`) wraz ze zdjęciami zadania, wskazówkami i zgłoszeniami do niego | **24 miesiące** od ostatniej aktywności (dodanie, edycja, zgłoszenie) | `RETENTION_PRIVATE_TASK_MONTHS` | uczeń może usunąć zadanie w każdej chwili; zgłoszenia do zadania prywatnego podlegają też ogólnej retencji zgłoszeń |
+| Szkic odczytu zadania (zdjęcia niezatwierdzone jako zadanie) | **24 godziny** | przebieg plików osieroconych | usuwany też natychmiast po zatwierdzeniu |
+| Licznik wywołań modelu (`ai_usage`) | **90 dni** | `RETENTION_AI_USAGE_DAYS` | bez treści; potrzebny do limitów dobowych i rozliczenia kosztów |
 | Dziennik dostępu administratora (`admin_access_log`) | **12 miesięcy** od zdarzenia | `RETENTION_ADMIN_AUDIT_MONTHS` | dość długo, by zbadać skargę, dość krótko, by nie stać się archiwum tego, kto na kogo patrzył |
 | Pseudonimowy znacznik limitu po usunięciu konta (`deleted_account_quota`) | do zamknięcia okna limitu, czyli **maks. 24 godziny** od ostatniego zgłoszenia | okno limitu (24 h) | usuwany automatycznie; powstaje tylko wtedy, gdy konto miało zgłoszenia w oknie |
 | Pliki osierocone (bez odpowiadającego zgłoszenia) | usuwane przy każdym przebiegu retencji | `RETENTION_AUTO_PURGE` (przebieg dobowy) | zabezpieczenie na wypadek niepowodzenia usunięcia plików |
@@ -641,6 +691,29 @@ bo nie zostało poinformowane, że taki zapis powstał.
 - [DO ROZWAŻENIA] próg `abuse_score`, poniżej którego znacznik nie jest utrwalany.
 
 ---
+
+### R5a. Zadania prywatne — treści osób trzecich i słabsza ocena
+
+**Źródło:** uczeń może dodać dowolne zadanie (zdjęcie strony broszury, zbioru, kartki).
+Treść bywa utworem osoby trzeciej, zdjęcie może uchwycić więcej niż samo zadanie, a model ocenia
+bez rozwiązania wzorcowego.
+
+**Środki wdrożone:**
+- zadanie widzi wyłącznie właściciel (404 dla każdego innego konta, brak listy publicznej,
+  `noindex`, tytuł zadania poza `<title>` strony); nie ma funkcji udostępniania,
+- przed zapisem uczeń widzi i poprawia odczytaną treść; zapisywane jest tylko to, co zatwierdził,
+- zdjęcia zadania przechodzą ten sam proces usuwania EXIF/GPS co zdjęcia rozwiązań,
+- tekst zadania i odpowiedź modelu są na stronie wyświetlane jako tekst (znaczniki HTML są
+  neutralizowane), więc treść zadania nie może wstrzyknąć kodu do przeglądarki ucznia ani
+  administratora,
+- próba manipulacji modelem w zdjęciu lub tekście zadania (`abuse_score` ≥ 70) blokuje zapis,
+- osobne limity dobowe na odczyty zdjęć (15) i tworzenie zadań/wskazówek (10) oraz limit
+  globalny (1000), liczone przed wywołaniem modelu; usunięcie konta ich nie zeruje,
+- na stronie zadania i przy wyniku widnieje informacja, że ocena powstała bez rozwiązania
+  wzorcowego i może być mniej pewna,
+- retencja 24 miesiące od ostatniej aktywności; usunięcie zadania kasuje wiersze i pliki.
+
+**Ryzyko szczątkowe:** niskie dla ochrony danych; prawo autorskie — zob. 7.4.
 
 ### R6. Przekazanie danych dziecka do podmiotu z USA
 
@@ -1060,6 +1133,13 @@ dla ograniczonego kręgu osób uczących się i nauczających, zidentyfikowanych
 Praktycznie oznacza to, że w instancji szkolnej **pliki PDF i pełne treści zadań muszą być
 dostępne dopiero po zalogowaniu**, wyłącznie dla uczniów i nauczycieli tej szkoły — inaczej niż
 w serwisie publicznym, gdzie są dostępne dla każdego.
+
+**Zadania prywatne („Moje zadania”, od września 2026).** Uczeń może przepisać lub sfotografować
+zadanie z broszury czy zbioru. Serwis przechowuje taką treść **wyłącznie na potrzeby nauki tego
+jednego ucznia** — nie publikuje jej, nie udostępnia innym kontom i nie indeksuje — co mieści się
+w granicach użytku osobistego po stronie ucznia. Kopia jest jednak przekazywana dostawcy AI
+(odczyt, wskazówki, ocena); regulamin zobowiązuje ucznia, by dodawał tylko treści do własnej
+nauki i ich nie rozpowszechniał.
 
 **Rekomendacja dla wdrożenia szkolnego (do wykonania przed uruchomieniem):** zamknąć dostęp do
 `/pdf/...` i do pełnych treści zadań za uwierzytelnieniem. **Nie jest to obecnie zaimplementowane
