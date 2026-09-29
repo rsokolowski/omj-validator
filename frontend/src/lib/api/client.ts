@@ -51,11 +51,13 @@ export async function fetchAPI<T>(
 export async function uploadFiles<T>(
   endpoint: string,
   files: File[],
-  onProgress?: (progress: number) => void
+  onProgress?: (progress: number) => void,
+  fields?: Record<string, string>
 ): Promise<T> {
   const url = `${API_BASE}${endpoint}`;
   const formData = new FormData();
   files.forEach((file) => formData.append("images", file));
+  Object.entries(fields ?? {}).forEach(([name, value]) => formData.append(name, value));
 
   // Use XMLHttpRequest for progress tracking
   return new Promise((resolve, reject) => {

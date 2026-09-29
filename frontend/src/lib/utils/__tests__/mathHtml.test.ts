@@ -2,6 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { renderMathHtml } from "../mathHtml.ts";
+import { findMathSpans } from "../solutionText.ts";
 
 test("text outside math is HTML-escaped", () => {
   const html = renderMathHtml('<img src=x onerror="alert(1)"> i <b>bold</b>');
@@ -29,4 +30,26 @@ test("bracket delimiters still work", () => {
 
 test("an unmatched dollar stays literal text", () => {
   assert.equal(renderMathHtml("koszt 5$ & więcej"), "koszt 5$ &amp; więcej");
+});
+
+test("indexMath wraps each formula with its source index, in findMathSpans order", () => {
+  const text = "Niech $a$ i \\(b\\); wtedy $$a+b$$ oraz \\[a-b\\].";
+  const html = renderMathHtml(text, { indexMath: true });
+  const indices = [...html.matchAll(/data-math-index="(\d+)"/g)].map((m) => Number(m[1]));
+  assert.deepEqual(indices, [0, 1, 2, 3]);
+  assert.equal(findMathSpans(text).length, 4);
+  assert.ok(html.includes('class="math-src math-src--display" data-math-index="2"'), html);
+  assert.ok(html.includes('role="button" tabindex="0" aria-label="Popraw wzór"'), html);
+});
+
+test("without indexMath there is no wrapper", () => {
+  assert.ok(!renderMathHtml("$x$").includes("data-math-index"));
+});
+
+test("a display formula swallows one adjacent newline on each side", () => {
+  assert.ok(!renderMathHtml("a\n$$x$$\nb").includes("<br>"));
+  const html = renderMathHtml("a\n\n$$x$$\n\nb");
+  assert.equal((html.match(/<br>/g) || []).length, 2, html);
+  // inline formulas keep their line breaks
+  assert.equal((renderMathHtml("a\n$x$\nb").match(/<br>/g) || []).length, 2);
 });

@@ -54,6 +54,14 @@ class TestNormalize:
         assert normalize_solution_text("") is None
         assert normalize_solution_text(None) is None
 
+    def test_format_characters_kept(self):
+        # Cf (zero-width space, BOM) is not Cc and not whitespace for str.strip();
+        # solutionText.test.ts asserts the same outputs for the browser counter
+        assert normalize_solution_text("\u200ba\u200bb\u200b") == "\u200ba\u200bb\u200b"
+        assert normalize_solution_text(" \ufeffa\ufeff ") == "\ufeffa\ufeff"
+        assert len(normalize_solution_text("\u200ba\u200b")) == 3
+        assert normalize_solution_text("\u3000\u00a0a\u2028\u2029") == "a"
+
     def test_polish_letters_and_latex_untouched(self):
         text = "Zatem $\\frac{a}{b} \\le 1$ – gdyż ąęśćżźół."
         assert normalize_solution_text(text) == text
