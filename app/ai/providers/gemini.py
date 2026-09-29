@@ -81,6 +81,11 @@ class StreamChunk:
     meta: Optional[dict] = None
 
 
+# Gemini rejects a request whose inline data exceeds ~20 MB in total, and
+# inline bytes travel base64-encoded (+33%). Photos above this budget go
+# through the File API instead.
+INLINE_IMAGE_BUDGET_BYTES = 14 * 1024 * 1024
+
 # In-memory cache: local file path -> CachedFile
 # Files persist on Gemini for 48 hours, we use 24h to be safe
 _file_cache: dict[str, CachedFile] = {}
@@ -987,13 +992,22 @@ class GeminiProvider:
         ".webp": "image/webp",
     }
 
-    def _inline_image_parts(self, image_paths: list[Path]) -> list:
-        """Photos as inline parts - no File API round trip, nothing to clean up.
+    async def _image_parts(self, image_paths: list[Path]) -> tuple[list, list]:
+        """Photos as request parts: (parts, uploaded_files_to_clean_up).
 
-        Uploads are normalised to JPEG and capped at 10 x 10 MB before they get
-        here, well inside the inline request limit. Gemini 3 gets the per-part
-        image resolution used for handwriting; older models the global one.
+        Inline when they fit INLINE_IMAGE_BUDGET_BYTES - no File API round trip,
+        nothing left at Google. Larger batches (up to 10 photos of 2048 px can
+        exceed the ~20 MB inline cap) are uploaded instead and must be deleted
+        by the caller with _cleanup_files(uploaded, skip_cached=False).
+        Gemini 3 gets the per-part image resolution used for handwriting.
         """
+        total = sum(p.stat().st_size for p in image_paths if p.exists())
+        if total > INLINE_IMAGE_BUDGET_BYTES:
+            uploaded = list(
+                await asyncio.gather(*(self._upload_file(p, use_cache=False) for p in image_paths))
+            )
+            return list(uploaded), uploaded
+
         resolution = (
             self._get_media_resolution(settings.gemini_media_resolution_images)
             if self._is_gemini_3
@@ -1012,7 +1026,7 @@ class GeminiProvider:
                 except (TypeError, AttributeError):
                     pass  # SDK without per-part resolution - plain part below
             parts.append(types.Part.from_bytes(data=data, mime_type=mime))
-        return parts
+        return parts, []
 
     def _thinking_config(self):
         if self._is_gemini_3:
@@ -1093,8 +1107,11 @@ class GeminiProvider:
 
     async def extract_private_tasks(self, image_paths: list[Path]) -> PrivateExtractionResult:
         """Read every problem statement off photos of a page."""
-        contents = [load_private_prompt("extract"), *self._inline_image_parts(image_paths)]
-        text, meta = await self._generate_json(contents, EXTRACTION_SCHEMA)
+        parts, uploaded = await self._image_parts(image_paths)
+        try:
+            text, meta = await self._generate_json([load_private_prompt("extract"), *parts], EXTRACTION_SCHEMA)
+        finally:
+            await self._cleanup_files(uploaded, skip_cached=False)
         result = parse_extraction_response(text)
         result.meta = meta
         return result
@@ -1124,6 +1141,7 @@ class GeminiProvider:
         logger.info(
             f"[Gemini Private Stream] model={self._model_name}, images={len(image_paths)}"
         )
+        uploaded: list = []
         try:
             prompt = (
                 f"{build_private_scoring_prompt()}\n\n"
@@ -1131,7 +1149,7 @@ class GeminiProvider:
                 f"### {task_title}\n{task_content}\n\n"
                 f"### Rozwiązanie ucznia:\n"
             )
-            image_parts = self._inline_image_parts(image_paths)
+            image_parts, uploaded = await self._image_parts(image_paths)
             contents = [prompt]
             for index, part in enumerate(image_parts, 1):
                 contents.append(f"Zdjęcie {index}:")
@@ -1170,6 +1188,8 @@ class GeminiProvider:
         except Exception as e:
             logger.error(f"[Gemini Private Stream] {type(e).__name__}: {e}")
             raise self._friendly_error(e)
+        finally:
+            await self._cleanup_files(uploaded, skip_cached=False)
 
     def _get_file_hash(self, file_path: Path) -> str:
         """Compute MD5 hash of file for cache validation."""

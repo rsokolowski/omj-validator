@@ -206,3 +206,52 @@ class TestGeminiRequests:
         assert call["config"].response_json_schema == META_SCHEMA
         assert all(isinstance(c, str) for c in call["contents"])
         assert "Treść zadania do rozwiązania." in call["contents"][0]
+
+
+class _FakeFiles:
+    def __init__(self):
+        self.uploaded = []
+        self.deleted = []
+
+    def upload(self, file):
+        ref = SimpleNamespace(name=f"files/{len(self.uploaded)}", source=file)
+        self.uploaded.append(ref)
+        return ref
+
+    def delete(self, name):
+        self.deleted.append(name)
+
+
+class TestLargePhotosUseFileApi:
+    """Gemini caps a request with inline data at ~20 MB in total."""
+
+    def test_photos_over_the_inline_budget_are_uploaded_and_cleaned_up(self, provider, tmp_path, monkeypatch):
+        import app.ai.providers.gemini as gemini
+
+        monkeypatch.setattr(gemini, "INLINE_IMAGE_BUDGET_BYTES", 1000)
+        images = []
+        for i in range(2):
+            path = tmp_path / f"p{i}.jpg"
+            path.write_bytes(b"\xff" * 800)
+            images.append(path)
+        fake = _FakeModels(extraction([problem()]))
+        files = _FakeFiles()
+        provider._client = SimpleNamespace(models=fake, files=files)
+
+        result = asyncio.run(provider.extract_private_tasks(images))
+
+        assert len(result.problems) == 1
+        sent = [c for c in fake.calls[0]["contents"] if not isinstance(c, str)]
+        assert [ref.name for ref in sent] == ["files/0", "files/1"]
+        assert sorted(files.deleted) == ["files/0", "files/1"]
+
+    def test_small_photos_stay_inline(self, provider, tmp_path):
+        image = tmp_path / "p.jpg"
+        image.write_bytes(b"\xff" * 800)
+        fake = _FakeModels(extraction([problem()]))
+        files = _FakeFiles()
+        provider._client = SimpleNamespace(models=fake, files=files)
+
+        asyncio.run(provider.extract_private_tasks([image]))
+
+        assert files.uploaded == []

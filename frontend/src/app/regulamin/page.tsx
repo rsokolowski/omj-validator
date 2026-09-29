@@ -407,9 +407,8 @@ export default function RegulaminPage() {
             <li>
               przy <strong>własnych zadaniach</strong> do Google trafia też zdjęcie
               strony z zadaniem (żeby odczytać jego treść) i sama treść zadania
-              (żeby przygotować wskazówki i ocenić rozwiązanie); zdjęcia te są
-              przesyłane bezpośrednio w zapytaniu i nie są przechowywane u Google
-              po jego zakończeniu,
+              (żeby przygotować wskazówki i ocenić rozwiązanie); zdjęcia te nie są
+              przechowywane u Google po zakończeniu analizy,
             </li>
             <li>
               korzystamy z <strong>płatnej wersji usługi</strong>, w której

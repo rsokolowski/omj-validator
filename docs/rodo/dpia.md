@@ -307,7 +307,7 @@ zadaniu. Konsekwencje, które trzeba przyjąć świadomie:
 | Podmiot | Rola | Co otrzymuje | Ramy prawne |
 |---|---|---|---|
 | Google Ireland Ltd. / Google LLC — usługa logowania (OAuth 2.0) | odrębny administrator dla swojego konta użytkownika | fakt logowania do naszej aplikacji; my otrzymujemy `sub`, e-mail, imię i nazwisko, adres zdjęcia profilowego | zakres `openid email profile` |
-| Google — Gemini API (płatny poziom usługi) | podmiot przetwarzający | **fotografie pracy ucznia**, PDF zadań, PDF rozwiązań wzorcowych, instrukcja oceniania; przy zadaniach prywatnych także **zdjęcie strony z zadaniem** (odczyt treści) i **treść zadania** (wskazówki, ocena) — zdjęcia przesyłane w treści zapytania, bez File API; **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Gemini API Additional Terms + Google Cloud Data Processing Addendum; transfer: EU-US Data Privacy Framework |
+| Google — Gemini API (płatny poziom usługi) | podmiot przetwarzający | **fotografie pracy ucznia**, PDF zadań, PDF rozwiązań wzorcowych, instrukcja oceniania; przy zadaniach prywatnych także **zdjęcie strony z zadaniem** (odczyt treści) i **treść zadania** (wskazówki, ocena) — zdjęcia zwykle przesyłane w treści zapytania, a zestawy powyżej 14 MB przez File API i usuwane zaraz po analizie; **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Gemini API Additional Terms + Google Cloud Data Processing Addendum; transfer: EU-US Data Privacy Framework |
 | Google — Cloud Translation API v2 (funkcja opcjonalna, `TRANSLATE_ENABLED`) | podmiot przetwarzający | krótkie nagłówki toku rozumowania modelu tłumaczone z angielskiego na polski — **dotyczą treści pracy ucznia** | jw. |
 | Cloudflare, Inc. | podmiot przetwarzający | ruch HTTPS między użytkownikiem a serwerem (tunel, terminacja TLS) | [DO USTALENIA: potwierdzić zawarcie DPA / warunki Cloudflare i wpisać do rejestru] |
 | Telegram FZ-LLC | odbiorca powiadomień technicznych | komunikaty operacyjne: identyfikator zgłoszenia, oznaczenie zadania, liczba zdjęć, wynik punktowy, treść błędu. **Bez imienia, nazwiska, e-maila i identyfikatora użytkownika.** Funkcja wyłączana konfiguracją | brak umowy powierzenia — zob. R12; **w wariancie B zalecane wyłączenie** |
@@ -357,7 +357,8 @@ danych osobowych.
     │
     │  5a. zadania prywatne: zdjęcie strony z zadaniem → odczyt treści,
     │      treść zadania → wskazówki; przy ocenie treść zadania jako tekst
-    │      zamiast PDF (zdjęcia w treści zapytania, bez File API)
+    │      zamiast PDF (zdjęcia w treści zapytania; >14 MB przez File API,
+    │      kasowane po analizie)
     ├──────────────────────────────────────► [Google Gemini — USA / DPF]
     │
     │  7. zapis wyniku w PostgreSQL (w tym surowa odpowiedź modelu w scoring_meta)
