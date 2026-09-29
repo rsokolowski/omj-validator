@@ -22,6 +22,10 @@ interface ExcalidrawCanvasProps {
 // the library browser (libraries.excalidraw.com), web embeds and the Mermaid
 // dialog (mermaid.js.org). Buttons without an API switch are hidden here; the
 // dialogs they open are also closed in onChange, since shortcuts reach them too.
+// UPGRADE NOTE: the selectors below target @excalidraw/excalidraw 0.18.1 class
+// names and test ids. After bumping the package, run the e2e test "the drawing
+// editor offers no way off the page" (e2e/tests/text-solutions.spec.ts) - it is
+// the tripwire if a renamed class brings a hidden button back.
 // !important: Excalidraw's own display rules are at least as specific and load later.
 const hidden = { display: "none !important" };
 const hideOffPageUi = {

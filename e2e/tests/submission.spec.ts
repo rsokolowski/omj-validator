@@ -12,6 +12,7 @@ import { test, expect } from '@playwright/test';
 import { loginAs, TEST_USERS } from './utils/auth';
 import { setGeminiScenario, resetGemini, GeminiScenario } from './utils/api';
 import { uploadAndSubmit } from './utils/submission';
+import * as fs from 'fs';
 import * as path from 'path';
 
 // Path to test fixtures
@@ -223,7 +224,7 @@ test.describe('Submission Flow', () => {
       await fileInput.setInputFiles(TEST_IMAGE);
 
       // File should be accepted (it's small)
-      await expect(page.locator('[data-testid="image-preview"]').or(page.getByText(/test-solution/i))).toBeVisible();
+      await expect(page.locator('[data-testid="image-preview"]').or(page.getByText(/test-solution/i)).first()).toBeVisible();
     });
 
     test('rejects non-image files', async ({ page }) => {
@@ -241,12 +242,23 @@ test.describe('Submission Flow', () => {
 
       const fileInput = page.locator('input[type="file"][accept="image/*"]');
 
-      // Try uploading more than max allowed (10)
-      // For now just verify we can upload multiple
-      await fileInput.setInputFiles([TEST_IMAGE, TEST_IMAGE_2]);
+      // Choose more than the maximum (10): the extra ones are dropped with a notice
+      const eleven = Array.from({ length: 11 }, (_, i) => ({
+        name: `strona-${i + 1}.jpg`,
+        mimeType: 'image/jpeg',
+        buffer: fs.readFileSync(TEST_IMAGE),
+      }));
+      await fileInput.setInputFiles(eleven);
 
-      // Should show both images
-      expect(await page.locator('[data-testid="image-preview"]').count()).toBeLessThanOrEqual(10);
+      await expect(page.locator('[data-testid="image-preview"]')).toHaveCount(10);
+      await expect(page.getByText(/Zdjęcia i rysunki: 10 \/ 10/)).toBeVisible();
+      await expect(page.getByRole('status').filter({ hasText: /pominięto 1\./ })).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Dodaj rysunek' })).toBeDisabled();
+
+      // Removing one frees a place and clears the notice
+      await page.getByRole('button', { name: 'Usuń strona-1.jpg' }).click();
+      await expect(page.locator('[data-testid="image-preview"]')).toHaveCount(9);
+      await expect(page.getByText(/pominięto/)).toHaveCount(0);
     });
   });
 

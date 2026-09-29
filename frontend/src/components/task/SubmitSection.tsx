@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, DragEvent, useEffect, useCallback } from "react";
+import { useState, useRef, DragEvent, useEffect, useCallback, useId } from "react";
 import { useRouter } from "next/navigation";
 import {
   Paper,
@@ -9,8 +9,10 @@ import {
   Button,
   Alert,
   CircularProgress,
+  IconButton,
 } from "@mui/material";
 import BrushIcon from "@mui/icons-material/Brush";
+import CloseIcon from "@mui/icons-material/Close";
 import { uploadFiles } from "@/lib/api/client";
 import { MAX_UPLOAD_FILES, SUBMISSION_TEXT_MAX_CHARS, getMaxScore } from "@/lib/utils/constants";
 import { countChars, formatCount, normalizeSolutionText } from "@/lib/utils/solutionText";
@@ -46,6 +48,12 @@ interface SubmitResponse {
 }
 
 type SubmitStatus = "idle" | "processing" | "completed" | "failed";
+
+/** A chosen photo or drawing with the object URL of its thumbnail */
+interface SelectedFile {
+  file: File;
+  url: string;
+}
 
 /**
  * Technika "visually hidden": element zostaje w drzewie dostepnosci
@@ -109,7 +117,11 @@ export function SubmitSection({
   resumeSubmissionId,
 }: SubmitSectionProps) {
   const router = useRouter();
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<SelectedFile[]>([]);
+  // Thumbnail URLs still to revoke on clear/unmount - kept current after each render
+  const filesRef = useRef<SelectedFile[]>([]);
+  // "pominięto n" after the list hit MAX_UPLOAD_FILES
+  const [filesNotice, setFilesNotice] = useState("");
   const [solutionText, setSolutionText] = useState("");
   const [drawingOpen, setDrawingOpen] = useState(false);
   // Numbers drawings within this visit: rysunek-1.png, rysunek-2.png, ...
@@ -118,6 +130,7 @@ export function SubmitSection({
   const textCount = countChars(normalizedText);
   const textTooLong = textCount > SUBMISSION_TEXT_MAX_CHARS;
   const hasSomething = files.length > 0 || normalizedText.length > 0;
+  const helperId = useId();
   const [uploadState, setUploadState] = useState<UploadState>({
     status: "idle",
     statusMessage: "",
@@ -141,6 +154,29 @@ export function SubmitSection({
       }
     };
   }, []);
+
+  useEffect(() => {
+    filesRef.current = files;
+  }, [files]);
+
+  // Release the thumbnails when the page goes away
+  useEffect(() => {
+    return () => filesRef.current.forEach((f) => URL.revokeObjectURL(f.url));
+  }, []);
+
+  const clearFiles = useCallback(() => {
+    filesRef.current.forEach((f) => URL.revokeObjectURL(f.url));
+    filesRef.current = [];
+    setFiles([]);
+    setFilesNotice("");
+  }, []);
+
+  // A new photo, drawing or text edit starts a new attempt: the previous
+  // result or error is cleared (never while a submission is being graded)
+  const resetOutcome = () =>
+    setUploadState((prev) =>
+      prev.status === "processing" || prev.status === "idle" ? prev : { status: "idle", statusMessage: "" }
+    );
 
   const connectWebSocket = useCallback(
     (wsPath: string) => {
@@ -199,7 +235,7 @@ export function SubmitSection({
                   feedback: msg.feedback,
                 },
               });
-              setFiles([]);
+              clearFiles();
               setSolutionText("");
               if (fileInputRef.current) {
                 fileInputRef.current.value = "";
@@ -238,7 +274,7 @@ export function SubmitSection({
         wsRef.current = null;
       };
     },
-    [etap, router, onCompleted]
+    [etap, router, onCompleted, clearFiles]
   );
 
   useEffect(() => {
@@ -260,8 +296,13 @@ export function SubmitSection({
 
   const addFiles = (newFiles: File[]) => {
     const imageFiles = newFiles.filter((file) => file.type.startsWith("image/"));
-    setFiles((prev) => [...prev, ...imageFiles].slice(0, MAX_UPLOAD_FILES));
-    setUploadState({ status: "idle", statusMessage: "" });
+    const kept = imageFiles.slice(0, Math.max(0, MAX_UPLOAD_FILES - files.length));
+    const dropped = imageFiles.length - kept.length;
+    setFiles([...files, ...kept.map((file) => ({ file, url: URL.createObjectURL(file) }))]);
+    setFilesNotice(
+      dropped > 0 ? `Można dodać najwyżej ${MAX_UPLOAD_FILES} zdjęć i rysunków – pominięto ${dropped}.` : ""
+    );
+    resetOutcome();
   };
 
   const addDrawing = (png: Blob) => {
@@ -288,7 +329,9 @@ export function SubmitSection({
   };
 
   const handleRemoveFile = (index: number) => {
+    URL.revokeObjectURL(files[index].url);
     setFiles(files.filter((_, i) => i !== index));
+    setFilesNotice("");
   };
 
   const handleSubmit = async () => {
@@ -306,7 +349,7 @@ export function SubmitSection({
       // Step 1: Upload files via POST
       const result = await uploadFiles<SubmitResponse>(
         submitUrl ?? `/api/task/${year}/${etap}/${num}/submit`,
-        files,
+        files.map((f) => f.file),
         undefined,
         normalizedText ? { solution_text: solutionText } : undefined
       );
@@ -483,33 +526,77 @@ export function SubmitSection({
       <Typography variant="body2" sx={{ color: "grey.700", mb: files.length ? 1 : 2 }}>
         Zdjęcia i rysunki: {files.length} / {MAX_UPLOAD_FILES}
       </Typography>
+      {/* Always in the DOM, so screen readers announce the notice when it appears */}
+      <Typography role="status" variant="body2" sx={{ color: "warning.dark", mb: filesNotice ? 1 : 0 }}>
+        {filesNotice}
+      </Typography>
       {files.length > 0 && (
-        <Box sx={{ mb: 2 }}>
-          {files.map((file, index) => (
+        <Box component="ul" sx={{ display: "flex", flexWrap: "wrap", gap: 1, listStyle: "none", p: 0, m: 0, mb: 2 }}>
+          {files.map(({ file, url }, index) => (
             <Box
-              key={index}
+              component="li"
+              key={url}
+              data-testid="image-preview"
               sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                p: 1,
-                mb: 0.5,
-                bgcolor: "grey.50",
+                position: "relative",
+                width: 96,
+                height: 96,
+                border: 1,
+                borderColor: "grey.300",
                 borderRadius: 1,
+                overflow: "hidden",
+                bgcolor: "grey.100",
               }}
             >
-              <Typography variant="body2" sx={{ color: "grey.700" }}>
+              {/* Decorative: the name below says what it is. A format the browser
+                  cannot show (HEIC) leaves the grey box with the name. */}
+              <Box
+                component="img"
+                src={url}
+                alt=""
+                onError={(e) => {
+                  e.currentTarget.style.visibility = "hidden";
+                }}
+                sx={{ width: "100%", height: "100%", objectFit: "contain", bgcolor: "common.white" }}
+              />
+              <Typography
+                variant="caption"
+                component="span"
+                title={file.name}
+                sx={{
+                  position: "absolute",
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  px: 0.5,
+                  fontSize: 10,
+                  color: "common.white",
+                  bgcolor: "rgba(0,0,0,.6)",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
                 {file.name}
               </Typography>
-              <Button
+              <IconButton
                 size="small"
-                color="error"
                 onClick={() => handleRemoveFile(index)}
                 disabled={isProcessing}
-                aria-label={`Usuń plik ${file.name}`}
+                aria-label={`Usuń ${file.name}`}
+                sx={{
+                  position: "absolute",
+                  top: 2,
+                  right: 2,
+                  p: 0.25,
+                  color: "common.white",
+                  bgcolor: "rgba(0,0,0,.6)",
+                  "&:hover": { bgcolor: "rgba(0,0,0,.8)" },
+                  "&.Mui-focusVisible": { outline: "3px solid", outlineColor: "primary.main" },
+                }}
               >
-                Usuń
-              </Button>
+                <CloseIcon sx={{ fontSize: 16 }} />
+              </IconButton>
             </Box>
           ))}
         </Box>
@@ -526,7 +613,7 @@ export function SubmitSection({
           value={solutionText}
           onChange={(next) => {
             setSolutionText(next);
-            if (uploadState.status === "failed") setUploadState({ status: "idle", statusMessage: "" });
+            resetOutcome();
           }}
           maxChars={SUBMISSION_TEXT_MAX_CHARS}
           disabled={isProcessing}
@@ -588,13 +675,19 @@ export function SubmitSection({
         variant="contained"
         fullWidth
         disabled={!canSend}
+        aria-describedby={helper && !isProcessing ? helperId : undefined}
         onClick={handleSubmit}
         sx={{ py: 1.5 }}
       >
         {isProcessing ? "Przetwarzanie..." : "Prześlij rozwiązanie"}
       </Button>
       {helper && !isProcessing && (
-        <Typography variant="caption" component="p" sx={{ color: "grey.600", mt: 1, textAlign: "center" }}>
+        <Typography
+          id={helperId}
+          variant="caption"
+          component="p"
+          sx={{ color: "grey.600", mt: 1, textAlign: "center" }}
+        >
           {helper}
         </Typography>
       )}

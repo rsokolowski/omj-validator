@@ -43,28 +43,51 @@ test.describe('Typed solutions', () => {
     await expect(toggle).toBeVisible();
     await expect(toggle).toHaveAttribute('aria-expanded', 'false');
     await toggle.click();
-    await expect(page.getByText(/jedna z liczb/)).toBeVisible();
+    // Scoped to this panel: earlier submissions of the same user keep theirs in the DOM
+    const panel = page.locator(`[id="${await toggle.getAttribute('aria-controls')}"]`);
+    await expect(panel.getByText(/jedna z liczb/)).toBeVisible();
   });
 
   test('the editors never call a third-party host', async ({ page }) => {
     const external: string[] = [];
+    const fonts: string[] = [];
     page.on('request', (req) => {
-      const host = new URL(req.url()).hostname;
-      if (host !== 'localhost' && host !== '127.0.0.1') external.push(req.url());
+      const url = new URL(req.url());
+      // blob:/data: URLs (the drawing's thumbnail) never leave the browser
+      if (url.protocol === 'blob:' || url.protocol === 'data:') return;
+      if (url.hostname !== 'localhost' && url.hostname !== '127.0.0.1') external.push(req.url());
+      else if (url.pathname.startsWith('/excalidraw/fonts/')) fonts.push(url.pathname);
     });
 
     await page.goto('/task/2024/etap2/1');
     await page.waitForLoadState('networkidle');
 
+    // Typing in MathLive renders glyphs (it reuses the KaTeX faces the page
+    // already declares, so /mathlive/fonts is only a fallback)
     await page.getByRole('button', { name: 'Wstaw wzór' }).click();
-    await expect(page.locator('math-field')).toBeVisible({ timeout: 15000 });
+    const field = page.locator('math-field');
+    await expect(field).toBeVisible({ timeout: 15000 });
+    await field.click();
+    await page.keyboard.type('x');
+    await page.waitForLoadState('networkidle');
     await page.getByRole('button', { name: 'Anuluj' }).click();
 
+    // A text element in Excalidraw loads its hand-drawn font; exporting the
+    // drawing embeds fonts into the PNG
     await page.getByRole('button', { name: 'Dodaj rysunek' }).click();
-    await expect(page.locator('.excalidraw')).toBeVisible({ timeout: 20000 });
-    await page.getByRole('button', { name: 'Anuluj' }).click();
+    const editor = page.locator('.excalidraw');
+    await expect(editor).toBeVisible({ timeout: 20000 });
+    // The radio input sits under its icon, which takes the pointer events
+    await editor.getByTestId('toolbar-text').click({ force: true });
+    await editor.locator('canvas').last().click({ position: { x: 300, y: 200 } });
+    await page.keyboard.type('ABC');
+    await page.keyboard.press('Escape');
+    await page.getByRole('button', { name: 'Dodaj do rozwiązania' }).click();
+    await expect(page.getByTestId('image-preview')).toHaveCount(1);
+    await expect(page.getByText('Zdjęcia i rysunki: 1 / 10')).toBeVisible();
 
     await page.waitForLoadState('networkidle');
+    expect(fonts.length, 'Excalidraw fonts served locally').toBeGreaterThan(0);
     expect(external, 'requests to third-party hosts').toEqual([]);
   });
 
