@@ -1327,6 +1327,16 @@ async def task_history_api(
 # ==================== User Submissions (Moje rozwiązania) ====================
 
 
+def _private_tasks_by_id(db: Session, submissions) -> dict:
+    """Private tasks referenced by these submissions, keyed by id (one query)."""
+    from .db.models import PrivateTaskDB
+
+    ids = {s.private_task_id for s in submissions if s.private_task_id}
+    if not ids:
+        return {}
+    return {t.id: t for t in db.query(PrivateTaskDB).filter(PrivateTaskDB.id.in_(ids)).all()}
+
+
 def _get_max_score(etap: str) -> int:
     """Get max score for an etap (3 for etap1, 6 for etap2/3)."""
     return get_max_score(etap)
@@ -1385,13 +1395,23 @@ async def my_submissions(
             "tasks_mastered": 0,
         }
 
+    # Private tasks referenced on this page, in one query
+    private_tasks = _private_tasks_by_id(db, db_submissions)
+
     # Enrich submissions with task metadata
     submissions_list = []
     for sub in db_submissions:
-        # Get task info for title and categories
-        task = get_task(sub.year, sub.etap, sub.task_number)
-        task_title = task.title if task else f"Zadanie {sub.task_number}"
-        task_categories = task.categories if task else []
+        if sub.private_task_id:
+            private_task = private_tasks.get(sub.private_task_id)
+            task_title = private_task.title if private_task else "Zadanie prywatne"
+            task_categories = (
+                [private_task.category] if private_task and private_task.category else []
+            )
+        else:
+            # Get task info for title and categories
+            task = get_task(sub.year, sub.etap, sub.task_number)
+            task_title = task.title if task else f"Zadanie {sub.task_number}"
+            task_categories = task.categories if task else []
 
         # Create feedback preview (first 150 chars)
         feedback_preview = None
@@ -1403,6 +1423,7 @@ async def my_submissions(
             "year": sub.year,
             "etap": sub.etap,
             "task_number": sub.task_number,
+            "private_task_id": sub.private_task_id,
             "task_title": task_title,
             "task_categories": task_categories,
             "timestamp": ensure_utc(sub.timestamp).isoformat(),
@@ -1642,10 +1663,13 @@ async def admin_submissions(
     user_ids = list(set(sub.user_id for sub in db_submissions))
     users_by_id = user_repo.get_by_google_subs(user_ids)
 
+    private_tasks = _private_tasks_by_id(db, db_submissions)
+
     # Convert to response format with user info
     submissions = []
     for sub in db_submissions:
         user = users_by_id.get(sub.user_id)
+        private_task = private_tasks.get(sub.private_task_id) if sub.private_task_id else None
         submissions.append({
             "id": sub.id,
             "user_id": sub.user_id,
@@ -1654,6 +1678,8 @@ async def admin_submissions(
             "year": sub.year,
             "etap": sub.etap,
             "task_number": sub.task_number,
+            "private_task_id": sub.private_task_id,
+            "task_title": private_task.title if private_task else None,
             "timestamp": ensure_utc(sub.timestamp).isoformat(),
             "status": sub.status.value,
             "images": sub.images,
@@ -1765,13 +1791,24 @@ async def admin_rerun_submission(
             detail=f"Image files no longer available on disk: {', '.join(missing)}",
         )
 
-    # Validate task PDF exists (same check as submit endpoint)
-    task_pdf = get_task_pdf_path(original.year, original.etap)
-    if not task_pdf or not task_pdf.exists():
-        raise HTTPException(
-            status_code=409,
-            detail="Nie znaleziono pliku z zadaniami",
-        )
+    # Private task: re-grade against the text the original was graded against
+    private_task = None
+    if original.private_task_id:
+        snapshot = (original.scoring_meta or {}).get("task_snapshot") or {}
+        task_row = original.private_task
+        title = snapshot.get("title") or (task_row.title if task_row else None)
+        content = snapshot.get("content") or (task_row.content if task_row else None)
+        if not content:
+            raise HTTPException(status_code=409, detail="Private task text no longer available")
+        private_task = {"id": original.private_task_id, "title": title or "", "content": content}
+    else:
+        # Validate task PDF exists (same check as submit endpoint)
+        task_pdf = get_task_pdf_path(original.year, original.etap)
+        if not task_pdf or not task_pdf.exists():
+            raise HTTPException(
+                status_code=409,
+                detail="Nie znaleziono pliku z zadaniami",
+            )
 
     from .db.models import SubmissionStatus
     from .websocket.progress import progress_manager
@@ -1787,6 +1824,8 @@ async def admin_rerun_submission(
         task_number=original.task_number,
         images=list(relative_images),
         status=SubmissionStatus.PENDING,
+        private_task_id=original.private_task_id,
+        hints_used=original.hints_used or 0,
     )
 
     # Initialize progress tracking (handler.py will set first status)
@@ -1801,6 +1840,7 @@ async def admin_rerun_submission(
             etap=original.etap,
             task_number=original.task_number,
             image_paths=image_paths,
+            private_task=private_task,
         )
     )
     _background_tasks.add(task)

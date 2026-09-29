@@ -221,9 +221,11 @@ class UserSubmissionStats(BaseModel):
 class UserSubmissionListItem(BaseModel):
     """Single submission item for user's submission list."""
     id: str
-    year: str
-    etap: str
-    task_number: int
+    # OMJ task reference, or None for a private task (then private_task_id)
+    year: Optional[str] = None
+    etap: Optional[str] = None
+    task_number: Optional[int] = None
+    private_task_id: Optional[str] = None
     task_title: str
     task_categories: list[str]
     timestamp: datetime
