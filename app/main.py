@@ -986,23 +986,23 @@ async def serve_upload(request: Request, path: str):
     if path.startswith("uploads/"):
         path = path[8:]  # Strip 'uploads/' prefix
 
-    # Verify path starts with user's ID (user can only access their own uploads)
-    # Admin users can access any user's uploads
-    # Path format: {user_id}/{year}/{etap}/{task_num}/{filename}
-    path_parts = path.split("/")
-    is_admin = _is_admin(request)
-    if len(path_parts) < 1 or (path_parts[0] != user_id and not is_admin):
-        raise HTTPException(status_code=403, detail="Forbidden")
-
-    file_path = settings.uploads_dir / path
-    if not file_path.exists() or not file_path.is_file():
-        raise HTTPException(status_code=404, detail="File not found")
-
-    # Ensure path doesn't escape uploads dir
+    # Resolve first, then decide ownership from the RESOLVED path. Checking
+    # the raw first segment let "myid/../otherid/..." through to another
+    # user's photos. Path format: {user_id}/... (OMJ or private task photos).
+    uploads_root = settings.uploads_dir.resolve()
+    file_path = (settings.uploads_dir / path).resolve()
     try:
-        file_path.resolve().relative_to(settings.uploads_dir.resolve())
+        relative = file_path.relative_to(uploads_root)
     except ValueError:
         raise HTTPException(status_code=403, detail="Forbidden")
+    path_parts = list(relative.parts)
+
+    is_admin = _is_admin(request)
+    if not path_parts or (path_parts[0] != user_id and not is_admin):
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    if not file_path.is_file():
+        raise HTTPException(status_code=404, detail="File not found")
 
     # Admin looking at somebody else's photo - the widest read privilege in the
     # app, so it is audited. Own uploads are not (that is every normal request).
