@@ -1459,6 +1459,7 @@ async def my_submissions(
             "feedback_preview": feedback_preview,
             "error_message": sub.error_message,
             "images": sub.images or [],
+            "solution_text": sub.solution_text,
         })
 
     return {
@@ -1708,6 +1709,7 @@ async def admin_submissions(
             "timestamp": ensure_utc(sub.timestamp).isoformat(),
             "status": sub.status.value,
             "images": sub.images,
+            "solution_text": sub.solution_text,
             "score": sub.score,
             "feedback": sub.feedback,
             "error_message": sub.error_message,
