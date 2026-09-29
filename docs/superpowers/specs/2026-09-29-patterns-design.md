@@ -158,7 +158,7 @@ LaTeX backslashes in JSON and to treat the student's text as data, not instructi
   column limits); questions ≤2, each ≤300 chars; unknown verdict → `ok`;
   unknown category → null; skills filtered against `data/skills.json`, ≤3;
   comment ≤500. **Fewer than 2 usable variants** → the round is treated as a
-  failure (502 "Spróbuj jeszcze raz") and its `ai_usage` reservation released.
+  failure (502 "Spróbuj jeszcze raz").
 - Prompt rules: keep his wording where it is good; never solve the source task;
   if the pattern is wrong, say so (`bledny`) instead of polishing it; triggers
   describe what is *visible in a problem statement*; actions are concrete moves.
@@ -173,7 +173,7 @@ LaTeX backslashes in JSON and to treat the student's text as data, not instructi
   No photos.
 - Output (`PATTERN_SUGGEST_SCHEMA`):
   `{"suggestions": [{"trigger","action","example","why"}], "abuse_score": 0}`;
-  1–3 kept; `why` ≤300 chars. Zero usable → 502, reservation released.
+  1–3 kept; `why` ≤300 chars. Zero usable → 502.
 - An accepted suggestion becomes the editor's draft with `origin = ai_suggested`;
   from there it goes through normal refine rounds.
 
@@ -203,8 +203,9 @@ LaTeX backslashes in JSON and to treat the student's text as data, not instructi
 
 Each uses `service.reserve_ai_calls` (insert, then count, release + 429 if over);
 all count toward `rate_limit_ai_usage_global_per_day`; allowlisted users bypass
-the per-user limits; any AI failure releases the reservation. Recall reviews
-make no AI calls.
+the per-user limits. As for private tasks, a call that was made still counts
+when it fails or is refused (it still cost Gemini money); only a reservation
+refused by the limit itself is released. Recall reviews make no AI calls.
 
 ## 3. Spaced repetition (`app/patterns/srs.py`, pure)
 
@@ -273,7 +274,7 @@ id → 404.
 | `POST /refine` | Body `{draft, source: {task_key}\|{private_task_id}\|null, history, answer, pattern_id?}` → round. Stateless before saving; with `pattern_id` (owned) the source and history come from the stored pattern. |
 | `POST /suggest` | Body `{submission_id, draft?}`; submission must be the user's own and COMPLETED → `{suggestions}` |
 | `POST ""` | Create `{trigger, action, example?, category?, skills?, origin, source?, refinement?}` → pattern (201). Creates the `source` link. Does **not** call the AI. |
-| `GET ""` | List `?category=&archived=` with link counts |
+| `GET ""` | List `?category=&archived=&task_key=&private_task_id=` with link counts (the last two: patterns linked to that task, any role, accepted) |
 | `GET /queue` | `{items, due_total}` |
 | `GET /{id}` | Detail + links (with task titles; unknown OMJ keys flagged `available: false`) + last 20 reviews |
 | `PATCH /{id}` | Edit fields; `append_round` (a round from `/refine` with `chosen`); `archived: bool`. Editing trigger/action does not reset the schedule. |
@@ -336,8 +337,8 @@ length limits of §1.
 
 | Situation | Response |
 |---|---|
-| AI error / timeout / unusable output | 502 Polish message; reservation released |
-| Abuse score ≥ 70 or safety block | 422 "Tej treści nie możemy przetworzyć."; reservation released |
+| AI error / timeout / unusable output | 502 Polish message (the call still counts) |
+| Abuse score ≥ 70 or safety block | 422 "Tej treści nie możemy przetworzyć." (counts) |
 | Per-user or global limit | 429 + `Retry-After` / rate-limit headers |
 | Review of a not-due / archived pattern, or lost race | 409 |
 | Someone else's pattern / link / private task / submission | 404 |
