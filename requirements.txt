@@ -32,4 +32,4 @@ alembic>=1.13.0
 psycopg2-binary>=2.9.0
 
 # Production server
-gunicorn>=21.0.0
+gunicorn>=26.0.0  # Dockerfile passes --no-control-socket (added in 26)
