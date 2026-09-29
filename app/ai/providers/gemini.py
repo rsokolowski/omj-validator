@@ -22,7 +22,7 @@ from ..private_parsing import (
     parse_extraction_response,
     parse_meta_response,
 )
-from ..factory import AIProviderError
+from ..factory import AIContentBlockedError, AIProviderError
 
 try:
     from google import genai
@@ -1032,7 +1032,7 @@ class GeminiProvider:
                 "System jest obecnie przeciążony. Spróbuj ponownie za kilka minut."
             )
         if "safety" in message or "blocked" in message:
-            return AIProviderError(
+            return AIContentBlockedError(
                 "Nie udało się przetworzyć zdjęcia. Upewnij się, że zdjęcie "
                 "zawiera tylko treść zadania lub rozwiązanie."
             )
@@ -1075,6 +1075,13 @@ class GeminiProvider:
         except Exception as e:
             logger.error(f"[Gemini Private] {type(e).__name__}: {e}")
             raise self._friendly_error(e)
+
+        candidates = getattr(response, "candidates", None) or []
+        finish = str(getattr(candidates[0], "finish_reason", "") if candidates else "")
+        if "SAFETY" in finish.upper() or "PROHIBITED" in finish.upper():
+            raise AIContentBlockedError(
+                "Nie udało się przetworzyć tej treści. Upewnij się, że zawiera tylko zadanie."
+            )
 
         meta = self._usage_meta(getattr(response, "usage_metadata", None), started)
         logger.info(

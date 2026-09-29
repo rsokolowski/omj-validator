@@ -18,7 +18,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
-from ..ai import AIProviderError, create_ai_provider
+from ..ai import AIContentBlockedError, AIProviderError, create_ai_provider
 from ..auth import get_current_user, get_current_user_id, is_group_member_async, verify_auth
 from ..config import settings
 from ..db import get_db
@@ -56,6 +56,7 @@ router = APIRouter(prefix="/api/private-tasks", tags=["private-tasks"])
 _background_tasks: set[asyncio.Task] = set()
 
 NOT_FOUND = "Nie znaleziono zadania"
+REFUSED_TEXT = "Nie udało się zapisać zadania. Sprawdź, czy tekst zawiera tylko treść zadania."
 
 
 # --------------------------------------------------------------------- helpers
@@ -132,9 +133,15 @@ def serialize_summary(row: dict) -> dict:
 
 
 async def _generate_meta(provider, user_id: str, item: PrivateTaskInput) -> Optional[PrivateTaskMeta]:
-    """Hints for one task, or None when the call failed (task is still saved)."""
+    """Hints for one task, or None when the call failed (task is still saved).
+
+    A safety block is NOT a failure to shrug off: it propagates, and the caller
+    refuses to save the text, because that text was never abuse-checked.
+    """
     try:
         return await provider.generate_private_task_meta(item.title, item.content)
+    except AIContentBlockedError:
+        raise
     except AIProviderError as e:
         logger.warning(f"Hint generation failed for user {mask_user_id(user_id)}: {e}")
         return None
@@ -222,17 +229,17 @@ async def _create_from_inputs(
 ) -> list[PrivateTaskDB]:
     """Generate hints for each task, refuse manipulation, then save them all."""
     provider = create_ai_provider()
-    metas = await asyncio.gather(*(_generate_meta(provider, user_id, item) for item in items))
+    try:
+        metas = await asyncio.gather(*(_generate_meta(provider, user_id, item) for item in items))
+    except AIContentBlockedError:
+        raise HTTPException(status_code=422, detail=REFUSED_TEXT)
     for row, meta in zip(usage_rows, metas):
         row.meta = meta.meta if meta and meta.meta else None
     db.commit()
 
     if any(meta is not None and _abusive(meta.abuse_score) for meta in metas):
         logger.warning(f"Private task text flagged as manipulation for user {mask_user_id(user_id)}")
-        raise HTTPException(
-            status_code=422,
-            detail="Nie udało się zapisać zadania. Sprawdź, czy tekst zawiera tylko treść zadania.",
-        )
+        raise HTTPException(status_code=422, detail=REFUSED_TEXT)
 
     repo = PrivateTaskRepository(db)
     created = []
@@ -364,6 +371,31 @@ async def update_task(
     for required in ("title", "content"):
         if required in fields and fields[required] is None:
             del fields[required]
+
+    if "content" in fields and fields["content"] != task.content:
+        # New text goes into the grading prompt, so it gets the same check as
+        # at creation - and the old hints no longer fit it anyway.
+        [usage_row] = service.reserve_ai_calls(
+            db,
+            user_id,
+            KIND_REGEN,
+            CREATION_KINDS,
+            settings.rate_limit_private_tasks_per_user_per_day,
+            _is_allowlisted(request),
+        )
+        item = PrivateTaskInput(title=fields.get("title", task.title), content=fields["content"])
+        try:
+            meta = await _generate_meta(create_ai_provider(), user_id, item)
+        except AIContentBlockedError:
+            raise HTTPException(status_code=422, detail=REFUSED_TEXT)
+        if meta is not None:
+            usage_row.meta = meta.meta or None
+            db.commit()
+            if _abusive(meta.abuse_score):
+                logger.warning(f"Edited private task text flagged for user {mask_user_id(user_id)}")
+                raise HTTPException(status_code=422, detail=REFUSED_TEXT)
+        # Failed call: keep the edit, drop the stale hints ("Wygeneruj wskazówki")
+        fields["hints"] = meta.hints if meta is not None else []
 
     PrivateTaskRepository(db).update_fields(task, **fields)
     return {"task": serialize_task(task)}
