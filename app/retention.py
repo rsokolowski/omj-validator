@@ -33,6 +33,7 @@ from .db.models import (
     AIUsageDB,
     AdminAccessLogDB,
     DeletedAccountQuotaDB,
+    PatternDB,
     PrivateTaskDB,
     SubmissionDB,
     UserDB,
@@ -66,6 +67,7 @@ class RetentionReport:
     accounts_deleted: int = 0
     audit_entries_purged: int = 0
     private_tasks_deleted: int = 0
+    patterns_deleted: int = 0
     ai_usage_purged: int = 0
     files_deleted: int = 0
     files_missing: int = 0  # already gone - fine, keeps the run idempotent
@@ -86,6 +88,7 @@ class RetentionReport:
         self.accounts_deleted += other.accounts_deleted
         self.audit_entries_purged += other.audit_entries_purged
         self.private_tasks_deleted += other.private_tasks_deleted
+        self.patterns_deleted += other.patterns_deleted
         self.ai_usage_purged += other.ai_usage_purged
         self.files_deleted += other.files_deleted
         self.files_missing += other.files_missing
@@ -110,6 +113,7 @@ class RetentionReport:
             f"deleted {self.accounts_deleted} inactive accounts, "
             f"purged {self.audit_entries_purged} admin audit entries, "
             f"deleted {self.private_tasks_deleted} idle private tasks, "
+            f"deleted {self.patterns_deleted} idle patterns, "
             f"purged {self.ai_usage_purged} AI usage rows "
             f"(missing files: {self.files_missing}, unsafe paths skipped: "
             f"{self.files_skipped_unsafe})"
@@ -639,6 +643,33 @@ def purge_expired_private_tasks(
     return report
 
 
+def purge_expired_patterns(
+    db: Session,
+    months: Optional[int] = None,
+    dry_run: bool = False,
+) -> RetentionReport:
+    """Delete patterns idle for the whole period, with their links and reviews.
+
+    "Idle" is last_activity_at, bumped by edits, refine rounds, reviews and
+    practice results, so a pattern the student keeps practising is never lost.
+    Submissions that practised it stay (their pattern_id becomes NULL).
+    """
+    report = RetentionReport(dry_run=dry_run)
+    months = settings.retention_pattern_months if months is None else months
+    cutoff = _cutoff_from_months(months)
+    if cutoff is None:
+        logger.info("Retention: pattern expiry disabled (retention_pattern_months unset/0)")
+        return report
+
+    expired = db.query(PatternDB).filter(PatternDB.last_activity_at < cutoff.replace(tzinfo=None)).all()
+    report.patterns_deleted = len(expired)
+    if not dry_run:
+        for pattern in expired:
+            db.delete(pattern)  # cascade removes links and reviews
+        db.commit()
+    return report
+
+
 def purge_expired_ai_usage(
     db: Session,
     days: Optional[int] = None,
@@ -801,6 +832,7 @@ def run_retention(db: Session, dry_run: bool = False) -> RetentionReport:
     report = RetentionReport(dry_run=dry_run)
     report.merge(purge_expired_submissions(db, dry_run=dry_run))
     report.merge(purge_expired_private_tasks(db, dry_run=dry_run))
+    report.merge(purge_expired_patterns(db, dry_run=dry_run))
     report.merge(strip_expired_scoring_thinking(db, dry_run=dry_run))
     # After the purge, so files freed above are not re-scanned as orphans
     report.merge(sweep_orphan_upload_files(db, dry_run=dry_run))

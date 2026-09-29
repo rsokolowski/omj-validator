@@ -63,6 +63,8 @@ stats) additionally filters `private_task_id IS NULL` explicitly.
 **Foreign Keys:**
 - `user_id` → `users.google_sub` with `ON DELETE CASCADE`
 - `private_task_id` → `private_tasks.id` with `ON DELETE CASCADE`
+- `pattern_id` → `patterns.id` with `ON DELETE SET NULL` (migration 007): the
+  pattern a solution practised; the submission outlives the pattern
 
 ### private_tasks
 
@@ -97,12 +99,56 @@ Expires after `RETENTION_AI_USAGE_DAYS`.
 |--------|------|-------------|-------------|
 | `id` | INTEGER | PRIMARY KEY | |
 | `user_id` | VARCHAR(255) | NOT NULL, FK → users.google_sub (CASCADE) | Caller |
-| `kind` | VARCHAR(32) | NOT NULL | `private_extract`, `private_create`, `private_regen` |
+| `kind` | VARCHAR(32) | NOT NULL | `private_extract`, `private_create`, `private_regen`, `pattern_refine`, `pattern_suggest`, `pattern_link` |
 | `created_at` | TIMESTAMP | NOT NULL, indexed | |
 | `meta` | JSON | NULL | Model, tokens, cost |
 
 `deleted_account_quota` also carries `ai_usage_count` (migration 006), so
 erasing an account does not reset these limits either.
+
+### patterns
+
+Problem-solving patterns a student wrote down ("Wzorce"): "when I see
+`trigger` in a problem, try `action`", reviewed with spaced repetition
+(`app/patterns/srs.py`). Visible only to the owner. Expire
+`RETENTION_PATTERN_MONTHS` after `last_activity_at`.
+
+| Column | Type | Constraints | Description |
+|--------|------|-------------|-------------|
+| `id` | VARCHAR(12) | PRIMARY KEY | `secrets.token_urlsafe(9)` |
+| `user_id` | VARCHAR(255) | NOT NULL, FK → users.google_sub (CASCADE), indexed | Owner |
+| `trigger` | TEXT | NOT NULL | 5–300 chars |
+| `action` | TEXT | NOT NULL | 5–600 chars |
+| `example` | TEXT | NULL | ≤1000 chars, `$LaTeX$` |
+| `category` | VARCHAR(20) | NULL | One of the six task categories |
+| `skills` | JSON | NOT NULL | ≤3 ids from `data/skills.json` |
+| `origin` | VARCHAR(16) | NOT NULL | `own` or `ai_suggested` |
+| `refinement` | JSON | NOT NULL | ≤10 refine rounds with the AI |
+| `srs_level` | SMALLINT | NOT NULL, default 1 | 1–3, 4 = maintenance |
+| `srs_streak` | SMALLINT | NOT NULL, default 0 | Successes in a row at this level |
+| `due_on` | DATE | NOT NULL, indexed | Next review (Europe/Warsaw day) |
+| `review_count`, `lapse_count` | INTEGER | NOT NULL, default 0 | |
+| `last_reviewed_at`, `archived_at` | TIMESTAMP | NULL | `archived_at` = paused |
+| `created_at`, `updated_at` | TIMESTAMP | NOT NULL | |
+| `last_activity_at` | TIMESTAMP | NOT NULL, indexed | Drives retention |
+
+Index `ix_patterns_user_due` on `(user_id, due_on)` for the review queue.
+
+### pattern_links
+
+A task connected to a pattern: EITHER an OMJ `task_key` (`{year}_{etap}_{num}`)
+OR a `private_task_id` (check `ck_pattern_links_ref`), unique per pattern.
+`role` = `source` | `practice`, `origin` = `ai` | `manual`, `status` =
+`suggested` | `accepted` | `rejected` (rejected rows stay so the AI does not
+suggest the task again), `reason` = the AI's one-line explanation.
+`pattern_id` and `private_task_id` both cascade on delete.
+
+### pattern_reviews
+
+One row per review: `kind` (`recall` | `task`), `outcome` (`fail` | `hard` |
+`ok`), `recall_text` (typed from memory), `submission_id` (graded practice,
+SET NULL), `level_before/after`, `due_before/after`, `created_at`.
+Cascades with the pattern and the user.
 
 ## Entity Relationship Diagram
 
@@ -128,7 +174,10 @@ erasing an account does not reset these limits either.
           │                   └─────────────────────────┘
           │
           ├──< private_tasks (user_id)   id, title, content, hints, source_images, ...
-          └──< ai_usage (user_id)        kind, created_at, meta
+          ├──< ai_usage (user_id)        kind, created_at, meta
+          └──< patterns (user_id)        trigger, action, srs_level, due_on, ...
+                    ├──< pattern_links     task_key | private_task_id, role, status
+                    └──< pattern_reviews   kind, outcome, submission_id
 ```
 
 ## Migrations

@@ -144,6 +144,21 @@ Zgłoszenia do zadań prywatnych trafiają do tej samej tabeli `submissions`: za
 z dwóch), a `hints_used` zapisuje liczbę odkrytych wskazówek. W `scoring_meta` zapisywana jest
 kopia treści zadania, według której oceniono rozwiązanie (`task_snapshot`).
 
+**Tabele wzorców** („Wzorce” — pomysły na rozwiązywanie zadań zapisane przez ucznia, np.
+„kiedy w treści widzę X, to warto spróbować Y”, powtarzane w odstępach; od września 2026):
+
+| Tabela / pole | Treść |
+|---|---|
+| `patterns.id`, `user_id` | 12-znakowy losowy identyfikator; właściciel — wzorzec widzi **wyłącznie** on, API zwraca 404 każdemu innemu |
+| `patterns.trigger`, `action`, `example` | treść wzorca napisana przez ucznia (albo zaakceptowana i poprawiona propozycja modelu) |
+| `patterns.category`, `skills` | kategoria i do 3 umiejętności z katalogu serwisu |
+| `patterns.refinement` | historia rund dopracowania z modelem (do 10): szkic ucznia, jego odpowiedzi, wersje i pytania modelu |
+| `patterns.srs_level`, `srs_streak`, `due_on`, `review_count`, `lapse_count`, `last_reviewed_at` | stan powtórek (poziom, termin następnej powtórki, liczniki) |
+| `patterns.archived_at`, `created_at`, `updated_at`, `last_activity_at` | znaczniki czasu; `last_activity_at` steruje retencją |
+| `pattern_links` | powiązanie wzorca z zadaniem OMJ (klucz zadania) albo zadaniem prywatnym; rola, pochodzenie (uczeń/model), status, jednozdaniowe uzasadnienie modelu |
+| `pattern_reviews` | dziennik powtórek: rodzaj (przypomnienie / zadanie), samoocena albo wynik oceny, **tekst wpisany przez ucznia z pamięci**, identyfikator zgłoszenia, poziom i termin przed i po |
+| `submissions.pattern_id` | wzorzec ćwiczony danym rozwiązaniem (po usunięciu wzorca — NULL, zgłoszenie zostaje) |
+
 **Tabela `ai_usage`** (licznik wywołań modelu niebędących zgłoszeniem — odczyt zadania ze
 zdjęcia, generowanie wskazówek):
 
@@ -361,6 +376,12 @@ danych osobowych.
     │      kasowane po analizie)
     ├──────────────────────────────────────► [Google Gemini — USA / DPF]
     │
+    │  5b. wzorce: szkic wzorca, odpowiedzi ucznia, treść zadania źródłowego,
+    │      informacja zwrotna z oceny → propozycje wersji / wzorców; opis
+    │      wzorca + nasze wskazówki do zadań OMJ → propozycje zadań do
+    │      ćwiczenia (bez zdjęć i bez identyfikatorów ucznia)
+    ├──────────────────────────────────────► [Google Gemini — USA / DPF]
+    │
     │  7. zapis wyniku w PostgreSQL (w tym surowa odpowiedź modelu w scoring_meta)
     │  8. przesłanie wyniku do przeglądarki ucznia przez WebSocket
     │  9. powiadomienie techniczne bez tożsamości
@@ -378,6 +399,7 @@ ani udostępniania danych podmiotom komercyjnym.
 | Surowy zapis toku rozumowania modelu w `scoring_meta` | **90 dni** od utworzenia | `RETENTION_SCORING_THINKING_DAYS` | zapis odtwarza treść pracy ucznia dosłownie, dlatego jest usuwany znacznie wcześniej niż samo zgłoszenie; pozostałe metadane (nazwa modelu, liczba tokenów, koszt, czasy) nie są danymi osobowymi i zostają |
 | Konto użytkownika (`users`) wraz ze wszystkim, co do niego należy | **36 miesięcy** bez logowania i bez zgłoszenia | `RETENTION_INACTIVE_ACCOUNT_MONTHS` | aktywność liczona jako późniejsza z dwóch dat: ostatniego logowania i ostatniego zgłoszenia (sesja trwa 30 dni, więc sam znacznik logowania byłby mylący). Pomijane są konta administracyjne i konto deweloperskie. Okres dłuższy niż retencja zgłoszeń, by wracający uczeń zastał swoją historię |
 | Zadanie prywatne (`private_tasks`) wraz ze zdjęciami zadania, wskazówkami i zgłoszeniami do niego | **24 miesiące** od ostatniej aktywności (dodanie, edycja, zgłoszenie) | `RETENTION_PRIVATE_TASK_MONTHS` | uczeń może usunąć zadanie w każdej chwili; zgłoszenia do zadania prywatnego podlegają też ogólnej retencji zgłoszeń |
+| Wzorzec (`patterns`) wraz z historią dopracowania, powiązaniami i dziennikiem powtórek (w tym tekstami wpisanymi z pamięci) | **24 miesiące** od ostatniej aktywności (edycja, runda z modelem, powtórka, ocena rozwiązania ćwiczącego wzorzec) | `RETENTION_PATTERN_MONTHS` | uczeń może usunąć wzorzec w każdej chwili; zgłoszenia, które go ćwiczyły, zostają (bez powiązania) |
 | Szkic odczytu zadania (zdjęcia niezatwierdzone jako zadanie) | **24 godziny** | przebieg plików osieroconych | usuwany też natychmiast po zatwierdzeniu |
 | Licznik wywołań modelu (`ai_usage`) | **90 dni** | `RETENTION_AI_USAGE_DAYS` | bez treści; potrzebny do limitów dobowych i rozliczenia kosztów |
 | Dziennik dostępu administratora (`admin_access_log`) | **12 miesięcy** od zdarzenia | `RETENTION_ADMIN_AUDIT_MONTHS` | dość długo, by zbadać skargę, dość krótko, by nie stać się archiwum tego, kto na kogo patrzył |
@@ -715,6 +737,30 @@ bez rozwiązania wzorcowego.
 - retencja 24 miesiące od ostatniej aktywności; usunięcie zadania kasuje wiersze i pliki.
 
 **Ryzyko szczątkowe:** niskie dla ochrony danych; prawo autorskie — zob. 7.4.
+
+### R5b. Wzorce — treść pisana przez ucznia i rozmowa z modelem
+
+**Źródło:** uczeń zapisuje własne notatki (wzorce) i odpowiada na pytania modelu; tekst jest
+dowolny, więc może zawierać dane nadmiarowe albo próbę manipulacji modelem. Model proponuje
+sformułowania, które dziecko przyjmuje, oraz zadania do ćwiczenia.
+
+**Środki wdrożone:**
+- wzorzec widzi wyłącznie właściciel (404 dla każdego innego konta), brak udostępniania i list
+  publicznych,
+- do modelu trafia tylko tekst potrzebny do rundy (szkic, odpowiedź, treść zadania źródłowego,
+  informacja zwrotna z oceny) — bez zdjęć, e-maila, imienia i identyfikatora ucznia; tekst ucznia
+  jest w instrukcji oznaczony jako dane, nie polecenia,
+- próba manipulacji (`abuse_score` ≥ 70) albo blokada bezpieczeństwa kończy rundę bez wyniku,
+- model wybiera zadania OMJ wyłącznie z listy przygotowanej przez serwer; klucze spoza listy są
+  odrzucane, a model nie dostaje treści zadań OMJ, tylko nasze wskazówki,
+- każda propozycja modelu wymaga świadomego wyboru ucznia (wersja, wzorzec, zadanie);
+  samoocena przy powtórce nie korzysta z modelu,
+- limity dobowe: 30 rund dopracowania, 10 podpowiedzi wzorca, 10 doborów zadań, wspólny limit
+  globalny; liczone przed wywołaniem modelu,
+- tekst wyświetlany jest jako tekst (HTML neutralizowany),
+- retencja 24 miesiące od ostatniej aktywności.
+
+**Ryzyko szczątkowe:** niskie.
 
 ### R6. Przekazanie danych dziecka do podmiotu z USA
 

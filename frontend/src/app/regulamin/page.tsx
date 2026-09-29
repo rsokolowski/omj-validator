@@ -12,6 +12,7 @@ const RETENTION_SUBMISSIONS = "24 miesiące";
 const RETENTION_THINKING = "90 dni";
 const RETENTION_INACTIVE_ACCOUNT = "36 miesięcy";
 const RETENTION_PRIVATE_TASKS = "24 miesiące";
+const RETENTION_PATTERNS = "24 miesiące";
 const RETENTION_AI_USAGE = "90 dni";
 const RETENTION_ADMIN_AUDIT = "12 miesięcy";
 
@@ -309,6 +310,31 @@ export default function RegulaminPage() {
             innym użytkownikom ani indeksowane przez wyszukiwarki.
           </Typography>
           <Typography paragraph>
+            <strong>Wzorce</strong> (zapisane pomysły na rozwiązywanie zadań), jeśli z nich korzystasz:
+          </Typography>
+          <Box component="ul" sx={{ pl: 3, mb: 2 }}>
+            <li>
+              treść wzorca, którą napisałeś albo wybrałeś z propozycji programu
+              (&bdquo;kiedy w treści widzę&hellip;, to warto spróbować&hellip;&rdquo;),
+              wraz z przykładem i kategorią,
+            </li>
+            <li>
+              przebieg dopracowywania wzorca z programem: Twoje szkice i odpowiedzi
+              oraz zaproponowane wersje i pytania,
+            </li>
+            <li>
+              zadania powiązane ze wzorcem (zadania OMJ albo Twoje własne),
+            </li>
+            <li>
+              historia powtórek: termin, Twoja samoocena albo wynik oceny
+              rozwiązania oraz tekst, który wpisałeś z pamięci.
+            </li>
+          </Box>
+          <Typography paragraph>
+            Wzorce widzisz tylko Ty. Nie są publikowane ani udostępniane innym
+            użytkownikom.
+          </Typography>
+          <Typography paragraph>
             <strong>Dane techniczne:</strong> ciasteczko sesyjne (ważne 30 dni,
             podpisane kryptograficznie) oraz dzienniki serwera zawierające m.in.
             informacje o logowaniach i błędach. W dziennikach adresy e-mail są
@@ -403,6 +429,12 @@ export default function RegulaminPage() {
             <li>
               pliki są <strong>usuwane</strong> z infrastruktury Google zaraz po
               zakończeniu analizy,
+            </li>
+            <li>
+              przy pracy ze <strong>wzorcami</strong> do Gemini trafia tylko tekst:
+              szkic wzorca, Twoje odpowiedzi, treść zadania, przy którym go
+              zauważyłeś, i informacja zwrotna z oceny &ndash; bez zdjęć i bez
+              danych konta,
             </li>
             <li>
               przy <strong>własnych zadaniach</strong> do Google trafia też zdjęcie
@@ -526,6 +558,12 @@ export default function RegulaminPage() {
               rozwiązania). Możesz je też usunąć w każdej chwili. Zdjęcia
               przesłane do odczytania, ale niezapisane jako zadanie, są usuwane
               po 24 godzinach.
+            </li>
+            <li>
+              <strong>Wzorce</strong> razem z historią dopracowania i powtórek
+              &ndash; przez {RETENTION_PATTERNS} od ostatniej aktywności przy
+              wzorcu (edycja, powtórka albo ocenione rozwiązanie). Możesz je też
+              usunąć w każdej chwili.
             </li>
             <li>
               <strong>Techniczny zapis wywołań modelu przy dodawaniu zadań</strong>{" "}
