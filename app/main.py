@@ -1119,6 +1119,44 @@ async def reset_user_submissions(
     }
 
 
+@app.post("/api/test/reset-user-patterns")
+async def reset_user_patterns(request: Request, db: Session = Depends(get_db)):
+    """Delete all of the current user's patterns (E2E_MODE only)."""
+    if not settings.e2e_mode:
+        raise HTTPException(status_code=404, detail="Not found")
+    user = get_current_user(request)
+    if not user or not user.get("google_sub"):
+        raise HTTPException(status_code=401, detail="Authentication required")
+
+    from .db.models import PatternDB
+
+    patterns = db.query(PatternDB).filter(PatternDB.user_id == user["google_sub"]).all()
+    for pattern in patterns:
+        db.delete(pattern)
+    db.commit()
+    return {"success": True, "deleted_count": len(patterns)}
+
+
+@app.post("/api/test/patterns/{pattern_id}/make-due")
+async def make_pattern_due(pattern_id: str, request: Request, db: Session = Depends(get_db)):
+    """Move one of the current user's patterns to today (E2E_MODE only)."""
+    if not settings.e2e_mode:
+        raise HTTPException(status_code=404, detail="Not found")
+    user = get_current_user(request)
+    if not user or not user.get("google_sub"):
+        raise HTTPException(status_code=401, detail="Authentication required")
+
+    from .db.patterns import PatternRepository
+    from .patterns import srs
+
+    pattern = PatternRepository(db).get_owned(pattern_id, user["google_sub"])
+    if pattern is None:
+        raise HTTPException(status_code=404, detail="Not found")
+    pattern.due_on = srs.today_warsaw()
+    db.commit()
+    return {"success": True, "due_on": pattern.due_on.isoformat()}
+
+
 @app.post("/api/test/reset-all-submissions")
 async def reset_all_submissions(
     request: Request,

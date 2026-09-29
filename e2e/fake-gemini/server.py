@@ -703,9 +703,66 @@ PRIVATE_META_RESPONSE = {
 }
 
 
+# Patterns ("Wzorce"): refine rounds, suggestions from a solution, OMJ links.
+# Invented wording only.
+PATTERN_REFINE_RESPONSE = {
+    "variants": [
+        {
+            "trigger": "Pytają, czy suma kolejnych liczb może być parzysta",
+            "action": "Zapisz liczby jako $n$ i $n+1$ i zbadaj parzystość",
+            "example": "$n + (n+1) = 2n+1$",
+        },
+        {
+            "trigger": "W zadaniu pojawiają się kolejne liczby całkowite",
+            "action": "Sprawdź parzystość - jedna z dwóch kolejnych liczb jest parzysta",
+            "example": "$n(n+1)$ jest parzyste",
+        },
+    ],
+    "questions": ["Czy ten pomysł działa także dla trzech kolejnych liczb?"],
+    "verdict": "ok",
+    "comment": "Dobry, konkretny wzorzec.",
+    "category": "teoria_liczb",
+    "skills": [],
+    "abuse_score": 0,
+}
+
+PATTERN_SUGGEST_RESPONSE = {
+    "suggestions": [
+        {
+            "trigger": "Pytają o parzystość wyrażenia z kolejnymi liczbami",
+            "action": "Rozważ osobno przypadek $n$ parzystego i nieparzystego",
+            "example": "",
+            "why": "Ten pomysł wraca w wielu zadaniach z teorii liczb.",
+        },
+        {
+            "trigger": "Wyrażenie da się rozłożyć na czynniki",
+            "action": "Rozłóż je i zbadaj każdy czynnik osobno",
+            "example": "$n^2+n = n(n+1)$",
+            "why": "Rozkład często od razu pokazuje podzielność.",
+        },
+    ],
+    "abuse_score": 0,
+}
+
+TASK_KEY_RE = re.compile(r"\d{4}_etap[123]_\d{1,2}")
+
+
+def pattern_link_response(body: dict) -> dict:
+    """Pick the first candidate task key listed in the prompt."""
+    keys = TASK_KEY_RE.findall(json.dumps(body.get("contents") or [], ensure_ascii=False))
+    links = [{"task_key": keys[0], "reason": "Ćwiczy ten sam pomysł z parzystością."}] if keys else []
+    return {"links": links, "abuse_score": 0}
+
+
 def private_call_kind(body: dict) -> Optional[str]:
-    """'extract' / 'meta' for private-task calls, None for grading."""
+    """'extract' / 'meta' / pattern_* for schema-constrained calls, None for grading."""
     config = json.dumps(body.get("generationConfig") or body.get("generation_config") or {})
+    if '"variants"' in config:
+        return "pattern_refine"
+    if '"suggestions"' in config:
+        return "pattern_suggest"
+    if '"links"' in config:
+        return "pattern_link"
     if "is_math_problem" in config:
         return "extract"
     if '"hints"' in config:
@@ -734,6 +791,12 @@ async def generate_content(model: str, request: Request):
                 **PRIVATE_EXTRACTION_RESPONSE,
                 "problems": PRIVATE_EXTRACTION_RESPONSE["problems"][:config.extraction_problems],
             }
+        elif kind == "pattern_refine":
+            payload = PATTERN_REFINE_RESPONSE
+        elif kind == "pattern_suggest":
+            payload = PATTERN_SUGGEST_RESPONSE
+        elif kind == "pattern_link":
+            payload = pattern_link_response(body)
         else:
             payload = PRIVATE_META_RESPONSE
         logger.info(f"generateContent: model={model}, private call={kind}")

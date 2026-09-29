@@ -327,3 +327,27 @@ class TestPractice:
         detail = client.get(f"/api/patterns/{p['id']}").json()["pattern"]
         assert detail["links"][0]["available"] is False
         assert client.get(f"/api/patterns/{p['id']}/practice").json() == {"task": None}
+
+
+class TestE2EEndpoints:
+    def test_hidden_outside_e2e_mode(self, client, monkeypatch):
+        monkeypatch.setattr(settings, "e2e_mode", False)
+        p = create(client)
+        assert client.post(f"/api/test/patterns/{p['id']}/make-due").status_code == 404
+        assert client.post("/api/test/reset-user-patterns").status_code == 404
+
+    def test_make_due_only_for_own_pattern(self, client, db, monkeypatch, current_user):
+        import app.main as app_main
+
+        monkeypatch.setattr(settings, "e2e_mode", True)
+        monkeypatch.setattr(app_main, "get_current_user",
+                            lambda request: {"google_sub": current_user["id"]})
+        p = create(client)
+        assert client.post(f"/api/patterns/{p['id']}/review",
+                           json={"recall_text": "Szukam niezmiennika", "outcome": "ok"}).status_code == 409
+        assert client.post(f"/api/test/patterns/{p['id']}/make-due").status_code == 200
+        assert client.get(f"/api/patterns/{p['id']}").json()["pattern"]["is_due"] is True
+        current_user["id"] = OTHER_USER_ID
+        assert client.post(f"/api/test/patterns/{p['id']}/make-due").status_code == 404
+        current_user["id"] = USER_ID
+        assert client.post("/api/test/reset-user-patterns").json()["deleted_count"] == 1
