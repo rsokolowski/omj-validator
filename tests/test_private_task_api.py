@@ -530,3 +530,43 @@ class TestAuth:
             return False
         monkeypatch.setattr(routes, "is_group_member_async", not_member)
         assert client.get("/api/private-tasks").status_code == 403
+
+
+# ------------------------------------------------------- final review findings
+
+
+class TestDraftIsClaimedAtomically:
+    def test_concurrent_confirmations_create_tasks_once(self, client, provider, db):
+        """Two confirmations racing on one draft: exactly one wins."""
+        import asyncio as _asyncio
+
+        draft = extract(client).json()
+        body = {"draft_id": draft["draft_id"], "tasks": [{"title": "T", "content": CONTENT}]}
+
+        gate = {"first": True}
+        original = provider.generate_private_task_meta
+
+        async def slow_meta(title, content):
+            # The first request is still waiting on the AI when the second arrives
+            if gate["first"]:
+                gate["first"] = False
+                second = client.post("/api/private-tasks", json=body)
+                gate["second_status"] = second.status_code
+            return await original(title, content)
+
+        provider.generate_private_task_meta = slow_meta
+
+        first = client.post("/api/private-tasks", json=body)
+
+        assert first.status_code == 200, first.text
+        assert gate["second_status"] == 410
+        assert db.query(PrivateTaskDB).count() == 1
+
+    def test_failed_confirmation_keeps_the_draft(self, client, provider):
+        draft = extract(client).json()
+        provider.meta.abuse_score = 99
+        body = {"draft_id": draft["draft_id"], "tasks": [{"title": "T", "content": CONTENT}]}
+
+        assert client.post("/api/private-tasks", json=body).status_code == 422
+        provider.meta.abuse_score = 0
+        assert client.post("/api/private-tasks", json=body).status_code == 200

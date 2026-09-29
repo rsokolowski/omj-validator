@@ -213,38 +213,14 @@ async def extract_tasks(
 # ---------------------------------------------------------------------- create
 
 
-@router.post("")
-async def create_tasks(
-    request: Request,
-    payload: CreatePrivateTasksRequest,
-    db: Session = Depends(get_db),
-):
-    """Save confirmed drafts (photo) or typed tasks, generating hints for each."""
-    user_id = await current_member_id(request)
-
-    photos: list[Path] = []
-    if payload.draft_id:
-        found = service.draft_photos(user_id, payload.draft_id)
-        if found is None:
-            raise HTTPException(
-                status_code=status.HTTP_410_GONE,
-                detail="Ten szkic wygasł albo został już zapisany. Prześlij zdjęcie ponownie.",
-            )
-        photos = found
-
-    service.check_ai_limit(
-        db,
-        user_id,
-        CREATION_KINDS,
-        settings.rate_limit_private_tasks_per_user_per_day,
-        _is_allowlisted(request),
-        cost=len(payload.tasks),
-    )
-
+async def _create_from_inputs(
+    db: Session, user_id: str, items: list[PrivateTaskInput], photos: list[Path]
+) -> list[PrivateTaskDB]:
+    """Generate hints for each task, refuse manipulation, then save them all."""
     usage = AIUsageRepository(db)
-    usage_rows = [usage.record(user_id, KIND_CREATE) for _ in payload.tasks]
+    usage_rows = [usage.record(user_id, KIND_CREATE) for _ in items]
     provider = create_ai_provider()
-    metas = await asyncio.gather(*(_generate_meta(provider, user_id, item) for item in payload.tasks))
+    metas = await asyncio.gather(*(_generate_meta(provider, user_id, item) for item in items))
     for row, meta in zip(usage_rows, metas):
         row.meta = meta.meta if meta and meta.meta else None
     db.commit()
@@ -258,26 +234,66 @@ async def create_tasks(
 
     repo = PrivateTaskRepository(db)
     created = []
-    for item, meta in zip(payload.tasks, metas):
+    for item, meta in zip(items, metas):
         task_id = new_private_task_id()
         source_images = service.copy_photos_to_task(photos, user_id, task_id) if photos else []
-        task = repo.create(
-            user_id,
-            task_id=task_id,
-            title=item.title,
-            content=item.content,
-            source_label=item.source_label,
-            category=item.category or (meta.category if meta else None),
-            difficulty=item.difficulty or (meta.difficulty if meta else None),
-            hints=meta.hints if meta else [],
-            origin="photo" if photos else "typed",
-            source_images=source_images,
-            extraction_meta={"hints": meta.meta} if meta and meta.meta else None,
+        created.append(
+            repo.create(
+                user_id,
+                task_id=task_id,
+                title=item.title,
+                content=item.content,
+                source_label=item.source_label,
+                category=item.category or (meta.category if meta else None),
+                difficulty=item.difficulty or (meta.difficulty if meta else None),
+                hints=meta.hints if meta else [],
+                origin="photo" if photos else "typed",
+                source_images=source_images,
+                extraction_meta={"hints": meta.meta} if meta and meta.meta else None,
+            )
         )
-        created.append(task)
+    return created
 
+
+@router.post("")
+async def create_tasks(
+    request: Request,
+    payload: CreatePrivateTasksRequest,
+    db: Session = Depends(get_db),
+):
+    """Save confirmed drafts (photo) or typed tasks, generating hints for each."""
+    user_id = await current_member_id(request)
+
+    service.check_ai_limit(
+        db,
+        user_id,
+        CREATION_KINDS,
+        settings.rate_limit_private_tasks_per_user_per_day,
+        _is_allowlisted(request),
+        cost=len(payload.tasks),
+    )
+
+    photos: list[Path] = []
+    claimed: Optional[Path] = None
     if payload.draft_id:
-        service.discard_draft(user_id, payload.draft_id)
+        claim = service.claim_draft(user_id, payload.draft_id)
+        if claim is None:
+            raise HTTPException(
+                status_code=status.HTTP_410_GONE,
+                detail="Ten szkic wygasł albo został już zapisany. Prześlij zdjęcie ponownie.",
+            )
+        claimed, photos = claim
+
+    try:
+        created = await _create_from_inputs(db, user_id, payload.tasks, photos)
+    except BaseException:
+        # Refused (abuse, crash, client gone): the student can confirm again
+        if claimed is not None:
+            service.release_draft(claimed, user_id, payload.draft_id)
+        raise
+
+    if claimed is not None:
+        service.discard_claimed_draft(claimed)
 
     return {"tasks": [serialize_task(t) for t in created]}
 

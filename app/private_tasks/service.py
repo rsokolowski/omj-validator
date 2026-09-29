@@ -72,6 +72,37 @@ def draft_photos(user_id: str, draft_id: str) -> Optional[list[Path]]:
     return photos
 
 
+def claim_draft(user_id: str, draft_id: str) -> Optional[tuple[Path, list[Path]]]:
+    """Take a usable draft for exclusive use: (claimed_dir, photos) or None.
+
+    The claim is an atomic rename, so of two requests confirming the same draft
+    exactly one gets it - the other sees it gone (410) instead of copying photos
+    out from under the winner. A crash leaves the claimed directory under
+    _drafts/, where the orphan sweep removes it like any stale draft.
+    """
+    if draft_photos(user_id, draft_id) is None:
+        return None
+    source = draft_dir(user_id, draft_id)
+    claimed = source.with_name(f"{draft_id}.claimed-{uuid.uuid4().hex[:8]}")
+    try:
+        source.rename(claimed)
+    except OSError:
+        return None  # someone else claimed it first
+    return claimed, sorted(p for p in claimed.iterdir() if p.is_file())
+
+
+def release_draft(claimed: Path, user_id: str, draft_id: str) -> None:
+    """Give a claimed draft back after a refused confirmation (student may retry)."""
+    try:
+        claimed.rename(draft_dir(user_id, draft_id))
+    except OSError:
+        shutil.rmtree(claimed, ignore_errors=True)
+
+
+def discard_claimed_draft(claimed: Path) -> None:
+    shutil.rmtree(claimed, ignore_errors=True)
+
+
 def discard_draft(user_id: str, draft_id: str) -> None:
     if not DRAFT_ID_PATTERN.match(draft_id or ""):
         return
