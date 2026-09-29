@@ -59,9 +59,16 @@ export const ETAP_MAX_SCORES: Record<string, number> = {
   etap3: 6,
 };
 
-export function getMaxScore(etap: string): number {
-  return ETAP_MAX_SCORES[etap] ?? 6;
+// `null` etap = private task, graded on the 0-6 scale
+export function getMaxScore(etap: string | null | undefined): number {
+  return (etap && ETAP_MAX_SCORES[etap]) || 6;
 }
+
+// Private tasks (Moje zadania) - limits mirror the backend (app/models.py)
+export const PRIVATE_TITLE_MAX = 120;
+export const PRIVATE_CONTENT_MIN = 20;
+export const PRIVATE_CONTENT_MAX = 10000;
+export const PRIVATE_SOURCE_LABEL_MAX = 120;
 
 // Mastery thresholds - matches backend progress.py:get_mastery_threshold()
 export const MASTERY_THRESHOLDS: Record<string, number> = {

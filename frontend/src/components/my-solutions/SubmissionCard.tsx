@@ -158,7 +158,11 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
             <Box sx={{ mb: 0.5 }}>
               <MuiLink
                 component={Link}
-                href={`/task/${submission.year}/${submission.etap}/${submission.task_number}`}
+                href={
+                  submission.private_task_id
+                    ? `/moje-zadania/${submission.private_task_id}`
+                    : `/task/${submission.year}/${submission.etap}/${submission.task_number}`
+                }
                 onClick={(e) => e.stopPropagation()}
                 sx={{
                   fontWeight: 600,
@@ -174,7 +178,9 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
             </Box>
             <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
               <Typography variant="caption" color="text.secondary">
-                {submission.year} / {ETAP_NAMES[submission.etap] || submission.etap} / Zadanie {submission.task_number}
+                {submission.private_task_id
+                  ? "Moje zadanie"
+                  : `${submission.year} / ${ETAP_NAMES[submission.etap ?? ""] || submission.etap} / Zadanie ${submission.task_number}`}
               </Typography>
               <Typography variant="caption" color="text.disabled">
                 {formatDate(submission.timestamp)}

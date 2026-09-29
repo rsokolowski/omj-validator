@@ -109,6 +109,23 @@ export function Header() {
               </Typography>
             </Link>
 
+            {/* Private tasks - only for users who can submit */}
+            {isAuthenticated && isGroupMember && (
+              <Link
+                href="/moje-zadania"
+                style={{ textDecoration: "none", color: "#4b5563" }}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: 500,
+                    "&:hover": { color: "primary.main" },
+                  }}
+                >
+                  Moje zadania
+                </Typography>
+              </Link>
+            )}
+
             {/* My solutions link - only visible to authenticated users */}
             {isAuthenticated && (
               <Link
