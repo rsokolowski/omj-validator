@@ -27,6 +27,13 @@ test.describe('Typed solutions', () => {
     const submit = page.getByRole('button', { name: /prześlij rozwiązanie/i });
     await expect(submit).toBeDisabled();
 
+    // Earlier specs submit to the same task as the same user, so the history
+    // may already be on screen; remember its size to find our entry later
+    const history = page.getByRole('heading', { name: /Historia rozwiązań/ });
+    const before = (await history.count())
+      ? Number((await history.textContent())?.match(/\((\d+)\)/)?.[1] ?? 0)
+      : 0;
+
     await page.getByLabel('Tekst rozwiązania').fill(SOLUTION);
     const preview = page.getByRole('region', { name: 'Podgląd rozwiązania' });
     await expect(preview.locator('.katex').first()).toBeVisible();
@@ -37,8 +44,10 @@ test.describe('Typed solutions', () => {
     await expect(page.getByText(/Wynik: 6 \/ 6 punktów/)).toBeVisible({ timeout: 30000 });
 
     // The history below refreshes with the graded submission and shows the text
-    await expect(page.getByRole('heading', { name: /Historia rozwiązań/ })).toBeVisible({ timeout: 15000 });
-    await page.getByRole('button', { name: /Rozwiń szczegóły rozwiązania numer/ }).first().click();
+    // (wait for the refetch: clicking before it would expand an older entry)
+    const ours = before + 1;
+    await expect(history).toHaveText(new RegExp(`\\(${ours}\\)`), { timeout: 15000 });
+    await page.getByRole('button', { name: `Rozwiń szczegóły rozwiązania numer ${ours}`, exact: true }).click();
     const toggle = page.getByRole('button', { name: /Wpisany tekst rozwiązania \(\d+ znaków\)/ });
     await expect(toggle).toBeVisible();
     await expect(toggle).toHaveAttribute('aria-expanded', 'false');
