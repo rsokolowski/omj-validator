@@ -47,9 +47,12 @@ export interface SubmissionResult {
 export interface Submission {
   id: string;
   user_id: string;
-  year: string;
-  etap: string;
-  task_number: number;
+  // OMJ task reference - null for a private task submission
+  year: string | null;
+  etap: string | null;
+  task_number: number | null;
+  private_task_id?: string | null;
+  hints_used?: number;
   timestamp: string;
   status: "pending" | "processing" | "completed" | "failed";
   images: string[];
@@ -156,9 +159,11 @@ export interface AdminSubmission {
   user_id: string;
   user_email: string | null;
   user_name: string | null;
-  year: string;
-  etap: string;
-  task_number: number;
+  year: string | null;
+  etap: string | null;
+  task_number: number | null;
+  private_task_id?: string | null;
+  task_title?: string | null;
   timestamp: string;
   status: "pending" | "processing" | "completed" | "failed";
   images: string[];
@@ -213,9 +218,10 @@ export interface UserSubmissionStats {
 
 export interface UserSubmissionListItem {
   id: string;
-  year: string;
-  etap: string;
-  task_number: number;
+  year: string | null;
+  etap: string | null;
+  task_number: number | null;
+  private_task_id?: string | null;
   task_title: string;
   task_categories: string[];
   timestamp: string;
@@ -242,4 +248,80 @@ export interface AccountDeleteResponse {
   success: boolean;
   deleted_submissions: number;
   deleted_files: number;
+}
+
+// Private tasks (Moje zadania)
+export type PrivateTaskOrigin = "photo" | "typed";
+
+export interface PrivateTask {
+  id: string;
+  title: string;
+  content: string;
+  source_label: string | null;
+  category: string | null;
+  difficulty: number | null;
+  origin: PrivateTaskOrigin;
+  source_images: string[];
+  hints_count: number;
+  revealed_hints: string[];
+  created_at: string;
+  last_activity_at: string;
+}
+
+export interface PrivateTaskSummary {
+  id: string;
+  title: string;
+  source_label: string | null;
+  category: string | null;
+  difficulty: number | null;
+  origin: PrivateTaskOrigin;
+  best_score: number | null;
+  attempts: number;
+  last_activity_at: string;
+}
+
+export interface PrivateTaskListResponse {
+  tasks: PrivateTaskSummary[];
+  total_count: number;
+  offset: number;
+  limit: number;
+  has_more: boolean;
+}
+
+export interface PrivateTaskDetailResponse {
+  task: PrivateTask;
+  submissions: Submission[];
+  stats: { submission_count: number; highest_score: number | null };
+}
+
+export interface ExtractedProblem {
+  label: string;
+  title: string;
+  content: string;
+  category: string | null;
+  difficulty: number | null;
+}
+
+export interface ExtractResponse {
+  draft_id: string;
+  problems: ExtractedProblem[];
+  photos: string[];
+}
+
+export interface PrivateTaskInput {
+  title: string;
+  content: string;
+  source_label?: string | null;
+  category?: string | null;
+  difficulty?: number | null;
+}
+
+export interface CreatePrivateTasksResponse {
+  tasks: PrivateTask[];
+}
+
+export interface RevealHintResponse {
+  n: number;
+  hint: string;
+  hints_revealed: number;
 }

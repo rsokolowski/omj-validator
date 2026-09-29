@@ -17,11 +17,17 @@ import { MathContent } from "@/components/ui/MathContent";
 import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
 
 interface SubmitSectionProps {
-  year: string;
-  etap: string;
-  num: number;
+  year?: string;
+  etap?: string;
+  num?: number;
   canSubmit: boolean;
   isAuthenticated: boolean;
+  /** Endpoint to POST photos to - defaults to the OMJ task's submit route */
+  submitUrl?: string;
+  /** Page to return to after login - defaults to the OMJ task page */
+  pagePath?: string;
+  /** Called after a graded result arrives (default: refresh the page) */
+  onCompleted?: () => void;
 }
 
 interface SubmitResponse {
@@ -90,6 +96,9 @@ export function SubmitSection({
   num,
   canSubmit,
   isAuthenticated,
+  submitUrl,
+  pagePath,
+  onCompleted,
 }: SubmitSectionProps) {
   const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
@@ -164,7 +173,7 @@ export function SubmitSection({
             case "completed":
               // Wynik oglasza <Alert role="alert"> - nie dublujemy go tutaj.
               setLiveMessage("");
-              const maxScore = getMaxScore(etap);
+              const maxScore = getMaxScore(etap ?? null);
               setUploadState({
                 status: "completed",
                 statusMessage: "",
@@ -180,7 +189,11 @@ export function SubmitSection({
               }
               ws.close();
               // Refresh the page to update submission history
-              router.refresh();
+              if (onCompleted) {
+                onCompleted();
+              } else {
+                router.refresh();
+              }
               break;
 
             case "error":
@@ -208,7 +221,7 @@ export function SubmitSection({
         wsRef.current = null;
       };
     },
-    [etap, router]
+    [etap, router, onCompleted]
   );
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -262,7 +275,7 @@ export function SubmitSection({
     try {
       // Step 1: Upload files via POST
       const result = await uploadFiles<SubmitResponse>(
-        `/api/task/${year}/${etap}/${num}/submit`,
+        submitUrl ?? `/api/task/${year}/${etap}/${num}/submit`,
         files
       );
 
@@ -290,7 +303,7 @@ export function SubmitSection({
   };
 
   if (!isAuthenticated) {
-    const currentUrl = `/task/${year}/${etap}/${num}`;
+    const currentUrl = pagePath ?? `/task/${year}/${etap}/${num}`;
     return (
       <LoginPrompt
         title="Prześlij rozwiązanie"

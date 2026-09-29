@@ -653,6 +653,57 @@ def get_scenario_for_request(request_body: dict) -> ScenarioType:
     return config.default_scenario
 
 
+# ============================================================================
+# Private tasks ("Moje zadania"): extraction and hint generation
+# ============================================================================
+#
+# Both are non-streaming calls with a JSON schema; the schema tells them apart
+# from grading. The problems are invented for testing - never real OMJ or
+# booklet material (see CLAUDE.md).
+
+PRIVATE_EXTRACTION_RESPONSE = {
+    "is_math_problem": True,
+    "abuse_score": 0,
+    "problems": [
+        {
+            "label": "Zadanie 1",
+            "title": "Suma dwóch kolejnych liczb",
+            "content": "Wykaż, że suma dwóch kolejnych liczb całkowitych $n$ i $n+1$ jest nieparzysta.",
+            "category": "teoria_liczb",
+            "difficulty": 1,
+        },
+        {
+            "label": "Zadanie 2",
+            "title": "Obwód kwadratu",
+            "content": "Kwadrat ma pole $49$. Oblicz jego obwód i uzasadnij odpowiedź.",
+            "category": "geometria",
+            "difficulty": 1,
+        },
+    ],
+}
+
+PRIVATE_META_RESPONSE = {
+    "hints": [
+        "Zapisz obie liczby za pomocą jednej zmiennej.",
+        "Jaka jest parzystość liczby $2n$?",
+        "Dodaj $1$ do liczby parzystej.",
+    ],
+    "category": "teoria_liczb",
+    "difficulty": 1,
+    "abuse_score": 0,
+}
+
+
+def private_call_kind(body: dict) -> Optional[str]:
+    """'extract' / 'meta' for private-task calls, None for grading."""
+    config = json.dumps(body.get("generationConfig") or body.get("generation_config") or {})
+    if "is_math_problem" in config:
+        return "extract"
+    if '"hints"' in config:
+        return "meta"
+    return None
+
+
 @app.post("/v1beta/models/{model}:generateContent")
 @app.post("/v1alpha/models/{model}:generateContent")
 async def generate_content(model: str, request: Request):
@@ -665,6 +716,22 @@ async def generate_content(model: str, request: Request):
     validate_api_key(request)
 
     body = await request.json()
+
+    kind = private_call_kind(body)
+    if kind is not None:
+        await asyncio.sleep(config.response_delay_ms / 1000)
+        payload = PRIVATE_EXTRACTION_RESPONSE if kind == "extract" else PRIVATE_META_RESPONSE
+        logger.info(f"generateContent: model={model}, private call={kind}")
+        return {
+            "candidates": [{
+                "content": {
+                    "parts": [{"text": json.dumps(payload, ensure_ascii=False)}],
+                    "role": "model",
+                },
+                "finishReason": "STOP",
+            }],
+            "usageMetadata": {"promptTokenCount": 1000, "candidatesTokenCount": 200, "totalTokenCount": 1200},
+        }
     scenario = get_scenario_for_request(body)
     task_number, task_key = extract_task_info_from_request(body)
 

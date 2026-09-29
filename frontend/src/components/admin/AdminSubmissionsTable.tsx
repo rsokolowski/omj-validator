@@ -361,15 +361,26 @@ export function AdminSubmissionsTable() {
                         )}
                       </Box>
 
-                      {/* Task link */}
-                      <MuiLink
-                        component={Link}
-                        href={`/task/${submission.year}/${submission.etap}/${submission.task_number}`}
-                        onClick={(e) => e.stopPropagation()}
-                        sx={{ fontWeight: 500, fontSize: "0.875rem" }}
-                      >
-                        {submission.year}/{submission.etap}/{submission.task_number}
-                      </MuiLink>
+                      {/* Task link - private tasks are owner-only, so no link */}
+                      {submission.private_task_id ? (
+                        <Typography
+                          variant="body2"
+                          noWrap
+                          title={submission.task_title ?? undefined}
+                          sx={{ fontWeight: 500, fontSize: "0.875rem", maxWidth: 200 }}
+                        >
+                          Private: {submission.task_title || submission.private_task_id}
+                        </Typography>
+                      ) : (
+                        <MuiLink
+                          component={Link}
+                          href={`/task/${submission.year}/${submission.etap}/${submission.task_number}`}
+                          onClick={(e) => e.stopPropagation()}
+                          sx={{ fontWeight: 500, fontSize: "0.875rem" }}
+                        >
+                          {submission.year}/{submission.etap}/{submission.task_number}
+                        </MuiLink>
+                      )}
 
                       {/* Timestamp */}
                       <Typography variant="body2" color="text.secondary" sx={{ minWidth: 130 }}>
@@ -391,7 +402,7 @@ export function AdminSubmissionsTable() {
                       onClick={() => setExpandedId(isExpanded ? null : submission.id)}
                       aria-expanded={isExpanded}
                       aria-controls={`admin-panel-${submission.id}`}
-                      aria-label={`${isExpanded ? "Collapse" : "Expand"} submission ${submission.year}/${submission.etap}/${submission.task_number}`}
+                      aria-label={`${isExpanded ? "Collapse" : "Expand"} submission ${submission.private_task_id ? `private ${submission.private_task_id}` : `${submission.year}/${submission.etap}/${submission.task_number}`}`}
                     >
                       {isExpanded ? "Collapse" : "Expand"}
                     </Button>

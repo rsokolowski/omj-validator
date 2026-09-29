@@ -50,34 +50,31 @@ from .db.repositories import ensure_utc
 
 logger = logging.getLogger(__name__)
 
+from datetime import datetime as dt_datetime, timezone as dt_timezone, timedelta as dt_timedelta
+from typing import Optional as OptionalType
 
-def _register_heif_decoder() -> bool:
-    """Teach Pillow to read HEIC/HEIF, returning whether it worked.
+from .uploads import (
+    HEIF_SUPPORTED,
+    HEIF_EXTENSIONS,
+    MAX_IMAGE_DIMENSION,
+    register_heif_decoder as _register_heif_decoder,
+    discard_uploads as _discard_uploads,
+    unprocessable_image_message as _unprocessable_image_message,
+    flatten_transparency as _flatten_transparency,
+    normalize_uploaded_image,
+    save_uploaded_images,
+    validate_image_batch,
+)
+from .rate_limits import (
+    calculate_rate_limit_headers as _calculate_rate_limit_headers,
+    rate_limit_reset_anchor as _rate_limit_reset_anchor,
+    calculate_retry_after as _calculate_retry_after,
+    check_submission_limits,
+)
 
-    iPhones upload HEIC. We must be able to DECODE it, because that is the only
-    way to strip its EXIF - and HEIC from a phone routinely carries GPS
-    coordinates, i.e. the child's home address, which used to be written to disk
-    and forwarded to Google untouched.
-
-    pillow-heif is treated as optional: if it is missing or fails to register,
-    the app still starts and HEIC uploads degrade to the explicit refusal in
-    _normalize_uploaded_image instead of taking the whole service down.
-    """
-    try:
-        import pillow_heif
-
-        pillow_heif.register_heif_opener()
-        return True
-    except Exception as e:
-        logger.warning(
-            f"HEIF decoder unavailable ({type(e).__name__}: {e}) - HEIC uploads "
-            "will be refused, because their EXIF/GPS cannot be stripped. "
-            "Install pillow-heif to accept them."
-        )
-        return False
-
-
-HEIF_SUPPORTED = _register_heif_decoder()
+# Kept under its historical name: submit_solution resolves it at call time, so
+# tests (and a future hotfix) can substitute the normaliser here.
+_normalize_uploaded_image = normalize_uploaded_image
 
 # Track background tasks for proper lifecycle management
 _background_tasks: set[asyncio.Task] = set()
@@ -104,6 +101,10 @@ from .skills import get_skills_by_ids
 from .scoring import get_max_score
 
 app = FastAPI(title="OMJ Validator", description="Walidator rozwiązań OMJ")
+
+from .private_tasks import router as private_tasks_router  # noqa: E402
+
+app.include_router(private_tasks_router)
 
 # Determine if we're in split deployment mode (frontend on different domain)
 is_split_deployment = bool(settings.frontend_url)
@@ -170,126 +171,6 @@ templates.env.filters["roman"] = to_roman
 
 
 # --- Rate Limit Headers ---
-
-from datetime import datetime as dt_datetime, timezone as dt_timezone, timedelta as dt_timedelta
-from typing import Optional as OptionalType
-
-
-def _calculate_rate_limit_headers(
-    limit: int,
-    current_count: int,
-    oldest_timestamp: OptionalType[dt_datetime],
-    window_hours: int = 24,
-) -> dict[str, str]:
-    """Calculate standard rate limit headers.
-
-    Args:
-        limit: Maximum allowed requests in the window
-        current_count: Current number of requests in the window
-        oldest_timestamp: Timestamp of the oldest request in the window (for reset calculation)
-        window_hours: Duration of the rolling window in hours
-
-    Returns:
-        Dict with standard rate limit headers:
-        - X-RateLimit-Limit: Maximum requests allowed
-        - X-RateLimit-Remaining: Remaining requests in current window
-        - X-RateLimit-Reset: Unix timestamp when oldest request expires from window
-    """
-    remaining = max(0, limit - current_count)
-
-    # Ensure timestamp is timezone-aware (using shared utility)
-    oldest_timestamp = ensure_utc(oldest_timestamp)
-
-    # Calculate reset time: when the oldest item in the window ages out
-    if oldest_timestamp:
-        # If we have items in window, reset when oldest expires
-        reset_time = oldest_timestamp + dt_timedelta(hours=window_hours)
-    else:
-        # No items in window, reset is 24h from now (window is empty)
-        reset_time = dt_datetime.now(dt_timezone.utc) + dt_timedelta(hours=window_hours)
-
-    reset_unix = int(reset_time.timestamp())
-
-    return {
-        "X-RateLimit-Limit": str(limit),
-        "X-RateLimit-Remaining": str(remaining),
-        "X-RateLimit-Reset": str(reset_unix),
-    }
-
-
-def _rate_limit_reset_anchor(
-    live_timestamps: list[dt_datetime],
-    carryover_blocks: list[tuple[int, dt_datetime]],
-    limit: int,
-    window_hours: int = 24,
-) -> OptionalType[dt_datetime]:
-    """Anchor to feed the header helpers when a deleted-account carryover exists.
-
-    The helpers below all compute `anchor + window`, which normally means "the
-    oldest request leaves the window". That breaks once a carryover is in play:
-    the carried-over quota is one block released at its tombstone's expires_at,
-    so taking the oldest submission behind it points at a moment when nothing
-    frees. A user with 30 submissions between T-23h and T-1h who deletes their
-    account and signs back in would be told to retry in an hour - and get 429
-    again, every hour, for 22 hours.
-
-    So the moment the caller can actually submit again is computed by replaying
-    the releases in order: each live submission frees one slot at
-    `timestamp + window`, each tombstone frees its whole count at `expires_at`.
-    The first moment the total drops below the limit is the answer, and the
-    anchor returned is that moment minus the window, so the existing
-    `anchor + window` arithmetic lands exactly on it.
-
-    Returns None when nothing is counted, which leaves the callers' "no items in
-    window" behaviour untouched.
-    """
-    releases: list[tuple[dt_datetime, int]] = [
-        (ensure_utc(ts) + dt_timedelta(hours=window_hours), 1) for ts in live_timestamps
-    ]
-    releases += [
-        (ensure_utc(expires_at), count)
-        for count, expires_at in carryover_blocks
-        if expires_at and count > 0
-    ]
-    if not releases:
-        return None
-
-    releases.sort(key=lambda item: item[0])
-    remaining = len(live_timestamps) + sum(
-        count for count, expires_at in carryover_blocks if expires_at and count > 0
-    )
-
-    for when, freed in releases:
-        remaining -= freed
-        if remaining < limit:
-            return when - dt_timedelta(hours=window_hours)
-
-    # Below the limit only once everything has gone
-    return releases[-1][0] - dt_timedelta(hours=window_hours)
-
-
-def _calculate_retry_after(
-    oldest_timestamp: OptionalType[dt_datetime], window_hours: int = 24
-) -> int:
-    """Calculate Retry-After header value in seconds.
-
-    Args:
-        oldest_timestamp: Timestamp of the oldest request in the window
-        window_hours: Duration of the rolling window in hours
-
-    Returns:
-        Seconds until the rate limit resets (minimum 1 second)
-    """
-    # Ensure timestamp is timezone-aware (using shared utility)
-    oldest_timestamp = ensure_utc(oldest_timestamp)
-
-    if oldest_timestamp:
-        reset_time = oldest_timestamp + dt_timedelta(hours=window_hours)
-    else:
-        reset_time = dt_datetime.now(dt_timezone.utc) + dt_timedelta(hours=window_hours)
-
-    retry_after = int((reset_time - dt_datetime.now(dt_timezone.utc)).total_seconds())
-    return max(1, retry_after)
 
 
 # --- Startup Events ---
@@ -376,6 +257,8 @@ async def start_retention_task():
             settings.retention_scoring_thinking_days,
             settings.retention_inactive_account_months,
             settings.retention_admin_audit_months,
+            settings.retention_private_task_months,
+            settings.retention_ai_usage_days,
         )
     ):
         logger.info("Automatic data retention disabled (no retention periods configured)")
@@ -811,151 +694,6 @@ def _validate_path_params(year: str, etap: str) -> bool:
     return bool(re.match(r"^\d{4}$", year) and re.match(r"^[a-zA-Z0-9_-]+$", etap))
 
 
-# Max image dimensions for AI API compatibility
-MAX_IMAGE_DIMENSION = 2048
-
-
-def _discard_uploads(saved_paths: list[Path], current: OptionalType[Path] = None) -> None:
-    """Remove every file written by a submission request that ends in an error.
-
-    A rejected request must not leave a child's photo on disk with no DB row
-    pointing at it - nothing else would ever look at it again, and with
-    retention disabled (the local default) it would sit there forever.
-    Only paths produced by this request are touched.
-    """
-    for path in list(saved_paths) + ([current] if current else []):
-        try:
-            path.unlink(missing_ok=True)
-        except OSError as e:
-            logger.warning(f"Could not discard rejected upload: {type(e).__name__}: {e}")
-    saved_paths.clear()
-
-
-HEIF_EXTENSIONS = {".heic", ".heif"}
-
-
-def _unprocessable_image_message(filename: OptionalType[str], ext: str) -> str:
-    """Polish error for a photo we could not sanitize, aimed at a 10-15 year old."""
-    name = filename or "zdjęcie"
-    if ext in HEIF_EXTENSIONS and not HEIF_SUPPORTED:
-        # Server-side gap, not the child's fault - say what to do about it
-        return (
-            f"Nie umiemy teraz przetworzyć pliku {name} (format HEIC z iPhone'a). "
-            "Zapisz zdjęcie jako JPG i prześlij ponownie."
-        )
-    return (
-        f"Nie udało się przetworzyć pliku {name}. "
-        "Prześlij zdjęcie w formacie JPG lub PNG."
-    )
-
-
-def _flatten_transparency(img: Image.Image) -> Image.Image:
-    """Return an RGB image, compositing any transparency onto WHITE.
-
-    JPEG has no alpha channel, and Image.convert("RGB") drops it without
-    compositing: a fully transparent pixel keeps whatever RGB value it happened
-    to carry. For the standard "export with transparent background" from a
-    tablet note-taking app that value is (0, 0, 0), so the entire page turns
-    black - the student sends a correct solution and gets zero points with a
-    comment about a blank sheet, having burnt one of their daily submissions.
-    The same happens to a palette PNG carrying `transparency` in info.
-
-    White, because a sheet of paper is white: the model then sees what the
-    student saw on screen, dark handwriting on a light background.
-    """
-    # Covers RGBA and LA (alpha band present), PA, and palette images whose
-    # transparency lives in info rather than in a band.
-    has_alpha = "A" in img.getbands() or (
-        img.mode in ("P", "PA") and "transparency" in img.info
-    )
-    if not has_alpha:
-        return img.convert("RGB")
-
-    rgba = img.convert("RGBA")
-    background = Image.new("RGBA", rgba.size, (255, 255, 255, 255))
-    return Image.alpha_composite(background, rgba).convert("RGB")
-
-
-def _normalize_uploaded_image(file_path: Path) -> OptionalType[Path]:
-    """Strip metadata, fix orientation and downscale an uploaded photo.
-
-    Returns the path the normalized image ended up at - it is NOT always the
-    input path, because everything is re-encoded as JPEG. Callers must use the
-    returned path, otherwise the DB would reference a file that no longer
-    exists. Returns None when the image could not be sanitized at all; the
-    caller must then reject the upload rather than store it.
-
-    Why every image and not just the big ones: these are phone photos of a
-    child's handwriting, and the EXIF block routinely carries GPS coordinates -
-    in practice the child's home address - which we would otherwise store on
-    disk and forward to Google. Metadata used to be dropped only as a side
-    effect of re-encoding during a resize, so a cropped photo, a screenshot or
-    an older camera's output kept its EXIF. Privacy must not depend on the
-    camera's resolution.
-
-    Orientation is applied BEFORE the metadata is dropped (ImageOps.exif_transpose
-    handles all 8 orientation values, not just the three the old code knew), so
-    portrait photos do not end up sideways once the EXIF flag is gone.
-
-    HEIC/HEIF goes through the same path as everything else thanks to
-    pillow-heif (registered at import, see _register_heif_decoder): decode,
-    orient, drop metadata, re-encode as JPEG. If that decoder is unavailable,
-    HEIC lands in the failure branch below.
-
-    Transparency is composited onto white rather than discarded - see
-    _flatten_transparency for why that is not optional.
-
-    A file Pillow cannot decode cannot have its metadata removed either, so it
-    is refused instead of being stored as-is - storing an un-sanitizable photo
-    would defeat the whole point of this function.
-    """
-    tmp_path = file_path.with_name(file_path.name + ".tmp.jpg")
-    target_path = file_path.with_suffix(".jpg")
-
-    try:
-        with Image.open(file_path) as img:
-            # Camera rotation flag first, metadata removal second
-            oriented = ImageOps.exif_transpose(img) or img
-
-            # Flatten BEFORE resizing: resampling an RGBA image blends the RGB
-            # values hiding under transparent pixels into their neighbours, which
-            # would leave a dark halo around the handwriting.
-            flattened = _flatten_transparency(oriented)
-
-            if flattened.width > MAX_IMAGE_DIMENSION or flattened.height > MAX_IMAGE_DIMENSION:
-                ratio = min(
-                    MAX_IMAGE_DIMENSION / flattened.width,
-                    MAX_IMAGE_DIMENSION / flattened.height,
-                )
-                new_size = (
-                    max(1, int(flattened.width * ratio)),
-                    max(1, int(flattened.height * ratio)),
-                )
-                flattened = flattened.resize(new_size, Image.Resampling.LANCZOS)
-
-            # A fresh JPEG written from pixel data only: no EXIF, no GPS, no XMP.
-            # Written to a temp file first so a failure mid-encode cannot destroy
-            # the upload we already have.
-            flattened.save(tmp_path, "JPEG", quality=85)
-    except Exception as e:
-        tmp_path.unlink(missing_ok=True)
-        logger.warning(
-            f"Image normalization failed for {file_path.suffix}: "
-            f"{type(e).__name__}: {e} - upload refused (metadata cannot be stripped)"
-        )
-        return None
-
-    try:
-        tmp_path.replace(target_path)
-        if target_path != file_path:
-            file_path.unlink(missing_ok=True)
-    except OSError as e:
-        tmp_path.unlink(missing_ok=True)
-        logger.warning(f"Could not replace {file_path.name} with normalized image: {e}")
-        return None
-
-    return target_path
-
 
 @app.post("/task/{year}/{etap}/{num}/submit")
 async def submit_solution(
@@ -993,85 +731,12 @@ async def submit_solution(
     user_email_lower = user.get("email", "").lower() if user else ""
     is_allowlisted = allowed_emails and user_email_lower in allowed_emails
 
-    # Create repository once for rate limit checks and later submission creation
     submission_repo = SubmissionRepository(db)
-
-    # Track rate limit info for headers (even if allowlisted, for informational purposes)
-    user_submission_count, user_oldest_submission = submission_repo.get_user_rate_limit_info(
-        user_id, hours=24
+    limit_error, rate_limit_headers, user_submission_count, user_oldest_submission = (
+        check_submission_limits(db, user_id, bool(is_allowlisted))
     )
-
-    # Quota already used by an account this person erased inside the window.
-    # Without this, deleting the account would hand out a fresh daily budget -
-    # see DeletedAccountQuotaDB.
-    quota_repo = DeletedAccountQuotaRepository(db)
-    carryover_count, carryover_expires_at = quota_repo.get_user_carryover(user_id)
-    user_submission_count += carryover_count
-    if carryover_count and carryover_expires_at:
-        # Reset/Retry-After must point at a moment when quota actually frees;
-        # the carried-over block is released in one go at expires_at, so the
-        # anchor is computed from the real release schedule.
-        user_oldest_submission = _rate_limit_reset_anchor(
-            submission_repo.get_user_submission_timestamps(user_id, hours=24),
-            [(carryover_count, carryover_expires_at)],
-            limit=settings.rate_limit_submissions_per_user_per_day,
-            window_hours=24,
-        ) or user_oldest_submission
-    rate_limit_headers = _calculate_rate_limit_headers(
-        limit=settings.rate_limit_submissions_per_user_per_day,
-        current_count=user_submission_count,
-        oldest_timestamp=user_oldest_submission,
-        window_hours=24,
-    )
-
-    if not is_allowlisted:
-        # Check per-user submission limit
-        if user_submission_count >= settings.rate_limit_submissions_per_user_per_day:
-            logger.warning(
-                f"User submission rate limit exceeded: {mask_user_id(user_id)} "
-                f"{user_submission_count}/{settings.rate_limit_submissions_per_user_per_day}"
-            )
-            retry_after = _calculate_retry_after(user_oldest_submission, window_hours=24)
-            return JSONResponse(
-                {
-                    "error": f"Osiągnięto dzienny limit zgłoszeń ({settings.rate_limit_submissions_per_user_per_day}). "
-                    "Możesz przesłać więcej rozwiązań jutro."
-                },
-                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                headers={**rate_limit_headers, "Retry-After": str(retry_after)},
-            )
-
-        # Check global submission limit
-        global_submission_count, global_oldest_submission = submission_repo.get_global_rate_limit_info(
-            hours=24
-        )
-        # Erased accounts also freed global quota - count it back
-        carryover_blocks = quota_repo.get_global_carryover_blocks()
-        global_submission_count += sum(count for count, _ in carryover_blocks)
-        if carryover_blocks:
-            # Same reasoning as the per-user branch above
-            global_oldest_submission = _rate_limit_reset_anchor(
-                submission_repo.get_all_submission_timestamps(hours=24),
-                carryover_blocks,
-                limit=settings.rate_limit_submissions_global_per_day,
-                window_hours=24,
-            ) or global_oldest_submission
-        if global_submission_count >= settings.rate_limit_submissions_global_per_day:
-            logger.warning(
-                f"Global submission rate limit exceeded: {global_submission_count}/{settings.rate_limit_submissions_global_per_day}"
-            )
-            global_rate_headers = _calculate_rate_limit_headers(
-                limit=settings.rate_limit_submissions_global_per_day,
-                current_count=global_submission_count,
-                oldest_timestamp=global_oldest_submission,
-                window_hours=24,
-            )
-            retry_after = _calculate_retry_after(global_oldest_submission, window_hours=24)
-            return JSONResponse(
-                {"error": "System osiągnął dzienny limit zgłoszeń. Spróbuj ponownie później."},
-                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                headers={**global_rate_headers, "Retry-After": str(retry_after)},
-            )
+    if limit_error is not None:
+        return limit_error
 
     # Validate path parameters to prevent directory traversal
     if not _validate_path_params(year, etap):
@@ -1080,99 +745,18 @@ async def submit_solution(
             status_code=status.HTTP_400_BAD_REQUEST,
         )
 
-    if not images:
-        return JSONResponse(
-            {"error": "Nie przesłano żadnych zdjęć"},
-            status_code=status.HTTP_400_BAD_REQUEST,
-        )
+    batch_error = validate_image_batch(images)
+    if batch_error is not None:
+        return batch_error
 
-    # Limit number of images
-    MAX_IMAGES = 10
-    if len(images) > MAX_IMAGES:
-        return JSONResponse(
-            {"error": f"Maksymalnie {MAX_IMAGES} zdjęć na raz"},
-            status_code=status.HTTP_400_BAD_REQUEST,
-        )
-
-    # Validate file types
-    # HEIC/HEIF included: pillow-heif decodes them so their EXIF (incl. GPS)
-    # can be stripped like any other format - see _register_heif_decoder.
-    allowed_types = {
-        "image/jpeg",
-        "image/png",
-        "image/webp",
-        "image/heic",
-        "image/heif",
-    }
-    for img in images:
-        if img.content_type not in allowed_types:
-            return JSONResponse(
-                {"error": f"Niedozwolony typ pliku: {img.content_type}"},
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
-
-    # Save uploaded images (per-user directory structure)
+    # Save uploaded images (per-user directory structure). The normaliser is
+    # resolved through this module at call time - see _normalize_uploaded_image.
     upload_dir = settings.uploads_dir / user_id / year / etap / str(num)
-    upload_dir.mkdir(parents=True, exist_ok=True)
-
-    saved_paths: list[Path] = []
-    max_size = settings.upload_max_size_mb * 1024 * 1024
-    allowed_extensions = {".jpg", ".jpeg", ".png", ".webp", ".heic", ".heif"}
-
-    # File currently being written - not yet in saved_paths, but just as much an
-    # orphan as the rest if this request ends without creating a submission row.
-    in_progress: OptionalType[Path] = None
-
-    # One guard around the whole loop: every exit between "bytes hit the disk"
-    # and "the DB row exists" must clean up after itself, otherwise a child's
-    # photo stays on disk with nothing referencing it (see _discard_uploads).
-    try:
-        for img in images:
-            # Validate and normalize extension
-            ext = Path(img.filename).suffix.lower() if img.filename else ".jpg"
-            if ext not in allowed_extensions:
-                ext = ".jpg"  # Default to jpg for safety
-
-            filename = f"{uuid.uuid4().hex[:12]}{ext}"
-            file_path = upload_dir / filename
-            in_progress = file_path
-
-            # Read file in chunks with size limit check
-            total_size = 0
-            CHUNK_SIZE = 64 * 1024  # 64KB chunks
-            with open(file_path, "wb") as f:
-                while True:
-                    chunk = await img.read(CHUNK_SIZE)
-                    if not chunk:
-                        break
-                    total_size += len(chunk)
-                    if total_size > max_size:
-                        f.close()
-                        _discard_uploads(saved_paths, file_path)
-                        return JSONResponse(
-                            {"error": f"Plik {img.filename} jest za duży (max {settings.upload_max_size_mb}MB)"},
-                            status_code=status.HTTP_400_BAD_REQUEST,
-                        )
-                    f.write(chunk)
-
-            # Strip EXIF/GPS, fix orientation, downscale. Returns the final path -
-            # normalization always re-encodes to JPEG, so the name can change.
-            normalized_path = _normalize_uploaded_image(file_path)
-            if normalized_path is None:
-                # Could not be decoded, so its metadata could not be removed
-                # either. Storing it would ship the photo's GPS coordinates to
-                # disk and to Google, so the upload is refused instead.
-                _discard_uploads(saved_paths, file_path)
-                return JSONResponse(
-                    {"error": _unprocessable_image_message(img.filename, ext)},
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                )
-
-            saved_paths.append(normalized_path)
-            in_progress = None
-    except Exception:
-        _discard_uploads(saved_paths, in_progress)
-        raise
+    saved_paths, upload_error = await save_uploaded_images(
+        images, upload_dir, normalize=lambda p: _normalize_uploaded_image(p)
+    )
+    if upload_error is not None:
+        return upload_error
 
     # Get PDF paths - validate early
     task_pdf = get_task_pdf_path(year, etap)
@@ -1402,23 +986,23 @@ async def serve_upload(request: Request, path: str):
     if path.startswith("uploads/"):
         path = path[8:]  # Strip 'uploads/' prefix
 
-    # Verify path starts with user's ID (user can only access their own uploads)
-    # Admin users can access any user's uploads
-    # Path format: {user_id}/{year}/{etap}/{task_num}/{filename}
-    path_parts = path.split("/")
-    is_admin = _is_admin(request)
-    if len(path_parts) < 1 or (path_parts[0] != user_id and not is_admin):
-        raise HTTPException(status_code=403, detail="Forbidden")
-
-    file_path = settings.uploads_dir / path
-    if not file_path.exists() or not file_path.is_file():
-        raise HTTPException(status_code=404, detail="File not found")
-
-    # Ensure path doesn't escape uploads dir
+    # Resolve first, then decide ownership from the RESOLVED path. Checking
+    # the raw first segment let "myid/../otherid/..." through to another
+    # user's photos. Path format: {user_id}/... (OMJ or private task photos).
+    uploads_root = settings.uploads_dir.resolve()
+    file_path = (settings.uploads_dir / path).resolve()
     try:
-        file_path.resolve().relative_to(settings.uploads_dir.resolve())
+        relative = file_path.relative_to(uploads_root)
     except ValueError:
         raise HTTPException(status_code=403, detail="Forbidden")
+    path_parts = list(relative.parts)
+
+    is_admin = _is_admin(request)
+    if not path_parts or (path_parts[0] != user_id and not is_admin):
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    if not file_path.is_file():
+        raise HTTPException(status_code=404, detail="File not found")
 
     # Admin looking at somebody else's photo - the widest read privilege in the
     # app, so it is audited. Own uploads are not (that is every normal request).
@@ -1743,6 +1327,16 @@ async def task_history_api(
 # ==================== User Submissions (Moje rozwiązania) ====================
 
 
+def _private_tasks_by_id(db: Session, submissions) -> dict:
+    """Private tasks referenced by these submissions, keyed by id (one query)."""
+    from .db.models import PrivateTaskDB
+
+    ids = {s.private_task_id for s in submissions if s.private_task_id}
+    if not ids:
+        return {}
+    return {t.id: t for t in db.query(PrivateTaskDB).filter(PrivateTaskDB.id.in_(ids)).all()}
+
+
 def _get_max_score(etap: str) -> int:
     """Get max score for an etap (3 for etap1, 6 for etap2/3)."""
     return get_max_score(etap)
@@ -1801,13 +1395,23 @@ async def my_submissions(
             "tasks_mastered": 0,
         }
 
+    # Private tasks referenced on this page, in one query
+    private_tasks = _private_tasks_by_id(db, db_submissions)
+
     # Enrich submissions with task metadata
     submissions_list = []
     for sub in db_submissions:
-        # Get task info for title and categories
-        task = get_task(sub.year, sub.etap, sub.task_number)
-        task_title = task.title if task else f"Zadanie {sub.task_number}"
-        task_categories = task.categories if task else []
+        if sub.private_task_id:
+            private_task = private_tasks.get(sub.private_task_id)
+            task_title = private_task.title if private_task else "Zadanie prywatne"
+            task_categories = (
+                [private_task.category] if private_task and private_task.category else []
+            )
+        else:
+            # Get task info for title and categories
+            task = get_task(sub.year, sub.etap, sub.task_number)
+            task_title = task.title if task else f"Zadanie {sub.task_number}"
+            task_categories = task.categories if task else []
 
         # Create feedback preview (first 150 chars)
         feedback_preview = None
@@ -1819,6 +1423,7 @@ async def my_submissions(
             "year": sub.year,
             "etap": sub.etap,
             "task_number": sub.task_number,
+            "private_task_id": sub.private_task_id,
             "task_title": task_title,
             "task_categories": task_categories,
             "timestamp": ensure_utc(sub.timestamp).isoformat(),
@@ -1910,9 +1515,20 @@ async def delete_my_account(
     used_count, used_oldest, used_newest = submission_repo.get_user_rate_limit_window(
         user_id, hours=24
     )
+    # Same for AI calls made while creating private tasks (ai_usage rows)
+    from .db import AIUsageRepository
+
+    ai_count, _, ai_newest = AIUsageRepository(db).user_total_window(user_id, hours=24)
     quota_repo = DeletedAccountQuotaRepository(db)
     quota_repo.purge_expired()
-    quota_repo.record_deletion(user_id, used_count, used_oldest, used_newest)
+    quota_repo.record_deletion(
+        user_id,
+        used_count,
+        used_oldest,
+        used_newest,
+        ai_usage_count=ai_count,
+        ai_usage_newest_at=ai_newest,
+    )
 
     report = erase_user_data(db, user_id)
 
@@ -2047,10 +1663,13 @@ async def admin_submissions(
     user_ids = list(set(sub.user_id for sub in db_submissions))
     users_by_id = user_repo.get_by_google_subs(user_ids)
 
+    private_tasks = _private_tasks_by_id(db, db_submissions)
+
     # Convert to response format with user info
     submissions = []
     for sub in db_submissions:
         user = users_by_id.get(sub.user_id)
+        private_task = private_tasks.get(sub.private_task_id) if sub.private_task_id else None
         submissions.append({
             "id": sub.id,
             "user_id": sub.user_id,
@@ -2059,6 +1678,8 @@ async def admin_submissions(
             "year": sub.year,
             "etap": sub.etap,
             "task_number": sub.task_number,
+            "private_task_id": sub.private_task_id,
+            "task_title": private_task.title if private_task else None,
             "timestamp": ensure_utc(sub.timestamp).isoformat(),
             "status": sub.status.value,
             "images": sub.images,
@@ -2170,13 +1791,24 @@ async def admin_rerun_submission(
             detail=f"Image files no longer available on disk: {', '.join(missing)}",
         )
 
-    # Validate task PDF exists (same check as submit endpoint)
-    task_pdf = get_task_pdf_path(original.year, original.etap)
-    if not task_pdf or not task_pdf.exists():
-        raise HTTPException(
-            status_code=409,
-            detail="Nie znaleziono pliku z zadaniami",
-        )
+    # Private task: re-grade against the text the original was graded against
+    private_task = None
+    if original.private_task_id:
+        snapshot = (original.scoring_meta or {}).get("task_snapshot") or {}
+        task_row = original.private_task
+        title = snapshot.get("title") or (task_row.title if task_row else None)
+        content = snapshot.get("content") or (task_row.content if task_row else None)
+        if not content:
+            raise HTTPException(status_code=409, detail="Private task text no longer available")
+        private_task = {"id": original.private_task_id, "title": title or "", "content": content}
+    else:
+        # Validate task PDF exists (same check as submit endpoint)
+        task_pdf = get_task_pdf_path(original.year, original.etap)
+        if not task_pdf or not task_pdf.exists():
+            raise HTTPException(
+                status_code=409,
+                detail="Nie znaleziono pliku z zadaniami",
+            )
 
     from .db.models import SubmissionStatus
     from .websocket.progress import progress_manager
@@ -2192,6 +1824,8 @@ async def admin_rerun_submission(
         task_number=original.task_number,
         images=list(relative_images),
         status=SubmissionStatus.PENDING,
+        private_task_id=original.private_task_id,
+        hints_used=original.hints_used or 0,
     )
 
     # Initialize progress tracking (handler.py will set first status)
@@ -2206,6 +1840,7 @@ async def admin_rerun_submission(
             etap=original.etap,
             task_number=original.task_number,
             image_paths=image_paths,
+            private_task=private_task,
         )
     )
     _background_tasks.add(task)

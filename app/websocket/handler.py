@@ -35,17 +35,27 @@ def _format_elapsed(start_time: float) -> str:
 async def process_submission_background(
     submission_id: str,
     user_id: str,
-    year: str,
-    etap: str,
-    task_number: int,
+    year: Optional[str],
+    etap: Optional[str],
+    task_number: Optional[int],
     image_paths: list[Path],
+    private_task: Optional[dict] = None,
 ) -> None:
     """
     Process submission in background with progress updates.
 
     This function is started as an asyncio task from the submit endpoint.
     It sends progress updates via the ProgressManager.
+
+    ``private_task`` ({"id", "title", "content"}) switches to grading against a
+    private task's text; year/etap/task_number are then None. The text graded
+    against is stored in scoring_meta["task_snapshot"], so a later edit of the
+    task cannot change what an old score refers to.
     """
+    if private_task is not None:
+        # Notifications and logs identify the task only as "private" - its title
+        # and statement are the student's content (see app/notifications.py).
+        year, etap, task_number = "private", "-", 0
     start_time = time.time()
     image_info = ", ".join([f"{p.name}({p.stat().st_size // 1024}KB)" for p in image_paths if p.exists()])
 
@@ -79,18 +89,19 @@ async def process_submission_background(
         logger.info(f"[Submission {submission_id}] Stage 1: Preparing file upload ({_format_elapsed(start_time)})")
         await progress_manager.send_status(submission_id, "Przesyłam pliki...")
 
-        # Get PDF paths
-        task_pdf = get_task_pdf_path(year, etap)
-        solution_pdf = get_solution_pdf_path(year, etap)
+        if private_task is None:
+            # Get PDF paths
+            task_pdf = get_task_pdf_path(year, etap)
+            solution_pdf = get_solution_pdf_path(year, etap)
 
-        if not task_pdf or not task_pdf.exists():
-            logger.error(f"[Submission {submission_id}] Task PDF not found: {task_pdf}")
-            raise AIProviderError("Nie znaleziono pliku z zadaniami")
+            if not task_pdf or not task_pdf.exists():
+                logger.error(f"[Submission {submission_id}] Task PDF not found: {task_pdf}")
+                raise AIProviderError("Nie znaleziono pliku z zadaniami")
 
-        logger.debug(
-            f"[Submission {submission_id}] PDFs: task={task_pdf.name}, "
-            f"solution={solution_pdf.name if solution_pdf and solution_pdf.exists() else 'N/A'}"
-        )
+            logger.debug(
+                f"[Submission {submission_id}] PDFs: task={task_pdf.name}, "
+                f"solution={solution_pdf.name if solution_pdf and solution_pdf.exists() else 'N/A'}"
+            )
 
         # Create AI provider and analyze with streaming
         logger.info(f"[Submission {submission_id}] Stage 2: Creating AI provider ({_format_elapsed(start_time)})")
@@ -111,17 +122,34 @@ async def process_submission_background(
                 logger.debug(f"[Submission {submission_id}] First thinking chunk received ({_format_elapsed(start_time)})")
             await progress_manager.send_thinking(submission_id, chunk)
 
-        logger.info(f"[Submission {submission_id}] Calling analyze_solution_stream ({_format_elapsed(start_time)})")
-        result = await provider.analyze_solution_stream(
-            task_pdf_path=task_pdf,
-            solution_pdf_path=solution_pdf,
-            image_paths=image_paths,
-            task_number=task_number,
-            etap=etap,
-            on_thinking=on_thinking,
-            on_feedback=None,  # We don't stream feedback anymore
-            on_upload_complete=on_upload_complete,
-        )
+        if private_task is None:
+            logger.info(f"[Submission {submission_id}] Calling analyze_solution_stream ({_format_elapsed(start_time)})")
+            result = await provider.analyze_solution_stream(
+                task_pdf_path=task_pdf,
+                solution_pdf_path=solution_pdf,
+                image_paths=image_paths,
+                task_number=task_number,
+                etap=etap,
+                on_thinking=on_thinking,
+                on_feedback=None,  # We don't stream feedback anymore
+                on_upload_complete=on_upload_complete,
+            )
+        else:
+            logger.info(f"[Submission {submission_id}] Calling analyze_private_solution_stream ({_format_elapsed(start_time)})")
+            result = await provider.analyze_private_solution_stream(
+                task_title=private_task["title"],
+                task_content=private_task["content"],
+                image_paths=image_paths,
+                on_thinking=on_thinking,
+                on_upload_complete=on_upload_complete,
+            )
+            result.scoring_meta = {
+                **(result.scoring_meta or {}),
+                "task_snapshot": {
+                    "title": private_task["title"],
+                    "content": private_task["content"],
+                },
+            }
 
         logger.info(
             f"[Submission {submission_id}] AI analysis complete ({_format_elapsed(start_time)}) - "

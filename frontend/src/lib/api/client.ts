@@ -9,6 +9,20 @@ export class APIError extends Error {
   }
 }
 
+/**
+ * Human-readable message from a FastAPI error body. Validation errors (422)
+ * arrive as a list of objects in English - never show those raw.
+ */
+function errorMessage(body: unknown, fallback: string): string {
+  if (body && typeof body === "object") {
+    const { detail, error } = body as { detail?: unknown; error?: unknown };
+    if (typeof error === "string") return error;
+    if (typeof detail === "string") return detail;
+    if (Array.isArray(detail)) return "Nieprawidłowe dane. Sprawdź wypełnione pola.";
+  }
+  return fallback;
+}
+
 export async function fetchAPI<T>(
   endpoint: string,
   options: RequestInit = {}
@@ -25,8 +39,8 @@ export async function fetchAPI<T>(
   });
 
   if (!res.ok) {
-    const error = await res.json().catch(() => ({ detail: "Unknown error" }));
-    throw new APIError(res.status, error.detail || res.statusText);
+    const body = await res.json().catch(() => null);
+    throw new APIError(res.status, errorMessage(body, res.statusText || "Wystąpił błąd"));
   }
 
   return res.json();
@@ -59,14 +73,13 @@ export async function uploadFiles<T>(
         resolve(JSON.parse(xhr.responseText));
       } else {
         // Parse JSON error response to get the actual error message
-        let errorMessage = xhr.statusText;
+        let message = xhr.statusText;
         try {
-          const errorData = JSON.parse(xhr.responseText);
-          errorMessage = errorData.error || errorData.detail || xhr.statusText;
+          message = errorMessage(JSON.parse(xhr.responseText), xhr.statusText);
         } catch {
           // If response isn't JSON, use status text
         }
-        reject(new APIError(xhr.status, errorMessage));
+        reject(new APIError(xhr.status, message));
       }
     });
 

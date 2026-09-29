@@ -15,6 +15,7 @@ import pytest
 from PIL import Image, ImageDraw
 
 import app.main as main
+import app.uploads as uploads
 from app.main import (
     HEIF_SUPPORTED,
     MAX_IMAGE_DIMENSION,
@@ -311,7 +312,7 @@ class TestUnprocessableMessage:
     """The 400 body a child actually reads."""
 
     def test_heic_without_decoder_gets_actionable_advice(self, monkeypatch):
-        monkeypatch.setattr(main, "HEIF_SUPPORTED", False)
+        monkeypatch.setattr(uploads, "HEIF_SUPPORTED", False)
 
         message = _unprocessable_image_message("zdjecie.heic", ".heic")
 
@@ -327,7 +328,7 @@ class TestUnprocessableMessage:
 
     def test_heic_with_decoder_uses_the_generic_message(self, monkeypatch):
         """With a decoder available a HEIC failure is a corrupt file, not format."""
-        monkeypatch.setattr(main, "HEIF_SUPPORTED", True)
+        monkeypatch.setattr(uploads, "HEIF_SUPPORTED", True)
 
         message = _unprocessable_image_message("zdjecie.heic", ".heic")
 

@@ -23,6 +23,7 @@ from sqlalchemy import (
     Index,
     Enum,
     JSON,
+    CheckConstraint,
 )
 from sqlalchemy.orm import relationship
 
@@ -62,9 +63,20 @@ class UserDB(Base):
 
     # Relationships
     submissions = relationship("SubmissionDB", back_populates="user", cascade="all, delete-orphan")
+    private_tasks = relationship("PrivateTaskDB", back_populates="user", cascade="all, delete-orphan")
+    ai_usage = relationship("AIUsageDB", cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
         return f"<User {self.email}>"
+
+
+# A submission points at exactly one task: an OMJ one or a private one
+SUBMISSION_TASK_REF_CHECK = (
+    "(year IS NOT NULL AND etap IS NOT NULL AND task_number IS NOT NULL "
+    "AND private_task_id IS NULL) OR "
+    "(year IS NULL AND etap IS NULL AND task_number IS NULL "
+    "AND private_task_id IS NOT NULL)"
+)
 
 
 class SubmissionDB(Base):
@@ -83,10 +95,22 @@ class SubmissionDB(Base):
         index=True
     )
 
-    # Task identification
-    year = Column(String(10), nullable=False)
-    etap = Column(String(10), nullable=False)
-    task_number = Column(Integer, nullable=False)
+    # Task identification: EITHER an OMJ task (year, etap, task_number) OR a
+    # private task (private_task_id) - never both, never neither. Enforced by
+    # ck_submissions_task_ref, because every OMJ aggregate (progress graph,
+    # stats) relies on private rows having NULL OMJ fields.
+    year = Column(String(10), nullable=True)
+    etap = Column(String(10), nullable=True)
+    task_number = Column(Integer, nullable=True)
+    private_task_id = Column(
+        String(12),
+        ForeignKey("private_tasks.id", ondelete="CASCADE"),
+        nullable=True,
+    )
+
+    # How many hints of a private task the student had revealed before this
+    # submission (0 for OMJ tasks, whose hints are revealed client-side only)
+    hints_used = Column(Integer, nullable=False, default=0, server_default="0")
 
     # Submission data
     timestamp = Column(DateTime, nullable=False, default=utc_now)
@@ -123,6 +147,7 @@ class SubmissionDB(Base):
 
     # Relationships
     user = relationship("UserDB", back_populates="submissions")
+    private_task = relationship("PrivateTaskDB", back_populates="submissions")
 
     # Indexes for common queries
     __table_args__ = (
@@ -130,10 +155,104 @@ class SubmissionDB(Base):
         Index("ix_submissions_user_task", "user_id", "year", "etap", "task_number"),
         # Task stats: get all submissions for a task
         Index("ix_submissions_task", "year", "etap", "task_number"),
+        # Private task history
+        Index("ix_submissions_user_private_task", "user_id", "private_task_id"),
+        CheckConstraint(SUBMISSION_TASK_REF_CHECK, name="ck_submissions_task_ref"),
     )
 
     def __repr__(self) -> str:
         return f"<Submission {self.id} task={self.year}/{self.etap}/{self.task_number} score={self.score}>"
+
+
+class PrivateTaskDB(Base):
+    """A task a student added themselves - from a photo or typed in.
+
+    Visible only to its owner. The statement is text the student confirmed
+    (possibly after AI extraction from a photo of a booklet page), so it may be
+    third-party material: it is never shared, listed or indexed, and it expires
+    with retention_private_task_months after the last activity.
+    """
+
+    __tablename__ = "private_tasks"
+
+    # secrets.token_urlsafe(9) - 12 URL-safe chars, unguessable
+    id = Column(String(12), primary_key=True)
+
+    user_id = Column(
+        String(255),
+        ForeignKey("users.google_sub", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+
+    title = Column(String(120), nullable=False)
+    content = Column(Text, nullable=False)
+    source_label = Column(String(120), nullable=True)
+    category = Column(String(20), nullable=True)
+    difficulty = Column(Integer, nullable=True)
+
+    # Up to 4 progressive hints. Revealed one at a time through the API so
+    # "solved with a hint" can be recorded honestly.
+    hints = Column(JSON, nullable=False, default=list)
+    # Highest hint number ever revealed - a reload shows these again
+    hints_revealed = Column(Integer, nullable=False, default=0, server_default="0")
+    # Highest hint revealed since the last submission; copied onto the next
+    # submission's hints_used and reset
+    pending_hints_used = Column(Integer, nullable=False, default=0, server_default="0")
+
+    # Relative paths of the original photos of the problem ([] when typed)
+    source_images = Column(JSON, nullable=False, default=list)
+    origin = Column(String(10), nullable=False)  # "photo" | "typed"
+
+    # Model, tokens, cost of the extraction/hint calls. A "thinking" key, if
+    # present, is stripped by retention like submissions.scoring_meta.
+    extraction_meta = Column(JSON, nullable=True)
+
+    created_at = Column(DateTime, nullable=False, default=utc_now)
+    updated_at = Column(DateTime, nullable=False, default=utc_now, onupdate=utc_now)
+    # Bumped on create, edit and every submission - drives retention
+    last_activity_at = Column(DateTime, nullable=False, default=utc_now, index=True)
+
+    user = relationship("UserDB", back_populates="private_tasks")
+    submissions = relationship(
+        "SubmissionDB",
+        back_populates="private_task",
+        cascade="all, delete-orphan",
+    )
+
+    __table_args__ = (
+        Index("ix_private_tasks_user_activity", "user_id", "last_activity_at"),
+    )
+
+    def __repr__(self) -> str:
+        return f"<PrivateTask {self.id}>"
+
+
+class AIUsageDB(Base):
+    """One AI call that is not a submission (task extraction, hint generation).
+
+    Submissions are rate-limited by counting submission rows. The calls made
+    while creating a private task have no such row, so without this table they
+    would be unlimited - a public page that turns any photo into a Gemini call.
+    Holds no content: kind, time, and model/token/cost numbers only.
+    """
+
+    __tablename__ = "ai_usage"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(
+        String(255),
+        ForeignKey("users.google_sub", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    # "private_extract" | "private_create" | "private_regen"
+    kind = Column(String(32), nullable=False)
+    created_at = Column(DateTime, nullable=False, default=utc_now, index=True)
+    meta = Column(JSON, nullable=True)
+
+    def __repr__(self) -> str:
+        return f"<AIUsage {self.kind} at {self.created_at}>"
 
 
 class DeletedAccountQuotaDB(Base):
@@ -158,6 +277,9 @@ class DeletedAccountQuotaDB(Base):
 
     # Submissions the deleted account made inside the rate limit window
     submission_count = Column(Integer, nullable=False, default=0)
+
+    # Non-submission AI calls (ai_usage rows) inside the window - same reason
+    ai_usage_count = Column(Integer, nullable=False, default=0, server_default="0")
 
     # Oldest counted submission, used for Retry-After / reset headers
     oldest_submission_at = Column(DateTime, nullable=True)

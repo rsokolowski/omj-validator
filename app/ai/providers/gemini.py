@@ -13,10 +13,16 @@ from pathlib import Path
 from typing import AsyncIterator, Optional, Callable, Any
 
 from ...config import settings
-from ...models import SubmissionResult
+from ...models import PrivateExtractionResult, PrivateTaskMeta, SubmissionResult
 from ..parsing import parse_ai_response
-from ..prompt_builder import build_prompt
-from ..factory import AIProviderError
+from ..prompt_builder import build_prompt, build_private_scoring_prompt, load_private_prompt
+from ..private_parsing import (
+    EXTRACTION_SCHEMA,
+    META_SCHEMA,
+    parse_extraction_response,
+    parse_meta_response,
+)
+from ..factory import AIContentBlockedError, AIProviderError
 
 try:
     from google import genai
@@ -74,6 +80,11 @@ class StreamChunk:
     feedback: str = ""
     meta: Optional[dict] = None
 
+
+# Gemini rejects a request whose inline data exceeds ~20 MB in total, and
+# inline bytes travel base64-encoded (+33%). Photos above this budget go
+# through the File API instead.
+INLINE_IMAGE_BUDGET_BYTES = 14 * 1024 * 1024
 
 # In-memory cache: local file path -> CachedFile
 # Files persist on Gemini for 48 hours, we use 24h to be safe
@@ -730,176 +741,11 @@ class GeminiProvider:
                 media_resolution=media_resolution,
             )
 
-            # Stream the response with timeout
-            api_start_time = time.time()
-            thinking_text = ""
-            feedback_text = ""
-            timeout = self.get_timeout()
-            usage_metadata = None  # Will be populated from final chunk
-
-            # Use thread-safe queue and event for cross-thread communication
-            chunk_queue: queue.Queue = queue.Queue()
-            stream_done_event = threading.Event()
-            stream_error: Optional[Exception] = None
-            stream_started = threading.Event()
-
-            def stream_to_queue():
-                """Run streaming in thread and push chunks to queue."""
-                nonlocal stream_error
-                try:
-                    logger.debug("[Gemini Stream] Thread: Calling generate_content_stream...")
-                    response_stream = self._client.models.generate_content_stream(
-                        model=self._model_name,
-                        contents=content_parts,
-                        config=config,
-                    )
-                    logger.debug("[Gemini Stream] Thread: Got response_stream iterator")
-                    stream_started.set()
-
-                    chunk_count = 0
-                    for chunk in response_stream:
-                        chunk_count += 1
-                        if chunk_count == 1:
-                            logger.debug("[Gemini Stream] Thread: First chunk received from API")
-                        chunk_queue.put(chunk)
-
-                    logger.debug(f"[Gemini Stream] Thread: Stream complete, {chunk_count} chunks received")
-                except Exception as e:
-                    logger.error(f"[Gemini Stream] Thread error: {type(e).__name__}: {e}")
-                    stream_error = e
-                    stream_started.set()  # Unblock main thread if waiting
-                finally:
-                    stream_done_event.set()
-
-            # Start streaming in background thread
-            logger.debug("[Gemini Stream] Starting background thread for streaming")
-            executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
-            stream_future = executor.submit(stream_to_queue)
-
-            # Process chunks with simple polling
-            chunks_processed = 0
-            start_wait = time.time()
-            last_chunk_time = start_wait
-            last_log_time = start_wait
-
-            try:
-                logger.debug("[Gemini Stream] Starting chunk processing loop")
-                while True:
-                    elapsed = time.time() - start_wait
-                    since_last_chunk = time.time() - last_chunk_time
-
-                    # Check for timeout
-                    if elapsed > timeout:
-                        logger.error(
-                            f"[Gemini Stream] TIMEOUT - elapsed={elapsed:.1f}s, "
-                            f"timeout={timeout}s, chunks_processed={chunks_processed}, "
-                            f"since_last_chunk={since_last_chunk:.1f}s, "
-                            f"stream_done={stream_done_event.is_set()}, "
-                            f"stream_started={stream_started.is_set()}"
-                        )
-                        raise AIProviderError(
-                            "Analiza trwa zbyt długo. Spróbuj ponownie za chwilę."
-                        )
-
-                    # Log progress every 30 seconds for stuck detection
-                    if time.time() - last_log_time > 30:
-                        logger.debug(
-                            f"[Gemini Stream] Progress - elapsed={elapsed:.1f}s, "
-                            f"chunks={chunks_processed}, since_last_chunk={since_last_chunk:.1f}s, "
-                            f"thinking_len={len(thinking_text)}, feedback_len={len(feedback_text)}"
-                        )
-                        last_log_time = time.time()
-
-                    # Check for stream error
-                    if stream_error:
-                        logger.error(f"[Gemini Stream] Stream error detected: {stream_error}")
-                        raise stream_error
-
-                    # Try to get a chunk (non-blocking)
-                    try:
-                        chunk = chunk_queue.get_nowait()
-                        chunks_processed += 1
-                        last_chunk_time = time.time()
-
-                        # Log first chunk
-                        if chunks_processed == 1:
-                            logger.debug(f"[Gemini Stream] Processing first chunk (waited {elapsed:.1f}s)")
-
-                        # Capture usage metadata (typically in final chunk)
-                        if hasattr(chunk, "usage_metadata") and chunk.usage_metadata:
-                            usage_metadata = chunk.usage_metadata
-
-                        # Process the chunk
-                        if hasattr(chunk, "candidates") and chunk.candidates:
-                            for candidate in chunk.candidates:
-                                if hasattr(candidate, "content") and candidate.content:
-                                    for part in candidate.content.parts:
-                                        text = getattr(part, "text", "") or ""
-                                        if not text:
-                                            continue
-
-                                        # Check if this is a thought part
-                                        is_thought = getattr(part, "thought", False)
-
-                                        if is_thought:
-                                            thinking_text += text
-                                            if on_thinking:
-                                                if asyncio.iscoroutinefunction(on_thinking):
-                                                    await on_thinking(text)
-                                                else:
-                                                    on_thinking(text)
-                                        else:
-                                            feedback_text += text
-                                            if on_feedback:
-                                                if asyncio.iscoroutinefunction(on_feedback):
-                                                    await on_feedback(text)
-                                                else:
-                                                    on_feedback(text)
-
-                    except queue.Empty:
-                        # No chunk available - check if stream is done
-                        if stream_done_event.is_set() and chunk_queue.empty():
-                            logger.debug(f"[Gemini Stream] Stream done, processed {chunks_processed} chunks")
-                            break
-                        # Wait a bit before polling again
-                        await asyncio.sleep(0.05)
-
-            finally:
-                # Clean up executor
-                logger.debug("[Gemini Stream] Cleaning up executor thread")
-                try:
-                    stream_future.result(timeout=5)
-                except Exception as e:
-                    logger.warning(f"[Gemini Stream] Error waiting for stream thread: {e}")
-                executor.shutdown(wait=False)
-
-            api_time = time.time() - api_start_time
-            total_time = time.time() - start_time
-
-            # Log response with usage stats
-            if usage_metadata:
-                input_tokens, output_tokens, thoughts_tokens = self._read_usage(
-                    usage_metadata
+            thinking_text, feedback_text, usage_metadata, api_time, total_time = (
+                await self._run_stream(
+                    content_parts, config, on_thinking, on_feedback, start_time
                 )
-                estimated_cost = self._calculate_cost(
-                    input_tokens, output_tokens, thoughts_tokens
-                )
-                logger.info(
-                    f"[Gemini Stream Response] api_time={api_time:.1f}s, "
-                    f"total_time={total_time:.1f}s, "
-                    f"input_tokens={input_tokens:,}, output_tokens={output_tokens:,}, "
-                    f"thoughts_tokens={thoughts_tokens:,}, "
-                    f"estimated_cost=${estimated_cost:.4f}, "
-                    f"thinking_chars={len(thinking_text)}, feedback_chars={len(feedback_text)}"
-                )
-            else:
-                logger.info(
-                    f"[Gemini Stream Response] api_time={api_time:.1f}s, "
-                    f"total_time={total_time:.1f}s, "
-                    f"thinking_chars={len(thinking_text)}, feedback_chars={len(feedback_text)} "
-                    f"(no usage metadata)"
-                )
-
+            )
             if not feedback_text:
                 logger.warning("[Gemini] Empty feedback text from stream")
                 raise AIProviderError(
@@ -950,6 +796,400 @@ class GeminiProvider:
                 )
         finally:
             await self._cleanup_files(uploaded_files, skip_cached=not self._disable_file_cache)
+
+    async def _run_stream(
+        self,
+        content_parts: list,
+        config,
+        on_thinking: Optional[Callable[[str], Any]] = None,
+        on_feedback: Optional[Callable[[str], Any]] = None,
+        start_time: Optional[float] = None,
+    ) -> tuple[str, str, Any, float, float]:
+        """Stream one generate_content call; return the collected text.
+
+        Returns (thinking_text, feedback_text, usage_metadata, api_time,
+        total_time). Shared by OMJ and private-task grading so both get the same
+        timeout, stall detection and callback behaviour.
+        """
+        start_time = start_time or time.time()
+        # Stream the response with timeout
+        api_start_time = time.time()
+        thinking_text = ""
+        feedback_text = ""
+        timeout = self.get_timeout()
+        usage_metadata = None  # Will be populated from final chunk
+
+        # Use thread-safe queue and event for cross-thread communication
+        chunk_queue: queue.Queue = queue.Queue()
+        stream_done_event = threading.Event()
+        stream_error: Optional[Exception] = None
+        stream_started = threading.Event()
+
+        def stream_to_queue():
+            """Run streaming in thread and push chunks to queue."""
+            nonlocal stream_error
+            try:
+                logger.debug("[Gemini Stream] Thread: Calling generate_content_stream...")
+                response_stream = self._client.models.generate_content_stream(
+                    model=self._model_name,
+                    contents=content_parts,
+                    config=config,
+                )
+                logger.debug("[Gemini Stream] Thread: Got response_stream iterator")
+                stream_started.set()
+
+                chunk_count = 0
+                for chunk in response_stream:
+                    chunk_count += 1
+                    if chunk_count == 1:
+                        logger.debug("[Gemini Stream] Thread: First chunk received from API")
+                    chunk_queue.put(chunk)
+
+                logger.debug(f"[Gemini Stream] Thread: Stream complete, {chunk_count} chunks received")
+            except Exception as e:
+                logger.error(f"[Gemini Stream] Thread error: {type(e).__name__}: {e}")
+                stream_error = e
+                stream_started.set()  # Unblock main thread if waiting
+            finally:
+                stream_done_event.set()
+
+        # Start streaming in background thread
+        logger.debug("[Gemini Stream] Starting background thread for streaming")
+        executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+        stream_future = executor.submit(stream_to_queue)
+
+        # Process chunks with simple polling
+        chunks_processed = 0
+        start_wait = time.time()
+        last_chunk_time = start_wait
+        last_log_time = start_wait
+
+        try:
+            logger.debug("[Gemini Stream] Starting chunk processing loop")
+            while True:
+                elapsed = time.time() - start_wait
+                since_last_chunk = time.time() - last_chunk_time
+
+                # Check for timeout
+                if elapsed > timeout:
+                    logger.error(
+                        f"[Gemini Stream] TIMEOUT - elapsed={elapsed:.1f}s, "
+                        f"timeout={timeout}s, chunks_processed={chunks_processed}, "
+                        f"since_last_chunk={since_last_chunk:.1f}s, "
+                        f"stream_done={stream_done_event.is_set()}, "
+                        f"stream_started={stream_started.is_set()}"
+                    )
+                    raise AIProviderError(
+                        "Analiza trwa zbyt długo. Spróbuj ponownie za chwilę."
+                    )
+
+                # Log progress every 30 seconds for stuck detection
+                if time.time() - last_log_time > 30:
+                    logger.debug(
+                        f"[Gemini Stream] Progress - elapsed={elapsed:.1f}s, "
+                        f"chunks={chunks_processed}, since_last_chunk={since_last_chunk:.1f}s, "
+                        f"thinking_len={len(thinking_text)}, feedback_len={len(feedback_text)}"
+                    )
+                    last_log_time = time.time()
+
+                # Check for stream error
+                if stream_error:
+                    logger.error(f"[Gemini Stream] Stream error detected: {stream_error}")
+                    raise stream_error
+
+                # Try to get a chunk (non-blocking)
+                try:
+                    chunk = chunk_queue.get_nowait()
+                    chunks_processed += 1
+                    last_chunk_time = time.time()
+
+                    # Log first chunk
+                    if chunks_processed == 1:
+                        logger.debug(f"[Gemini Stream] Processing first chunk (waited {elapsed:.1f}s)")
+
+                    # Capture usage metadata (typically in final chunk)
+                    if hasattr(chunk, "usage_metadata") and chunk.usage_metadata:
+                        usage_metadata = chunk.usage_metadata
+
+                    # Process the chunk
+                    if hasattr(chunk, "candidates") and chunk.candidates:
+                        for candidate in chunk.candidates:
+                            if hasattr(candidate, "content") and candidate.content:
+                                for part in candidate.content.parts:
+                                    text = getattr(part, "text", "") or ""
+                                    if not text:
+                                        continue
+
+                                    # Check if this is a thought part
+                                    is_thought = getattr(part, "thought", False)
+
+                                    if is_thought:
+                                        thinking_text += text
+                                        if on_thinking:
+                                            if asyncio.iscoroutinefunction(on_thinking):
+                                                await on_thinking(text)
+                                            else:
+                                                on_thinking(text)
+                                    else:
+                                        feedback_text += text
+                                        if on_feedback:
+                                            if asyncio.iscoroutinefunction(on_feedback):
+                                                await on_feedback(text)
+                                            else:
+                                                on_feedback(text)
+
+                except queue.Empty:
+                    # No chunk available - check if stream is done
+                    if stream_done_event.is_set() and chunk_queue.empty():
+                        logger.debug(f"[Gemini Stream] Stream done, processed {chunks_processed} chunks")
+                        break
+                    # Wait a bit before polling again
+                    await asyncio.sleep(0.05)
+
+        finally:
+            # Clean up executor
+            logger.debug("[Gemini Stream] Cleaning up executor thread")
+            try:
+                stream_future.result(timeout=5)
+            except Exception as e:
+                logger.warning(f"[Gemini Stream] Error waiting for stream thread: {e}")
+            executor.shutdown(wait=False)
+
+        api_time = time.time() - api_start_time
+        total_time = time.time() - start_time
+
+        # Log response with usage stats
+        if usage_metadata:
+            input_tokens, output_tokens, thoughts_tokens = self._read_usage(
+                usage_metadata
+            )
+            estimated_cost = self._calculate_cost(
+                input_tokens, output_tokens, thoughts_tokens
+            )
+            logger.info(
+                f"[Gemini Stream Response] api_time={api_time:.1f}s, "
+                f"total_time={total_time:.1f}s, "
+                f"input_tokens={input_tokens:,}, output_tokens={output_tokens:,}, "
+                f"thoughts_tokens={thoughts_tokens:,}, "
+                f"estimated_cost=${estimated_cost:.4f}, "
+                f"thinking_chars={len(thinking_text)}, feedback_chars={len(feedback_text)}"
+            )
+        else:
+            logger.info(
+                f"[Gemini Stream Response] api_time={api_time:.1f}s, "
+                f"total_time={total_time:.1f}s, "
+                f"thinking_chars={len(thinking_text)}, feedback_chars={len(feedback_text)} "
+                f"(no usage metadata)"
+            )
+        return thinking_text, feedback_text, usage_metadata, api_time, total_time
+
+    # ==================== Private tasks ("Moje zadania") ====================
+
+    _IMAGE_MIME_TYPES = {
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".png": "image/png",
+        ".webp": "image/webp",
+    }
+
+    async def _image_parts(self, image_paths: list[Path]) -> tuple[list, list]:
+        """Photos as request parts: (parts, uploaded_files_to_clean_up).
+
+        Inline when they fit INLINE_IMAGE_BUDGET_BYTES - no File API round trip,
+        nothing left at Google. Larger batches (up to 10 photos of 2048 px can
+        exceed the ~20 MB inline cap) are uploaded instead and must be deleted
+        by the caller with _cleanup_files(uploaded, skip_cached=False).
+        Gemini 3 gets the per-part image resolution used for handwriting.
+        """
+        total = sum(p.stat().st_size for p in image_paths if p.exists())
+        if total > INLINE_IMAGE_BUDGET_BYTES:
+            uploaded = list(
+                await asyncio.gather(*(self._upload_file(p, use_cache=False) for p in image_paths))
+            )
+            return list(uploaded), uploaded
+
+        resolution = (
+            self._get_media_resolution(settings.gemini_media_resolution_images)
+            if self._is_gemini_3
+            else None
+        )
+        parts = []
+        for path in image_paths:
+            data = path.read_bytes()
+            mime = self._IMAGE_MIME_TYPES.get(path.suffix.lower(), "image/jpeg")
+            if resolution is not None:
+                try:
+                    parts.append(
+                        types.Part.from_bytes(data=data, mime_type=mime, media_resolution=resolution)
+                    )
+                    continue
+                except (TypeError, AttributeError):
+                    pass  # SDK without per-part resolution - plain part below
+            parts.append(types.Part.from_bytes(data=data, mime_type=mime))
+        return parts, []
+
+    def _thinking_config(self):
+        if self._is_gemini_3:
+            return types.ThinkingConfig(
+                include_thoughts=True, thinking_level=settings.gemini_thinking_level
+            )
+        return types.ThinkingConfig(include_thoughts=True, thinking_budget=8192)
+
+    @staticmethod
+    def _friendly_error(error: Exception) -> AIProviderError:
+        """Map an SDK/transport error to a Polish message fit for a child."""
+        message = str(error).lower()
+        if isinstance(error, asyncio.TimeoutError):
+            return AIProviderError("Analiza trwa zbyt długo. Spróbuj ponownie za chwilę.")
+        if "quota" in message:
+            return AIProviderError(
+                "System jest obecnie przeciążony. Spróbuj ponownie za kilka minut."
+            )
+        if "safety" in message or "blocked" in message:
+            return AIContentBlockedError(
+                "Nie udało się przetworzyć zdjęcia. Upewnij się, że zdjęcie "
+                "zawiera tylko treść zadania lub rozwiązanie."
+            )
+        return AIProviderError("Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę.")
+
+    def _usage_meta(self, usage_metadata, started: float) -> dict:
+        """Model, tokens, cost and timing - never content."""
+        input_tokens, output_tokens, thoughts_tokens = self._read_usage(usage_metadata)
+        return {
+            "model": self._model_name,
+            "input_tokens": input_tokens,
+            "output_tokens": output_tokens,
+            "thoughts_tokens": thoughts_tokens,
+            "estimated_cost": round(
+                self._calculate_cost(input_tokens, output_tokens, thoughts_tokens), 6
+            ),
+            "api_time": round(time.time() - started, 2),
+        }
+
+    async def _generate_json(self, contents: list, schema: dict) -> tuple[str, dict]:
+        """One non-streaming, schema-constrained call. Returns (text, usage meta)."""
+        config = types.GenerateContentConfig(
+            thinking_config=self._thinking_config(),
+            response_mime_type="application/json",
+            response_json_schema=schema,
+        )
+        started = time.time()
+        try:
+            response = await asyncio.wait_for(
+                asyncio.to_thread(
+                    self._client.models.generate_content,
+                    model=self._model_name,
+                    contents=contents,
+                    config=config,
+                ),
+                timeout=self.get_timeout(),
+            )
+        except AIProviderError:
+            raise
+        except Exception as e:
+            logger.error(f"[Gemini Private] {type(e).__name__}: {e}")
+            raise self._friendly_error(e)
+
+        candidates = getattr(response, "candidates", None) or []
+        finish = str(getattr(candidates[0], "finish_reason", "") if candidates else "")
+        if "SAFETY" in finish.upper() or "PROHIBITED" in finish.upper():
+            raise AIContentBlockedError(
+                "Nie udało się przetworzyć tej treści. Upewnij się, że zawiera tylko zadanie."
+            )
+
+        meta = self._usage_meta(getattr(response, "usage_metadata", None), started)
+        logger.info(
+            f"[Gemini Private] api_time={meta['api_time']}s, "
+            f"input_tokens={meta['input_tokens']:,}, output_tokens={meta['output_tokens']:,}, "
+            f"estimated_cost=${meta['estimated_cost']:.4f}"
+        )
+        return (getattr(response, "text", "") or ""), meta
+
+    async def extract_private_tasks(self, image_paths: list[Path]) -> PrivateExtractionResult:
+        """Read every problem statement off photos of a page."""
+        parts, uploaded = await self._image_parts(image_paths)
+        try:
+            text, meta = await self._generate_json([load_private_prompt("extract"), *parts], EXTRACTION_SCHEMA)
+        finally:
+            await self._cleanup_files(uploaded, skip_cached=False)
+        result = parse_extraction_response(text)
+        result.meta = meta
+        return result
+
+    async def generate_private_task_meta(self, title: str, content: str) -> PrivateTaskMeta:
+        """Hints, category and difficulty for a task statement (text only)."""
+        prompt = (
+            f"{load_private_prompt('meta')}\n\n"
+            f"## Tytuł zadania\n{title}\n\n"
+            f"## Treść zadania\n{content}\n"
+        )
+        text, meta = await self._generate_json([prompt], META_SCHEMA)
+        result = parse_meta_response(text)
+        result.meta = meta
+        return result
+
+    async def analyze_private_solution_stream(
+        self,
+        task_title: str,
+        task_content: str,
+        image_paths: list[Path],
+        on_thinking: Optional[Callable[[str], Any]] = None,
+        on_upload_complete: Optional[Callable[[], Any]] = None,
+    ) -> SubmissionResult:
+        """Grade a solution to a private task - no PDF, no official solution."""
+        start_time = time.time()
+        logger.info(
+            f"[Gemini Private Stream] model={self._model_name}, images={len(image_paths)}"
+        )
+        uploaded: list = []
+        try:
+            prompt = (
+                f"{build_private_scoring_prompt()}\n\n"
+                f"## Treść zadania (tekst podany przez ucznia)\n"
+                f"### {task_title}\n{task_content}\n\n"
+                f"### Rozwiązanie ucznia:\n"
+            )
+            image_parts, uploaded = await self._image_parts(image_paths)
+            contents = [prompt]
+            for index, part in enumerate(image_parts, 1):
+                contents.append(f"Zdjęcie {index}:")
+                contents.append(part)
+            contents.append("Oceń rozwiązanie i odpowiedz WYŁĄCZNIE w formacie JSON.")
+
+            if on_upload_complete:
+                if asyncio.iscoroutinefunction(on_upload_complete):
+                    await on_upload_complete()
+                else:
+                    on_upload_complete()
+
+            config = types.GenerateContentConfig(
+                thinking_config=self._thinking_config(),
+                response_mime_type="application/json",
+                response_json_schema=RESPONSE_JSON_SCHEMA,
+                media_resolution=self._get_media_resolution(),
+            )
+            thinking_text, feedback_text, usage_metadata, api_time, total_time = (
+                await self._run_stream(contents, config, on_thinking, None, start_time)
+            )
+            if not feedback_text:
+                raise AIProviderError("Nie udało się odczytać rozwiązania. Spróbuj ponownie.")
+
+            # Private tasks are graded on the etap2 ladder (0, 2, 5, 6)
+            result = parse_ai_response(feedback_text, provider_name="Gemini", etap="etap2")
+            result.scoring_meta = {
+                **self._usage_meta(usage_metadata, start_time),
+                "thinking": thinking_text,
+                "api_time": api_time,
+                "total_time": total_time,
+            }
+            return result
+        except AIProviderError:
+            raise
+        except Exception as e:
+            logger.error(f"[Gemini Private Stream] {type(e).__name__}: {e}")
+            raise self._friendly_error(e)
+        finally:
+            await self._cleanup_files(uploaded, skip_cached=False)
 
     def _get_file_hash(self, file_path: Path) -> str:
         """Compute MD5 hash of file for cache validation."""

@@ -232,6 +232,20 @@ class TestRateLimitCarryover:
 
         assert db.query(DeletedAccountQuotaDB).count() == 0
 
+    def test_ai_usage_survives_the_deletion(self, client, db):
+        """Private task AI calls are limited too - erasure must not reset them."""
+        from app.db.models import AIUsageDB
+
+        db.query(SubmissionDB).filter(SubmissionDB.user_id == USER_ID).delete()
+        db.add(AIUsageDB(user_id=USER_ID, kind="private_extract"))
+        db.add(AIUsageDB(user_id=USER_ID, kind="private_create"))
+        db.commit()
+
+        _post(client)
+
+        assert DeletedAccountQuotaRepository(db).get_user_ai_usage_carryover(USER_ID) == 2
+        assert db.query(AIUsageDB).count() == 0
+
     def test_rejected_deletion_records_nothing(self, client, db):
         _post(client, "nope")
 

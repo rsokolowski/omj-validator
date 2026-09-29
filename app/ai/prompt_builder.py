@@ -27,6 +27,13 @@ SCORING_PROMPT_FILES = {
     "etap2": "gemini_prompt_scoring_etap2.txt",
     "etap3": "gemini_prompt_scoring_etap3.txt",
 }
+# Private tasks ("Moje zadania"): grading without an official solution, plus the
+# two non-grading calls made when a task is created
+PRIVATE_SCORING_PROMPT_FILE = "gemini_prompt_scoring_private.txt"
+PRIVATE_PROMPT_FILES = {
+    "extract": "private_task_extract.txt",
+    "meta": "private_task_meta.txt",
+}
 
 
 @lru_cache(maxsize=10)
@@ -87,6 +94,22 @@ def build_prompt(etap: str = "etap2") -> str:
     return f"{base}\n\n{scoring}\n\n{abuse}"
 
 
+def build_private_scoring_prompt() -> str:
+    """Grading prompt for a private task: base -> private scoring -> abuse/JSON."""
+    prompts_dir = settings.prompts_dir
+    base = _load_prompt_file(prompts_dir / BASE_PROMPT_FILE)
+    scoring = _load_prompt_file(prompts_dir / PRIVATE_SCORING_PROMPT_FILE)
+    abuse = _load_prompt_file(prompts_dir / ABUSE_PROMPT_FILE)
+    return f"{base}\n\n{scoring}\n\n{abuse}"
+
+
+def load_private_prompt(name: str) -> str:
+    """Prompt for a private task call: "extract" (photo -> text) or "meta" (hints)."""
+    if name not in PRIVATE_PROMPT_FILES:
+        raise ValueError(f"Unknown private prompt: {name!r}")
+    return _load_prompt_file(settings.prompts_dir / PRIVATE_PROMPT_FILES[name])
+
+
 def validate_prompts() -> list[str]:
     """
     Validate all prompt files exist and are readable.
@@ -120,6 +143,12 @@ def validate_prompts() -> list[str]:
             errors.append(f"Scoring prompt for {etap} not found: {scoring_path}")
         elif not scoring_path.is_file():
             errors.append(f"Scoring prompt for {etap} is not a file: {scoring_path}")
+
+    # Private task prompts
+    for filename in [PRIVATE_SCORING_PROMPT_FILE, *PRIVATE_PROMPT_FILES.values()]:
+        path = prompts_dir / filename
+        if not path.is_file():
+            errors.append(f"Private task prompt not found: {path}")
 
     return errors
 

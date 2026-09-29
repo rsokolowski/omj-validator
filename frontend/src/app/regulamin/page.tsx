@@ -11,9 +11,11 @@ import { APP_NAME, CONTACT_EMAIL } from "@/lib/utils/constants";
 const RETENTION_SUBMISSIONS = "24 miesiące";
 const RETENTION_THINKING = "90 dni";
 const RETENTION_INACTIVE_ACCOUNT = "36 miesięcy";
+const RETENTION_PRIVATE_TASKS = "24 miesiące";
+const RETENTION_AI_USAGE = "90 dni";
 const RETENTION_ADMIN_AUDIT = "12 miesięcy";
 
-const LAST_UPDATED = "sierpień 2026";
+const LAST_UPDATED = "wrzesień 2026";
 
 export const metadata: Metadata = {
   title: "Regulamin i polityka prywatności",
@@ -282,6 +284,31 @@ export default function RegulaminPage() {
             </li>
           </Box>
           <Typography paragraph>
+            <strong>Własne zadania (&bdquo;Moje zadania&rdquo;)</strong>, jeśli z
+            nich korzystasz:
+          </Typography>
+          <Box component="ul" sx={{ pl: 3, mb: 2 }}>
+            <li>
+              treść zadania, którą wpisałeś albo która została odczytana ze
+              zdjęcia i przez Ciebie zatwierdzona, wraz z tytułem, źródłem,
+              kategorią i trudnością,
+            </li>
+            <li>zdjęcie strony z zadaniem, jeśli dodałeś zadanie ze zdjęcia,</li>
+            <li>
+              wygenerowane wskazówki i informacja, ile z nich odkryłeś przed
+              wysłaniem rozwiązania,
+            </li>
+            <li>
+              techniczny zapis wywołań modelu przy dodawaniu zadań (rodzaj i czas
+              wywołania, liczba tokenów, koszt &ndash; bez treści), potrzebny do
+              limitu dziennego.
+            </li>
+          </Box>
+          <Typography paragraph>
+            Własne zadania widzisz tylko Ty. Nie są publikowane, udostępniane
+            innym użytkownikom ani indeksowane przez wyszukiwarki.
+          </Typography>
+          <Typography paragraph>
             <strong>Dane techniczne:</strong> ciasteczko sesyjne (ważne 30 dni,
             podpisane kryptograficznie) oraz dzienniki serwera zawierające m.in.
             informacje o logowaniach i błędach. W dziennikach adresy e-mail są
@@ -376,6 +403,12 @@ export default function RegulaminPage() {
             <li>
               pliki są <strong>usuwane</strong> z infrastruktury Google zaraz po
               zakończeniu analizy,
+            </li>
+            <li>
+              przy <strong>własnych zadaniach</strong> do Google trafia też zdjęcie
+              strony z zadaniem (żeby odczytać jego treść) i sama treść zadania
+              (żeby przygotować wskazówki i ocenić rozwiązanie); zdjęcia te nie są
+              przechowywane u Google po zakończeniu analizy,
             </li>
             <li>
               korzystamy z <strong>płatnej wersji usługi</strong>, w której
@@ -485,6 +518,18 @@ export default function RegulaminPage() {
               usuniesz. Jeżeli przez {RETENTION_INACTIVE_ACCOUNT} nie zalogujesz
               się i nie wyślesz żadnego rozwiązania, konto zostanie usunięte
               automatycznie razem ze wszystkim, co do niego należy.
+            </li>
+            <li>
+              <strong>Własne zadania</strong> razem ze zdjęciami, wskazówkami i
+              rozwiązaniami &ndash; przez {RETENTION_PRIVATE_TASKS} od ostatniej
+              aktywności przy zadaniu (dodanie, edycja albo wysłanie
+              rozwiązania). Możesz je też usunąć w każdej chwili. Zdjęcia
+              przesłane do odczytania, ale niezapisane jako zadanie, są usuwane
+              po 24 godzinach.
+            </li>
+            <li>
+              <strong>Techniczny zapis wywołań modelu przy dodawaniu zadań</strong>{" "}
+              &ndash; przez {RETENTION_AI_USAGE}.
             </li>
             <li>
               <strong>Zapisy dostępu administratora do danych</strong> (patrz
@@ -656,6 +701,11 @@ export default function RegulaminPage() {
             <li>
               przesyłać wyłącznie zdjęcia własnych rozwiązań zadań
               matematycznych,
+            </li>
+            <li>
+              jako &bdquo;własne zadania&rdquo; dodawać tylko treści zadań
+              matematycznych, z których korzystasz do własnej nauki, i nie
+              rozpowszechniać ich dalej,
             </li>
             <li>
               nie przesyłać zdjęć przedstawiających inne osoby, ich dane lub ich

@@ -3,7 +3,7 @@
 from pathlib import Path
 from typing import Optional, Protocol, runtime_checkable
 
-from ..models import SubmissionResult
+from ..models import PrivateExtractionResult, PrivateTaskMeta, SubmissionResult
 
 
 @runtime_checkable
@@ -31,6 +31,25 @@ class AIProvider(Protocol):
         Returns:
             SubmissionResult with score and feedback
         """
+        ...
+
+    async def extract_private_tasks(self, image_paths: list[Path]) -> PrivateExtractionResult:
+        """Read every problem statement off photos of a page (private tasks)."""
+        ...
+
+    async def generate_private_task_meta(self, title: str, content: str) -> PrivateTaskMeta:
+        """Hints, category and difficulty for a private task statement."""
+        ...
+
+    async def analyze_private_solution_stream(
+        self,
+        task_title: str,
+        task_content: str,
+        image_paths: list[Path],
+        on_thinking=None,
+        on_upload_complete=None,
+    ) -> SubmissionResult:
+        """Grade a solution to a private task (no official solution exists)."""
         ...
 
     def get_timeout(self) -> int:

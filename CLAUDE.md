@@ -89,14 +89,20 @@ omj-validator/
 │   ├── storage.py          # Task loading (dir scan + LRU cache)
 │   ├── models.py           # Pydantic models
 │   ├── progress.py         # Task progression graph logic
+│   ├── uploads.py          # Photo saving + sanitizing (EXIF/GPS strip), shared by all uploads
+│   ├── rate_limits.py      # Rolling 24h limits (submissions; AI calls via ai_usage)
+│   ├── retention.py        # Data retention + account erasure (RODO)
+│   ├── private_tasks/      # "Moje zadania": router (routes.py) + files/limits (service.py)
 │   ├── db/                 # Database layer
 │   │   ├── session.py      # SQLAlchemy engine, get_db dependency
-│   │   ├── models.py       # ORM: UserDB, SubmissionDB
-│   │   └── repositories.py # Data access layer
+│   │   ├── models.py       # ORM: UserDB, SubmissionDB, PrivateTaskDB, AIUsageDB, ...
+│   │   ├── repositories.py # Data access layer
+│   │   └── private_tasks.py # PrivateTaskRepository, AIUsageRepository
 │   └── ai/
 │       ├── protocol.py     # AIProvider interface
 │       ├── factory.py      # Provider factory
 │       ├── parsing.py      # JSON parsing, OMJ score normalization
+│       ├── private_parsing.py # Validation of extraction / hint responses
 │       └── providers/
 │           └── gemini.py   # Gemini API integration
 ├── data/                    # Runtime data
@@ -129,11 +135,13 @@ frontend/src/
 │   ├── years/[year]/[etap]/page.tsx # Task list for etap
 │   ├── task/[year]/[etap]/[num]/page.tsx  # Task detail with submission
 │   ├── progress/page.tsx            # Task progression graph
+│   ├── moje-zadania/                # Private tasks: list, nowe (add), [id] (task)
 │   └── login/page.tsx               # Google OAuth login
 ├── components/
 │   ├── layout/                      # Header, Footer, Breadcrumb
 │   ├── task/                        # TaskCard, SubmitSection, HintsSection
 │   ├── progress/                    # ProgressGraph, CategoryFilter
+│   ├── private-tasks/               # NewPrivateTaskForm, ProblemEditor, hints, actions
 │   └── ui/                          # DifficultyStars, CategoryBadge, MathContent
 └── lib/
     ├── api/client.ts                # Fetch helpers
@@ -156,6 +164,17 @@ GET  /api/task/{year}/{etap}/{num}/history  # Submission history
 GET  /api/progress/data              # Task progression data
 POST /task/{year}/{etap}/{num}/submit       # Submit solution
 POST /api/account/delete             # Erase own account + submissions + photos (RODO art. 17)
+
+# Private tasks ("Moje zadania") - owner only, someone else's id is a 404
+POST   /api/private-tasks/extract            # Photos -> draft {draft_id, problems[]} (AI)
+POST   /api/private-tasks                    # Create from draft selection or typed text (AI hints)
+GET    /api/private-tasks                    # List own tasks
+GET    /api/private-tasks/{id}               # Detail + history; only revealed hints
+PATCH  /api/private-tasks/{id}               # Edit
+DELETE /api/private-tasks/{id}               # Task + submissions + photos
+POST   /api/private-tasks/{id}/hints/{n}     # Reveal hint n (in order)
+POST   /api/private-tasks/{id}/regenerate-hints
+POST   /api/private-tasks/{id}/submit        # Solution photos -> grading over the WebSocket
 ```
 
 **Auth routes**:
@@ -180,6 +199,11 @@ GET  /uploads/{path}                 # Serve uploaded images
   self-service account deletion, so erasing an account cannot reset the daily limit
 - `admin_access_log` - Audit trail of admin access to other users' data (RODO art. 5(2));
   identifiers and a resource label only, never content
+- `private_tasks` - Tasks a student added from a photo or typed text; owner-only.
+  `submissions` reference EITHER an OMJ task (`year`, `etap`, `task_number`) OR a
+  private task (`private_task_id`) - check constraint `ck_submissions_task_ref`.
+  Any new OMJ aggregate over `submissions` must filter `private_task_id IS NULL`.
+- `ai_usage` - Content-free log of non-submission AI calls (extraction, hints), for rate limits
 
 **Local**: PostgreSQL 16 via Docker on port 5433 (`postgresql://omj:omj@localhost:5433/omj`)
 
@@ -229,9 +253,19 @@ GET  /uploads/{path}                 # Serve uploaded images
    - Results stored in PostgreSQL `submissions` table
    - OMJ scoring: 0, 2, 5, or 6 points
 
-3. **AI Integration**: Uses Gemini File API. Prompt in `prompts/gemini_prompt.txt`.
+3. **AI Integration**: Uses Gemini File API. Prompts in `prompts/` (see `app/ai/prompt_builder.py`).
 
-4. **LaTeX Rendering**: Frontend uses KaTeX via `MathContent` component.
+4. **Private tasks ("Moje zadania")**: photo -> `extract_private_tasks` (schema-constrained,
+   inline images) -> draft photos in `uploads/{user}/private/_drafts/{id}/` -> student picks
+   and edits problems -> `generate_private_task_meta` (hints) -> `private_tasks` row with its
+   own copy of the photos in `uploads/{user}/private/{task_id}/source/`. Grading uses
+   `analyze_private_solution_stream` (task text instead of PDFs, no official solution,
+   prompt `gemini_prompt_scoring_private.txt`) through the same background worker and
+   WebSocket; the graded text is kept in `scoring_meta["task_snapshot"]`. Never commit real
+   task statements in fixtures - the fake Gemini uses invented problems.
+
+5. **LaTeX Rendering**: Frontend uses KaTeX via `MathContent` component, which HTML-escapes
+   all non-math text (private task statements are user/AI controlled). `npm test` covers it.
 
 ### Configuration
 
@@ -259,7 +293,14 @@ RETENTION_SUBMISSION_MONTHS=24        # Submission row + uploaded photos
 RETENTION_SCORING_THINKING_DAYS=90    # Raw AI "thinking" trace in scoring_meta
 RETENTION_INACTIVE_ACCOUNT_MONTHS=36  # Accounts with no login and no submission
 RETENTION_ADMIN_AUDIT_MONTHS=12       # Admin access audit trail
+RETENTION_PRIVATE_TASK_MONTHS=24      # Private tasks, counted from last activity
+RETENTION_AI_USAGE_DAYS=90            # ai_usage rows (rate limiting only)
 RETENTION_AUTO_PURGE=true             # Daily in-app run (single-worker only)
+
+# Private task limits (grading shares the submission limits)
+# RATE_LIMIT_PRIVATE_TASKS_PER_USER_PER_DAY=10
+# RATE_LIMIT_PRIVATE_EXTRACTS_PER_USER_PER_DAY=15
+# RATE_LIMIT_AI_USAGE_GLOBAL_PER_DAY=1000
 
 # AI
 AI_PROVIDER=gemini

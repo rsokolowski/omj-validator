@@ -14,6 +14,14 @@ class AIProviderError(Exception):
     pass
 
 
+class AIContentBlockedError(AIProviderError):
+    """The model's safety filter refused the input.
+
+    Distinct from a timeout or an outage: for student-supplied text (private
+    tasks) a block means the text must not be saved unchecked.
+    """
+
+
 # Singleton cache for AI provider
 _provider_instance: Optional["AIProvider"] = None
 

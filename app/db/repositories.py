@@ -127,6 +127,8 @@ class DeletedAccountQuotaRepository:
         oldest_submission_at: Optional[datetime],
         newest_submission_at: Optional[datetime] = None,
         window_hours: int = 24,
+        ai_usage_count: int = 0,
+        ai_usage_newest_at: Optional[datetime] = None,
     ) -> Optional[DeletedAccountQuotaDB]:
         """Remember how much quota an erased account had already used.
 
@@ -143,12 +145,24 @@ class DeletedAccountQuotaRepository:
 
         oldest_submission_at is still stored, because that is what the reset /
         Retry-After headers should point at (when the FIRST slot frees up).
+
+        ai_usage_count carries the non-submission AI calls (private task
+        extraction and hint generation) the same way; the block expires at the
+        later of the two newest timestamps.
         """
-        if submission_count <= 0:
+        submission_count = max(0, submission_count or 0)
+        ai_usage_count = max(0, ai_usage_count or 0)
+        if submission_count <= 0 and ai_usage_count <= 0:
             return None
 
         now = datetime.now(timezone.utc)
-        anchor = ensure_utc(newest_submission_at) or ensure_utc(oldest_submission_at) or now
+        anchors = [
+            a for a in (
+                ensure_utc(newest_submission_at) or ensure_utc(oldest_submission_at),
+                ensure_utc(ai_usage_newest_at),
+            ) if a is not None
+        ]
+        anchor = max(anchors) if anchors else now
         expires_at = (anchor + timedelta(hours=window_hours)).replace(tzinfo=None)
         user_hash = hash_user_id(user_id)
 
@@ -160,6 +174,7 @@ class DeletedAccountQuotaRepository:
         if tombstone:
             # Same person deleting again inside the window - quota accumulates
             tombstone.submission_count += submission_count
+            tombstone.ai_usage_count = (tombstone.ai_usage_count or 0) + ai_usage_count
             if tombstone.expires_at < expires_at:
                 tombstone.expires_at = expires_at
             # Reset headers should still point at the earliest counted submission
@@ -172,6 +187,7 @@ class DeletedAccountQuotaRepository:
             tombstone = DeletedAccountQuotaDB(
                 user_hash=user_hash,
                 submission_count=submission_count,
+                ai_usage_count=ai_usage_count,
                 oldest_submission_at=(
                     ensure_utc(oldest_submission_at).replace(tzinfo=None)
                     if oldest_submission_at
@@ -184,7 +200,8 @@ class DeletedAccountQuotaRepository:
         self.db.commit()
         logger.info(
             f"Recorded rate-limit tombstone for erased account "
-            f"({submission_count} submissions, expires {expires_at})"
+            f"({submission_count} submissions, {ai_usage_count} AI calls, "
+            f"expires {expires_at})"
         )
         return tombstone
 
@@ -208,6 +225,19 @@ class DeletedAccountQuotaRepository:
         if not tombstone:
             return 0, None
         return tombstone.submission_count, tombstone.expires_at
+
+    def get_user_ai_usage_carryover(self, user_id: str) -> int:
+        """AI calls (ai_usage rows) an erased account made that still count."""
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
+        tombstone = (
+            self.db.query(DeletedAccountQuotaDB)
+            .filter(
+                DeletedAccountQuotaDB.user_hash == hash_user_id(user_id),
+                DeletedAccountQuotaDB.expires_at > now,
+            )
+            .first()
+        )
+        return (tombstone.ai_usage_count or 0) if tombstone else 0
 
     def get_global_carryover_blocks(self) -> list[tuple[int, datetime]]:
         """Every live tombstone as a (count, expires_at) block.
@@ -385,9 +415,9 @@ class SubmissionRepository:
         self,
         id: str,
         user_id: str,
-        year: str,
-        etap: str,
-        task_number: int,
+        year: Optional[str],
+        etap: Optional[str],
+        task_number: Optional[int],
         images: list[str],
         score: Optional[int] = None,
         feedback: Optional[str] = None,
@@ -396,14 +426,22 @@ class SubmissionRepository:
         issue_type: IssueType = IssueType.NONE,
         abuse_score: int = 0,
         scoring_meta: Optional[dict] = None,
+        private_task_id: Optional[str] = None,
+        hints_used: int = 0,
     ) -> SubmissionDB:
-        """Create a new submission."""
+        """Create a new submission.
+
+        Pass year/etap/task_number for an OMJ task, or leave them None and pass
+        private_task_id for a private task (ck_submissions_task_ref).
+        """
         submission = SubmissionDB(
             id=id,
             user_id=user_id,
             year=year,
             etap=etap,
             task_number=task_number,
+            private_task_id=private_task_id,
+            hints_used=hints_used,
             images=images,
             score=score,
             feedback=feedback,
@@ -442,6 +480,7 @@ class SubmissionRepository:
             self.db.query(SubmissionDB)
             .filter(
                 SubmissionDB.user_id == user_id,
+                SubmissionDB.private_task_id.is_(None),
                 SubmissionDB.year == year,
                 SubmissionDB.etap == etap,
                 SubmissionDB.task_number == task_number,
@@ -494,6 +533,8 @@ class SubmissionRepository:
             )
             .filter(
                 SubmissionDB.user_id == user_id,
+                # Private tasks are not part of the OMJ progression graph
+                SubmissionDB.private_task_id.is_(None),
                 SubmissionDB.status == SubmissionStatus.COMPLETED,
                 SubmissionDB.score.isnot(None),
             )
@@ -535,6 +576,8 @@ class SubmissionRepository:
             year=db_submission.year,
             etap=db_submission.etap,
             task_number=db_submission.task_number,
+            private_task_id=db_submission.private_task_id,
+            hints_used=db_submission.hints_used or 0,
             timestamp=ensure_utc(db_submission.timestamp),
             status=PydanticSubmissionStatus(db_submission.status.value),
             images=db_submission.images,
@@ -827,7 +870,12 @@ class SubmissionRepository:
         """
         query = self.db.query(SubmissionDB).filter(SubmissionDB.user_id == user_id)
 
-        # Apply filters
+        # Apply filters. A year/etap filter is an OMJ filter - private tasks
+        # have neither, so they are excluded explicitly rather than by NULL
+        # happening not to match.
+        if year_filter or etap_filter:
+            query = query.filter(SubmissionDB.private_task_id.is_(None))
+
         if year_filter:
             query = query.filter(SubmissionDB.year == year_filter)
 
@@ -907,13 +955,26 @@ class SubmissionRepository:
         avg_score = round(score_stats.avg_score, 2) if score_stats.avg_score else None
         best_score = score_stats.best_score
 
-        # Unique tasks attempted (any status)
-        tasks_attempted = (
+        # Unique tasks attempted (any status): OMJ tasks plus private tasks
+        omj_attempted = (
             self.db.query(SubmissionDB.year, SubmissionDB.etap, SubmissionDB.task_number)
-            .filter(SubmissionDB.user_id == user_id)
+            .filter(
+                SubmissionDB.user_id == user_id,
+                SubmissionDB.private_task_id.is_(None),
+            )
             .distinct()
             .count()
         )
+        private_attempted = (
+            self.db.query(SubmissionDB.private_task_id)
+            .filter(
+                SubmissionDB.user_id == user_id,
+                SubmissionDB.private_task_id.isnot(None),
+            )
+            .distinct()
+            .count()
+        )
+        tasks_attempted = omj_attempted + private_attempted
 
         # Tasks mastered: best score >= mastery threshold per task
         # etap1: mastery = 2, etap2/etap3: mastery = 5
@@ -929,6 +990,23 @@ class SubmissionRepository:
                 threshold = 2 if etap == "etap1" else 5
                 if best >= threshold:
                     tasks_mastered += 1
+
+        # Private tasks are graded on the 0/2/5/6 ladder, mastery = 5
+        private_best = (
+            self.db.query(
+                SubmissionDB.private_task_id,
+                func.max(SubmissionDB.score).label("best_score"),
+            )
+            .filter(
+                SubmissionDB.user_id == user_id,
+                SubmissionDB.private_task_id.isnot(None),
+                SubmissionDB.status == SubmissionStatus.COMPLETED,
+                SubmissionDB.score.isnot(None),
+            )
+            .group_by(SubmissionDB.private_task_id)
+            .all()
+        )
+        tasks_mastered += sum(1 for row in private_best if row.best_score >= 5)
 
         return {
             "total_submissions": total,
