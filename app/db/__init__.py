@@ -20,6 +20,7 @@ from .repositories import (
     DeletedAccountQuotaRepository,
     AdminAccessLogRepository,
 )
+from .private_tasks import AIUsageRepository, HintOrderError, PrivateTaskRepository
 
 __all__ = [
     # Session management
@@ -41,4 +42,7 @@ __all__ = [
     "SubmissionRepository",
     "DeletedAccountQuotaRepository",
     "AdminAccessLogRepository",
+    "PrivateTaskRepository",
+    "AIUsageRepository",
+    "HintOrderError",
 ]

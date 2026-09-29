@@ -127,6 +127,8 @@ class DeletedAccountQuotaRepository:
         oldest_submission_at: Optional[datetime],
         newest_submission_at: Optional[datetime] = None,
         window_hours: int = 24,
+        ai_usage_count: int = 0,
+        ai_usage_newest_at: Optional[datetime] = None,
     ) -> Optional[DeletedAccountQuotaDB]:
         """Remember how much quota an erased account had already used.
 
@@ -143,12 +145,24 @@ class DeletedAccountQuotaRepository:
 
         oldest_submission_at is still stored, because that is what the reset /
         Retry-After headers should point at (when the FIRST slot frees up).
+
+        ai_usage_count carries the non-submission AI calls (private task
+        extraction and hint generation) the same way; the block expires at the
+        later of the two newest timestamps.
         """
-        if submission_count <= 0:
+        submission_count = max(0, submission_count or 0)
+        ai_usage_count = max(0, ai_usage_count or 0)
+        if submission_count <= 0 and ai_usage_count <= 0:
             return None
 
         now = datetime.now(timezone.utc)
-        anchor = ensure_utc(newest_submission_at) or ensure_utc(oldest_submission_at) or now
+        anchors = [
+            a for a in (
+                ensure_utc(newest_submission_at) or ensure_utc(oldest_submission_at),
+                ensure_utc(ai_usage_newest_at),
+            ) if a is not None
+        ]
+        anchor = max(anchors) if anchors else now
         expires_at = (anchor + timedelta(hours=window_hours)).replace(tzinfo=None)
         user_hash = hash_user_id(user_id)
 
@@ -160,6 +174,7 @@ class DeletedAccountQuotaRepository:
         if tombstone:
             # Same person deleting again inside the window - quota accumulates
             tombstone.submission_count += submission_count
+            tombstone.ai_usage_count = (tombstone.ai_usage_count or 0) + ai_usage_count
             if tombstone.expires_at < expires_at:
                 tombstone.expires_at = expires_at
             # Reset headers should still point at the earliest counted submission
@@ -172,6 +187,7 @@ class DeletedAccountQuotaRepository:
             tombstone = DeletedAccountQuotaDB(
                 user_hash=user_hash,
                 submission_count=submission_count,
+                ai_usage_count=ai_usage_count,
                 oldest_submission_at=(
                     ensure_utc(oldest_submission_at).replace(tzinfo=None)
                     if oldest_submission_at
@@ -184,7 +200,8 @@ class DeletedAccountQuotaRepository:
         self.db.commit()
         logger.info(
             f"Recorded rate-limit tombstone for erased account "
-            f"({submission_count} submissions, expires {expires_at})"
+            f"({submission_count} submissions, {ai_usage_count} AI calls, "
+            f"expires {expires_at})"
         )
         return tombstone
 
@@ -208,6 +225,19 @@ class DeletedAccountQuotaRepository:
         if not tombstone:
             return 0, None
         return tombstone.submission_count, tombstone.expires_at
+
+    def get_user_ai_usage_carryover(self, user_id: str) -> int:
+        """AI calls (ai_usage rows) an erased account made that still count."""
+        now = datetime.now(timezone.utc).replace(tzinfo=None)
+        tombstone = (
+            self.db.query(DeletedAccountQuotaDB)
+            .filter(
+                DeletedAccountQuotaDB.user_hash == hash_user_id(user_id),
+                DeletedAccountQuotaDB.expires_at > now,
+            )
+            .first()
+        )
+        return (tombstone.ai_usage_count or 0) if tombstone else 0
 
     def get_global_carryover_blocks(self) -> list[tuple[int, datetime]]:
         """Every live tombstone as a (count, expires_at) block.
