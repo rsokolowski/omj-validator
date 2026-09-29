@@ -108,7 +108,10 @@ def known_skills(skills: list[str]) -> list[str]:
 
 
 def stored_round(round_: RefineRoundIn) -> dict:
+    """A round as saved: the proposal is filtered like the pattern's own fields."""
     data = round_.model_dump()
+    data["category"] = round_.category if round_.category in PRIVATE_TASK_CATEGORIES else None
+    data["skills"] = known_skills(round_.skills)
     data["at"] = datetime.now(timezone.utc).isoformat()
     return data
 

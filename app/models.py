@@ -1,6 +1,6 @@
 from pydantic import BaseModel, computed_field, Field, field_validator
 from datetime import datetime
-from typing import Optional, Literal
+from typing import Annotated, Optional, Literal
 from enum import Enum
 
 
@@ -459,7 +459,7 @@ class RefineRoundIn(BaseModel):
     chosen: Optional[int] = Field(default=None, ge=0, le=2)
     # The AI's category / skills proposal from this round (filtered on save)
     category: Optional[str] = Field(default=None, max_length=20)
-    skills: list[str] = Field(default=[], max_length=10)
+    skills: list[Annotated[str, Field(max_length=64)]] = Field(default=[], max_length=10)
 
     @field_validator("questions")
     @classmethod

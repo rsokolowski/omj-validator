@@ -16,7 +16,8 @@ export function PracticeBanner({ pattern }: { pattern: Pattern }) {
       </Box>
       <Typography variant="body2" sx={{ color: "grey.700", mt: 0.5 }}>
         Ocena Twojego rozwiązania zaliczy się jako powtórka tego wzorca (wskazówki obniżają ją
-        do &bdquo;z trudem&rdquo;). <Link href={`/wzorce/${pattern.id}`}>Pokaż wzorzec</Link>
+        do &bdquo;z trudem&rdquo;). Liczy się pierwsze ocenione rozwiązanie danego dnia.{" "}
+        <Link href={`/wzorce/${pattern.id}`}>Pokaż wzorzec</Link>
       </Typography>
     </Paper>
   );

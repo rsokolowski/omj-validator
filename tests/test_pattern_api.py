@@ -445,3 +445,21 @@ def test_link_lookups_are_indexed():
     indexed = {tuple(c.name for c in index.columns) for index in PatternLinkDB.__table__.indexes}
     assert ("private_task_id",) in indexed
     assert ("task_key",) in indexed
+
+
+class TestStoredRoundsAreBounded:
+    def test_round_skills_and_category_are_filtered_before_storing(self, client):
+        from app.skills import get_all_skills
+
+        skill = get_all_skills()[0].id
+        round_ = {"draft": {"raw": "szkic"}, "variants": [{"trigger": "W1 wyzwalacz", "action": "A1 akcja"}],
+                  "chosen": 0, "category": "<b>x</b>", "skills": [skill, "made_up"]}
+        p = create(client, refinement=[round_])
+        client.patch(f"/api/patterns/{p['id']}", json={"append_round": round_})
+        stored = client.get(f"/api/patterns/{p['id']}").json()["pattern"]["refinement"]
+        assert [(r["category"], r["skills"]) for r in stored] == [(None, [skill]), (None, [skill])]
+
+    def test_overlong_skill_is_rejected(self, client):
+        round_ = {"variants": [], "skills": ["y" * 5000]}
+        r = client.post("/api/patterns/refine", json={"draft": {"raw": "szkic"}, "history": [round_]})
+        assert r.status_code == 422

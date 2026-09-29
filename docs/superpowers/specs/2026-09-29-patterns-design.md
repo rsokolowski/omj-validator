@@ -237,7 +237,11 @@ schedule(level, streak, outcome, today) -> (level, streak, due_on)
 | solved with hints, or partial (score > 0 but not solved) | `hard` |
 | score 0 | `fail` |
 
-A graded practice task counts **whenever it happens** (even before `due_on`).
+A graded practice task counts whenever it happens (even before `due_on`), but
+**only the first graded practice of a pattern per Europe/Warsaw day** counts:
+solving linked tasks again the same afternoon is not spaced repetition and
+would otherwise move a pattern up several levels at once. The practice banner
+says so.
 Failed gradings (status FAILED) do not count. A submission applies at most once
 (a `pattern_reviews` row with that `submission_id` already existing → no-op).
 
@@ -257,7 +261,8 @@ Failed gradings (status FAILED) do not count. A submission applies at most once
 - Order: most overdue first (`due_on` asc, then `created_at`), then **interleave
   categories**: greedy — take the next item whose category differs from the
   previous one, else the next item.
-- Returns the first `limit` (default 10, ≤50) plus `due_total`.
+- Returns the first `limit` (default 10, ≤50) plus `due_total`; `limit=0`
+  returns only `due_total` (one COUNT query - the header badge polls it).
 - A recall review is accepted only when due: `POST /review` on a not-due or
   archived pattern → 409. The update is conditional
   (`UPDATE ... WHERE id=:id AND due_on=:seen_due_on`), so a double click counts once.
