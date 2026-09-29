@@ -428,6 +428,7 @@ class SubmissionRepository:
         scoring_meta: Optional[dict] = None,
         private_task_id: Optional[str] = None,
         hints_used: int = 0,
+        pattern_id: Optional[str] = None,
     ) -> SubmissionDB:
         """Create a new submission.
 
@@ -442,6 +443,7 @@ class SubmissionRepository:
             task_number=task_number,
             private_task_id=private_task_id,
             hints_used=hints_used,
+            pattern_id=pattern_id,
             images=images,
             score=score,
             feedback=feedback,
@@ -578,6 +580,7 @@ class SubmissionRepository:
             task_number=db_submission.task_number,
             private_task_id=db_submission.private_task_id,
             hints_used=db_submission.hints_used or 0,
+            pattern_id=db_submission.pattern_id,
             timestamp=ensure_utc(db_submission.timestamp),
             status=PydanticSubmissionStatus(db_submission.status.value),
             images=db_submission.images,

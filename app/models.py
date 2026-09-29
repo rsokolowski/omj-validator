@@ -118,6 +118,8 @@ class Submission(BaseModel):
     # Set instead of the OMJ fields for a private task submission
     private_task_id: Optional[str] = None
     hints_used: int = 0
+    # Pattern this solution practised (graded practice from a pattern card)
+    pattern_id: Optional[str] = None
     timestamp: datetime
     status: SubmissionStatus = SubmissionStatus.COMPLETED
     images: list[str]  # paths to uploaded images (relative to uploads_dir)
