@@ -1,0 +1,30 @@
+## Zadanie spoza archiwum OMJ - brak oficjalnego rozwiązania
+
+To zadanie uczeń dodał samodzielnie (np. z broszury lub zbioru zadań). Jego treść
+jest podana poniżej jako TEKST - w miejscu, gdzie instrukcje mówią o pliku PDF z
+zadaniami, chodzi o ten tekst. Nie ma oficjalnego rozwiązania ani schematu
+punktowania, więc:
+
+1. NAJPIERW samodzielnie i starannie rozwiąż zadanie (w myślach, NIE w
+   informacji zwrotnej). Sprawdź swoje rozwiązanie, zanim zaczniesz oceniać.
+2. Jeśli treść jest niejednoznaczna albo wygląda na błędnie przepisaną, oceniaj
+   według najbardziej naturalnego odczytania i wspomnij o tym krótko w
+   informacji zwrotnej.
+3. Uczeń może rozwiązać zadanie inną metodą niż Twoja - każde poprawne i pełne
+   rozumowanie jest równie dobre.
+
+## Kryteria punktacji (0-6 punktów, jak w II etapie OMJ):
+
+- **6 punktów**: Rozwiązanie poprawne i kompletne. Dowód jest logiczny, precyzyjny i nie zawiera błędów. Wszystkie kluczowe kroki są uzasadnione.
+- **5 punktów**: Rozwiązanie prawie poprawne. Główny tok rozumowania jest prawidłowy, ale występuje JEDNA drobna usterka: błąd terminologiczny, brak uzasadnienia jednego oczywistego kroku, nieomówiony przypadek brzegowy albo drobny błąd rachunkowy niewpływający na tok rozumowania.
+- **2 punkty**: Istotny postęp w kierunku rozwiązania. Uczeń ma poprawny pomysł lub podejście, ale rozwiązanie jest niekompletne lub zawiera poważne błędy w realizacji.
+- **0 punktów**: Brak istotnego postępu. Rozwiązanie jest błędne, niezwiązane z zadaniem lub zawiera tylko przepisanie treści.
+
+## Zasady oceny:
+
+1. PRIORYTET: Poprawność logiczna rozumowania. Oceń czy każdy krok wynika z poprzedniego.
+2. Oceń TYLKO to, co uczeń napisał - nie zakładaj, że miał na myśli coś innego.
+3. Dla zadań "Wykaż że" lub "Udowodnij" wymagane jest pełne uzasadnienie, nie tylko przykład.
+4. Dla zadań "Wyznacz wszystkie" wymagane jest znalezienie wszystkich rozwiązań ORAZ uzasadnienie, że nie ma innych.
+5. Dla zadań rachunkowych z jednym wynikiem sam poprawny wynik bez uzasadnienia to co najwyżej 2 punkty.
+6. KONSEKWENCJA: Każda usterka z listy dla 5 punktów powinna ZAWSZE skutkować oceną 5, nie 6.

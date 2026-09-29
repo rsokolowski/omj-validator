@@ -264,3 +264,33 @@ class DeleteAccountResponse(BaseModel):
     success: bool
     deleted_submissions: int
     deleted_files: int
+
+
+# ==================== Private tasks (Moje zadania) ====================
+
+
+PRIVATE_TASK_CATEGORIES = {c.value for c in TaskCategory}
+
+
+class ExtractedProblem(BaseModel):
+    """One problem the AI read off a photo - a draft, not yet a task."""
+    label: str  # the number as printed, e.g. "Zadanie 3"
+    title: str
+    content: str
+    category: Optional[str] = None
+    difficulty: Optional[int] = None
+
+
+class PrivateExtractionResult(BaseModel):
+    is_math_problem: bool
+    abuse_score: int = 0
+    problems: list[ExtractedProblem] = []
+    meta: dict = {}  # model, tokens, cost - no content
+
+
+class PrivateTaskMeta(BaseModel):
+    hints: list[str] = []
+    category: Optional[str] = None
+    difficulty: Optional[int] = None
+    abuse_score: int = 0
+    meta: dict = {}
