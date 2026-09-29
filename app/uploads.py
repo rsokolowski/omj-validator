@@ -207,7 +207,10 @@ MAX_IMAGES = 10
 
 
 def validate_image_batch(images: list[UploadFile]) -> OptionalType[JSONResponse]:
-    """400 response for an oversized or wrongly typed batch, else None. Emptiness is validate_submission_input's business."""
+    """400 response for an oversized or wrongly typed batch, else None.
+
+    Emptiness is validate_submission_input's business.
+    """
     if len(images) > MAX_IMAGES:
         return JSONResponse(
             {"error": f"Maksymalnie {MAX_IMAGES} zdjęć na raz"},

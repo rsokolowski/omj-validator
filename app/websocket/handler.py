@@ -93,7 +93,9 @@ async def process_submission_background(
 
         # Stage 1: Uploading files
         logger.info(f"[Submission {submission_id}] Stage 1: Preparing file upload ({_format_elapsed(start_time)})")
-        await progress_manager.send_status(submission_id, "Przesyłam pliki...")
+        await progress_manager.send_status(
+            submission_id, "Przesyłam pliki..." if image_paths else "Przesyłam rozwiązanie..."
+        )
 
         if private_task is None:
             # Get PDF paths
