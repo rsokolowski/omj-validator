@@ -154,17 +154,19 @@ async def extract_tasks(
 ):
     """Read problem statements off photos. Returns a draft; nothing is saved yet."""
     user_id = await current_member_id(request)
-    service.check_ai_limit(
+    batch_error = validate_image_batch(images)
+    if batch_error is not None:
+        return batch_error
+
+    # Reserved before the photos are written: a refused request leaves nothing
+    [usage_row] = service.reserve_ai_calls(
         db,
         user_id,
+        KIND_EXTRACT,
         {KIND_EXTRACT},
         settings.rate_limit_private_extracts_per_user_per_day,
         _is_allowlisted(request),
     )
-
-    batch_error = validate_image_batch(images)
-    if batch_error is not None:
-        return batch_error
 
     draft_id = service.new_draft_id()
     saved, upload_error = await save_uploaded_images(images, service.draft_dir(user_id, draft_id))
@@ -177,8 +179,6 @@ async def extract_tasks(
         service.discard_draft(user_id, draft_id)
         raise HTTPException(status_code=code, detail=message)
 
-    usage = AIUsageRepository(db)
-    usage_row = usage.record(user_id, KIND_EXTRACT)
     try:
         result = await create_ai_provider().extract_private_tasks(saved)
     except AIProviderError as e:
@@ -214,11 +214,13 @@ async def extract_tasks(
 
 
 async def _create_from_inputs(
-    db: Session, user_id: str, items: list[PrivateTaskInput], photos: list[Path]
+    db: Session,
+    user_id: str,
+    items: list[PrivateTaskInput],
+    photos: list[Path],
+    usage_rows: list,
 ) -> list[PrivateTaskDB]:
     """Generate hints for each task, refuse manipulation, then save them all."""
-    usage = AIUsageRepository(db)
-    usage_rows = [usage.record(user_id, KIND_CREATE) for _ in items]
     provider = create_ai_provider()
     metas = await asyncio.gather(*(_generate_meta(provider, user_id, item) for item in items))
     for row, meta in zip(usage_rows, metas):
@@ -264,15 +266,6 @@ async def create_tasks(
     """Save confirmed drafts (photo) or typed tasks, generating hints for each."""
     user_id = await current_member_id(request)
 
-    service.check_ai_limit(
-        db,
-        user_id,
-        CREATION_KINDS,
-        settings.rate_limit_private_tasks_per_user_per_day,
-        _is_allowlisted(request),
-        cost=len(payload.tasks),
-    )
-
     photos: list[Path] = []
     claimed: Optional[Path] = None
     if payload.draft_id:
@@ -285,7 +278,16 @@ async def create_tasks(
         claimed, photos = claim
 
     try:
-        created = await _create_from_inputs(db, user_id, payload.tasks, photos)
+        usage_rows = service.reserve_ai_calls(
+            db,
+            user_id,
+            KIND_CREATE,
+            CREATION_KINDS,
+            settings.rate_limit_private_tasks_per_user_per_day,
+            _is_allowlisted(request),
+            cost=len(payload.tasks),
+        )
+        created = await _create_from_inputs(db, user_id, payload.tasks, photos, usage_rows)
     except BaseException:
         # Refused (abuse, crash, client gone): the student can confirm again
         if claimed is not None:
@@ -407,15 +409,14 @@ async def reveal_hint(request: Request, task_id: str, n: int, db: Session = Depe
 async def regenerate_hints(request: Request, task_id: str, db: Session = Depends(get_db)):
     user_id = await current_member_id(request)
     task = _owned_task(db, task_id, user_id)
-    service.check_ai_limit(
+    [usage_row] = service.reserve_ai_calls(
         db,
         user_id,
+        KIND_REGEN,
         CREATION_KINDS,
         settings.rate_limit_private_tasks_per_user_per_day,
         _is_allowlisted(request),
     )
-
-    usage_row = AIUsageRepository(db).record(user_id, KIND_REGEN)
     try:
         meta = await create_ai_provider().generate_private_task_meta(task.title, task.content)
     except AIProviderError as e:

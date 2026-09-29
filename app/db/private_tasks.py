@@ -199,6 +199,19 @@ class AIUsageRepository:
         self.db.commit()
         return row
 
+    def record_many(self, user_id: str, kind: str, count: int) -> list[AIUsageDB]:
+        """Insert ``count`` rows in one commit (a reservation)."""
+        rows = [AIUsageDB(user_id=user_id, kind=kind, created_at=_now()) for _ in range(count)]
+        self.db.add_all(rows)
+        self.db.commit()
+        return rows
+
+    def release(self, rows: list[AIUsageDB]) -> None:
+        """Delete a reservation that was refused."""
+        for row in rows:
+            self.db.delete(row)
+        self.db.commit()
+
     def _window(self, hours: int):
         return _now() - timedelta(hours=hours)
 

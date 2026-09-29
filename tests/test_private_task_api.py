@@ -570,3 +570,46 @@ class TestDraftIsClaimedAtomically:
         assert client.post("/api/private-tasks", json=body).status_code == 422
         provider.meta.abuse_score = 0
         assert client.post("/api/private-tasks", json=body).status_code == 200
+
+
+class TestQuotaIsReservedBeforeCounting:
+    def test_two_racing_requests_never_exceed_the_cap(self, client, db, monkeypatch):
+        """Request B runs while request A sits between its quota read and the AI call.
+
+        With check-then-insert both saw an empty window and both got through
+        (3 + 8 = 11 tasks against a limit of 10). With reserve-then-count at
+        most one of them is admitted.
+        """
+        from app.db.private_tasks import AIUsageRepository
+
+        monkeypatch.setattr(settings, "rate_limit_private_tasks_per_user_per_day", 10)
+        original = AIUsageRepository.user_window
+        state = {"raced": False}
+
+        def racing_window(self, user_id, kinds, hours=24):
+            result = original(self, user_id, kinds, hours)
+            if not state["raced"]:
+                state["raced"] = True
+                state["b"] = client.post("/api/private-tasks", json={
+                    "tasks": [{"title": f"B{i}", "content": CONTENT} for i in range(8)],
+                }).status_code
+            return result
+
+        monkeypatch.setattr(AIUsageRepository, "user_window", racing_window)
+
+        a = client.post("/api/private-tasks", json={
+            "tasks": [{"title": f"A{i}", "content": CONTENT} for i in range(3)],
+        }).status_code
+
+        db.expire_all()
+        assert sorted([a, state["b"]]).count(200) <= 1
+        assert db.query(PrivateTaskDB).count() <= 10
+        assert db.query(AIUsageDB).filter_by(kind="private_create").count() <= 10
+
+    def test_reservation_up_to_the_limit_is_allowed(self, client, db, monkeypatch):
+        monkeypatch.setattr(settings, "rate_limit_private_tasks_per_user_per_day", 3)
+        response = client.post("/api/private-tasks", json={
+            "tasks": [{"title": f"T{i}", "content": CONTENT} for i in range(3)],
+        })
+        assert response.status_code == 200
+        assert db.query(AIUsageDB).filter_by(kind="private_create").count() == 3

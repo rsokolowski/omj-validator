@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 
 from ..config import settings
 from ..db.models import PrivateTaskDB
+from ..db.models import AIUsageDB
 from ..db.private_tasks import AIUsageRepository
 from ..db.repositories import DeletedAccountQuotaRepository
 from ..rate_limits import calculate_rate_limit_headers, calculate_retry_after
@@ -141,6 +142,8 @@ def check_ai_limit(
 ) -> None:
     """Raise 429 when ``cost`` more AI calls of ``kinds`` would exceed a limit.
 
+    ``cost=0`` checks a reservation already inserted (see reserve_ai_calls).
+
     Counts the user's calls of these kinds in the last 24h plus AI usage carried
     over from an erased account, and every user's calls against the global cap.
     Allowlisted users are never limited.
@@ -175,3 +178,29 @@ def check_ai_limit(
             detail="System osiągnął dzienny limit. Spróbuj ponownie później.",
             headers=headers,
         )
+
+
+def reserve_ai_calls(
+    db: Session,
+    user_id: str,
+    kind: str,
+    counted_kinds: set[str],
+    per_user_limit: int,
+    is_allowlisted: bool,
+    cost: int = 1,
+) -> list[AIUsageDB]:
+    """Reserve ``cost`` AI calls, or raise 429 and reserve nothing.
+
+    Insert first, count second: two requests racing each other both see both
+    reservations, so neither can slip past the limit on a count taken before
+    the other one landed (at worst both are refused, never both admitted).
+    The returned rows get their usage meta filled in after the call.
+    """
+    usage = AIUsageRepository(db)
+    rows = usage.record_many(user_id, kind, cost)
+    try:
+        check_ai_limit(db, user_id, counted_kinds, per_user_limit, is_allowlisted, cost=0)
+    except HTTPException:
+        usage.release(rows)
+        raise
+    return rows
