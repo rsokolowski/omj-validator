@@ -212,7 +212,8 @@ i najsłabiej kontrolowana. Uczniowie odruchowo podpisują prace. Realnie na zdj
 się: imię i nazwisko, klasa, nazwa szkoły, data, charakter pisma (dana biometryczna w sensie
 potocznym, ale nie w rozumieniu art. 4 pkt 14 RODO — nie służy identyfikacji technicznej),
 notatki na marginesie niezwiązane z matematyką, fragmenty innych prac, a w tle kadru — elementy
-mieszkania lub inne osoby.
+mieszkania lub inne osoby. Wpisany w przeglądarce tekst rozwiązania może zawierać ten sam
+nadmiar (podpis imieniem i nazwiskiem, klasę, szkołę, dopiski niezwiązane z zadaniem).
 
 **Sesja (cookie).** Podpisane kryptograficznie ciasteczko sesyjne Starlette, ważne 30 dni,
 przechowuje: `google_sub`, `email`, `name`, adres URL zdjęcia profilowego Google,
@@ -635,6 +636,8 @@ System kontroluje, jakie pola bazy zbiera, ale nie kontroluje, co dziecko sfotog
 W praktyce na zdjęciach pojawiają się: imię i nazwisko oraz klasa (uczniowie odruchowo podpisują
 prace), nazwa szkoły, notatki na marginesie niezwiązane z zadaniem, fragmenty innych prac,
 przedmioty i osoby w tle kadru. Zdarza się, że margines zeszytu zawiera treści osobiste.
+To samo dotyczy tekstu rozwiązania wpisanego w przeglądarce: uczeń może go podpisać albo dopisać
+treści niezwiązane z zadaniem, a tekst trafia do modelu AI tak samo jak zdjęcie.
 
 Dodatkowo: fotografie o wymiarach poniżej 2048 px **nie są przetwarzane ponownie i zachowują
 oryginalne metadane EXIF**, które w zdjęciach z telefonu regularnie zawierają współrzędne GPS

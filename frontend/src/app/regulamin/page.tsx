@@ -270,7 +270,10 @@ export default function RegulaminPage() {
             <strong>Dane związane z rozwiązywaniem zadań:</strong>
           </Typography>
           <Box component="ul" sx={{ pl: 3, mb: 2 }}>
-            <li>przesłane przez Ciebie zdjęcia rozwiązań,</li>
+            <li>
+              przesłane przez Ciebie zdjęcia rozwiązań i rysunki wykonane w
+              przeglądarce oraz wpisany przez Ciebie tekst rozwiązania,
+            </li>
             <li>informacja, którego zadania dotyczyły i kiedy je wysłałeś,</li>
             <li>przyznana liczba punktów i treść informacji zwrotnej,</li>
             <li>
@@ -340,7 +343,7 @@ export default function RegulaminPage() {
           <Typography paragraph>
             Nie zbieramy danych szczególnych kategorii (np. o zdrowiu,
             pochodzeniu czy przekonaniach) i prosimy, byś ich nie umieszczał na
-            przesyłanych zdjęciach.
+            przesyłanych zdjęciach ani we wpisywanym tekście rozwiązania.
           </Typography>
         </Section>
 
@@ -500,11 +503,12 @@ export default function RegulaminPage() {
           <Box component="ul" sx={{ pl: 3, mb: 2 }}>
             <li>
               <strong>
-                Zgłoszenia razem ze zdjęciami rozwiązań, wynikami i informacjami
-                zwrotnymi
+                Zgłoszenia razem ze zdjęciami i rysunkami, wpisanym tekstem
+                rozwiązania, wynikami i informacjami zwrotnymi
               </strong>{" "}
               &ndash; przez {RETENTION_SUBMISSIONS} od przesłania. Po tym czasie
-              usuwany jest zarówno wpis w bazie, jak i pliki ze zdjęciami.
+              usuwany jest zarówno wpis w bazie (razem z wpisanym tekstem), jak
+              i pliki ze zdjęciami.
             </li>
             <li>
               <strong>Zapis szczegółowej analizy wykonanej przez model</strong>{" "}
