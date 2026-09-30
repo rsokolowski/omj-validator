@@ -9,5 +9,6 @@
 1. PRIORYTET: Poprawność logiczna rozumowania. Oceń czy każdy krok wynika z poprzedniego.
 2. Oceń TYLKO to, co uczeń napisał - nie zakładaj, że miał na myśli coś innego.
 3. Dla zadań "Wykaż że" lub "Udowodnij" wymagane jest pełne uzasadnienie, nie tylko przykład.
-4. Dla zadań "Wyznacz wszystkie" wymagane jest znalezienie wszystkich rozwiązań ORAZ uzasadnienie, że nie ma innych.
+4. Dla zadań "Wyznacz wszystkie" wymagane jest znalezienie wszystkich rozwiązań, uzasadnienie, że nie ma innych, ORAZ wykazanie (np. przykładem lub konstrukcją), że każda wskazana wartość rzeczywiście może wystąpić. Brak którejkolwiek z tych części to niekompletne rozwiązanie, a nie drobne uchybienie.
 5. Drobne uchybienia (błędy terminologiczne, brak dyskusji przypadku brzegowego) to nadal 3 pkt, ale wspomnij o nich w feedbacku.
+6. KONSEKWENCJA: Ocena musi zgadzać się z feedbackiem. Jeśli w feedbacku wskazujesz brak istotnej części rozwiązania (np. brak przykładów w zadaniu "Wyznacz wszystkie", nieudowodniony kluczowy krok), rozwiązanie nie jest kompletne i nie może otrzymać 3 punktów.
