@@ -81,7 +81,16 @@ test.describe('Wzorce', () => {
     await page.waitForTimeout(1500);
     await expect(page.getByTestId('link-proposals')).toHaveCount(0);
 
-    // 5. Due today -> the header badge and a recall card
+    // 5. Graded practice from the pattern page: 6/6 without hints counts as a review
+    await page.getByRole('region', { name: 'Zadania do tego wzorca' })
+      .getByRole('link', { name: 'Rozwiąż' }).first().click();
+    await expect(page.getByTestId('practice-banner')).toBeVisible();
+    await submitSolution(page);
+
+    await page.goto(`/wzorce/${patternId}`);
+    await expect(page.getByTestId('review-history')).toContainText('Zadanie · Pamiętałem · Poziom 1');
+
+    // 6. Due again (e2e hook) -> the header badge and a recall card -> level 2
     const due = await page.request.post(`/api/test/patterns/${patternId}/make-due`);
     expect(due.ok()).toBeTruthy();
     await page.goto('/wzorce');
@@ -95,22 +104,15 @@ test.describe('Wzorce', () => {
     await show.click();
     await expect(page.getByText('Zapisany wzorzec')).toBeVisible();
     await page.getByRole('button', { name: 'Pamiętałem', exact: true }).click();
-    await expect(page.getByText(/Poziom 1 · następna powtórka/)).toBeVisible();
+    await expect(page.getByText(/Poziom 2 · następna powtórka/)).toBeVisible();
     await page.getByRole('button', { name: 'Zakończ' }).click();
     await expect(page.getByText('Na dziś wszystko')).toBeVisible();
-
-    // 6. Graded practice from the pattern page: 6/6 without hints -> level 2
-    await page.goto(`/wzorce/${patternId}`);
-    await page.getByRole('region', { name: 'Zadania do tego wzorca' })
-      .getByRole('link', { name: 'Rozwiąż' }).first().click();
-    await expect(page.getByTestId('practice-banner')).toBeVisible();
-    await submitSolution(page);
 
     await page.goto(`/wzorce/${patternId}`);
     await expect(page.getByTestId('pattern-level')).toHaveText('Poziom 2');
     const history = page.getByTestId('review-history');
-    await expect(history).toContainText('Zadanie · Pamiętałem · Poziom 2');
-    await expect(history).toContainText('Przypomnienie · Pamiętałem · Poziom 1');
+    await expect(history).toContainText('Przypomnienie · Pamiętałem · Poziom 2');
+    await expect(history).toContainText('Zadanie · Pamiętałem · Poziom 1');
   });
 
   test('another user cannot open the pattern', async ({ page, context }) => {

@@ -250,3 +250,33 @@ class TestOnePracticePerDay:
         db.refresh(p)
         assert (p.srs_level, p.srs_streak) == (2, 0)
         assert len(p.reviews) == 1
+
+    def test_practice_after_a_recall_card_on_the_same_day_does_not_count(self, db, monkeypatch):
+        from datetime import datetime as real_datetime
+
+        today = real_datetime.now(srs._WARSAW).date()
+        monkeypatch.setattr(srs, "today_warsaw", lambda: today)
+        p = make_pattern(db, level=1, streak=0)
+        PatternRepository(db).apply_review(
+            p, seen_due_on=p.due_on, new_level=1, new_streak=1, new_due=today + timedelta(days=4),
+            outcome="ok", kind="recall", recall_text="Szukam niezmiennika", conditional=False,
+        )
+        omj_submission(db, "sub00001", p.id, 6)
+
+        service.apply_practice_result(db, "sub00001")
+
+        db.refresh(p)
+        assert (p.srs_level, p.srs_streak) == (1, 1)
+        assert len(p.reviews) == 1
+
+    def test_archived_pattern_is_not_moved(self, db):
+        p = make_pattern(db, level=1, streak=1)
+        p.archived_at = datetime(2026, 9, 1)
+        db.commit()
+        omj_submission(db, "sub00001", p.id, 6)
+
+        service.apply_practice_result(db, "sub00001")
+
+        db.refresh(p)
+        assert (p.srs_level, p.srs_streak) == (1, 1)
+        assert p.reviews == []

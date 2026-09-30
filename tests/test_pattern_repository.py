@@ -98,9 +98,17 @@ class TestLinks:
     def test_duplicate_link_returns_none(self, repo):
         p = create(repo)
         q = create(repo)
-        assert repo.add_link(p, task_key="2024_etap1_1", role="practice", origin="ai", status="suggested")
+        assert repo.add_link(p, task_key="2024_etap1_1", role="practice", origin="manual", status="accepted")
         assert repo.add_link(p, task_key="2024_etap1_1", role="practice", origin="manual", status="accepted") is None
+        assert repo.add_link(p, task_key="2024_etap1_1", role="practice", origin="ai", status="suggested") is None
         assert repo.add_link(q, task_key="2024_etap1_1", role="practice", origin="manual", status="accepted")
+
+    def test_manual_link_accepts_pending_suggestion_in_place(self, repo):
+        p = create(repo)
+        suggested = repo.add_link(p, task_key="2024_etap1_1", role="practice", origin="ai",
+                                  status="suggested", reason="Ta sama parzystość")
+        link = repo.add_link(p, task_key="2024_etap1_1", role="practice", origin="manual", status="accepted")
+        assert (link.id, link.status, link.origin, link.reason) == (suggested.id, "accepted", "manual", None)
 
     def test_deleting_private_task_removes_link_but_keeps_pattern(self, db, repo):
         p = create(repo)

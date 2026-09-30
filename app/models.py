@@ -482,6 +482,14 @@ def _pattern_category(value: Optional[str]) -> Optional[str]:
     return value
 
 
+def _pattern_text(value: str) -> str:
+    """Trigger/action without surrounding whitespace, still long enough."""
+    value = value.strip()
+    if len(value) < PATTERN_TRIGGER_MIN:
+        raise ValueError("Za krótki tekst")
+    return value
+
+
 class CreatePatternRequest(BaseModel):
     trigger: str = Field(min_length=PATTERN_TRIGGER_MIN, max_length=PATTERN_TRIGGER_MAX)
     action: str = Field(min_length=PATTERN_ACTION_MIN, max_length=PATTERN_ACTION_MAX)
@@ -497,10 +505,7 @@ class CreatePatternRequest(BaseModel):
     @field_validator("trigger", "action")
     @classmethod
     def _strip_required(cls, value: str) -> str:
-        value = value.strip()
-        if len(value) < PATTERN_TRIGGER_MIN:
-            raise ValueError("Za krótki tekst")
-        return value
+        return _pattern_text(value)
 
     @field_validator("category")
     @classmethod
@@ -516,6 +521,11 @@ class UpdatePatternRequest(BaseModel):
     skills: Optional[list[str]] = Field(default=None, max_length=10)
     append_round: Optional[RefineRoundIn] = None
     archived: Optional[bool] = None
+
+    @field_validator("trigger", "action")
+    @classmethod
+    def _strip_required(cls, value: Optional[str]) -> Optional[str]:
+        return None if value is None else _pattern_text(value)
 
     @field_validator("category")
     @classmethod

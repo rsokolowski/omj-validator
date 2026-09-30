@@ -6,6 +6,7 @@ from datetime import date, datetime, timezone
 from typing import Optional
 
 from sqlalchemy import func, update
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, selectinload
 
 from .models import PatternDB, PatternLinkDB, PatternReviewDB
@@ -162,14 +163,26 @@ class PatternRepository:
         status: str,
         reason: Optional[str] = None,
     ) -> Optional[PatternLinkDB]:
-        """Link a task, or None when the pattern already has a link to it."""
+        """Link a task, or None when the pattern already has a link to it.
+
+        An accepted link revives a rejected or pending suggestion of the same
+        task in place - rejected links are hidden, so refusing would leave the
+        student with a 409 for a link they cannot see.
+        """
         existing = self.db.query(PatternLinkDB).filter(PatternLinkDB.pattern_id == pattern.id)
         if task_key is not None:
             existing = existing.filter(PatternLinkDB.task_key == task_key)
         else:
             existing = existing.filter(PatternLinkDB.private_task_id == private_task_id)
-        if existing.first() is not None:
-            return None
+        found = existing.first()
+        if found is not None:
+            if found.status == "accepted" or status != "accepted":
+                return None
+            found.status, found.origin, found.role, found.reason = status, origin, role, reason
+            pattern.last_activity_at = _now()
+            self.db.commit()
+            self.db.refresh(found)
+            return found
         link = PatternLinkDB(
             pattern_id=pattern.id,
             task_key=task_key,
@@ -182,7 +195,11 @@ class PatternRepository:
         )
         self.db.add(link)
         pattern.last_activity_at = _now()
-        self.db.commit()
+        try:
+            self.db.commit()
+        except IntegrityError:  # a concurrent request linked the same task first
+            self.db.rollback()
+            return None
         self.db.refresh(link)
         return link
 
@@ -195,10 +212,12 @@ class PatternRepository:
 
     def set_link_status(self, link: PatternLinkDB, status: str) -> PatternLinkDB:
         link.status = status
+        link.pattern.last_activity_at = _now()
         self.db.commit()
         return link
 
     def delete_link(self, link: PatternLinkDB) -> None:
+        link.pattern.last_activity_at = _now()
         self.db.delete(link)
         self.db.commit()
 

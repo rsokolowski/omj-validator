@@ -178,6 +178,10 @@ class TestReadAndEdit:
         detail = client.get(f"/api/patterns/{p['id']}").json()["pattern"]
         assert len(detail["refinement"]) == 10
 
+    def test_patch_rejects_whitespace_only_text(self, client):
+        p = create(client)
+        assert client.patch(f"/api/patterns/{p['id']}", json={"trigger": " " * 20}).status_code == 422
+
     def test_archive_removes_from_queue(self, client, db):
         p = create(client)
         make_due(db, p["id"])
@@ -288,6 +292,18 @@ class TestLinks:
         assert r.json()["link"]["status"] == "rejected"
         assert client.delete(f"/api/patterns/{p['id']}/links/{link['id']}").status_code == 200
         assert client.delete(f"/api/patterns/{p['id']}/links/{link['id']}").status_code == 404
+
+    def test_rejected_link_can_be_linked_again(self, client):
+        p = create(client)
+        link = client.post(f"/api/patterns/{p['id']}/links", json={"task_key": "2024_etap2_3"}).json()["link"]
+        client.patch(f"/api/patterns/{p['id']}/links/{link['id']}", json={"status": "rejected"})
+        r = client.post(f"/api/patterns/{p['id']}/links", json={"task_key": "2024_etap2_3"})
+        assert r.status_code == 201
+        assert (r.json()["link"]["id"], r.json()["link"]["status"]) == (link["id"], "accepted")
+
+    def test_task_key_is_stored_canonical(self, client):
+        p = create(client, source={"task_key": "2024_etap2_03"})
+        assert client.post(f"/api/patterns/{p['id']}/links", json={"task_key": "2024_etap2_3"}).status_code == 409
 
     def test_other_users_link_is_404(self, client, current_user):
         p = create(client)

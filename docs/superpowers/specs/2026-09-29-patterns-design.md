@@ -238,10 +238,11 @@ schedule(level, streak, outcome, today) -> (level, streak, due_on)
 | score 0 | `fail` |
 
 A graded practice task counts whenever it happens (even before `due_on`), but
-**only the first graded practice of a pattern per Europe/Warsaw day** counts:
-solving linked tasks again the same afternoon is not spaced repetition and
-would otherwise move a pattern up several levels at once. The practice banner
-says so.
+**a pattern's schedule moves at most once per Europe/Warsaw day**: a practice
+graded after that day's recall card or earlier practice is not counted. Solving
+linked tasks the same afternoon is not spaced repetition and would otherwise
+move a pattern up several levels at once. The practice banner says so. Practice
+of an archived pattern is not counted either.
 Failed gradings (status FAILED) do not count. A submission applies at most once
 (a `pattern_reviews` row with that `submission_id` already existing → no-op).
 

@@ -118,14 +118,13 @@ def practice_candidates(db: Session, pattern: PatternDB, user_id: str) -> list[s
     return candidates
 
 
-def _task_review_on(db: Session, pattern: PatternDB, day) -> bool:
-    """Was a graded practice of this pattern already counted on ``day`` (Warsaw)?"""
+def _reviewed_on(db: Session, pattern: PatternDB, day) -> bool:
+    """Did a recall card or a graded practice already move this pattern on ``day`` (Warsaw)?"""
     start = datetime.combine(day, time.min, tzinfo=srs._WARSAW).astimezone(timezone.utc).replace(tzinfo=None)
     return (
         db.query(PatternReviewDB.id)
         .filter(
             PatternReviewDB.pattern_id == pattern.id,
-            PatternReviewDB.kind == "task",
             PatternReviewDB.created_at >= start,
         )
         .first()
@@ -146,13 +145,13 @@ def apply_practice_result(db: Session, submission_id: str) -> None:
         return
     repo = PatternRepository(db)
     pattern = repo.get_owned(submission.pattern_id, submission.user_id)
-    if pattern is None or repo.has_review_for_submission(submission_id):
+    if pattern is None or pattern.archived_at is not None or repo.has_review_for_submission(submission_id):
         return
     today = srs.today_warsaw()
-    if _task_review_on(db, pattern, today):
-        # Solving the same task again the same afternoon is not spaced
-        # repetition: only the first graded practice of a day counts
-        logger.info(f"Pattern {pattern.id}: practice already counted today, submission {submission_id} ignored")
+    if _reviewed_on(db, pattern, today):
+        # A recall card and then a linked task the same afternoon is not
+        # spaced repetition: the schedule moves at most once a day
+        logger.info(f"Pattern {pattern.id}: already reviewed today, submission {submission_id} ignored")
         return
 
     max_score = PRIVATE_MAX_SCORE if submission.private_task_id else get_max_score(submission.etap)

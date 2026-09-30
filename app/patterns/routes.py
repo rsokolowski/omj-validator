@@ -92,9 +92,10 @@ def resolve_source(db: Session, source: Optional[PatternSource], user_id: str) -
     if source.task_key and source.private_task_id:
         raise HTTPException(status_code=422, detail="Podaj jedno zadanie.")
     if source.task_key:
-        if service.omj_task(source.task_key) is None:
+        task = service.omj_task(source.task_key)
+        if task is None:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=TASK_NOT_FOUND)
-        return {"task_key": source.task_key}
+        return {"task_key": linking.task_key(task)}  # canonical, so "_03" and "_3" dedupe
     task = owned_private_task(db, source.private_task_id, user_id)
     return {"private_task_id": task.id}
 
