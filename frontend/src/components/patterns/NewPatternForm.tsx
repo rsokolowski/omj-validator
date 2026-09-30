@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Alert, Box, Button, CircularProgress, Paper, Typography } from "@mui/material";
 import { emptyDraft, patternsApi } from "@/lib/api/patterns";
-import { PatternDraft, PatternSource, PatternVariant, RefineRound } from "@/lib/types";
+import { PatternDraft, PatternInitialDraft, PatternSource, PatternVariant, RefineRound } from "@/lib/types";
 import { PatternEditor, validatePattern } from "./PatternEditor";
 import { RefinePanel } from "./RefinePanel";
 
@@ -13,15 +13,17 @@ interface NewPatternFormProps {
   /** Human label of the source task, e.g. "2024 · etap1 · zad. 3" */
   sourceLabel?: string | null;
   /** A suggestion the student chose on the task page ("Podpowiedz wzorzec") */
-  initialDraft?: PatternVariant | null;
+  initialDraft?: PatternInitialDraft | null;
 }
 
 export function NewPatternForm({ source, sourceLabel, initialDraft }: NewPatternFormProps) {
   const router = useRouter();
   const [draft, setDraft] = useState<PatternDraft>(
-    initialDraft ? { ...emptyDraft(), ...initialDraft } : emptyDraft()
+    initialDraft
+      ? { ...emptyDraft(), trigger: initialDraft.trigger, action: initialDraft.action, example: initialDraft.example }
+      : emptyDraft()
   );
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(initialDraft?.category ?? "");
   const [skills, setSkills] = useState<string[]>([]);
   const [rounds, setRounds] = useState<RefineRound[]>([]);
   const [saving, setSaving] = useState(false);

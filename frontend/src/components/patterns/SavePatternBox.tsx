@@ -58,6 +58,7 @@ export function SavePatternBox({ source, latestSubmissionId }: SavePatternBoxPro
       trigger: suggestion.trigger,
       action: suggestion.action,
       example: suggestion.example,
+      category: suggestion.category,
     });
     router.push(`/wzorce/nowy?${sourceQuery(source)}&draft=${encodeURIComponent(draft)}`);
   };

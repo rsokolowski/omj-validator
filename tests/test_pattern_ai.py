@@ -116,8 +116,13 @@ class TestSuggestParsing:
         return json.dumps({"suggestions": suggestions, "abuse_score": abuse}, ensure_ascii=False)
 
     def test_valid(self):
-        result = parse_suggest_response(self.suggest([{**variant(), "why": "Pojawia się często."}]))
+        result = parse_suggest_response(self.suggest([{**variant(), "why": "Pojawia się często.", "category": "algebra"}]))
         assert result.suggestions[0].why == "Pojawia się często."
+        assert result.suggestions[0].category == "algebra"
+
+    def test_suggestion_unknown_category_dropped(self):
+        result = parse_suggest_response(self.suggest([{**variant(), "category": "chemia"}]))
+        assert result.suggestions[0].category is None
 
     def test_truncated_and_blank_dropped(self):
         items = [{**variant(), "why": "w" * 400}] * 4 + [{**variant(trigger=""), "why": ""}]

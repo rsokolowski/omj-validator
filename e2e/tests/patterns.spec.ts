@@ -53,6 +53,7 @@ test.describe('Wzorce', () => {
     // 3. The editor starts from the suggestion; one refine round, pick version 2
     await expect(page).toHaveURL(/\/wzorce\/nowy\?private=/);
     await expect(page.getByLabel('Kiedy w treści widzę…')).toHaveValue(/Pytają o parzystość wyrażenia/);
+    await expect(page.locator('#pattern-category')).toHaveText('Teoria liczb');
     await page.getByRole('button', { name: 'Dopracuj z AI' }).click();
     const version2 = page.getByRole('article', { name: 'Wersja 2' });
     await expect(version2).toBeVisible({ timeout: 30000 });

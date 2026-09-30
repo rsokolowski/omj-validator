@@ -16,6 +16,8 @@ które przydadzą się w innych zadaniach, w formie:
 - "example": jedno krótkie zdanie z przykładem (może być puste).
 - "why": jedno zdanie, dlaczego warto to zapamiętać (np. co uczniowi umknęło
   w rozwiązaniu albo gdzie ten pomysł często się pojawia).
+- "category": dział, do którego wzorzec należy - jedna z: algebra, geometria,
+  teoria_liczb, kombinatoryka, logika, arytmetyka.
 - Jeśli uczeń podał własny szkic wzorca, zbuduj propozycje na nim - popraw go,
   zamiast zastępować czymś zupełnie innym.
 - Pisz po polsku, zwracaj się do ucznia bezpośrednio.
@@ -29,6 +31,6 @@ które przydadzą się w innych zadaniach, w formie:
 
 Odpowiedz WYŁĄCZNIE obiektem JSON:
 {
-  "suggestions": [{"trigger": "...", "action": "...", "example": "...", "why": "..."}],
+  "suggestions": [{"trigger": "...", "action": "...", "example": "...", "why": "...", "category": "..."}],
   "abuse_score": 0
 }

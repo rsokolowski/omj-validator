@@ -416,6 +416,7 @@ class RefineResult(BaseModel):
 
 class PatternSuggestion(PatternVariant):
     why: str = Field(default="", max_length=PATTERN_REASON_MAX)
+    category: Optional[str] = None
 
 
 class SuggestResult(BaseModel):

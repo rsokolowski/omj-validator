@@ -88,8 +88,9 @@ PATTERN_SUGGEST_SCHEMA = {
                 "properties": {
                     **_VARIANT_PROPERTIES,
                     "why": {"type": "string", "description": "Dlaczego warto to zapamiętać, 1 zdanie"},
+                    "category": {"type": "string", "enum": _CATEGORY_ENUM},
                 },
-                "required": ["trigger", "action", "example", "why"],
+                "required": ["trigger", "action", "example", "why", "category"],
             },
         },
         "abuse_score": {
@@ -175,7 +176,11 @@ def parse_suggest_response(text: str) -> SuggestResult:
         variant = _variant(raw)
         if variant is None:
             continue
-        suggestions.append(PatternSuggestion(**variant, why=_text(raw.get("why"), PATTERN_REASON_MAX)))
+        suggestions.append(PatternSuggestion(
+            **variant,
+            why=_text(raw.get("why"), PATTERN_REASON_MAX),
+            category=_category(raw.get("category")),
+        ))
         if len(suggestions) == MAX_SUGGESTIONS:
             break
     return SuggestResult(suggestions=suggestions, abuse_score=_abuse(data.get("abuse_score")))

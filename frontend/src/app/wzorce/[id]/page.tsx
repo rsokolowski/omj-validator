@@ -95,8 +95,8 @@ export default async function PatternPage({ params, searchParams }: PageProps) {
                   {REVIEW_OUTCOMES[r.outcome]} · {PATTERN_LEVEL_NAMES[r.level_after]}
                 </Typography>
                 {r.recall_text && (
-                  <Typography variant="body2" sx={{ color: "grey.600", whiteSpace: "pre-wrap" }}>
-                    „{r.recall_text}”
+                  <Typography variant="body2" component="div" sx={{ color: "grey.600" }}>
+                    <MathContent content={`„${r.recall_text}”`} />
                   </Typography>
                 )}
               </li>

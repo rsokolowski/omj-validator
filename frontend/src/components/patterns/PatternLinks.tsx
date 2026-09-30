@@ -50,8 +50,8 @@ function LinkRow({ link, practiceHref, children }: {
           <Typography sx={{ color: "grey.500" }}>Zadanie niedostępne</Typography>
         )}
         {link.reason && (
-          <Typography variant="body2" sx={{ color: "grey.700" }}>
-            {link.reason}
+          <Typography variant="body2" component="div" sx={{ color: "grey.700" }}>
+            <MathContent content={link.reason} />
           </Typography>
         )}
       </Box>
@@ -235,7 +235,11 @@ export function PatternLinks({ patternId, initialLinks, autoSuggest }: PatternLi
               onChange={(e) => setPrivateId(e.target.value)} sx={{ minWidth: 200 }} disabled={busy}>
               <MenuItem value="">-</MenuItem>
               {privateTasks.map((t) => (
-                <MenuItem key={t.id} value={t.id}>{t.title}</MenuItem>
+                <MenuItem key={t.id} value={t.id}>
+                  <Box component="span" sx={{ "& .math-content": { display: "inline" } }}>
+                    <MathContent content={t.title} />
+                  </Box>
+                </MenuItem>
               ))}
             </TextField>
           )}

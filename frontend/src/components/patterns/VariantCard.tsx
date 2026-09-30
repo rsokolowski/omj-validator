@@ -52,8 +52,8 @@ export function VariantCard({ variant, label, chosen, actionLabel = "Wybierz", o
         </Box>
       )}
       {note && (
-        <Typography variant="body2" sx={{ color: "#1e40af" }}>
-          {note}
+        <Typography variant="body2" component="div" sx={{ color: "#1e40af" }}>
+          <MathContent content={note} />
         </Typography>
       )}
       {onChoose && (

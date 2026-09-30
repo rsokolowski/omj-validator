@@ -5,8 +5,8 @@ import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { NewPatternForm } from "@/components/patterns/NewPatternForm";
 import { serverFetch } from "@/lib/api/server";
-import { PatternSource, PatternVariant, PrivateTaskDetailResponse, User } from "@/lib/types";
-import { ETAP_NAMES, PATTERN_ACTION_MAX, PATTERN_EXAMPLE_MAX, PATTERN_TRIGGER_MAX } from "@/lib/utils/constants";
+import { PatternInitialDraft, PatternSource, PrivateTaskDetailResponse, User } from "@/lib/types";
+import { CATEGORY_NAMES, ETAP_NAMES, PATTERN_ACTION_MAX, PATTERN_EXAMPLE_MAX, PATTERN_TRIGGER_MAX } from "@/lib/utils/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +27,7 @@ function one(value: string | string[] | undefined): string | undefined {
 }
 
 /** A suggestion handed over from a task page, clamped like the backend would. */
-function parseDraft(raw: string | undefined): PatternVariant | null {
+function parseDraft(raw: string | undefined): PatternInitialDraft | null {
   if (!raw) return null;
   try {
     const data = JSON.parse(raw);
@@ -36,6 +36,7 @@ function parseDraft(raw: string | undefined): PatternVariant | null {
       trigger: text(data.trigger, PATTERN_TRIGGER_MAX),
       action: text(data.action, PATTERN_ACTION_MAX),
       example: text(data.example, PATTERN_EXAMPLE_MAX),
+      category: typeof data.category === "string" && data.category in CATEGORY_NAMES ? data.category : null,
     };
     return draft.trigger && draft.action ? draft : null;
   } catch {

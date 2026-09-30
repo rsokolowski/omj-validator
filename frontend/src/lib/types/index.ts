@@ -359,6 +359,12 @@ export interface RefineRound {
 
 export interface PatternSuggestion extends PatternVariant {
   why: string;
+  category?: string | null;
+}
+
+/** A suggestion handed from a task page to the new-pattern form */
+export interface PatternInitialDraft extends PatternVariant {
+  category?: string | null;
 }
 
 export interface PatternSource {

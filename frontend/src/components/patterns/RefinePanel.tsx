@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Alert, Box, Button, Chip, CircularProgress, Paper, TextField, Typography } from "@mui/material";
+import { MathContent } from "@/components/ui/MathContent";
 import { patternsApi } from "@/lib/api/patterns";
 import { PatternDraft, PatternSource, PatternVariant, RefineRound } from "@/lib/types";
 import { PATTERN_ANSWER_MAX, PATTERN_VERDICTS } from "@/lib/utils/constants";
@@ -80,8 +81,8 @@ export function RefinePanel({ draft, rounds, onRoundsChange, onPick, source, pat
               <Chip size="small" color={verdict.color} label={verdict.label} />
             </Box>
             {round.comment && (
-              <Typography variant="body2" sx={{ mb: 1.5, color: "grey.800" }}>
-                {round.comment}
+              <Typography variant="body2" component="div" sx={{ mb: 1.5, color: "grey.800" }}>
+                <MathContent content={round.comment} />
               </Typography>
             )}
             <Box sx={{ display: "grid", gap: 1.5, gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" } }}>
@@ -104,7 +105,9 @@ export function RefinePanel({ draft, rounds, onRoundsChange, onPick, source, pat
                 <Box component="ul" sx={{ m: 0, pl: 3 }}>
                   {round.questions.map((q, i) => (
                     <li key={i}>
-                      <Typography variant="body2">{q}</Typography>
+                      <Typography variant="body2" component="div">
+                        <MathContent content={q} />
+                      </Typography>
                     </li>
                   ))}
                 </Box>
