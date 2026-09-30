@@ -56,6 +56,31 @@ class TestRefineParsing:
         assert result.category == "kombinatoryka"
         assert result.skills == ["parity"]
 
+    def test_variant_tasks_only_from_the_offered_list(self):
+        offered = {"2015_etap3_1", "2010_etap3_4"}
+        raw = variant(note="Szeroka wersja", tasks=["2015_etap3_1", "2099_etap2_9", "2015_etap3_1", 7])
+        [v] = parse_refine_response(refine([raw]), KNOWN_SKILLS, offered).variants
+        assert v.tasks == ["2015_etap3_1"]
+        assert v.note == "Szeroka wersja"
+
+    def test_reply_drops_invented_task_references(self):
+        offered = {"2015_etap3_1"}
+        text = refine([variant()], reply="Zobacz [[2015_etap3_1]] oraz [[2019_etap2_5]] - tam też działa.")
+        result = parse_refine_response(text, KNOWN_SKILLS, offered)
+        assert result.reply == "Zobacz [[2015_etap3_1]] oraz - tam też działa."
+
+    def test_questions_and_comment_drop_invented_task_references(self):
+        text = refine([variant()], questions=["Widzisz to w [[2015_etap3_1]]? A w [[2001_etap1_1]]?"],
+                      comment="Jak w [[2001_etap1_1]].")
+        result = parse_refine_response(text, KNOWN_SKILLS, {"2015_etap3_1"})
+        assert result.questions == ["Widzisz to w [[2015_etap3_1]]? A w ?"]
+        assert result.comment == "Jak w ."
+
+    def test_missing_reply_and_tasks_are_empty(self):
+        result = parse_refine_response(refine([variant()]), KNOWN_SKILLS)
+        assert result.reply == ""
+        assert result.variants[0].tasks == []
+
     def test_more_than_three_variants_truncated(self):
         result = parse_refine_response(refine([variant() for _ in range(5)]), KNOWN_SKILLS)
         assert len(result.variants) == 3
@@ -200,11 +225,19 @@ class TestGeminiRequests:
         fake = _FakeModels(refine([variant(), variant()]))
         provider._client = SimpleNamespace(models=fake)
 
+        history = [{
+            "answers": [], "message": "Pierwsza wiadomość", "draft": {"raw": "szkic"}, "reply": "Odpowiedź AI",
+            "verdict": "za_ogolny", "comment": "c",
+            "variants": [{"trigger": "Trig A", "action": "Akcja A", "note": "szeroka", "tasks": ["2024_etap1_1"]}],
+            "questions": ["Pytanie AI?"], "chosen": None,
+        }]
         result = asyncio.run(provider.refine_pattern(
             {"raw": "Jak jest parzystość to patrz na sumę"},
             "Treść wymyślonego zadania o żetonach.",
-            [{"chosen": {"trigger": "t", "action": "a"}, "questions": ["q?"], "answer": "tak"}],
-            "Chodzi mi o sumę wszystkich liczb",
+            history,
+            {"answers": [{"question": "Pytanie AI?", "answer": "Tak, dla iloczynu"}],
+             "message": "Chodzi mi o sumę wszystkich liczb"},
+            [{"task_key": "2024_etap1_1", "difficulty": 2, "categories": ["logika"], "hints": ["h2"]}],
         ))
 
         assert len(result.variants) == 2
@@ -215,6 +248,11 @@ class TestGeminiRequests:
         assert "Jak jest parzystość to patrz na sumę" in prompt
         assert "Treść wymyślonego zadania o żetonach." in prompt
         assert "Chodzi mi o sumę wszystkich liczb" in prompt
+        assert "Tak, dla iloczynu" in prompt
+        # The model sees its own earlier versions and reply, and the task list
+        assert "Trig A" in prompt and "Odpowiedź AI" in prompt
+        assert "Uczeń nie wybrał żadnej wersji" in prompt
+        assert "2024_etap1_1 | trudność 2 | logika | h2" in prompt
 
     def test_suggest_sends_feedback(self, provider):
         fake = _FakeModels(json.dumps({"suggestions": [{**variant(), "why": "w"}], "abuse_score": 0}))

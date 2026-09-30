@@ -296,6 +296,7 @@ export const PATTERN_ACTION_MAX = 600;
 export const PATTERN_EXAMPLE_MAX = 1000;
 export const PATTERN_RAW_MAX = 1000;
 export const PATTERN_ANSWER_MAX = 1000;
+export const PATTERN_MESSAGE_MAX = 1000;
 export const RECALL_TEXT_MIN = 10;
 export const RECALL_TEXT_MAX = 1000;
 
@@ -307,7 +308,7 @@ export const PATTERN_LEVEL_NAMES: Record<number, string> = {
 };
 
 export const PATTERN_VERDICTS: Record<string, { label: string; color: "success" | "warning" | "error" | "info" }> = {
-  ok: { label: "Dobry wzorzec", color: "success" },
+  ok: { label: "Dobry", color: "success" },
   za_ogolny: { label: "Za ogólny", color: "warning" },
   bledny: { label: "Coś się nie zgadza", color: "error" },
   to_nie_wzorzec: { label: "To jeszcze nie wzorzec", color: "info" },

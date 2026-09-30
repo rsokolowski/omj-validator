@@ -393,6 +393,22 @@ class TestRefineSavedPattern:
         assert body["category"] == "teoria_liczb"
         assert body["skills"] == [skill]
 
+    def test_whole_session_appended_with_its_own_times(self, client):
+        p = create(client)
+        rounds = [
+            {"draft": {"raw": "szkic"}, "variants": [{"trigger": "W1 wyzwalacz", "action": "A1 akcja"}],
+             "message": "m1", "reply": "r1", "at": "2026-09-30T15:00:00+00:00"},
+            {"draft": {"raw": "szkic"}, "variants": [{"trigger": "W2 wyzwalacz", "action": "A2 akcja",
+                                                       "tasks": ["2015_etap3_1", "bad key"]}],
+             "answers": ["a"], "chosen": 0, "category": "teoria_liczb", "at": "2999-01-01T00:00:00+00:00"},
+        ]
+        body = client.patch(f"/api/patterns/{p['id']}", json={"append_rounds": rounds}).json()["pattern"]
+        stored = body["refinement"]
+        assert [r["reply"] for r in stored] == ["r1", ""]
+        assert stored[0]["at"] == "2026-09-30T15:00:00+00:00"
+        assert stored[1]["at"] < "2999"  # a future time is not trusted
+        assert stored[1]["variants"][0]["tasks"] == ["2015_etap3_1"]
+
     def test_picked_round_keeps_existing_category(self, client):
         p = create(client, category="algebra")
         round_ = {"draft": {"raw": "szkic"}, "variants": [{"trigger": "W1 wyzwalacz", "action": "A1 akcja"}],

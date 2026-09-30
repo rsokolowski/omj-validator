@@ -70,3 +70,18 @@ def test_payload_has_strategy_hints_and_no_statement():
         "categories": ["logika"],
         "hints": ["h2 strategy", "h3 direction"],
     }
+
+
+def test_refine_candidates_spread_ties_over_the_years():
+    from app.models import TaskInfo, TaskPdf
+    from app.patterns.linking import MAX_REFINE_CANDIDATES, refine_candidates
+
+    tasks = [
+        TaskInfo(year=str(year), etap="etap1", number=n, title="t", pdf=TaskPdf(tasks="t.pdf"),
+                 categories=["geometria"], hints=[])
+        for year in range(2005, 2026) for n in range(1, 8)
+    ]
+    picked = refine_candidates(tasks, skills=[], category="geometria")
+    assert len(picked) == MAX_REFINE_CANDIDATES
+    assert {t.year for t in picked} == {str(y) for y in range(2005, 2026)}
+    assert picked[0].year == "2025"

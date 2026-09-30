@@ -63,9 +63,14 @@ class AIProvider(Protocol):
         ...
 
     async def refine_pattern(
-        self, draft: dict, source_text: Optional[str], history: list[dict], answer: Optional[str]
+        self,
+        draft: dict,
+        source_text: Optional[str],
+        history: list[dict],
+        current: dict,
+        candidates: list[dict],
     ) -> RefineResult:
-        """One guided refine round for a pattern (versions, verdict, questions)."""
+        """One turn of the refine conversation (reply, versions with tasks, verdict, questions)."""
         ...
 
     async def suggest_patterns(self, task_text: str, feedback: str, draft: Optional[str]) -> SuggestResult:

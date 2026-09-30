@@ -49,3 +49,39 @@ def candidate_payload(task: TaskInfo) -> dict:
         "categories": list(task.categories),
         "hints": list(task.hints[1:3]),
     }
+
+
+# Refine rounds list tasks as evidence that a version applies. With a category
+# or skills known the list is narrowed like for linking; before that (a first
+# round with nothing but the student's sentence) every task goes in, with a
+# single hint to keep the prompt small.
+MAX_REFINE_CANDIDATES = 60
+
+
+def refine_candidates(tasks: list[TaskInfo], *, skills: list[str], category: str | None) -> list[TaskInfo]:
+    wanted = set(skills)
+    if not wanted and not category:
+        return sorted(tasks, key=task_key)
+    scored = [(_score(t, wanted, category), t) for t in tasks]
+    scored = [row for row in scored if row[0] > 0]
+    # Most tasks of a category tie; the cut must not keep only the oldest
+    # editions, so ties go round-robin over the years, newest year first
+    scored.sort(key=lambda row: (-row[0], -int(row[1].year), row[1].etap, row[1].number))
+    seen: dict[tuple[int, str], int] = {}
+    ranked = []
+    for score, task in scored:
+        turn = seen.get((score, task.year), 0)
+        seen[(score, task.year)] = turn + 1
+        ranked.append((-score, turn, -int(task.year), task.etap, task.number, task))
+    ranked.sort(key=lambda row: row[:5])
+    return [row[5] for row in ranked[:MAX_REFINE_CANDIDATES]]
+
+
+def refine_payload(task: TaskInfo, *, narrowed: bool) -> dict:
+    """Like ``candidate_payload``; one hint when the whole task list is sent."""
+    return {
+        "task_key": task_key(task),
+        "difficulty": task.difficulty,
+        "categories": list(task.categories),
+        "hints": list(task.hints[1:3] if narrowed else task.hints[2:3]),
+    }

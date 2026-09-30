@@ -108,12 +108,23 @@ def known_skills(skills: list[str]) -> list[str]:
     return result[:PATTERN_SKILLS_MAX]
 
 
+def _round_time(value: Optional[str]) -> str:
+    """The round's own ISO time when it is a sane past one, else now."""
+    now = datetime.now(timezone.utc)
+    try:
+        at = datetime.fromisoformat(value or "")
+    except ValueError:
+        return now.isoformat()
+    at = at if at.tzinfo else at.replace(tzinfo=timezone.utc)
+    return at.isoformat() if at <= now else now.isoformat()
+
+
 def stored_round(round_: RefineRoundIn) -> dict:
     """A round as saved: the proposal is filtered like the pattern's own fields."""
     data = round_.model_dump()
     data["category"] = round_.category if round_.category in PRIVATE_TASK_CATEGORIES else None
     data["skills"] = known_skills(round_.skills)
-    data["at"] = datetime.now(timezone.utc).isoformat()
+    data["at"] = _round_time(round_.at)
     return data
 
 
@@ -281,16 +292,17 @@ async def update_pattern(
         fields["category"] = sent["category"]
     if sent.get("skills") is not None:
         fields["skills"] = known_skills(sent["skills"])
-    if payload.append_round is not None:
-        rounds = list(pattern.refinement or []) + [stored_round(payload.append_round)]
+    new_rounds = payload.append_rounds + ([payload.append_round] if payload.append_round else [])
+    if new_rounds:
+        rounds = list(pattern.refinement or []) + [stored_round(r) for r in new_rounds]
         fields["refinement"] = rounds[-PATTERN_ROUNDS_MAX:]
-        # The round's proposal fills what the pattern lacks: without skills or a
+        # The last round's proposal fills what the pattern lacks: without skills or a
         # category, "Znajdź więcej zadań" has no candidates to offer the AI
-        proposed_category = payload.append_round.category
-        if not pattern.category and "category" not in fields and proposed_category in PRIVATE_TASK_CATEGORIES:
-            fields["category"] = proposed_category
+        latest = new_rounds[-1]
+        if not pattern.category and "category" not in fields and latest.category in PRIVATE_TASK_CATEGORIES:
+            fields["category"] = latest.category
         if not pattern.skills and "skills" not in fields:
-            fields["skills"] = known_skills(payload.append_round.skills)
+            fields["skills"] = known_skills(latest.skills)
     if payload.archived is not None:
         fields["archived_at"] = _now() if payload.archived else None
 
@@ -437,27 +449,66 @@ def _pattern_source(pattern: PatternDB) -> Optional[dict]:
     return None
 
 
+def _task_hints(source: Optional[dict]) -> tuple[Optional[str], list[str]]:
+    """Category and skills of an OMJ source task, to narrow the evidence list."""
+    task = service.omj_task(source.get("task_key")) if source else None
+    if task is None:
+        return None, []
+    skills = list(dict.fromkeys(list(task.skills_required) + list(task.skills_gained)))
+    return (task.categories[0] if task.categories else None), skills
+
+
+def refine_evidence(category: Optional[str], skills: list[str], history: list[dict],
+                    source: Optional[dict]) -> list[dict]:
+    """OMJ tasks the model may name as places where a version applies.
+
+    Narrowed by what is known - the editor's category, else the latest AI
+    proposal, else the source task - and the whole list when nothing is.
+    """
+    latest = history[-1] if history else {}
+    source_category, source_skills = _task_hints(source)
+    category = category or latest.get("category") or source_category
+    skills = skills or list(latest.get("skills") or []) or source_skills
+    category = category if category in PRIVATE_TASK_CATEGORIES else None
+    skills = known_skills(skills)
+    tasks = linking.refine_candidates(service.all_omj_tasks(), skills=skills, category=category)
+    narrowed = bool(category or skills)
+    return [linking.refine_payload(t, narrowed=narrowed) for t in tasks]
+
+
 @router.post("/refine")
 async def refine_pattern(request: Request, payload: RefineRequest, db: Session = Depends(get_db)):
-    """One guided round: 2-3 versions to pick from, a verdict and questions back."""
+    """One conversation turn: a reply, 2-3 versions with tasks, a verdict and questions."""
     user_id = await current_member_id(request)
     draft = payload.draft.model_dump()
     history = [r.model_dump() for r in payload.history]
+    category, skills = payload.category, []
     if payload.pattern_id:
         pattern = owned_pattern(db, payload.pattern_id, user_id)
         if not (draft["trigger"] or draft["action"] or draft["raw"]):
             draft.update(trigger=pattern.trigger, action=pattern.action, example=pattern.example or "")
         source = _pattern_source(pattern)
         history = list(pattern.refinement or []) + history
+        category = category or pattern.category
+        skills = list(pattern.skills or [])
     else:
         source = resolve_source(db, payload.source, user_id)
     if not (draft["raw"].strip() or (draft["trigger"].strip() and draft["action"].strip())):
         raise HTTPException(status_code=422, detail="Napisz najpierw swój pomysł na wzorzec.")
 
+    # An old client sends one answer for everything: treat it as the message
+    message = payload.message if payload.message is not None else payload.answer
+    last_questions = list(history[-1].get("questions") or []) if history else []
+    current = {
+        "answers": service.round_answers(last_questions, list(payload.answers)),
+        "message": (message or "").strip() or None,
+    }
+    candidates = refine_evidence(category, skills, history, source)
+
     usage_row = _reserve(db, request, user_id, service.KIND_REFINE,
                          settings.rate_limit_pattern_refines_per_user_per_day)
     result = await _call(db, usage_row, user_id, create_ai_provider().refine_pattern(
-        draft, _source_text(db, source), service.compact_history(history, payload.answer), payload.answer,
+        draft, _source_text(db, source), service.compact_history(history), current, candidates,
     ))
     if len(result.variants) < 2:
         raise HTTPException(
@@ -467,13 +518,17 @@ async def refine_pattern(request: Request, payload: RefineRequest, db: Session =
     return {
         "round": {
             "draft": draft,
-            "answer": payload.answer,
+            "answer": None,
+            "answers": list(payload.answers),
+            "message": current["message"],
+            "reply": result.reply,
             "variants": [v.model_dump() for v in result.variants],
             "questions": result.questions,
             "verdict": result.verdict,
             "comment": result.comment,
             "category": result.category,
             "skills": result.skills,
+            "at": datetime.now(timezone.utc).isoformat(),
         }
     }
 

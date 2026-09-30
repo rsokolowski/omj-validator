@@ -2,10 +2,12 @@
 
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { MathContent } from "@/components/ui/MathContent";
-import { PatternVariant } from "@/lib/types";
+import { RoundVariant } from "@/lib/types";
+import { taskRef } from "@/lib/utils/patternTasks";
+import { TaskChip, TextWithTasks } from "./TaskChip";
 
 interface VariantCardProps {
-  variant: PatternVariant;
+  variant: RoundVariant;
   label: string;
   chosen?: boolean;
   actionLabel?: string;
@@ -51,6 +53,12 @@ export function VariantCard({ variant, label, chosen, actionLabel = "Wybierz", o
           <MathContent content={`Przykład: ${variant.example}`} />
         </Box>
       )}
+      {variant.note && (
+        <Typography variant="body2" component="div" sx={{ color: "grey.700", fontStyle: "italic" }}>
+          <TextWithTasks text={variant.note} />
+        </Typography>
+      )}
+      {variant.tasks && <VariantTasks keys={variant.tasks} />}
       {note && (
         <Typography variant="body2" component="div" sx={{ color: "#1e40af" }}>
           <MathContent content={note} />
@@ -64,5 +72,29 @@ export function VariantCard({ variant, label, chosen, actionLabel = "Wybierz", o
         </Box>
       )}
     </Paper>
+  );
+}
+
+/** OMJ tasks where the version helps - how broad it is, shown rather than argued. */
+function VariantTasks({ keys }: { keys: string[] }) {
+  const refs = keys.map(taskRef).filter((r) => r !== null);
+  if (!refs.length) {
+    return (
+      <Typography variant="caption" sx={{ color: "grey.600" }}>
+        Nie pasuje do żadnego zadania OMJ z listy AI.
+      </Typography>
+    );
+  }
+  return (
+    <Box>
+      <Typography variant="caption" sx={{ color: "grey.600", display: "block", mb: 0.5 }}>
+        Pomaga w zadaniach OMJ ({refs.length}):
+      </Typography>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+        {refs.map((ref) => (
+          <TaskChip key={ref.key} task={ref} />
+        ))}
+      </Box>
+    </Box>
   );
 }

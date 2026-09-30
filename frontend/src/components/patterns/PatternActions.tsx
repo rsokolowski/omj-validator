@@ -63,16 +63,16 @@ export function PatternActions({ pattern }: { pattern: PatternDetail }) {
     });
   };
 
-  // Picking a version in a refine round saves it right away, with the round
-  const pick = (variant: PatternVariant, round: RefineRound) =>
+  // Picking a version saves it right away, with the conversation that led to it
+  const pick = (variant: PatternVariant, _round: RefineRound, session: RefineRound[]) =>
     run(async () => {
       await patternsApi.update(pattern.id, {
         trigger: variant.trigger,
         action: variant.action,
         example: variant.example,
-        append_round: round,
+        append_rounds: session,
       });
-      setDraft({ ...draft, ...variant });
+      setDraft({ ...draft, trigger: variant.trigger, action: variant.action, example: variant.example });
       setRounds([]);
       setMode("idle");
       router.refresh();
@@ -123,7 +123,8 @@ export function PatternActions({ pattern }: { pattern: PatternDetail }) {
       )}
 
       {mode === "refine" && (
-        <RefinePanel draft={draft} rounds={rounds} onRoundsChange={setRounds} onPick={pick} patternId={pattern.id} />
+        <RefinePanel draft={draft} rounds={rounds} onRoundsChange={setRounds} onPick={pick} patternId={pattern.id}
+          category={category} earlierRounds={pattern.refinement} />
       )}
 
       <Dialog open={deleting} onClose={() => setDeleting(false)}>

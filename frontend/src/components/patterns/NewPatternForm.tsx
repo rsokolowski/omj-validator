@@ -93,7 +93,8 @@ export function NewPatternForm({ source, sourceLabel, initialDraft }: NewPattern
         />
       </Paper>
 
-      <RefinePanel draft={draft} rounds={rounds} onRoundsChange={onRoundsChange} onPick={pick} source={source} />
+      <RefinePanel draft={draft} rounds={rounds} onRoundsChange={onRoundsChange} onPick={pick} source={source}
+        category={category} />
 
       {error && <Alert severity="error">{error}</Alert>}
       <Box>

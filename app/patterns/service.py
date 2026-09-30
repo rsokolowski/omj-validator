@@ -194,27 +194,61 @@ def solved_omj_keys(db: Session, user_id: str) -> set[str]:
     return {f"{y}_{e}_{n}" for y, e, n in rows}
 
 
-# Refine rounds sent back to the model (the rest only costs tokens)
-HISTORY_ROUNDS_SENT = 3
+# Refine rounds sent back to the model; a session keeps at most PATTERN_ROUNDS_MAX
+HISTORY_ROUNDS_SENT = 8
 
 
-def compact_history(rounds: list[dict], current_answer: Optional[str] = None) -> list[dict]:
-    """Stored/client rounds -> what the model sees: chosen version, questions, answer.
+def round_answers(questions: list[str], answers: list, legacy_answer: Optional[str] = None) -> list[dict]:
+    """Questions paired with the student's answers; unanswered ones are left out.
 
-    A round stores the answer sent to REQUEST it, which replied to the round
-    before. So round i's questions pair with round i+1's answer, and the last
-    round's questions with the answer sent now.
+    Rounds stored before answers were split carry one ``answer`` for all the
+    questions - it is then paired with the questions as a whole.
     """
-    compacted = []
-    recent = rounds[-HISTORY_ROUNDS_SENT:]
-    for index, round_ in enumerate(recent):
-        variants = round_.get("variants") or []
-        chosen = round_.get("chosen")
-        picked = variants[chosen] if isinstance(chosen, int) and 0 <= chosen < len(variants) else {}
-        reply = recent[index + 1].get("answer") if index + 1 < len(recent) else current_answer
-        compacted.append({
-            "chosen": dict(picked),
+    pairs = []
+    for index, question in enumerate(questions):
+        answer = answers[index] if index < len(answers) else None
+        if answer and answer.strip():
+            pairs.append({"question": question, "answer": answer.strip()})
+    if not pairs and legacy_answer and legacy_answer.strip() and questions:
+        pairs.append({"question": " / ".join(questions), "answer": legacy_answer.strip()})
+    return pairs
+
+
+def compact_history(rounds: list[dict]) -> list[dict]:
+    """Stored/client rounds -> the conversation so far, as the model sees it.
+
+    Each turn is what the student sent (answers to the previous round's
+    questions, a message, the draft if it changed) and what the AI answered
+    (reply, verdict, the versions it offered, questions), then which version
+    the student picked. The model needs its own versions to know what
+    "wersja 2" means.
+    """
+    turns = []
+    start = max(0, len(rounds) - HISTORY_ROUNDS_SENT)
+    previous_draft = rounds[start - 1].get("draft") if start > 0 else None
+    for index in range(start, len(rounds)):
+        round_ = rounds[index]
+        before = rounds[index - 1] if index > 0 else {}
+        has_split = bool(round_.get("answers")) or round_.get("message") is not None
+        legacy = None if has_split else round_.get("answer")
+        answers = round_answers(list(before.get("questions") or []), list(round_.get("answers") or []), legacy)
+        message = round_.get("message")
+        if legacy and not before.get("questions"):
+            message = legacy
+        draft = round_.get("draft") or {}
+        turns.append({
+            "answers": answers,
+            "message": (message or "").strip() or None,
+            "draft": draft if draft != previous_draft else None,
+            "reply": round_.get("reply") or "",
+            "verdict": round_.get("verdict") or "ok",
+            "comment": round_.get("comment") or "",
+            "variants": [
+                {k: v.get(k) for k in ("trigger", "action", "note", "tasks")}
+                for v in (round_.get("variants") or [])
+            ],
             "questions": list(round_.get("questions") or []),
-            "answer": reply,
+            "chosen": round_.get("chosen"),
         })
-    return compacted
+        previous_draft = draft
+    return turns

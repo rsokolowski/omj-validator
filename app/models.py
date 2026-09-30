@@ -1,3 +1,4 @@
+import re
 from pydantic import BaseModel, computed_field, Field, field_validator
 from datetime import datetime
 from typing import Annotated, Optional, Literal
@@ -389,6 +390,13 @@ PATTERN_QUESTION_MAX = 300
 PATTERN_QUESTIONS = 2
 PATTERN_SKILLS_MAX = 3
 PATTERN_ROUNDS_MAX = 10
+# A refine round is a conversation turn: the student's own message and the AI's reply
+PATTERN_MESSAGE_MAX = 1000
+PATTERN_REPLY_MAX = 1500
+PATTERN_NOTE_MAX = 300
+# OMJ tasks the AI names as evidence that a proposed version applies
+PATTERN_VARIANT_TASKS = 6
+PATTERN_TASK_KEY = re.compile(r"^\d{4}_etap[123]_\d{1,2}$")
 RECALL_TEXT_MIN = 10
 RECALL_TEXT_MAX = 1000
 
@@ -401,10 +409,27 @@ class PatternVariant(BaseModel):
     example: str = Field(default="", max_length=PATTERN_EXAMPLE_MAX)
 
 
-class RefineResult(BaseModel):
-    """A refine round from the AI: versions to pick from, verdict, questions."""
+class RoundVariant(PatternVariant):
+    """A version proposed in a refine round, with how broad it is and where it applies."""
 
-    variants: list[PatternVariant] = []
+    note: str = Field(default="", max_length=PATTERN_NOTE_MAX)
+    tasks: list[str] = Field(default=[], max_length=20)
+
+    @field_validator("tasks")
+    @classmethod
+    def _task_keys(cls, value: list[str]) -> list[str]:
+        keys: list[str] = []
+        for key in value:
+            if isinstance(key, str) and PATTERN_TASK_KEY.match(key) and key not in keys:
+                keys.append(key)
+        return keys[:PATTERN_VARIANT_TASKS]
+
+
+class RefineResult(BaseModel):
+    """A refine round from the AI: a reply, versions to pick from, verdict, questions."""
+
+    reply: str = ""
+    variants: list[RoundVariant] = []
     questions: list[str] = []
     verdict: str = "ok"
     comment: str = ""
@@ -454,8 +479,16 @@ class RefineRoundIn(BaseModel):
     """A refine round as the client keeps it and sends it back to be stored."""
 
     draft: PatternDraft = PatternDraft()
+    # What the student sent to request this round: answers to the previous
+    # round's questions (same order) and a free message. ``answer`` is the
+    # single field rounds had before, kept so stored rounds still load.
     answer: Optional[str] = Field(default=None, max_length=PATTERN_ANSWER_MAX)
-    variants: list[PatternVariant] = Field(default=[], max_length=3)
+    answers: list[Optional[Annotated[str, Field(max_length=PATTERN_ANSWER_MAX)]]] = Field(
+        default=[], max_length=PATTERN_QUESTIONS
+    )
+    message: Optional[str] = Field(default=None, max_length=PATTERN_MESSAGE_MAX)
+    reply: str = Field(default="", max_length=PATTERN_REPLY_MAX)
+    variants: list[RoundVariant] = Field(default=[], max_length=3)
     questions: list[str] = Field(default=[], max_length=PATTERN_QUESTIONS)
     verdict: str = Field(default="ok", max_length=20)
     comment: str = Field(default="", max_length=PATTERN_COMMENT_MAX)
@@ -463,6 +496,8 @@ class RefineRoundIn(BaseModel):
     # The AI's category / skills proposal from this round (filtered on save)
     category: Optional[str] = Field(default=None, max_length=20)
     skills: list[Annotated[str, Field(max_length=64)]] = Field(default=[], max_length=10)
+    # When the round was generated (server time, ISO); stamped on save if missing
+    at: Optional[str] = Field(default=None, max_length=40)
 
     @field_validator("questions")
     @classmethod
@@ -521,6 +556,8 @@ class UpdatePatternRequest(BaseModel):
     category: Optional[str] = None
     skills: Optional[list[str]] = Field(default=None, max_length=10)
     append_round: Optional[RefineRoundIn] = None
+    # A whole refine session at once (the rounds that led to the chosen version)
+    append_rounds: list[RefineRoundIn] = Field(default=[], max_length=100)
     archived: Optional[bool] = None
 
     @field_validator("trigger", "action")
@@ -562,7 +599,14 @@ class RefineRequest(BaseModel):
     history: list[RefineRoundIn] = Field(default=[], max_length=100)
 
     _keep_last_rounds = field_validator("history")(_last_rounds)
+    # Legacy single field; new clients send answers + message
     answer: Optional[str] = Field(default=None, max_length=PATTERN_ANSWER_MAX)
+    answers: list[Optional[Annotated[str, Field(max_length=PATTERN_ANSWER_MAX)]]] = Field(
+        default=[], max_length=PATTERN_QUESTIONS
+    )
+    message: Optional[str] = Field(default=None, max_length=PATTERN_MESSAGE_MAX)
+    # The category picked in the editor - narrows the OMJ tasks shown as evidence
+    category: Optional[str] = Field(default=None, max_length=20)
     pattern_id: Optional[str] = Field(default=None, max_length=12)
 
 

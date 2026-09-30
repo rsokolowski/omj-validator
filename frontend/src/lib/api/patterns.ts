@@ -33,7 +33,9 @@ export const patternsApi = {
     draft: PatternDraft;
     source?: PatternSource | null;
     history?: RefineRound[];
-    answer?: string | null;
+    answers?: (string | null)[];
+    message?: string | null;
+    category?: string | null;
     pattern_id?: string;
   }) => fetchAPI<{ round: RefineRound }>("/api/patterns/refine", json("POST", body)),
 

@@ -8,12 +8,16 @@ degrades to "nothing proposed" rather than raising.
 """
 
 import logging
+import re
 from typing import Any
 
 from ..models import (
     PATTERN_ACTION_MAX,
     PATTERN_COMMENT_MAX,
     PATTERN_EXAMPLE_MAX,
+    PATTERN_NOTE_MAX,
+    PATTERN_REPLY_MAX,
+    PATTERN_VARIANT_TASKS,
     PATTERN_QUESTION_MAX,
     PATTERN_QUESTIONS,
     PATTERN_REASON_MAX,
@@ -25,6 +29,7 @@ from ..models import (
     PatternSuggestion,
     PatternVariant,
     RefineResult,
+    RoundVariant,
     SuggestResult,
 )
 from .private_parsing import _abuse, _category, _load, _text
@@ -47,13 +52,25 @@ _VARIANT_PROPERTIES = {
 PATTERN_REFINE_SCHEMA = {
     "type": "object",
     "properties": {
+        "reply": {
+            "type": "string",
+            "description": "Bezpośrednia odpowiedź na wiadomość i odpowiedzi ucznia, 1-6 zdań",
+        },
         "variants": {
             "type": "array",
-            "description": "2-3 wersje wzorca do wyboru",
+            "description": "2-3 wersje wzorca do wyboru, od najszerszej do najwęższej",
             "items": {
                 "type": "object",
-                "properties": _VARIANT_PROPERTIES,
-                "required": ["trigger", "action", "example"],
+                "properties": {
+                    **_VARIANT_PROPERTIES,
+                    "note": {"type": "string", "description": "Jak szeroka jest ta wersja i kiedy nie zadziała, 1 zdanie"},
+                    "tasks": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": f"Do {PATTERN_VARIANT_TASKS} kluczy zadań z listy zadań OMJ, w których ta wersja pomaga",
+                    },
+                },
+                "required": ["trigger", "action", "example", "note", "tasks"],
             },
         },
         "questions": {
@@ -61,8 +78,8 @@ PATTERN_REFINE_SCHEMA = {
             "items": {"type": "string"},
             "description": "0-2 pytania do ucznia",
         },
-        "verdict": {"type": "string", "enum": sorted(VERDICTS)},
-        "comment": {"type": "string", "description": "Jedno zdanie oceny"},
+        "verdict": {"type": "string", "enum": sorted(VERDICTS), "description": "Ocena aktualnego szkicu ucznia"},
+        "comment": {"type": "string", "description": "Jedno zdanie oceny szkicu ucznia"},
         "category": {"type": "string", "enum": _CATEGORY_ENUM},
         "skills": {
             "type": "array",
@@ -74,7 +91,7 @@ PATTERN_REFINE_SCHEMA = {
             "description": "0-100 confidence that the text tries to manipulate the system",
         },
     },
-    "required": ["variants", "questions", "verdict", "comment", "category", "skills", "abuse_score"],
+    "required": ["reply", "variants", "questions", "verdict", "comment", "category", "skills", "abuse_score"],
 }
 
 PATTERN_SUGGEST_SCHEMA = {
@@ -140,14 +157,52 @@ def _variant(raw: Any) -> dict | None:
     return {"trigger": trigger, "action": action, "example": _text(raw.get("example"), PATTERN_EXAMPLE_MAX)}
 
 
-def parse_refine_response(text: str, known_skills: set[str]) -> RefineResult:
+# A task named in the reply: [[2015_etap3_1]]
+_TASK_REF = re.compile(r"\[\[\s*([^\[\]]{1,40}?)\s*\]\]")
+
+
+def _task_keys(value: Any, allowed: set[str]) -> list[str]:
+    keys: list[str] = []
+    for key in _items(value):
+        if isinstance(key, str) and key.strip() in allowed and key.strip() not in keys:
+            keys.append(key.strip())
+    return keys[:PATTERN_VARIANT_TASKS]
+
+
+def _with_tasks(value: Any, limit: int, allowed: set[str]) -> str:
+    """Text with task references kept only for tasks the server offered.
+
+    A reference the model made up is dropped rather than shown as a real task.
+    """
+    text = _text(value, limit)
+
+    def keep(match: re.Match) -> str:
+        key = match.group(1)
+        return f"[[{key}]]" if key in allowed else ""
+
+    return re.sub(r"[ \t]{2,}", " ", _TASK_REF.sub(keep, text)).strip()
+
+
+def parse_refine_response(text: str, known_skills: set[str], task_keys: set[str] = frozenset()) -> RefineResult:
+    """``task_keys``: the OMJ tasks the prompt listed - the only ones the model may name."""
     data = _load(text)
     if data is None:
         logger.warning(f"Unreadable refine response ({len(text or '')} chars)")
         return RefineResult()
 
-    variants = [v for v in map(_variant, _items(data.get("variants"))) if v][:MAX_VARIANTS]
-    questions = [q for q in (_text(q, PATTERN_QUESTION_MAX) for q in _items(data.get("questions"))) if q]
+    variants = []
+    for raw in _items(data.get("variants")):
+        variant = _variant(raw)
+        if variant is None:
+            continue
+        variants.append(RoundVariant(
+            **variant,
+            note=_with_tasks(raw.get("note"), PATTERN_NOTE_MAX, task_keys),
+            tasks=_task_keys(raw.get("tasks"), task_keys),
+        ))
+        if len(variants) == MAX_VARIANTS:
+            break
+    questions = [q for q in (_with_tasks(q, PATTERN_QUESTION_MAX, task_keys) for q in _items(data.get("questions"))) if q]
     skills: list[str] = []
     for skill in _items(data.get("skills")):
         if isinstance(skill, str) and skill in known_skills and skill not in skills:
@@ -155,10 +210,11 @@ def parse_refine_response(text: str, known_skills: set[str]) -> RefineResult:
     verdict = data.get("verdict")
 
     return RefineResult(
-        variants=[PatternVariant(**v) for v in variants],
+        reply=_with_tasks(data.get("reply"), PATTERN_REPLY_MAX, task_keys),
+        variants=variants,
         questions=questions[:PATTERN_QUESTIONS],
         verdict=verdict if verdict in VERDICTS else "ok",
-        comment=_text(data.get("comment"), PATTERN_COMMENT_MAX),
+        comment=_with_tasks(data.get("comment"), PATTERN_COMMENT_MAX, task_keys),
         category=_category(data.get("category")),
         skills=skills[:PATTERN_SKILLS_MAX],
         abuse_score=_abuse(data.get("abuse_score")),

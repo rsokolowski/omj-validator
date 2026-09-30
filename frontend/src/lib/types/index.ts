@@ -345,16 +345,30 @@ export interface PatternDraft {
 
 export type PatternVerdict = "ok" | "za_ogolny" | "bledny" | "to_nie_wzorzec";
 
+/** A version offered in a refine round: how broad it is and OMJ tasks where it helps */
+export interface RoundVariant extends PatternVariant {
+  note?: string;
+  tasks?: string[];
+}
+
 export interface RefineRound {
   draft: PatternDraft;
-  answer: string | null;
-  variants: PatternVariant[];
+  /** Rounds saved before the conversation had separate fields: one answer for everything */
+  answer?: string | null;
+  /** The student's answers to the previous round's questions, same order */
+  answers?: (string | null)[];
+  /** The student's own message that requested this round */
+  message?: string | null;
+  /** The AI's direct reply to that message; OMJ tasks appear as [[2015_etap3_1]] */
+  reply?: string;
+  variants: RoundVariant[];
   questions: string[];
   verdict: PatternVerdict;
   comment: string;
   category?: string | null;
   skills?: string[];
   chosen: number | null;
+  at?: string;
 }
 
 export interface PatternSuggestion extends PatternVariant {
@@ -423,7 +437,7 @@ export interface Pattern {
 
 export interface PatternDetail extends Pattern {
   links: PatternLink[];
-  refinement: (RefineRound & { at?: string })[];
+  refinement: RefineRound[];
   reviews: PatternReview[];
 }
 

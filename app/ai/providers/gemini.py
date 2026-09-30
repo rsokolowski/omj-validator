@@ -1194,31 +1194,74 @@ class GeminiProvider:
         draft: dict,
         source_text: Optional[str],
         history: list[dict],
-        answer: Optional[str],
+        current: dict,
+        candidates: list[dict],
     ) -> RefineResult:
-        """One guided refine round: 2-3 versions to pick from, verdict, questions."""
+        """One turn of the refine conversation: a reply, 2-3 versions, verdict, questions.
+
+        ``history`` comes from ``compact_history``; ``current`` is what the
+        student sends now ({"answers": [{"question", "answer"}], "message"});
+        ``candidates`` are the OMJ tasks the model may name as evidence.
+        """
         skills = get_all_skills()
         skill_lines = "\n".join(f"- {s.id}: {s.name}" for s in skills)
-        history_lines = []
-        for index, round_ in enumerate(history, 1):
-            chosen = round_.get("chosen") or {}
-            history_lines.append(
-                f"Runda {index}: wybrana wersja: {chosen.get('trigger', '')} -> {chosen.get('action', '')}; "
-                f"pytania: {' / '.join(round_.get('questions') or [])}; "
-                f"odpowiedź ucznia: {round_.get('answer') or '(brak)'}"
+        task_lines = []
+        for c in candidates:
+            hints = " | ".join(c.get("hints") or [])
+            task_lines.append(
+                f"- {c['task_key']} | trudność {c.get('difficulty') or '?'} | "
+                f"{', '.join(c.get('categories') or [])} | {hints}"
             )
         prompt = (
             f"{load_private_prompt('pattern_refine')}\n\n"
             f"## Lista umiejętności (skills)\n{skill_lines}\n\n"
-            f"## Szkic wzorca ucznia\n{self._student_text(self._draft_text(draft))}\n\n"
+            f"## Zadania OMJ (klucz | trudność | działy | nasze wskazówki)\n"
+            f"{chr(10).join(task_lines) or '(brak listy - nie podawaj zadań)'}\n\n"
             f"## Zadanie, przy którym uczeń zauważył wzorzec\n{self._student_text(source_text)}\n\n"
-            f"## Poprzednie rundy\n{self._student_text(chr(10).join(history_lines))}\n\n"
-            f"## Odpowiedź ucznia na Twoje pytania\n{self._student_text(answer)}\n"
+            f"## Dotychczasowa rozmowa\n{self._student_text(self._conversation_text(history))}\n\n"
+            f"## Aktualny szkic wzorca ucznia (z formularza)\n{self._student_text(self._draft_text(draft))}\n\n"
+            f"## Odpowiedzi ucznia na Twoje ostatnie pytania\n"
+            f"{self._student_text(self._answers_text(current.get('answers') or []))}\n\n"
+            f"## Wiadomość ucznia do Ciebie\n{self._student_text(current.get('message'))}\n"
         )
         text, meta = await self._generate_json([prompt], PATTERN_REFINE_SCHEMA)
-        result = parse_refine_response(text, {s.id for s in skills})
+        result = parse_refine_response(text, {s.id for s in skills}, {c["task_key"] for c in candidates})
         result.meta = meta
         return result
+
+    @staticmethod
+    def _answers_text(pairs: list[dict]) -> str:
+        return "\n".join(f"Pytanie: {p['question']}\nOdpowiedź: {p['answer']}" for p in pairs)
+
+    @classmethod
+    def _conversation_text(cls, history: list[dict]) -> str:
+        """The refine rounds so far, turn by turn, including the versions offered."""
+        blocks = []
+        for number, turn in enumerate(history, 1):
+            lines = [f"### Runda {number}"]
+            if turn.get("draft"):
+                lines.append(f"Uczeń - szkic: {cls._draft_text(turn['draft'])}")
+            if turn.get("answers"):
+                lines.append(f"Uczeń - odpowiedzi:\n{cls._answers_text(turn['answers'])}")
+            if turn.get("message"):
+                lines.append(f"Uczeń - wiadomość: {turn['message']}")
+            if turn.get("reply"):
+                lines.append(f"Ty - odpowiedź: {turn['reply']}")
+            lines.append(f"Ty - ocena szkicu: {turn.get('verdict')}; {turn.get('comment') or ''}")
+            for index, variant in enumerate(turn.get("variants") or [], 1):
+                tasks = ", ".join(variant.get("tasks") or []) or "brak"
+                lines.append(
+                    f"Ty - wersja {index}: Kiedy widzę {variant.get('trigger')} -> {variant.get('action')}"
+                    f" (uwaga: {variant.get('note') or '-'}; zadania: {tasks})"
+                )
+            if turn.get("questions"):
+                lines.append(f"Ty - pytania: {' / '.join(turn['questions'])}")
+            chosen = turn.get("chosen")
+            lines.append(
+                f"Uczeń wybrał wersję {chosen + 1}" if isinstance(chosen, int) else "Uczeń nie wybrał żadnej wersji"
+            )
+            blocks.append("\n".join(lines))
+        return "\n\n".join(blocks)
 
     async def suggest_patterns(self, task_text: str, feedback: str, draft: Optional[str]) -> SuggestResult:
         """1-3 patterns worth remembering from a graded solution."""

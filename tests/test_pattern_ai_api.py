@@ -11,6 +11,7 @@ from app.models import (
     PatternSuggestion,
     PatternVariant,
     RefineResult,
+    RoundVariant,
     SuggestResult,
     TaskInfo,
     TaskPdf,
@@ -36,7 +37,8 @@ V2 = PatternVariant(trigger="Operacje zmieniają liczby", action="Sprawdź, co s
 
 class StubProvider:
     def __init__(self):
-        self.refine = RefineResult(variants=[V1, V2], questions=["Czy to działa dla iloczynu?"],
+        self.refine = RefineResult(variants=[RoundVariant(**V1.model_dump()), RoundVariant(**V2.model_dump())],
+                                   reply="Odpowiadam", questions=["Czy to działa dla iloczynu?"],
                                    verdict="ok", comment="Dobrze", category="kombinatoryka",
                                    skills=["parity"], meta={"model": "stub"})
         self.suggest = SuggestResult(suggestions=[PatternSuggestion(**V1.model_dump(), why="Często")],
@@ -45,8 +47,8 @@ class StubProvider:
         self.error = None
         self.calls = []
 
-    async def refine_pattern(self, draft, source_text, history, answer):
-        self.calls.append(("refine", draft, source_text, history, answer))
+    async def refine_pattern(self, draft, source_text, history, current, candidates):
+        self.calls.append(("refine", draft, source_text, history, current, candidates))
         if self.error:
             raise self.error
         return self.refine
@@ -86,24 +88,58 @@ def refine(client, **overrides):
 
 class TestRefine:
     def test_round(self, client, provider, db):
-        r = refine(client, source={"private_task_id": PRIVATE_ID}, answer="Tak")
+        r = refine(client, source={"private_task_id": PRIVATE_ID}, message="Czemu za ogólny?")
         assert r.status_code == 200, r.text
         round_ = r.json()["round"]
         assert [v["trigger"] for v in round_["variants"]] == [V1.trigger, V2.trigger]
         assert round_["questions"] == ["Czy to działa dla iloczynu?"]
         assert round_["category"] == "kombinatoryka"
-        _, draft, source_text, history, answer = provider.calls[0]
+        assert round_["reply"] == "Odpowiadam"
+        assert round_["message"] == "Czemu za ogólny?"
+        assert round_["at"]
+        _, draft, source_text, history, current, _ = provider.calls[0]
         assert "Wymyślone zadanie o parzystości." in source_text
-        assert answer == "Tak"
+        assert current == {"answers": [], "message": "Czemu za ogólny?"}
         assert usage(db, service.KIND_REFINE) == 1
 
-    def test_history_is_compacted_to_the_chosen_variants(self, client, provider):
+    def test_legacy_answer_is_the_message(self, client, provider):
+        refine(client, answer="Tak")
+        assert provider.calls[0][4]["message"] == "Tak"
+
+    def test_answers_pair_with_the_last_questions(self, client, provider):
         history = [{"draft": {"raw": "x"}, "variants": [V1.model_dump(), V2.model_dump()],
-                    "questions": ["q?"], "answer": "a", "chosen": 1}] * 5
+                    "questions": ["Q1?", "Q2?"], "chosen": None}]
+        refine(client, history=history, answers=[None, "Tylko drugie"], message="Uwaga")
+        current = provider.calls[0][4]
+        assert current == {"answers": [{"question": "Q2?", "answer": "Tylko drugie"}], "message": "Uwaga"}
+
+    def test_history_keeps_the_versions_offered(self, client, provider):
+        history = [{"draft": {"raw": "x"}, "variants": [V1.model_dump(), V2.model_dump()],
+                    "questions": ["q?"], "reply": "r", "chosen": None}] * 10
         refine(client, history=history)
         sent = provider.calls[0][3]
-        assert len(sent) == 3
-        assert sent[0] == {"chosen": V2.model_dump(), "questions": ["q?"], "answer": "a"}
+        assert len(sent) == service.HISTORY_ROUNDS_SENT
+        assert [v["trigger"] for v in sent[-1]["variants"]] == [V1.trigger, V2.trigger]
+        assert sent[-1]["reply"] == "r" and sent[-1]["chosen"] is None
+        # The draft is repeated only when it changed
+        assert sent[0]["draft"] is None
+
+    def test_evidence_is_narrowed_by_category(self, client, provider, all_tasks):
+        refine(client, category="kombinatoryka")
+        candidates = provider.calls[0][5]
+        assert [c["task_key"] for c in candidates] == ["2023_etap1_1", "2023_etap1_2", "2023_etap1_3"]
+        assert candidates[0]["hints"] == ["b", "c"]
+
+    def test_evidence_without_category_is_every_task_with_one_hint(self, client, provider, all_tasks):
+        refine(client)
+        candidates = provider.calls[0][5]
+        assert len(candidates) == 4
+        assert candidates[0]["hints"] == ["c"]
+
+    def test_saved_pattern_narrows_by_its_category(self, client, provider, all_tasks):
+        p = create(client, category="geometria")
+        client.post("/api/patterns/refine", json={"pattern_id": p["id"]})
+        assert [c["task_key"] for c in provider.calls[0][5]] == ["2023_etap2_1"]
 
     def test_empty_draft_is_422(self, client, provider):
         assert client.post("/api/patterns/refine", json={"draft": {}}).status_code == 422
@@ -113,7 +149,7 @@ class TestRefine:
         p = create(client, source={"private_task_id": PRIVATE_ID})
         r = client.post("/api/patterns/refine", json={"pattern_id": p["id"]})
         assert r.status_code == 200
-        _, draft, source_text, _, _ = provider.calls[0]
+        _, draft, source_text, _, _, _ = provider.calls[0]
         assert draft["trigger"] == p["trigger"]
         assert "Wymyślone zadanie" in source_text
 
@@ -213,14 +249,18 @@ CANDIDATES = [
              difficulty=2, categories=["kombinatoryka"], hints=["a", "b", "c", "d"])
     for n in (1, 2, 3)
 ]
+GEOMETRY = TaskInfo(year="2023", etap="etap2", number=1, title="Zadanie 1", pdf=TaskPdf(tasks="t.pdf"),
+                    difficulty=3, categories=["geometria"], hints=["a", "b", "c", "d"])
+
+
+@pytest.fixture
+def all_tasks(monkeypatch):
+    tasks = list(CANDIDATES)
+    monkeypatch.setattr(service, "all_omj_tasks", lambda: tasks + [GEOMETRY])
+    return tasks
 
 
 class TestSuggestLinks:
-    @pytest.fixture
-    def all_tasks(self, monkeypatch):
-        tasks = list(CANDIDATES)
-        monkeypatch.setattr(service, "all_omj_tasks", lambda: tasks)
-        return tasks
 
     def test_stores_suggested_links(self, client, provider, db, all_tasks, omj):
         for t in all_tasks:
@@ -247,7 +287,7 @@ class TestSuggestLinks:
         assert [c["task_key"] for c in candidates] == ["2023_etap1_3"]
 
     def test_no_candidates_no_ai_call(self, client, provider, db, all_tasks):
-        p = create(client, category="geometria")
+        p = create(client, category="logika")
         r = client.post(f"/api/patterns/{p['id']}/suggest-links")
         assert r.json() == {"links": []}
         assert provider.calls == []
@@ -268,14 +308,24 @@ class TestLongSessions:
 
 
 def test_history_pairs_each_answer_with_the_questions_it_answers():
-    # A round stores the answer sent to REQUEST it - the reply to the round before
+    # A round stores what was sent to REQUEST it - the reply to the round before
     rounds = [
-        {"variants": [V1.model_dump()], "chosen": 0, "questions": ["Q0?"], "answer": None},
-        {"variants": [V2.model_dump()], "chosen": 0, "questions": ["Q1?"], "answer": "odpowiedź na Q0"},
+        {"draft": {"raw": "x"}, "variants": [V1.model_dump()], "chosen": 0, "questions": ["Q0?"]},
+        {"draft": {"raw": "x"}, "variants": [V2.model_dump()], "chosen": None, "questions": ["Q1?"],
+         "answers": ["odpowiedź na Q0"], "message": "i jeszcze coś"},
     ]
-    compacted = service.compact_history(rounds, current_answer="odpowiedź na Q1")
-    assert [(r["questions"], r["answer"]) for r in compacted] == [
-        (["Q0?"], "odpowiedź na Q0"),
-        (["Q1?"], "odpowiedź na Q1"),
+    compacted = service.compact_history(rounds)
+    assert compacted[1]["answers"] == [{"question": "Q0?", "answer": "odpowiedź na Q0"}]
+    assert compacted[1]["message"] == "i jeszcze coś"
+    assert compacted[0]["chosen"] == 0
+
+
+def test_legacy_rounds_keep_their_single_answer():
+    rounds = [
+        {"variants": [V1.model_dump()], "questions": ["Q0?"], "answer": None},
+        {"variants": [V2.model_dump()], "questions": [], "answer": "stara odpowiedź"},
+        {"variants": [V2.model_dump()], "questions": [], "answer": "sama uwaga"},
     ]
-    assert compacted[1]["chosen"] == V2.model_dump()
+    compacted = service.compact_history(rounds)
+    assert compacted[1]["answers"] == [{"question": "Q0?", "answer": "stara odpowiedź"}]
+    assert compacted[2]["message"] == "sama uwaga"
