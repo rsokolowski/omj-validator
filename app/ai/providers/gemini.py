@@ -132,6 +132,10 @@ class StreamChunk:
 # through the File API instead.
 INLINE_IMAGE_BUDGET_BYTES = 14 * 1024 * 1024
 
+# A File API upload still PROCESSING is polled this long for ACTIVE
+FILE_ACTIVE_TIMEOUT_SECONDS = 10.0
+FILE_ACTIVE_POLL_SECONDS = 0.5
+
 # In-memory cache: local file path -> CachedFile
 # Files persist on Gemini for 48 hours, we use 24h to be safe
 _file_cache: dict[str, CachedFile] = {}
@@ -286,13 +290,30 @@ def block_reason(response) -> Optional[str]:
     return None
 
 
+# 400 FAILED_PRECONDITION is also what a File API file still PROCESSING gets
+# ("The File ... is not in an ACTIVE state"), so only these message starts
+# mean the key, billing or project is broken for every request.
+_PERMANENT_PRECONDITION_PREFIXES = (
+    "user location is not supported",
+    "gemini api free tier is not available",
+    "api key",
+    "billing",
+    "this api method requires billing",
+    "project",
+    "your project",
+    "permission",
+    "the caller does not have permission",
+)
+
+
 def classify_unavailable(error: Exception) -> Optional[AIUnavailableError]:
     """An AIUnavailableError when ``error`` means Gemini could not serve, else None.
 
     Fail closed: only signals a student cannot produce with what they send
     count as availability errors that fail the request over - 401/403
-    (incl. Gemini's 400 whose message STARTS with "API key ..." and
-    FAILED_PRECONDITION for billing/region), 404, 429, 502/503/504 and a
+    (incl. Gemini's 400 whose message STARTS with "API key ..." and a
+    FAILED_PRECONDITION whose message starts like a billing/region/project
+    problem - not "file not ACTIVE yet"), 404, 429, 502/503/504 and a
     connection that could not be established. Timeouts, 500 INTERNAL and a
     connection dropped mid-request can be caused by the request's own
     content: they are classified (kind timeout/internal/connection_lost) so
@@ -314,7 +335,10 @@ def classify_unavailable(error: Exception) -> Optional[AIUnavailableError]:
         kind = None
         if code in (401, 403):
             kind = UNAVAILABLE_AUTH
-        elif code == 400 and (detail.startswith("api key") or status_text == "FAILED_PRECONDITION"):
+        elif code == 400 and (
+            detail.startswith("api key")
+            or (status_text == "FAILED_PRECONDITION" and detail.startswith(_PERMANENT_PRECONDITION_PREFIXES))
+        ):
             kind = UNAVAILABLE_AUTH
         elif code == 404:
             kind = UNAVAILABLE_NOT_FOUND
@@ -1456,6 +1480,7 @@ class GeminiProvider:
                 self._client.files.upload,
                 file=str(file_path),
             )
+            gemini_file = await self._wait_until_active(gemini_file)
             upload_time = time.time() - upload_start
             logger.debug(f"[Gemini Upload] {file_name} uploaded in {upload_time:.1f}s -> {gemini_file.name}")
         except Exception as e:
@@ -1472,6 +1497,25 @@ class GeminiProvider:
             )
             logger.info(f"[Gemini Cache] STORED {file_name} -> {gemini_file.name}")
 
+        return gemini_file
+
+    async def _wait_until_active(self, gemini_file):
+        """The uploaded file once the File API has processed it.
+
+        Photos and PDFs are normally ACTIVE straight away; one still
+        PROCESSING would make generate_content fail with FAILED_PRECONDITION.
+        Polls for at most FILE_ACTIVE_TIMEOUT_SECONDS, then hands the file on
+        as it is (the call then fails as an ordinary error, no failover).
+        """
+        deadline = time.monotonic() + FILE_ACTIVE_TIMEOUT_SECONDS
+        while _enum_name(getattr(gemini_file, "state", None)) == "PROCESSING":
+            if time.monotonic() >= deadline:
+                logger.warning(f"[Gemini Upload] {gemini_file.name} still PROCESSING after {FILE_ACTIVE_TIMEOUT_SECONDS}s")
+                return gemini_file
+            await asyncio.sleep(FILE_ACTIVE_POLL_SECONDS)
+            gemini_file = await asyncio.to_thread(self._client.files.get, name=gemini_file.name)
+        if _enum_name(getattr(gemini_file, "state", None)) == "FAILED":
+            raise AIProviderError("Nie udało się przetworzyć przesłanego pliku. Spróbuj ponownie.")
         return gemini_file
 
     async def _cleanup_files(self, files: list, skip_cached: bool = True) -> None:

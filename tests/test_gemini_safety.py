@@ -177,6 +177,9 @@ def client_error(code, status, message="body"):
         (client_error(403, "PERMISSION_DENIED", "Your API key was reported as leaked"), "auth", True),
         (client_error(400, "INVALID_ARGUMENT", "API key not valid. Please pass a valid API key."), "auth", True),
         (client_error(400, "FAILED_PRECONDITION", "User location is not supported"), "auth", True),
+        (client_error(400, "FAILED_PRECONDITION", "Gemini API free tier is not available in your country. "
+                      "Please enable billing on your project in Google AI Studio."), "auth", True),
+        (client_error(400, "FAILED_PRECONDITION", "Billing account is disabled"), "auth", True),
         (client_error(404, "NOT_FOUND", "models/gemini-9 is not found"), "not_found", True),
         (client_error(429, "RESOURCE_EXHAUSTED"), "rate_limit", False),
         (client_error(502, "BAD_GATEWAY"), "server", False),
@@ -221,6 +224,10 @@ def test_content_dependent_failures_never_fail_over(error, kind):
         client_error(400, "INVALID_ARGUMENT", "The input token count exceeds the maximum"),  # oversized input
         client_error(400, "INVALID_ARGUMENT", "Unable to process input image. echo: API key"),  # key text not at start
         client_error(413, "PAYLOAD_TOO_LARGE"),
+        # A File API upload not processed yet: transient, not a dead key
+        client_error(400, "FAILED_PRECONDITION",
+                     "The File abc123 is not in an ACTIVE state and usage is not allowed."),
+        client_error(400, "FAILED_PRECONDITION", "Precondition check failed."),
         ValueError("schema mismatch"),
         RuntimeError("Response was blocked due to SAFETY"),
         RuntimeError("You exceeded your current quota"),  # text match is not trusted to fail over
@@ -293,3 +300,59 @@ def test_cleanup_failure_is_logged_without_failing(caplog):
         asyncio.run(p._cleanup_files([SimpleNamespace(name="files/abc123")], skip_cached=False))
     assert "Could not delete files/abc123: ServerError 500 INTERNAL" in caplog.text
     assert "secret" not in caplog.text
+
+
+# --------------------------------------------------------------- File API state
+
+
+class _ProcessingFiles:
+    def __init__(self, states):
+        self.states = list(states)
+        self.gets = 0
+
+    def upload(self, file):
+        return SimpleNamespace(name="files/x", state=SimpleNamespace(name=self.states.pop(0)))
+
+    def get(self, name):
+        self.gets += 1
+        return SimpleNamespace(name=name, state=SimpleNamespace(name=self.states.pop(0)))
+
+
+def _upload_with(monkeypatch, tmp_path, files):
+    import app.ai.providers.gemini as gemini
+
+    monkeypatch.setattr(gemini, "FILE_ACTIVE_POLL_SECONDS", 0)
+    p = object.__new__(GeminiProvider)
+    p._client = SimpleNamespace(files=files)
+    photo = tmp_path / "a.jpg"
+    photo.write_bytes(b"x")
+    return asyncio.run(p._upload_file(photo, use_cache=False))
+
+
+def test_upload_waits_for_a_processing_file_to_become_active(monkeypatch, tmp_path):
+    files = _ProcessingFiles(["PROCESSING", "PROCESSING", "ACTIVE"])
+    uploaded = _upload_with(monkeypatch, tmp_path, files)
+    assert uploaded.state.name == "ACTIVE"
+    assert files.gets == 2
+
+
+def test_upload_of_an_active_file_does_not_poll(monkeypatch, tmp_path):
+    files = _ProcessingFiles(["ACTIVE"])
+    _upload_with(monkeypatch, tmp_path, files)
+    assert files.gets == 0
+
+
+def test_upload_polling_is_bounded(monkeypatch, tmp_path):
+    import app.ai.providers.gemini as gemini
+
+    monkeypatch.setattr(gemini, "FILE_ACTIVE_TIMEOUT_SECONDS", 0)
+    files = _ProcessingFiles(["PROCESSING"])
+    assert _upload_with(monkeypatch, tmp_path, files).state.name == "PROCESSING"
+    assert files.gets == 0
+
+
+def test_failed_file_processing_is_an_ordinary_error(monkeypatch, tmp_path):
+    files = _ProcessingFiles(["PROCESSING", "FAILED"])
+    with pytest.raises(AIProviderError) as excinfo:
+        _upload_with(monkeypatch, tmp_path, files)
+    assert not isinstance(excinfo.value, AIUnavailableError)
