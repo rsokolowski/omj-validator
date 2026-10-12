@@ -231,7 +231,7 @@ async def process_submission_background(
         # Notify: submission failed (fire-and-forget)
         await send_telegram_message(
             build_failed_message(
-                submission_id, user_id, year, etap, task_number, error_msg
+                submission_id, user_id, year, etap, task_number, e
             )
         )
 
@@ -257,7 +257,7 @@ async def process_submission_background(
         # Notify: submission failed (fire-and-forget)
         await send_telegram_message(
             build_failed_message(
-                submission_id, user_id, year, etap, task_number, error_msg
+                submission_id, user_id, year, etap, task_number, e
             )
         )
 

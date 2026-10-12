@@ -5,6 +5,7 @@ import logging
 import re
 from typing import Optional
 
+from ..config import settings
 from ..models import SubmissionResult, IssueType
 
 logger = logging.getLogger(__name__)
@@ -323,8 +324,13 @@ def parse_ai_response(
             score = 0
             logger.info(f"Wrong task detected (confidence: {abuse_score}%)")
 
-        elif issue_type == IssueType.INJECTION:
-            # Bland feedback for injection (don't reveal detection)
+        elif issue_type == IssueType.INJECTION or abuse_score >= settings.private_abuse_threshold:
+            # Bland feedback for injection (don't reveal detection). A high
+            # abuse_score counts whatever issue_type says: a model that saw a
+            # manipulation attempt but still filed it as "none" must not grade it.
+            if issue_type != IssueType.INJECTION:
+                logger.warning(f"abuse_score {abuse_score} with issue_type '{issue_type.value}' - treated as injection")
+            issue_type = IssueType.INJECTION
             feedback = INJECTION_FEEDBACK
             score = 0
             logger.warning(f"Injection attempt detected (confidence: {abuse_score}%)")

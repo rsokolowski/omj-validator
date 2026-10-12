@@ -117,8 +117,9 @@ class Settings(BaseSettings):
     rate_limit_private_tasks_per_user_per_day: int = 10     # Tasks created + hint regenerations
     rate_limit_private_extracts_per_user_per_day: int = 15  # Photo -> text extractions
     rate_limit_ai_usage_global_per_day: int = 1000          # All non-submission AI calls
-    # abuse_score (0-100) at or above which extraction / hint generation is
-    # treated as a manipulation attempt and nothing is saved
+    # abuse_score (0-100) at or above which extraction / hint generation /
+    # pattern calls are treated as a manipulation attempt and nothing is saved,
+    # and a graded solution gets 0 points whatever issue_type the model chose
     private_abuse_threshold: int = 70
     # Patterns ("Wzorce"): AI calls while writing a pattern (ai_usage kinds
     # pattern_refine / pattern_suggest / pattern_link). Recall reviews make none.

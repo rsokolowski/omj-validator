@@ -37,7 +37,13 @@ export const patternsApi = {
     message?: string | null;
     category?: string | null;
     pattern_id?: string;
-  }) => fetchAPI<{ round: RefineRound }>("/api/patterns/refine", json("POST", body)),
+  }) =>
+    // off_topic: the message was not about maths / the pattern - a decline in
+    // `reply`, no round (it does not count as a refinement)
+    fetchAPI<{ round?: RefineRound; off_topic?: boolean; reply?: string }>(
+      "/api/patterns/refine",
+      json("POST", body)
+    ),
 
   suggest: (submissionId: string, draft?: string) =>
     fetchAPI<{ suggestions: PatternSuggestion[] }>(

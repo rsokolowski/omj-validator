@@ -40,16 +40,33 @@ from ..private_parsing import (
     parse_extraction_response,
     parse_meta_response,
 )
-from ..factory import AIContentBlockedError, AIProviderError
+from ..factory import (
+    UNAVAILABLE_AUTH,
+    UNAVAILABLE_NETWORK,
+    UNAVAILABLE_NOT_FOUND,
+    UNAVAILABLE_RATE_LIMIT,
+    UNAVAILABLE_SERVER,
+    UNAVAILABLE_TIMEOUT,
+    AIContentBlockedError,
+    AIProviderError,
+    AIUnavailableError,
+)
+
+try:
+    import httpx
+except ImportError:  # pragma: no cover - google-genai depends on httpx
+    httpx = None
 
 try:
     from google import genai
+    from google.genai import errors as genai_errors
     from google.genai import types
 
     GEMINI_AVAILABLE = True
 except ImportError:
     GEMINI_AVAILABLE = False
     genai = None
+    genai_errors = None
     types = None
 
 logger = logging.getLogger(__name__)
@@ -187,6 +204,135 @@ def estimate_cost(
     input_cost = (input_tokens / 1_000_000) * in_rate
     output_cost = ((output_tokens + thoughts_tokens) / 1_000_000) * out_rate
     return input_cost + output_cost
+
+
+# ------------------------------------------------------------ safety + errors
+
+# A children's app: harassment, hate and sexual content are blocked from a LOW
+# probability up, dangerous content from MEDIUM (a geometry problem about a
+# "sharp" angle must still pass). Sent with every generate call (_config).
+SAFETY_THRESHOLDS = (
+    ("HARM_CATEGORY_HARASSMENT", "BLOCK_LOW_AND_ABOVE"),
+    ("HARM_CATEGORY_HATE_SPEECH", "BLOCK_LOW_AND_ABOVE"),
+    ("HARM_CATEGORY_SEXUALLY_EXPLICIT", "BLOCK_LOW_AND_ABOVE"),
+    ("HARM_CATEGORY_DANGEROUS_CONTENT", "BLOCK_MEDIUM_AND_ABOVE"),
+)
+
+# finish_reason values that mean the safety system stopped the answer
+# (IMAGE_SAFETY / IMAGE_PROHIBITED_CONTENT included by substring)
+_BLOCK_FINISH_MARKERS = ("SAFETY", "PROHIBITED", "BLOCKLIST", "SPII")
+
+GRADING_BLOCKED_MESSAGE = (
+    "Nie udało się przetworzyć rozwiązania. Upewnij się, że zawiera "
+    "tylko rozwiązanie zadania."
+)
+PRIVATE_BLOCKED_MESSAGE = (
+    "Nie udało się przetworzyć rozwiązania. Upewnij się, że zawiera "
+    "tylko treść zadania lub rozwiązanie."
+)
+AUX_BLOCKED_MESSAGE = "Nie udało się przetworzyć tej treści. Upewnij się, że zawiera tylko zadanie."
+UNREADABLE_MESSAGE = "Nie udało się odczytać rozwiązania. Spróbuj ponownie."
+AUX_UNREADABLE_MESSAGE = "Nie udało się odczytać odpowiedzi. Spróbuj ponownie za chwilę."
+TIMEOUT_MESSAGE = "Analiza trwa zbyt długo. Spróbuj ponownie za chwilę."
+OVERLOADED_MESSAGE = "System jest obecnie przeciążony. Spróbuj ponownie za kilka minut."
+TECHNICAL_MESSAGE = "Przepraszamy, wystąpił problem techniczny. Spróbuj ponownie później."
+GENERIC_MESSAGE = "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
+
+_UNAVAILABLE_MESSAGES = {
+    UNAVAILABLE_AUTH: TECHNICAL_MESSAGE,
+    UNAVAILABLE_NOT_FOUND: TECHNICAL_MESSAGE,
+    UNAVAILABLE_RATE_LIMIT: OVERLOADED_MESSAGE,
+    UNAVAILABLE_SERVER: GENERIC_MESSAGE,
+    UNAVAILABLE_NETWORK: GENERIC_MESSAGE,
+    UNAVAILABLE_TIMEOUT: TIMEOUT_MESSAGE,
+}
+
+
+def safety_settings() -> list:
+    """The SafetySetting list sent with every request."""
+    return [
+        types.SafetySetting(
+            category=getattr(types.HarmCategory, category),
+            threshold=getattr(types.HarmBlockThreshold, threshold),
+        )
+        for category, threshold in SAFETY_THRESHOLDS
+    ]
+
+
+def _enum_name(value) -> str:
+    return str(getattr(value, "name", None) or value or "").upper()
+
+
+def block_reason(response) -> Optional[str]:
+    """Why the safety system blocked a response (or stream chunk), else None.
+
+    A prompt-level block (prompt_feedback.block_reason) arrives with NO
+    candidates and no text - read naively it looks like an empty answer.
+    """
+    feedback = getattr(response, "prompt_feedback", None)
+    reason = _enum_name(getattr(feedback, "block_reason", None))
+    if reason and "UNSPECIFIED" not in reason:
+        return f"prompt:{reason}"
+    for candidate in getattr(response, "candidates", None) or []:
+        finish = _enum_name(getattr(candidate, "finish_reason", None))
+        if any(marker in finish for marker in _BLOCK_FINISH_MARKERS):
+            return f"finish:{finish}"
+    return None
+
+
+def classify_unavailable(error: Exception) -> Optional[AIUnavailableError]:
+    """An AIUnavailableError when ``error`` means Gemini could not serve at all.
+
+    Auth/permission (incl. Gemini's 400 "API key not valid" and
+    FAILED_PRECONDITION for billing/region), 404, 429/quota, 5xx, network
+    errors and timeouts. Anything else (a 400 about the request, a content
+    block) returns None. Status and class only - never the response body.
+    """
+    name = type(error).__name__
+    timeouts = (asyncio.TimeoutError, TimeoutError) + ((httpx.TimeoutException,) if httpx else ())
+    if isinstance(error, timeouts):
+        return AIUnavailableError(TIMEOUT_MESSAGE, kind=UNAVAILABLE_TIMEOUT, error_class=name)
+    if genai_errors is not None and isinstance(error, genai_errors.APIError):
+        code = error.code if isinstance(error.code, int) else None
+        status_text = str(getattr(error, "status", "") or "").upper()
+        detail = str(getattr(error, "message", "") or "").lower()
+        kind = None
+        if code in (401, 403) or status_text in ("UNAUTHENTICATED", "PERMISSION_DENIED"):
+            kind = UNAVAILABLE_AUTH
+        elif code == 400 and ("api key" in detail or "api_key" in detail or status_text == "FAILED_PRECONDITION"):
+            kind = UNAVAILABLE_AUTH
+        elif code == 404:
+            kind = UNAVAILABLE_NOT_FOUND
+        elif code == 429 or status_text == "RESOURCE_EXHAUSTED":
+            kind = UNAVAILABLE_RATE_LIMIT
+        elif code is not None and code >= 500:
+            kind = UNAVAILABLE_SERVER
+        if kind is None:
+            return None
+        return AIUnavailableError(_UNAVAILABLE_MESSAGES[kind], kind=kind, status=code, error_class=name)
+    transport = (ConnectionError,) + ((httpx.TransportError,) if httpx else ())
+    if isinstance(error, transport):
+        return AIUnavailableError(GENERIC_MESSAGE, kind=UNAVAILABLE_NETWORK, error_class=name)
+    if "quota" in str(error).lower():
+        return AIUnavailableError(OVERLOADED_MESSAGE, kind=UNAVAILABLE_RATE_LIMIT, error_class=name)
+    return None
+
+
+def map_error(error: Exception, blocked_message: str) -> AIProviderError:
+    """An SDK/transport error as the AIProviderError (Polish message) callers handle.
+
+    Availability first: a 403 whose text says "blocked" is a dead key, not a
+    safety block, and must stay eligible for failover.
+    """
+    if isinstance(error, AIProviderError):
+        return error
+    unavailable = classify_unavailable(error)
+    if unavailable is not None:
+        return unavailable
+    message = str(error).lower()
+    if "safety" in message or "blocked" in message:
+        return AIContentBlockedError(blocked_message)
+    return AIProviderError(GENERIC_MESSAGE)
 
 
 def _ping_status_text(error: Exception) -> str:
@@ -595,7 +741,7 @@ class GeminiProvider:
                 f"media_resolution: {settings.gemini_media_resolution}"
             )
 
-            config = types.GenerateContentConfig(
+            config = self._config(
                 thinking_config=thinking_config,
                 response_mime_type="application/json",
                 response_json_schema=RESPONSE_JSON_SCHEMA,
@@ -633,48 +779,26 @@ class GeminiProvider:
             total_time = time.time() - start_time
             logger.info(f"[Gemini] Total request time: {total_time:.1f}s")
 
+            blocked = block_reason(response)
+            if blocked:
+                logger.warning(f"[Gemini] Response blocked ({blocked})")
+                raise AIContentBlockedError(GRADING_BLOCKED_MESSAGE)
+
             # Extract text from response
             response_text = response.text if hasattr(response, "text") else ""
             if not response_text:
                 logger.warning("[Gemini] Empty response text received")
-                raise AIProviderError(
-                    "Nie udało się odczytać rozwiązania. Spróbuj ponownie."
-                )
+                raise AIProviderError(UNREADABLE_MESSAGE)
 
             # Use shared parsing utility with etap-specific scoring
             return parse_ai_response(response_text, provider_name="Gemini", etap=etap)
 
         except AIProviderError:
             raise
-        except asyncio.TimeoutError:
-            elapsed = time.time() - start_time
-            logger.error(f"[Gemini Error] Timeout after {elapsed:.1f}s (limit: {self.get_timeout()}s)")
-            raise AIProviderError(
-                "Analiza trwa zbyt długo. Spróbuj ponownie za chwilę."
-            )
         except Exception as e:
             elapsed = time.time() - start_time
-            error_msg = str(e)
-            logger.error(f"[Gemini Error] {error_msg} (after {elapsed:.1f}s)")
-
-            # Map technical errors to user-friendly messages
-            if "quota" in error_msg.lower():
-                raise AIProviderError(
-                    "System jest obecnie przeciążony. Spróbuj ponownie za kilka minut."
-                )
-            elif "invalid" in error_msg.lower() and "key" in error_msg.lower():
-                raise AIProviderError(
-                    "Przepraszamy, wystąpił problem techniczny. Spróbuj ponownie później."
-                )
-            elif "safety" in error_msg.lower() or "blocked" in error_msg.lower():
-                raise AIProviderError(
-                    "Nie udało się przetworzyć rozwiązania. Upewnij się, że zawiera "
-                    "tylko rozwiązanie zadania."
-                )
-            else:
-                raise AIProviderError(
-                    "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
-                )
+            logger.error(f"[Gemini Error] {type(e).__name__} {_ping_status_text(e)} (after {elapsed:.1f}s)")
+            raise map_error(e, GRADING_BLOCKED_MESSAGE)
         finally:
             await self._cleanup_files(uploaded_files, skip_cached=not self._disable_file_cache)
 
@@ -768,7 +892,7 @@ class GeminiProvider:
                 f"media_resolution: {settings.gemini_media_resolution}"
             )
 
-            config = types.GenerateContentConfig(
+            config = self._config(
                 thinking_config=thinking_config,
                 response_mime_type="application/json",
                 response_json_schema=RESPONSE_JSON_SCHEMA,
@@ -782,9 +906,7 @@ class GeminiProvider:
             )
             if not feedback_text:
                 logger.warning("[Gemini] Empty feedback text from stream")
-                raise AIProviderError(
-                    "Nie udało się odczytać rozwiązania. Spróbuj ponownie."
-                )
+                raise AIProviderError(UNREADABLE_MESSAGE)
 
             # Parse the response
             result = parse_ai_response(feedback_text, provider_name="Gemini", etap=etap)
@@ -801,34 +923,10 @@ class GeminiProvider:
 
         except AIProviderError:
             raise
-        except asyncio.TimeoutError:
-            elapsed = time.time() - start_time
-            logger.error(f"[Gemini Error] Timeout after {elapsed:.1f}s (limit: {self.get_timeout()}s)")
-            raise AIProviderError(
-                "Analiza trwa zbyt długo. Spróbuj ponownie za chwilę."
-            )
         except Exception as e:
             elapsed = time.time() - start_time
-            error_msg = str(e)
-            logger.error(f"[Gemini Error] {error_msg} (after {elapsed:.1f}s)")
-
-            if "quota" in error_msg.lower():
-                raise AIProviderError(
-                    "System jest obecnie przeciążony. Spróbuj ponownie za kilka minut."
-                )
-            elif "invalid" in error_msg.lower() and "key" in error_msg.lower():
-                raise AIProviderError(
-                    "Przepraszamy, wystąpił problem techniczny. Spróbuj ponownie później."
-                )
-            elif "safety" in error_msg.lower() or "blocked" in error_msg.lower():
-                raise AIProviderError(
-                    "Nie udało się przetworzyć rozwiązania. Upewnij się, że zawiera "
-                    "tylko rozwiązanie zadania."
-                )
-            else:
-                raise AIProviderError(
-                    "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
-                )
+            logger.error(f"[Gemini Error] {type(e).__name__} {_ping_status_text(e)} (after {elapsed:.1f}s)")
+            raise map_error(e, GRADING_BLOCKED_MESSAGE)
         finally:
             await self._cleanup_files(uploaded_files, skip_cached=not self._disable_file_cache)
 
@@ -914,9 +1012,7 @@ class GeminiProvider:
                         f"stream_done={stream_done_event.is_set()}, "
                         f"stream_started={stream_started.is_set()}"
                     )
-                    raise AIProviderError(
-                        "Analiza trwa zbyt długo. Spróbuj ponownie za chwilę."
-                    )
+                    raise AIUnavailableError(TIMEOUT_MESSAGE, kind=UNAVAILABLE_TIMEOUT)
 
                 # Log progress every 30 seconds for stuck detection
                 if time.time() - last_log_time > 30:
@@ -945,6 +1041,13 @@ class GeminiProvider:
                     # Capture usage metadata (typically in final chunk)
                     if hasattr(chunk, "usage_metadata") and chunk.usage_metadata:
                         usage_metadata = chunk.usage_metadata
+
+                    # A prompt-level block arrives as a chunk with no candidates;
+                    # an answer stopped by the safety system as a finish_reason
+                    blocked = block_reason(chunk)
+                    if blocked:
+                        logger.warning(f"[Gemini Stream] Response blocked ({blocked})")
+                        raise AIContentBlockedError(GRADING_BLOCKED_MESSAGE)
 
                     # Process the chunk
                     if hasattr(chunk, "candidates") and chunk.candidates:
@@ -1073,19 +1176,12 @@ class GeminiProvider:
     @staticmethod
     def _friendly_error(error: Exception) -> AIProviderError:
         """Map an SDK/transport error to a Polish message fit for a child."""
-        message = str(error).lower()
-        if isinstance(error, asyncio.TimeoutError):
-            return AIProviderError("Analiza trwa zbyt długo. Spróbuj ponownie za chwilę.")
-        if "quota" in message:
-            return AIProviderError(
-                "System jest obecnie przeciążony. Spróbuj ponownie za kilka minut."
-            )
-        if "safety" in message or "blocked" in message:
-            return AIContentBlockedError(
-                "Nie udało się przetworzyć rozwiązania. Upewnij się, że zawiera "
-                "tylko treść zadania lub rozwiązanie."
-            )
-        return AIProviderError("Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę.")
+        return map_error(error, PRIVATE_BLOCKED_MESSAGE)
+
+    @staticmethod
+    def _config(**kwargs):
+        """GenerateContentConfig for every generate call - always with the safety settings."""
+        return types.GenerateContentConfig(safety_settings=safety_settings(), **kwargs)
 
     def _usage_meta(self, usage_metadata, started: float) -> dict:
         """Model, tokens, cost and timing - never content."""
@@ -1104,7 +1200,7 @@ class GeminiProvider:
 
     async def _generate_json(self, contents: list, schema: dict) -> tuple[str, dict]:
         """One non-streaming, schema-constrained call. Returns (text, usage meta)."""
-        config = types.GenerateContentConfig(
+        config = self._config(
             thinking_config=self._thinking_config(),
             response_mime_type="application/json",
             response_json_schema=schema,
@@ -1123,15 +1219,13 @@ class GeminiProvider:
         except AIProviderError:
             raise
         except Exception as e:
-            logger.error(f"[Gemini Private] {type(e).__name__}: {e}")
-            raise self._friendly_error(e)
+            logger.error(f"[Gemini Private] {type(e).__name__} {_ping_status_text(e)}")
+            raise map_error(e, AUX_BLOCKED_MESSAGE)
 
-        candidates = getattr(response, "candidates", None) or []
-        finish = str(getattr(candidates[0], "finish_reason", "") if candidates else "")
-        if "SAFETY" in finish.upper() or "PROHIBITED" in finish.upper():
-            raise AIContentBlockedError(
-                "Nie udało się przetworzyć tej treści. Upewnij się, że zawiera tylko zadanie."
-            )
+        blocked = block_reason(response)
+        if blocked:
+            logger.warning(f"[Gemini Private] Response blocked ({blocked})")
+            raise AIContentBlockedError(AUX_BLOCKED_MESSAGE)
 
         meta = self._usage_meta(getattr(response, "usage_metadata", None), started)
         logger.info(
@@ -1139,7 +1233,12 @@ class GeminiProvider:
             f"input_tokens={meta['input_tokens']:,}, output_tokens={meta['output_tokens']:,}, "
             f"estimated_cost=${meta['estimated_cost']:.4f}"
         )
-        return (getattr(response, "text", "") or ""), meta
+        text = getattr(response, "text", "") or ""
+        if not text.strip():
+            # Nothing to parse must not read as "no problem found" / "no manipulation"
+            logger.warning("[Gemini Private] Empty response text")
+            raise AIProviderError(AUX_UNREADABLE_MESSAGE)
+        return text, meta
 
     async def extract_private_tasks(self, image_paths: list[Path]) -> PrivateExtractionResult:
         """Read every problem statement off photos of a page."""
@@ -1233,7 +1332,7 @@ class GeminiProvider:
                 else:
                     on_upload_complete()
 
-            config = types.GenerateContentConfig(
+            config = self._config(
                 thinking_config=self._thinking_config(),
                 response_mime_type="application/json",
                 response_json_schema=RESPONSE_JSON_SCHEMA,
@@ -1243,7 +1342,7 @@ class GeminiProvider:
                 await self._run_stream(contents, config, on_thinking, None, start_time)
             )
             if not feedback_text:
-                raise AIProviderError("Nie udało się odczytać rozwiązania. Spróbuj ponownie.")
+                raise AIProviderError(UNREADABLE_MESSAGE)
 
             # Private tasks are graded on the etap2 ladder (0, 2, 5, 6)
             result = parse_ai_response(feedback_text, provider_name="Gemini", etap="etap2")
@@ -1257,7 +1356,7 @@ class GeminiProvider:
         except AIProviderError:
             raise
         except Exception as e:
-            logger.error(f"[Gemini Private Stream] {type(e).__name__}: {e}")
+            logger.error(f"[Gemini Private Stream] {type(e).__name__} {_ping_status_text(e)}")
             raise self._friendly_error(e)
         finally:
             await self._cleanup_files(uploaded, skip_cached=False)
@@ -1379,6 +1478,10 @@ class GeminiProvider:
                     name=file_name,
                 )
                 logger.debug(f"[Gemini Cleanup] Deleted: {file_name}")
-            except Exception:
-                # Log but don't fail if cleanup fails
-                pass
+            except Exception as e:
+                # Never fail the request over cleanup, but say so: an undeleted
+                # photo stays at Google until the File API's 48 h expiry.
+                logger.warning(
+                    f"[Gemini Cleanup] Could not delete {file_name}: "
+                    f"{type(e).__name__} {_ping_status_text(e)}"
+                )

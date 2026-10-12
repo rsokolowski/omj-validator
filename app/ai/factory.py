@@ -23,8 +23,51 @@ class AIContentBlockedError(AIProviderError):
     """The model's safety filter refused the input.
 
     Distinct from a timeout or an outage: for student-supplied text (private
-    tasks) a block means the text must not be saved unchecked.
+    tasks) a block means the text must not be saved unchecked. Never a reason
+    to fail over - a second provider must not become a way around the first
+    one's safety filter.
     """
+
+
+# Kinds of AIUnavailableError. "auth" and "not_found" look permanent (revoked
+# key, retired model) and open the failover breaker at once.
+UNAVAILABLE_AUTH = "auth"            # 401/403, invalid/suspended key, billing
+UNAVAILABLE_NOT_FOUND = "not_found"  # 404 model
+UNAVAILABLE_RATE_LIMIT = "rate_limit"  # 429 / quota
+UNAVAILABLE_SERVER = "server"        # 5xx / overloaded
+UNAVAILABLE_NETWORK = "network"      # connection errors
+UNAVAILABLE_TIMEOUT = "timeout"
+PERMANENT_KINDS = frozenset({UNAVAILABLE_AUTH, UNAVAILABLE_NOT_FOUND})
+
+
+class AIUnavailableError(AIProviderError):
+    """The provider could not serve the request at all (availability, not content).
+
+    The only error that may trigger a failover to the backup provider. The
+    message is the Polish text for the student; ``kind``/``status``/
+    ``error_class`` describe the cause without any response content.
+    """
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        kind: str,
+        status: Optional[int] = None,
+        error_class: str = "",
+    ):
+        super().__init__(message)
+        self.kind = kind
+        self.status = status
+        self.error_class = error_class
+
+    @property
+    def permanent(self) -> bool:
+        return self.kind in PERMANENT_KINDS
+
+
+class AISpendLimitError(AIProviderError):
+    """The daily AI spend cap (AI_DAILY_SPEND_LIMIT_USD) is reached."""
 
 
 # One instance per (provider, model): client construction costs ~1.3s

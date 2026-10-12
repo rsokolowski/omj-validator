@@ -351,6 +351,11 @@ class PrivateTaskMeta(BaseModel):
     category: Optional[str] = None
     difficulty: Optional[int] = None
     abuse_score: int = 0
+    # The model said the text is not a maths problem at all
+    is_math_problem: bool = True
+    # True only when a model response was actually read: an unreadable one
+    # means the text was never abuse-checked and must not be saved.
+    checked: bool = False
     meta: dict = {}
 
 
@@ -487,6 +492,8 @@ class RefineResult(BaseModel):
     category: Optional[str] = None
     skills: list[str] = []
     abuse_score: int = 0
+    # The student asked about something other than maths / the pattern
+    off_topic: bool = False
     meta: dict = {}
 
 
