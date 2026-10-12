@@ -106,6 +106,11 @@ def build_snapshot(monkeypatch) -> dict[str, list[str]]:
         build_prompt("etap2"), ["TASK", "SOL", "IMG1", "IMG2"], 3, True, 2,
         image_paths=None, solution_text="moje $a$",
     )
+    # Typed text only: no official solution PDF, no photos.
+    out["omj_grading_text_only"] = p._build_content_parts(
+        build_prompt("etap2"), ["TASK"], 3, False, 0,
+        image_paths=None, solution_text="moje $a$",
+    )
 
     async def fake_run_stream(contents, config, on_thinking=None, on_feedback=None, start_time=None):
         captured.append(_strings(contents))
