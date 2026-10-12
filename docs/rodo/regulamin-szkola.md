@@ -162,11 +162,11 @@ Uczniowi zabrania się:
 4. Fotografie rozwiązań są przekazywane dostawcy usługi sztucznej inteligencji (w danym
    momencie jednemu: Google albo Anthropic) **bez danych identyfikujących Ucznia**. Google
    usuwa pliki ze swojej infrastruktury po zakończeniu analizy; Anthropic otrzymuje fotografie
-   w treści zapytania, bez zapisywania plików. Obaj dostawcy mogą przez ograniczony czas
-   przechowywać zapisy techniczne: Google — maksymalnie 55 dni, wyłącznie w celu wykrywania
-   naruszeń zasad korzystania z usługi; Anthropic — do 30 dni, a dłużej wyłącznie w razie
-   egzekwowania zasad korzystania z usługi lub obowiązku prawnego. Szczegóły w klauzuli
-   informacyjnej.
+   w treści zapytania, bez zapisywania plików. Google może przechowywać zapisy techniczne
+   maksymalnie 55 dni, wyłącznie w celu wykrywania naruszeń zasad korzystania z usługi.
+   Anthropic usuwa przesłane treści i odpowiedzi w ciągu 30 dni, a dłużej przechowuje je
+   wyłącznie w razie egzekwowania zasad korzystania z usługi lub obowiązku prawnego. Szczegóły
+   w klauzuli informacyjnej.
 5. Kontakt w sprawach ochrony danych: inspektor ochrony danych Szkoły, [E-MAIL IOD].
 
 ## § 9. Dostępność Narzędzia i ograniczenie odpowiedzialności

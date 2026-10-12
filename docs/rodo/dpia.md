@@ -1174,7 +1174,8 @@ ryzyko mimo zastosowania środków**. Po wdrożeniu wszystkich środków z sekcj
 pozostaje na poziomie wysokim. **Wstępny wniosek: uprzednie konsultacje nie są wymagane** —
 z zastrzeżeniem, że wniosek ten jest ważny wyłącznie przy spełnieniu warunków brzegowych:
 płatny poziom API (Gemini) lub warunki komercyjne (Anthropic), ocena bez skutków formalnych,
-wdrożona retencja, wdrożona weryfikacja zgody rodzica (wariant A). **Ocena ta wymaga potwierdzenia przez inspektora ochrony danych.**
+wdrożona retencja, wdrożona weryfikacja zgody rodzica (wariant A).
+**Ocena ta wymaga potwierdzenia przez inspektora ochrony danych.**
 
 ---
 
