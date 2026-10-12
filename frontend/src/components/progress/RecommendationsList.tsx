@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Box, Paper, Typography, Chip } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import { GraphNode } from "@/lib/types";
 import { DifficultyStars } from "@/components/ui/DifficultyStars";
 import { CategoryBadge } from "@/components/ui/CategoryBadge";

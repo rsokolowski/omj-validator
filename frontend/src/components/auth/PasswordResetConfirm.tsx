@@ -45,6 +45,7 @@ function PasswordResetConfirmView({ token }: { token: string | null }) {
   }, [token]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Fetch on mount; state is set after the await
     void check();
   }, [check]);
 

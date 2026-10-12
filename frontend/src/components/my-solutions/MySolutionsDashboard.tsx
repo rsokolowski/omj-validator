@@ -82,6 +82,7 @@ export function MySolutionsDashboard() {
 
   // Load initial data and when filters change
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Filters changed: start the list over, then fetch (external data)
     setSubmissions([]);
     setOffset(0);
     setHasMore(true);

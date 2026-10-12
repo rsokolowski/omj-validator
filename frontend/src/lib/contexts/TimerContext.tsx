@@ -58,6 +58,7 @@ export function TimerProvider({ children }: { children: ReactNode }) {
 
   // Load timer state from localStorage after hydration
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Hydration flag: localStorage is only readable after mount
     setIsHydrated(true);
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {

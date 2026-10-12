@@ -63,6 +63,7 @@ function ParentConsentView({ token, declineIntent }: ParentConsentProps) {
   }, [token, declineIntent]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Fetch on mount; state is set after the await
     void load();
   }, [load]);
 

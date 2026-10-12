@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Paper, Typography, Box, Button, Collapse, IconButton } from "@mui/material";
+import { Paper, Typography, Box, Button, Collapse } from "@mui/material";
 import { MathContent } from "@/components/ui/MathContent";
 import { AiGeneratedNotice } from "@/components/ui/AiGeneratedNotice";
 import { useHintsUsage } from "./HintsUsageContext";
