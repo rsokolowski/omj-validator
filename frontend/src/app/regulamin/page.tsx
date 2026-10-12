@@ -252,7 +252,7 @@ export default function RegulaminPage() {
           </Typography>
           <Typography paragraph>
             <strong>Strona rodzica</strong> (
-            <MuiLink component={Link} href="/rodzic">
+            <MuiLink href="/rodzic">
               omj-validator.pl/rodzic
             </MuiLink>
             ) pokazuje konta dzieci powiązane z adresem rodzica. Rodzic może tam
@@ -880,7 +880,7 @@ export default function RegulaminPage() {
             <li>
               <strong>Rodzic lub opiekun</strong> może usunąć konto dziecka
               samodzielnie na{" "}
-              <MuiLink component={Link} href="/rodzic">
+              <MuiLink href="/rodzic">
                 stronie rodzica
               </MuiLink>{" "}
               &ndash; link jest w każdej wiadomości od nas, a nowy wyślemy po
