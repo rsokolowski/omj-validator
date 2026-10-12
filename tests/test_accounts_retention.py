@@ -43,7 +43,10 @@ def test_pending_account_erased_after_14_days(client, db, pending_user):
     report = delete_unconfirmed_accounts(db)
     assert report.unconfirmed_accounts_deleted == 1
     assert db.query(UserDB).count() == 0
-    assert db.query(ParentDB).count() == 0
+    # The address was mailed today: it stays for the send log, then goes
+    assert db.query(ParentDB).count() == 1
+    age_tokens(db, hours=25)
+    assert delete_childless_parents(db).parents_deleted == 1
     assert not upload.exists()
 
 

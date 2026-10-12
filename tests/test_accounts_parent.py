@@ -32,7 +32,7 @@ def pending(client, db):
 class TestConsentPage:
     def test_view_shows_the_account_and_changes_nothing(self, other_client, db, pending):
         for _ in range(3):  # a mail scanner opening the link, a preview, the parent
-            view = other_client.get("/api/parent/consent", params={"t": pending}).json()
+            view = other_client.post("/api/parent/consent/view", json={"token": pending}).json()
         assert view["state"] == "valid"
         assert view["child"]["identifier"] == "kuba_m"
         assert view["child"]["kind"] == "login"
@@ -68,16 +68,41 @@ class TestConsentPage:
         assert again.status_code == 410
         assert again.json()["state"] == "used"
         assert user_by_login(db, "kuba_m").status == "active"
-        assert other_client.get("/api/parent/consent", params={"t": pending}).json()["state"] == "used"
+        assert other_client.post("/api/parent/consent/view", json={"token": pending}).json()["state"] == "used"
 
     def test_decline_erases_the_account_and_the_parent(self, client, other_client, db, pending):
         response = other_client.post("/api/parent/consent", json={"token": pending, "decision": "decline"})
         assert response.json() == {"result": "declined"}
         assert db.query(UserDB).count() == 0
-        assert db.query(ParentDB).count() == 0
-        assert db.query(EmailTokenDB).count() == 0
+        # The child's links no longer point at anybody ...
+        db.expire_all()
+        assert db.query(EmailTokenDB).filter(EmailTokenDB.user_id.isnot(None)).count() == 0
+        # ... but the address and its send log stay for 24 h (retention removes them)
+        assert db.query(ParentDB).count() == 1
         # The child's session dies with the account
         assert me(client)["is_authenticated"] is False
+
+    def test_parent_without_recent_mail_goes_with_the_last_child(self, client, other_client, db, pending):
+        age_tokens(db, hours=25)
+        other_client.post("/api/parent/consent", json={"token": pending, "decision": "decline"})
+        assert db.query(ParentDB).count() == 0
+        assert db.query(EmailTokenDB).count() == 0
+
+    def test_delete_and_register_again_does_not_reset_the_per_parent_limit(self, client, other_client, db, pending):
+        """Mail-bombing guard: erasing the account must not erase the send log."""
+        from app.config import settings as app_settings
+
+        for i in range(4):  # 1 (fixture) + 4 = 5 consent e-mails to this address today
+            register_login(make_client(db), login=f"bomba{i}")
+        for user in db.query(UserDB).all():
+            other_client.post(
+                "/api/parent/consent",
+                json={"token": consent_token_for(db, user), "decision": "decline"},
+            )
+        assert db.query(UserDB).count() == 0
+        assert app_settings.email_backend == "console"
+        response = register_login(make_client(db), login="bomba_next")
+        assert response.json()["email_sent"] is False  # 6th e-mail to the address today
 
     def test_decline_keeps_a_sibling_and_the_parent(self, client, other_client, db, pending):
         sibling = make_client(db)
@@ -90,7 +115,7 @@ class TestConsentPage:
         for token in db.query(EmailTokenDB).all():
             token.expires_at = naive_now() - timedelta(minutes=1)
         age_tokens(db, hours=0.1)
-        view = other_client.get("/api/parent/consent", params={"t": pending}).json()
+        view = other_client.post("/api/parent/consent/view", json={"token": pending}).json()
         assert view["state"] == "expired" and view["can_resend"] is True
         refused = other_client.post("/api/parent/consent", json={"token": pending, "decision": "accept"})
         assert refused.status_code == 410
@@ -102,12 +127,22 @@ class TestConsentPage:
         assert other_client.post("/api/parent/consent", json={"token": fresh, "decision": "accept"}).status_code == 200
 
     def test_unknown_token(self, other_client, db):
-        view = other_client.get("/api/parent/consent", params={"t": "nonsense"}).json()
+        view = other_client.post("/api/parent/consent/view", json={"token": "nonsense"}).json()
         assert view == {"state": "invalid", "child": None, "can_resend": False, "summary": view["summary"]}
         assert other_client.post("/api/parent/consent", json={"token": "x", "decision": "accept"}).status_code == 410
 
     def test_decision_must_be_explicit(self, other_client, db, pending):
         assert other_client.post("/api/parent/consent", json={"token": pending}).status_code == 400
+
+
+def consent_token_for(db, user) -> str:
+    """Consent token of one account, read back from the outbox."""
+    from accounts_support import token_from
+
+    for message in reversed(messages(subject_contains="Prośba o zgodę")):
+        if user.login in message["text"]:
+            return token_from(message, "/rodzic/zgoda")
+    raise AssertionError("no consent e-mail for " + user.login)
 
 
 def _activate(other_client, token):
@@ -120,7 +155,7 @@ class TestParentPage:
         sibling = make_client(db)
         register_login(sibling, login="ola_k")
         manage = _activate(other_client, pending)
-        data = other_client.get("/api/parent/children", params={"t": manage}).json()
+        data = other_client.post("/api/parent/children", json={"token": manage}).json()
         assert data["parent_email"] == "m***@example.com"
         assert [(c["identifier"], c["status"]) for c in data["children"]] == [
             ("kuba_m", "active"),
@@ -130,7 +165,7 @@ class TestParentPage:
 
     def test_manage_link_from_any_email_works(self, other_client, db, pending):
         manage = manage_token()  # the one inside the consent request
-        assert other_client.get("/api/parent/children", params={"t": manage}).status_code == 200
+        assert other_client.post("/api/parent/children", json={"token": manage}).status_code == 200
 
     def test_delete_child_erases_everything(self, client, other_client, db, pending, tmp_path):
         manage = _activate(other_client, pending)
@@ -147,11 +182,12 @@ class TestParentPage:
         assert db.query(UserDB).count() == 0
         assert db.query(SubmissionDB).count() == 0
         assert db.query(ConsentDB).count() == 0
-        assert db.query(ParentDB).count() == 0  # last child gone, parent row gone
+        # Last child gone; the address waits out its 24 h send log (retention)
+        assert db.query(ParentDB).count() == 1
         assert not (settings.uploads_dir / user.id).exists()
         assert me(client)["is_authenticated"] is False
         # The link has nothing left to show
-        assert other_client.get("/api/parent/children", params={"t": manage}).status_code == 404
+        assert other_client.post("/api/parent/children", json={"token": manage}).json()["children"] == []
 
     def test_cannot_touch_someone_elses_child(self, other_client, db, pending):
         manage = _activate(other_client, pending)
@@ -186,7 +222,7 @@ class TestParentPage:
         for token in db.query(EmailTokenDB).all():
             token.expires_at = naive_now() - timedelta(seconds=1)
         db.commit()
-        response = other_client.get("/api/parent/children", params={"t": manage})
+        response = other_client.post("/api/parent/children", json={"token": manage})
         assert response.status_code == 410 and response.json()["state"] == "expired"
 
 
@@ -220,7 +256,7 @@ class TestPasswordReset:
         from accounts_support import token_from
 
         token = token_from(mail, "/reset-hasla/nowe")
-        assert other_client.get("/api/auth/password-reset/check", params={"t": token}).json() == {
+        assert other_client.post("/api/auth/password-reset/check", json={"token": token}).json() == {
             "state": "valid", "login": "kuba_m"
         }
         done = other_client.post("/api/auth/password-reset/confirm", json={"token": token, "password": "nowe dobre haslo"})

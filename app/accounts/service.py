@@ -13,7 +13,7 @@ import secrets
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
-from typing import Optional
+from typing import Callable, Optional
 
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -51,10 +51,19 @@ CONSENT_COOLDOWN = timedelta(seconds=60)
 RESET_PER_ACCOUNT_PER_DAY = 3
 MANAGE_PER_PARENT_PER_DAY = 3
 
-# Login lockout
+# Login lockout. Failures are counted per (login, actor): the actor is the
+# device when the browser carries our device cookie for this login (it signed
+# in there before), otherwise the client IP. Someone guessing a child's
+# password from elsewhere locks only their own attempts; the child's device
+# keeps its own counter, so the child cannot be locked out from it.
 LOGIN_FAILURE_WINDOW = timedelta(minutes=15)
-LOGIN_MAX_FAILURES_PER_LOGIN = 5
+LOGIN_MAX_FAILURES_PER_ACTOR = 5
+# Not for known devices: one IP guessing many logins, many IPs guessing one
 LOGIN_MAX_FAILURES_PER_IP = 20
+LOGIN_MAX_FAILURES_PER_LOGIN = 30
+DEVICE_COOKIE = "omj_device"
+DEVICE_COOKIE_MAX_TAGS = 10
+DEVICE_COOKIE_MAX_AGE = 365 * 24 * 60 * 60
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]{2,}$")
 EMAIL_MAX = 254
@@ -273,12 +282,19 @@ def invalidate_consent_tokens(db: Session, user: UserDB) -> None:
         token.expires_at = moment
 
 
-async def send_consent_email(db: Session, user: UserDB, parent: Optional[ParentDB] = None) -> None:
-    """Send the consent request to the user's parent.
+async def send_consent_email(
+    db: Session,
+    user: UserDB,
+    parent: Optional[ParentDB] = None,
+    on_sent: Optional[Callable[[], None]] = None,
+) -> None:
+    """Send the consent request to ``parent`` (default: the user's parent).
 
     Raises EmailLimitError (nothing sent) or EmailSendError (provider failed).
     The token rows - which are also the rate-limit log - are written only
-    after a successful send, so a failure never uses up a slot.
+    after a successful send, so a failure never uses up a slot. ``on_sent``
+    runs after a successful send, inside the same commit (e.g. switching the
+    account to the new parent address).
     """
     parent = parent or user.parent
     if parent is None:
@@ -293,7 +309,7 @@ async def send_consent_email(db: Session, user: UserDB, parent: Optional[ParentD
     )
     label, identifier = child_identifier(user)
     deadline = pending_deadline(user) or (now() + PENDING_TTL)
-    subject = "Prośba o zgodę — konto Twojego dziecka w OMJ Validator"
+    subject = "Prośba o zgodę — konto Twojego dziecka w serwisie Trener OMJ"
     html, text = render(
         "consent_request",
         subject=subject,
@@ -307,6 +323,8 @@ async def send_consent_email(db: Session, user: UserDB, parent: Optional[ParentD
         deadline=date_pl(min(deadline, consent_row.expires_at)),
     )
     await send_email(parent.email, subject, html, text)
+    if on_sent is not None:
+        on_sent()
     db.add(consent_row)
     db.add(manage_row)
     db.commit()
@@ -406,8 +424,20 @@ async def send_password_reset(db: Session, user: UserDB) -> None:
 
 def set_password(db: Session, user: UserDB, password: str) -> None:
     """New password; every existing session of this account stops working."""
+    moment = now()
     user.password_hash = passwords.hash_password(password)
     user.session_version = (user.session_version or 0) + 1
+    # Any other reset link still in a mailbox stops working too
+    for token in (
+        db.query(EmailTokenDB)
+        .filter(
+            EmailTokenDB.user_id == user.id,
+            EmailTokenDB.purpose == EmailTokenPurpose.PASSWORD_RESET,
+            EmailTokenDB.used_at.is_(None),
+        )
+        .all()
+    ):
+        token.used_at = moment
     clear_login_failures(db, user.login)
 
 
@@ -426,7 +456,7 @@ async def send_manage_link(db: Session, parent: ParentDB) -> None:
     manage_raw, manage_row = _new_token(
         EmailTokenPurpose.PARENT_MANAGE, parent.id, None, MANAGE_TOKEN_TTL
     )
-    subject = "Link do strony rodzica — OMJ Validator"
+    subject = "Link do strony rodzica — Trener OMJ"
     html, text = render("manage_link", subject=subject, manage_url=manage_url(manage_raw))
     await send_email(parent.email, subject, html, text)
     db.add(manage_row)
@@ -451,11 +481,12 @@ def new_users_limit_reached(db: Session, email: Optional[str]) -> bool:
     """rate_limit_new_users_per_day, bypassed by ALLOWED_EMAILS."""
     from ..groups import _get_allowed_emails
 
+    from ..db.repositories import UserRepository
+
     allowed = _get_allowed_emails()
     if email and allowed and email.lower() in allowed:
         return False
-    threshold = datetime.now(timezone.utc) - timedelta(hours=24)
-    recent = db.query(func.count(UserDB.id)).filter(UserDB.created_at >= threshold).scalar() or 0
+    recent = UserRepository(db).count_recent_users(hours=24)
     return recent >= settings.rate_limit_new_users_per_day
 
 
@@ -533,32 +564,62 @@ def account_summary(db: Session, user: UserDB) -> dict:
 # --------------------------------------------------------------------- login lockout
 
 
-def ip_hash(ip: Optional[str]) -> str:
+def _hmac(value: str) -> str:
     key = (settings.session_secret_key or "").encode("utf-8")
-    return hmac.new(key, (ip or "unknown").encode("utf-8"), hashlib.sha256).hexdigest()
+    return hmac.new(key, value.encode("utf-8"), hashlib.sha256).hexdigest()
 
 
-def login_locked(db: Session, login: str, ip_digest: str) -> bool:
+def ip_hash(ip: Optional[str]) -> str:
+    return _hmac(ip or "unknown")
+
+
+def device_tag(login: str) -> str:
+    """What the device cookie remembers about a login: a keyed digest only."""
+    return _hmac(f"device:{login}")[:32]
+
+
+def device_tags(cookie_value: Optional[str]) -> list[str]:
+    tags = [tag for tag in (cookie_value or "").split(".") if tag]
+    return tags[-DEVICE_COOKIE_MAX_TAGS:]
+
+
+def with_device_tag(cookie_value: Optional[str], login: str) -> str:
+    """Cookie value after a successful login on this device (newest last)."""
+    tag = device_tag(login)
+    tags = [t for t in device_tags(cookie_value) if t != tag] + [tag]
+    return ".".join(tags[-DEVICE_COOKIE_MAX_TAGS:])
+
+
+def login_actor(login: str, ip: Optional[str], cookie_value: Optional[str]) -> tuple[str, bool]:
+    """(actor digest, known device) for counting this attempt."""
+    tag = device_tag(login)
+    if tag in device_tags(cookie_value):
+        return _hmac(f"actor-device:{tag}"), True
+    return ip_hash(ip), False
+
+
+def _failures(db: Session, *conditions) -> int:
     since = now() - LOGIN_FAILURE_WINDOW
-    by_login = (
+    return (
         db.query(func.count(LoginFailureDB.id))
-        .filter(LoginFailureDB.login == login, LoginFailureDB.at >= since)
+        .filter(LoginFailureDB.at >= since, *conditions)
         .scalar()
         or 0
     )
-    if by_login >= LOGIN_MAX_FAILURES_PER_LOGIN:
+
+
+def login_locked(db: Session, login: str, actor: str, known_device: bool) -> bool:
+    if _failures(db, LoginFailureDB.login == login, LoginFailureDB.ip_hash == actor) >= LOGIN_MAX_FAILURES_PER_ACTOR:
         return True
-    by_ip = (
-        db.query(func.count(LoginFailureDB.id))
-        .filter(LoginFailureDB.ip_hash == ip_digest, LoginFailureDB.at >= since)
-        .scalar()
-        or 0
-    )
-    return by_ip >= LOGIN_MAX_FAILURES_PER_IP
+    if known_device:
+        return False
+    if _failures(db, LoginFailureDB.ip_hash == actor) >= LOGIN_MAX_FAILURES_PER_IP:
+        return True
+    return _failures(db, LoginFailureDB.login == login) >= LOGIN_MAX_FAILURES_PER_LOGIN
 
 
-def record_login_failure(db: Session, login: str, ip_digest: str) -> None:
-    db.add(LoginFailureDB(login=login[:64], ip_hash=ip_digest, at=now()))
+def record_login_failure(db: Session, login: str, actor: str) -> None:
+    db.add(LoginFailureDB(login=login[:64], ip_hash=actor, at=now()))
     db.commit()
 
 

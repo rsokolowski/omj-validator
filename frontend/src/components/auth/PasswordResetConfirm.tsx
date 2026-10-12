@@ -12,6 +12,7 @@ import { FormCard } from "@/components/account/FormCard";
 import { StepHeading } from "@/components/account/StepHeading";
 import { PasswordField } from "@/components/account/PasswordField";
 import { SubmitButton } from "@/components/account/SubmitButton";
+import { LinkTokenLoading, useLinkToken } from "@/components/account/LinkToken";
 
 type View =
   | { kind: "loading" }
@@ -21,7 +22,7 @@ type View =
   | { kind: "done" };
 
 /** Strona z linku "Zmiana hasla" (otwiera ja zwykle rodzic). Nikogo nie loguje. */
-export function PasswordResetConfirm({ token }: { token: string | null }) {
+function PasswordResetConfirmView({ token }: { token: string | null }) {
   const [view, setView] = useState<View>(token ? { kind: "loading" } : { kind: "problem", state: "invalid" });
   const [acted, setActed] = useState(false);
   const [password, setPassword] = useState("");
@@ -181,4 +182,11 @@ export function PasswordResetConfirm({ token }: { token: string | null }) {
       </Box>
     </FormCard>
   );
+}
+
+/** Odczytuje token z linku (i chowa go z paska adresu), potem pokazuje strone. */
+export function PasswordResetConfirm({ token: tokenFromUrl }: { token: string | null }) {
+  const link = useLinkToken(tokenFromUrl, "omj-link-haslo");
+  if (!link.ready) return <LinkTokenLoading />;
+  return <PasswordResetConfirmView token={link.token} />;
 }

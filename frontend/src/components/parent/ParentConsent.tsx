@@ -19,6 +19,7 @@ import { FormCard } from "@/components/account/FormCard";
 import { StepHeading } from "@/components/account/StepHeading";
 import { ConfirmDialog } from "@/components/account/ConfirmDialog";
 import { ChildIdentifier } from "./ChildIdentifier";
+import { LinkTokenLoading, useLinkToken } from "@/components/account/LinkToken";
 
 type View =
   | { kind: "loading" }
@@ -37,7 +38,7 @@ interface ParentConsentProps {
  * Strona zgody rodzica. Samo otwarcie strony niczego nie zmienia (skanery
  * poczty otwieraja linki) - decyzja zapada dopiero po kliknieciu przycisku.
  */
-export function ParentConsent({ token, declineIntent }: ParentConsentProps) {
+function ParentConsentView({ token, declineIntent }: ParentConsentProps) {
   const [view, setView] = useState<View>(token ? { kind: "loading" } : { kind: "load_error", message: "" });
   // Fokus na naglowek przy zmianie stanu po akcji, nie przy pierwszym wejsciu
   const [acted, setActed] = useState(false);
@@ -389,4 +390,11 @@ function LinkProblem({ state, focus = false, child, canResend, resent, resending
       {parentPageLink}
     </FormCard>
   );
+}
+
+/** Odczytuje token z linku (i chowa go z paska adresu), potem pokazuje strone. */
+export function ParentConsent({ token: tokenFromUrl, declineIntent }: ParentConsentProps) {
+  const link = useLinkToken(tokenFromUrl, "omj-link-zgoda");
+  if (!link.ready) return <LinkTokenLoading />;
+  return <ParentConsentView token={link.token} declineIntent={declineIntent} />;
 }

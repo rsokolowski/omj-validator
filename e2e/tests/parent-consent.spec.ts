@@ -81,10 +81,21 @@ test.describe('Parent consent for a login account', () => {
     const consentLink = await linkFromOutbox(page.request, parentEmail, '/rodzic/zgoda');
     const parentContext = await browser.newContext();
     const parentPage = await parentContext.newPage();
+    // The token must never reach the API in a query string (access logs)
+    const apiUrlsWithToken: string[] = [];
+    parentPage.on('request', (request) => {
+      const url = new URL(request.url());
+      if (url.pathname.startsWith('/api/') && url.searchParams.has('t')) apiUrlsWithToken.push(url.pathname);
+    });
     await parentPage.goto(consentLink);
+    await expect(parentPage.locator('#tresc-glowna').getByText(login, { exact: true })).toBeVisible();
+    // ... and it leaves the address bar once read; a reload still works
+    await expect(parentPage).not.toHaveURL(/[?&]t=/);
+    await parentPage.reload();
     await expect(parentPage.locator('#tresc-glowna').getByText(login, { exact: true })).toBeVisible();
     await parentPage.getByRole('button', { name: 'Wyrażam zgodę' }).click();
     await expect(parentPage.getByRole('heading', { name: 'Dziękujemy! Konto jest aktywne.' })).toBeVisible();
+    expect(apiUrlsWithToken).toEqual([]);
     // The parent is not logged in as the child
     const parentMe = await (await parentPage.request.get('/api/auth/me')).json();
     expect(parentMe.is_authenticated).toBe(false);

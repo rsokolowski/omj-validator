@@ -244,3 +244,30 @@ def check_submission_limits(
         )
 
     return None, rate_limit_headers, user_submission_count, user_oldest_submission
+
+
+def record_erasure_quota(db, user_id: str) -> None:
+    """Carry the quota an account used over its erasure (call BEFORE erasing).
+
+    Without it, erasing the account and registering again is a free rate-limit
+    reset (see DeletedAccountQuotaDB). Recorded first: if the erasure then
+    fails, a still-existing account is over-counted by its own submissions,
+    which is safe; the reverse order would not be.
+    """
+    from .db import AIUsageRepository
+
+    used_count, used_oldest, used_newest = SubmissionRepository(db).get_user_rate_limit_window(
+        user_id, hours=24
+    )
+    # Same for AI calls made while creating private tasks / patterns (ai_usage)
+    ai_count, _, ai_newest = AIUsageRepository(db).user_total_window(user_id, hours=24)
+    quota_repo = DeletedAccountQuotaRepository(db)
+    quota_repo.purge_expired()
+    quota_repo.record_deletion(
+        user_id,
+        used_count,
+        used_oldest,
+        used_newest,
+        ai_usage_count=ai_count,
+        ai_usage_newest_at=ai_newest,
+    )

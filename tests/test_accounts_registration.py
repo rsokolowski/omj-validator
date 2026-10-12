@@ -51,7 +51,7 @@ class TestLoginRegistration:
     def test_consent_email_names_the_login_and_nothing_else(self, client, db):
         register_login(client)
         (message,) = messages(to="mama@example.com")
-        assert message["subject"] == "Prośba o zgodę — konto Twojego dziecka w OMJ Validator"
+        assert message["subject"] == "Prośba o zgodę — konto Twojego dziecka w serwisie Trener OMJ"
         assert "kuba_m" in message["text"]
         assert "Wyrażam zgodę" in message["html"]
         assert "Nie zgadzam się" in message["html"]
@@ -372,7 +372,7 @@ class TestPendingScreen:
         assert response.status_code == 200, response.text
         assert response.json()["account"]["pending"]["parent_email"] == "t***@example.com"
         assert messages(to="tata@example.com")
-        view = client.get("/api/parent/consent", params={"t": old_token}).json()
+        view = client.post("/api/parent/consent/view", json={"token": old_token}).json()
         assert view["state"] == "expired"
         assert view["can_resend"] is False  # the old address cannot pull a new link
 

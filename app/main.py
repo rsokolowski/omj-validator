@@ -51,7 +51,6 @@ from .db import (
     get_db,
     UserRepository,
     SubmissionRepository,
-    DeletedAccountQuotaRepository,
     AdminAccessLogRepository,
 )
 from .db.repositories import ensure_utc
@@ -461,15 +460,18 @@ async def _google_new_identity(
     from .accounts.routes import finish_google_registration
 
     identity = {"sub": google_sub, "email": email, "name": name, "picture": picture, "at": _time.time()}
-    answers = request.session.pop(SESSION_PENDING_REGISTRATION_KEY, None)
+    # The identity waits in the session whatever happens next; it is dropped
+    # only when the account is created (start_session replaces the session)
+    request.session[SESSION_PENDING_GOOGLE_KEY] = identity
+    answers = request.session.get(SESSION_PENDING_REGISTRATION_KEY)
     if not answers or _time.time() - answers.get("at", 0) > PENDING_SESSION_SECONDS:
-        request.session[SESSION_PENDING_GOOGLE_KEY] = identity
+        request.session.pop(SESSION_PENDING_REGISTRATION_KEY, None)
         return RedirectResponse(url="/rejestracja?google=1", status_code=status.HTTP_303_SEE_OTHER)
 
     parent_email = answers.get("parent_email")
     if parent_email and parent_email == email.strip().lower():
         # The parent's address must not be the child's own Google address
-        request.session[SESSION_PENDING_GOOGLE_KEY] = identity
+        request.session.pop(SESSION_PENDING_REGISTRATION_KEY, None)
         return RedirectResponse(
             url="/rejestracja?google=1&blad=ten-sam-adres", status_code=status.HTTP_303_SEE_OTHER
         )
@@ -1650,28 +1652,11 @@ async def delete_my_account(
 
     from .retention import erase_user_data
 
-    # Carry the used quota over the deletion, otherwise erasing the account is a
-    # free rate limit reset (see DeletedAccountQuotaDB). Recorded first: if the
-    # erasure then fails, we have over-counted a still-existing account by its
-    # own submissions, which is safe. The reverse order would not be.
-    submission_repo = SubmissionRepository(db)
-    used_count, used_oldest, used_newest = submission_repo.get_user_rate_limit_window(
-        user_id, hours=24
-    )
-    # Same for AI calls made while creating private tasks (ai_usage rows)
-    from .db import AIUsageRepository
+    # Carry the used quota over the deletion (keyed by the Google identity or
+    # the parent's address, so registering again does not reset it)
+    from .rate_limits import record_erasure_quota
 
-    ai_count, _, ai_newest = AIUsageRepository(db).user_total_window(user_id, hours=24)
-    quota_repo = DeletedAccountQuotaRepository(db)
-    quota_repo.purge_expired()
-    quota_repo.record_deletion(
-        user_id,
-        used_count,
-        used_oldest,
-        used_newest,
-        ai_usage_count=ai_count,
-        ai_usage_newest_at=ai_newest,
-    )
+    record_erasure_quota(db, user_id)
 
     report = erase_user_data(db, user_id)
 

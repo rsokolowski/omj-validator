@@ -65,26 +65,23 @@ export const accountApi = {
   passwordResetRequest: (login: string) =>
     post<{ sent: true }>("/api/auth/password-reset/request", { login }),
 
+  // Tokens go in POST bodies only - query strings end up in access logs
   passwordResetCheck: (token: string) =>
-    fetchAPI<PasswordResetCheckResponse>(
-      `/api/auth/password-reset/check?t=${encodeURIComponent(token)}`
-    ),
+    post<PasswordResetCheckResponse>("/api/auth/password-reset/check", { token }),
 
   passwordResetConfirm: (token: string, password: string) =>
     post<{ ok: true }>("/api/auth/password-reset/confirm", { token, password }),
 };
 
 export const parentApi = {
-  consent: (token: string) =>
-    fetchAPI<ConsentView>(`/api/parent/consent?t=${encodeURIComponent(token)}`),
+  consent: (token: string) => post<ConsentView>("/api/parent/consent/view", { token }),
 
   decide: (token: string, decision: "accept" | "decline") =>
     post<ConsentDecisionResponse>("/api/parent/consent", { token, decision }),
 
   resendConsent: (token: string) => post<{ sent: true }>("/api/parent/consent/resend", { token }),
 
-  children: (token: string) =>
-    fetchAPI<ParentChildrenResponse>(`/api/parent/children?t=${encodeURIComponent(token)}`),
+  children: (token: string) => post<ParentChildrenResponse>("/api/parent/children", { token }),
 
   deleteChild: (token: string, childId: string) =>
     post<ParentDeleteResponse>(`/api/parent/children/${encodeURIComponent(childId)}/delete`, {

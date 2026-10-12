@@ -24,6 +24,7 @@ import { StepHeading } from "@/components/account/StepHeading";
 import { ConfirmDialog } from "@/components/account/ConfirmDialog";
 import { PasswordField } from "@/components/account/PasswordField";
 import { ParentLinkRequest } from "./ParentLinkRequest";
+import { LinkTokenLoading, useLinkToken } from "@/components/account/LinkToken";
 
 type View =
   | { kind: "loading" }
@@ -41,7 +42,7 @@ function linkProblem(error: unknown): "expired" | "invalid" | null {
   return null;
 }
 
-export function ParentPage({ token }: { token: string | null }) {
+function ParentPageView({ token }: { token: string | null }) {
   const [view, setView] = useState<View>(token ? { kind: "loading" } : { kind: "invalid" });
   const [acted, setActed] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
@@ -449,4 +450,11 @@ function PasswordDialog({ open, token, child, onClose, onChanged, onLinkProblem 
       </Box>
     </Dialog>
   );
+}
+
+/** Odczytuje token z linku (i chowa go z paska adresu), potem pokazuje strone. */
+export function ParentPage({ token: tokenFromUrl }: { token: string | null }) {
+  const link = useLinkToken(tokenFromUrl, "omj-link-rodzic");
+  if (!link.ready) return <LinkTokenLoading />;
+  return <ParentPageView token={link.token} />;
 }

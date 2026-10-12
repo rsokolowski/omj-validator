@@ -2,9 +2,10 @@
 existing accounts, the pending screen, the parent page and password reset.
 
 Parent endpoints authenticate with the token from the e-mail, never with the
-session (the parent is usually on their own phone). GET never changes
-anything - mail scanners and link previewers open links - every action is a
-POST from a page.
+session (the parent is usually on their own phone). The e-mail links open
+PAGES (mail scanners and link previewers open links); the page sends the
+token to the API in a POST body - never in a query string, which would land
+in proxy access logs - and only an explicit button press changes anything.
 """
 
 import logging
@@ -12,7 +13,7 @@ import time
 from collections import defaultdict, deque
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from sqlalchemy.exc import IntegrityError
@@ -37,6 +38,7 @@ from ..db.models import (
 )
 from ..email import EmailSendError, outbox
 from ..privacy import mask_email_for_display, mask_user_id
+from ..rate_limits import record_erasure_quota
 from ..retention import erase_user_data
 from . import age, passwords, service
 from .service import EmailLimitError, SEND_FAILED_MESSAGE
@@ -205,10 +207,12 @@ async def register_google(
 async def finish_google_registration(
     request: Request, db: Session, identity: dict, answers: "service.AgeAnswers"
 ):
-    """Create the Google user from verified identity + answers and log in."""
-    request.session.pop(SESSION_PENDING_GOOGLE_KEY, None)
-    request.session.pop(SESSION_PENDING_REGISTRATION_KEY, None)
+    """Create the Google user from verified identity + answers and log in.
 
+    The waiting identity and answers leave the session only once the account
+    exists (start_session replaces the session): after a 429 or 409 the child
+    can try again without going back to Google.
+    """
     existing = db.query(UserDB).filter(UserDB.google_sub == identity["sub"]).first()
     if existing is not None:  # registered meanwhile (second tab) - just log in
         start_session(
@@ -336,28 +340,29 @@ class LoginRequest(BaseModel):
     next: Optional[str] = None
 
 
-def _safe_next(next_url: Optional[str]) -> Optional[str]:
-    return safe_next_path(next_url)
-
-
 @router.post("/api/auth/login")
 @allow_inactive_account
-async def login_with_password(request: Request, body: LoginRequest, db: Session = Depends(get_db)):
+async def login_with_password(
+    request: Request, response: Response, body: LoginRequest, db: Session = Depends(get_db)
+):
     """Login + password. One generic error for unknown login and wrong
-    password; the lockout answer is the same for existing and unknown logins."""
+    password; the lockout answer is the same for existing and unknown logins.
+    See service.LOGIN_* for how failures are counted (per login and device
+    or IP, so nobody can lock a child out of their own device)."""
     login = passwords.normalize_login(body.login)[:64]
     password = body.password or ""
     if not login or not password:
         return _fail(400, "Wpisz login i hasło.", "invalid")
 
-    ip_digest = service.ip_hash(client_ip(request))
-    if service.login_locked(db, login, ip_digest):
+    device_cookie = request.cookies.get(service.DEVICE_COOKIE)
+    actor, known_device = service.login_actor(login, client_ip(request), device_cookie)
+    if service.login_locked(db, login, actor, known_device):
         return _fail(429, LOCKED_MESSAGE, "login_locked")
 
     user = db.query(UserDB).filter(UserDB.login == login).first()
     ok = passwords.verify_password(user.password_hash if user else None, password[: passwords.PASSWORD_MAX])
     if not ok or user is None:
-        service.record_login_failure(db, login, ip_digest)
+        service.record_login_failure(db, login, actor)
         logger.info("Failed password login")
         return _fail(401, GENERIC_LOGIN_ERROR, "invalid_credentials")
 
@@ -369,10 +374,20 @@ async def login_with_password(request: Request, body: LoginRequest, db: Session 
     db.commit()
 
     start_session(request, user, remember=body.remember, is_group_member=await _group_access(None))
+    # Remember that this login succeeded on this device (a keyed digest, no
+    # personal data) - its failed attempts are then counted separately
+    response.set_cookie(
+        service.DEVICE_COOKIE,
+        service.with_device_tag(device_cookie, login),
+        max_age=service.DEVICE_COOKIE_MAX_AGE,
+        httponly=True,
+        secure=not settings.auth_disabled,
+        samesite="lax",
+    )
     logger.info(f"Password login: user {mask_user_id(user.id)}")
     redirect = _home_for(user)
     if redirect == "/years":
-        redirect = _safe_next(body.next) or redirect
+        redirect = safe_next_path(body.next) or redirect
     return {"redirect": redirect}
 
 
@@ -468,24 +483,24 @@ async def change_parent_email(
         return error
 
     parent = service.get_or_create_parent(db, parent_email)
-    try:
-        service.check_consent_limits(db, account, parent)
-    except EmailLimitError as e:
-        db.rollback()
-        return _limit_response(e)
+
+    def switch_parent() -> None:
+        # Only once the new e-mail is out: until then the old links and the
+        # old address stay exactly as they were
+        service.invalidate_consent_tokens(db, account)
+        account.parent_id = parent.id
 
     # The previous parent row stays until the daily retention pass: its
     # e-mail log keeps counting against the limits for 24 h.
-    service.invalidate_consent_tokens(db, account)
-    account.parent_id = parent.id
-    db.commit()
-    db.refresh(account)
     try:
-        await service.send_consent_email(db, account, parent)
+        await service.send_consent_email(db, account, parent, on_sent=switch_parent)
     except EmailLimitError as e:
+        db.rollback()
         return _limit_response(e)
     except EmailSendError:
+        db.rollback()
         return _send_failed()
+    db.refresh(account)
     return {"sent": True, "account": service.account_summary(db, account)}
 
 
@@ -531,10 +546,19 @@ def _consent_lookup(db: Session, raw: Optional[str]):
     return state, token, user
 
 
-@router.get("/api/parent/consent")
-async def parent_consent_view(t: str = "", db: Session = Depends(get_db)):
+class TokenRequest(BaseModel):
+    token: Optional[str] = None
+
+
+# Tokens travel in POST bodies only, never in an API query string: query
+# strings end up in proxy access logs. These lookups change nothing.
+
+
+@router.post("/api/parent/consent/view")
+@allow_inactive_account
+async def parent_consent_view(body: TokenRequest, db: Session = Depends(get_db)):
     """What the consent page shows. Never changes anything."""
-    state, token, user = _consent_lookup(db, t)
+    state, token, user = _consent_lookup(db, body.token)
     can_resend = (
         state == "expired"
         and user is not None
@@ -565,6 +589,7 @@ async def parent_consent_decide(body: ConsentDecisionRequest, db: Session = Depe
         return _fail(410, message, f"link_{state}", state=state)
 
     if body.decision == "decline":
+        record_erasure_quota(db, user.id)
         erase_user_data(db, user.id)
         logger.info(f"Parent declined consent; account {mask_user_id(user.id)} erased")
         return {"result": "declined"}
@@ -573,10 +598,6 @@ async def parent_consent_decide(body: ConsentDecisionRequest, db: Session = Depe
     db.refresh(user)
     await service.send_account_active_email(db, user, manage_raw)
     return {"result": "accepted", "manage_url": f"/rodzic?t={manage_raw}", "child": _child_view(user)}
-
-
-class TokenRequest(BaseModel):
-    token: Optional[str] = None
 
 
 @router.post("/api/parent/consent/resend")
@@ -607,9 +628,11 @@ def _manage_parent(db: Session, raw: Optional[str]) -> tuple[Optional[ParentDB],
     return parent, None
 
 
-@router.get("/api/parent/children")
-async def parent_children(t: str = "", db: Session = Depends(get_db)):
-    parent, error = _manage_parent(db, t)
+@router.post("/api/parent/children")
+@allow_inactive_account
+async def parent_children(body: TokenRequest, db: Session = Depends(get_db)):
+    """The parent page: children of this parent address. Changes nothing."""
+    parent, error = _manage_parent(db, body.token)
     if error:
         return error
     children = sorted(parent.children, key=lambda u: u.created_at)
@@ -634,6 +657,7 @@ async def parent_delete_child(child_id: str, body: TokenRequest, db: Session = D
     if child is None:
         return _fail(404, "Nie znaleziono tego konta.", "not_found")
     remaining = len(parent.children) - 1
+    record_erasure_quota(db, child.id)
     report = erase_user_data(db, child.id)
     logger.info(f"Parent erased account {mask_user_id(child_id)}")
     return {"deleted": True, "remaining": remaining, "deleted_submissions": report.submissions_deleted}
@@ -717,9 +741,11 @@ def _reset_lookup(db: Session, raw: Optional[str]):
     return state, token, user
 
 
-@router.get("/api/auth/password-reset/check")
-async def password_reset_check(t: str = "", db: Session = Depends(get_db)):
-    state, _, user = _reset_lookup(db, t)
+@router.post("/api/auth/password-reset/check")
+@allow_inactive_account
+async def password_reset_check(body: TokenRequest, db: Session = Depends(get_db)):
+    """Is a reset link still good (and for which login). Changes nothing."""
+    state, _, user = _reset_lookup(db, body.token)
     return {"state": state, "login": user.login if user is not None and state == "valid" else None}
 
 

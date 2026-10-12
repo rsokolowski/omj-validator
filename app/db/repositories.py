@@ -136,11 +136,44 @@ class AppSettingsRepository:
         return row
 
 
+def quota_identity(db: Session, user_id: str) -> str:
+    """Who stands behind an account, for the erasure tombstone.
+
+    Erasing an account and registering again must not hand out a fresh daily
+    budget, so the tombstone is keyed by something that survives the erasure:
+
+    * Google accounts: the Google sub. Accounts created before login accounts
+      existed have ``id == google_sub``, so their key (and every tombstone
+      written before this change) is unchanged; newer ones have a random id
+      that a re-registration would not reproduce.
+    * Login accounts: the parent's e-mail address - a new login with the same
+      parent is the same budget (siblings share it while a tombstone lives,
+      which errs on the safe side).
+    * Anything else (dev "anonymous"): the id.
+    """
+    user = db.get(UserDB, user_id)
+    if user is None:
+        return user_id
+    if user.google_sub:
+        return user.google_sub
+    if user.parent is not None:
+        return f"parent:{user.parent.email}"
+    return user_id
+
+
 class DeletedAccountQuotaRepository:
-    """Rate-limit tombstones for erased accounts (see DeletedAccountQuotaDB)."""
+    """Rate-limit tombstones for erased accounts (see DeletedAccountQuotaDB).
+
+    Every method takes the account id and keys the tombstone by
+    quota_identity(), so record (before erasure) and lookup (from the new
+    account) meet.
+    """
 
     def __init__(self, db: Session):
         self.db = db
+
+    def _key(self, user_id: str) -> str:
+        return hash_user_id(quota_identity(self.db, user_id))
 
     def record_deletion(
         self,
@@ -186,7 +219,7 @@ class DeletedAccountQuotaRepository:
         ]
         anchor = max(anchors) if anchors else now
         expires_at = (anchor + timedelta(hours=window_hours)).replace(tzinfo=None)
-        user_hash = hash_user_id(user_id)
+        user_hash = self._key(user_id)
 
         tombstone = (
             self.db.query(DeletedAccountQuotaDB)
@@ -239,7 +272,7 @@ class DeletedAccountQuotaRepository:
         tombstone = (
             self.db.query(DeletedAccountQuotaDB)
             .filter(
-                DeletedAccountQuotaDB.user_hash == hash_user_id(user_id),
+                DeletedAccountQuotaDB.user_hash == self._key(user_id),
                 DeletedAccountQuotaDB.expires_at > now,
             )
             .first()
@@ -254,7 +287,7 @@ class DeletedAccountQuotaRepository:
         tombstone = (
             self.db.query(DeletedAccountQuotaDB)
             .filter(
-                DeletedAccountQuotaDB.user_hash == hash_user_id(user_id),
+                DeletedAccountQuotaDB.user_hash == self._key(user_id),
                 DeletedAccountQuotaDB.expires_at > now,
             )
             .first()

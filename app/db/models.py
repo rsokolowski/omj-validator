@@ -111,7 +111,10 @@ class UserDB(Base):
     ai_usage = relationship("AIUsageDB", cascade="all, delete-orphan")
     patterns = relationship("PatternDB", back_populates="user", cascade="all, delete-orphan")
     consents = relationship("ConsentDB", cascade="all, delete-orphan")
-    email_tokens = relationship("EmailTokenDB", cascade="all, delete-orphan")
+    # Not deleted with the account: the rows are the per-parent send log and
+    # must keep counting for 24 h (user_id becomes NULL, nothing personal is
+    # left in them). Retention removes them 30 days after expiry.
+    email_tokens = relationship("EmailTokenDB")
     parent = relationship("ParentDB", back_populates="children")
 
     __table_args__ = (
@@ -184,7 +187,9 @@ class EmailTokenDB(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     token_hash = Column(String(64), nullable=False, unique=True)
     purpose = Column(String(16), nullable=False)
-    user_id = Column(String(255), ForeignKey("users.id", ondelete="CASCADE"), nullable=True, index=True)
+    # SET NULL, not CASCADE: an erased account's links stay as the parent's
+    # send log (rate limits) - see UserDB.email_tokens
+    user_id = Column(String(255), ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
     parent_id = Column(String(32), ForeignKey("parents.id", ondelete="CASCADE"), nullable=False, index=True)
     created_at = Column(DateTime, nullable=False, default=utc_now, index=True)
     expires_at = Column(DateTime, nullable=False, index=True)
@@ -571,7 +576,8 @@ class DeletedAccountQuotaDB(Base):
 
     __tablename__ = "deleted_account_quota"
 
-    # HMAC-SHA256 of the user's id, hex - see repositories.hash_user_id
+    # HMAC-SHA256 of repositories.quota_identity() (Google sub, or the parent's
+    # address for login accounts), hex - see repositories.hash_user_id
     user_hash = Column(String(64), primary_key=True)
 
     # Submissions the deleted account made inside the rate limit window

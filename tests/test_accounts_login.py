@@ -166,7 +166,7 @@ class TestResendBackend:
         monkeypatch.setattr(settings, "resend_api_key", "re_test")
         await email_module.send_email("mama@example.com", "Temat", "<p>x</p>", "x")
         assert captured["auth"] == "Bearer re_test"
-        assert captured["json"]["from"] == "OMJ Validator <noreply@omj-validator.pl>"
+        assert captured["json"]["from"] == "Trener OMJ <noreply@omj-validator.pl>"
         assert captured["json"]["reply_to"] == "kontakt@omj-validator.pl"
         assert captured["json"]["text"] == "x"
 

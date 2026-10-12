@@ -13,7 +13,7 @@
 * parents: a parent's e-mail address, shared by siblings.
 * consents: proof of consent (art. 7(1) RODO) - kind self / parent.
 * email_tokens: SHA-256 of the links e-mailed to parents; also the send log
-  for the e-mail rate limits.
+  for the e-mail rate limits (kept when the account is erased: user_id SET NULL).
 * login_failures: failed login attempts for the brute-force lockout (24 h).
 
 Revision ID: 010
@@ -99,10 +99,11 @@ def upgrade() -> None:
         sa.Column("id", sa.Integer(), primary_key=True, autoincrement=True),
         sa.Column("token_hash", sa.String(64), nullable=False),
         sa.Column("purpose", sa.String(16), nullable=False),
+        # SET NULL: an erased account's links stay as the parent's send log
         sa.Column(
             "user_id",
             sa.String(255),
-            sa.ForeignKey("users.id", ondelete="CASCADE"),
+            sa.ForeignKey("users.id", ondelete="SET NULL"),
             nullable=True,
         ),
         sa.Column(
@@ -134,12 +135,19 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    # Login accounts cannot exist in the old schema (no Google id, no e-mail)
+    # The old schema keys users by their Google sub. Login accounts (no Google
+    # id) cannot exist there, and Google accounts created after 010 have a
+    # random id that every FK and upload directory uses - renaming id back to
+    # google_sub would silently swap their identity. Refuse instead.
     bind = op.get_bind()
-    count = bind.execute(sa.text("SELECT count(*) FROM users WHERE google_sub IS NULL")).scalar()
+    count = bind.execute(
+        sa.text("SELECT count(*) FROM users WHERE google_sub IS NULL OR id <> google_sub")
+    ).scalar()
     if count:
         raise RuntimeError(
-            f"{count} login/password accounts exist; erase them before downgrading below 010"
+            f"Cannot downgrade below 010: {count} account(s) were created after it "
+            "(login/password accounts, or Google accounts whose id is not their Google sub). "
+            "Erase them first, or restore a backup taken before the upgrade."
         )
 
     op.drop_table("login_failures")

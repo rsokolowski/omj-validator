@@ -110,7 +110,15 @@ def test_upgrade_keeps_ids_and_foreign_keys(engine, monkeypatch):
             assert conn.execute(text("SELECT count(*) FROM submissions")).scalar() == 0
             assert conn.execute(text("SELECT count(*) FROM ai_usage")).scalar() == 0
 
+        # A Google account created after 010 has a random id: downgrading would
+        # swap its identity, so the downgrade refuses (as it does for login accounts)
+        session.add(UserDB(id="n" * 32, google_sub="g-new", email="new@gmail.com", birth_year=2005))
+        session.commit()
         session.query(UserDB).filter(UserDB.login.isnot(None)).delete()
+        session.commit()
+        with pytest.raises(RuntimeError, match="Cannot downgrade below 010"):
+            _alembic(monkeypatch, "downgrade", "009")
+        session.query(UserDB).filter(UserDB.id == "n" * 32).delete()
         session.commit()
     finally:
         session.close()

@@ -870,15 +870,12 @@ def run_retention(db: Session, dry_run: bool = False) -> RetentionReport:
 
 # --- Parent consent (accounts of children under 16, login accounts) ---------
 
-# A pending account is erased this long after pending_since without consent.
-# Mirrored by app/accounts/service.PENDING_TTL (the date shown on screen).
-UNCONFIRMED_ACCOUNT_DAYS = 14
 # E-mailed links are kept this long after they expire (rate-limit log, support)
 EMAIL_TOKEN_KEEP_DAYS = 30
 LOGIN_FAILURE_KEEP_HOURS = 24
 # A parent row without children is kept while its e-mail log still counts
-# against the 24 h sending limits (a child changing the parent address must
-# not reset them)
+# against the 24 h sending limits (a child changing the parent address, or
+# deleting the account and registering again, must not reset them)
 CHILDLESS_PARENT_GRACE_HOURS = 24
 
 
@@ -889,7 +886,9 @@ def _naive_now() -> datetime:
 def delete_unconfirmed_accounts(db: Session, dry_run: bool = False) -> RetentionReport:
     """Erase accounts still waiting for a parent 14 days after pending_since."""
     report = RetentionReport(dry_run=dry_run)
-    cutoff = _naive_now() - timedelta(days=UNCONFIRMED_ACCOUNT_DAYS)
+    from .accounts.service import PENDING_TTL
+
+    cutoff = _naive_now() - PENDING_TTL
     users = (
         db.query(UserDB)
         .filter(UserDB.status == UserStatus.PENDING_PARENT, UserDB.pending_since < cutoff)
@@ -949,8 +948,24 @@ def delete_childless_parents(db: Session, dry_run: bool = False) -> RetentionRep
 
 
 def _delete_parent_if_childless(db: Session, parent_id: str) -> None:
-    """Called inside an erasure (no commit here)."""
+    """Called inside an erasure (no commit here).
+
+    The parent row goes with its last child - unless we e-mailed that address
+    in the last 24 h. Its email_tokens are the per-parent send log, and
+    deleting them would let "delete the account, register again" mail-bomb
+    the address past the daily limit; delete_childless_parents removes such a
+    row on the first daily run after the grace period.
+    """
     if db.query(UserDB.id).filter(UserDB.parent_id == parent_id).first() is not None:
+        return
+    recent = _naive_now() - timedelta(hours=CHILDLESS_PARENT_GRACE_HOURS)
+    recently_mailed = (
+        db.query(EmailTokenDB.id)
+        .filter(EmailTokenDB.parent_id == parent_id, EmailTokenDB.created_at >= recent)
+        .first()
+        is not None
+    )
+    if recently_mailed:
         return
     parent = db.get(ParentDB, parent_id)
     if parent is not None:
