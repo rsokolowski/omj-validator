@@ -17,10 +17,13 @@ the report still shows the scores side by side, cost and latency, but no
 accuracy numbers - the prod score is NOT ground truth (it came from whatever
 model was deployed at the time).
 
-Cost is the row's estimated_cost (what the provider put in scoring_meta, the
-figure prod stores) when present; older Gemini result files without it are
-priced with app.ai.models_catalog.estimate_cost, so promo pricing and
-long-context tiers are applied the same way prod logs them.
+Cost, for both providers, is the row's estimated_cost (what the provider put
+in scoring_meta, the figure prod stores) when present. Rows without it (result
+files written before rows carried a cost) are priced from their usage with
+app.ai.models_catalog.estimate_cost - Gemini through GEMINI_PRICING (promo
+pricing and long-context tiers applied the same way prod logs them), Claude at
+the catalog rates including cache reads/writes. A row with no usage, or for a
+model missing from both tables, is reported as unpriced, never as $0.
 """
 
 import argparse

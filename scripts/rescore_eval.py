@@ -56,8 +56,14 @@ def make_provider(provider: str, model: str):
 
 
 def usage_from_meta(meta: dict) -> dict:
-    """Token counts from scoring_meta, in the shape ab_compare.py reads."""
+    """Token counts from scoring_meta, in the shape ab_compare.py reads.
+
+    {} when the meta carries no token counts at all, so the row is reported
+    as unpriced instead of costing $0.
+    """
     usage = {k: meta.get(k, 0) or 0 for k in USAGE_KEYS}
+    if not any(usage.values()):
+        return {}
     usage["total_tokens"] = sum(usage.values())
     return usage
 
@@ -99,8 +105,9 @@ async def main(args):
                 "new_feedback": res.feedback,
                 "elapsed_s": round(time.time() - t0, 1),
                 "usage": usage_from_meta(meta),
-                "estimated_cost": meta.get("estimated_cost"),
             }
+            # No usage reported -> no estimate either (an estimate of 0 would read as free)
+            row["estimated_cost"] = meta.get("estimated_cost") if row["usage"] else None
             if meta.get("served_by"):
                 row["served_by"] = meta["served_by"]
         except Exception as e:  # keep going; one failure shouldn't kill the run
