@@ -1,7 +1,7 @@
 """AI Provider Protocol - defines contract for all AI providers."""
 
 from pathlib import Path
-from typing import Optional, Protocol, runtime_checkable
+from typing import Any, Callable, Optional, Protocol, runtime_checkable
 
 from ..models import (
     LinkResult,
@@ -16,6 +16,9 @@ from ..models import (
 @runtime_checkable
 class AIProvider(Protocol):
     """Protocol defining the interface for AI solution analyzers."""
+
+    provider_name: str  # "gemini" | "anthropic"
+    model_name: str
 
     async def analyze_solution(
         self,
@@ -40,6 +43,21 @@ class AIProvider(Protocol):
         Returns:
             SubmissionResult with score and feedback
         """
+        ...
+
+    async def analyze_solution_stream(
+        self,
+        task_pdf_path: Path,
+        solution_pdf_path: Optional[Path],
+        image_paths: list[Path],
+        task_number: int,
+        etap: str = "etap2",
+        on_thinking: Optional[Callable[[str], Any]] = None,
+        on_feedback: Optional[Callable[[str], Any]] = None,
+        on_upload_complete: Optional[Callable[[], Any]] = None,
+        solution_text: Optional[str] = None,
+    ) -> SubmissionResult:
+        """analyze_solution, streaming thinking/feedback text through the callbacks (grading worker)."""
         ...
 
     async def extract_private_tasks(self, image_paths: list[Path]) -> PrivateExtractionResult:
@@ -83,4 +101,8 @@ class AIProvider(Protocol):
 
     def get_timeout(self) -> int:
         """Return timeout in seconds for this provider."""
+        ...
+
+    async def ping(self) -> None:
+        """Minimal request to verify key + model; raises AIProviderError."""
         ...

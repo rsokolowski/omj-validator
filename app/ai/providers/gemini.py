@@ -222,8 +222,10 @@ RESPONSE_JSON_SCHEMA = {
 class GeminiProvider:
     """AI provider using Google Gemini API for solution analysis."""
 
-    def __init__(self):
-        """Initialize Gemini provider with API key."""
+    provider_name = "gemini"
+
+    def __init__(self, model: Optional[str] = None):
+        """Initialize Gemini provider with API key; model defaults to GEMINI_MODEL."""
         if not GEMINI_AVAILABLE:
             raise ImportError(
                 "google-genai package not installed. "
@@ -255,7 +257,7 @@ class GeminiProvider:
                 http_options=http_options,
             )
 
-        self._model_name = settings.gemini_model
+        self._model_name = model or settings.gemini_model
         self._is_gemini_3 = "gemini-3" in self._model_name.lower()
 
         # Log media resolution settings
@@ -352,9 +354,28 @@ class GeminiProvider:
         """
         return build_prompt(etap)
 
+    @property
+    def model_name(self) -> str:
+        return self._model_name
+
     def get_timeout(self) -> int:
         """Return timeout in seconds for Gemini API."""
         return settings.gemini_timeout
+
+    async def ping(self) -> None:
+        """One tiny call proving key + model work (admin switch). Raises AIProviderError."""
+        try:
+            await asyncio.wait_for(
+                asyncio.to_thread(
+                    self._client.models.generate_content,
+                    model=self._model_name,
+                    contents=["Odpowiedz jednym słowem: OK"],
+                ),
+                timeout=30,
+            )
+        except Exception as e:
+            logger.error(f"[Gemini ping] {type(e).__name__}: {e}")
+            raise AIProviderError(f"Model {self._model_name} nie odpowiada: {type(e).__name__}")
 
     def _build_content_parts(
         self,
@@ -794,12 +815,13 @@ class GeminiProvider:
             # Parse the response
             result = parse_ai_response(feedback_text, provider_name="Gemini", etap=etap)
 
-            # Add thinking to scoring_meta
-            if result.scoring_meta is None:
-                result.scoring_meta = {}
-            result.scoring_meta["thinking"] = thinking_text
-            result.scoring_meta["api_time"] = api_time
-            result.scoring_meta["total_time"] = total_time
+            result.scoring_meta = {
+                **(result.scoring_meta or {}),
+                **self._usage_meta(usage_metadata, start_time),
+                "thinking": thinking_text,
+                "api_time": api_time,
+                "total_time": total_time,
+            }
 
             return result
 
@@ -1095,6 +1117,7 @@ class GeminiProvider:
         """Model, tokens, cost and timing - never content."""
         input_tokens, output_tokens, thoughts_tokens = self._read_usage(usage_metadata)
         return {
+            "provider": "gemini",
             "model": self._model_name,
             "input_tokens": input_tokens,
             "output_tokens": output_tokens,

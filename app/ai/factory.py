@@ -1,11 +1,16 @@
-"""Factory for creating AI providers based on configuration."""
+"""Factory for creating AI providers based on the active model."""
 
-from typing import TYPE_CHECKING, Optional
+import logging
+import threading
+from typing import TYPE_CHECKING
 
-from ..config import settings
+from .config_store import env_default, get_active_model
+from .models_catalog import provider_approved, provider_configured
 
 if TYPE_CHECKING:
     from .protocol import AIProvider
+
+logger = logging.getLogger(__name__)
 
 
 class AIProviderError(Exception):
@@ -22,43 +27,66 @@ class AIContentBlockedError(AIProviderError):
     """
 
 
-# Singleton cache for AI provider
-_provider_instance: Optional["AIProvider"] = None
+# One instance per (provider, model): client construction costs ~1.3s
+_instances: dict[tuple[str, str], "AIProvider"] = {}
+_instances_lock = threading.Lock()
+
+
+def reset_provider_cache() -> None:
+    with _instances_lock:
+        _instances.clear()
+
+
+def _construct(provider: str, model: str) -> "AIProvider":
+    if provider == "gemini":
+        from .providers.gemini import GeminiProvider
+        return GeminiProvider(model)
+    if provider == "anthropic":
+        from .providers.anthropic import AnthropicProvider
+        return AnthropicProvider(model)
+    raise AIProviderError(f"Unknown AI provider: {provider}. Supported providers: gemini, anthropic")
+
+
+def build_provider(provider: str, model: str) -> "AIProvider":
+    """A fresh, uncached provider for (provider, model). Used by ping and scripts."""
+    if provider not in ("gemini", "anthropic"):
+        raise AIProviderError(f"Unknown AI provider: {provider}. Supported providers: gemini, anthropic")
+    if not provider_configured(provider):
+        raise AIProviderError(
+            f"{provider.upper()}_API_KEY is required for provider {provider}. Set it in your .env file."
+        )
+    return _construct(provider, model)
+
+
+def _usable(provider: str) -> bool:
+    return provider_configured(provider) and provider_approved(provider)
 
 
 def create_ai_provider() -> "AIProvider":
-    """
-    Create and return the configured AI provider (singleton).
+    """The provider for the active model (app_settings row, else env), cached per pair.
 
-    The provider is cached and reused across requests to avoid
-    the ~1.3s initialization overhead of the genai.Client.
-
-    Returns:
-        AIProvider instance based on AI_PROVIDER setting
+    A run already holding an instance finishes on it; the next call picks up a
+    switch. An active choice that cannot be used (no key, or Anthropic not yet
+    approved as a processor) falls back to the environment default rather than
+    stopping grading - or sending data to an unapproved processor.
 
     Raises:
-        AIProviderError: If provider cannot be created (missing config, etc.)
+        AIProviderError: If the provider cannot be created (missing config, etc.)
     """
-    global _provider_instance
-
-    if _provider_instance is not None:
-        return _provider_instance
-
-    provider_name = settings.ai_provider.lower()
-
-    if provider_name == "gemini":
-        from .providers.gemini import GeminiProvider
-
-        if not settings.gemini_api_key:
-            raise AIProviderError(
-                "GEMINI_API_KEY is required when AI_PROVIDER=gemini. "
-                "Set it in your .env file."
-            )
-        _provider_instance = GeminiProvider()
-        return _provider_instance
-
-    else:
-        raise AIProviderError(
-            f"Unknown AI provider: {provider_name}. "
-            f"Supported providers: gemini"
+    active = get_active_model()
+    provider, model = active.provider, active.model
+    if active.source == "db" and not _usable(provider):
+        logger.error(
+            f"[AI] Active model {provider}/{model} is not usable "
+            f"({'not approved' if provider_configured(provider) else 'no API key'}) - using env default"
         )
+        fallback = env_default()
+        provider, model = fallback.provider, fallback.model
+    key = (provider, model)
+    with _instances_lock:
+        instance = _instances.get(key)
+    if instance is None:
+        instance = build_provider(provider, model)
+        with _instances_lock:
+            instance = _instances.setdefault(key, instance)
+    return instance
