@@ -89,9 +89,6 @@ class TestPixelCap:
     def test_cap_admits_48_megapixel_phone_photos(self):
         assert 8064 * 6048 <= uploads.MAX_IMAGE_PIXELS
 
-    def test_pillow_guard_matches_the_cap(self):
-        assert Image.MAX_IMAGE_PIXELS == uploads.MAX_IMAGE_PIXELS
-
     def test_cap_applies_to_heic(self, tmp_path, monkeypatch):
         pillow_heif = pytest.importorskip("pillow_heif")
         if not uploads.HEIF_SUPPORTED:
@@ -128,7 +125,54 @@ class TestSaveUploadedImages:
         assert saved == []
         assert error is not None and error.status_code == 400
         assert b"rozdzielczo" in error.body
+        # Refused from the header - cheap, so not an UndecodablePhotoResponse
+        assert not isinstance(error, uploads.UndecodablePhotoResponse)
         assert not target.exists() or not any(p.is_file() for p in target.rglob("*"))
+
+    def test_broken_photo_is_an_undecodable_refusal(self, uploads_root):
+        images = [upload("good.png", png_bytes((40, 40))), upload("broken.png", b"nope")]
+
+        saved, error = asyncio.run(
+            uploads.save_uploaded_images(images, settings.uploads_dir / "u")
+        )
+
+        assert saved == []
+        assert isinstance(error, uploads.UndecodablePhotoResponse)
+        assert error.status_code == 400
+
+    def test_cancelled_request_cleans_up(self, uploads_root):
+        """The await on the decode thread is a cancellation point."""
+        calls = {"n": 0}
+
+        def normalize(path):
+            calls["n"] += 1
+            if calls["n"] == 2:
+                raise asyncio.CancelledError()
+            return uploads.normalize_uploaded_image(path)
+
+        images = [upload("a.png", png_bytes((20, 20))), upload("b.png", png_bytes((20, 20)))]
+        with pytest.raises(asyncio.CancelledError):
+            asyncio.run(uploads.save_uploaded_images(images, settings.uploads_dir / "u", normalize))
+
+        assert not any(p.is_file() for p in settings.uploads_dir.rglob("*"))
+
+    def test_transparency_flattening_matches_alpha_composite(self):
+        """The memory-saving paste gives the same page as alpha_composite onto white."""
+        img = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
+        for x in range(64):
+            for y in range(0, 64, 8):
+                img.putpixel((x, y), (10, 20, 200, x * 4))
+        expected = Image.alpha_composite(
+            Image.new("RGBA", img.size, (255, 255, 255, 255)), img
+        ).convert("RGB")
+
+        flattened = uploads.flatten_transparency(img)
+
+        diffs = [
+            max(abs(a - b) for a, b in zip(p, q))
+            for p, q in zip(flattened.getdata(), expected.getdata())
+        ]
+        assert max(diffs) <= 1
 
     def test_normalization_runs_off_the_event_loop(self, uploads_root):
         loop_threads = []

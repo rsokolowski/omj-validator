@@ -76,8 +76,9 @@ from .rate_limits import (
     calculate_rate_limit_headers as _calculate_rate_limit_headers,
     rate_limit_reset_anchor as _rate_limit_reset_anchor,
     calculate_retry_after as _calculate_retry_after,
-    refuse_reserved_submission,
+    release_reserved_submission,
     reserve_submission,
+    settle_refused_submission,
 )
 
 # Kept under its historical name: submit_solution resolves it at call time, so
@@ -857,28 +858,30 @@ async def submit_solution(
     if limit_error is not None:
         return limit_error
     submission_id = submission.id
-    submission_repo = SubmissionRepository(db)
 
     # Save uploaded images (per-user directory structure). The normaliser is
     # resolved through this module at call time - see _normalize_uploaded_image.
     upload_dir = settings.uploads_dir / user_id / year / etap / str(num)
+    saved_paths: list = []
     try:
         saved_paths, upload_error = await save_uploaded_images(
             images, upload_dir, normalize=lambda p: _normalize_uploaded_image(p)
         )
-    except Exception:
-        # Our failure, not the student's: the slot is given back
-        submission_repo.remove(submission)
+        if upload_error is None:
+            SubmissionRepository(db).attach_solution(
+                submission,
+                images=[str(p.relative_to(settings.uploads_dir)) for p in saved_paths],
+                solution_text=solution_text,
+            )
+    except BaseException:
+        # Our failure (or a cancelled request), not the student's: no photo
+        # stays behind and the slot is given back
+        _discard_uploads(saved_paths)
+        release_reserved_submission(db, submission_id)
         raise
     if upload_error is not None:
-        refuse_reserved_submission(db, submission, upload_error)
+        settle_refused_submission(db, submission, upload_error)
         return upload_error
-
-    submission_repo.attach_solution(
-        submission,
-        images=[str(p.relative_to(settings.uploads_dir)) for p in saved_paths],
-        solution_text=solution_text,
-    )
 
     # Initialize progress tracking (handler.py will set first status)
     await progress_manager.create_submission(submission_id)

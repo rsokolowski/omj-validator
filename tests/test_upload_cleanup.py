@@ -205,7 +205,8 @@ class TestRejectedSubmissionLeavesNothing:
         )
 
         assert response.status_code == 400
-        assert_refused_row_only(db)
+        # A size refusal is cheap and honest: the reserved slot is given back
+        assert db.query(SubmissionDB).count() == 0
         assert files_left() == []
 
     def test_missing_task_pdf_discards_everything(self, client, db, monkeypatch):

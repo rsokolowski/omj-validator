@@ -10,7 +10,6 @@ import asyncio
 import logging
 import unicodedata
 import uuid
-import warnings
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Callable, Optional as OptionalType
@@ -58,15 +57,14 @@ MAX_IMAGE_DIMENSION = 2048
 # 3.3 GB of RAM on the single production worker - a decompression bomb well
 # under the upload size limit. 50 MP still admits the 48 MP mode of recent
 # phones (8064x6048); anything bigger is refused from its header, before a
-# single pixel is decoded. Pillow's own guard is set to the same value and its
-# warning made an error, so every opener (HEIC included) stops there too.
+# single pixel is decoded (normalize_uploaded_image). Pillow's process-wide
+# guard is left alone; its hard error (well above this cap) is caught too.
 MAX_IMAGE_PIXELS = 50_000_000
-Image.MAX_IMAGE_PIXELS = MAX_IMAGE_PIXELS
-warnings.simplefilter("error", Image.DecompressionBombWarning)
 
 # Decoding runs in these threads, never on the event loop: one slow photo must
 # not freeze every other request (and the WebSockets) of the single worker. Two
-# at a time also caps the memory a burst of large photos can take.
+# at a time also caps the memory a burst of large photos can take - a
+# transparent photo at the pixel cap peaks at roughly 0.5 GB while normalized.
 IMAGE_DECODE_WORKERS = 2
 _image_executor = ThreadPoolExecutor(
     max_workers=IMAGE_DECODE_WORKERS, thread_name_prefix="image-normalize"
@@ -75,6 +73,16 @@ _image_executor = ThreadPoolExecutor(
 
 class ImageTooLargeError(Exception):
     """The photo has more pixels than MAX_IMAGE_PIXELS; it was not decoded."""
+
+
+class UndecodablePhotoResponse(JSONResponse):
+    """The 400 for a batch refused because a photo failed to decode.
+
+    Distinguished from the other refusals (file too big, too many pixels, no
+    HEIC decoder - all cheap and honest mistakes) because by then the batch
+    may have cost real decoding work, so a submission that was refused this
+    way still uses up its daily slot (see settle_refused_submission).
+    """
 
 
 def discard_uploads(saved_paths: list[Path], current: OptionalType[Path] = None) -> None:
@@ -142,9 +150,13 @@ def flatten_transparency(img: Image.Image) -> Image.Image:
     if not has_alpha:
         return img.convert("RGB")
 
-    rgba = img.convert("RGBA")
-    background = Image.new("RGBA", rgba.size, (255, 255, 255, 255))
-    return Image.alpha_composite(background, rgba).convert("RGB")
+    # Pasted through its own alpha onto an RGB page: the same picture as
+    # alpha_composite onto opaque white, without the extra full-size RGBA
+    # buffers (a 50 MP page went from ~1 GB to ~0.5 GB at peak).
+    rgba = img if img.mode == "RGBA" else img.convert("RGBA")
+    page = Image.new("RGB", rgba.size, (255, 255, 255))
+    page.paste(rgba, (0, 0), rgba)
+    return page
 
 
 def normalize_uploaded_image(file_path: Path) -> OptionalType[Path]:
@@ -195,13 +207,14 @@ def normalize_uploaded_image(file_path: Path) -> OptionalType[Path]:
             if img.width * img.height > MAX_IMAGE_PIXELS:
                 raise ImageTooLargeError(f"{img.width}x{img.height}")
 
-            # Camera rotation flag first, metadata removal second
-            oriented = ImageOps.exif_transpose(img) or img
+            # Camera rotation flag first, metadata removal second. In place: a
+            # rotated copy would be one more full-size image in memory.
+            ImageOps.exif_transpose(img, in_place=True)
 
             # Flatten BEFORE resizing: resampling an RGBA image blends the RGB
             # values hiding under transparent pixels into their neighbours, which
             # would leave a dark halo around the handwriting.
-            flattened = flatten_transparency(oriented)
+            flattened = flatten_transparency(img)
 
             if flattened.width > MAX_IMAGE_DIMENSION or flattened.height > MAX_IMAGE_DIMENSION:
                 ratio = min(
@@ -218,7 +231,7 @@ def normalize_uploaded_image(file_path: Path) -> OptionalType[Path]:
             # Written to a temp file first so a failure mid-encode cannot destroy
             # the upload we already have.
             flattened.save(tmp_path, "JPEG", quality=85)
-    except (ImageTooLargeError, Image.DecompressionBombError, Image.DecompressionBombWarning) as e:
+    except (ImageTooLargeError, Image.DecompressionBombError) as e:
         tmp_path.unlink(missing_ok=True)
         logger.warning(f"Image refused for {file_path.suffix}: too many pixels ({e})")
         raise ImageTooLargeError(str(e)) from None
@@ -395,14 +408,18 @@ async def save_uploaded_images(
                 # either. Storing it would ship the photo's GPS coordinates to
                 # disk and to Google, so the upload is refused instead.
                 discard_uploads(saved_paths, file_path)
-                return [], JSONResponse(
+                # A missing HEIC decoder is our gap, not a broken photo
+                server_gap = ext in HEIF_EXTENSIONS and not HEIF_SUPPORTED
+                return [], (JSONResponse if server_gap else UndecodablePhotoResponse)(
                     {"error": unprocessable_image_message(img.filename, ext)},
                     status_code=status.HTTP_400_BAD_REQUEST,
                 )
 
             saved_paths.append(normalized_path)
             in_progress = None
-    except Exception:
+    except BaseException:
+        # BaseException: a cancelled request (shutdown, client gone) must clean
+        # up too - the await on the decode thread is a cancellation point.
         discard_uploads(saved_paths, in_progress)
         raise
 

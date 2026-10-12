@@ -21,6 +21,7 @@ from .db import DeletedAccountQuotaRepository, SubmissionRepository
 from .db.models import SubmissionDB, SubmissionStatus
 from .db.repositories import ensure_utc
 from .privacy import mask_user_id
+from .uploads import UndecodablePhotoResponse
 
 import logging
 
@@ -259,6 +260,29 @@ IN_FLIGHT_MESSAGE = (
 IN_FLIGHT_RETRY_AFTER_SECONDS = 30
 
 
+def _in_flight_error(db: Session, user_id: str, reserved: int) -> OptionalType[JSONResponse]:
+    """429 when the user already has the allowed number of gradings running."""
+    in_flight = SubmissionRepository(db).count_user_in_flight(user_id) - reserved
+    limit = settings.rate_limit_submissions_in_flight_per_user
+    if in_flight < limit:
+        return None
+    logger.warning(f"In-flight submission limit reached: {mask_user_id(user_id)} {in_flight}/{limit}")
+    return JSONResponse(
+        {"error": IN_FLIGHT_MESSAGE},
+        status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+        headers={"Retry-After": str(IN_FLIGHT_RETRY_AFTER_SECONDS)},
+    )
+
+
+def _check_all(
+    db: Session, user_id: str, is_allowlisted: bool, reserved: int
+) -> tuple[OptionalType[JSONResponse], dict[str, str]]:
+    error, headers, _, _ = check_submission_limits(db, user_id, is_allowlisted, reserved=reserved)
+    if error is None and not is_allowlisted:
+        error = _in_flight_error(db, user_id, reserved)
+    return error, headers
+
+
 def reserve_submission(
     db: Session,
     user_id: str,
@@ -278,42 +302,33 @@ def reserve_submission(
     requests all pass the same count: 60 at once against a limit of 30 made 60
     rows and 60 paid gradings. Racing requests now each see the others'
     reservations, so at worst both are refused at the boundary, never both
-    admitted.
+    admitted. A read-only check runs first, so a user who is already over a
+    limit is refused without writing anything (and without briefly inflating
+    everyone else's global count).
 
-    The caller owns the row from here: remove it (SubmissionRepository.remove)
-    if the request fails through no fault of the student, or mark it FAILED
-    when the student's photos were refused, so a batch built to be refused
-    still costs a slot and cannot be replayed for free.
+    The caller owns the row from here: settle_refused_submission when the
+    student's photos were refused, release_reserved_submission when the
+    request fails on our side.
 
     Also caps the submissions one user has in grading at once
     (rate_limit_submissions_in_flight_per_user). Allowlisted users skip both.
     """
-    repo = SubmissionRepository(db)
-    submission = repo.create(
+    error, headers = _check_all(db, user_id, is_allowlisted, reserved=0)
+    if error is not None:
+        return error, None, headers
+
+    submission = SubmissionRepository(db).create(
         id=str(uuid.uuid4())[:8],
         user_id=user_id,
         images=[],
         status=SubmissionStatus.PENDING,
         **{"year": None, "etap": None, "task_number": None, **task_ref},
     )
-
-    error, headers, _, _ = check_submission_limits(db, user_id, is_allowlisted, reserved=1)
-    if error is None and not is_allowlisted:
-        in_flight = repo.count_user_in_flight(user_id)
-        if in_flight > settings.rate_limit_submissions_in_flight_per_user:
-            logger.warning(
-                f"In-flight submission limit reached: {mask_user_id(user_id)} "
-                f"{in_flight}/{settings.rate_limit_submissions_in_flight_per_user}"
-            )
-            error = JSONResponse(
-                {"error": IN_FLIGHT_MESSAGE},
-                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                headers={"Retry-After": str(IN_FLIGHT_RETRY_AFTER_SECONDS)},
-            )
+    error, headers = _check_all(db, user_id, is_allowlisted, reserved=1)
     if error is None:
         return None, submission, headers
 
-    repo.remove(submission)
+    release_reserved_submission(db, submission.id)
     # A daily-limit refusal is answered from a recount without the reservation,
     # so Retry-After and X-RateLimit-* describe what the caller really has (the
     # reservation would push a carried-over reset back by one slot).
@@ -323,12 +338,35 @@ def reserve_submission(
     return error, None, headers
 
 
-def refuse_reserved_submission(db: Session, submission: SubmissionDB, response: JSONResponse) -> None:
-    """The student's photos were refused: the reservation stays, as FAILED.
+def release_reserved_submission(db: Session, submission_id: str) -> None:
+    """Give a reserved slot back - the request failed on our side.
 
-    It keeps counting toward the daily limit (see reserve_submission) and the
-    history shows why it went nowhere. ``response`` is the 400 the student gets.
+    Safe in an exception handler: the session may be mid-failure, and the row
+    may already be gone (the account was erased while the photos uploaded).
     """
+    try:
+        db.rollback()
+        db.query(SubmissionDB).filter(SubmissionDB.id == submission_id).delete()
+        db.commit()
+    except Exception as e:
+        db.rollback()
+        logger.warning(f"Could not release reserved submission {submission_id}: {type(e).__name__}")
+
+
+def settle_refused_submission(db: Session, submission: SubmissionDB, response: JSONResponse) -> None:
+    """The student's photos were refused with ``response`` (a 400).
+
+    A photo that failed to decode (UndecodablePhotoResponse) keeps the
+    reservation as FAILED: it still counts toward the daily limit, so a batch
+    of large photos ending in a broken one - real decoding work, then a
+    refusal - cannot be replayed for free, and the history shows why it went
+    nowhere. The cheap, honest refusals (file too big, too many pixels, no
+    HEIC decoder) are refused before or without decoding and give the slot
+    back.
+    """
+    if not isinstance(response, UndecodablePhotoResponse):
+        release_reserved_submission(db, submission.id)
+        return
     SubmissionRepository(db).update_status(
         submission.id,
         SubmissionStatus.FAILED,

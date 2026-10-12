@@ -238,6 +238,65 @@ async def post_text(app, url: str, text: str = "abc") -> httpx.Response:
 
 
 class TestReservationCleanup:
+    @pytest.mark.parametrize("url", [OMJ_URL, PRIVATE_URL])
+    def test_too_many_pixels_gives_the_slot_back(self, app, db, monkeypatch, url):
+        """Refused from the header: cheap and usually honest, so it costs nothing."""
+        import app.uploads as uploads
+
+        monkeypatch.setattr(uploads, "MAX_IMAGE_PIXELS", 10 * 10)
+
+        [code] = asyncio.run(fire(app, url, 1, small_jpeg()))
+
+        assert code == 400
+        assert db.query(SubmissionDB).count() == 0
+        assert files_left() == []
+
+    @pytest.mark.parametrize("url", [OMJ_URL, PRIVATE_URL])
+    def test_failure_after_the_photos_are_saved_leaves_nothing(self, app, db, monkeypatch, url):
+        """E.g. the account was erased meanwhile: no orphaned photo, no reservation."""
+        from app.db.repositories import SubmissionRepository
+
+        def broken(*args, **kwargs):
+            raise RuntimeError("row gone")
+
+        monkeypatch.setattr(SubmissionRepository, "attach_solution", broken)
+
+        with pytest.raises(RuntimeError):
+            asyncio.run(fire(app, url, 1, small_jpeg()))
+
+        assert db.query(SubmissionDB).count() == 0
+        assert files_left() == []
+
+    def test_over_the_limit_writes_nothing(self, app, db, monkeypatch):
+        """A user already at the limit is refused by a read-only check."""
+        from app.db.repositories import SubmissionRepository
+
+        monkeypatch.setattr(settings, "rate_limit_submissions_per_user_per_day", 1)
+        db.add(SubmissionDB(id="done0001", user_id=USER_ID, year="2024", etap="etap1",
+                            task_number=2, images=[], status=SubmissionStatus.COMPLETED))
+        db.commit()
+
+        def no_insert(*args, **kwargs):
+            raise AssertionError("a refused request must not insert a reservation")
+
+        monkeypatch.setattr(SubmissionRepository, "create", no_insert)
+
+        [code] = asyncio.run(fire(app, OMJ_URL, 1, small_jpeg()))
+        assert code == 429
+
+    def test_in_flight_window_covers_the_slower_provider(self, app, db, monkeypatch):
+        """A Claude grading can run past the Gemini timeout and still counts."""
+        monkeypatch.setattr(settings, "rate_limit_submissions_in_flight_per_user", 1)
+        monkeypatch.setattr(settings, "gemini_timeout", 90)
+        monkeypatch.setattr(settings, "anthropic_timeout", 180)
+        db.add(SubmissionDB(id="slow0001", user_id=USER_ID, year="2024", etap="etap1",
+                            task_number=2, images=[], status=SubmissionStatus.PROCESSING,
+                            timestamp=datetime.now(timezone.utc) - timedelta(seconds=170)))
+        db.commit()
+
+        [code] = asyncio.run(fire(app, OMJ_URL, 1, small_jpeg()))
+        assert code == 429
+
     def test_private_refused_photo_keeps_a_failed_row(self, app, db):
         [code] = asyncio.run(fire(app, PRIVATE_URL, 1, b"not an image"))
 

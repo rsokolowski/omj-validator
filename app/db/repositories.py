@@ -715,19 +715,16 @@ class SubmissionRepository:
             submission.hints_used = hints_used
         self.db.commit()
 
-    def remove(self, submission: SubmissionDB) -> None:
-        """Delete one submission row (a reservation that was refused)."""
-        self.db.delete(submission)
-        self.db.commit()
-
     def count_user_in_flight(self, user_id: str) -> int:
         """Submissions of a user waiting for or in grading.
 
-        Rows older than the grading timeout are left out: a worker that died
-        leaves them PENDING until someone opens the history, and they must not
-        lock the user out until then.
+        Rows older than the longest grading can take are left out: a worker
+        that died leaves them PENDING until someone opens the history, and they
+        must not lock the user out until then. The window covers the slower
+        provider's timeout (either can be active) plus photo processing.
         """
-        threshold = datetime.now(timezone.utc) - timedelta(seconds=SUBMISSION_TIMEOUT_SECONDS)
+        window = max(settings.gemini_timeout, settings.anthropic_timeout) + 120
+        threshold = datetime.now(timezone.utc) - timedelta(seconds=window)
         return (
             self.db.query(func.count(SubmissionDB.id))
             .filter(

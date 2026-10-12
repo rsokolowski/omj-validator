@@ -42,7 +42,7 @@ from ..models import (
     UpdatePrivateTaskRequest,
 )
 from ..privacy import mask_user_id
-from ..rate_limits import refuse_reserved_submission, reserve_submission
+from ..rate_limits import release_reserved_submission, reserve_submission, settle_refused_submission
 from ..uploads import discard_uploads, save_uploaded_images, validate_image_batch, validate_submission_input
 from ..websocket.handler import process_submission_background
 from ..websocket.progress import progress_manager
@@ -516,24 +516,26 @@ async def submit_private_solution(
     if limit_error is not None:
         return limit_error
     submission_id = submission.id
-    submission_repo = SubmissionRepository(db)
 
+    saved: list[Path] = []
     try:
         saved, upload_error = await save_uploaded_images(images, service.task_dir(user_id, task.id))
-    except Exception:
-        # Our failure, not the student's: the slot is given back
-        submission_repo.remove(submission)
+        if upload_error is None:
+            SubmissionRepository(db).attach_solution(
+                submission,
+                images=[service.relative_upload_path(p) for p in saved],
+                solution_text=solution_text,
+                hints_used=PrivateTaskRepository(db).take_pending_hints(task),
+            )
+    except BaseException:
+        # Our failure (or a cancelled request), not the student's: no photo
+        # stays behind and the slot is given back
+        discard_uploads(saved)
+        release_reserved_submission(db, submission_id)
         raise
     if upload_error is not None:
-        refuse_reserved_submission(db, submission, upload_error)
+        settle_refused_submission(db, submission, upload_error)
         return upload_error
-
-    submission_repo.attach_solution(
-        submission,
-        images=[service.relative_upload_path(p) for p in saved],
-        solution_text=solution_text,
-        hints_used=PrivateTaskRepository(db).take_pending_hints(task),
-    )
 
     await progress_manager.create_submission(submission_id)
     job = asyncio.create_task(
