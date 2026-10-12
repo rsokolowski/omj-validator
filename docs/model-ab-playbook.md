@@ -195,6 +195,12 @@ choice has been saved; update it, and the default in `app/config.py`,
 Switching prod to Claude needs the processor sign-off described under
 "Claude arm".
 
+**Rollback.** `ANTHROPIC_PROCESSOR_APPROVED=false` in `.env.prod` plus an api
+restart forces Gemini (the `GEMINI_MODEL` default) whatever the stored row
+says; `/admin/settings` then shows the fallback. Switching back to Gemini in
+the UI also works, but only after a successful Gemini ping - while Google
+answers 503/429 the switch is refused, so use the env flag.
+
 Either way, record the outcome in a commit message or a short note in this
 directory (`docs/model-ab-YYYY-MM-DD.md`): sample ids, both models' agreement
 numbers, cost, and the decision. Then:

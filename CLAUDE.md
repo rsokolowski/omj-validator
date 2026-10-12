@@ -298,6 +298,9 @@ GET  /uploads/{path}                 # Serve uploaded images
    unusable choice falls back to the env Gemini default. Both providers send the same text
    (`app/ai/requests.py`), so `scripts/rescore_eval.py --provider` A/Bs compare models, not
    prompts (`docs/model-ab-playbook.md`). Prompts in `prompts/` (see `app/ai/prompt_builder.py`).
+   **Rollback**: `ANTHROPIC_PROCESSOR_APPROVED=false` + api restart forces Gemini whatever the
+   stored row says. Switching back in the UI needs a successful Gemini ping (a Google 503/429
+   blocks it - then use the env flag).
 
 4. **Private tasks ("Moje zadania")**: photo -> `extract_private_tasks` (schema-constrained,
    inline images) -> draft photos in `uploads/{user}/private/_drafts/{id}/` -> student picks

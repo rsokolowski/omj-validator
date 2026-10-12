@@ -2,8 +2,9 @@
 
 * app_settings: key/value rows. Only "ai_model" ({"provider", "model"}) today -
   the AI provider and model selected in /admin/settings. A missing row means
-  the environment default (AI_PROVIDER / GEMINI_MODEL). Never holds secrets;
-  API keys stay in the environment.
+  the environment default: Gemini with GEMINI_MODEL (AI_PROVIDER is ignored -
+  Claude is only ever chosen in /admin/settings). Never holds secrets; API
+  keys stay in the environment.
 
 Revision ID: 009
 Revises: 008

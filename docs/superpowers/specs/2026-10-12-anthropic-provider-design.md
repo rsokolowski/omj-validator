@@ -45,7 +45,7 @@ This feature adds:
 | column | type | notes |
 |---|---|---|
 | `key` | `String(64)` PK | `"ai_model"` is the only key for now |
-| `value` | `JSONB` | `{"provider": "anthropic", "model": "claude-opus-5-5"}` |
+| `value` | `JSON` (`sa.JSON`; tests run on SQLite) | `{"provider": "anthropic", "model": "claude-opus-5-5"}` |
 | `updated_at` | `DateTime(tz)` | server default `now()` |
 | `updated_by` | `String` nullable | admin's e-mail; null for seeds |
 
@@ -125,11 +125,15 @@ monkeypatches stay valid):
 ```python
 _instances: dict[tuple[str, str], AIProvider] = {}
 
+def resolve_active(active=None) -> tuple[ActiveModel, str | None]:
+    active = active or get_active_model()
+    if active.source != "env" and not usable(active.provider):  # no key / not approved
+        return env_default(), reason                       # always Gemini; Polish reason
+    return active, None
+
 def create_ai_provider() -> AIProvider:
-    active = get_active_model()
-    provider, model = active.provider, active.model
-    if not usable(provider) and active.source != "env":   # no key / not approved
-        provider, model = env_default()                    # always Gemini
+    effective, _ = resolve_active()
+    provider, model = effective.provider, effective.model
     if not provider_approved(provider):
         raise AIProviderError(...)                         # gate on the resolved provider
     key = (provider, model)
@@ -143,10 +147,12 @@ def create_ai_provider() -> AIProvider:
   key is missing, same as today for Gemini; `_construct` does the actual
   instantiation.
 - A stored choice that is not usable (no key, or Claude while
-  `ANTHROPIC_PROCESSOR_APPROVED` is false): the factory logs an error and
-  falls back to the env default (Gemini) rather than stop grading or send
-  data to an unapproved processor (defence in depth; the admin endpoint
-  already refuses to save it, section 6).
+  `ANTHROPIC_PROCESSOR_APPROVED` is false): `resolve_active` logs an error
+  (once per provider, model and reason) and falls back to the env default
+  (Gemini) rather than stop grading or send data to an unapproved processor
+  (defence in depth; the admin endpoint already refuses to save it, section
+  6). The same function feeds `GET /api/admin/ai-config`, so the page shows
+  the model that actually grades.
 - The approval gate is then checked again on whatever provider was resolved,
   whatever its source: a provider not approved as a processor is never built
   (`AIProviderError`).
@@ -165,7 +171,8 @@ same shape — the precondition for a fair A/B:
 | new module | moved out of `gemini.py` |
 |---|---|
 | `app/ai/schemas.py` | `RESPONSE_JSON_SCHEMA` and the extraction / meta / refine / suggest / link schemas |
-| `app/ai/prompt_builder.py` (exists) | prompt loading (`_load_prompt`), `_student_text`, `_draft_text`, `_answers_text`, `_conversation_text` and the text assembly of each call |
+| `app/ai/prompt_builder.py` (exists) | prompt files: loading and caching (`build_prompt`, `load_private_prompt`), plus the typed-solution block (`solution_text_block`), `solution_shape_line` and `CLOSING_LINE` |
+| `app/ai/requests.py` (new) | the text assembly of each call: `omj_grading_text`, `private_grading_text`, `photo_label`, `extract_text`, `meta_text`, `student_text`, `draft_text`, `answers_text`, `conversation_text`, `refine_text`, `suggest_text`, `link_text` |
 | `app/ai/parsing.py` (exists) | anything left in `gemini.py` that turns raw JSON into `SubmissionResult` / private / pattern results |
 
 What stays Gemini-only: File API upload + 24h cache, media resolution ladder,
@@ -266,12 +273,14 @@ thinking has no heading.
 
 ```
 GET /api/admin/ai-config
-  -> {active: {provider, model, source, updated_at, updated_by},
+  -> {active: {provider, model, model_label, source, updated_at, updated_by},
+      effective: {provider, model, model_label},   # what grades (resolve_active)
+      fallback_reason: str | null,                 # why effective != active
       providers: [{id, label, configured, approved,
                    models: [{id, label}]}]}
 
 PUT /api/admin/ai-config   body {provider, model}
-  -> 200 {active: ...}
+  -> 200 {active: ..., effective: ..., fallback_reason: ...}
   -> 400 model not in catalog
   -> 409 provider API key not configured, or anthropic not approved (GDPR gate)
   -> 502 test call failed, timed out, or raised an unexpected error
@@ -280,11 +289,18 @@ PUT /api/admin/ai-config   body {provider, model}
 
 - Both behind `_require_admin`.
 - `PUT` runs a test call before saving: a new protocol method
-  `async ping() -> None` on both providers sends one minimal request
-  ("Odpowiedz: OK", small `max_tokens`, lowest effort) to the chosen model
-  through a freshly built provider, with a 30 s timeout. Any non-error response
-  counts as success (a `max_tokens` stop is fine — thinking may use the budget);
-  any exception, including the timeout, means 502 and nothing is saved.
+  `async ping() -> None` on both providers sends one small request to the
+  chosen model through a freshly built provider, with a 30 s timeout. Claude's
+  ping goes through the grading request builder (beta path + fallbacks on
+  Opus/Sonnet, adaptive thinking, a tiny strict JSON schema, `effort: low`,
+  `max_tokens` 2048), so a request shape the API rejects fails here and not on
+  a student's grading. Any non-error response counts as success (a
+  `max_tokens` stop is fine — thinking may use the budget); any exception,
+  including the timeout, means 502 and nothing is saved. The 502 detail names
+  the HTTP status code and status text when there is one (`429
+  RESOURCE_EXHAUSTED`, `503 Service Unavailable`), never the response body.
+- After a successful `PUT` the pinged instance seeds the factory cache, so the
+  first real call does not build a client.
 - The change is logged at INFO (`AI model changed: gemini/gemini-3.8-flash ->
   anthropic/claude-opus-5-5 by <masked admin e-mail>`, via `mask_email`). It is not written to
   `admin_access_log` — that table records access to other users' data, which
@@ -294,7 +310,8 @@ PUT /api/admin/ai-config   body {provider, model}
 
 - Link from the existing admin page header ("Ustawienia AI").
 - Shows the active provider + model, its source (baza / konfiguracja serwera),
-  who changed it and when.
+  who changed it and when. When the stored model is unusable, a warning:
+  "Zapisany model jest niedostępny ({reason}) — oceny wykonuje {effective}."
 - Provider radio + model select (models of the chosen provider). A provider
   with no key or not approved is disabled with the reason as helper text.
 - "Zapisz" -> spinner "Sprawdzam model…" -> success toast or the error from
