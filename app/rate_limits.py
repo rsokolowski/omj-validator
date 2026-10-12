@@ -7,6 +7,8 @@ account that was erased is carried over (see DeletedAccountQuotaDB), so
 deleting the account is never a way to reset it.
 """
 
+import json
+import uuid
 from datetime import datetime as dt_datetime, timezone as dt_timezone, timedelta as dt_timedelta
 from typing import Optional as OptionalType
 
@@ -16,6 +18,7 @@ from sqlalchemy.orm import Session
 
 from .config import settings
 from .db import DeletedAccountQuotaRepository, SubmissionRepository
+from .db.models import SubmissionDB, SubmissionStatus
 from .db.repositories import ensure_utc
 from .privacy import mask_user_id
 
@@ -144,13 +147,16 @@ def check_submission_limits(
     db: Session,
     user_id: str,
     is_allowlisted: bool,
+    reserved: int = 0,
 ) -> tuple[OptionalType[JSONResponse], dict[str, str], int, OptionalType[dt_datetime]]:
     """Per-user and global daily submission limits (OMJ and private tasks alike).
 
     Returns (error_response_or_None, rate_limit_headers, user_count, user_anchor).
-    ``user_count`` / ``user_anchor`` let the caller report the headers again
-    after it has created the submission. Allowlisted users are never refused,
-    but still get informational headers.
+    Allowlisted users are never refused, but still get informational headers.
+
+    ``reserved`` is the number of rows the caller has already inserted for the
+    request being checked (see reserve_submission): they are in the counts, so
+    the limit is exceeded only when the count goes past it.
     """
     submission_repo = SubmissionRepository(db)
 
@@ -186,7 +192,7 @@ def check_submission_limits(
         return None, rate_limit_headers, user_submission_count, user_oldest_submission
 
     # Check per-user submission limit
-    if user_submission_count >= settings.rate_limit_submissions_per_user_per_day:
+    if user_submission_count - reserved >= settings.rate_limit_submissions_per_user_per_day:
         logger.warning(
             f"User submission rate limit exceeded: {mask_user_id(user_id)} "
             f"{user_submission_count}/{settings.rate_limit_submissions_per_user_per_day}"
@@ -221,7 +227,7 @@ def check_submission_limits(
             limit=settings.rate_limit_submissions_global_per_day,
             window_hours=24,
         ) or global_oldest_submission
-    if global_submission_count >= settings.rate_limit_submissions_global_per_day:
+    if global_submission_count - reserved >= settings.rate_limit_submissions_global_per_day:
         logger.warning(
             f"Global submission rate limit exceeded: {global_submission_count}/{settings.rate_limit_submissions_global_per_day}"
         )
@@ -244,6 +250,90 @@ def check_submission_limits(
         )
 
     return None, rate_limit_headers, user_submission_count, user_oldest_submission
+
+
+IN_FLIGHT_MESSAGE = (
+    "Twoje poprzednie rozwiązania są jeszcze oceniane. "
+    "Poczekaj na wynik i prześlij kolejne."
+)
+IN_FLIGHT_RETRY_AFTER_SECONDS = 30
+
+
+def reserve_submission(
+    db: Session,
+    user_id: str,
+    is_allowlisted: bool,
+    **task_ref,
+) -> tuple[OptionalType[JSONResponse], OptionalType[SubmissionDB], dict[str, str]]:
+    """Take a daily submission slot BEFORE any photo is processed.
+
+    Returns (None, reserved_row, rate_limit_headers), or (429, None, headers)
+    with nothing reserved. ``task_ref`` holds the row's task fields (year, etap,
+    task_number or private_task_id, pattern_id, hints_used); the row is PENDING
+    with no photos and no text until the caller attaches them
+    (SubmissionRepository.attach_solution).
+
+    Insert first, count second - the same pattern as reserve_ai_calls. Counting
+    first and inserting after the (slow, awaited) photo upload let parallel
+    requests all pass the same count: 60 at once against a limit of 30 made 60
+    rows and 60 paid gradings. Racing requests now each see the others'
+    reservations, so at worst both are refused at the boundary, never both
+    admitted.
+
+    The caller owns the row from here: remove it (SubmissionRepository.remove)
+    if the request fails through no fault of the student, or mark it FAILED
+    when the student's photos were refused, so a batch built to be refused
+    still costs a slot and cannot be replayed for free.
+
+    Also caps the submissions one user has in grading at once
+    (rate_limit_submissions_in_flight_per_user). Allowlisted users skip both.
+    """
+    repo = SubmissionRepository(db)
+    submission = repo.create(
+        id=str(uuid.uuid4())[:8],
+        user_id=user_id,
+        images=[],
+        status=SubmissionStatus.PENDING,
+        **{"year": None, "etap": None, "task_number": None, **task_ref},
+    )
+
+    error, headers, _, _ = check_submission_limits(db, user_id, is_allowlisted, reserved=1)
+    if error is None and not is_allowlisted:
+        in_flight = repo.count_user_in_flight(user_id)
+        if in_flight > settings.rate_limit_submissions_in_flight_per_user:
+            logger.warning(
+                f"In-flight submission limit reached: {mask_user_id(user_id)} "
+                f"{in_flight}/{settings.rate_limit_submissions_in_flight_per_user}"
+            )
+            error = JSONResponse(
+                {"error": IN_FLIGHT_MESSAGE},
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                headers={"Retry-After": str(IN_FLIGHT_RETRY_AFTER_SECONDS)},
+            )
+    if error is None:
+        return None, submission, headers
+
+    repo.remove(submission)
+    # A daily-limit refusal is answered from a recount without the reservation,
+    # so Retry-After and X-RateLimit-* describe what the caller really has (the
+    # reservation would push a carried-over reset back by one slot).
+    recounted, recounted_headers, _, _ = check_submission_limits(db, user_id, is_allowlisted)
+    if recounted is not None:
+        return recounted, None, recounted_headers
+    return error, None, headers
+
+
+def refuse_reserved_submission(db: Session, submission: SubmissionDB, response: JSONResponse) -> None:
+    """The student's photos were refused: the reservation stays, as FAILED.
+
+    It keeps counting toward the daily limit (see reserve_submission) and the
+    history shows why it went nowhere. ``response`` is the 400 the student gets.
+    """
+    SubmissionRepository(db).update_status(
+        submission.id,
+        SubmissionStatus.FAILED,
+        error_message=json.loads(response.body).get("error"),
+    )
 
 
 def record_erasure_quota(db, user_id: str) -> None:

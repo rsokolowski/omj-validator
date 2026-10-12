@@ -67,7 +67,8 @@ def client(db, monkeypatch):
     async def member(request):
         return True
 
-    monkeypatch.setattr(private_routes, "is_group_member_async", member)
+    for module in (main, private_routes):
+        monkeypatch.setattr(module, "is_group_member_async", member)
     task = TaskInfo(year="2024", etap="etap1", number=1, title="Zadanie 1", pdf=TaskPdf(tasks="t.pdf"),
                     hints=["a", "b", "c", "d"])
     monkeypatch.setattr(storage, "get_task", lambda y, e, n: task if (y, e, n) == ("2024", "etap1", 1) else None)

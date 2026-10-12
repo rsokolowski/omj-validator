@@ -7,6 +7,7 @@ that a caller can only ever erase themselves.
 
 import base64
 import json
+import pathlib
 from datetime import datetime, timedelta, timezone
 
 import pytest
@@ -27,6 +28,23 @@ from app.models import ACCOUNT_DELETE_CONFIRMATION
 USER_ID = "user-1"
 USER_EMAIL = "kid@example.com"
 OTHER_USER_ID = "user-2"
+
+# The OMJ PDFs are not in the repository (see NOTICE); submit checks the task
+# PDF exists before it reserves a slot, so point it at the synthetic one.
+FIXTURE_TASK_PDF = (
+    pathlib.Path(__file__).parent / "fixtures" / "task_corpus" / "tasks" / "1999" / "etap1" / "zadania.pdf"
+)
+
+
+@pytest.fixture
+def submit_ready(monkeypatch):
+    """What the submit endpoint needs beyond the client fixture."""
+
+    async def member(request):
+        return True
+
+    monkeypatch.setattr(main, "is_group_member_async", member)
+    monkeypatch.setattr(main, "get_task_pdf_path", lambda year, etap: FIXTURE_TASK_PDF)
 
 
 @pytest.fixture
@@ -277,6 +295,7 @@ class TestAuthMeGate:
         assert client.get("/api/auth/me").json()["can_delete_account"] is False
 
 
+@pytest.mark.usefixtures("submit_ready")
 class TestCarryoverIsEnforcedOnSubmit:
     """The tombstone only matters if submit/ actually honours it.
 
@@ -335,6 +354,7 @@ class TestCarryoverIsEnforcedOnSubmit:
         assert response.status_code != 429
 
 
+@pytest.mark.usefixtures("submit_ready")
 class TestRetryAfterForAReturningUser:
     """The header a user actually receives after deleting and signing back in.
 

@@ -412,6 +412,10 @@ RETENTION_AI_USAGE_DAYS=90            # ai_usage rows (rate limiting only)
 RETENTION_PATTERN_MONTHS=24           # Patterns, counted from last activity
 RETENTION_AUTO_PURGE=true             # Daily in-app run (single-worker only)
 
+# Submissions (OMJ + private): the row is reserved before photos are processed;
+# refused photos keep it as FAILED, so they still count
+# RATE_LIMIT_SUBMISSIONS_IN_FLIGHT_PER_USER=2  # pending/processing at once
+
 # Private task limits (grading shares the submission limits)
 # RATE_LIMIT_PRIVATE_TASKS_PER_USER_PER_DAY=10
 # RATE_LIMIT_PRIVATE_EXTRACTS_PER_USER_PER_DAY=15

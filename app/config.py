@@ -110,6 +110,8 @@ class Settings(BaseSettings):
     rate_limit_new_users_per_day: int = 50           # Max new user registrations per 24h
     rate_limit_submissions_per_user_per_day: int = 30  # Max submissions per user per 24h
     rate_limit_submissions_global_per_day: int = 500   # Max total submissions per 24h
+    # Submissions of one user waiting for / in grading at the same time
+    rate_limit_submissions_in_flight_per_user: int = 2
 
     # Private tasks ("Moje zadania"). Grading a private task is a submission and
     # shares the limits above; these cover the AI calls made while CREATING a

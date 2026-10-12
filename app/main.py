@@ -76,7 +76,8 @@ from .rate_limits import (
     calculate_rate_limit_headers as _calculate_rate_limit_headers,
     rate_limit_reset_anchor as _rate_limit_reset_anchor,
     calculate_retry_after as _calculate_retry_after,
-    check_submission_limits,
+    refuse_reserved_submission,
+    reserve_submission,
 )
 
 # Kept under its historical name: submit_solution resolves it at call time, so
@@ -800,18 +801,20 @@ async def submit_solution(
             status_code=status.HTTP_401_UNAUTHORIZED,
         )
 
-    # Check rate limits (skip for allowlisted users)
+    # Same audience as private tasks and patterns. With PUBLIC_ACCESS=true
+    # (production) every signed-in user passes; without it only the allowlist
+    # or the Google Group may spend paid gradings.
+    if not await is_group_member_async(request):
+        return JSONResponse(
+            {"error": "Nie masz uprawnień do tej funkcji."},
+            status_code=status.HTTP_403_FORBIDDEN,
+        )
+
+    # Rate limits are skipped for allowlisted users
     allowed_emails = _get_allowed_emails()
     user = get_current_user(request)
     user_email_lower = (user.get("email") or "").lower() if user else ""
     is_allowlisted = allowed_emails and user_email_lower in allowed_emails
-
-    submission_repo = SubmissionRepository(db)
-    limit_error, rate_limit_headers, user_submission_count, user_oldest_submission = (
-        check_submission_limits(db, user_id, bool(is_allowlisted))
-    )
-    if limit_error is not None:
-        return limit_error
 
     # Validate path parameters to prevent directory traversal
     if not _validate_path_params(year, etap):
@@ -826,46 +829,55 @@ async def submit_solution(
     if input_error is not None:
         return input_error
 
-    # Save uploaded images (per-user directory structure). The normaliser is
-    # resolved through this module at call time - see _normalize_uploaded_image.
-    upload_dir = settings.uploads_dir / user_id / year / etap / str(num)
-    saved_paths, upload_error = await save_uploaded_images(
-        images, upload_dir, normalize=lambda p: _normalize_uploaded_image(p)
-    )
-    if upload_error is not None:
-        return upload_error
-
-    # Get PDF paths - validate early
+    # Checked before anything is reserved or written
     task_pdf = get_task_pdf_path(year, etap)
     if not task_pdf or not task_pdf.exists():
-        # No submission row will be created, so the photos already on disk would
-        # be orphans forever (retention is off by default in dev).
-        _discard_uploads(saved_paths)
         return JSONResponse(
             {"error": "Nie znaleziono pliku z zadaniami"},
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         )
 
-    # Create submission record with PENDING status
-    from .db.models import SubmissionStatus
     from .websocket.progress import progress_manager
     from .websocket.handler import process_submission_background
 
-    submission_id = str(uuid.uuid4())[:8]
-
+    # The daily slot is taken before any photo is processed - see
+    # reserve_submission. The row is PENDING from here on.
     omj = pattern_service.omj_task(f"{year}_{etap}_{num}")
     hints_available = len(omj.hints) if omj is not None else 0
-    submission = submission_repo.create(
-        id=submission_id,
-        user_id=user_id,
+    limit_error, submission, rate_limit_headers = reserve_submission(
+        db,
+        user_id,
+        bool(is_allowlisted),
         year=year,
         etap=etap,
         task_number=num,
-        images=[str(p.relative_to(settings.uploads_dir)) for p in saved_paths],
-        solution_text=solution_text,
-        status=SubmissionStatus.PENDING,
         pattern_id=pattern_service.owned_pattern_id(db, user_id, pattern_id),
         hints_used=max(0, min(hints_used or 0, hints_available)),
+    )
+    if limit_error is not None:
+        return limit_error
+    submission_id = submission.id
+    submission_repo = SubmissionRepository(db)
+
+    # Save uploaded images (per-user directory structure). The normaliser is
+    # resolved through this module at call time - see _normalize_uploaded_image.
+    upload_dir = settings.uploads_dir / user_id / year / etap / str(num)
+    try:
+        saved_paths, upload_error = await save_uploaded_images(
+            images, upload_dir, normalize=lambda p: _normalize_uploaded_image(p)
+        )
+    except Exception:
+        # Our failure, not the student's: the slot is given back
+        submission_repo.remove(submission)
+        raise
+    if upload_error is not None:
+        refuse_reserved_submission(db, submission, upload_error)
+        return upload_error
+
+    submission_repo.attach_solution(
+        submission,
+        images=[str(p.relative_to(settings.uploads_dir)) for p in saved_paths],
+        solution_text=solution_text,
     )
 
     # Initialize progress tracking (handler.py will set first status)
@@ -890,15 +902,6 @@ async def submit_solution(
     # Include ws_url so frontend knows where to connect
     ws_path = f"/ws/submissions/{submission.id}"
 
-    # Update rate limit headers to reflect this new submission
-    # (increment count by 1 since we just created a submission)
-    updated_rate_limit_headers = _calculate_rate_limit_headers(
-        limit=settings.rate_limit_submissions_per_user_per_day,
-        current_count=user_submission_count + 1,
-        oldest_timestamp=user_oldest_submission,
-        window_hours=24,
-    )
-
     return JSONResponse(
         {
             "success": True,
@@ -907,7 +910,8 @@ async def submit_solution(
             "message": "Rozwiązanie przesłane. Połącz się z WebSocket, aby śledzić postęp.",
             "ws_path": ws_path,
         },
-        headers=updated_rate_limit_headers,
+        # Already counting this submission - it was reserved
+        headers=rate_limit_headers,
     )
 
 

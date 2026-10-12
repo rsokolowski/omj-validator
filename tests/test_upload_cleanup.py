@@ -1,7 +1,7 @@
 """A rejected submission must not leave a child's photo on disk.
 
-The submit endpoint writes files BEFORE it inserts the DB row, so every exit
-between those two points has to clean up after itself. Nothing else would: an
+The submit endpoint writes files BEFORE they are attached to the (reserved)
+DB row, so every exit between those two points has to clean up after itself. Nothing else would: an
 unreferenced file is invisible to the retention passes that walk the database,
 and in local dev (RETENTION_* = 0, no sweep) it would sit there forever.
 """
@@ -21,7 +21,7 @@ import app.main as main
 import app.websocket.handler as handler
 from app.config import settings
 from app.db import get_db
-from app.db.models import SubmissionDB, UserDB
+from app.db.models import SubmissionDB, SubmissionStatus, UserDB
 from app.db.session import Base
 
 USER_ID = "user-1"
@@ -86,6 +86,11 @@ def client(db, monkeypatch):
     monkeypatch.setattr(main, "get_current_user_id", lambda request: USER_ID)
     monkeypatch.setattr(main, "get_current_user", lambda request: user)
     monkeypatch.setattr(main, "_get_allowed_emails", lambda: set())
+
+    async def member(request):
+        return True
+
+    monkeypatch.setattr(main, "is_group_member_async", member)
 
     yield TestClient(main.app)
 
@@ -168,6 +173,13 @@ class TestHeicUploadIsAccepted:
         assert response.status_code == 200, response.text
 
 
+def assert_refused_row_only(db):
+    """Refused photos keep their reserved slot as FAILED - and nothing else."""
+    row = db.query(SubmissionDB).one()
+    assert row.status == SubmissionStatus.FAILED
+    assert row.images == [] and row.solution_text is None
+
+
 class TestRejectedSubmissionLeavesNothing:
     def test_unprocessable_second_image_discards_the_first(self, client, db):
         """The regression this guards: the good file was already on disk."""
@@ -180,7 +192,7 @@ class TestRejectedSubmissionLeavesNothing:
         )
 
         assert response.status_code == 400
-        assert db.query(SubmissionDB).count() == 0
+        assert_refused_row_only(db)
         assert files_left() == []
 
     def test_oversized_second_image_discards_the_first(self, client, db, monkeypatch):
@@ -193,7 +205,7 @@ class TestRejectedSubmissionLeavesNothing:
         )
 
         assert response.status_code == 400
-        assert db.query(SubmissionDB).count() == 0
+        assert_refused_row_only(db)
         assert files_left() == []
 
     def test_missing_task_pdf_discards_everything(self, client, db, monkeypatch):

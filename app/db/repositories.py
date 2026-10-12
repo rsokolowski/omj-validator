@@ -701,6 +701,43 @@ class SubmissionRepository:
         self.db.refresh(submission)
         return submission
 
+    def attach_solution(
+        self,
+        submission: SubmissionDB,
+        images: list[str],
+        solution_text: Optional[str],
+        hints_used: Optional[int] = None,
+    ) -> None:
+        """Fill a reserved submission row in once its photos are on disk."""
+        submission.images = images
+        submission.solution_text = solution_text
+        if hints_used is not None:
+            submission.hints_used = hints_used
+        self.db.commit()
+
+    def remove(self, submission: SubmissionDB) -> None:
+        """Delete one submission row (a reservation that was refused)."""
+        self.db.delete(submission)
+        self.db.commit()
+
+    def count_user_in_flight(self, user_id: str) -> int:
+        """Submissions of a user waiting for or in grading.
+
+        Rows older than the grading timeout are left out: a worker that died
+        leaves them PENDING until someone opens the history, and they must not
+        lock the user out until then.
+        """
+        threshold = datetime.now(timezone.utc) - timedelta(seconds=SUBMISSION_TIMEOUT_SECONDS)
+        return (
+            self.db.query(func.count(SubmissionDB.id))
+            .filter(
+                SubmissionDB.user_id == user_id,
+                SubmissionDB.status.in_([SubmissionStatus.PENDING, SubmissionStatus.PROCESSING]),
+                SubmissionDB.timestamp >= threshold,
+            )
+            .scalar()
+        ) or 0
+
     def count_user_recent_submissions(self, user_id: str, hours: int = 24) -> int:
         """Count submissions by user in the last N hours (for rate limiting)."""
         threshold = datetime.now(timezone.utc) - timedelta(hours=hours)

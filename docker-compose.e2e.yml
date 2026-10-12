@@ -144,6 +144,8 @@ services:
       RATE_LIMIT_NEW_USERS_PER_DAY: "20"  # registration spec creates accounts on every run
       RATE_LIMIT_SUBMISSIONS_PER_USER_PER_DAY: "3"
       RATE_LIMIT_SUBMISSIONS_GLOBAL_PER_DAY: "10"
+      # The specs fire submissions back to back without waiting for grading
+      RATE_LIMIT_SUBMISSIONS_IN_FLIGHT_PER_USER: "10"
 
       # Data retention - off, so a background purge can never race the tests
       RETENTION_SUBMISSION_MONTHS: "0"

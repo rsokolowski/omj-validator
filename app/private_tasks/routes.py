@@ -10,7 +10,6 @@ money, so it still counts toward the daily limits.
 
 import asyncio
 import logging
-import uuid
 from pathlib import Path
 from typing import Optional
 
@@ -43,7 +42,7 @@ from ..models import (
     UpdatePrivateTaskRequest,
 )
 from ..privacy import mask_user_id
-from ..rate_limits import calculate_rate_limit_headers, check_submission_limits
+from ..rate_limits import refuse_reserved_submission, reserve_submission
 from ..uploads import discard_uploads, save_uploaded_images, validate_image_batch, validate_submission_input
 from ..websocket.handler import process_submission_background
 from ..websocket.progress import progress_manager
@@ -499,39 +498,41 @@ async def submit_private_solution(
     user_id = await current_member_id(request)
     task = _owned_task(db, task_id, user_id)
 
-    # Same daily budget as OMJ submissions - it is the same kind of Gemini call
-    limit_error, _, user_count, user_oldest = check_submission_limits(
-        db, user_id, _is_allowlisted(request)
-    )
-    if limit_error is not None:
-        return limit_error
-
     # Normalise the text and check there is something to grade - before any
     # file is written, so a rejected request leaves nothing to clean up.
     solution_text, input_error = validate_submission_input(images, solution_text)
     if input_error is not None:
         return input_error
 
-    saved, upload_error = await save_uploaded_images(images, service.task_dir(user_id, task.id))
+    # Same daily budget as OMJ submissions - it is the same kind of Gemini call.
+    # The slot is reserved before any photo is processed (see reserve_submission).
+    limit_error, submission, rate_limit_headers = reserve_submission(
+        db,
+        user_id,
+        _is_allowlisted(request),
+        private_task_id=task.id,
+        pattern_id=owned_pattern_id(db, user_id, pattern_id),
+    )
+    if limit_error is not None:
+        return limit_error
+    submission_id = submission.id
+    submission_repo = SubmissionRepository(db)
+
+    try:
+        saved, upload_error = await save_uploaded_images(images, service.task_dir(user_id, task.id))
+    except Exception:
+        # Our failure, not the student's: the slot is given back
+        submission_repo.remove(submission)
+        raise
     if upload_error is not None:
+        refuse_reserved_submission(db, submission, upload_error)
         return upload_error
 
-    repo = PrivateTaskRepository(db)
-    hints_used = repo.take_pending_hints(task)
-
-    submission_id = str(uuid.uuid4())[:8]
-    SubmissionRepository(db).create(
-        id=submission_id,
-        user_id=user_id,
-        year=None,
-        etap=None,
-        task_number=None,
+    submission_repo.attach_solution(
+        submission,
         images=[service.relative_upload_path(p) for p in saved],
         solution_text=solution_text,
-        status=SubmissionStatus.PENDING,
-        private_task_id=task.id,
-        hints_used=hints_used,
-        pattern_id=owned_pattern_id(db, user_id, pattern_id),
+        hints_used=PrivateTaskRepository(db).take_pending_hints(task),
     )
 
     await progress_manager.create_submission(submission_id)
@@ -558,7 +559,5 @@ async def submit_private_solution(
             "message": "Rozwiązanie przesłane. Połącz się z WebSocket, aby śledzić postęp.",
             "ws_path": f"/ws/submissions/{submission_id}",
         },
-        headers=calculate_rate_limit_headers(
-            settings.rate_limit_submissions_per_user_per_day, user_count + 1, user_oldest
-        ),
+        headers=rate_limit_headers,
     )
