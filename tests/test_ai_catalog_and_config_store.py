@@ -1,5 +1,7 @@
 """Model catalog and the persisted active model (admin AI switch)."""
 
+from datetime import datetime
+
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -51,6 +53,18 @@ def test_haiku_long_context_tier():
     assert cost == pytest.approx(200_000 / 1e6 * 0.50)
 
 
+def test_haiku_long_tier_scales_cache_rates_from_long_input():
+    read = models_catalog.estimate_cost("anthropic", "claude-haiku-5-5", 0, 0, cache_read_tokens=200_000)
+    write = models_catalog.estimate_cost("anthropic", "claude-haiku-5-5", 0, 0, cache_write_tokens=200_000)
+    assert read == pytest.approx(200_000 / 1e6 * 0.05)
+    assert write == pytest.approx(200_000 / 1e6 * 0.625)
+
+
+def test_haiku_short_tier_keeps_listed_cache_rates():
+    read = models_catalog.estimate_cost("anthropic", "claude-haiku-5-5", 0, 0, cache_read_tokens=50_000)
+    assert read == pytest.approx(50_000 / 1e6 * 0.01)
+
+
 def test_gemini_cost_delegates_to_gemini_pricing():
     from app.ai.providers.gemini import estimate_cost as gemini_cost
     assert models_catalog.estimate_cost("gemini", "gemini-3.8-flash", 1000, 2000, 300) == pytest.approx(
@@ -100,3 +114,28 @@ def test_cache_is_dropped_on_set(session_factory):
 def test_set_rejects_models_outside_catalog(session_factory):
     with session_factory() as db, pytest.raises(ValueError):
         config_store.set_active_model(db, "anthropic", "claude-3-opus", "a@example.com")
+
+
+def test_set_twice_updates_the_row(session_factory):
+    with session_factory() as db:
+        config_store.set_active_model(db, "anthropic", "claude-opus-5-5", "a@example.com")
+        row = db.get(AppSettingDB, config_store.AI_MODEL_KEY)
+        row.updated_at = datetime(2020, 1, 1)
+        db.commit()
+        config_store.set_active_model(db, "anthropic", "claude-sonnet-5-5", "b@example.com")
+    with session_factory() as db:
+        rows = db.query(AppSettingDB).all()
+        assert len(rows) == 1
+        assert rows[0].value == {"provider": "anthropic", "model": "claude-sonnet-5-5"}
+        assert rows[0].updated_by == "b@example.com"
+        assert rows[0].updated_at.replace(tzinfo=None) > datetime(2020, 1, 1)
+
+
+def test_env_default_is_always_gemini(monkeypatch, caplog):
+    monkeypatch.setattr(settings, "ai_provider", "anthropic")
+    monkeypatch.setattr(settings, "gemini_model", "gemini-3.8-flash")
+    monkeypatch.setattr(config_store, "_env_provider_warned", False)
+    first = config_store.env_default()
+    config_store.env_default()
+    assert (first.provider, first.model, first.source) == ("gemini", "gemini-3.8-flash", "env")
+    assert caplog.text.count("is ignored") == 1

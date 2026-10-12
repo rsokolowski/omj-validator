@@ -17,6 +17,7 @@ pillow-heif>=0.15.0
 
 # AI Providers
 google-genai==2.19.0  # pinned: per-part media_resolution needs v1alpha; unpinned builds drifted 2.16-2.19
+anthropic==1.13.0  # Claude provider (app/ai/providers/anthropic.py)
 
 # OAuth & Google APIs
 authlib>=1.3.0
@@ -33,4 +34,3 @@ psycopg2-binary>=2.9.0
 
 # Production server
 gunicorn>=26.0.0  # Dockerfile passes --no-control-socket (added in 26)
-anthropic==1.13.0  # Claude provider (app/ai/providers/anthropic.py)

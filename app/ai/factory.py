@@ -75,13 +75,17 @@ def create_ai_provider() -> "AIProvider":
     """
     active = get_active_model()
     provider, model = active.provider, active.model
-    if active.source == "db" and not _usable(provider):
+    if not _usable(provider) and active.source != "env":
         logger.error(
             f"[AI] Active model {provider}/{model} is not usable "
             f"({'not approved' if provider_configured(provider) else 'no API key'}) - using env default"
         )
         fallback = env_default()
         provider, model = fallback.provider, fallback.model
+    # Whatever the source: never build a provider not approved as a processor.
+    # (An env Gemini without a key raises in build_provider.)
+    if not provider_approved(provider):
+        raise AIProviderError(f"Provider {provider} is not approved as a data processor")
     key = (provider, model)
     with _instances_lock:
         instance = _instances.get(key)

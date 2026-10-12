@@ -2,7 +2,7 @@
 
 import pytest
 
-from app.ai import factory
+from app.ai import config_store, factory
 from app.ai.config_store import ActiveModel
 from app.ai.factory import AIProviderError
 from app.config import settings
@@ -69,3 +69,27 @@ def test_env_provider_without_key_still_raises(monkeypatch):
 def test_unknown_provider_raises():
     with pytest.raises(AIProviderError):
         factory.build_provider("openai", "gpt")
+
+
+def test_env_ai_provider_anthropic_is_ignored(monkeypatch, caplog):
+    monkeypatch.setattr(settings, "ai_provider", "anthropic")
+    monkeypatch.setattr(config_store, "_env_provider_warned", False)
+    monkeypatch.setattr(factory, "get_active_model", config_store.env_default)
+    provider = factory.create_ai_provider()
+    assert (provider.provider_name, provider.model_name) == ("gemini", "gemini-3.8-flash")
+    assert "AI_PROVIDER=anthropic is ignored" in caplog.text
+
+
+def test_unapproved_anthropic_row_never_constructs_anthropic(monkeypatch):
+    built = []
+
+    def record(provider, model):
+        built.append(provider)
+        return FakeProvider(provider, model)
+
+    monkeypatch.setattr(factory, "_construct", record)
+    monkeypatch.setattr(settings, "anthropic_processor_approved", False)
+    use(monkeypatch, "anthropic", "claude-opus-5-5")
+    factory.create_ai_provider()
+    factory.create_ai_provider()
+    assert "anthropic" not in built and built == ["gemini"]

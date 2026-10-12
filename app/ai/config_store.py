@@ -37,12 +37,19 @@ class ActiveModel:
 
 _lock = threading.Lock()
 _cached: Optional[tuple[float, ActiveModel]] = None
+_env_provider_warned = False
 
 
 def env_default() -> ActiveModel:
-    provider = settings.ai_provider.lower()
-    model = settings.gemini_model if provider == "gemini" else ""
-    return ActiveModel(provider=provider, model=model, source="env")
+    """Always Gemini: Claude needs the GDPR sign-off and is chosen only in /admin/settings."""
+    global _env_provider_warned
+    if settings.ai_provider.lower() != "gemini" and not _env_provider_warned:
+        _env_provider_warned = True
+        logger.warning(
+            f"[AI config] AI_PROVIDER={settings.ai_provider} is ignored - the environment default "
+            f"is always Gemini; Claude is selected only in /admin/settings"
+        )
+    return ActiveModel(provider="gemini", model=settings.gemini_model, source="env")
 
 
 def invalidate_cache() -> None:

@@ -21,13 +21,16 @@ class ModelInfo:
     id: str
     label: str
     # USD per 1M tokens. Claude: "input", "output", "cache_read", "cache_write",
-    # optional "long_threshold"/"long_input"/"long_output". Gemini entries are
-    # empty - estimate_cost delegates to GEMINI_PRICING.
+    # optional "long_threshold"/"long_input"/"long_output" (cache rates in the
+    # long tier are derived from long_input). Gemini entries are empty -
+    # estimate_cost delegates to GEMINI_PRICING.
     pricing: dict = field(default_factory=dict)
 
 
 # Claude prices: platform.claude.com pricing, checked 2026-10-12.
 # cache_write is the 5-minute TTL rate (1.25x input).
+LONG_CACHE_READ_FACTOR = 0.1
+LONG_CACHE_WRITE_FACTOR = 1.25
 # Thinking tokens are part of output_tokens in the Messages API usage.
 CATALOG: tuple[ModelInfo, ...] = (
     ModelInfo("gemini", "gemini-3.8-flash", "Gemini 3.8 Flash"),
@@ -87,11 +90,15 @@ def estimate_cost(
     prompt_tokens = input_tokens + cache_read_tokens + cache_write_tokens
     threshold = p.get("long_threshold")
     long = bool(threshold and prompt_tokens > threshold)
-    in_rate = p.get("long_input", p["input"]) if long else p["input"]
-    out_rate = p.get("long_output", p["output"]) if long else p["output"]
+    if long:
+        in_rate, out_rate = p["long_input"], p["long_output"]
+        read_rate, write_rate = in_rate * LONG_CACHE_READ_FACTOR, in_rate * LONG_CACHE_WRITE_FACTOR
+    else:
+        in_rate, out_rate = p["input"], p["output"]
+        read_rate, write_rate = p.get("cache_read", in_rate), p.get("cache_write", in_rate)
     return (
         input_tokens * in_rate
         + output_tokens * out_rate
-        + cache_read_tokens * p.get("cache_read", in_rate)
-        + cache_write_tokens * p.get("cache_write", in_rate)
+        + cache_read_tokens * read_rate
+        + cache_write_tokens * write_rate
     ) / 1_000_000

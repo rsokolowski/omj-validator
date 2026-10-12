@@ -130,8 +130,7 @@ class AppSettingsRepository:
             self.db.add(row)
         else:
             row.value = value
-            row.updated_by = updated_by
-            row.updated_at = datetime.now(timezone.utc)
+            row.updated_by = updated_by  # updated_at: column onupdate
         self.db.commit()
         self.db.refresh(row)
         return row
