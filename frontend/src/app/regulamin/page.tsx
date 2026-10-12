@@ -77,8 +77,9 @@ export default function RegulaminPage() {
           </li>
           <li>
             <strong>Twoje zdjęcie kartki albo wpisany tekst rozwiązania (i rysunek) są wysyłane do firmy Google</strong>{" "}
-            w USA, żeby program mógł je przeczytać i ocenić. Gdy usługa Google
-            nie działa, zastępuje ją firma Anthropic (też USA). Nie wysyłamy tam
+            w USA, żeby program mógł je przeczytać i ocenić. Zapasowo, np. gdy
+            usługa Google nie działa, zastępuje ją firma Anthropic (też USA).
+            Nie wysyłamy tam
             Twojego imienia, nazwiska ani adresu e-mail.
           </li>
           <li>

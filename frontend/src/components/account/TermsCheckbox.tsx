@@ -38,6 +38,8 @@ function RegulaminLink({ children }: { children: React.ReactNode }) {
  * Dwa osobne pola, bo zgoda na przetwarzanie danych musi byc wyraznie
  * odrozniona od akceptacji regulaminu (art. 7 ust. 2 RODO). API przyjmuje
  * jedno pole accept_terms - onChange zwraca true dopiero, gdy zaznaczone sa oba.
+ * `checked` jest tylko wartoscia poczatkowa: zaden rodzic nie zeruje go z zewnatrz;
+ * gdyby mial, niech zmieni `key` komponentu, zeby wyczyscic oba pola.
  */
 export function TermsCheckbox({ checked, onChange, error, disabled }: TermsCheckboxProps) {
   const [terms, setTerms] = useState(checked);
@@ -98,11 +100,11 @@ export function TermsCheckbox({ checked, onChange, error, disabled }: TermsCheck
         label={
           <Typography variant="body2" sx={{ color: "grey.700" }}>
             Zgadzam się na przetwarzanie moich danych, w tym zdjęć i tekstu moich
-            rozwiązań, żeby serwis mógł je ocenić i prowadzić moje konto &ndash;
-            także na ich przesłanie do firmy Google w USA, a gdy jej usługa nie
-            działa, do firmy Anthropic w USA. Szczegóły są w punktach 6&ndash;8{" "}
-            <RegulaminLink>polityki prywatności</RegulaminLink>. Zgodę mogę w
-            każdej chwili cofnąć, usuwając konto.
+            rozwiązań, żeby serwis mógł je ocenić i prowadzić moje konto. Wiem, że
+            do oceny są one wysyłane do firmy Google w USA, a zapasowo (np. gdy
+            usługa Google nie działa) do firmy Anthropic w USA. Szczegóły są w
+            punktach 6&ndash;8 <RegulaminLink>polityki prywatności</RegulaminLink>.
+            Zgodę mogę w każdej chwili cofnąć, usuwając konto.
           </Typography>
         }
         sx={{ alignItems: "flex-start", m: 0 }}

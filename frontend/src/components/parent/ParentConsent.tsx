@@ -223,8 +223,8 @@ function ParentConsentView({ token, declineIntent }: ParentConsentProps) {
           model sztucznej inteligencji (AI).
         </li>
         <li>
-          Do oceny wysyłamy zdjęcia i rozwiązania do firmy Google (Gemini) w USA, a gdy jej usługa
-          nie działa &ndash; do firmy Anthropic (Claude), również w USA. Nie wysyłamy tam imienia,
+          Do oceny wysyłamy zdjęcia i rozwiązania do firmy Google (Gemini) w USA, a zapasowo (np. gdy
+          usługa Google nie działa) do firmy Anthropic (Claude), również w USA. Nie wysyłamy tam imienia,
           nazwiska ani adresu e-mail dziecka.
         </li>
         <li>
