@@ -434,7 +434,7 @@ EMAIL_BACKEND=console                 # "console" (logs + in-memory outbox) or "
 # EMAIL_FROM=Trener OMJ <noreply@omj-validator.pl>
 # EMAIL_REPLY_TO=kontakt@omj-validator.pl
 # PUBLIC_BASE_URL=https://omj-validator.pl   # absolute links + e-mail logo
-# TERMS_VERSION=2026-10-12            # stored with each consent; bump with LAST_UPDATED in /regulamin
+# TERMS_VERSION=2026-10-13            # stored with each consent; bump with LAST_UPDATED in /regulamin
 
 # Data retention (RODO art. 5(1)(e) - storage limitation)
 # 0 disables a pass; docker-compose.yml disables both for local dev.

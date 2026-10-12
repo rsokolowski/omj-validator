@@ -219,7 +219,7 @@ class Settings(BaseSettings):
     public_base_url: str = "https://omj-validator.pl"
     # Date of the /regulamin text, stored with every consent record. Bump it
     # together with LAST_UPDATED in frontend/src/app/regulamin/page.tsx.
-    terms_version: str = "2026-10-12"
+    terms_version: str = "2026-10-13"
 
     # Cloudflare Turnstile on registration (the steps that create an account
     # or e-mail a parent). Disabled while TURNSTILE_SECRET_KEY is unset (dev,

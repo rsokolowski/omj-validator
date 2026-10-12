@@ -255,7 +255,7 @@ export function RegistrationWizard({ currentYear, googleMode, sameAddressError }
         return;
       }
     } else if (!acceptTerms) {
-      setErrors((prev) => ({ ...prev, accept_terms: "Zaznacz zgodę, żeby założyć konto." }));
+      setErrors((prev) => ({ ...prev, accept_terms: "Zaznacz oba pola, żeby założyć konto." }));
       return;
     }
     if (turnstileSiteKey && !turnstileToken) {
