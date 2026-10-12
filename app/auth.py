@@ -2,6 +2,7 @@
 
 import time
 from typing import Optional
+from urllib.parse import urlsplit
 
 from fastapi import Depends, Request, HTTPException, status
 from fastapi.responses import RedirectResponse
@@ -65,6 +66,31 @@ SHORT_SESSION_SECONDS = 12 * 60 * 60
 SESSION_PENDING_REGISTRATION_KEY = "pending_registration"
 SESSION_PENDING_GOOGLE_KEY = "pending_google"
 PENDING_SESSION_SECONDS = 30 * 60
+
+
+def safe_next_path(next_url: Optional[str]) -> Optional[str]:
+    """``next_url`` if it is a same-site path, else None (open-redirect guard).
+
+    Browsers normalise "\\" to "/" and drop tabs/newlines, so "/\\evil.com",
+    "/%5Cevil.com" or "/\t/evil.com" would all become "//evil.com". Only a
+    plain path is accepted: one leading "/", no backslash (raw or encoded),
+    no control characters, no scheme and no host.
+    """
+    if not next_url or not isinstance(next_url, str) or len(next_url) > 2000:
+        return None
+    if not next_url.startswith("/") or next_url[1:2] in ("/", "\\"):
+        return None
+    if "\\" in next_url or "%5c" in next_url.lower():
+        return None
+    if any(ord(ch) < 0x20 or ord(ch) == 0x7F for ch in next_url):
+        return None
+    lowered = next_url.lower()
+    if any(code in lowered for code in ("%09", "%0a", "%0d", "%00")):
+        return None
+    parsed = urlsplit(next_url)
+    if parsed.scheme or parsed.netloc:
+        return None
+    return next_url
 
 
 def start_session(

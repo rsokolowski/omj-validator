@@ -24,6 +24,7 @@ from ..auth import (
     PENDING_SESSION_SECONDS,
     allow_inactive_account,
     current_account,
+    safe_next_path,
     start_session,
 )
 from ..config import settings
@@ -345,9 +346,7 @@ class LoginRequest(BaseModel):
 
 
 def _safe_next(next_url: Optional[str]) -> Optional[str]:
-    if next_url and next_url.startswith("/") and not next_url.startswith("//"):
-        return next_url
-    return None
+    return safe_next_path(next_url)
 
 
 @router.post("/api/auth/login")

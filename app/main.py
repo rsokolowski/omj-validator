@@ -35,6 +35,7 @@ from .auth import (
     allow_inactive_account,
     current_account,
     require_active_user,
+    safe_next_path,
     start_session,
     verify_auth,
     require_auth_redirect,
@@ -433,7 +434,7 @@ async def google_auth_callback(request: Request, db: Session = Depends(get_db)):
         redirect_url = "/years"
         if existing_user.status != "active":
             redirect_url = "/konto/oczekuje"
-        elif next_url and next_url.startswith("/") and not next_url.startswith("//"):
+        elif safe_next_path(next_url):
             redirect_url = next_url
         return RedirectResponse(url=redirect_url, status_code=status.HTTP_303_SEE_OTHER)
 

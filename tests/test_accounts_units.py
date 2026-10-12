@@ -79,3 +79,27 @@ class TestPassword:
 def test_display_mask_keeps_domain_only():
     assert mask_email_for_display("anna.nowak@gmail.com") == "a***@gmail.com"
     assert mask_email_for_display(None) == ""
+
+
+class TestSafeNext:
+    @pytest.mark.parametrize(
+        "value",
+        ["/years", "/task/2024/etap1/1", "/moje-zadania?x=1#a", "/wzorce/abc%20def"],
+    )
+    def test_plain_paths_pass(self, value):
+        from app.auth import safe_next_path
+
+        assert safe_next_path(value) == value
+
+    @pytest.mark.parametrize(
+        "value",
+        [
+            None, "", "years", "https://evil.com", "//evil.com", "/\\evil.com", "\\\\evil.com",
+            "/%5Cevil.com", "/%5cevil.com", "/\t/evil.com", "/\n/evil.com", "/%09/evil.com",
+            "/a\\b", "javascript:alert(1)", "/\x00", "/x" + "y" * 2000,
+        ],
+    )
+    def test_redirect_tricks_refused(self, value):
+        from app.auth import safe_next_path
+
+        assert safe_next_path(value) is None

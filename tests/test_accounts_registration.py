@@ -399,3 +399,19 @@ class TestPendingScreen:
         client.cookies.set("session", signed_cookie({"user": {"user_id": "a1", "session_version": 0}}))
         assert client.post("/api/account/consent/resend").status_code == 409
         assert db.query(ParentDB).count() == 0
+
+
+@pytest.mark.parametrize("next_url, expected", [("/task/2024/etap1/1", "/task/2024/etap1/1"), ("/\\evil.com", "/years"), ("//evil.com", "/years"), ("/%5Cevil.com", "/years")])
+def test_google_callback_next_is_a_same_site_path(client, db, google, monkeypatch, next_url, expected):
+    from fastapi.responses import RedirectResponse
+
+    db.add(UserDB(id="g-123", google_sub="g-123", email="kid@gmail.com", birth_year=2005))
+    db.commit()
+    monkeypatch.setattr(main.settings, "google_client_id", "id")
+
+    async def fake_redirect(request, uri):
+        return RedirectResponse("https://accounts.google.com/")
+
+    google.authorize_redirect = fake_redirect
+    client.get("/login/google", params={"next": next_url}, follow_redirects=False)
+    assert callback(client).headers["location"] == expected
