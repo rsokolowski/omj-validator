@@ -38,7 +38,7 @@ CATALOG: tuple[ModelInfo, ...] = (
     ModelInfo("anthropic", "claude-opus-5-5", "Claude Opus 5.5",
               {"input": 4.00, "output": 20.00, "cache_read": 0.20, "cache_write": 5.00}),
     ModelInfo("anthropic", "claude-sonnet-5-5", "Claude Sonnet 5.5",
-              {"input": 2.00, "output": 10.00, "cache_read": 0.20, "cache_write": 2.50}),
+              {"input": 2.00, "output": 10.00, "cache_read": 0.10, "cache_write": 2.50}),
     ModelInfo("anthropic", "claude-haiku-5-5", "Claude Haiku 5.5",
               {"input": 0.10, "output": 0.50, "cache_read": 0.01, "cache_write": 0.125,
                "long_threshold": 100_000, "long_input": 0.50, "long_output": 2.50}),

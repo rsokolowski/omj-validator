@@ -323,7 +323,7 @@ def test_fallback_served_by_catalog_model_is_priced_at_its_rates(make_provider):
     result = asyncio.run(p.analyze_solution_stream(TASK_PDF, None, [], 1, solution_text="x"))
     assert result.scoring_meta["served_by"] == "claude-sonnet-5-5"
     expected = estimate_cost("anthropic", "claude-sonnet-5-5", 1000, 200, cache_read_tokens=300, cache_write_tokens=400)
-    assert expected == pytest.approx(0.00506)
+    assert expected == pytest.approx(0.00503)  # (1000*2 + 200*10 + 300*0.10 + 400*2.50) / 1M
     assert result.scoring_meta["estimated_cost"] == pytest.approx(expected)
 
 def test_no_served_by_without_fallback_iteration(make_provider):
