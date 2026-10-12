@@ -18,6 +18,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import app.main as main
+import app.auth as auth_module
 import app.private_tasks.routes as routes
 from app.ai.factory import AIProviderError
 from app.config import settings
@@ -101,17 +102,14 @@ def provider(monkeypatch):
 def current_user(monkeypatch):
     state = {"id": USER_ID}
 
-    def user(request):
-        return {"user_id": state["id"], "email": f"{state['id']}@example.com"}
-
     async def member(request):
         return True
 
-    monkeypatch.setattr(routes, "verify_auth", lambda request: True)
-    monkeypatch.setattr(routes, "get_current_user_id", lambda request: state["id"])
-    monkeypatch.setattr(routes, "get_current_user", user)
-    monkeypatch.setattr(routes, "is_group_member_async", member)
-    monkeypatch.setattr(routes, "_get_allowed_emails", lambda: set())
+    # auth.current_member_id: the member check shared by every submit endpoint
+    monkeypatch.setattr(auth_module, "verify_auth", lambda request: True)
+    monkeypatch.setattr(auth_module, "get_current_user_id", lambda request: state["id"])
+    monkeypatch.setattr(auth_module, "is_group_member_async", member)
+    monkeypatch.setattr(auth_module, "_get_allowed_emails", lambda: set())
     return state
 
 
@@ -222,7 +220,7 @@ class TestExtract:
 
     def test_allowlisted_user_is_not_capped(self, client, monkeypatch):
         monkeypatch.setattr(settings, "rate_limit_private_extracts_per_user_per_day", 0)
-        monkeypatch.setattr(routes, "_get_allowed_emails", lambda: {f"{USER_ID}@example.com"})
+        monkeypatch.setattr(routes, "is_allowlisted", lambda request: True)
         assert extract(client).status_code == 200
 
     def test_extract_without_images_is_400(self, client):
@@ -604,14 +602,14 @@ class TestSubmit:
 
 class TestAuth:
     def test_anonymous_is_401(self, client, monkeypatch):
-        monkeypatch.setattr(routes, "verify_auth", lambda request: False)
-        monkeypatch.setattr(routes, "get_current_user_id", lambda request: None)
+        monkeypatch.setattr(auth_module, "verify_auth", lambda request: False)
+        monkeypatch.setattr(auth_module, "get_current_user_id", lambda request: None)
         assert client.get("/api/private-tasks").status_code == 401
 
     def test_non_member_is_403(self, client, monkeypatch):
         async def not_member(request):
             return False
-        monkeypatch.setattr(routes, "is_group_member_async", not_member)
+        monkeypatch.setattr(auth_module, "is_group_member_async", not_member)
         assert client.get("/api/private-tasks").status_code == 403
 
 

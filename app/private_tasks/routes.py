@@ -18,7 +18,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from ..ai import AIContentBlockedError, AIProviderError, create_ai_provider
-from ..auth import get_current_user, get_current_user_id, is_group_member_async, verify_auth
+from ..auth import current_member_id, is_allowlisted
 from ..config import settings
 from ..db import get_db
 from ..db.models import PrivateTaskDB, SubmissionStatus
@@ -33,7 +33,6 @@ from ..db.private_tasks import (
     new_private_task_id,
 )
 from ..db.repositories import SubmissionRepository, ensure_utc
-from ..groups import _get_allowed_emails
 from ..patterns.service import owned_pattern_id
 from ..models import (
     CreatePrivateTasksRequest,
@@ -66,28 +65,6 @@ NOT_MATH_TEXT = (
 
 
 # --------------------------------------------------------------------- helpers
-
-
-async def current_member_id(request: Request) -> str:
-    """Signed-in user with submit rights, or 401/403."""
-    if not verify_auth(request):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Nieautoryzowany dostęp")
-    user_id = get_current_user_id(request)
-    if not user_id:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Nieautoryzowany dostęp")
-    if not await is_group_member_async(request):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Nie masz uprawnień do tej funkcji.",
-        )
-    return user_id
-
-
-def _is_allowlisted(request: Request) -> bool:
-    allowed = _get_allowed_emails()
-    user = get_current_user(request)
-    email = ((user or {}).get("email") or "").lower()
-    return bool(allowed and email in allowed)
 
 
 def _owned_task(db: Session, task_id: str, user_id: str) -> PrivateTaskDB:
@@ -208,7 +185,7 @@ async def extract_tasks(
         KIND_EXTRACT,
         {KIND_EXTRACT},
         settings.rate_limit_private_extracts_per_user_per_day,
-        _is_allowlisted(request),
+        is_allowlisted(request),
     )
 
     draft_id = service.new_draft_id()
@@ -336,7 +313,7 @@ async def create_tasks(
             KIND_CREATE,
             CREATION_KINDS,
             settings.rate_limit_private_tasks_per_user_per_day,
-            _is_allowlisted(request),
+            is_allowlisted(request),
             cost=len(payload.tasks),
         )
         created = await _create_from_inputs(db, user_id, payload.tasks, photos, usage_rows)
@@ -429,7 +406,7 @@ async def update_task(
             KIND_REGEN,
             CREATION_KINDS,
             settings.rate_limit_private_tasks_per_user_per_day,
-            _is_allowlisted(request),
+            is_allowlisted(request),
         )
         item = PrivateTaskInput(
             title=fields.get("title", task.title), content=fields.get("content", task.content)
@@ -501,7 +478,7 @@ async def regenerate_hints(request: Request, task_id: str, db: Session = Depends
         KIND_REGEN,
         CREATION_KINDS,
         settings.rate_limit_private_tasks_per_user_per_day,
-        _is_allowlisted(request),
+        is_allowlisted(request),
     )
     try:
         meta = await create_ai_provider().generate_private_task_meta(task.title, task.content)
@@ -556,7 +533,7 @@ async def submit_private_solution(
     limit_error, submission, rate_limit_headers = reserve_submission(
         db,
         user_id,
-        _is_allowlisted(request),
+        is_allowlisted(request),
         private_task_id=task.id,
         pattern_id=owned_pattern_id(db, user_id, pattern_id),
     )

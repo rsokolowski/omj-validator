@@ -20,6 +20,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import app.main as main
+import app.auth as auth_module
 import app.private_tasks.routes as private_routes
 import app.websocket.handler as handler
 from app.config import settings
@@ -92,12 +93,15 @@ def app(db, monkeypatch, started):
     async def member(request):
         return True
 
-    for module in (main, private_routes):
-        monkeypatch.setattr(module, "verify_auth", lambda request: True)
-        monkeypatch.setattr(module, "get_current_user_id", lambda request: USER_ID)
-        monkeypatch.setattr(module, "get_current_user", lambda request: user)
-        monkeypatch.setattr(module, "is_group_member_async", member)
-        monkeypatch.setattr(module, "_get_allowed_emails", lambda: set())
+    monkeypatch.setattr(main, "verify_auth", lambda request: True)
+    monkeypatch.setattr(main, "get_current_user_id", lambda request: USER_ID)
+    monkeypatch.setattr(main, "get_current_user", lambda request: user)
+    monkeypatch.setattr(main, "is_group_member_async", member)
+    # auth.current_member_id: the member check shared by every submit endpoint
+    monkeypatch.setattr(auth_module, "verify_auth", lambda request: True)
+    monkeypatch.setattr(auth_module, "get_current_user_id", lambda request: USER_ID)
+    monkeypatch.setattr(auth_module, "is_group_member_async", member)
+    monkeypatch.setattr(auth_module, "_get_allowed_emails", lambda: set())
     yield main.app
     main.app.dependency_overrides.clear()
 
@@ -438,12 +442,24 @@ class TestOmjSubmitRequiresAccess:
         async def not_member(request):
             return False
 
-        monkeypatch.setattr(main, "is_group_member_async", not_member)
+        monkeypatch.setattr(auth_module, "is_group_member_async", not_member)
 
         [code] = asyncio.run(fire(app, OMJ_URL, 1, small_jpeg()))
 
         assert code == 403
         assert db.query(SubmissionDB).count() == 0
+
+    def test_refusal_keeps_the_error_shape(self, app, db, monkeypatch):
+        """The legacy submit endpoint answers {"error"}, the API routes {"detail"}."""
+        from fastapi.testclient import TestClient
+
+        async def not_member(request):
+            return False
+
+        monkeypatch.setattr(auth_module, "is_group_member_async", not_member)
+        response = TestClient(app).post(OMJ_URL, data={"solution_text": "x"})
+        assert response.status_code == 403
+        assert response.json() == {"error": "Nie masz uprawnień do tej funkcji."}
         assert files_left() == []
 
 

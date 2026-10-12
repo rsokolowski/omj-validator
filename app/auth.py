@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from starlette.requests import HTTPConnection
 
 from .config import settings
+from .groups import _get_allowed_emails
 from .db import get_db
 from .db.models import UserDB, UserStatus
 
@@ -241,6 +242,35 @@ def require_auth(request: Request) -> None:
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Nieautoryzowany dostęp",
         )
+
+
+UNAUTHORIZED_MESSAGE = "Nieautoryzowany dostęp"
+NOT_A_MEMBER_MESSAGE = "Nie masz uprawnień do tej funkcji."
+
+
+async def current_member_id(request: Request) -> str:
+    """Signed-in user allowed to use the paid AI features, or HTTPException 401/403.
+
+    One rule for OMJ submissions, private tasks and patterns. With
+    PUBLIC_ACCESS=true (production) every signed-in user is a member; without
+    it only the allowlist or the Google Group.
+    """
+    if not verify_auth(request):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=UNAUTHORIZED_MESSAGE)
+    user_id = get_current_user_id(request)
+    if not user_id:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=UNAUTHORIZED_MESSAGE)
+    if not await is_group_member_async(request):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=NOT_A_MEMBER_MESSAGE)
+    return user_id
+
+
+def is_allowlisted(request: Request) -> bool:
+    """The signed-in user's e-mail is in ALLOWED_EMAILS (rate limits skipped)."""
+    allowed = _get_allowed_emails()
+    user = get_current_user(request)
+    email = ((user or {}).get("email") or "").lower()
+    return bool(allowed and email in allowed)
 
 
 def require_auth_redirect(request: Request) -> Optional[RedirectResponse]:

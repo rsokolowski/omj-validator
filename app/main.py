@@ -43,6 +43,8 @@ from .auth import (
     get_current_user_id,
     is_group_member,
     is_group_member_async,
+    current_member_id,
+    is_allowlisted,
 )
 from .oauth import oauth
 from .privacy import mask_email, mask_user_id
@@ -432,13 +434,13 @@ async def google_auth_callback(request: Request, db: Session = Depends(get_db)):
         # Check if user has full access (via public access, allowlist, or Google Groups)
         has_access = await check_group_membership(email)
         allowed_emails = _get_allowed_emails()
-        is_allowlisted = allowed_emails and email.lower() in allowed_emails
+        email_allowlisted = allowed_emails and email.lower() in allowed_emails
 
         start_session(request, existing_user, remember=True, is_group_member=has_access, picture=picture)
 
         logger.info(
             f"User logged in: {mask_email(email)} "
-            f"(has_access: {has_access}, allowlisted: {is_allowlisted})"
+            f"(has_access: {has_access}, allowlisted: {email_allowlisted})"
         )
 
         # Redirect to the original page or default to /years
@@ -823,35 +825,15 @@ async def submit_solution(
     of that pattern; ``hints_used`` is the number of hints the task page
     revealed (OMJ hints are shown client-side), clamped to the task's hints.
     """
-    # Check if user is authenticated
-    if not verify_auth(request):
-        return JSONResponse(
-            {"error": "Nieautoryzowany dostęp"},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
-
-    # Get user ID from session
-    user_id = get_current_user_id(request)
-    if not user_id:
-        return JSONResponse(
-            {"error": "Nieautoryzowany dostęp"},
-            status_code=status.HTTP_401_UNAUTHORIZED,
-        )
-
-    # Same audience as private tasks and patterns. With PUBLIC_ACCESS=true
-    # (production) every signed-in user passes; without it only the allowlist
-    # or the Google Group may spend paid gradings.
-    if not await is_group_member_async(request):
-        return JSONResponse(
-            {"error": "Nie masz uprawnień do tej funkcji."},
-            status_code=status.HTTP_403_FORBIDDEN,
-        )
+    # Same audience as private tasks and patterns (auth.current_member_id);
+    # this legacy endpoint answers {"error"} rather than {"detail"}
+    try:
+        user_id = await current_member_id(request)
+    except HTTPException as e:
+        return JSONResponse({"error": e.detail}, status_code=e.status_code)
 
     # Rate limits are skipped for allowlisted users
-    allowed_emails = _get_allowed_emails()
-    user = get_current_user(request)
-    user_email_lower = (user.get("email") or "").lower() if user else ""
-    is_allowlisted = allowed_emails and user_email_lower in allowed_emails
+    allowlisted = is_allowlisted(request)
 
     # Validate path parameters to prevent directory traversal
     if not _validate_path_params(year, etap):
@@ -884,7 +866,7 @@ async def submit_solution(
     limit_error, submission, rate_limit_headers = reserve_submission(
         db,
         user_id,
-        bool(is_allowlisted),
+        allowlisted,
         year=year,
         etap=etap,
         task_number=num,

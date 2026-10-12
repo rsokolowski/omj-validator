@@ -18,6 +18,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import app.main as main
+import app.auth as auth_module
 import app.websocket.handler as handler
 from app.config import settings
 from app.db import get_db
@@ -91,6 +92,11 @@ def client(db, monkeypatch):
         return True
 
     monkeypatch.setattr(main, "is_group_member_async", member)
+    # auth.current_member_id: the member check shared by every submit endpoint
+    monkeypatch.setattr(auth_module, "verify_auth", lambda request: True)
+    monkeypatch.setattr(auth_module, "get_current_user_id", lambda request: USER_ID)
+    monkeypatch.setattr(auth_module, "is_group_member_async", member)
+    monkeypatch.setattr(auth_module, "_get_allowed_emails", lambda: set())
 
     yield TestClient(main.app)
 

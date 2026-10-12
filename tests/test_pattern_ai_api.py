@@ -168,10 +168,10 @@ class TestRefine:
         assert usage(db, service.KIND_REFINE) == 2
 
     def test_allowlisted_user_not_limited(self, client, provider, monkeypatch):
-        import app.private_tasks.routes as private_routes
+        import app.patterns.routes as pattern_routes
 
         monkeypatch.setattr(settings, "rate_limit_pattern_refines_per_user_per_day", 1)
-        monkeypatch.setattr(private_routes, "_get_allowed_emails", lambda: {f"{USER_ID}@example.com"})
+        monkeypatch.setattr(pattern_routes, "is_allowlisted", lambda request: True)
         assert refine(client).status_code == 200
         assert refine(client).status_code == 200
 

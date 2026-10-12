@@ -13,6 +13,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import app.main as main
+import app.auth as auth_module
 import app.private_tasks.routes as private_routes
 from app.config import settings
 from app.db import get_db
@@ -65,11 +66,14 @@ def as_user(monkeypatch):
     async def member(request):
         return True
 
-    for module in (main, private_routes):
-        monkeypatch.setattr(module, "verify_auth", lambda request: True)
-        monkeypatch.setattr(module, "get_current_user_id", lambda request: USER_ID)
-        monkeypatch.setattr(module, "get_current_user", user)
-        monkeypatch.setattr(module, "is_group_member_async", member)
+    monkeypatch.setattr(main, "verify_auth", lambda request: True)
+    monkeypatch.setattr(main, "get_current_user_id", lambda request: USER_ID)
+    monkeypatch.setattr(main, "get_current_user", user)
+    monkeypatch.setattr(main, "is_group_member_async", member)
+    # auth.current_member_id: the member check shared by every submit endpoint
+    monkeypatch.setattr(auth_module, "verify_auth", lambda request: True)
+    monkeypatch.setattr(auth_module, "get_current_user_id", lambda request: USER_ID)
+    monkeypatch.setattr(auth_module, "is_group_member_async", member)
     return state
 
 

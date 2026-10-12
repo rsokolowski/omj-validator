@@ -103,3 +103,50 @@ class TestSafeNext:
         from app.auth import safe_next_path
 
         assert safe_next_path(value) is None
+
+
+class TestMemberCheck:
+    """auth.current_member_id / is_allowlisted: one rule for every submit endpoint."""
+
+    @staticmethod
+    def _patch(monkeypatch, *, authed=True, user_id="u1", member=True, email="kid@example.com", allowed=()):
+        import app.auth as auth
+
+        async def is_member(request):
+            return member
+
+        monkeypatch.setattr(auth, "verify_auth", lambda request: authed)
+        monkeypatch.setattr(auth, "get_current_user_id", lambda request: user_id)
+        monkeypatch.setattr(auth, "is_group_member_async", is_member)
+        monkeypatch.setattr(auth, "get_current_user", lambda request: {"user_id": user_id, "email": email})
+        monkeypatch.setattr(auth, "_get_allowed_emails", lambda: set(allowed))
+        return auth
+
+    def test_member_gets_the_id(self, monkeypatch):
+        import asyncio
+
+        auth = self._patch(monkeypatch)
+        assert asyncio.run(auth.current_member_id(object())) == "u1"
+
+    @pytest.mark.parametrize("kwargs, code", [
+        ({"authed": False}, 401),
+        ({"user_id": None}, 401),
+        ({"member": False}, 403),
+    ])
+    def test_refusals(self, monkeypatch, kwargs, code):
+        import asyncio
+
+        from fastapi import HTTPException
+
+        auth = self._patch(monkeypatch, **kwargs)
+        with pytest.raises(HTTPException) as info:
+            asyncio.run(auth.current_member_id(object()))
+        assert info.value.status_code == code
+
+    def test_allowlist_is_case_insensitive(self, monkeypatch):
+        auth = self._patch(monkeypatch, email="Kid@Example.com", allowed={"kid@example.com"})
+        assert auth.is_allowlisted(object()) is True
+
+    def test_no_allowlist_or_no_email_is_not_allowlisted(self, monkeypatch):
+        assert self._patch(monkeypatch).is_allowlisted(object()) is False
+        assert self._patch(monkeypatch, email=None, allowed={"kid@example.com"}).is_allowlisted(object()) is False

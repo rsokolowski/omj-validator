@@ -14,6 +14,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from ..ai import AIContentBlockedError, AIProviderError, create_ai_provider
+from ..auth import current_member_id, is_allowlisted
 from ..config import settings
 from ..db import get_db
 from ..db.models import PatternDB, PatternLinkDB, PrivateTaskDB, SubmissionDB, SubmissionStatus
@@ -35,7 +36,6 @@ from ..models import (
     UpdatePatternRequest,
 )
 from ..privacy import mask_user_id
-from ..private_tasks import routes as private_routes
 from ..private_tasks import service as private_service
 from ..skills import get_skill
 from . import linking, service, srs
@@ -60,15 +60,6 @@ def _now() -> datetime:
 
 
 # --------------------------------------------------------------------- helpers
-
-
-async def current_member_id(request: Request) -> str:
-    """Signed-in user with submit rights, or 401/403 (same rule as private tasks)."""
-    return await private_routes.current_member_id(request)
-
-
-def is_allowlisted(request: Request) -> bool:
-    return private_routes._is_allowlisted(request)
 
 
 def owned_pattern(db: Session, pattern_id: str, user_id: str) -> PatternDB:

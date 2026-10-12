@@ -11,6 +11,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import app.main as main
+import app.auth as auth_module
 import app.private_tasks.routes as private_routes
 import app.websocket.handler as handler
 from app import storage
@@ -58,17 +59,19 @@ def client(db, monkeypatch):
     monkeypatch.setattr(main, "get_task_pdf_path", lambda year, etap: FIXTURE_TASK_PDF)
     monkeypatch.setattr(main, "get_solution_pdf_path", lambda year, etap: None)
     user = {"user_id": USER_ID, "email": "kid@example.com"}
-    for module in (main, private_routes):
-        monkeypatch.setattr(module, "verify_auth", lambda request: True)
-        monkeypatch.setattr(module, "get_current_user_id", lambda request: USER_ID)
-        monkeypatch.setattr(module, "get_current_user", lambda request: user)
-        monkeypatch.setattr(module, "_get_allowed_emails", lambda: set())
+    monkeypatch.setattr(main, "verify_auth", lambda request: True)
+    monkeypatch.setattr(main, "get_current_user_id", lambda request: USER_ID)
+    monkeypatch.setattr(main, "get_current_user", lambda request: user)
 
     async def member(request):
         return True
 
-    for module in (main, private_routes):
-        monkeypatch.setattr(module, "is_group_member_async", member)
+    monkeypatch.setattr(main, "is_group_member_async", member)
+    # auth.current_member_id: the member check shared by every submit endpoint
+    monkeypatch.setattr(auth_module, "verify_auth", lambda request: True)
+    monkeypatch.setattr(auth_module, "get_current_user_id", lambda request: USER_ID)
+    monkeypatch.setattr(auth_module, "is_group_member_async", member)
+    monkeypatch.setattr(auth_module, "_get_allowed_emails", lambda: set())
     task = TaskInfo(year="2024", etap="etap1", number=1, title="Zadanie 1", pdf=TaskPdf(tasks="t.pdf"),
                     hints=["a", "b", "c", "d"])
     monkeypatch.setattr(storage, "get_task", lambda y, e, n: task if (y, e, n) == ("2024", "etap1", 1) else None)
