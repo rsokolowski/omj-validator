@@ -344,7 +344,7 @@ class GeminiProvider:
                 timeout=30,
             )
         except Exception as e:
-            logger.error(f"[Gemini ping] {type(e).__name__}: {e}")
+            logger.error(f"[Gemini ping] {self._model_name}: {type(e).__name__}")
             raise AIProviderError(f"Model {self._model_name} nie odpowiada: {type(e).__name__}")
 
     def _build_content_parts(
