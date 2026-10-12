@@ -206,6 +206,44 @@ export interface AdminMeResponse {
   is_admin: boolean;
 }
 
+// Admin: AI provider/model switch (GET/PUT /api/admin/ai-config)
+export type AiProviderId = "gemini" | "anthropic";
+
+export interface AiActiveModel {
+  provider: AiProviderId;
+  model: string;
+  /** Catalog label, or the raw id when the server's env model is outside the catalog */
+  model_label: string;
+  /** "db" = chosen in /admin/settings, "env" = server configuration default */
+  source: "db" | "env";
+  updated_at: string | null;
+  updated_by: string | null;
+}
+
+export interface AiModelOption {
+  id: string;
+  label: string;
+}
+
+export interface AiProviderOption {
+  id: AiProviderId;
+  label: string;
+  /** API key is set on the server */
+  configured: boolean;
+  /** GDPR: student data may be sent to this provider */
+  approved: boolean;
+  models: AiModelOption[];
+}
+
+export interface AiConfigResponse {
+  active: AiActiveModel;
+  providers: AiProviderOption[];
+}
+
+export interface AiConfigUpdateResponse {
+  active: AiActiveModel;
+}
+
 // User submissions types (Moje rozwiązania)
 export interface UserSubmissionStats {
   total_submissions: number;

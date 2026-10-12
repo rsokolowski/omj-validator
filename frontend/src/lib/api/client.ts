@@ -1,5 +1,7 @@
 // API client for communicating with FastAPI backend (client-side)
 
+import type { AiConfigResponse, AiConfigUpdateResponse, AiProviderId } from "@/lib/types";
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
 export class APIError extends Error {
@@ -46,6 +48,19 @@ export async function fetchAPI<T>(
   return res.json();
 }
 
+
+// Admin: AI provider/model switch
+export function getAiConfig(): Promise<AiConfigResponse> {
+  return fetchAPI<AiConfigResponse>("/api/admin/ai-config");
+}
+
+/** Pings the model server-side before storing; rejects with APIError (400/409/502) */
+export function putAiConfig(provider: AiProviderId, model: string): Promise<AiConfigUpdateResponse> {
+  return fetchAPI<AiConfigUpdateResponse>("/api/admin/ai-config", {
+    method: "PUT",
+    body: JSON.stringify({ provider, model }),
+  });
+}
 
 // File upload helper
 export async function uploadFiles<T>(
