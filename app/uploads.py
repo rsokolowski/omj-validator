@@ -76,12 +76,13 @@ class ImageTooLargeError(Exception):
 
 
 class UndecodablePhotoResponse(JSONResponse):
-    """The 400 for a batch refused because a photo failed to decode.
+    """The 400 for a batch refused while its photos were being decoded.
 
-    Distinguished from the other refusals (file too big, too many pixels, no
-    HEIC decoder - all cheap and honest mistakes) because by then the batch
-    may have cost real decoding work, so a submission that was refused this
-    way still uses up its daily slot (see settle_refused_submission).
+    The cheap checks (byte size, header, decoder) run on the whole batch
+    first, so this refusal means real decoding work was already spent on the
+    request: a submission refused this way keeps using its daily slot (see
+    settle_refused_submission). The cheap refusals before it are plain
+    JSONResponses and give the slot back.
     """
 
 
@@ -157,6 +158,28 @@ def flatten_transparency(img: Image.Image) -> Image.Image:
     page = Image.new("RGB", rgba.size, (255, 255, 255))
     page.paste(rgba, (0, 0), rgba)
     return page
+
+
+def header_refusal(file_path: Path, filename: OptionalType[str], ext: str) -> OptionalType[str]:
+    """Polish refusal for a photo unusable judging by its header alone, else None.
+
+    Reads no pixel data - Image.open only parses the header - so it is the
+    cheap pre-check save_uploaded_images runs on a whole batch before decoding
+    any of it: too many pixels, or nothing that can read the file (not an
+    image, or HEIC without its decoder).
+    """
+    try:
+        with Image.open(file_path) as img:
+            too_large = img.width * img.height > MAX_IMAGE_PIXELS
+    except Image.DecompressionBombError:
+        too_large = True
+    except Exception as e:
+        logger.warning(f"Image refused for {file_path.suffix}: unreadable header ({type(e).__name__})")
+        return unprocessable_image_message(filename, ext)
+    if too_large:
+        logger.warning(f"Image refused for {file_path.suffix}: too many pixels")
+        return too_large_image_message(filename)
+    return None
 
 
 def normalize_uploaded_image(file_path: Path) -> OptionalType[Path]:
@@ -351,26 +374,32 @@ async def save_uploaded_images(
     so tests can substitute it. It runs in _image_executor, off the event loop.
     """
     normalize = normalize or (lambda p: normalize_uploaded_image(p))
-    saved_paths: list[Path] = []
     max_size = settings.upload_max_size_mb * 1024 * 1024
+    loop = asyncio.get_running_loop()
 
-    # File currently being written - not yet in saved_paths, but just as much an
-    # orphan as the rest if this request ends without creating a DB row.
-    in_progress: OptionalType[Path] = None
+    # Every path this call may have put on disk (raw uploads and their
+    # normalized copies); discard_uploads skips the ones already gone.
+    on_disk: list[Path] = []
 
-    # One guard around the whole loop: every exit between "bytes hit the disk"
+    # One guard around everything: every exit between "bytes hit the disk"
     # and "the DB row exists" must clean up after itself, otherwise a child's
     # photo stays on disk with nothing referencing it (see discard_uploads).
     try:
+        # Pass 1 - cheap checks on EVERY photo before any is decoded: the byte
+        # size while streaming, then the header (pixel count, a decoder that
+        # can read it). A refusal here has cost no decoding, so the caller may
+        # give the submission slot back. Once pass 2 starts it may not:
+        # otherwise nine photos at the pixel cap followed by one oversized file
+        # would be a free, repeatable way to burn seconds of CPU and gigabytes.
+        written: list[tuple[UploadFile, str, Path]] = []
         for img in images:
             # Validate and normalize extension
             ext = Path(img.filename).suffix.lower() if img.filename else ".jpg"
             if ext not in ALLOWED_IMAGE_EXTENSIONS:
                 ext = ".jpg"  # Default to jpg for safety
 
-            filename = f"{uuid.uuid4().hex[:12]}{ext}"
-            file_path = upload_dir / filename
-            in_progress = file_path
+            file_path = upload_dir / f"{uuid.uuid4().hex[:12]}{ext}"
+            on_disk.append(file_path)
 
             # Read file in chunks with size limit check
             total_size = 0
@@ -384,43 +413,46 @@ async def save_uploaded_images(
                     total_size += len(chunk)
                     if total_size > max_size:
                         f.close()
-                        discard_uploads(saved_paths, file_path)
+                        discard_uploads(on_disk)
                         return [], JSONResponse(
                             {"error": f"Plik {img.filename} jest za duży (max {settings.upload_max_size_mb}MB)"},
                             status_code=status.HTTP_400_BAD_REQUEST,
                         )
                     f.write(chunk)
+            written.append((img, ext, file_path))
 
-            # Strip EXIF/GPS, fix orientation, downscale. Returns the final path -
-            # normalization always re-encodes to JPEG, so the name can change.
+        for img, ext, file_path in written:
+            refusal = await loop.run_in_executor(
+                _image_executor, header_refusal, file_path, img.filename, ext
+            )
+            if refusal is not None:
+                discard_uploads(on_disk)
+                return [], JSONResponse({"error": refusal}, status_code=status.HTTP_400_BAD_REQUEST)
+
+        # Pass 2 - strip EXIF/GPS, fix orientation, downscale. Returns the final
+        # path - normalization always re-encodes to JPEG, so the name can change.
+        saved_paths: list[Path] = []
+        for img, ext, file_path in written:
             try:
-                normalized_path = await asyncio.get_running_loop().run_in_executor(
-                    _image_executor, normalize, file_path
-                )
+                normalized_path = await loop.run_in_executor(_image_executor, normalize, file_path)
             except ImageTooLargeError:
-                discard_uploads(saved_paths, file_path)
-                return [], JSONResponse(
-                    {"error": too_large_image_message(img.filename)},
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                )
+                # Its header passed pass 1, so this is no honest mistake
+                normalized_path = None
             if normalized_path is None:
                 # Could not be decoded, so its metadata could not be removed
                 # either. Storing it would ship the photo's GPS coordinates to
                 # disk and to Google, so the upload is refused instead.
-                discard_uploads(saved_paths, file_path)
-                # A missing HEIC decoder is our gap, not a broken photo
-                server_gap = ext in HEIF_EXTENSIONS and not HEIF_SUPPORTED
-                return [], (JSONResponse if server_gap else UndecodablePhotoResponse)(
+                discard_uploads(on_disk)
+                return [], UndecodablePhotoResponse(
                     {"error": unprocessable_image_message(img.filename, ext)},
                     status_code=status.HTTP_400_BAD_REQUEST,
                 )
-
+            on_disk.append(normalized_path)
             saved_paths.append(normalized_path)
-            in_progress = None
     except BaseException:
         # BaseException: a cancelled request (shutdown, client gone) must clean
-        # up too - the await on the decode thread is a cancellation point.
-        discard_uploads(saved_paths, in_progress)
+        # up too - every await on the decode threads is a cancellation point.
+        discard_uploads(on_disk)
         raise
 
     return saved_paths, None

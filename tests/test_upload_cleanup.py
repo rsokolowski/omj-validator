@@ -192,7 +192,8 @@ class TestRejectedSubmissionLeavesNothing:
         )
 
         assert response.status_code == 400
-        assert_refused_row_only(db)
+        # Unreadable from its header: refused before any decoding, slot given back
+        assert db.query(SubmissionDB).count() == 0
         assert files_left() == []
 
     def test_oversized_second_image_discards_the_first(self, client, db, monkeypatch):

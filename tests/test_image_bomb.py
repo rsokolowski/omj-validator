@@ -8,6 +8,7 @@ decoding runs in a worker thread.
 
 import asyncio
 import io
+import os
 import struct
 import threading
 import time
@@ -129,8 +130,22 @@ class TestSaveUploadedImages:
         assert not isinstance(error, uploads.UndecodablePhotoResponse)
         assert not target.exists() or not any(p.is_file() for p in target.rglob("*"))
 
-    def test_broken_photo_is_an_undecodable_refusal(self, uploads_root):
+    def test_unreadable_header_is_a_cheap_refusal(self, uploads_root):
         images = [upload("good.png", png_bytes((40, 40))), upload("broken.png", b"nope")]
+
+        saved, error = asyncio.run(
+            uploads.save_uploaded_images(images, settings.uploads_dir / "u")
+        )
+
+        assert saved == []
+        assert error is not None and error.status_code == 400
+        assert not isinstance(error, uploads.UndecodablePhotoResponse)
+
+    def test_failure_mid_decode_is_an_undecodable_refusal(self, uploads_root):
+        jpeg = io.BytesIO()
+        Image.frombytes("RGB", (300, 300), os.urandom(300 * 300 * 3)).save(jpeg, "JPEG")
+        truncated = jpeg.getvalue()[: len(jpeg.getvalue()) // 2]  # header intact, scan cut off
+        images = [upload("good.png", png_bytes((40, 40))), upload("cut.jpg", truncated, "image/jpeg")]
 
         saved, error = asyncio.run(
             uploads.save_uploaded_images(images, settings.uploads_dir / "u")
@@ -139,6 +154,24 @@ class TestSaveUploadedImages:
         assert saved == []
         assert isinstance(error, uploads.UndecodablePhotoResponse)
         assert error.status_code == 400
+
+    def test_every_header_is_checked_before_anything_is_decoded(self, uploads_root):
+        decoded = []
+
+        def normalize(path):
+            decoded.append(path)
+            return uploads.normalize_uploaded_image(path)
+
+        images = [upload(f"{i}.png", png_bytes((40, 40))) for i in range(3)]
+        images.append(upload("bomb.png", png_header_only(12000, 12000)))
+
+        saved, error = asyncio.run(
+            uploads.save_uploaded_images(images, settings.uploads_dir / "u", normalize)
+        )
+
+        assert error is not None and not isinstance(error, uploads.UndecodablePhotoResponse)
+        assert decoded == []
+        assert not any(p.is_file() for p in settings.uploads_dir.rglob("*"))
 
     def test_cancelled_request_cleans_up(self, uploads_root):
         """The await on the decode thread is a cancellation point."""

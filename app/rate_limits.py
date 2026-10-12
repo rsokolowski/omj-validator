@@ -356,13 +356,13 @@ def release_reserved_submission(db: Session, submission_id: str) -> None:
 def settle_refused_submission(db: Session, submission: SubmissionDB, response: JSONResponse) -> None:
     """The student's photos were refused with ``response`` (a 400).
 
-    A photo that failed to decode (UndecodablePhotoResponse) keeps the
+    A refusal during decoding (UndecodablePhotoResponse) keeps the
     reservation as FAILED: it still counts toward the daily limit, so a batch
-    of large photos ending in a broken one - real decoding work, then a
-    refusal - cannot be replayed for free, and the history shows why it went
-    nowhere. The cheap, honest refusals (file too big, too many pixels, no
-    HEIC decoder) are refused before or without decoding and give the slot
-    back.
+    that cost real decoding work cannot be replayed for free, and the history
+    shows why it went nowhere. Every cheap check (file too big, too many
+    pixels, unreadable header, no HEIC decoder) runs on the whole batch before
+    anything is decoded (save_uploaded_images), so those refusals cost
+    nothing and give the slot back.
     """
     if not isinstance(response, UndecodablePhotoResponse):
         release_reserved_submission(db, submission.id)

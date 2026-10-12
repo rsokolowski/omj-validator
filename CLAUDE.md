@@ -413,7 +413,8 @@ RETENTION_PATTERN_MONTHS=24           # Patterns, counted from last activity
 RETENTION_AUTO_PURGE=true             # Daily in-app run (single-worker only)
 
 # Submissions (OMJ + private): the row is reserved before photos are processed;
-# a photo that fails to decode keeps it as FAILED (still counts), other refusals free it
+# cheap checks (bytes, header pixels, decoder) run on the whole batch first and free
+# it; a refusal once decoding started keeps it as FAILED (still counts)
 # RATE_LIMIT_SUBMISSIONS_IN_FLIGHT_PER_USER=2  # pending/processing at once
 
 # Private task limits (grading shares the submission limits)

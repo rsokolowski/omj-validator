@@ -204,12 +204,93 @@ def small_jpeg() -> bytes:
     return buffer.getvalue()
 
 
+def truncated_jpeg() -> bytes:
+    """Valid header (passes the cheap pre-check), fails half way through decoding."""
+    side = 400
+    buffer = io.BytesIO()
+    Image.frombytes("RGB", (side, side), os.urandom(side * side * 3)).save(buffer, "JPEG")
+    data = buffer.getvalue()
+    return data[: len(data) // 2]
+
+
+def giant_png_header() -> bytes:
+    from tests.test_image_bomb import png_header_only
+
+    return png_header_only(12000, 12000)
+
+
 class TestRejectedPhotosStillCount:
+    @pytest.mark.parametrize("url", [OMJ_URL, PRIVATE_URL])
+    def test_cheap_refusal_after_expensive_photos_decodes_nothing(self, app, db, monkeypatch, url):
+        """Coordinator follow-up: big photos first, an over-cap one last.
+
+        Every photo is checked cheaply before any is decoded, so the refusal
+        that gives the slot back happens before the expensive work - it never
+        comes after it.
+        """
+        import app.uploads as uploads
+
+        decoded = []
+        real = uploads.normalize_uploaded_image
+
+        def spy(path):
+            decoded.append(path)
+            return real(path)
+
+        monkeypatch.setattr(uploads, "normalize_uploaded_image", spy)
+        monkeypatch.setattr(main, "_normalize_uploaded_image", spy)
+
+        async def batch():
+            transport = httpx.ASGITransport(app=app)
+            async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
+                files = [("images", (f"{i}.jpg", big_jpeg(), "image/jpeg")) for i in range(3)]
+                files.append(("images", ("last.png", giant_png_header(), "image/png")))
+                return await client.post(url, files=files)
+
+        response = asyncio.run(batch())
+
+        assert response.status_code == 400
+        assert "rozdzielczo" in response.json()["error"]
+        assert decoded == []
+        assert db.query(SubmissionDB).count() == 0  # nothing decoded, so the slot is free
+        assert files_left() == []
+
+    def test_oversized_file_after_photos_decodes_nothing(self, app, db, monkeypatch):
+        decoded = []
+        monkeypatch.setattr(main, "_normalize_uploaded_image", lambda p: decoded.append(p))
+        monkeypatch.setattr(settings, "upload_max_size_mb", 1)
+
+        async def batch():
+            transport = httpx.ASGITransport(app=app)
+            async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
+                files = [("images", ("a.jpg", small_jpeg(), "image/jpeg")),
+                         ("images", ("huge.jpg", b"\xff" * (2 * 1024 * 1024), "image/jpeg"))]
+                return await client.post(OMJ_URL, files=files)
+
+        assert asyncio.run(batch()).status_code == 400
+        assert decoded == []
+        assert db.query(SubmissionDB).count() == 0
+
+    def test_refusal_during_decoding_keeps_the_slot(self, app, db, monkeypatch):
+        """Past the pre-check, decoding work was spent: the refused batch counts."""
+        monkeypatch.setattr(settings, "rate_limit_submissions_per_user_per_day", 2)
+
+        async def batch():
+            transport = httpx.ASGITransport(app=app)
+            async with httpx.AsyncClient(transport=transport, base_url="http://test") as client:
+                files = [("images", ("a.jpg", big_jpeg(), "image/jpeg")),
+                         ("images", ("b.jpg", truncated_jpeg(), "image/jpeg"))]
+                return await client.post(OMJ_URL, files=files)
+
+        assert asyncio.run(batch()).status_code == 400
+        assert db.query(SubmissionDB).one().status == SubmissionStatus.FAILED
+        assert files_left() == []
+
     def test_unreadable_photo_keeps_a_failed_row(self, app, db, monkeypatch):
         """A refused batch costs one daily submission, so it cannot be repeated for free."""
         monkeypatch.setattr(settings, "rate_limit_submissions_per_user_per_day", 1)
 
-        [code] = asyncio.run(fire(app, OMJ_URL, 1, b"not an image"))
+        [code] = asyncio.run(fire(app, OMJ_URL, 1, truncated_jpeg()))
         assert code == 400
         row = db.query(SubmissionDB).one()
         assert row.status == SubmissionStatus.FAILED
@@ -298,7 +379,7 @@ class TestReservationCleanup:
         assert code == 429
 
     def test_private_refused_photo_keeps_a_failed_row(self, app, db):
-        [code] = asyncio.run(fire(app, PRIVATE_URL, 1, b"not an image"))
+        [code] = asyncio.run(fire(app, PRIVATE_URL, 1, truncated_jpeg()))
 
         assert code == 400
         row = db.query(SubmissionDB).one()
