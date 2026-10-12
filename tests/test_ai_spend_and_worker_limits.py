@@ -78,13 +78,13 @@ def test_spend_sums_recorded_costs_in_the_window(session_factory):
 
 def test_unrecorded_calls_count_at_flat_estimates(session_factory):
     db = session_factory()
-    submission(db, "pending", status=SubmissionStatus.PENDING, age_hours=0)
+    submission(db, "pending", status=SubmissionStatus.PENDING, age_hours=0)  # queued: no AI call yet
     submission(db, "processing", status=SubmissionStatus.PROCESSING, age_hours=0)
     submission(db, "failed", status=SubmissionStatus.FAILED, age_hours=0)  # failures without usage cost nothing
     usage(db, age_hours=0)  # reserved, no meta yet (in flight)
     db.add(AIUsageDB(user_id=USER_ID, kind="pattern_refine", meta=None, created_at=naive_now()))
     db.commit()
-    expected = 2 * spend.GRADING_UNRECORDED_COST_USD + 2 * spend.AUX_UNRECORDED_COST_USD
+    expected = spend.GRADING_UNRECORDED_COST_USD + 2 * spend.AUX_UNRECORDED_COST_USD
     assert spend.spent_last_24h(db) == pytest.approx(expected)
 
 
@@ -95,7 +95,7 @@ def test_unrecorded_calls_past_their_timeout_count_nothing(session_factory):
     stale = SUBMISSION_TIMEOUT_SECONDS + 60
     db.add(SubmissionDB(
         id="dead", user_id=USER_ID, year="2024", etap="etap1", task_number=1, images=[],
-        status=SubmissionStatus.PENDING, timestamp=naive_now() - timedelta(seconds=stale),
+        status=SubmissionStatus.PROCESSING, timestamp=naive_now() - timedelta(seconds=stale),
     ))
     for _ in range(1000):
         db.add(AIUsageDB(

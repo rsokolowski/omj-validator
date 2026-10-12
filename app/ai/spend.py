@@ -104,12 +104,15 @@ def spent_last_24h(db: Session, now: Optional[datetime] = None) -> float:
         .filter(SubmissionDB.timestamp >= since)
         .scalar()
     )
-    # A PENDING/PROCESSING row older than this is a dead worker's, not a grading
+    # Only PROCESSING rows can be calling a model (at most
+    # AI_GRADING_MAX_CONCURRENT); PENDING ones wait in the queue and check the
+    # cap themselves once they get a slot. Older than SUBMISSION_TIMEOUT_SECONDS
+    # is a dead worker's row, not a grading.
     in_flight = (
         db.query(func.count(SubmissionDB.id))
         .filter(
             SubmissionDB.timestamp >= now - timedelta(seconds=SUBMISSION_TIMEOUT_SECONDS),
-            SubmissionDB.status.in_([SubmissionStatus.PENDING, SubmissionStatus.PROCESSING]),
+            SubmissionDB.status == SubmissionStatus.PROCESSING,
             or_(SubmissionDB.scoring_meta.is_(None), submission_cost.is_(None)),
         )
         .scalar()
