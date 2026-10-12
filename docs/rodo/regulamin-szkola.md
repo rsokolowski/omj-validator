@@ -62,12 +62,14 @@ w drodze praktyki.**
 
 ## § 4. Dostęp do Narzędzia
 
-1. Dostęp uzyskuje się po zalogowaniu [UZUPEŁNIĆ: szkolnym kontem Google / Microsoft / innym].
-2. Konta prywatne [UZUPEŁNIĆ: są / nie są] dopuszczone.
+1. Dostęp uzyskuje się po zalogowaniu [UZUPEŁNIĆ: szkolnym kontem Google / loginem i hasłem
+   nadanymi w Narzędziu]. Narzędzie obsługuje wyłącznie te dwa sposoby logowania.
+2. Prywatne konta Google [UZUPEŁNIĆ: są / nie są] dopuszczone.
 3. Uczeń nie udostępnia swojego konta innym osobom.
 4. Uczeń wylogowuje się po zakończeniu pracy, zwłaszcza na komputerze współdzielonym
-   (pracownia, biblioteka). Sesja pozostaje aktywna do 30 dni, więc niewylogowanie się
-   oznacza, że kolejna osoba przy tym komputerze zobaczy prace Ucznia.
+   (pracownia, biblioteka). Sesja pozostaje aktywna do 30 dni (przy logowaniu loginem i hasłem
+   — 12 godzin, chyba że zaznaczono „Zapamiętaj mnie”), więc niewylogowanie się oznacza, że
+   kolejna osoba przy tym komputerze zobaczy prace Ucznia.
 5. Dostęp może zostać ograniczony lub cofnięty w przypadku naruszenia § 6 — po uprzednim
    poinformowaniu Ucznia i, jeśli sprawa tego wymaga, jego rodziców.
 
@@ -78,9 +80,12 @@ w drodze praktyki.**
    **10 MB**, w formacie JPEG, PNG, WebP lub HEIC.
 3. Obowiązują limity liczby Zgłoszeń chroniące dostępność Narzędzia dla wszystkich
    uczniów: [UZUPEŁNIĆ: liczba] Zgłoszeń na Ucznia w ciągu doby oraz [UZUPEŁNIĆ: liczba]
-   Zgłoszeń łącznie w ciągu doby dla całej Szkoły. Po wyczerpaniu limitu Narzędzie informuje,
-   kiedy będzie można wysłać kolejne rozwiązanie. Limitu nie da się zresetować przez usunięcie
-   i ponowne założenie konta (§ 8 ust. 3).
+   Zgłoszeń łącznie w ciągu doby dla całej Szkoły; jednocześnie oceniane są najwyżej 2
+   Zgłoszenia jednego Ucznia. Narzędzie ma też dzienny budżet na usługę sztucznej inteligencji
+   [UZUPEŁNIĆ: kwota]; po jego wyczerpaniu funkcje korzystające z AI są wstrzymane dla
+   wszystkich do czasu, aż w ciągu doby zwolni się miejsce. Po wyczerpaniu limitu Narzędzie
+   informuje, kiedy będzie można wysłać kolejne rozwiązanie. Limitu nie da się zresetować przez
+   usunięcie i ponowne założenie konta (§ 8 ust. 3).
 4. Zalecenia dotyczące fotografii — mają bezpośredni wpływ na jakość oceny:
    - fotografuj **całe strony**, tak by nic nie było ucięte,
    - rób zdjęcia prosto, przy dobrym świetle, bez cieni na kartce,
@@ -113,8 +118,9 @@ Uczniowi zabrania się:
 ## § 7. Sztuczna inteligencja — jak działa i czego się po niej nie spodziewać
 
 1. Ocena punktowa i informacja zwrotna są generowane przez **system sztucznej inteligencji**
-   (model językowy dostarczany przez Google lub Anthropic — w danym momencie przez jednego
-   z nich, wybranego przez Administratora Narzędzia), a nie przez człowieka. Żaden nauczyciel nie
+   (model językowy dostarczany przez Google, a zapasowo — gdy usługa Google jest niedostępna
+   albo gdy wybierze go Administrator Narzędzia — przez Anthropic), a nie przez człowieka.
+   Żaden nauczyciel nie
    sprawdza wyniku przed pokazaniem go Uczniowi.
 2. **Ocena AI bywa błędna.** W testach autora oprogramowania ocena zwykle zgadzała się z oceną
    człowieka, ale próba była mała. Ryzyko pomyłki rośnie, gdy zdjęcie jest nieostre lub ciemne,
@@ -126,11 +132,12 @@ Uczniowi zabrania się:
    Nauczycielowi prowadzącemu. Nauczyciel lub Administrator Narzędzia **osobiście** ogląda pracę
    i może zlecić ponowną analizę. Ta ścieżka jest dostępna zawsze i nie wymaga uzasadnienia.
 4. **Automatyczne wykrywanie nieprawidłowości.** Narzędzie sprawdza, czy przesłana praca dotyczy
-   wybranego zadania oraz czy nie zawiera prób wpływania na ocenę. W razie wykrycia przyznaje
-   0 punktów i zapisuje przy Zgłoszeniu odpowiednie oznaczenie widoczne dla Nauczyciela
-   prowadzącego i Administratora Narzędzia. **Wykrywanie to jest zawodne i bywa fałszywie
-   pozytywne.** Samo oznaczenie nie stanowi dowodu nieuczciwości Ucznia i nie może być podstawą
-   jakiejkolwiek konsekwencji bez uprzedniej weryfikacji przez człowieka. Uczeń ma prawo
+   wybranego zadania oraz czy nie zawiera prób wpływania na ocenę. W razie wykrycia automatycznie
+   przyznaje 0 punktów w tej próbie i zapisuje przy Zgłoszeniu odpowiednie oznaczenie widoczne dla
+   Nauczyciela prowadzącego i Administratora Narzędzia. **Wykrywanie to jest zawodne i bywa
+   fałszywie pozytywne.** Samo oznaczenie nie stanowi dowodu nieuczciwości Ucznia i poza wynikiem
+   0 punktów w tej próbie nie może być podstawą jakiejkolwiek konsekwencji bez uprzedniej
+   weryfikacji przez człowieka. Uczeń ma prawo
    zakwestionować oznaczenie w trybie ust. 3.
 5. **Informacja zwrotna nie podaje rozwiązania.** Narzędzie jest instruowane, by wskazywać luki
    w rozumowaniu, ale nie przeprowadzać brakującego dowodu za Ucznia. Oficjalne rozwiązanie
@@ -150,20 +157,24 @@ Uczniowi zabrania się:
    stanowiąca [UZUPEŁNIĆ: załącznik nr … do niniejszego regulaminu / odrębny dokument
    dostępny pod adresem …].
 3. Uczeń może w każdej chwili, po zalogowaniu, **samodzielnie usunąć swoje konto** wraz ze
-   wszystkimi przesłanymi fotografiami i historią wyników. Po usunięciu pozostaje wyłącznie
-   pseudonimowy zapis liczby rozwiązań przesłanych w ciągu ostatniej doby (bez danych
-   identyfikujących), kasowany automatycznie najpóźniej po 24 godzinach — zapobiega on
-   obchodzeniu limitów z § 5 ust. 3 przez kasowanie i zakładanie konta od nowa. Szczegóły
-   w klauzuli informacyjnej.
+   wszystkimi przesłanymi fotografiami, historią wyników, własnymi zadaniami i wzorcami. Po
+   usunięciu przez około dobę pozostaje pseudonimowy zapis liczby rozwiązań i wywołań programu
+   z ostatniej doby (bez danych identyfikujących) — zapobiega on obchodzeniu limitów z § 5
+   ust. 3 przez kasowanie i zakładanie konta od nowa. Przez pewien czas zostają też ślady
+   techniczne bez danych identyfikujących Ucznia (dzienniki serwera, kopie zapasowe). Szczegóły
+   w klauzuli informacyjnej (punkt 10a).
 3a. Konto Ucznia, z którego przez [UZUPEŁNIĆ — wartość domyślna narzędzia: 36 miesięcy] nikt się
    nie zalogował i nie przesłał rozwiązania, jest usuwane automatycznie wraz ze wszystkimi
    danymi.
-3b. **Dziennik dostępu.** Każde sięgnięcie Nauczyciela prowadzącego lub Administratora Narzędzia
-   po dane konkretnego Ucznia jest rejestrowane (kto, czyje dane, jaki zasób, kiedy — bez
-   treści i bez frazy wyszukiwania). Uczeń i rodzic mogą wystąpić o informację z tego dziennika.
+3b. **Dziennik dostępu.** Otwarcie przez Nauczyciela prowadzącego lub Administratora Narzędzia
+   zdjęcia rozwiązania albo listy zgłoszeń konkretnego Ucznia, wyszukanie użytkownika i zlecenie
+   ponownej analizy są rejestrowane (kto, czyje dane, jaki zasób, kiedy — bez treści i bez frazy
+   wyszukiwania). Przegląd zbiorczej listy zgłoszeń wszystkich uczniów jest rejestrowany bez
+   wskazania osoby, a bezpośredni dostęp do serwera i bazy danych nie jest rejestrowany. Uczeń
+   i rodzic mogą wystąpić o informację z tego dziennika.
    Zapisy przechowywane są przez [UZUPEŁNIĆ — wartość domyślna narzędzia: 12 miesięcy].
-4. Fotografie rozwiązań są przekazywane dostawcy usługi sztucznej inteligencji (w danym
-   momencie jednemu: Google albo Anthropic) **bez danych identyfikujących Ucznia**. Google
+4. Fotografie i tekst rozwiązań są przekazywane dostawcy usługi sztucznej inteligencji (Google,
+   a zapasowo Anthropic) **bez danych identyfikujących Ucznia**. Google
    usuwa pliki ze swojej infrastruktury po zakończeniu analizy; Anthropic otrzymuje fotografie
    w treści zapytania, bez zapisywania plików. Google może przechowywać zapisy techniczne
    maksymalnie 55 dni, wyłącznie w celu wykrywania naruszeń zasad korzystania z usługi.
@@ -213,8 +224,8 @@ Uczniowi zabrania się:
 3. Szkoła może zmienić Regulamin; o istotnych zmianach informuje Uczniów i rodziców z co
    najmniej [UZUPEŁNIĆ: liczba] dniowym wyprzedzeniem.
 4. Szkoła może zaprzestać udostępniania Narzędzia; w takim przypadku informuje o tym
-   z wyprzedzeniem [UZUPEŁNIĆ: liczba] dni i usuwa zgromadzone dane, umożliwiając wcześniej
-   Uczniom pobranie własnych wyników.
+   z wyprzedzeniem [UZUPEŁNIĆ: liczba] dni i usuwa zgromadzone dane; w tym czasie Uczeń może
+   złożyć wniosek o kopię własnych wyników (Narzędzie nie ma funkcji samodzielnego eksportu).
 5. W sprawach nieuregulowanych stosuje się statut Szkoły oraz powszechnie obowiązujące przepisy.
 6. Pytania i zgłoszenia dotyczące Narzędzia: [E-MAIL / OSOBA KONTAKTOWA].
 

@@ -7,7 +7,8 @@ ten adres został podany jako adres rodzica lub opiekuna przy zakładaniu konta 
 {{ child_identifier_label }}: {{ child_identifier|nolink }}
 
 Co to oznacza dla dziecka:
-- Dziecko przesyła zdjęcia albo wpisane rozwiązania zadań. Ocenia je automatycznie model sztucznej inteligencji (Google Gemini lub Anthropic Claude) - ocena jest poglądowa i może być błędna.
+- Dziecko przesyła zdjęcia albo wpisane rozwiązania zadań. Ocenia je automatycznie model sztucznej inteligencji - ocena jest poglądowa i może być błędna.
+- Do oceny wysyłamy zdjęcia i rozwiązania do firmy Google (Gemini) w USA, a zapasowo (np. gdy usługa Google nie działa) do firmy Anthropic (Claude), również w USA. Nie wysyłamy tam imienia, nazwiska ani adresu e-mail dziecka.
 - Rozwiązania przechowujemy przez {{ submission_retention }}. Konto, z którego nikt nie korzysta przez {{ inactive_retention }}, usuwamy.
 - Nie ma reklam i nie wykorzystujemy danych w celach marketingowych.
 - Konto i wszystkie dane możesz usunąć w każdej chwili na stronie rodzica.

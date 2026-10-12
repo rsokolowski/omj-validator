@@ -167,8 +167,18 @@ function ParentConsentView({ token, declineIntent }: ParentConsentProps) {
     return (
       <FormCard>
         <StepHeading focus={acted}>Konto zostało usunięte</StepHeading>
-        <Typography sx={{ color: "grey.700" }}>
-          Nie zachowaliśmy żadnych danych dziecka. Dziękujemy za odpowiedź.
+        <Typography sx={{ color: "grey.700", mb: 1 }}>
+          Usunęliśmy konto dziecka i wszystkie zapisane w nim dane. Dziękujemy za odpowiedź.
+        </Typography>
+        <Typography variant="body2" sx={{ color: "grey.700" }}>
+          Twój adres e-mail, jeśli nie jest powiązany z kontem innego dziecka, usuniemy w ciągu
+          dwóch dób (tyle potrzebują limity wysyłki wiadomości). Przez
+          pewien czas zostają jeszcze ślady techniczne bez danych dziecka, np. w kopiach
+          zapasowych &ndash; opisujemy je w{" "}
+          <MuiLink component={Link} href="/regulamin" target="_blank" rel="noopener noreferrer" sx={{ color: "primary.main" }}>
+            regulaminie, w punkcie 11
+          </MuiLink>
+          .
         </Typography>
       </FormCard>
     );
@@ -211,6 +221,11 @@ function ParentConsentView({ token, declineIntent }: ParentConsentProps) {
         <li>
           Dziecko może przesyłać zdjęcia albo wpisane rozwiązania zadań. Ocenia je automatycznie
           model sztucznej inteligencji (AI).
+        </li>
+        <li>
+          Do oceny wysyłamy zdjęcia i rozwiązania do firmy Google (Gemini) w USA, a zapasowo (np. gdy
+          usługa Google nie działa) do firmy Anthropic (Claude), również w USA. Nie wysyłamy tam imienia,
+          nazwiska ani adresu e-mail dziecka.
         </li>
         <li>
           Rozwiązania przechowujemy przez {summary.submission_retention}. Konto, z którego nikt nie

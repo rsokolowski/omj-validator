@@ -40,7 +40,7 @@ poz. 22).
 | Kategorie osób | uczniowie (w większości 13–15 lat, czyli dzieci w rozumieniu motywu 38 RODO) |
 | Kategorie danych | fotografia odręcznego rozwiązania i/lub wpisany tekst rozwiązania; przy zadaniach prywatnych zdjęcie strony z treścią i treść zadania; przy wzorcach tekst wzorca i rozmowy o nim. **Bez** imienia, nazwiska, adresu e-mail i identyfikatora konta; nazwy plików są losowe |
 | Dane szczególne | nie są przetwarzane celowo. Na zdjęciu może się przypadkowo znaleźć podpis ucznia lub otoczenie kartki (DPIA, R4) |
-| Częstotliwość | przy każdej ocenie i każdym wywołaniu AI, tylko gdy Claude jest aktywnym dostawcą |
+| Częstotliwość | Claude jest dostawcą **zapasowym**: dane trafiają do Anthropic przy wywołaniach AI wykonywanych, gdy Gemini API jest niedostępne (automatyczne przełączenie, `app/ai/failover.py` — przez czas otwarcia bezpiecznika wszystkie wywołania), albo gdy administrator ręcznie wybierze Claude. Oba tryby działają dopiero po ustawieniu `ANTHROPIC_PROCESSOR_APPROVED=true` |
 | Sposób przekazania | HTTPS (TLS) do Messages API; zdjęcia i PDF-y w treści zapytania (base64), **bez** Files API |
 | Okres przechowywania u importera | wejścia i wyjścia usuwane **w ciągu 30 dni**; dłużej tylko przy egzekwowaniu zasad korzystania z usługi (Usage Policy) lub z obowiązku prawnego |
 | Wykorzystanie do trenowania modeli | wyłączone umownie (Commercial Terms: Anthropic may not train models on Customer Content) |
@@ -162,7 +162,8 @@ Warunki tego wniosku:
 - Anthropic zmieni okres przechowywania, zasady trenowania, DPA lub listę podprocesorów
   w sposób istotny dla tego transferu;
 - raport przejrzystości Anthropic wykaże istotny wzrost liczby żądań dotyczących treści;
-- aplikacja zacznie wysyłać do Anthropic nowe kategorie danych.
+- aplikacja zacznie wysyłać do Anthropic nowe kategorie danych albo Anthropic stanie się
+  dostawcą podstawowym zamiast zapasowego (wzrośnie skala transferu).
 
 ## 8. Źródła (stan na 12.10.2026)
 

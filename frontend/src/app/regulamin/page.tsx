@@ -18,7 +18,7 @@ const RETENTION_ADMIN_AUDIT = "12 miesięcy";
 
 // Zmieniajac tekst, zmien tez TERMS_VERSION w app/config.py (data zapisywana
 // przy kazdej zgodzie) - obie wartosci opisuja te sama wersje dokumentu.
-const LAST_UPDATED = "12 października 2026";
+const LAST_UPDATED = "13 października 2026";
 // Konto czekajace na zgode rodzica - app/accounts/service.py PENDING_TTL
 const PENDING_DAYS = 14;
 
@@ -76,10 +76,11 @@ export default function RegulaminPage() {
             rekrutację. To trenażer.
           </li>
           <li>
-            <strong>Twoje zdjęcie kartki albo wpisany tekst rozwiązania (i rysunek) są wysyłane do firmy Google albo Anthropic</strong>,
-            żeby program mógł je przeczytać i ocenić. Serwis używa w danej
-            chwili tylko jednej z tych firm, więc rozwiązanie nie trafia do obu
-            naraz. Nie wysyłamy tam Twojego imienia, nazwiska ani adresu e-mail.
+            <strong>Twoje zdjęcie kartki albo wpisany tekst rozwiązania (i rysunek) są wysyłane do firmy Google</strong>{" "}
+            w USA, żeby program mógł je przeczytać i ocenić. Zapasowo, np. gdy
+            usługa Google nie działa, zastępuje ją firma Anthropic (też USA).
+            Nie wysyłamy tam
+            Twojego imienia, nazwiska ani adresu e-mail.
           </li>
           <li>
             <strong>Nie podpisuj kartki</strong> imieniem i nazwiskiem. Serwis i
@@ -134,7 +135,11 @@ export default function RegulaminPage() {
             osobiście, pod adresem podanym wyżej.
           </Typography>
           <Typography paragraph>
-            Korzystanie z serwisu oznacza akceptację tego regulaminu.
+            Regulamin akceptujesz, zakładając konto. Zasady korzystania z
+            serwisu (punkty 13&ndash;16) obowiązują każdego, kto z niego
+            korzysta. <strong>Zgoda na przetwarzanie danych to osobna
+            sprawa</strong> &ndash; wyrażasz ją sam (jeśli masz co najmniej 16
+            lat) albo wyraża ją Twój rodzic. Opisujemy to w punktach 3 i 6.
           </Typography>
         </Section>
 
@@ -160,8 +165,8 @@ export default function RegulaminPage() {
           <Typography paragraph>
             <strong>
               Punkty i komentarze są generowane przez sztuczną inteligencję
-              (model językowy Google Gemini lub Anthropic Claude) i mogą być
-              błędne.
+              (model językowy Google Gemini, a gdy ta usługa nie działa &ndash;
+              Anthropic Claude) i mogą być błędne.
             </strong>{" "}
             W naszych testach ocena zwykle zgadzała się z oceną człowieka, ale
             próba była mała. Ryzyko pomyłki rośnie, gdy zdjęcie jest nieostre
@@ -237,10 +242,15 @@ export default function RegulaminPage() {
               rodzica jest jedynym sposobem odzyskania dostępu.
             </li>
             <li>
-              Jeśli Twoje konto powstało, zanim wprowadziliśmy te zasady, przy
-              najbliższej wizycie zapytamy o rok urodzenia. Gdy masz mniej niż 16
-              lat, Twoje konto też poczeka na zgodę rodzica (dotychczasowe dane
-              zostają, obowiązuje ta sama zasada {PENDING_DAYS} dni).
+              Jeśli Twoje konto powstało przed 12 października 2026, czyli zanim
+              wprowadziliśmy te zasady, przy najbliższej wizycie zapytamy o rok
+              urodzenia. Do tego czasu Twoje dotychczasowe rozwiązania i wyniki
+              zostają w serwisie (obowiązują okresy z punktu 9), ale nie możesz
+              wysyłać nowych ani niczego zapisywać. Jeśli nie chcesz odpowiadać,
+              możesz od razu usunąć konto w panelu &bdquo;Moje rozwiązania&rdquo;.
+              Gdy masz mniej niż 16 lat, Twoje konto też poczeka na zgodę rodzica
+              (dotychczasowe dane zostają, obowiązuje ta sama zasada{" "}
+              {PENDING_DAYS} dni).
             </li>
           </Box>
           <Typography paragraph>
@@ -260,7 +270,8 @@ export default function RegulaminPage() {
             ) pokazuje konta dzieci powiązane z adresem rodzica. Rodzic może tam
             w każdej chwili <strong>usunąć konto dziecka razem ze wszystkimi
             danymi</strong> &ndash; to jest zarazem cofnięcie zgody &ndash; a przy
-            koncie z loginem ustawić nowe hasło. Link działa 30 dni; nowy
+            koncie z loginem ustawić nowe hasło. Link działa 30 dni i można go
+            używać wielokrotnie, więc nie należy go nikomu przekazywać; nowy
             wyślemy po wpisaniu adresu na tej stronie. Rodzic może też w każdej
             chwili napisać na adres{" "}
             <MuiLink href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</MuiLink>.
@@ -283,10 +294,11 @@ export default function RegulaminPage() {
             7.
           </Typography>
           <Typography paragraph>
-            <strong>Zgodność z przepisami.</strong> Serwis działa zgodnie
-            z obowiązującymi przepisami o ochronie dzieci i o ochronie danych
-            osobowych, w tym z RODO, które szczególnie chroni dane dzieci,
-            i z polską ustawą o ochronie danych osobowych. Oceny i wskazówki
+            <strong>Zgodność z przepisami.</strong> Serwis jest projektowany
+            tak, by spełniać wymogi przepisów o ochronie dzieci i o ochronie
+            danych osobowych, w tym RODO, które szczególnie chroni dane dzieci,
+            i polskiej ustawy o ochronie danych osobowych. Jeśli zauważysz coś,
+            co tym wymogom nie odpowiada, napisz do nas. Oceny i wskazówki
             przygotowuje program komputerowy (sztuczna inteligencja), a nie
             człowiek &ndash; więcej o tym w punkcie 10.
           </Typography>
@@ -329,10 +341,22 @@ export default function RegulaminPage() {
           <Typography paragraph>
             Po 5 nieudanych próbach logowania na ten sam login z jednego
             urządzenia lub sieci logowanie jest tam wstrzymywane na 15 minut
-            (chroni to przed odgadywaniem haseł). Urządzenie, na którym już się
-            zalogowałeś, zapamiętujemy w osobnym ciasteczku, więc czyjeś próby
-            zgadywania Twojego hasła z innego miejsca nie zablokują Ci
-            logowania na Twoim urządzeniu.
+            (chroni to przed odgadywaniem haseł). Z urządzeń, na których ten
+            login jeszcze się nie logował, obowiązują dodatkowe limity: 20
+            nieudanych prób z jednej sieci i 10 na jeden login w ciągu 15
+            minut. Urządzenie, na którym już się zalogowałeś, zapamiętujemy w
+            osobnym ciasteczku, więc czyjeś próby zgadywania Twojego hasła z
+            innego miejsca nie zablokują Ci logowania na Twoim urządzeniu.
+          </Typography>
+          <Typography paragraph>
+            <strong>Ochrona rejestracji przed automatami.</strong> Przy
+            zakładaniu konta pokazujemy ramkę firmy Cloudflare (Turnstile),
+            która sprawdza, że nie jesteś automatem. Twoja przeglądarka
+            łączy się wtedy bezpośrednio z serwerami Cloudflare, które sprawdzają
+            jej cechy techniczne i widzą Twój adres IP (punkt 7). Liczbę nowych
+            kont z jednego adresu IP ograniczamy w ciągu doby; w tym celu
+            serwer trzyma przez 24 godziny w pamięci (nie w bazie danych)
+            zakodowany kluczem skrót adresu IP, a nie sam adres.
           </Typography>
         </Section>
 
@@ -348,6 +372,8 @@ export default function RegulaminPage() {
             <li>
               adres zdjęcia profilowego &ndash; przechowywany wyłącznie w Twojej
               sesji (w ciasteczku), <strong>nie zapisujemy go w bazie danych</strong>.
+              Samo zdjęcie, wyświetlane w rogu strony, Twoja przeglądarka pobiera
+              bezpośrednio z serwerów Google.
             </li>
           </Box>
           <Typography paragraph>
@@ -418,11 +444,12 @@ export default function RegulaminPage() {
             <li>
               techniczny zapis wywołań modelu przy dodawaniu zadań (rodzaj i czas
               wywołania, liczba tokenów, koszt &ndash; bez treści), potrzebny do
-              limitu dziennego.
+              limitu dziennego. Taki sam zapis powstaje przy pracy ze wzorcami.
             </li>
           </Box>
           <Typography paragraph>
-            Własne zadania widzisz tylko Ty. Nie są publikowane, udostępniane
+            Własne zadania widzisz Ty, a poza Tobą tylko administrator serwisu
+            w zakresie opisanym w punkcie 7. Nie są publikowane, udostępniane
             innym użytkownikom ani indeksowane przez wyszukiwarki.
           </Typography>
           <Typography paragraph>
@@ -447,8 +474,9 @@ export default function RegulaminPage() {
             </li>
           </Box>
           <Typography paragraph>
-            Wzorce widzisz tylko Ty. Nie są publikowane ani udostępniane innym
-            użytkownikom.
+            Wzorce widzisz Ty, a poza Tobą tylko administrator serwisu w
+            zakresie opisanym w punkcie 7. Nie są publikowane ani udostępniane
+            innym użytkownikom.
           </Typography>
           <Typography paragraph>
             <strong>Dane techniczne:</strong> ciasteczko sesyjne (ważne do 30 dni,
@@ -459,13 +487,19 @@ export default function RegulaminPage() {
             cudze próby zgadywania hasła nie blokowały logowania na Twoim
             urządzeniu; po zmianie hasła przestaje działać dla tego loginu)
             oraz dzienniki serwera zawierające m.in.
-            informacje o logowaniach i błędach. W dziennikach adresy e-mail są
-            skracane tak, by nie identyfikowały osoby.
+            informacje o logowaniach i błędach oraz numery zgłoszeń. W
+            dziennikach adresy e-mail i identyfikatory kont są skracane tak, by
+            nie identyfikowały osoby. Przeglądarka zapisuje też u Ciebie
+            (w pamięci lokalnej, ang. <em>localStorage</em>) stan minutnika
+            próbnych zawodów, żeby przetrwał odświeżenie strony &ndash; ten
+            zapis do nas nie trafia.
           </Typography>
           <Typography paragraph>
-            <strong>Zapisy dostępu administratora:</strong> jeśli administrator
-            serwisu zajrzy w Twoje dane, powstaje wpis w osobnym dzienniku
-            &ndash; kto, czyje dane, jaki zasób i kiedy. Szczegóły w punkcie 7.
+            <strong>Zapisy dostępu administratora:</strong> gdy administrator
+            serwisu otworzy zdjęcie Twojego rozwiązania albo listę Twoich
+            zgłoszeń, powstaje wpis w osobnym dzienniku &ndash; kto, czyje dane,
+            jaki zasób i kiedy. Szczegóły i ograniczenia tego dziennika opisujemy
+            w punkcie 7.
           </Typography>
           <Typography paragraph>
             <strong>To, co jest na zdjęciu kartki.</strong> To najważniejsze
@@ -510,6 +544,20 @@ export default function RegulaminPage() {
             </li>
             <li>
               <strong>
+                Konto czekające na zgodę rodzica (najwyżej {PENDING_DAYS} dni)
+              </strong>{" "}
+              &ndash; zanim rodzic zdecyduje, przechowujemy tylko to, co jest
+              potrzebne, żeby poprosić go o zgodę i sprawdzić, że to on ją
+              wyraża: login albo adres e-mail i nazwę z konta Google, rok
+              urodzenia i adres e-mail rodzica (przy koncie założonym przed 12
+              października 2026 zostają też dotychczasowe rozwiązania). Podstawą jest
+              obowiązek dołożenia rozsądnych starań, by sprawdzić zgodę rodzica
+              (art. 6 ust. 1 lit. c w związku z art. 8 ust. 2 RODO). Takie konto
+              nie może wysyłać rozwiązań ani niczego zapisywać; bez zgody jest
+              usuwane.
+            </li>
+            <li>
+              <strong>
                 Bezpieczeństwo serwisu, limity liczby zgłoszeń i wykrywanie
                 nadużyć
               </strong>{" "}
@@ -519,8 +567,10 @@ export default function RegulaminPage() {
               Na tej podstawie prowadzimy też dziennik dostępu administratora do
               danych (punkt 7), krótkotrwały, pseudonimowy zapis
               wykorzystanego limitu po usunięciu konta (punkt 11), zapis
-              nieudanych prób logowania oraz zapis wysłanych wiadomości
-              potrzebny do limitów wysyłki. Te operacje
+              nieudanych prób logowania, zapis wysłanych wiadomości
+              potrzebny do limitów wysyłki, sprawdzenie Turnstile i limit nowych
+              kont z jednego adresu IP (punkt 4), powiadomienia techniczne dla
+              administratora i kopie zapasowe (punkty 7 i 9). Te operacje
               nie mogą zależeć od zgody, bo wtedy każdy mógłby wyłączyć
               zabezpieczenia.
             </li>
@@ -543,12 +593,16 @@ export default function RegulaminPage() {
             <strong>Dostawca analizy rozwiązania (AI).</strong> Twoje zdjęcia i
             wpisany tekst rozwiązania razem z treścią zadania i rozwiązaniem
             wzorcowym są przesyłane do usługi sztucznej inteligencji, która
-            wykonuje ocenę. Serwis może korzystać z jednej z dwóch firm:{" "}
-            <strong>Google</strong> (Gemini) albo <strong>Anthropic</strong>{" "}
-            (Claude).{" "}
-            <strong>W danej chwili używa tylko jednej z nich</strong> &ndash;
-            wybiera ją administrator. Twoje rozwiązanie jest wysyłane tylko do
-            tej jednej, nie do obu naraz. Zasady wspólne dla obu firm:
+            wykonuje ocenę. <strong>Na co dzień jest to Google</strong> (Gemini).{" "}
+            <strong>Anthropic</strong> (Claude) <strong>jest dostawcą
+            zapasowym</strong>: serwis przełącza się na niego automatycznie, gdy
+            usługa Google jest niedostępna (awaria, przeciążenie), a
+            administrator może go też włączyć ręcznie. Z Anthropic korzystamy
+            dopiero po zakończeniu oceny prawnej tego przekazania danych (punkt
+            8). Twoje rozwiązanie trafia zwykle tylko do jednej z tych firm.
+            Wyjątek: jeśli Google przestanie odpowiadać w trakcie oceny, ta sama
+            praca jest wysyłana od nowa do Anthropic &ndash; wtedy trafia do
+            obu. Zasady wspólne dla obu firm:
           </Typography>
           <Box component="ul" sx={{ pl: 3, mb: 2 }}>
             <li>
@@ -572,14 +626,14 @@ export default function RegulaminPage() {
             </li>
           </Box>
           <Typography paragraph>
-            <strong>Google (Gemini API)</strong> &ndash; gdy serwis używa
-            Google:
+            <strong>Google (Gemini API):</strong>
           </Typography>
           <Box component="ul" sx={{ pl: 3, mb: 2 }}>
             <li>
-              pliki, także zdjęcia stron z własnymi zadaniami, są{" "}
-              <strong>usuwane</strong> z infrastruktury Google zaraz po
-              zakończeniu analizy,
+              pliki, także zdjęcia stron z własnymi zadaniami, serwis{" "}
+              <strong>usuwa</strong> z infrastruktury Google zaraz po
+              zakończeniu analizy; gdyby usunięcie się nie udało, Google kasuje
+              je samo najpóźniej po 48 godzinach,
             </li>
             <li>
               korzystamy z <strong>płatnej wersji usługi</strong>, w której
@@ -590,8 +644,7 @@ export default function RegulaminPage() {
             </li>
           </Box>
           <Typography paragraph>
-            <strong>Anthropic (Claude API)</strong> &ndash; gdy serwis używa
-            Anthropic:
+            <strong>Anthropic (Claude API)</strong> &ndash; gdy serwis go używa:
           </Typography>
           <Box component="ul" sx={{ pl: 3, mb: 2 }}>
             <li>
@@ -611,35 +664,51 @@ export default function RegulaminPage() {
           </Box>
           <Typography paragraph>
             <strong>Google &ndash; pozostałe usługi.</strong> Logowanie kontem
-            Google odbywa się przez usługę Google. Komunikaty o postępie analizy mogą być
-            tłumaczone z angielskiego na polski przez usługę Google Cloud
-            Translation &ndash; niezależnie od tego, która firma ocenia
+            Google odbywa się przez usługę Google, a zdjęcie profilowe Twoja
+            przeglądarka pobiera z serwerów Google. Komunikaty o postępie analizy
+            mogą być tłumaczone z angielskiego na polski przez usługę Google
+            Cloud Translation &ndash; niezależnie od tego, która firma ocenia
             rozwiązanie.
           </Typography>
           <Typography paragraph>
             <strong>Dostawca poczty e-mail.</strong> Wiadomości do rodziców
             (prośba o zgodę, potwierdzenie aktywacji konta, link do strony
-            rodzica, zmiana hasła) wysyłamy przez firmę <strong>Resend</strong>,
-            która robi to w naszym imieniu na podstawie umowy powierzenia
-            przetwarzania danych. Resend otrzymuje adres e-mail rodzica i treść
+            rodzica, zmiana hasła) wysyłamy przez amerykańską firmę{" "}
+            <strong>Resend</strong>, która robi to w naszym imieniu. Umowa
+            powierzenia przetwarzania danych jest częścią warunków korzystania z
+            usługi Resend. Resend otrzymuje adres e-mail rodzica i treść
             wiadomości &ndash; a w niej adres konta Google dziecka albo jego
             login. Żadnych innych danych dziecka (zdjęć, rozwiązań, wyników) tam
-            nie przekazujemy. Wiadomości są wysyłane z centrum danych w Unii
-            Europejskiej (Irlandia).
+            nie przekazujemy. Wiadomości wychodzą z serwerów w Irlandii, ale
+            Resend przetwarza dane głównie w USA (punkt 8).
           </Typography>
           <Typography paragraph>
             <strong>Dostawca ochrony i przesyłu ruchu.</strong> Połączenie z
-            serwisem jest szyfrowane i przechodzi przez infrastrukturę firmy
-            Cloudflare, Inc., która pośredniczy w przesyłaniu ruchu między Twoją
-            przeglądarką a serwerem.
+            serwisem przechodzi przez infrastrukturę amerykańskiej firmy{" "}
+            <strong>Cloudflare, Inc.</strong>, która pośredniczy w przesyłaniu
+            ruchu między Twoją przeglądarką a serwerem. Szyfrowanie połączenia
+            (HTTPS) kończy się na serwerach Cloudflare, więc Cloudflare
+            technicznie ma dostęp do całego ruchu &ndash; także do przesyłanych
+            zdjęć i rozwiązań &ndash; zanim prześle go dalej szyfrowanym tunelem
+            do naszego serwera. Cloudflare dostarcza też sprawdzenie Turnstile
+            przy rejestracji (punkt 4): Twoja przeglądarka pobiera je wprost z
+            serwerów Cloudflare, a nasz serwer wysyła Cloudflare tylko
+            jednorazowy wynik tego sprawdzenia, bez Twojego adresu IP i bez
+            danych konta.
           </Typography>
           <Typography paragraph>
-            <strong>Powiadomienia techniczne.</strong> Administrator może
-            otrzymywać automatyczne powiadomienia o działaniu serwisu (np. że
-            jakieś zgłoszenie się nie powiodło). Powiadomienia te zawierają
-            wyłącznie dane operacyjne: numer zgłoszenia, oznaczenie zadania,
-            liczbę zdjęć i wynik. <strong>Nie zawierają</strong> imienia,
-            nazwiska, adresu e-mail ani identyfikatora użytkownika.
+            <strong>Powiadomienia techniczne.</strong> Administrator dostaje
+            automatyczne powiadomienia o działaniu serwisu przez komunikator{" "}
+            <strong>Telegram</strong> (Telegram FZ-LLC, Zjednoczone Emiraty
+            Arabskie). Powiadomienie o zgłoszeniu zawiera: numer zgłoszenia,
+            oznaczenie zadania, liczbę zdjęć, liczbę znaków wpisanego tekstu,
+            wynik, a przy błędzie tylko jego rodzaj (bez treści błędu).{" "}
+            <strong>Nie zawiera</strong> imienia, nazwiska, adresu e-mail,
+            identyfikatora konta ani treści rozwiązania. Mimo to traktujemy je
+            jako dane osobowe, bo administrator może po numerze zgłoszenia
+            ustalić w serwisie, czyje to zgłoszenie. Z Telegramem nie mamy
+            umowy powierzenia przetwarzania danych, a historia czatu nie jest
+            automatycznie usuwana.
           </Typography>
           <Typography paragraph>
             <strong>Nikt inny.</strong> Nie sprzedajemy danych, nie przekazujemy
@@ -649,21 +718,27 @@ export default function RegulaminPage() {
           </Typography>
           <Typography paragraph>
             <strong>Dostęp administratora.</strong> Administrator serwisu ma
-            techniczną możliwość wglądu we wszystkie zgłoszenia i zdjęcia. Korzysta
-            z niej wyłącznie w celu rozwiązywania problemów technicznych i
+            techniczną możliwość wglądu we wszystkie dane w serwisie, w tym w
+            zgłoszenia, zdjęcia, własne zadania i wzorce. Korzysta z niej
+            wyłącznie w celu rozwiązywania problemów technicznych i
             rozpatrywania zgłoszeń dotyczących błędnych ocen.
           </Typography>
           <Typography paragraph>
-            <strong>Każde takie zajrzenie jest zapisywane.</strong> Serwis
-            prowadzi osobny dziennik dostępu administratora: zapisuje adres
-            e-mail administratora, informację, czyich danych dotyczył dostęp,
-            rodzaj zasobu (np. zdjęcie rozwiązania, lista zgłoszeń, wyszukanie
-            użytkownika) oraz datę i godzinę. <strong>Dziennik nie zawiera</strong>{" "}
-            treści &ndash; ani zdjęć, ani informacji zwrotnych, ani wpisanej frazy
-            wyszukiwania. Dzięki niemu można odpowiedzieć na pytanie
-            &bdquo;kto oglądał moje dane i kiedy&rdquo;. Jeśli chcesz to wiedzieć,
-            napisz na{" "}
-            <MuiLink href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</MuiLink>.
+            <strong>Dziennik dostępu administratora.</strong> Otwarcie zdjęcia
+            rozwiązania, listy zgłoszeń konkretnego ucznia, wyszukanie
+            użytkownika i ponowna analiza są zapisywane w osobnym dzienniku:
+            adres e-mail administratora, czyich danych dotyczył dostęp (przy
+            wyszukiwaniu &ndash; tylko liczba znalezionych osób), rodzaj zasobu
+            oraz data i godzina. Przegląd zbiorczej listy zgłoszeń wszystkich
+            użytkowników jest zapisywany bez wskazania, czyich danych dotyczył.
+            Bezpośredni dostęp administratora do serwera i bazy danych nie jest
+            rejestrowany w tym dzienniku. Jeśli zapis do dziennika się nie uda
+            (np. przy awarii bazy), operacja administratora i tak się wykona,
+            więc dziennik może być niepełny. <strong>Dziennik nie zawiera</strong>{" "}
+            treści &ndash; ani zdjęć, ani informacji zwrotnych, ani wpisanej
+            frazy wyszukiwania. Pomaga odpowiedzieć na pytanie &bdquo;kto
+            oglądał moje dane i kiedy&rdquo;. Jeśli chcesz to wiedzieć, napisz
+            na <MuiLink href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</MuiLink>.
             Zapisy są przechowywane przez {RETENTION_ADMIN_AUDIT}, a gdy usuniesz
             konto, Twój identyfikator jest w nich zastępowany nieodwracalnym
             skrótem &ndash; ślad, że dostęp miał miejsce, zostaje, ale nie da się
@@ -673,14 +748,17 @@ export default function RegulaminPage() {
 
         <Section title="8. Przekazywanie danych poza Unię Europejską">
           <Typography paragraph>
-            Korzystanie z usług Google albo Anthropic oznacza{" "}
+            Część odbiorców z punktu 7 ma siedzibę albo przetwarza dane poza
+            Europejskim Obszarem Gospodarczym. Najważniejsze:{" "}
             <strong>
-              przekazanie zdjęcia Twojej pracy do Stanów Zjednoczonych
+              ocena rozwiązania oznacza przekazanie zdjęcia albo tekstu Twojej
+              pracy do Stanów Zjednoczonych
             </strong>
-            . Podstawa prawna tego przekazania jest u każdej z tych firm inna.
+            . Podstawa prawna przekazania jest u każdej firmy inna.
           </Typography>
           <Typography paragraph>
-            <strong>Google.</strong> Podstawą przekazania jest{" "}
+            <strong>Google</strong> (Gemini, logowanie, tłumaczenie). Podstawą
+            przekazania jest{" "}
             <strong>
               decyzja Komisji Europejskiej stwierdzająca odpowiedni stopień
               ochrony danych
@@ -698,20 +776,41 @@ export default function RegulaminPage() {
             Google zostanie wstrzymane.
           </Typography>
           <Typography paragraph>
-            <strong>Resend.</strong> Wiadomości e-mail wychodzą z centrum danych
-            w Unii Europejskiej, ale Resend jest firmą amerykańską, więc adres
-            e-mail rodzica i treść wiadomości mogą być dostępne z USA. Resend jest
-            uczestnikiem programu EU-US Data Privacy Framework &ndash; podstawą
-            jest ta sama decyzja Komisji Europejskiej co w przypadku Google (art.
-            45 RODO), z tym samym zastrzeżeniem co do toczącego się postępowania.
-          </Typography>
-          <Typography paragraph>
-            <strong>Anthropic.</strong> Podstawą przekazania są{" "}
+            <strong>Anthropic.</strong> Anthropic nie uczestniczy w programie
+            Data Privacy Framework. Podstawą przekazania są{" "}
             <strong>standardowe klauzule umowne</strong> przyjęte przez Komisję
             Europejską (art. 46 ust. 2 lit. c RODO). Są one częścią umowy o
             przetwarzaniu danych zawartej z Anthropic Ireland, Limited. To
             gotowe zapisy przygotowane przez Komisję Europejską, w których
             odbiorca danych spoza Unii zobowiązuje się je chronić.
+          </Typography>
+          <Typography paragraph>
+            <strong>Resend.</strong> Adres e-mail rodzica i treść wiadomości są
+            przetwarzane głównie w USA. Podstawą są standardowe klauzule umowne
+            (decyzja Komisji (UE) 2021/914) zawarte w umowie powierzenia Resend;
+            Resend uczestniczy też w programie EU-US Data Privacy Framework (art.
+            45 RODO), z tym samym zastrzeżeniem co do toczącego się postępowania
+            co przy Google.
+          </Typography>
+          <Typography paragraph>
+            <strong>Cloudflare.</strong> Ruch przechodzący przez serwery
+            Cloudflare może być przetwarzany także poza Unią, w tym w USA.
+            Cloudflare, Inc. uczestniczy w programie EU-US Data Privacy
+            Framework (art. 45 RODO), a jego umowa powierzenia przewiduje
+            dodatkowo standardowe klauzule umowne.
+          </Typography>
+          <Typography paragraph>
+            <strong>Telegram.</strong> Telegram FZ-LLC ma siedzibę w
+            Zjednoczonych Emiratach Arabskich. Komisja Europejska nie wydała dla
+            tego kraju decyzji o odpowiednim stopniu ochrony, a z Telegramem nie
+            mamy standardowych klauzul umownych. Dlatego wysyłamy tam wyłącznie
+            dane techniczne opisane w punkcie 7, z których bez dostępu do naszej
+            bazy danych nie da się ustalić, kogo dotyczą.
+          </Typography>
+          <Typography paragraph>
+            Kopię standardowych klauzul umownych i informacje o pozostałych
+            zabezpieczeniach przekazania prześlemy na prośbę wysłaną na adres{" "}
+            <MuiLink href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</MuiLink>.
           </Typography>
         </Section>
 
@@ -730,8 +829,10 @@ export default function RegulaminPage() {
               <strong>Zapis szczegółowej analizy wykonanej przez model</strong>{" "}
               (odtwarza treść Twojej pracy słowo w słowo) &ndash; przez{" "}
               {RETENTION_THINKING} od przesłania, czyli znacznie krócej niż samo
-              zgłoszenie. Pozostają tylko dane nieosobowe: nazwa modelu, czas i
-              koszt analizy.
+              zgłoszenie. Potem przy zgłoszeniu zostają tylko dane techniczne
+              (nazwa modelu, czas i koszt analizy), a przy rozwiązaniu własnego
+              zadania także kopia treści zadania, według której je oceniono
+              &ndash; aż do usunięcia całego zgłoszenia.
             </li>
             <li>
               <strong>Konto użytkownika</strong> &ndash; do czasu, aż je
@@ -754,7 +855,10 @@ export default function RegulaminPage() {
               usunąć w każdej chwili.
             </li>
             <li>
-              <strong>Techniczny zapis wywołań modelu przy dodawaniu zadań</strong>{" "}
+              <strong>
+                Techniczny zapis wywołań modelu przy dodawaniu zadań i pracy ze
+                wzorcami
+              </strong>{" "}
               &ndash; przez {RETENTION_AI_USAGE}.
             </li>
             <li>
@@ -776,9 +880,9 @@ export default function RegulaminPage() {
               <strong>Adres e-mail rodzica</strong> &ndash; dopóki jest z nim
               powiązane choć jedno konto dziecka. Po usunięciu ostatniego konta
               albo zastąpieniu adresu innym (np. po poprawieniu literówki) jest
-              usuwany najpóźniej po dobie od ostatniej wiadomości &ndash; tyle
-              liczą się limity wysyłki, które chronią skrzynkę rodzica przed
-              zasypaniem wiadomościami.
+              usuwany po dobie od ostatniej wiadomości &ndash; tyle liczą się
+              limity wysyłki, które chronią skrzynkę rodzica przed zasypaniem
+              wiadomościami.
             </li>
             <li>
               <strong>Linki wysłane rodzicowi</strong> (ich skróty) &ndash; 30
@@ -790,26 +894,43 @@ export default function RegulaminPage() {
               <strong>Nieudane próby logowania</strong> &ndash; 24 godziny.
             </li>
             <li>
+              <strong>Skrót adresu IP przy zakładaniu konta</strong> (limit
+              nowych kont, punkt 4) &ndash; 24 godziny, tylko w pamięci serwera.
+            </li>
+            <li>
               <strong>Ciasteczko sesyjne</strong> &ndash; do 30 dni (12 godzin
               przy logowaniu loginem i hasłem bez &bdquo;Zapamiętaj mnie&rdquo;);
-              ciasteczko urządzenia &ndash; rok.
+              ciasteczko urządzenia &ndash; rok. Stan minutnika w Twojej
+              przeglądarce &ndash; do jego wyzerowania albo wyczyszczenia danych
+              przeglądarki.
             </li>
             <li>
               <strong>Dzienniki techniczne serwera</strong> &ndash;
               przechowywane w ograniczonej objętości (do 250 MB na usługę), po
               przekroczeniu której najstarsze wpisy są nadpisywane; przy obecnym
               ruchu odpowiada to kilku miesiącom. Nie zawierają zdjęć ani
-              treści rozwiązań, a adresy
-              e-mail są w nich skracane tak, by nie identyfikowały osoby
+              treści rozwiązań, a adresy e-mail i identyfikatory kont są w nich
+              skracane tak, by nie identyfikowały osoby
               (np. &bdquo;jan***@***&rdquo;).
+            </li>
+            <li>
+              <strong>Powiadomienia techniczne w Telegramie</strong> (punkt 7)
+              &ndash; nie są usuwane automatycznie.
+            </li>
+            <li>
+              <strong>Kopie zapasowe</strong> &ndash; codziennie wykonujemy
+              zaszyfrowaną kopię całego serwera (baza danych i przesłane pliki)
+              na osobny dysk w tym samym miejscu co serwer. Trzymamy 7 kopii
+              dziennych, 4 tygodniowe i 6 miesięcznych, więc usunięte dane
+              znikają z kopii zapasowych po około 6 miesiącach.
             </li>
           </Box>
           <Typography paragraph>
-            Usuwanie odbywa się automatycznie, raz na dobę. Jeśli usuniesz konto
-            samodzielnie, wszystkie Twoje dane &ndash; konto, zdjęcia i historia
-            wyników &ndash; są usuwane niezwłocznie; z kopii zapasowych znikają po
-            zakończeniu ich zwykłego cyklu wymiany. Jeden drobny wyjątek opisujemy
-            w punkcie 11.
+            Usuwanie odbywa się automatycznie, raz na dobę, więc dane mogą
+            zostać do doby dłużej, niż wynika z okresów podanych wyżej. Jeśli
+            usuniesz konto samodzielnie, Twoje konto, zdjęcia, historia wyników,
+            własne zadania i wzorce są usuwane od razu. Co mimo to zostaje
+            jeszcze przez pewien czas, opisujemy w punkcie 11.
           </Typography>
         </Section>
 
@@ -836,6 +957,13 @@ export default function RegulaminPage() {
             oznaczenie nie jest dowodem nieuczciwości, nie pociąga za sobą żadnych
             konsekwencji poza wynikiem 0 punktów w tej jednej próbie i możesz je
             zakwestionować w taki sam sposób jak ocenę.
+          </Typography>
+          <Typography paragraph>
+            <strong>Tylko matematyka.</strong> Program zajmuje się wyłącznie
+            zadaniami matematycznymi. Własnego zadania, które nie jest zadaniem
+            matematycznym, nie da się dodać, a przy wzorcach program grzecznie
+            odmawia rozmowy na inne tematy. Usługa Google ma dodatkowo włączone
+            filtry bezpieczeństwa, które blokują treści szkodliwe.
           </Typography>
           <Typography paragraph>
             <strong>Podgląd postępów.</strong> Twoje wyniki są zestawiane w prosty
@@ -891,8 +1019,9 @@ export default function RegulaminPage() {
               <strong>Usunięcie konta i wszystkich danych</strong> &ndash;
               możesz to zrobić <strong>samodzielnie</strong>, po zalogowaniu, w
               panelu &bdquo;Moje rozwiązania&rdquo;. Usuwane są konto, wszystkie
-              przesłane zdjęcia i cała historia wyników. Operacja jest
-              nieodwracalna. Jeden wyjątek opisujemy niżej.
+              przesłane zdjęcia, cała historia wyników, własne zadania i wzorce.
+              Operacja jest nieodwracalna. Co zostaje jeszcze przez pewien czas,
+              opisujemy niżej.
             </li>
             <li>
               <strong>Rodzic lub opiekun</strong> może usunąć konto dziecka
@@ -907,6 +1036,9 @@ export default function RegulaminPage() {
             <li>
               <strong>Podgląd swoich danych</strong> &ndash; swoje zgłoszenia,
               zdjęcia i wyniki widzisz w panelu &bdquo;Moje rozwiązania&rdquo;.
+              Kopię danych (także w formacie do odczytu maszynowego) prześlemy
+              na prośbę wysłaną e-mailem &ndash; serwis nie ma przycisku do jej
+              pobrania.
             </li>
             <li>
               <strong>Pozostałe żądania</strong> &ndash; napisz na{" "}
@@ -917,25 +1049,62 @@ export default function RegulaminPage() {
             </li>
           </Box>
           <Typography paragraph>
-            <strong>
-              Co zostaje po usunięciu konta &ndash; jedyny wyjątek
-            </strong>
-            . Po skasowaniu konta zostaje jedna rzecz i chcemy powiedzieć o niej
-            wprost: <strong>nieodwracalny skrót</strong> (nie da się z niego
-            odtworzyć Twojego identyfikatora ani adresu e-mail) wraz z liczbą
-            zgłoszeń wysłanych w ciągu ostatniej doby. Nie ma tam Twojego imienia,
-            nazwiska, adresu e-mail, zdjęć ani wyników.
+            <strong>Co zostaje po usunięciu konta.</strong> Twoje konto, zdjęcia,
+            wyniki, własne zadania i wzorce znikają od razu. Kilka śladów zostaje
+            jeszcze przez pewien czas i chcemy powiedzieć o nich wprost. W żadnym
+            z nich nie ma Twojego imienia, nazwiska, adresu e-mail, zdjęć ani
+            treści rozwiązań:
           </Typography>
+          <Box component="ul" sx={{ pl: 3, mb: 2 }}>
+            <li>
+              <strong>zapis wykorzystanego limitu</strong> &ndash;{" "}
+              nieodwracalny skrót (nie da się z niego odtworzyć Twojego
+              identyfikatora ani adresu e-mail) z liczbą zgłoszeń i wywołań
+              programu przy własnych zadaniach i wzorcach z ostatniej doby.
+              Opisujemy go dokładniej poniżej;
+            </li>
+            <li>
+              <strong>dzienniki techniczne serwera</strong> &ndash; wpisy z
+              numerami zgłoszeń i skróconymi identyfikatorami zostają do czasu
+              ich nadpisania (zwykle kilka miesięcy, punkt 9);
+            </li>
+            <li>
+              <strong>powiadomienia w Telegramie</strong> &ndash; numery
+              zgłoszeń, oznaczenia zadań i wyniki (punkt 7) nie są usuwane
+              automatycznie;
+            </li>
+            <li>
+              <strong>kopie zapasowe</strong> &ndash; usunięte dane znikają z
+              nich po około 6 miesiącach (punkt 9);
+            </li>
+            <li>
+              <strong>skróty linków wysłanych rodzicowi</strong> &ndash; już bez
+              powiązania z kontem, do 30 dni od wygaśnięcia linku (potrzebne do
+              limitów wysyłki);
+            </li>
+            <li>
+              <strong>dziennik dostępu administratora</strong> &ndash; Twój
+              identyfikator jest w nim zastąpiony nieodwracalnym skrótem
+              (punkt 7);
+            </li>
+            <li>
+              <strong>u dostawców AI</strong> &ndash; Google może trzymać
+              rejestry techniczne do 55 dni, a Anthropic przesłane treści do 30
+              dni (punkt 7).
+            </li>
+          </Box>
           <Typography paragraph>
-            Po co to jest: limity liczby zgłoszeń są liczone na podstawie
-            wysłanych rozwiązań, więc bez tego zapisu usunięcie konta i zalogowanie
-            się od nowa byłoby prostym sposobem na wyzerowanie dziennego limitu i
-            zablokowanie serwisu innym. Zapis <strong>znika automatycznie</strong>{" "}
-            najpóźniej 24 godziny po Twoim ostatnim zgłoszeniu, czyli razem
-            z wygaśnięciem samego limitu. Jeśli w ciągu doby przed usunięciem konta
-            nie wysłałeś żadnego rozwiązania, nie powstaje w ogóle. Podstawą jest
-            prawnie uzasadniony interes administratora (art. 6 ust. 1 lit. f RODO),
-            opisany w punkcie 6.
+            <strong>Po co jest zapis wykorzystanego limitu:</strong> limity są
+            liczone na podstawie wysłanych rozwiązań i wywołań programu, więc
+            bez tego zapisu usunięcie konta i założenie go od nowa byłoby
+            prostym sposobem na wyzerowanie dziennego limitu i zablokowanie
+            serwisu innym. Zapis <strong>znika automatycznie</strong>, gdy
+            wygasa sam limit, czyli dobę po Twoim ostatnim zgłoszeniu lub
+            wywołaniu programu (przy codziennym sprzątaniu &ndash; najpóźniej po
+            około 48 godzinach). Jeśli w ciągu doby przed usunięciem konta nie
+            korzystałeś z programu, zapis w ogóle nie powstaje. Podstawą tego
+            zapisu i pozostałych śladów z listy jest prawnie uzasadniony interes
+            administratora (art. 6 ust. 1 lit. f RODO), opisany w punkcie 6.
           </Typography>
           <Typography paragraph>
             <strong>Prawo do skargi.</strong> Jeżeli uważasz, że Twoje dane są
@@ -953,15 +1122,18 @@ export default function RegulaminPage() {
             administratora. Baza danych nie jest dostępna z internetu. Hasła do
             kont Google w ogóle do nas nie trafiają, a hasła do kont z loginem
             przechowujemy wyłącznie jako skrót argon2id &ndash; samego hasła nie
-            znamy. Logowanie jest chronione limitem nieudanych prób, a linki
-            wysyłane rodzicom są jednorazowe albo krótko ważne i zapisujemy tylko
-            ich skróty.
+            znamy. Logowanie jest chronione limitem nieudanych prób. Linki do
+            zgody i do zmiany hasła są jednorazowe, link do strony rodzica działa
+            30 dni, a w bazie zapisujemy tylko skróty linków. Każde przesłane
+            zdjęcie zapisujemy od nowa jako czysty plik JPEG, co usuwa ukryte w
+            nim dane, np. miejsce zrobienia zdjęcia (GPS).
           </Typography>
           <Typography paragraph>
             Żadne zabezpieczenia nie dają stuprocentowej pewności. Gdyby doszło do
-            naruszenia ochrony danych mogącego powodować wysokie ryzyko dla Twoich
-            praw, zostaniesz o tym poinformowany, a sprawa zostanie zgłoszona
-            Prezesowi Urzędu Ochrony Danych Osobowych zgodnie z art. 33 i 34 RODO.
+            naruszenia ochrony danych, zgłosimy je Prezesowi Urzędu Ochrony Danych
+            Osobowych zgodnie z art. 33 RODO, a jeśli mogłoby powodować wysokie
+            ryzyko dla Twoich praw &ndash; poinformujemy także Ciebie (a przy
+            koncie dziecka poniżej 16 lat także rodzica), zgodnie z art. 34 RODO.
           </Typography>
         </Section>
 
@@ -998,10 +1170,16 @@ export default function RegulaminPage() {
           <Typography paragraph>
             <strong>Limity.</strong> Każde sprawdzenie rozwiązania kosztuje, więc
             obowiązują limity chroniące dostępność serwisu: maksymalnie 30
-            zgłoszeń na użytkownika w ciągu doby oraz limit łączny dla wszystkich
-            użytkowników. Po wyczerpaniu limitu serwis informuje, kiedy będzie
-            można wysłać kolejne rozwiązanie. Jednorazowo można wysłać do 10
-            zdjęć, każde o rozmiarze do 10 MB (formaty JPEG, PNG, WebP, HEIC).
+            zgłoszeń na użytkownika w ciągu doby, najwyżej 2 Twoje rozwiązania
+            sprawdzane jednocześnie oraz limit łączny dla wszystkich
+            użytkowników. Serwis ma też dzienny budżet na sztuczną inteligencję:
+            gdy się wyczerpie, funkcje korzystające z AI są wstrzymane dla
+            wszystkich, dopóki w ciągu ostatniej doby nie zwolni się miejsce.
+            Zgłoszenie odrzucone przez serwer, zanim trafiło do AI, nie zużywa
+            Twojego dziennego limitu. Po wyczerpaniu limitu serwis informuje,
+            kiedy będzie można wysłać kolejne rozwiązanie. Jednorazowo można
+            wysłać do 10 zdjęć, każde o rozmiarze do 10 MB (formaty JPEG, PNG,
+            WebP, HEIC).
           </Typography>
           <Typography paragraph>
             Administrator może ograniczyć lub zablokować dostęp użytkownikowi,
@@ -1072,14 +1250,18 @@ export default function RegulaminPage() {
           <Typography paragraph>
             Administrator może zmienić regulamin. O istotnych zmianach
             użytkownicy zostaną poinformowani komunikatem w serwisie. Dalsze
-            korzystanie po wprowadzeniu zmian oznacza ich akceptację.
+            korzystanie po wprowadzeniu zmian oznacza akceptację zmienionych
+            zasad korzystania z serwisu. Nie dotyczy to zgody na przetwarzanie
+            danych: jej zakresu nie poszerzamy bez pytania. Gdyby zmiana
+            wymagała nowej zgody, poprosimy o nią Ciebie albo &ndash; jeśli
+            masz mniej niż 16 lat &ndash; Twojego rodzica.
           </Typography>
           <Typography paragraph>
             <strong>Zakończenie działania serwisu.</strong> Serwis jest projektem
             niekomercyjnym prowadzonym przez jedną osobę i może zostać wygaszony.
             Gdyby do tego doszło, użytkownicy zostaną poinformowani z
-            wyprzedzeniem i będą mieli czas na pobranie swoich wyników, a wszystkie
-            dane zostaną trwale usunięte.{" "}
+            wyprzedzeniem. W tym czasie będzie można poprosić e-mailem o kopię
+            swoich wyników, a potem wszystkie dane zostaną trwale usunięte.{" "}
             <strong>
               Dane z tego serwisu nie zostaną przekazane żadnemu innemu podmiotowi
             </strong>{" "}

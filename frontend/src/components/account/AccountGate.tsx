@@ -7,9 +7,18 @@ import { Box, Container, Link as MuiLink, Typography } from "@mui/material";
 import HourglassTop from "@mui/icons-material/HourglassTop";
 import { useAuth } from "@/lib/hooks/useAuth";
 
-// Strony dostepne mimo braku roku urodzenia: sam krok, zasady, wylogowanie
-// i strony z linkow w e-mailach (rodzic moze otworzyc je na urzadzeniu dziecka).
-const PROFILE_EXEMPT = ["/konto/uzupelnij", "/regulamin", "/logout", "/rodzic", "/reset-hasla"];
+// Strony dostepne mimo braku roku urodzenia: sam krok, zasady, wylogowanie,
+// strony z linkow w e-mailach (rodzic moze otworzyc je na urzadzeniu dziecka)
+// i "Moje rozwiazania" - tam jest usuniecie konta (RODO art. 17), ktore nie
+// moze zalezec od podania roku urodzenia.
+const PROFILE_EXEMPT = [
+  "/konto/uzupelnij",
+  "/regulamin",
+  "/logout",
+  "/rodzic",
+  "/reset-hasla",
+  "/my-solutions",
+];
 // Bez paska "czeka na zgode": sama strona oczekiwania i strony dla rodzica
 const BANNER_HIDDEN = ["/konto/oczekuje", "/konto/uzupelnij", "/rodzic", "/reset-hasla"];
 

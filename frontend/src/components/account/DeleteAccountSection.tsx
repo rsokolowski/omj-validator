@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
+  Link as MuiLink,
   Paper,
   Typography,
   Box,
@@ -116,9 +118,21 @@ export function DeleteAccountSection({ confirmationPhrase }: DeleteAccountSectio
                 wszystkie zdjęcia Twoich rozwiązań
               </Typography>
               <Typography component="li" variant="body2">
+                Twoje własne zadania (&bdquo;Moje zadania&rdquo;) i wzorce
+              </Typography>
+              <Typography component="li" variant="body2">
                 całą historię Twoich postępów
               </Typography>
             </Box>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              Przez pewien czas zostaną tylko ślady techniczne bez Twojego
+              imienia, adresu e-mail i rozwiązań (np. w kopiach zapasowych) &ndash;
+              opisujemy je w{" "}
+              <MuiLink component={Link} href="/regulamin" target="_blank" rel="noopener noreferrer">
+                regulaminie, w punkcie 11
+              </MuiLink>
+              .
+            </Typography>
             <Typography variant="body2" sx={{ mb: 2 }}>
               Jeśli na pewno chcesz usunąć konto, wpisz poniżej{" "}
               <strong>{confirmationPhrase}</strong>.

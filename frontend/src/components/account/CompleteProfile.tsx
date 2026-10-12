@@ -1,7 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { Alert, Box, ButtonBase, Typography } from "@mui/material";
+import Link from "next/link";
+import { Alert, Box, ButtonBase, Link as MuiLink, Typography } from "@mui/material";
 import { APIError } from "@/lib/api/client";
 import { accountApi, errorText } from "@/lib/api/account";
 import {
@@ -96,7 +97,7 @@ export function CompleteProfile({ currentYear, ownEmail }: CompleteProfileProps)
         return;
       }
     } else if (!acceptTerms) {
-      setErrors((prev) => ({ ...prev, accept_terms: "Zaznacz zgodę, żeby korzystać z serwisu." }));
+      setErrors((prev) => ({ ...prev, accept_terms: "Zaznacz oba pola, żeby korzystać z serwisu." }));
       return;
     }
 
@@ -160,6 +161,13 @@ export function CompleteProfile({ currentYear, ownEmail }: CompleteProfileProps)
               Dalej
             </SubmitButton>
           </StepActions>
+          <Typography variant="body2" sx={{ color: "grey.600", mt: 2 }}>
+            Nie chcesz odpowiadać? Możesz usunąć konto razem ze wszystkimi danymi w panelu{" "}
+            <MuiLink component={Link} href="/my-solutions" sx={{ color: "primary.main" }}>
+              Moje rozwiązania
+            </MuiLink>
+            .
+          </Typography>
         </Box>
       )}
 
