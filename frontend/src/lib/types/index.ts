@@ -1,10 +1,13 @@
 // TypeScript types matching FastAPI Pydantic models
 
 export interface User {
-  google_sub: string;
-  email: string;
+  id: string;
+  /** null for login/password accounts (children without an e-mail) */
+  email: string | null;
+  /** null for Google accounts */
+  login?: string | null;
   name: string;
-  picture?: string;
+  picture?: string | null;
   is_group_member: boolean;
 }
 
@@ -191,7 +194,7 @@ export interface AdminRerunResponse {
 }
 
 export interface AdminUser {
-  google_sub: string;
+  id: string;
   email: string;
   name: string | null;
 }
@@ -503,4 +506,110 @@ export interface PracticeTask {
   ref: string;
   title: string;
   url: string;
+}
+
+// Accounts: age step, parent consent, login/password accounts
+export type AccountStatus = "active" | "pending_parent";
+export type LoginMethod = "google" | "login";
+
+/** Present while the account waits for a parent's consent */
+export interface PendingInfo {
+  /** Masked, e.g. "m***@example.com" */
+  parent_email: string;
+  /** When the account is deleted without consent (ISO, UTC) */
+  deadline: string | null;
+  /** Newest consent e-mail; null = nothing has gone out yet */
+  last_sent_at: string | null;
+  resend_available_at: string | null;
+}
+
+export interface AccountInfo {
+  status: AccountStatus;
+  /** No year of birth yet (account created before the age step) */
+  needs_profile: boolean;
+  login_method: LoginMethod;
+  pending: PendingInfo | null;
+}
+
+export interface AuthMeResponse {
+  user: User | null;
+  account: AccountInfo | null;
+  is_authenticated: boolean;
+  is_admin: boolean;
+  can_delete_account?: boolean;
+  account_delete_confirmation?: string;
+}
+
+export interface RedirectResponse {
+  redirect: string;
+  email_sent?: boolean | null;
+}
+
+export type GoogleRegistrationResponse =
+  | { action: "google"; redirect: string }
+  | { action: "done"; redirect: string; email_sent: boolean | null };
+
+export interface RegistrationStateResponse {
+  google: { email: string } | null;
+}
+
+export interface LoginAvailableResponse {
+  login: string;
+  valid: boolean;
+  available: boolean;
+  message: string | null;
+}
+
+export interface ResendResponse {
+  sent: true;
+  account?: AccountInfo;
+}
+
+/** State of a link from an e-mail */
+export type LinkState = "valid" | "expired" | "used" | "invalid";
+
+/** A child's account as a parent sees it */
+export interface ParentChild {
+  id: string;
+  kind: LoginMethod;
+  /** "Login dziecka" / "Konto Google dziecka" */
+  identifier_label: string;
+  identifier: string;
+  created_at: string;
+  status: AccountStatus;
+  pending_deadline: string | null;
+}
+
+export interface ProcessingSummary {
+  /** e.g. "24 miesiące" */
+  submission_retention: string;
+  /** e.g. "36 miesięcy" */
+  inactive_retention: string;
+  pending_days: number;
+}
+
+export interface ConsentView {
+  state: LinkState;
+  child: ParentChild | null;
+  can_resend: boolean;
+  summary: ProcessingSummary;
+}
+
+export type ConsentDecisionResponse =
+  | { result: "accepted"; manage_url: string; child: ParentChild }
+  | { result: "declined" };
+
+export interface ParentChildrenResponse {
+  parent_email: string;
+  children: ParentChild[];
+}
+
+export interface ParentDeleteResponse {
+  deleted: true;
+  remaining: number;
+}
+
+export interface PasswordResetCheckResponse {
+  state: LinkState;
+  login: string | null;
 }

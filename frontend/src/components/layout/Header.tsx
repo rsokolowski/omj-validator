@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
@@ -66,7 +67,12 @@ export function Header() {
         >
           {/* Logo - wyglada jak h6, ale naglowkiem nie jest: naglowek poziomu 6
               przed <h1> psul hierarchie dokumentu (WCAG 1.3.1). */}
-          <Link href="/" style={{ textDecoration: "none" }}>
+          <Link
+            href="/"
+            style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}
+          >
+            {/* alt="" - nazwa stoi obok, czytnik nie musi jej czytac dwa razy */}
+            <Image src="/images/logo.png" alt="" width={32} height={32} priority unoptimized />
             <Typography
               variant="h6"
               component="span"
@@ -242,7 +248,7 @@ export function Header() {
                           whiteSpace: "nowrap",
                         }}
                       >
-                        {user.name || user.email}
+                        {user.login || user.name || user.email}
                       </Typography>
                       {!isGroupMember && (
                         <Chip

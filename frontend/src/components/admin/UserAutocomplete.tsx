@@ -53,7 +53,7 @@ export function UserAutocomplete({ value, onChange }: UserAutocompleteProps) {
       options={options}
       loading={loading}
       getOptionLabel={(option) => option.email}
-      isOptionEqualToValue={(option, value) => option.google_sub === value.google_sub}
+      isOptionEqualToValue={(option, value) => option.id === value.id}
       filterOptions={(x) => x} // Disable client-side filtering (server handles it)
       renderOption={(props, option) => {
         const { key, ...rest } = props;

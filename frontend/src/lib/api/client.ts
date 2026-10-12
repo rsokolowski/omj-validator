@@ -4,11 +4,50 @@ import type { AiConfigResponse, AiConfigUpdateResponse, AiProviderId } from "@/l
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "";
 
+/** Error body of the JSON API: `detail` plus optional machine-readable extras */
+export interface APIErrorBody {
+  detail?: unknown;
+  /** e.g. "invalid", "email_cooldown", "parent_consent_pending" */
+  code?: unknown;
+  /** Form field the error belongs to, e.g. "parent_email" */
+  field?: unknown;
+  /** Seconds until the action may be retried (429) */
+  retry_after?: unknown;
+  /** Link state on 410/404 answers of the e-mail link endpoints */
+  state?: unknown;
+  redirect?: unknown;
+  [key: string]: unknown;
+}
+
 export class APIError extends Error {
-  constructor(public status: number, message: string) {
+  constructor(
+    public status: number,
+    message: string,
+    public body: APIErrorBody | null = null
+  ) {
     super(message);
     this.name = "APIError";
   }
+
+  get code(): string | undefined {
+    return typeof this.body?.code === "string" ? this.body.code : undefined;
+  }
+
+  get field(): string | undefined {
+    return typeof this.body?.field === "string" ? this.body.field : undefined;
+  }
+
+  get retryAfter(): number | undefined {
+    return typeof this.body?.retry_after === "number" ? this.body.retry_after : undefined;
+  }
+
+  get state(): string | undefined {
+    return typeof this.body?.state === "string" ? this.body.state : undefined;
+  }
+}
+
+function asBody(body: unknown): APIErrorBody | null {
+  return body && typeof body === "object" && !Array.isArray(body) ? (body as APIErrorBody) : null;
 }
 
 /**
@@ -42,7 +81,11 @@ export async function fetchAPI<T>(
 
   if (!res.ok) {
     const body = await res.json().catch(() => null);
-    throw new APIError(res.status, errorMessage(body, res.statusText || "Wystąpił błąd"));
+    throw new APIError(
+      res.status,
+      errorMessage(body, res.statusText || "Wystąpił błąd"),
+      asBody(body)
+    );
   }
 
   return res.json();
@@ -91,12 +134,15 @@ export async function uploadFiles<T>(
       } else {
         // Parse JSON error response to get the actual error message
         let message = xhr.statusText;
+        let body: APIErrorBody | null = null;
         try {
-          message = errorMessage(JSON.parse(xhr.responseText), xhr.statusText);
+          const parsed = JSON.parse(xhr.responseText);
+          message = errorMessage(parsed, xhr.statusText);
+          body = asBody(parsed);
         } catch {
           // If response isn't JSON, use status text
         }
-        reject(new APIError(xhr.status, message));
+        reject(new APIError(xhr.status, message, body));
       }
     });
 
