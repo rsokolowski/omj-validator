@@ -1448,13 +1448,13 @@ prace i czytają odpowiedzi modelu, a przy wzorcach wymieniają z modelem wiadom
 |---|---|
 | **Zgodność z prawem** ochrony dzieci i danych, **jawnie zadeklarowana** na stronie lub w dokumentacji publicznej | spełnione: `/regulamin`, pkt 3 („Zgodność z przepisami”); w wariancie B — regulamin szkoły |
 | **Informacja, że użytkownik rozmawia z AI**, a nie z człowiekiem | spełnione: stopka każdej strony („…generowane przez AI…”) i `/regulamin` |
-| Środki techniczne odpowiednie do zastosowania (przykłady Anthropic, nie lista zamknięta): weryfikacja wieku, moderacja treści, monitorowanie i zgłaszanie, materiały edukacyjne | częściowo: odpowiedzi modelu są ograniczone schematem JSON i promptem do oceny rozwiązania; wykrywanie prób manipulacji (`abuse_score`, `issue_type`); panel administratora. Brak weryfikacji wieku i zgody rodzica (plan wdrożenia, poz. 3) i brak osobnej warstwy moderacji |
+| Środki techniczne odpowiednie do zastosowania (przykłady Anthropic, nie lista zamknięta): weryfikacja wieku, moderacja treści, monitorowanie i zgłaszanie, materiały edukacyjne | w dużej mierze: rok urodzenia i zgoda rodzica e-mailem dla osób poniżej 16 lat, a konto bez zgody nie może wywołać AI (R15, wdrożone 12.10.2026); odpowiedzi modelu ograniczone schematem JSON i promptem do oceny rozwiązania; wykrywanie prób manipulacji (`abuse_score`, `issue_type`); panel administratora. Brak osobnej warstwy moderacji |
 | Systemowy prompt bezpieczeństwa dzieci, który Anthropic „może udostępnić” | nieużywany — [DO DECYZJI: zapytać Anthropic, czy jest dostępny dla tego zastosowania] |
 | Okresowe audyty Anthropic; przy wysokim odsetku naruszeń — zalecenia, a w razie ich niewdrożenia zawieszenie konta | przyjęte do wiadomości |
 
 Wniosek: przy obecnym zakresie (ocena rozwiązań zadań matematycznych, odpowiedzi ograniczone
-schematem) ryzyko naruszenia zasad jest niskie, a jedynym brakiem jest weryfikacja wieku,
-która i tak jest otwartym środkiem tej DPIA.
+schematem) i przy wdrożonej weryfikacji wieku i zgody rodzica (R15) ryzyko naruszenia zasad
+jest niskie. Do rozważenia pozostaje tylko systemowy prompt bezpieczeństwa dzieci.
 Przed ustawieniem `ANTHROPIC_PROCESSOR_APPROVED=true` należy ponownie sprawdzić Usage Policy
 (nowa wersja obowiązuje od 12.11.2026).
 
