@@ -182,6 +182,7 @@ def test_aux_reservation_is_refused_with_429(session_factory, monkeypatch):
         private_service.reserve_ai_calls(db, USER_ID, "pattern_refine", {"pattern_refine"}, 30, is_allowlisted=True)
     assert info.value.status_code == 429
     assert info.value.detail == spend.SPEND_LIMIT_MESSAGE
+    assert info.value.headers == {"Retry-After": str(spend.SPEND_LIMIT_RETRY_AFTER_SECONDS)}
     assert db.query(AIUsageDB).count() == 0  # nothing reserved
 
 

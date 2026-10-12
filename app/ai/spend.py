@@ -30,6 +30,7 @@ import time
 from datetime import date, datetime, timedelta, timezone
 from typing import Optional
 
+from fastapi import HTTPException, status
 from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 
@@ -57,6 +58,9 @@ SPEND_LIMIT_MESSAGE = (
     "Na dziś wyczerpał się limit korzystania z AI w aplikacji. "
     "Spróbuj ponownie za kilka godzin."
 )
+
+# The spend window is rolling; an hour is a fair "come back later"
+SPEND_LIMIT_RETRY_AFTER_SECONDS = 3600
 
 # The window sum is cached briefly: it runs before every AI call, and the
 # submissions scan is not indexed by time. A burst can overshoot the cap by
@@ -184,3 +188,21 @@ def check_spend_limit(db: Session) -> None:
     if spent >= limit:
         logger.warning(f"[AI spend] Limit reached (${spent:.2f} / ${limit:.2f}) - AI call refused")
         raise AISpendLimitError(SPEND_LIMIT_MESSAGE)
+
+
+def spend_limit_http_error(db: Session) -> Optional[HTTPException]:
+    """The 429 for a request refused by the cap (check_spend_limit), else None.
+
+    One message and Retry-After for every route; the body is
+    {"detail": message} as raised, or the caller re-wraps ``detail`` in its
+    own shape (submit answers {"error"}).
+    """
+    try:
+        check_spend_limit(db)
+    except AISpendLimitError as e:
+        return HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=str(e),
+            headers={"Retry-After": str(SPEND_LIMIT_RETRY_AFTER_SECONDS)},
+        )
+    return None

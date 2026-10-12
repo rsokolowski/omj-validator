@@ -448,6 +448,7 @@ class TestOmjSubmitRequiresAccess:
 
         assert code == 403
         assert db.query(SubmissionDB).count() == 0
+        assert files_left() == []
 
     def test_refusal_keeps_the_error_shape(self, app, db, monkeypatch):
         """The legacy submit endpoint answers {"error"}, the API routes {"detail"}."""
@@ -460,7 +461,6 @@ class TestOmjSubmitRequiresAccess:
         response = TestClient(app).post(OMJ_URL, data={"solution_text": "x"})
         assert response.status_code == 403
         assert response.json() == {"error": "Nie masz uprawnień do tej funkcji."}
-        assert files_left() == []
 
 
 class TestSpendLimitAtSubmit:
@@ -480,3 +480,19 @@ class TestSpendLimitAtSubmit:
         assert db.query(SubmissionDB).count() == 0
         assert files_left() == []
         assert started == []
+
+    def test_refusal_body_and_retry_after(self, app, db, monkeypatch):
+        """Submit answers {"error"} (its other 429s do too) with the shared Retry-After."""
+        from fastapi.testclient import TestClient
+
+        from app.ai import spend
+        from app.ai.factory import AISpendLimitError
+
+        def over(db):
+            raise AISpendLimitError(spend.SPEND_LIMIT_MESSAGE)
+
+        monkeypatch.setattr(spend, "check_spend_limit", over)
+        response = TestClient(app).post(OMJ_URL, data={"solution_text": "x"})
+        assert response.status_code == 429
+        assert response.json() == {"error": spend.SPEND_LIMIT_MESSAGE}
+        assert response.headers["Retry-After"] == str(spend.SPEND_LIMIT_RETRY_AFTER_SECONDS)
