@@ -91,9 +91,10 @@ dokumenty korzystają.
 
 ### Rozstrzygnąć przed uruchomieniem — sprawy wymagające decyzji lub opinii prawnika
 
-1. **Klucz API musi być kluczem płatnym.** Cała ocena ryzyka opiera się na tym, że na płatnym
-   poziomie Gemini API Google nie wykorzystuje przesyłanych treści do trenowania modeli.
-   Na poziomie bezpłatnym jest inaczej — uruchomienie na darmowym kluczu unieważnia wnioski DPIA.
+1. **Klucz Gemini API musi być kluczem płatnym (przy Gemini).** Ocena ryzyka dla Google opiera
+   się na tym, że na płatnym poziomie Gemini API Google nie wykorzystuje przesyłanych treści do
+   trenowania modeli. Na poziomie bezpłatnym jest inaczej — uruchomienie na darmowym kluczu
+   unieważnia wnioski DPIA. Odpowiednik dla Anthropic — punkt 9.
 2. **Dostęp do materiałów olimpijskich musi zostać zamknięty za logowaniem.** W wyjściowej
    wersji kodu 162 pliki PDF i pełne treści zadań są serwowane publicznie. Dozwolony użytek
    instytucji oświatowych (art. 27 ust. 2 prawa autorskiego) wymaga ograniczenia dostępu do
@@ -157,5 +158,8 @@ Jeśli którekolwiek przestanie być prawdziwe — w regulaminie albo tylko w pr
 ## Przegląd dokumentów
 
 Aktualizacja co najmniej raz na 12 miesięcy oraz niezwłocznie po każdej istotnej zmianie:
-zmianie dostawcy lub modelu AI, zmianie zakresu zbieranych danych, rozszerzeniu kręgu osób
-z dostępem do danych uczniów, naruszeniu ochrony danych, zmianie stanu prawnego.
+wprowadzeniu dostawcy AI innego niż Google i Anthropic, pierwszym włączeniu Anthropic jako
+aktywnego dostawcy, zmianie modelu AI lub warunków przetwarzania danych u któregokolwiek
+z dostawców, zmianie zakresu zbieranych danych, rozszerzeniu kręgu osób z dostępem do danych
+uczniów, naruszeniu ochrony danych, zmianie stanu prawnego. Samo przełączenie między Google
+a Anthropic nie wymaga zmiany dokumentów (DPIA, R6a).

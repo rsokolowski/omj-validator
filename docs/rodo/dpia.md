@@ -51,7 +51,7 @@ jednocześnie dwa kryteria z wykazu:
    narzędzia są uczniowie klas VII–VIII szkoły podstawowej, typowo w wieku 10–15 lat.
 2. **Innowacyjne wykorzystanie lub zastosowanie nowych rozwiązań technologicznych.** Ocena pracy
    ucznia i wygenerowanie informacji zwrotnej odbywa się przez duży model językowy
-   (Google Gemini **lub** Anthropic Claude — jeden aktywny w danym momencie, wybierany przez
+   (Google Gemini lub Anthropic Claude — jeden aktywny w danym momencie, wybierany przez
    administratora), któremu przekazywane są fotografie odręcznej pracy dziecka.
 
 Do tego dochodzą przesłanki uzupełniające, które same nie przesądzają obowiązku, ale podnoszą
@@ -78,7 +78,7 @@ i jest odnotowane w ryzyku R16.
 Uczeń wybiera archiwalne zadanie olimpijskie, rozwiązuje je odręcznie na kartce, fotografuje
 kartkę telefonem i przesyła zdjęcia przez przeglądarkę. Zamiast zdjęcia (albo obok niego) uczeń może wpisać rozwiązanie w przeglądarce jako tekst ze wzorami i dołączyć rysunek wykonany w przeglądarce (wysyłany jako obraz PNG). System przesyła te zdjęcia razem z PDF-em
 zawierającym treści zadań i PDF-em z rozwiązaniami wzorcowymi do modelu AI (Google Gemini
-**lub** Anthropic Claude — jeden aktywny w danym momencie, wybierany przez administratora) wraz
+lub Anthropic Claude — jeden aktywny w danym momencie, wybierany przez administratora) wraz
 z instrukcją odtwarzającą oficjalne kryteria punktacji OMJ. Model zwraca:
 
 - liczbę punktów (0/1/3 dla etapu I, 0/2/5/6 dla etapów II i III),
@@ -318,8 +318,8 @@ zadaniu. Konsekwencje, które trzeba przyjąć świadomie:
 > Uwaga ustrojowa: szkoła publiczna prowadzona przez gminę jest jednostką budżetową bez
 > osobowości prawnej. Administratorem danych jest **szkoła** reprezentowana przez dyrektora
 > (a nie gmina, nie miasto, nie organ prowadzący). Stroną ewentualnych umów cywilnoprawnych
-> — w tym umowy z Google lub Anthropic na usługi API — jest natomiast **gmina**, działająca przez dyrektora
-> szkoły na podstawie pełnomocnictwa wójta/burmistrza/prezydenta.
+> — w tym umowy z Google lub Anthropic na usługi API — jest natomiast **gmina**, działająca
+> przez dyrektora szkoły na podstawie pełnomocnictwa wójta/burmistrza/prezydenta.
 
 ### 2.5 Odbiorcy danych i podmioty przetwarzające
 
@@ -353,14 +353,15 @@ porównania: na płatnym poziomie Gemini API logi są przechowywane do 55 dni. A
 do Claude zdjęcia i PDF-y wyłącznie w treści zapytania (base64), nigdy przez Files API, więc
 u Anthropic nie powstają przechowywane pliki, a przesłane treści podlegają opisanemu wyżej
 30-dniowemu okresowi usuwania. Odpowiednikiem warunku brzegowego dla Gemini jest tu blokada
-w kodzie: Claude nie może zostać wybrany
-w panelu administratora, dopóki na serwerze nie ustawiono `ANTHROPIC_PROCESSOR_APPROVED=true`
-(zob. R6a). Powyższe ustalenia sprawdzono 12.10.2026 w źródłach Anthropic; należy je
-sprawdzić ponownie przed publikacją i przy każdym przeglądzie.
+w kodzie: Claude nie może zostać wybrany w panelu administratora, dopóki na serwerze nie
+ustawiono `ANTHROPIC_PROCESSOR_APPROVED=true` (zob. R6a). Powyższe ustalenia sprawdzono
+12.10.2026 w źródłach Anthropic; należy je sprawdzić ponownie przed publikacją i przy każdym
+przeglądzie.
 
 Dodatkowo, przy Gemini: fotografie są przesyłane do Gemini File API na czas analizy
 i **usuwane po jej zakończeniu** przez kod aplikacji (usuwanie „najlepszym staraniem" — błąd
-usunięcia jest logowany, ale nie przerywa działania; niezależnie od tego pliki wygasają po stronie Google po ok. 48 godz.).
+usunięcia jest logowany, ale nie przerywa działania; niezależnie od tego pliki wygasają po
+stronie Google po ok. 48 godz.).
 PDF-y z zadaniami są celowo utrzymywane w pamięci podręcznej Gemini do 24 godzin, bo nie
 zawierają danych osobowych.
 
@@ -801,7 +802,8 @@ jednego z nich). U obu przetwarzanie obejmuje przekazanie danych do USA, ale pod
 są różne.
 
 **Google.** Podstawą transferu jest decyzja wykonawcza Komisji Europejskiej stwierdzająca
-odpowiedni stopień ochrony w ramach **EU-US Data Privacy Framework** (art. 45 RODO). Decyzja obowiązuje i jest ważną podstawą przekazania.
+odpowiedni stopień ochrony w ramach **EU-US Data Privacy Framework** (art. 45 RODO). Decyzja
+obowiązuje i jest ważną podstawą przekazania.
 
 **Anthropic.** Uczestnictwa Anthropic w EU-US Data Privacy Framework **nie potwierdzono**
 (stan na 12.10.2026). Podstawą transferu są więc **standardowe klauzule umowne** (art. 46
@@ -812,12 +814,16 @@ udokumentowanej oceny skutków transferu (czy prawo i praktyka państwa odbiorcy
 odbiorcy wywiązać się z klauzul) — [UZUPEŁNIĆ: notatka z oceny skutków transferu do Anthropic,
 sporządzona przed ustawieniem `ANTHROPIC_PROCESSOR_APPROVED=true`].
 
+[UZUPEŁNIĆ: potwierdzić lub podwyższyć ocenę R6 po wykonaniu oceny skutków transferu dla
+Anthropic (SCC)]
+
 Ryzyko dla transferu do Google ma charakter **rezydualny i systemowy**, nie operacyjny: Sąd Unii
 Europejskiej wyrokiem z 3 września 2025 r. w sprawie **T-553/23 (Latombe)** oddalił skargę
-o stwierdzenie nieważności decyzji o adekwatności, jednak **odwołanie do Trybunału Sprawiedliwości UE pozostaje w toku**.
-Historia unieważnień poprzednich mechanizmów (Safe Harbour, Tarcza Prywatności) uzasadnia
-traktowanie tego ryzyka jako realnego, choć odległego. Odrębnym czynnikiem jest stabilność
-mechanizmów nadzorczych po stronie amerykańskiej, na których opiera się decyzja.
+o stwierdzenie nieważności decyzji o adekwatności, jednak **odwołanie do Trybunału
+Sprawiedliwości UE pozostaje w toku**. Historia unieważnień poprzednich mechanizmów (Safe
+Harbour, Tarcza Prywatności) uzasadnia traktowanie tego ryzyka jako realnego, choć odległego.
+Odrębnym czynnikiem jest stabilność mechanizmów nadzorczych po stronie amerykańskiej, na których
+opiera się decyzja.
 
 Środki:
 
@@ -865,8 +871,9 @@ dostawcy. Zrobione bez przygotowania, przełączenie wyprzedziłoby dokumentacj�
 - obaj dostawcy są opisani w niniejszej ocenie, klauzuli informacyjnej i regulaminie, więc
   przełączenie między nimi nie zmienia informacji przekazanej użytkownikom; dodanie trzeciego
   dostawcy wymaga przeglądu DPIA (sekcja 9),
-- dane danej analizy trafiają wyłącznie do dostawcy aktywnego w chwili jej wykonania; ponowna
-  analiza zlecona przez administratora trafia do dostawcy aktywnego w chwili jej wykonania.
+- dane danej analizy trafiają wyłącznie do dostawcy aktywnego w chwili jej wykonania. Skutek,
+  o którym trzeba pamiętać: ponowna analiza zlecona przez administratora po przełączeniu wysyła
+  to samo rozwiązanie także do drugiego dostawcy.
 
 **Do decyzji:** [UZUPEŁNIĆ: czy każde przełączenie dostawcy wymaga uprzedniej informacji dla IOD
 lub wpisu w rejestrze czynności przetwarzania (wariant B)].
@@ -1166,8 +1173,8 @@ Konsultacja jest obowiązkowa, gdy DPIA wskazuje, że przetwarzanie powodowałob
 ryzyko mimo zastosowania środków**. Po wdrożeniu wszystkich środków z sekcji 5 żadne ryzyko nie
 pozostaje na poziomie wysokim. **Wstępny wniosek: uprzednie konsultacje nie są wymagane** —
 z zastrzeżeniem, że wniosek ten jest ważny wyłącznie przy spełnieniu warunków brzegowych:
-płatny poziom API (Gemini) lub warunki komercyjne (Anthropic), ocena bez skutków formalnych, wdrożona retencja, wdrożona weryfikacja zgody
-rodzica (wariant A). **Ocena ta wymaga potwierdzenia przez inspektora ochrony danych.**
+płatny poziom API (Gemini) lub warunki komercyjne (Anthropic), ocena bez skutków formalnych,
+wdrożona retencja, wdrożona weryfikacja zgody rodzica (wariant A). **Ocena ta wymaga potwierdzenia przez inspektora ochrony danych.**
 
 ---
 

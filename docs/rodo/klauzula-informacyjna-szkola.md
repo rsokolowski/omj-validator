@@ -265,8 +265,10 @@ robisz zdjęcie i wysyłasz. Program pisze, ile punktów by za to było i co mo�
 2. Zdjęcie jest wysyłane do firmy Google albo Anthropic, żeby program mógł je przeczytać
    i ocenić. Program używa w danej chwili tylko jednej z tych firm, więc zdjęcie nie trafia
    do obu naraz. **Nie wysyłamy tam Twojego imienia, nazwiska ani adresu e-mail** — tylko
-   samo zdjęcie pracy i treść zadania. Po sprawdzeniu Google kasuje zdjęcie. Anthropic kasuje
-   je w ciągu 30 dni (dłużej tylko wtedy, gdy sprawdza naruszenie zasad albo wymaga tego prawo).
+   samo zdjęcie pracy i treść zadania. Żadna z tych firm nie trzyma zdjęcia na stałe, ale obie
+   mogą przez pewien czas trzymać zapisy techniczne: Google najwyżej 55 dni (tylko po to, żeby
+   wykrywać nadużycia), Anthropic do 30 dni (dłużej tylko wtedy, gdy sprawdza naruszenie zasad
+   albo wymaga tego prawo).
 3. Wynik zapisuje się na szkolnym serwerze, żebyś mógł do niego wrócić.
 
 **Ważne:** na zdjęciu widać wszystko, co jest na kartce i wokół niej. Dlatego:

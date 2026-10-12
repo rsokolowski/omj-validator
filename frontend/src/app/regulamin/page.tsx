@@ -472,8 +472,8 @@ export default function RegulaminPage() {
           </Typography>
           <Box component="ul" sx={{ pl: 3, mb: 2 }}>
             <li>
-              zdjęcia są wysyłane bezpośrednio w zapytaniu, a{" "}
-              <strong>nie jako pliki</strong> zapisywane u Anthropic,
+              zdjęcia są wysyłane razem z prośbą o ocenę, a{" "}
+              <strong>nie jako osobne pliki</strong> zapisywane u Anthropic,
             </li>
             <li>
               Anthropic <strong>usuwa</strong> przesłane treści i odpowiedzi w
@@ -481,7 +481,7 @@ export default function RegulaminPage() {
               naruszenie zasad korzystania z usługi albo gdy wymaga tego prawo,
             </li>
             <li>
-              zgodnie z warunkami umowy Anthropic{" "}
+              Anthropic zgodnie z umową{" "}
               <strong>nie może wykorzystywać</strong> przesyłanych treści do
               trenowania swoich modeli.
             </li>
@@ -568,8 +568,8 @@ export default function RegulaminPage() {
             <strong>standardowe klauzule umowne</strong> przyjęte przez Komisję
             Europejską (art. 46 ust. 2 lit. c RODO). Są one częścią umowy o
             przetwarzaniu danych zawartej z Anthropic Ireland, Limited. To
-            wzór umowy, w którym odbiorca danych spoza Unii zobowiązuje się je
-            chronić.
+            gotowe zapisy przygotowane przez Komisję Europejską, w których
+            odbiorca danych spoza Unii zobowiązuje się je chronić.
           </Typography>
         </Section>
 
