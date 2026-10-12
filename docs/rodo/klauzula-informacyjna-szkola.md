@@ -99,10 +99,17 @@ bo uczeń jest zalogowany.
 
 | Odbiorca | Co otrzymuje | Uwagi |
 |---|---|---|
-| **Google** (Gemini API) — dostawca systemu sztucznej inteligencji | fotografie rozwiązania oraz treść zadania | **Nie przekazujemy** imienia, nazwiska, adresu e-mail ani identyfikatora konta ucznia. Pliki są usuwane z infrastruktury dostawcy zaraz po analizie. Korzystamy z płatnego poziomu usługi, na którym dostawca zobowiązuje się nie wykorzystywać przesyłanych treści do trenowania swoich modeli, a rejestry techniczne przechowuje maksymalnie 55 dni wyłącznie w celu wykrywania naruszeń zasad korzystania z usługi. |
+| **Google** (Gemini API) — dostawca systemu sztucznej inteligencji, alternatywny wobec Anthropic | fotografie rozwiązania oraz treść zadania | **Nie przekazujemy** imienia, nazwiska, adresu e-mail ani identyfikatora konta ucznia. Pliki są usuwane z infrastruktury dostawcy zaraz po analizie. Korzystamy z płatnego poziomu usługi, na którym dostawca zobowiązuje się nie wykorzystywać przesyłanych treści do trenowania swoich modeli, a rejestry techniczne przechowuje maksymalnie 55 dni wyłącznie w celu wykrywania naruszeń zasad korzystania z usługi. |
+| **Anthropic** (Claude API) — dostawca systemu sztucznej inteligencji, alternatywny wobec Google | fotografie rozwiązania oraz treść zadania | **Nie przekazujemy** imienia, nazwiska, adresu e-mail ani identyfikatora konta ucznia. Zdjęcia są przesyłane bezpośrednio w zapytaniu, bez zapisywania ich u dostawcy jako plików. Dostawca usuwa przesłane treści i odpowiedzi w ciągu 30 dni — dłużej tylko wtedy, gdy wymaga tego egzekwowanie zasad korzystania z usługi albo obowiązek prawny. Zgodnie z warunkami umowy dostawca nie może wykorzystywać przesyłanych treści do trenowania swoich modeli. Stroną umowy jest Anthropic Ireland, Limited. |
 | **Google** — usługa logowania | informacja o logowaniu do narzędzia | dotyczy konta [UZUPEŁNIĆ: szkolnego / innego] |
 | [UZUPEŁNIĆ, jeśli dotyczy: dostawca hostingu / firma obsługująca infrastrukturę informatyczną szkoły] | dostęp techniczny do systemu | na podstawie umowy powierzenia przetwarzania (art. 28 RODO) |
 | Nauczyciel prowadzący i administrator narzędzia | dostęp do prac i wyników uczniów | wyłącznie osoby upoważnione przez dyrektora szkoły, w zakresie niezbędnym do prowadzenia zajęć i obsługi zgłoszeń |
+
+Narzędzie korzysta w danym momencie **tylko z jednego** z dwóch dostawców sztucznej
+inteligencji — Google albo Anthropic — wybranego przez administratora narzędzia. Rozwiązanie
+ucznia trafia wyłącznie do tego dostawcy, który jest aktywny w chwili analizy.
+[UZUPEŁNIĆ: jeżeli Szkoła dopuszcza tylko jednego dostawcę, usunąć wiersz drugiego, ten akapit
+i odpowiedni akapit w punkcie 7 oraz w części B]
 
 Danych nie sprzedajemy, nie udostępniamy w celach reklamowych i nie przekazujemy innym
 podmiotom poza wymienionymi.
@@ -122,10 +129,11 @@ nieodwracalnym skrótem — ślad zdarzenia zostaje, ale nie da się już ustali
 
 ## 7. Przekazywanie danych poza Europejski Obszar Gospodarczy
 
-Analiza rozwiązań odbywa się z wykorzystaniem usług **Google**, co wiąże się z przekazaniem
-fotografii pracy do Stanów Zjednoczonych.
+Analiza rozwiązań odbywa się z wykorzystaniem usług **Google** albo **Anthropic** (punkt 6),
+co wiąże się z przekazaniem fotografii pracy do Stanów Zjednoczonych. Podstawa przekazania
+zależy od tego, który dostawca jest aktywny.
 
-Podstawą przekazania jest **decyzja Komisji Europejskiej stwierdzająca odpowiedni stopień
+**Google.** Podstawą przekazania jest **decyzja Komisji Europejskiej stwierdzająca odpowiedni stopień
 ochrony danych** w ramach programu EU-US Data Privacy Framework (art. 45 RODO). Oznacza to,
 że Komisja Europejska uznała poziom ochrony danych zapewniany przez uczestników tego programu
 w USA za odpowiadający standardowi europejskiemu.
@@ -133,7 +141,12 @@ w USA za odpowiadający standardowi europejskiemu.
 Uczciwie informujemy o ryzyku pozostającym: ważność tej decyzji została zaskarżona. Sąd Unii
 Europejskiej wyrokiem z 3 września 2025 r. w sprawie T-553/23 oddalił skargę, jednak odwołanie
 do Trybunału Sprawiedliwości UE jest w toku. Decyzja nadal obowiązuje. Szkoła monitoruje
-sytuację i w razie utraty mocy przez decyzję wstrzyma przekazywanie danych.
+sytuację i w razie utraty mocy przez decyzję wstrzyma przekazywanie danych do Google.
+
+**Anthropic.** Podstawą przekazania są **standardowe klauzule umowne** przyjęte przez Komisję
+Europejską (art. 46 ust. 2 lit. c RODO), zawarte w umowie powierzenia przetwarzania danych
+z Anthropic Ireland, Limited. Są to wzorcowe postanowienia umowne, w których odbiorca danych
+spoza Europejskiego Obszaru Gospodarczego zobowiązuje się zapewnić im ochronę.
 
 Kopię informacji o zabezpieczeniach przekazywania danych można uzyskać, kontaktując się
 z inspektorem ochrony danych.
@@ -249,9 +262,11 @@ robisz zdjęcie i wysyłasz. Program pisze, ile punktów by za to było i co mo�
 ## Co się dzieje z Twoim zdjęciem
 
 1. Zdjęcie zapisuje się na szkolnym serwerze.
-2. Zdjęcie jest wysyłane do firmy Google, żeby program mógł je przeczytać i ocenić.
-   **Nie wysyłamy tam Twojego imienia, nazwiska ani adresu e-mail** — tylko samo zdjęcie
-   pracy i treść zadania. Po sprawdzeniu Google kasuje zdjęcie.
+2. Zdjęcie jest wysyłane do firmy Google albo Anthropic, żeby program mógł je przeczytać
+   i ocenić. Program używa w danej chwili tylko jednej z tych firm, więc zdjęcie nie trafia
+   do obu naraz. **Nie wysyłamy tam Twojego imienia, nazwiska ani adresu e-mail** — tylko
+   samo zdjęcie pracy i treść zadania. Po sprawdzeniu Google kasuje zdjęcie. Anthropic kasuje
+   je w ciągu 30 dni (dłużej tylko wtedy, gdy sprawdza naruszenie zasad albo wymaga tego prawo).
 3. Wynik zapisuje się na szkolnym serwerze, żebyś mógł do niego wrócić.
 
 **Ważne:** na zdjęciu widać wszystko, co jest na kartce i wokół niej. Dlatego:

@@ -38,7 +38,7 @@ i podstawą prawną przetwarzania**. Dobór dokumentu zaczyna się od ustalenia 
   budżetową bez osobowości prawnej — administratorem nie jest gmina ani miasto (stroną umów
   cywilnoprawnych jest natomiast gmina).
 - Szkoła uruchamia **własną instancję** z otwartego kodu (licencja MIT), na własnej
-  infrastrukturze i z własnym kluczem Google. **Nie następuje przekazanie serwisu ani danych**
+  infrastrukturze i z własnym kluczem API dostawcy AI. **Nie następuje przekazanie serwisu ani danych**
   między wariantem A a B — instancja szkolna startuje z pustą bazą.
 - Podstawa przetwarzania: **art. 6 ust. 1 lit. e RODO** — zadanie realizowane w interesie
   publicznym (dydaktyka). Eliminuje to problem zgód dzieci poniżej 16 lat.
@@ -54,6 +54,11 @@ i podstawą prawną przetwarzania**. Dobór dokumentu zaczyna się od ustalenia 
 | [`klauzula-informacyjna-szkola.md`](klauzula-informacyjna-szkola.md) | Klauzula informacyjna (art. 13 RODO). Część A — dla rodziców, część B — prostym językiem dla ucznia (art. 12 ust. 1 RODO wymaga formy zrozumiałej dla dziecka). | rodzice, uczniowie | **B** |
 | [`regulamin-szkola.md`](regulamin-szkola.md) | Regulamin korzystania z narzędzia: zasady dla ucznia, zakazy, opis działania AI, rozgraniczenie „trenażer, nie ocenianie", prawa autorskie. | uczniowie, nauczyciele | **B** |
 | `../../frontend/src/app/regulamin/page.tsx` | Regulamin i polityka prywatności serwisu publicznego (strona w aplikacji). | użytkownicy serwisu | **A** |
+
+**Zmiana z 12 października 2026:** drugi, alternatywny dostawca AI — **Anthropic (Claude API)**
+obok Google (Gemini API); w danym momencie aktywny jest jeden, wybrany przez administratora.
+Uwzględniono we wszystkich czterech dokumentach (w DPIA: 2.5, 2.6, R6, R6a, R7, R12, plan
+wdrożenia, przegląd).
 
 > **Uwaga o spójności z kodem.** Okresy retencji podane w regulaminie serwisu publicznego
 > (`frontend/src/app/regulamin/page.tsx`, stałe `RETENTION_*`) muszą odpowiadać konfiguracji
@@ -106,6 +111,11 @@ dokumenty korzystają.
    nie jest w całości szkolna.
 8. **Prawa do treści zadań** — brak publicznej licencji OMJ na redystrybucję. Rozważyć
    wystąpienie do Stowarzyszenia na rzecz Edukacji Matematycznej o zgodę.
+9. **Anthropic jako dostawca AI — tylko po zatwierdzeniu.** Wyboru Claude w panelu nie da się
+   dokonać, dopóki na serwerze nie ustawiono `ANTHROPIC_PROCESSOR_APPROVED=true`. Ustawić ją
+   dopiero po akceptacji DPA Anthropic i ocenie skutków transferu (podstawą są standardowe
+   klauzule umowne, nie DPF) — albo, jeśli szkoła korzysta tylko z Google, zostawić wyłączoną
+   i usunąć Anthropic z klauzuli informacyjnej i regulaminu.
 
 ### Wykonać w konfiguracji instancji szkolnej
 
