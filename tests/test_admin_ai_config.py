@@ -235,3 +235,37 @@ def test_put_success_stores_and_switches(admin):
     current = config_store.get_active_model()
     assert (current.provider, current.model, current.source) == ("anthropic", "claude-sonnet-5-5", "db")
     assert ANTHROPIC_KEY not in response.text
+
+
+def test_unauthenticated_is_401(env, monkeypatch):
+    monkeypatch.setattr(main, "verify_auth", lambda request: False)
+    client = TestClient(main.app)
+
+    assert client.get("/api/admin/ai-config").status_code == 401
+    response = client.put("/api/admin/ai-config", json={"provider": "gemini", "model": "gemini-3.8-flash"})
+    assert response.status_code == 401
+    assert _stored(env[0]) is None
+    assert env[1]["calls"] == []
+
+
+@pytest.mark.parametrize("where", ["build", "ping"])
+def test_put_unexpected_error_is_502(admin, monkeypatch, where):
+    client, session, _ = admin
+
+    class _Broken:
+        async def ping(self):
+            raise RuntimeError("secret-ish internal detail")
+
+    def build(provider, model):
+        if where == "build":
+            raise ValueError("secret-ish internal detail")
+        return _Broken()
+
+    monkeypatch.setattr(factory, "build_provider", build)
+
+    response = client.put("/api/admin/ai-config", json={"provider": "anthropic", "model": "claude-opus-5-5"})
+
+    assert response.status_code == 502
+    assert response.json()["detail"] == "Nie udało się sprawdzić modelu claude-opus-5-5."
+    assert "secret-ish" not in response.text
+    assert _stored(session) is None

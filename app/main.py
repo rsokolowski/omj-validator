@@ -1914,6 +1914,9 @@ async def admin_put_ai_config(
             status_code=502,
             detail=f"Model {model} nie odpowiedział w ciągu {AI_CONFIG_PING_TIMEOUT_SECONDS} s.",
         )
+    except Exception as e:
+        logger.error(f"[AI config] Ping of {provider}/{model} raised {type(e).__name__}")
+        raise HTTPException(status_code=502, detail=f"Nie udało się sprawdzić modelu {model}.")
 
     old = await asyncio.to_thread(ai_config_store.get_active_model)
     user = get_current_user(request) or {}

@@ -35,11 +35,15 @@ function unavailableReason(provider: AiProviderOption): string | null {
   return null;
 }
 
-/** The model to preselect for a provider: the active one if it belongs there, else the first. */
+/**
+ * The model to preselect for a provider: the active one if it belongs there,
+ * nothing when the active (env) model is outside the catalog - so "Zapisz"
+ * stays disabled until the admin picks one - else the provider's first model.
+ */
 function defaultModelFor(provider: AiProviderOption | undefined, active: AiActiveModel): string {
   if (!provider) return "";
-  if (provider.id === active.provider && provider.models.some((m) => m.id === active.model)) {
-    return active.model;
+  if (provider.id === active.provider) {
+    return provider.models.some((m) => m.id === active.model) ? active.model : "";
   }
   return provider.models[0]?.id ?? "";
 }
