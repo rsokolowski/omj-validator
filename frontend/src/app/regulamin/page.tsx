@@ -235,6 +235,14 @@ export default function RegulaminPage() {
             udostępnia danych komukolwiek poza dostawcami wymienionymi w punkcie
             7.
           </Typography>
+          <Typography paragraph>
+            <strong>Zgodność z przepisami.</strong> Serwis działa zgodnie
+            z obowiązującymi przepisami o ochronie dzieci i o ochronie danych
+            osobowych, w tym z RODO, które szczególnie chroni dane dzieci,
+            i z polską ustawą o ochronie danych osobowych. Oceny i wskazówki
+            przygotowuje program komputerowy (sztuczna inteligencja), a nie
+            człowiek &ndash; więcej o tym w punkcie 10.
+          </Typography>
         </Section>
 
         <Section title="4. Konto i logowanie">

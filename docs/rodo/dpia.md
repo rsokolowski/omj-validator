@@ -880,8 +880,12 @@ dostawcy. Zrobione bez przygotowania, przełączenie wyprzedziłoby dokumentacj�
   o którym trzeba pamiętać: ponowna analiza zlecona przez administratora po przełączeniu wysyła
   to samo rozwiązanie także do drugiego dostawcy.
 
-**Do decyzji:** [UZUPEŁNIĆ: czy każde przełączenie dostawcy wymaga uprzedniej informacji dla IOD
-lub wpisu w rejestrze czynności przetwarzania (wariant B)].
+**Informowanie IOD i rejestr czynności (wariant B).** Rejestr czynności przetwarzania (art. 30
+RODO) wymienia od początku **obu** dostawców jako odbiorców i oba transfery do USA, a IOD opiniuje
+niniejszą ocenę, która opisuje obu. Przełączenie między nimi nie zmienia więc żadnego dokumentu
+i nie wymaga osobnej informacji. IOD jest informowany jednorazowo, przed **pierwszym**
+włączeniem Anthropic (ustawieniem `ANTHROPIC_PROCESSOR_APPROVED=true`), zgodnie z art. 38
+ust. 1 RODO. Szkoła może przyjąć zasadę surowszą (np. informację przy każdym przełączeniu).
 
 **Ryzyko szczątkowe:** niskie.
 
@@ -1303,15 +1307,15 @@ prace i czytają odpowiedzi modelu, a przy wzorcach wymieniają z modelem wiadom
 
 | Wymóg Anthropic | Stan w Trenerze OMJ |
 |---|---|
-| **Zgodność z prawem** ochrony dzieci i danych, **jawnie zadeklarowana** na stronie lub w dokumentacji publicznej | RODO opisane w `/regulamin`; brak wprost wyrażonej deklaracji zgodności z przepisami o ochronie dzieci — [DO DECYZJI: dodać jedno zdanie do `/regulamin`] |
+| **Zgodność z prawem** ochrony dzieci i danych, **jawnie zadeklarowana** na stronie lub w dokumentacji publicznej | spełnione: `/regulamin`, pkt 3 („Zgodność z przepisami”); w wariancie B — regulamin szkoły |
 | **Informacja, że użytkownik rozmawia z AI**, a nie z człowiekiem | spełnione: stopka każdej strony („…generowane przez AI…”) i `/regulamin` |
 | Środki techniczne odpowiednie do zastosowania (przykłady Anthropic, nie lista zamknięta): weryfikacja wieku, moderacja treści, monitorowanie i zgłaszanie, materiały edukacyjne | częściowo: odpowiedzi modelu są ograniczone schematem JSON i promptem do oceny rozwiązania; wykrywanie prób manipulacji (`abuse_score`, `issue_type`); panel administratora. Brak weryfikacji wieku i zgody rodzica (plan wdrożenia, poz. 3) i brak osobnej warstwy moderacji |
 | Systemowy prompt bezpieczeństwa dzieci, który Anthropic „może udostępnić” | nieużywany — [DO DECYZJI: zapytać Anthropic, czy jest dostępny dla tego zastosowania] |
 | Okresowe audyty Anthropic; przy wysokim odsetku naruszeń — zalecenia, a w razie ich niewdrożenia zawieszenie konta | przyjęte do wiadomości |
 
 Wniosek: przy obecnym zakresie (ocena rozwiązań zadań matematycznych, odpowiedzi ograniczone
-schematem) ryzyko naruszenia zasad jest niskie, a jedyne braki formalne to deklaracja
-zgodności w `/regulamin` i weryfikacja wieku, która i tak jest otwartym środkiem tej DPIA.
+schematem) ryzyko naruszenia zasad jest niskie, a jedynym brakiem jest weryfikacja wieku,
+która i tak jest otwartym środkiem tej DPIA.
 Przed ustawieniem `ANTHROPIC_PROCESSOR_APPROVED=true` należy ponownie sprawdzić Usage Policy
 (nowa wersja obowiązuje od 12.11.2026).
 
