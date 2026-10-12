@@ -131,15 +131,6 @@ def _parent_email(raw: Optional[str], own_email: Optional[str]) -> tuple[str, Op
     return email, None
 
 
-# --------------------------------------------------------------------- /api/auth/me helpers
-
-
-def account_payload(db: Session, account: Optional[UserDB]) -> Optional[dict]:
-    if account is None:
-        return None
-    return service.account_summary(db, account)
-
-
 # --------------------------------------------------------------------- registration
 
 
