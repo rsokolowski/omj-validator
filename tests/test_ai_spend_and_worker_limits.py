@@ -15,6 +15,7 @@ from app.ai.factory import AISpendLimitError, AIUnavailableError
 from app.ai.failover import FailoverProvider, breaker, restart_hook
 from app.config import settings
 from app.db.models import AIUsageDB, SubmissionDB, SubmissionStatus, UserDB
+from app.db.repositories import QUOTA_RELEASED_KEY, SUBMISSION_TIMEOUT_SECONDS, SubmissionRepository
 from app.db.session import Base
 from app.models import SubmissionResult
 from app.private_tasks import service as private_service
@@ -77,14 +78,36 @@ def test_spend_sums_recorded_costs_in_the_window(session_factory):
 
 def test_unrecorded_calls_count_at_flat_estimates(session_factory):
     db = session_factory()
-    submission(db, "pending", status=SubmissionStatus.PENDING)
-    submission(db, "processing", status=SubmissionStatus.PROCESSING)
-    submission(db, "failed", status=SubmissionStatus.FAILED)  # failures without usage cost nothing
-    usage(db)  # reserved, no meta yet (in flight)
+    submission(db, "pending", status=SubmissionStatus.PENDING, age_hours=0)
+    submission(db, "processing", status=SubmissionStatus.PROCESSING, age_hours=0)
+    submission(db, "failed", status=SubmissionStatus.FAILED, age_hours=0)  # failures without usage cost nothing
+    usage(db, age_hours=0)  # reserved, no meta yet (in flight)
     db.add(AIUsageDB(user_id=USER_ID, kind="pattern_refine", meta=None, created_at=naive_now()))
     db.commit()
     expected = 2 * spend.GRADING_UNRECORDED_COST_USD + 2 * spend.AUX_UNRECORDED_COST_USD
     assert spend.spent_last_24h(db) == pytest.approx(expected)
+
+
+def test_unrecorded_calls_past_their_timeout_count_nothing(session_factory):
+    """A row without a cost that can no longer be running is a call that failed
+    before reporting usage (e.g. a Gemini outage): it must not eat the cap for 24 h."""
+    db = session_factory()
+    stale = SUBMISSION_TIMEOUT_SECONDS + 60
+    db.add(SubmissionDB(
+        id="dead", user_id=USER_ID, year="2024", etap="etap1", task_number=1, images=[],
+        status=SubmissionStatus.PENDING, timestamp=naive_now() - timedelta(seconds=stale),
+    ))
+    for _ in range(1000):
+        db.add(AIUsageDB(
+            user_id=USER_ID, kind="private_create", meta=None,
+            created_at=naive_now() - timedelta(seconds=spend.aux_in_flight_seconds() + 60),
+        ))
+    db.commit()
+    assert spend.spent_last_24h(db) == 0
+
+
+def test_grading_estimate_is_the_upper_end_of_a_claude_grading():
+    assert spend.GRADING_UNRECORDED_COST_USD == pytest.approx(0.40)
 
 
 def test_check_raises_at_the_cap_and_alerts_once_per_level(session_factory, monkeypatch):
@@ -228,6 +251,9 @@ def test_spend_cap_fails_the_grading_before_any_ai_call(worker, monkeypatch):
     assert row.status == SubmissionStatus.FAILED
     assert row.error_message == spend.SPEND_LIMIT_MESSAGE
     assert any("AISpendLimitError (spend_limit)" in m for m in worker["sent"])
+    # Refused on our side before any AI call: the student keeps the slot
+    assert row.scoring_meta[QUOTA_RELEASED_KEY] == "spend_limit"
+    assert SubmissionRepository(db).count_user_recent_submissions(USER_ID) == 1  # only "spent"
 
 
 def test_concurrent_gradings_are_capped(worker, monkeypatch):
@@ -283,6 +309,55 @@ def test_queue_timeout_fails_the_waiting_job(worker, monkeypatch):
     assert late.status == SubmissionStatus.FAILED
     assert late.error_message == handler.QUEUE_TIMEOUT_MESSAGE
     assert provider.calls == 1
+    # The queue timed out before any AI call: "late" no longer uses a daily slot
+    assert late.scoring_meta[QUOTA_RELEASED_KEY] == "queue_timeout"
+    repo = SubmissionRepository(db)
+    assert repo.count_user_recent_submissions(USER_ID) == 1
+    assert repo.get_user_rate_limit_info(USER_ID)[0] == 1
+    assert repo.get_global_rate_limit_info()[0] == 1
+    assert repo.get_user_rate_limit_window(USER_ID)[0] == 1
+
+
+def test_queue_timeout_message_reaches_the_student(worker, monkeypatch):
+    monkeypatch.setattr(settings, "ai_grading_max_concurrent", 1)
+    monkeypatch.setattr(settings, "ai_grading_queue_timeout", 0.05)
+    db = worker["factory"]()
+    submission(db, "slow", status=SubmissionStatus.PENDING, meta={})
+    submission(db, "late", status=SubmissionStatus.PENDING, meta={})
+    db.commit()
+    monkeypatch.setattr(handler, "create_ai_provider", lambda: StubProvider(delay=0.3))
+    errors = []
+
+    async def capture_error(submission_id, message):
+        errors.append((submission_id, message))
+
+    monkeypatch.setattr(handler.progress_manager, "send_error", capture_error)
+
+    async def run():
+        await asyncio.gather(grade("slow"), grade("late"))
+
+    asyncio.run(run())
+    assert errors == [("late", handler.QUEUE_TIMEOUT_MESSAGE)]
+
+
+def test_ai_failure_keeps_counting(worker, monkeypatch):
+    """Once the model was called the slot stays used, whatever happened."""
+    class Failing:
+        async def analyze_solution_stream(self, **kwargs):
+            raise AIUnavailableError("Serwer AI jest przeciążony.", kind="server", status=503)
+
+    monkeypatch.setattr(handler, "create_ai_provider", lambda: Failing())
+    db = worker["factory"]()
+    submission(db, "sub1", status=SubmissionStatus.PENDING, meta={})
+    db.commit()
+
+    asyncio.run(grade("sub1"))
+
+    db = worker["factory"]()
+    row = db.get(SubmissionDB, "sub1")
+    assert row.status == SubmissionStatus.FAILED
+    assert QUOTA_RELEASED_KEY not in (row.scoring_meta or {})
+    assert SubmissionRepository(db).count_user_recent_submissions(USER_ID) == 1
 
 
 def test_failed_submission_telegram_carries_no_error_text(worker, monkeypatch):
@@ -357,4 +432,9 @@ def test_worker_failover_resets_progress_and_records_the_backup(worker, monkeypa
     row = db.get(SubmissionDB, "sub1")
     assert row.status == SubmissionStatus.COMPLETED
     assert row.scoring_meta["provider"] == "anthropic"
-    assert row.scoring_meta["failover"] == {"from": "gemini/gemini-3.8-flash", "reason": "server"}
+    assert row.scoring_meta["failover"] == {
+        "from": "gemini/gemini-3.8-flash", "reason": "server",
+        "primary_estimated_cost": spend.GRADING_UNRECORDED_COST_USD,
+    }
+    # The failed primary's share counts toward the daily cap with the backup's
+    assert spend.spent_last_24h(db) == pytest.approx(0.2 + spend.GRADING_UNRECORDED_COST_USD)

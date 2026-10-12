@@ -55,6 +55,20 @@ SUBMISSION_TIMEOUT_SECONDS = (
     + 60
 )
 
+# scoring_meta key on a FAILED submission we refused on our side before any AI
+# call (grading queue full, daily AI budget spent, task PDF missing). Value:
+# the reason. Such a row stays in the history with its error message but does
+# not count toward any submission limit - see counts_toward_limits().
+QUOTA_RELEASED_KEY = "quota_released"
+
+
+def counts_toward_limits():
+    """Filter clause: submissions that use up a daily slot (not released ones).
+
+    Missing key, SQL NULL and JSON null scoring_meta all extract as NULL.
+    """
+    return SubmissionDB.scoring_meta[QUOTA_RELEASED_KEY].as_string().is_(None)
+
 
 def hash_user_id(user_id: str) -> str:
     """Irreversible, salted digest of a Google sub.
@@ -688,6 +702,22 @@ class SubmissionRepository:
         self.db.refresh(submission)
         return submission
 
+    def release_quota(self, submission_id: str, reason: str, error_message: str) -> Optional[SubmissionDB]:
+        """FAILED with ``error_message`` and no longer counted toward the limits.
+
+        For a refusal on our side before any AI call: the student keeps the
+        slot, the history still shows what happened.
+        """
+        submission = self.get_by_id(submission_id)
+        if not submission:
+            return None
+        submission.status = SubmissionStatus.FAILED
+        submission.error_message = error_message
+        submission.scoring_meta = {**(submission.scoring_meta or {}), QUOTA_RELEASED_KEY: reason}
+        self.db.commit()
+        self.db.refresh(submission)
+        return submission
+
     def update_result(
         self,
         submission_id: str,
@@ -732,11 +762,11 @@ class SubmissionRepository:
 
         Rows older than the longest grading can take are left out: a worker
         that died leaves them PENDING until someone opens the history, and they
-        must not lock the user out until then. The window covers the slower
-        provider's timeout (either can be active) plus photo processing.
+        must not lock the user out until then. The window is the one after
+        which such a row is marked stale (SUBMISSION_TIMEOUT_SECONDS: queue
+        wait, primary and backup provider).
         """
-        window = max(settings.gemini_timeout, settings.anthropic_timeout) + 120
-        threshold = datetime.now(timezone.utc) - timedelta(seconds=window)
+        threshold = datetime.now(timezone.utc) - timedelta(seconds=SUBMISSION_TIMEOUT_SECONDS)
         return (
             self.db.query(func.count(SubmissionDB.id))
             .filter(
@@ -755,6 +785,7 @@ class SubmissionRepository:
             .filter(
                 SubmissionDB.user_id == user_id,
                 SubmissionDB.timestamp >= threshold,
+                counts_toward_limits(),
             )
             .scalar()
         ) or 0
@@ -777,6 +808,7 @@ class SubmissionRepository:
             .filter(
                 SubmissionDB.user_id == user_id,
                 SubmissionDB.timestamp >= threshold,
+                counts_toward_limits(),
             )
             .first()
         )
@@ -798,6 +830,7 @@ class SubmissionRepository:
             .filter(
                 SubmissionDB.user_id == user_id,
                 SubmissionDB.timestamp >= threshold,
+                counts_toward_limits(),
             )
             .order_by(SubmissionDB.timestamp)
             .all()
@@ -809,7 +842,7 @@ class SubmissionRepository:
         threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
         rows = (
             self.db.query(SubmissionDB.timestamp)
-            .filter(SubmissionDB.timestamp >= threshold)
+            .filter(SubmissionDB.timestamp >= threshold, counts_toward_limits())
             .order_by(SubmissionDB.timestamp)
             .all()
         )
@@ -834,6 +867,7 @@ class SubmissionRepository:
             .filter(
                 SubmissionDB.user_id == user_id,
                 SubmissionDB.timestamp >= threshold,
+                counts_toward_limits(),
             )
             .first()
         )
@@ -844,7 +878,7 @@ class SubmissionRepository:
         threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
         return (
             self.db.query(func.count(SubmissionDB.id))
-            .filter(SubmissionDB.timestamp >= threshold)
+            .filter(SubmissionDB.timestamp >= threshold, counts_toward_limits())
             .scalar()
         ) or 0
 
@@ -861,7 +895,7 @@ class SubmissionRepository:
                 func.count(SubmissionDB.id),
                 func.min(SubmissionDB.timestamp),
             )
-            .filter(SubmissionDB.timestamp >= threshold)
+            .filter(SubmissionDB.timestamp >= threshold, counts_toward_limits())
             .first()
         )
         count = result[0] or 0

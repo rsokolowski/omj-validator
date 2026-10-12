@@ -14,6 +14,7 @@ from ..db.session import SessionLocal
 from ..db.models import SubmissionStatus, IssueType
 from ..db.repositories import SubmissionRepository
 from ..ai import create_ai_provider, AIProviderError
+from ..ai.factory import AISpendLimitError
 from ..ai.failover import restart_hook
 from ..ai.messages import GENERIC_MESSAGE, OVERLOADED_MESSAGE
 from ..ai.spend import check_spend_limit
@@ -53,6 +54,19 @@ def _grading_semaphore() -> asyncio.Semaphore:
     if _grading_slots is None or _grading_slots[0] is not loop or _grading_slots[2] != limit:
         _grading_slots = (loop, asyncio.Semaphore(limit), limit)
     return _grading_slots[1]
+
+
+class _QueueTimeout(AIProviderError):
+    """No grading slot freed up within ai_grading_queue_timeout."""
+
+
+def _release_reason(error: Exception) -> str:
+    """scoring_meta["quota_released"] for a refusal before any AI call."""
+    if isinstance(error, _QueueTimeout):
+        return "queue_timeout"
+    if isinstance(error, AISpendLimitError):
+        return "spend_limit"
+    return "before_ai"
 
 
 async def process_submission_background(
@@ -99,6 +113,9 @@ async def process_submission_background(
     semaphore = _grading_semaphore()
     slot_taken = False
     hook_token = None
+    # Until the provider is created nothing has been sent to an AI: a failure
+    # up to there is our refusal and gives the student's daily slot back
+    ai_called = False
 
     # NOTE: Telegram notifications deliberately carry no user name or e-mail -
     # see the privacy note in app/notifications.py before changing this.
@@ -113,7 +130,7 @@ async def process_submission_background(
         try:
             await asyncio.wait_for(semaphore.acquire(), timeout=settings.ai_grading_queue_timeout)
         except asyncio.TimeoutError:
-            raise AIProviderError(QUEUE_TIMEOUT_MESSAGE)
+            raise _QueueTimeout(QUEUE_TIMEOUT_MESSAGE)
         slot_taken = True
 
         # Update status to PROCESSING
@@ -156,6 +173,7 @@ async def process_submission_background(
 
         # Create AI provider and analyze with streaming
         logger.info(f"[Submission {submission_id}] Stage 2: Creating AI provider ({_format_elapsed(start_time)})")
+        ai_called = True
         provider = create_ai_provider()
 
         # Define callback for when file upload completes
@@ -273,11 +291,14 @@ async def process_submission_background(
             f"error={error_msg}, elapsed={total_time:.1f}s"
         )
 
-        submission_repo.update_status(
-            submission_id,
-            SubmissionStatus.FAILED,
-            error_message=error_msg,
-        )
+        if ai_called:
+            submission_repo.update_status(
+                submission_id,
+                SubmissionStatus.FAILED,
+                error_message=error_msg,
+            )
+        else:
+            submission_repo.release_quota(submission_id, _release_reason(e), error_msg)
 
         await progress_manager.send_error(submission_id, error_msg)
 
@@ -298,11 +319,14 @@ async def process_submission_background(
 
         # The student sees error_message in their history: never the raw
         # exception text (it can quote model output or internals) - logs only.
-        submission_repo.update_status(
-            submission_id,
-            SubmissionStatus.FAILED,
-            error_message=UNEXPECTED_ERROR_MESSAGE,
-        )
+        if ai_called:
+            submission_repo.update_status(
+                submission_id,
+                SubmissionStatus.FAILED,
+                error_message=UNEXPECTED_ERROR_MESSAGE,
+            )
+        else:
+            submission_repo.release_quota(submission_id, _release_reason(e), UNEXPECTED_ERROR_MESSAGE)
 
         await progress_manager.send_error(submission_id, UNEXPECTED_ERROR_MESSAGE)
 

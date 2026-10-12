@@ -41,7 +41,11 @@ primary again (one more failure re-opens it, a success closes it).
 Limits: callers reserve/count a request once, before calling - a failover
 inside the call never counts twice. scoring_meta / ai_usage.meta carry the
 provider and model that actually answered (the providers' own usage meta)
-plus ``failover: {"from", "reason"}``.
+plus ``failover: {"from", "reason", "primary_estimated_cost"}``. The failed
+primary call reports no usage, so its cost is estimated for the daily spend
+cap (spend.py): 502/503/504 can come mid-stream after tokens were generated
+and count at the flat in-flight estimate; 401/403/404/429 and a connection
+never made are refused before any work and count 0.
 """
 
 import logging
@@ -54,7 +58,7 @@ from datetime import datetime, timedelta, timezone
 from typing import TYPE_CHECKING, Any, Awaitable, Callable, Optional
 
 from ..config import settings
-from .factory import AIUnavailableError
+from .factory import UNAVAILABLE_SERVER, AIUnavailableError
 
 if TYPE_CHECKING:
     from .protocol import AIProvider
@@ -169,9 +173,21 @@ def _alert(primary: Key, fallback: Key, error: AIUnavailableError, opened: bool)
     send_telegram_in_background(build_failover_message(label(primary), label(fallback), error, minutes))
 
 
-def _mark(result: Any, primary: Key, reason: str) -> Any:
+_GRADING_METHODS = frozenset({"analyze_solution", "analyze_solution_stream", "analyze_private_solution_stream"})
+
+
+def _primary_cost_estimate(method: str, error: Optional[AIUnavailableError]) -> float:
+    """What the failed primary call may have cost (it reports no usage)."""
+    if error is None or error.kind != UNAVAILABLE_SERVER:
+        return 0.0  # breaker open (not called) or refused before any work
+    from .spend import AUX_UNRECORDED_COST_USD, GRADING_UNRECORDED_COST_USD
+
+    return GRADING_UNRECORDED_COST_USD if method in _GRADING_METHODS else AUX_UNRECORDED_COST_USD
+
+
+def _mark(result: Any, primary: Key, reason: str, primary_cost: float = 0.0) -> Any:
     """Note the failover in the result's meta (the backup's own meta names provider + model)."""
-    note = {"from": label(primary), "reason": reason}
+    note = {"from": label(primary), "reason": reason, "primary_estimated_cost": primary_cost}
     if hasattr(result, "scoring_meta"):
         result.scoring_meta = {**(result.scoring_meta or {}), "failover": note}
     elif hasattr(result, "meta"):
@@ -241,7 +257,7 @@ class FailoverProvider:
             if hook is not None:
                 await hook()
             result = await getattr(fallback, method)(*args, **kwargs)
-            return _mark(result, primary, error.kind)
+            return _mark(result, primary, error.kind, _primary_cost_estimate(method, error))
         breaker.record_success(primary)
         return result
 

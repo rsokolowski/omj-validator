@@ -4,7 +4,7 @@ import asyncio
 
 import pytest
 
-from app.ai import factory, failover
+from app.ai import factory, failover, spend
 from app.ai.config_store import ActiveModel
 from app.ai.factory import AIContentBlockedError, AIProviderError, AIUnavailableError
 from app.ai.failover import FailoverProvider, breaker
@@ -175,7 +175,11 @@ def test_availability_errors_fail_over(kind, status, alerts):
     assert primary.calls == ["meta"] and backup.calls == ["meta"]
     assert result.meta["provider"] == "anthropic"
     assert result.meta["model"] == "claude-opus-5-5"
-    assert result.meta["failover"] == {"from": "gemini/gemini-3.8-flash", "reason": kind}
+    # Only a 5xx can come after the primary generated (billed) tokens
+    expected_cost = spend.AUX_UNRECORDED_COST_USD if kind == "server" else 0.0
+    assert result.meta["failover"] == {
+        "from": "gemini/gemini-3.8-flash", "reason": kind, "primary_estimated_cost": expected_cost,
+    }
     assert len(alerts) == 1 and "AI failover" in alerts[0]
 
 
@@ -416,7 +420,10 @@ def test_stream_failover_restarts_cleanly():
     assert restarts == [1]  # the primary had streamed one chunk before failing
     assert seen == ["**anthropic**"]
     assert result.scoring_meta["provider"] == "anthropic"
-    assert result.scoring_meta["failover"] == {"from": "gemini/gemini-3.8-flash", "reason": "server"}
+    assert result.scoring_meta["failover"] == {
+        "from": "gemini/gemini-3.8-flash", "reason": "server",
+        "primary_estimated_cost": spend.GRADING_UNRECORDED_COST_USD,
+    }
 
 
 def test_no_restart_without_failover():

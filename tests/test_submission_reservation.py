@@ -378,6 +378,23 @@ class TestReservationCleanup:
         [code] = asyncio.run(fire(app, OMJ_URL, 1, small_jpeg()))
         assert code == 429
 
+    def test_in_flight_window_is_the_stale_submission_timeout(self, app, db, monkeypatch):
+        """Queue wait + primary + backup: a row counts until it would be marked stale."""
+        from app.db.repositories import SUBMISSION_TIMEOUT_SECONDS, SubmissionRepository
+
+        monkeypatch.setattr(settings, "rate_limit_submissions_in_flight_per_user", 1)
+        db.add(SubmissionDB(id="slow0001", user_id=USER_ID, year="2024", etap="etap1",
+                            task_number=2, images=[], status=SubmissionStatus.PENDING,
+                            timestamp=datetime.now(timezone.utc) - timedelta(seconds=SUBMISSION_TIMEOUT_SECONDS - 30)))
+        db.commit()
+        repo = SubmissionRepository(db)
+        assert repo.count_user_in_flight(USER_ID) == 1
+
+        row = db.get(SubmissionDB, "slow0001")
+        row.timestamp = datetime.now(timezone.utc) - timedelta(seconds=SUBMISSION_TIMEOUT_SECONDS + 30)
+        db.commit()
+        assert repo.count_user_in_flight(USER_ID) == 0
+
     def test_private_refused_photo_keeps_a_failed_row(self, app, db):
         [code] = asyncio.run(fire(app, PRIVATE_URL, 1, truncated_jpeg()))
 
