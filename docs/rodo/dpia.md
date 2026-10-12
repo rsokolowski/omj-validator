@@ -650,7 +650,12 @@ Kolumna „szczątkowe" podaje poziom po pełnym wdrożeniu wymienionych środk�
 Model ocenia zdjęcie odręcznego rozwiązania zadania olimpijskiego. Źródła błędu są liczne
 i nakładają się: nieczytelne pismo, rysunek geometryczny, zdjęcie pod kątem lub nieostre,
 rozwiązanie poprawne, lecz inną metodą niż wzorcowa, rozwiązanie zapisane w nietypowej
-kolejności, brak jednej ze stron pracy. Skala punktowa OMJ jest przy tym skokowa (0/2/5/6) —
+kolejności, brak jednej ze stron pracy. To lista możliwych źródeł, nie zmierzona częstość:
+na 10 pracach ocenionych ręcznie (po dwa przebiegi, `docs/model-ab-2026-09-05.md`,
+`docs/model-ab-2026-10-12.md`) model produkcyjny zgodził się z człowiekiem w 20/20 i 19/20
+przebiegach; jedyna rozbieżność dotyczyła trzystronicowej pracy z wieloma skreśleniami, a
+obrócone, blade zdjęcie oceniono poprawnie. Rysunków i metod innych niż wzorcowa próba nie
+obejmowała. Skala punktowa OMJ jest przy tym skokowa (0/2/5/6) —
 pomyłka o jeden stopień to różnica między „prawie nic" a „prawie wszystko".
 
 Skutek dla dziecka nie jest formalny, lecz psychologiczny i realny: zaniżona ocena zniechęca

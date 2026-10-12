@@ -163,10 +163,12 @@ export default function RegulaminPage() {
               (model językowy Google Gemini lub Anthropic Claude) i mogą być
               błędne.
             </strong>{" "}
-            Program myli się najczęściej wtedy, gdy pismo jest nieczytelne, gdy
-            zadanie ma rysunek, gdy zdjęcie jest zrobione pod kątem albo gdy
-            rozwiązanie jest poprawne, ale zrobione inną metodą niż wzorcowa.
-            Traktuj wynik jako wskazówkę, a nie jako wyrok.
+            W naszych testach ocena zwykle zgadzała się z oceną człowieka, ale
+            próba była mała. Ryzyko pomyłki rośnie, gdy zdjęcie jest nieostre
+            lub ciemne albo rozwiązanie jest długie i ma wiele skreśleń.
+            Poprawne rozwiązanie inną metodą niż wzorcowa powinno dostać pełne
+            punkty &ndash; jeśli nie dostało, napisz do nas. Traktuj wynik jako
+            wskazówkę, a nie jako wyrok.
           </Typography>
           <Typography paragraph>
             <strong>

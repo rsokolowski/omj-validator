@@ -116,9 +116,12 @@ Uczniowi zabrania się:
    (model językowy dostarczany przez Google lub Anthropic — w danym momencie przez jednego
    z nich, wybranego przez Administratora Narzędzia), a nie przez człowieka. Żaden nauczyciel nie
    sprawdza wyniku przed pokazaniem go Uczniowi.
-2. **Ocena AI bywa błędna.** Typowe przyczyny: nieczytelne pismo, rysunek geometryczny, zdjęcie
-   pod kątem lub nieostre, rozwiązanie poprawne, ale zapisane inną metodą niż wzorcowa, brak
-   jednej ze stron pracy. Uczeń powinien traktować wynik jako wskazówkę, a nie werdykt.
+2. **Ocena AI bywa błędna.** W testach autora oprogramowania ocena zwykle zgadzała się z oceną
+   człowieka, ale próba była mała. Ryzyko pomyłki rośnie, gdy zdjęcie jest nieostre lub ciemne,
+   gdy brakuje jednej ze stron pracy albo gdy rozwiązanie jest długie i ma wiele skreśleń.
+   Poprawne rozwiązanie inną metodą niż wzorcowa powinno otrzymać pełną liczbę punktów — jeśli
+   nie otrzymało, Uczeń zgłasza to w trybie ust. 3. Uczeń powinien traktować wynik jako
+   wskazówkę, a nie werdykt.
 3. **Prawo do zakwestionowania oceny.** Uczeń, który uważa ocenę za nieprawidłową, zgłasza to
    Nauczycielowi prowadzącemu. Nauczyciel lub Administrator Narzędzia **osobiście** ogląda pracę
    i może zlecić ponowną analizę. Ta ścieżka jest dostępna zawsze i nie wymaga uzasadnienia.
