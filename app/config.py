@@ -84,10 +84,12 @@ class Settings(BaseSettings):
     anthropic_processor_approved: bool = False
 
     # Automatic failover: when the active provider cannot serve a call
-    # (auth/permission, model gone, quota/429, 5xx, network, timeout) the call
-    # is retried once on AI_FAILOVER_MODEL - only if that provider passes the
-    # gates above (key set; for Anthropic ANTHROPIC_PROCESSOR_APPROVED). Never
-    # on a content/safety block, an abuse verdict or an unreadable answer.
+    # (auth/permission, model gone, 429, 502/503/504, no connection) the call
+    # is retried once on AI_FAILOVER_MODEL (a Claude primary: on the env Gemini
+    # default) - only if that provider passes the gates above (key set; for
+    # Anthropic ANTHROPIC_PROCESSOR_APPROVED). Never on a content/safety block,
+    # an abuse verdict or an unreadable answer; timeouts and 500s (which the
+    # request's content can cause) only feed the breaker - app/ai/failover.py.
     ai_failover_enabled: bool = True
     ai_failover_model: str = "claude-opus-5-5"  # any model from app/ai/models_catalog.py
     # Circuit breaker: after a permanent-looking error (401/403/404) - or this

@@ -748,6 +748,17 @@ class TestManipulationGateCannotBeSidestepped:
         assert stored.hints == ["h1", "h2", "h3"]
         assert stored.hints_revealed == 1
 
+    def test_title_edit_does_not_need_hints(self, client, provider, db):
+        task = typed_task(client)
+        provider.meta = PrivateTaskMeta(hints=[], is_math_problem=True, checked=True)
+
+        response = client.patch(f"/api/private-tasks/{task['id']}", json={"title": "Nowy tytuł"})
+
+        assert response.status_code == 200
+        stored = db.get(PrivateTaskDB, task["id"])
+        assert stored.title == "Nowy tytuł"
+        assert stored.hints == ["h1", "h2", "h3"]
+
     def test_flagged_title_is_not_saved(self, client, provider, db):
         task = typed_task(client)
         provider.meta.abuse_score = 95

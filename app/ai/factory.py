@@ -34,11 +34,18 @@ class AIContentBlockedError(AIProviderError):
 # key, retired model) and open the failover breaker at once.
 UNAVAILABLE_AUTH = "auth"            # 401/403, invalid/suspended key, billing
 UNAVAILABLE_NOT_FOUND = "not_found"  # 404 model
-UNAVAILABLE_RATE_LIMIT = "rate_limit"  # 429 / quota
-UNAVAILABLE_SERVER = "server"        # 5xx / overloaded
-UNAVAILABLE_NETWORK = "network"      # connection errors
+UNAVAILABLE_RATE_LIMIT = "rate_limit"  # 429
+UNAVAILABLE_SERVER = "server"        # 502/503/504/529 - provider overloaded or down
+UNAVAILABLE_NETWORK = "network"      # connection could not be established
+# The request's own content can cause these (huge input, long thinking, an
+# input the model chokes on): they never fail the request over, they only
+# count toward the circuit breaker, which reacts to the primary failing
+# across requests - see app/ai/failover.py.
 UNAVAILABLE_TIMEOUT = "timeout"
+UNAVAILABLE_INTERNAL = "internal"    # 500 / unspecified internal error
+UNAVAILABLE_CONNECTION_LOST = "connection_lost"  # dropped mid-request
 PERMANENT_KINDS = frozenset({UNAVAILABLE_AUTH, UNAVAILABLE_NOT_FOUND})
+BREAKER_ONLY_KINDS = frozenset({UNAVAILABLE_TIMEOUT, UNAVAILABLE_INTERNAL, UNAVAILABLE_CONNECTION_LOST})
 
 
 class AIUnavailableError(AIProviderError):
@@ -65,6 +72,11 @@ class AIUnavailableError(AIProviderError):
     @property
     def permanent(self) -> bool:
         return self.kind in PERMANENT_KINDS
+
+    @property
+    def fails_over(self) -> bool:
+        """Content-independent, so the backup may take THIS request."""
+        return self.kind not in BREAKER_ONLY_KINDS
 
 
 class AISpendLimitError(AIProviderError):
@@ -180,20 +192,38 @@ FAILOVER_UNKNOWN_MODEL = "model spoza katalogu (AI_FAILOVER_MODEL)"
 FAILOVER_SAME_PROVIDER = "ten sam dostawca co aktywny model"
 
 
+def _backup_model(primary_provider: str) -> Optional[tuple[str, str]]:
+    """The backup (provider, model) for a primary of this provider, gates not checked.
+
+    AI_FAILOVER_MODEL - unless it belongs to the primary's own provider (an
+    admin made Claude the active model): then the environment Gemini default
+    backs it up. None when AI_FAILOVER_MODEL is not in the catalog.
+    """
+    info = find_model(settings.ai_failover_model)
+    if info is None:
+        return None
+    if info.provider != primary_provider:
+        return info.provider, info.id
+    if primary_provider != "gemini":
+        default = env_default()
+        return default.provider, default.model
+    return info.provider, info.id
+
+
 def _failover_blocker(primary_provider: str) -> tuple[Optional[tuple[str, str]], Optional[str]]:
     """(backup (provider, model), None) when failover applies, else (None, why not)."""
     if not settings.ai_failover_enabled:
         return None, FAILOVER_OFF
-    info = find_model(settings.ai_failover_model)
-    if info is None:
+    backup = _backup_model(primary_provider)
+    if backup is None:
         return None, FAILOVER_UNKNOWN_MODEL
+    if backup[0] == primary_provider:
+        return None, FAILOVER_SAME_PROVIDER
     # The existing GDPR gate, unchanged: no key or no processor approval = no failover
-    reason = _unusable_reason(info.provider)
+    reason = _unusable_reason(backup[0])
     if reason is not None:
         return None, reason
-    if info.provider == primary_provider:
-        return None, FAILOVER_SAME_PROVIDER
-    return (info.provider, info.id), None
+    return backup, None
 
 
 def failover_target(primary_provider: str) -> Optional[tuple[str, str]]:
@@ -204,16 +234,18 @@ def failover_target(primary_provider: str) -> Optional[tuple[str, str]]:
 def failover_status(effective: ActiveModel) -> dict:
     """Failover state for GET /api/admin/ai-config - no keys, no content."""
     from .failover import breaker
+    from .models_catalog import get_model
 
-    info = find_model(settings.ai_failover_model)
+    backup = _backup_model(effective.provider)
     target, reason = _failover_blocker(effective.provider)
+    info = get_model(*backup) if backup else None
     return {
         "enabled": settings.ai_failover_enabled,
-        "provider": info.provider if info else None,
-        "model": settings.ai_failover_model,
-        "model_label": info.label if info else settings.ai_failover_model,
-        # The fallback provider may receive student data (key + GDPR approval)
-        "gate_open": bool(info and _unusable_reason(info.provider) is None),
+        "provider": backup[0] if backup else None,
+        "model": backup[1] if backup else settings.ai_failover_model,
+        "model_label": info.label if info else (backup[1] if backup else settings.ai_failover_model),
+        # The backup provider may receive student data (key + GDPR approval)
+        "gate_open": bool(backup and _unusable_reason(backup[0]) is None),
         "active": target is not None,
         "inactive_reason": reason,
         "breaker_minutes": settings.ai_failover_breaker_minutes,

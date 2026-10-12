@@ -257,9 +257,10 @@ function FailoverStatus({
         />
       </Stack>
       <Typography variant="body2" color="text.secondary">
-        Gdy aktywny dostawca nie odpowiada (klucz, limit, awaria, przekroczony czas), wywołanie jest
-        powtarzane raz na modelu zapasowym. Nigdy po zablokowaniu treści przez filtr bezpieczeństwa.
-        Ustawienia: AI_FAILOVER_ENABLED, AI_FAILOVER_MODEL.
+        Gdy aktywny dostawca nie odpowiada (klucz, limit, awaria serwera, brak połączenia), wywołanie
+        jest powtarzane raz na modelu zapasowym. Nigdy po zablokowaniu treści przez filtr
+        bezpieczeństwa; przekroczony czas i błąd 500 tylko liczą się do bezpiecznika. Ustawienia:
+        AI_FAILOVER_ENABLED, AI_FAILOVER_MODEL.
       </Typography>
       {!failover.active && failover.inactive_reason && (
         <Typography variant="body2" sx={{ mt: 0.5 }}>

@@ -19,9 +19,9 @@ would let refusals push the spend up on their own.
 Estimates, never billing: the provider dashboards stay the source of truth.
 """
 
-import asyncio
 import logging
 import threading
+import time
 from datetime import date, datetime, timedelta, timezone
 from typing import Optional
 
@@ -49,15 +49,22 @@ SPEND_LIMIT_MESSAGE = (
     "Spróbuj ponownie za kilka godzin."
 )
 
+# The window sum is cached briefly: it runs before every AI call, and the
+# submissions scan is not indexed by time. A burst can overshoot the cap by
+# at most this many seconds' worth of new calls.
+CACHE_SECONDS = 15.0
+
 _alert_lock = threading.Lock()
 _alerted: set[tuple[date, int]] = set()
-_pending_alerts: set[asyncio.Task] = set()
+_cached: Optional[tuple[float, float]] = None  # (time.monotonic(), spent)
 
 
 def reset_alerts() -> None:
-    """Forget sent alerts (tests)."""
+    """Forget sent alerts and the cached sum (tests)."""
+    global _cached
     with _alert_lock:
         _alerted.clear()
+        _cached = None
 
 
 def _naive_utc_now() -> datetime:
@@ -111,15 +118,21 @@ def _alert(level: int, spent: float, limit: float) -> None:
             return
         _alerted.add(key)
     logger.warning(f"[AI spend] {level}% of the daily limit: ${spent:.2f} of ${limit:.2f}")
-    try:
-        loop = asyncio.get_running_loop()
-    except RuntimeError:
-        return  # no event loop (script): the log line above is the alert
-    from ..notifications import build_spend_message, send_telegram_message
+    from ..notifications import build_spend_message, send_telegram_in_background
 
-    task = loop.create_task(send_telegram_message(build_spend_message(level, spent, limit)))
-    _pending_alerts.add(task)
-    task.add_done_callback(_pending_alerts.discard)
+    send_telegram_in_background(build_spend_message(level, spent, limit))
+
+
+def _spent_cached(db: Session) -> float:
+    global _cached
+    now = time.monotonic()
+    with _alert_lock:
+        if _cached is not None and now - _cached[0] < CACHE_SECONDS:
+            return _cached[1]
+    spent = spent_last_24h(db)
+    with _alert_lock:
+        _cached = (now, spent)
+    return spent
 
 
 def check_spend_limit(db: Session) -> None:
@@ -132,7 +145,7 @@ def check_spend_limit(db: Session) -> None:
     if not limit or limit <= 0:
         return
     try:
-        spent = spent_last_24h(db)
+        spent = _spent_cached(db)
     except Exception as e:
         logger.error(f"[AI spend] Could not compute spend ({type(e).__name__}) - not enforcing")
         try:

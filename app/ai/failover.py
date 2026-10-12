@@ -7,11 +7,25 @@ ANTHROPIC_PROCESSOR_APPROVED. Otherwise the plain provider is returned and
 nothing here runs: with the GDPR gate closed behaviour is exactly as without
 failover.
 
-What fails over: only AIUnavailableError - the primary could not serve at all
-(auth/permission, model not found, 429/quota, 5xx, network, timeout). Never a
-content/safety block, an abuse verdict, or an unreadable/unparseable answer of
-a successful call: a second provider must not become a way around the first
-one's safety filters. At most one failover per call.
+What fails over - fail closed: only an AIUnavailableError whose cause a
+student cannot produce with what they send (``fails_over``): 401/403 (key,
+billing, region), 404 (model), 429, 502/503/504/529 and a connection that
+could not be established. Never a content/safety block (prompt-level or
+finish_reason), an abuse verdict, an empty/unreadable/unparseable answer, any
+other 400 - a second provider must not become a way around the first one's
+safety filters. At most one failover per call.
+
+Timeouts, 500 INTERNAL and connections dropped mid-request are the
+ambiguous case: a request's own content can cause them (oversized input,
+thinking that never ends, an input the model chokes on). Rule: they NEVER
+fail the request that hit them over (it gets the timeout/error message), but
+they count toward the breaker like any transient failure. Only a run of
+AI_FAILOVER_BREAKER_THRESHOLD consecutive failures across all requests (any
+success resets it) opens the breaker - i.e. when the primary is failing for
+other requests too. Worst case a student who times out several requests in
+a row with no other grading succeeding in between routes traffic to the
+backup for a while: a cost/routing effect, not a bypass - the backup applies
+its own refusals and the same abuse/maths gates on its answer.
 
 Streaming grading: the primary may fail after thinking chunks were already
 streamed. The grading worker registers a restart hook (``restart_hook``
@@ -19,7 +33,7 @@ context variable, set per asyncio task) that resets its partial progress;
 the backup then grades from scratch and the student sees progress continue.
 
 Circuit breaker (in-process; production runs one worker): a permanent-looking
-error (401/403/404) opens it at once, transient ones (429/5xx/timeout) after
+error (401/403/404) opens it at once, transient ones (429/5xx/network/timeout) after
 AI_FAILOVER_BREAKER_THRESHOLD in a row. While open, calls go straight to the
 backup for AI_FAILOVER_BREAKER_MINUTES; afterwards the next call tries the
 primary again (one more failure re-opens it, a success closes it).
@@ -30,7 +44,6 @@ provider and model that actually answered (the providers' own usage meta)
 plus ``failover: {"from", "reason"}``.
 """
 
-import asyncio
 import logging
 import math
 import threading
@@ -138,23 +151,22 @@ class CircuitBreaker:
 
 
 breaker = CircuitBreaker()
-_pending_alerts: set[asyncio.Task] = set()
 
 
-def _alert(primary: Key, fallback: Key, error: AIUnavailableError) -> None:
-    """Rate-limited Telegram message (error class/kind only), fire-and-forget."""
-    if not breaker.claim_alert(primary):
+def _alert(primary: Key, fallback: Key, error: AIUnavailableError, opened: bool) -> None:
+    """Telegram message (error class/kind only), fire-and-forget.
+
+    The breaker opening is always reported - exactly once, record_failure
+    returns True only for the call that opened it. A single failover that
+    leaves the breaker closed is rate-limited to one message per breaker
+    period, on its own counter, so it can never swallow the opening alert.
+    """
+    if not opened and not breaker.claim_alert(primary):
         return
-    from ..notifications import build_failover_message, send_telegram_message
+    from ..notifications import build_failover_message, send_telegram_in_background
 
-    minutes = settings.ai_failover_breaker_minutes if breaker.is_open(primary) else 0
-    message = build_failover_message(label(primary), label(fallback), error, minutes)
-    try:
-        task = asyncio.get_running_loop().create_task(send_telegram_message(message))
-    except RuntimeError:
-        return
-    _pending_alerts.add(task)
-    task.add_done_callback(_pending_alerts.discard)
+    minutes = settings.ai_failover_breaker_minutes if opened else 0
+    send_telegram_in_background(build_failover_message(label(primary), label(fallback), error, minutes))
 
 
 def _mark(result: Any, primary: Key, reason: str) -> Any:
@@ -205,7 +217,18 @@ class FailoverProvider:
         try:
             result = await getattr(self.primary, method)(*args, **kwargs)
         except AIUnavailableError as error:
-            breaker.record_failure(primary, error)
+            opened = breaker.record_failure(primary, error)
+            if not error.fails_over:
+                # Timeout / 500 / dropped connection: this request's own content
+                # may have caused it, so it fails closed. The breaker - fed by
+                # every request - still opens on a run of them.
+                logger.warning(
+                    f"[AI failover] {label(primary)} {error.kind} (status={error.status}) on {method} - "
+                    f"not failed over (content-dependent){'; breaker opened' if opened else ''}"
+                )
+                if opened:
+                    _alert(primary, self.fallback_key, error, opened=True)
+                raise
             fallback = self._fallback()
             if fallback is None:
                 raise
@@ -213,7 +236,7 @@ class FailoverProvider:
                 f"[AI failover] {label(primary)} unavailable ({error.kind}, status={error.status}, "
                 f"{error.error_class or type(error).__name__}) - {method} on {label(self.fallback_key)}"
             )
-            _alert(primary, self.fallback_key, error)
+            _alert(primary, self.fallback_key, error, opened)
             hook = restart_hook.get()
             if hook is not None:
                 await hook()

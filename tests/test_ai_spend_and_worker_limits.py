@@ -39,6 +39,7 @@ def session_factory(monkeypatch):
     spend.reset_alerts()
     breaker.reset()
     monkeypatch.setattr(settings, "ai_daily_spend_limit_usd", 25.0)
+    monkeypatch.setattr(spend, "CACHE_SECONDS", 0)
     yield factory
     spend.reset_alerts()
     breaker.reset()
@@ -125,6 +126,19 @@ def test_alerts_are_sent_once_per_level_per_day(monkeypatch):
     assert "80%" in sent[0] and "$20.00 of $25.00" in sent[0]
     assert "limit reached" in sent[1]
     spend.reset_alerts()
+
+
+def test_window_sum_is_cached_briefly(session_factory, monkeypatch):
+    monkeypatch.setattr(spend, "CACHE_SECONDS", 60)
+    monkeypatch.setattr(settings, "ai_daily_spend_limit_usd", 1.0)
+    monkeypatch.setattr(spend, "_alert", lambda *a: None)
+    calls = []
+    original = spend.spent_last_24h
+    monkeypatch.setattr(spend, "spent_last_24h", lambda db: calls.append(1) or original(db))
+    db = session_factory()
+    for _ in range(5):
+        spend.check_spend_limit(db)
+    assert len(calls) == 1
 
 
 def test_zero_disables_the_cap(session_factory, monkeypatch):

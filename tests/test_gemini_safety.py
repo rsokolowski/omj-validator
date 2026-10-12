@@ -179,12 +179,11 @@ def client_error(code, status, message="body"):
         (client_error(400, "FAILED_PRECONDITION", "User location is not supported"), "auth", True),
         (client_error(404, "NOT_FOUND", "models/gemini-9 is not found"), "not_found", True),
         (client_error(429, "RESOURCE_EXHAUSTED"), "rate_limit", False),
-        (client_error(500, "INTERNAL"), "server", False),
+        (client_error(502, "BAD_GATEWAY"), "server", False),
         (client_error(503, "UNAVAILABLE"), "server", False),
+        (client_error(504, "DEADLINE_EXCEEDED"), "server", False),
         (httpx.ConnectError("refused"), "network", False),
-        (httpx.ReadTimeout("slow"), "timeout", False),
-        (asyncio.TimeoutError(), "timeout", False),
-        (RuntimeError("You exceeded your current quota"), "rate_limit", False),
+        (httpx.ConnectTimeout("no route"), "network", False),
     ],
 )
 def test_availability_errors_are_classified(error, kind, permanent):
@@ -192,19 +191,63 @@ def test_availability_errors_are_classified(error, kind, permanent):
     assert isinstance(unavailable, AIUnavailableError)
     assert unavailable.kind == kind
     assert unavailable.permanent is permanent
+    assert unavailable.fails_over is True
     assert "body" not in str(unavailable)
+
+
+@pytest.mark.parametrize(
+    "error, kind",
+    [
+        # A student can cause these with what they send (huge input, endless
+        # thinking, an input the model chokes on): breaker only, fail closed
+        (client_error(500, "INTERNAL", "An internal error has occurred"), "internal"),
+        (httpx.ReadTimeout("slow"), "timeout"),
+        (asyncio.TimeoutError(), "timeout"),
+        (httpx.RemoteProtocolError("server disconnected"), "connection_lost"),
+        (httpx.ReadError("reset"), "connection_lost"),
+        (ConnectionResetError("reset"), "connection_lost"),
+    ],
+)
+def test_content_dependent_failures_never_fail_over(error, kind):
+    unavailable = classify_unavailable(error)
+    assert unavailable.kind == kind
+    assert unavailable.fails_over is False
 
 
 @pytest.mark.parametrize(
     "error",
     [
         client_error(400, "INVALID_ARGUMENT", "Request contains an invalid argument."),
+        client_error(400, "INVALID_ARGUMENT", "The input token count exceeds the maximum"),  # oversized input
+        client_error(400, "INVALID_ARGUMENT", "Unable to process input image. echo: API key"),  # key text not at start
+        client_error(413, "PAYLOAD_TOO_LARGE"),
         ValueError("schema mismatch"),
         RuntimeError("Response was blocked due to SAFETY"),
+        RuntimeError("You exceeded your current quota"),  # text match is not trusted to fail over
     ],
 )
 def test_other_errors_are_not_availability(error):
     assert classify_unavailable(error) is None
+    assert not isinstance(map_error(error, "msg"), AIUnavailableError)
+
+
+@pytest.mark.parametrize(
+    "resp",
+    [
+        response(block=types.BlockedReason.SAFETY),  # prompt-level block, no candidates
+        response(block="OTHER"),
+        response(finish=types.FinishReason.SAFETY),
+        response(finish=types.FinishReason.RECITATION),  # no text, not a safety finish
+        response(finish=types.FinishReason.OTHER),
+        response(),  # no candidates at all, no block reason
+    ],
+)
+def test_blocked_or_empty_answers_never_look_like_an_outage(resp):
+    """Nothing a student can provoke in the ANSWER may become an availability error."""
+    p = bare_provider(lambda **kwargs: resp)
+    with pytest.raises(AIProviderError) as info:
+        asyncio.run(p.generate_private_task_meta("Tytuł", "Treść"))
+    assert not isinstance(info.value, AIUnavailableError)
 
 
 def test_safety_text_maps_to_content_blocked_but_a_dead_key_does_not():

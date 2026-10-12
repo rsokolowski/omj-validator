@@ -46,6 +46,8 @@ from ...skills import get_all_skills
 from .. import requests as ai_requests
 from ..factory import (
     UNAVAILABLE_AUTH,
+    UNAVAILABLE_CONNECTION_LOST,
+    UNAVAILABLE_INTERNAL,
     UNAVAILABLE_NETWORK,
     UNAVAILABLE_NOT_FOUND,
     UNAVAILABLE_RATE_LIMIT,
@@ -54,6 +56,14 @@ from ..factory import (
     AIContentBlockedError,
     AIProviderError,
     AIUnavailableError,
+)
+from ..messages import (
+    AUX_UNREADABLE_MESSAGE,
+    GENERIC_MESSAGE,
+    OVERLOADED_MESSAGE,
+    TECHNICAL_MESSAGE,
+    TIMEOUT_MESSAGE,
+    UNREADABLE_MESSAGE,
 )
 from ..models_catalog import estimate_cost, get_model
 from ..parsing import parse_ai_response
@@ -124,12 +134,6 @@ _IMAGE_MEDIA_TYPES = {
 BLOCKED_MESSAGE = (
     "Nie udało się przetworzyć rozwiązania. Upewnij się, że zawiera tylko treść zadania lub rozwiązanie."
 )
-UNREADABLE_MESSAGE = "Nie udało się odczytać rozwiązania. Spróbuj ponownie."
-AUX_UNREADABLE_MESSAGE = "Nie udało się odczytać odpowiedzi. Spróbuj ponownie za chwilę."
-TIMEOUT_MESSAGE = "Analiza trwa zbyt długo. Spróbuj ponownie za chwilę."
-OVERLOADED_MESSAGE = "System jest obecnie przeciążony. Spróbuj ponownie za kilka minut."
-TECHNICAL_MESSAGE = "Przepraszamy, wystąpił problem techniczny. Spróbuj ponownie później."
-GENERIC_MESSAGE = "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
 TOO_LARGE_MESSAGE = "Przesłane zdjęcia są zbyt duże. Spróbuj wysłać mniej zdjęć."
 
 
@@ -287,8 +291,11 @@ def _status_text(error: Exception) -> str:
 def classify_unavailable(error: Exception) -> Optional[AIUnavailableError]:
     """An AIUnavailableError when ``error`` means Claude could not serve at all, else None.
 
-    Timeouts, 401/403, 404, 429, 5xx/529, connection errors and a 400 about
-    the account's credit balance (billing - the key works for nothing).
+    Same fail-closed rule as Gemini (see gemini.classify_unavailable): 401/403,
+    404, 429, 502/503/504/529, a connection never established and a 400 about
+    the account's credit balance fail a request over; timeouts, 500 and a
+    connection dropped mid-request (which the request's own content can
+    cause) are classified for the breaker only. Anything else returns None.
     """
     name = type(error).__name__
     status = getattr(error, "status_code", None)
@@ -296,16 +303,23 @@ def classify_unavailable(error: Exception) -> Optional[AIUnavailableError]:
         kind, message = UNAVAILABLE_TIMEOUT, TIMEOUT_MESSAGE
     elif isinstance(error, (anthropic.AuthenticationError, anthropic.PermissionDeniedError)):
         kind, message = UNAVAILABLE_AUTH, TECHNICAL_MESSAGE
-    elif isinstance(error, anthropic.BadRequestError) and "credit balance" in str(getattr(error, "message", "")).lower():
+    elif isinstance(error, anthropic.BadRequestError) and str(getattr(error, "message", "")).lower().startswith(
+        "your credit balance is too low"
+    ):
         kind, message = UNAVAILABLE_AUTH, TECHNICAL_MESSAGE
     elif isinstance(error, anthropic.NotFoundError):
         kind, message = UNAVAILABLE_NOT_FOUND, GENERIC_MESSAGE
     elif isinstance(error, anthropic.RateLimitError):
         kind, message = UNAVAILABLE_RATE_LIMIT, OVERLOADED_MESSAGE
     elif isinstance(error, anthropic.APIConnectionError):
-        kind, message = UNAVAILABLE_NETWORK, OVERLOADED_MESSAGE
-    elif isinstance(error, anthropic.APIStatusError) and (status == 529 or (status or 0) >= 500):
+        # The SDK wraps the transport error; only a failed connect proves the content played no part
+        never_connected = type(error.__cause__).__name__ in ("ConnectError", "ConnectTimeout")
+        kind = UNAVAILABLE_NETWORK if never_connected else UNAVAILABLE_CONNECTION_LOST
+        message = OVERLOADED_MESSAGE
+    elif isinstance(error, anthropic.APIStatusError) and status in (502, 503, 504, 529):
         kind, message = UNAVAILABLE_SERVER, OVERLOADED_MESSAGE
+    elif isinstance(error, anthropic.APIStatusError) and (status or 0) >= 500:
+        kind, message = UNAVAILABLE_INTERNAL, OVERLOADED_MESSAGE
     else:
         return None
     return AIUnavailableError(message, kind=kind, status=status, error_class=name)

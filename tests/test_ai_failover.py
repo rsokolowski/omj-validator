@@ -131,8 +131,19 @@ def test_gate_closed_behaves_exactly_as_before(monkeypatch):
     assert ("anthropic", "claude-opus-5-5") not in factory._instances
 
 
-def test_claude_primary_is_not_wrapped_with_a_claude_backup(monkeypatch):
+def test_claude_primary_is_backed_up_by_the_env_gemini_default(monkeypatch):
+    """AI_FAILOVER_MODEL is Claude: a Claude primary falls back to Gemini, not to itself."""
     monkeypatch.setattr(factory, "get_active_model", lambda: ActiveModel("anthropic", "claude-sonnet-5-5", "db"))
+    wrapper = factory.create_ai_provider()
+    assert isinstance(wrapper, FailoverProvider)
+    assert wrapper.fallback_key == ("gemini", "gemini-3.8-flash")
+    status = factory.failover_status(ActiveModel("anthropic", "claude-sonnet-5-5", "db"))
+    assert (status["provider"], status["model"], status["active"]) == ("gemini", "gemini-3.8-flash", True)
+
+
+def test_claude_primary_without_gemini_key_has_no_backup(monkeypatch):
+    monkeypatch.setattr(factory, "get_active_model", lambda: ActiveModel("anthropic", "claude-sonnet-5-5", "db"))
+    monkeypatch.setattr(settings, "gemini_api_key", None)
     assert not isinstance(factory.create_ai_provider(), FailoverProvider)
 
 
@@ -148,7 +159,7 @@ def test_backup_is_never_built_while_the_primary_works():
 
 @pytest.mark.parametrize("kind, status", [
     ("auth", 401), ("auth", 403), ("not_found", 404), ("rate_limit", 429),
-    ("server", 503), ("network", None), ("timeout", None),
+    ("server", 503), ("network", None),
 ])
 def test_availability_errors_fail_over(kind, status, alerts):
     wrapper, primary, backup = pair()
@@ -192,6 +203,82 @@ def test_abuse_verdict_is_returned_not_retried():
     result = asyncio.run(wrapper.generate_private_task_meta("T", "C"))
     assert result.abuse_score == 99
     assert backup.calls == []
+
+
+@pytest.mark.parametrize("kind, status", [("timeout", None), ("internal", 500), ("connection_lost", None)])
+def test_content_dependent_failures_fail_closed(kind, status, alerts):
+    """A student can cause these with what they send: no failover for that request."""
+    wrapper, primary, backup = pair()
+    error = unavailable(kind, status)
+    primary.outcomes.append(error)
+
+    async def run():
+        try:
+            await wrapper.generate_private_task_meta("T", "C")
+        finally:
+            await drain()
+
+    with pytest.raises(AIUnavailableError) as info:
+        asyncio.run(run())
+    assert info.value is error
+    assert backup.calls == []
+    assert alerts == []
+    # ...but the breaker sees it
+    assert breaker.state(("gemini", "gemini-3.8-flash"))["consecutive_failures"] == 1
+
+
+def test_a_run_of_timeouts_across_requests_opens_the_breaker(alerts):
+    """Only when the primary keeps failing - no success in between - does traffic move."""
+    wrapper, primary, backup = pair()
+    primary.outcomes.extend([unavailable("timeout", None)] * 3)
+
+    async def run():
+        for _ in range(3):
+            with pytest.raises(AIUnavailableError):
+                await wrapper.generate_private_task_meta("T", "C")
+        result = await wrapper.generate_private_task_meta("T", "C")
+        await drain()
+        return result
+
+    result = asyncio.run(run())
+
+    assert backup.calls == ["meta"]  # only the request after the breaker opened
+    assert result.meta["failover"]["reason"] == "breaker_open"
+    assert len(alerts) == 1 and "for 15 min" in alerts[0]
+
+
+def test_a_success_in_between_keeps_timeouts_from_opening_it():
+    wrapper, primary, backup = pair()
+    primary.outcomes.extend([
+        unavailable("timeout", None), unavailable("timeout", None),
+        PrivateTaskMeta(checked=True), unavailable("timeout", None),
+    ])
+
+    async def run():
+        for _ in range(4):
+            try:
+                await wrapper.generate_private_task_meta("T", "C")
+            except AIUnavailableError:
+                pass
+
+    asyncio.run(run())
+    assert not breaker.is_open(("gemini", "gemini-3.8-flash"))
+    assert backup.calls == []
+
+
+def test_opening_alert_is_not_swallowed_by_an_earlier_single_failover(alerts):
+    wrapper, primary, _ = pair()
+    primary.outcomes.extend([unavailable("rate_limit", 429)] * 3)
+
+    async def run():
+        for _ in range(3):
+            await wrapper.generate_private_task_meta("T", "C")
+        await drain()
+
+    asyncio.run(run())
+    assert len(alerts) == 2
+    assert "This call went to" in alerts[0]
+    assert "for 15 min" in alerts[1]
 
 
 def test_at_most_one_failover():
@@ -306,7 +393,7 @@ def test_breaker_half_opens_after_the_period(monkeypatch):
 
 def test_stream_failover_restarts_cleanly():
     wrapper, primary, backup = pair()
-    primary.outcomes.append(unavailable("timeout", None))
+    primary.outcomes.append(unavailable("server", 503))
     seen: list[str] = []
     restarts: list[int] = []
 
@@ -329,7 +416,7 @@ def test_stream_failover_restarts_cleanly():
     assert restarts == [1]  # the primary had streamed one chunk before failing
     assert seen == ["**anthropic**"]
     assert result.scoring_meta["provider"] == "anthropic"
-    assert result.scoring_meta["failover"] == {"from": "gemini/gemini-3.8-flash", "reason": "timeout"}
+    assert result.scoring_meta["failover"] == {"from": "gemini/gemini-3.8-flash", "reason": "server"}
 
 
 def test_no_restart_without_failover():

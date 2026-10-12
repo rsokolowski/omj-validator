@@ -353,23 +353,27 @@ GET  /uploads/{path}                 # Serve uploaded images
    blocks it - then use the env flag).
 
    **Failover** (`app/ai/failover.py`): `create_ai_provider()` wraps the active provider in a
-   `FailoverProvider` when `AI_FAILOVER_MODEL` (default `claude-opus-5-5`) is from another
-   provider that passes the SAME GDPR gate (key + `ANTHROPIC_PROCESSOR_APPROVED`); otherwise
-   the plain provider, exactly as before. Only `AIUnavailableError` (401/403, 404, 429/quota,
-   5xx, network, timeout - providers classify SDK errors) fails over, once per call; never
-   `AIContentBlockedError`, an abuse verdict or an unreadable answer. A streaming grading
-   restarts on the backup through the worker's `restart_hook`. In-process circuit breaker:
-   key/model errors open it at once, transient ones after `AI_FAILOVER_BREAKER_THRESHOLD` in a
-   row, for `AI_FAILOVER_BREAKER_MINUTES`; one Telegram alert per opening (error class only).
+   `FailoverProvider` when the backup - `AI_FAILOVER_MODEL` (default `claude-opus-5-5`), or the
+   env Gemini default when the active model is itself Claude - passes the SAME gates (key;
+   for Anthropic `ANTHROPIC_PROCESSOR_APPROVED`); otherwise the plain provider, exactly as
+   before. Fail closed: only an `AIUnavailableError` a student cannot provoke (401/403, 404,
+   429, 502/503/504/529, connection never established) fails a call over, once; never a
+   content block, abuse verdict, empty/unreadable answer or other 400. Timeouts, 500 and
+   dropped connections (content can cause them) never fail the call over - they only feed
+   the breaker. A streaming grading restarts on the backup through the worker's
+   `restart_hook`. In-process circuit breaker: key/model errors open it at once, transient
+   ones after `AI_FAILOVER_BREAKER_THRESHOLD` in a row across requests (a success resets),
+   for `AI_FAILOVER_BREAKER_MINUTES`; a Telegram alert per opening (error class only).
    scoring_meta / ai_usage.meta name the provider/model that answered plus `failover:
    {from, reason}`; `/admin/settings` shows backup, gate and breaker state. Scripts that call
    `build_provider()` (A/B, rescore) never fail over.
 
    **Safeguards**: Gemini gets `safety_settings` on every call (harassment, hate, sexual: LOW+;
    dangerous: MEDIUM+); a prompt-level `block_reason` or a safety `finish_reason` is
-   `AIContentBlockedError`. Student text in prompts is fenced (`student_text()` `<<< >>>`,
-   `<rozwiazanie_ucznia>`), with look-alikes of the closing fence (HTML entities, fullwidth,
-   diacritics, zero-width) removed. A grading `abuse_score >= PRIVATE_ABUSE_THRESHOLD` scores 0
+   `AIContentBlockedError`. Student text in prompts is fenced (`student_text()` `<<<NONCE ...
+   NONCE>>>`, `<rozwiazanie_ucznia_NONCE>`) with a random per-request suffix, and look-alikes
+   of a fence (any case/spacing, HTML entities, fullwidth, diacritics, zero-width) are removed
+   from the text sent (`prompt_builder.neutralise`). Snapshot tests patch `fence_nonce`. A grading `abuse_score >= PRIVATE_ABUSE_THRESHOLD` scores 0
    whatever `issue_type` says. Private-task text is saved only after a successful hint call
    that found it to be maths and not manipulation (create and edit). Pattern refine is
    maths-only (`off_topic` -> fixed decline, no round). `AI_DAILY_SPEND_LIMIT_USD` caps the

@@ -350,6 +350,6 @@ def test_put_returns_failover_for_the_new_model(admin, monkeypatch):
 
     body = client.put("/api/admin/ai-config", json={"provider": "anthropic", "model": "claude-sonnet-5-5"}).json()
 
-    # A Claude primary has no Claude backup
-    assert body["failover"]["active"] is False
-    assert body["failover"]["inactive_reason"] == factory.FAILOVER_SAME_PROVIDER
+    # A Claude primary is backed up by the env Gemini default, not by Claude
+    assert body["failover"]["active"] is True
+    assert (body["failover"]["provider"], body["failover"]["model"]) == ("gemini", "gemini-3.8-flash")

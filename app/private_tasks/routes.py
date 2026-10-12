@@ -162,15 +162,19 @@ async def _generate_meta(provider, user_id: str, item: PrivateTaskInput) -> Opti
     return meta
 
 
-def _refusal(meta: Optional[PrivateTaskMeta]) -> Optional[HTTPException]:
-    """Why the text must not be saved (unchecked, manipulation, not maths), or None."""
+def _refusal(meta: Optional[PrivateTaskMeta], need_hints: bool = True) -> Optional[HTTPException]:
+    """Why the text must not be saved (unchecked, manipulation, not maths), or None.
+
+    ``need_hints=False``: the hints are not going to be used (a title-only
+    edit), so a checked answer without them is not a reason to refuse.
+    """
     if meta is None:
         return HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=NOT_CHECKED_TEXT)
     if _abusive(meta.abuse_score):
         return HTTPException(status_code=422, detail=REFUSED_TEXT)
     if not meta.is_math_problem:
         return HTTPException(status_code=422, detail=NOT_MATH_TEXT)
-    if not meta.hints:
+    if need_hints and not meta.hints:
         # Maths, but no hints came back: a glitch - try again
         return HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=NOT_CHECKED_TEXT)
     return None
@@ -438,7 +442,7 @@ async def update_task(
         if meta is not None:
             usage_row.meta = meta.meta or None
             db.commit()
-        refusal = _refusal(meta)
+        refusal = _refusal(meta, need_hints=content_changed)
         if refusal is not None:
             logger.warning(
                 f"Edited private task text refused ({refusal.status_code}) for user {mask_user_id(user_id)}"

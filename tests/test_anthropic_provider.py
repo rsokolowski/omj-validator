@@ -114,6 +114,14 @@ def fake_client(log, **script):
     )
 
 
+@pytest.fixture(autouse=True)
+def fixed_fence_nonce(monkeypatch):
+    """Fences carry a random per-request suffix; fixed so request text compares equal."""
+    from app.ai import prompt_builder
+
+    monkeypatch.setattr(prompt_builder, "fence_nonce", lambda: "n0nce0n0nce0")
+
+
 @pytest.fixture
 def make_provider(monkeypatch):
     monkeypatch.setattr(settings, "anthropic_api_key", "sk-test-not-a-key")
@@ -730,10 +738,9 @@ def test_suggest_sends_shared_text_and_parses(make_provider):
         ), "auth", True),
         (lambda: anthropic.NotFoundError(message="x", response=_response(404), body=None), "not_found", True),
         (lambda: anthropic.RateLimitError(message="x", response=_response(429), body=None), "rate_limit", False),
-        (lambda: anthropic.InternalServerError(message="x", response=_response(500), body=None), "server", False),
         (lambda: anthropic.APIStatusError(message="x", response=_response(529), body=None), "server", False),
-        (lambda: anthropic.APIConnectionError(request=httpx2.Request("POST", "https://x.invalid")), "network", False),
-        (lambda: anthropic.APITimeoutError(request=httpx2.Request("POST", "https://x.invalid")), "timeout", False),
+        (lambda: anthropic.APIStatusError(message="x", response=_response(503), body=None), "server", False),
+        (lambda: _connection_error(ConnectionRefusedError, "ConnectError"), "network", False),
     ],
 )
 def test_availability_errors_are_unavailable(make_provider, error, kind, permanent):
@@ -742,6 +749,49 @@ def test_availability_errors_are_unavailable(make_provider, error, kind, permane
         asyncio.run(p.link_pattern_tasks({"trigger": "t", "action": "a"}, []))
     assert info.value.kind == kind
     assert info.value.permanent is permanent
+    assert info.value.fails_over is True
+
+
+def _connection_error(base, cause_name):
+    """APIConnectionError caused by a transport error of the given class name."""
+    error = anthropic.APIConnectionError(request=httpx2.Request("POST", "https://x.invalid"))
+    error.__cause__ = type(cause_name, (base,), {})("boom")
+    return error
+
+
+@pytest.mark.parametrize(
+    "error, kind",
+    [
+        # The request's own content can cause these: breaker only, never a per-request failover
+        (lambda: anthropic.InternalServerError(message="x", response=_response(500), body=None), "internal"),
+        (lambda: anthropic.APIConnectionError(request=httpx2.Request("POST", "https://x.invalid")), "connection_lost"),
+        (lambda: _connection_error(ConnectionResetError, "RemoteProtocolError"), "connection_lost"),
+        (lambda: anthropic.APITimeoutError(request=httpx2.Request("POST", "https://x.invalid")), "timeout"),
+    ],
+)
+def test_content_dependent_failures_do_not_fail_over(make_provider, error, kind):
+    p, _ = make_provider(error=error())
+    with pytest.raises(AIUnavailableError) as info:
+        asyncio.run(p.link_pattern_tasks({"trigger": "t", "action": "a"}, []))
+    assert info.value.kind == kind
+    assert info.value.fails_over is False
+
+
+@pytest.mark.parametrize(
+    "error",
+    [
+        lambda: anthropic.BadRequestError(message="prompt is too long", response=_response(400), body=None),
+        lambda: anthropic.APIStatusError(message="too large", response=_response(413), body=None),
+        lambda: anthropic.BadRequestError(
+            message="x credit balance is too low (quoted from the request)", response=_response(400), body=None,
+        ),
+    ],
+)
+def test_oversized_or_bad_requests_fail_closed(make_provider, error):
+    p, _ = make_provider(error=error())
+    with pytest.raises(AIProviderError) as info:
+        asyncio.run(p.link_pattern_tasks({"trigger": "t", "action": "a"}, []))
+    assert not isinstance(info.value, AIUnavailableError)
 
 
 def test_request_errors_are_not_availability(make_provider):

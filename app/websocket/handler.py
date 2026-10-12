@@ -15,6 +15,7 @@ from ..db.models import SubmissionStatus, IssueType
 from ..db.repositories import SubmissionRepository
 from ..ai import create_ai_provider, AIProviderError
 from ..ai.failover import restart_hook
+from ..ai.messages import GENERIC_MESSAGE, OVERLOADED_MESSAGE
 from ..ai.spend import check_spend_limit
 from ..privacy import mask_user_id
 from ..storage import get_task_pdf_path, get_solution_pdf_path
@@ -36,8 +37,8 @@ def _format_elapsed(start_time: float) -> str:
 
 
 QUEUE_STATUS = "Czekam w kolejce..."
-UNEXPECTED_ERROR_MESSAGE = "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
-QUEUE_TIMEOUT_MESSAGE = "System jest obecnie przeciążony. Spróbuj ponownie za kilka minut."
+UNEXPECTED_ERROR_MESSAGE = GENERIC_MESSAGE
+QUEUE_TIMEOUT_MESSAGE = OVERLOADED_MESSAGE
 
 # (event loop, semaphore, limit): at most AI_GRADING_MAX_CONCURRENT gradings
 # call the model at once; the rest wait with status PENDING. Bound to the
@@ -149,6 +150,9 @@ async def process_submission_background(
 
         # Global daily spend cap - before any AI call is made
         check_spend_limit(db)
+        # End the read transaction: the connection must not sit "idle in
+        # transaction" for the whole (minutes-long) model call
+        db.commit()
 
         # Create AI provider and analyze with streaming
         logger.info(f"[Submission {submission_id}] Stage 2: Creating AI provider ({_format_elapsed(start_time)})")

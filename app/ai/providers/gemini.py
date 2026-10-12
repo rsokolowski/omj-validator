@@ -42,6 +42,8 @@ from ..private_parsing import (
 )
 from ..factory import (
     UNAVAILABLE_AUTH,
+    UNAVAILABLE_CONNECTION_LOST,
+    UNAVAILABLE_INTERNAL,
     UNAVAILABLE_NETWORK,
     UNAVAILABLE_NOT_FOUND,
     UNAVAILABLE_RATE_LIMIT,
@@ -50,6 +52,15 @@ from ..factory import (
     AIContentBlockedError,
     AIProviderError,
     AIUnavailableError,
+)
+
+from ..messages import (
+    AUX_UNREADABLE_MESSAGE,
+    GENERIC_MESSAGE,
+    OVERLOADED_MESSAGE,
+    TECHNICAL_MESSAGE,
+    TIMEOUT_MESSAGE,
+    UNREADABLE_MESSAGE,
 )
 
 try:
@@ -231,18 +242,13 @@ PRIVATE_BLOCKED_MESSAGE = (
     "tylko treść zadania lub rozwiązanie."
 )
 AUX_BLOCKED_MESSAGE = "Nie udało się przetworzyć tej treści. Upewnij się, że zawiera tylko zadanie."
-UNREADABLE_MESSAGE = "Nie udało się odczytać rozwiązania. Spróbuj ponownie."
-AUX_UNREADABLE_MESSAGE = "Nie udało się odczytać odpowiedzi. Spróbuj ponownie za chwilę."
-TIMEOUT_MESSAGE = "Analiza trwa zbyt długo. Spróbuj ponownie za chwilę."
-OVERLOADED_MESSAGE = "System jest obecnie przeciążony. Spróbuj ponownie za kilka minut."
-TECHNICAL_MESSAGE = "Przepraszamy, wystąpił problem techniczny. Spróbuj ponownie później."
-GENERIC_MESSAGE = "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
 
 _UNAVAILABLE_MESSAGES = {
     UNAVAILABLE_AUTH: TECHNICAL_MESSAGE,
     UNAVAILABLE_NOT_FOUND: TECHNICAL_MESSAGE,
     UNAVAILABLE_RATE_LIMIT: OVERLOADED_MESSAGE,
     UNAVAILABLE_SERVER: GENERIC_MESSAGE,
+    UNAVAILABLE_INTERNAL: GENERIC_MESSAGE,
     UNAVAILABLE_NETWORK: GENERIC_MESSAGE,
     UNAVAILABLE_TIMEOUT: TIMEOUT_MESSAGE,
 }
@@ -281,40 +287,51 @@ def block_reason(response) -> Optional[str]:
 
 
 def classify_unavailable(error: Exception) -> Optional[AIUnavailableError]:
-    """An AIUnavailableError when ``error`` means Gemini could not serve at all.
+    """An AIUnavailableError when ``error`` means Gemini could not serve, else None.
 
-    Auth/permission (incl. Gemini's 400 "API key not valid" and
-    FAILED_PRECONDITION for billing/region), 404, 429/quota, 5xx, network
-    errors and timeouts. Anything else (a 400 about the request, a content
-    block) returns None. Status and class only - never the response body.
+    Fail closed: only signals a student cannot produce with what they send
+    count as availability errors that fail the request over - 401/403
+    (incl. Gemini's 400 whose message STARTS with "API key ..." and
+    FAILED_PRECONDITION for billing/region), 404, 429, 502/503/504 and a
+    connection that could not be established. Timeouts, 500 INTERNAL and a
+    connection dropped mid-request can be caused by the request's own
+    content: they are classified (kind timeout/internal/connection_lost) so
+    the breaker sees them, but never fail the request over (failover.py).
+    Everything else - any other 400, content blocks, empty or unreadable
+    answers - returns None. Status and class only - never the response body.
     """
     name = type(error).__name__
+    if httpx is not None and isinstance(error, httpx.ConnectTimeout):
+        # Never reached the server: nothing about the content was sent
+        return AIUnavailableError(GENERIC_MESSAGE, kind=UNAVAILABLE_NETWORK, error_class=name)
     timeouts = (asyncio.TimeoutError, TimeoutError) + ((httpx.TimeoutException,) if httpx else ())
     if isinstance(error, timeouts):
         return AIUnavailableError(TIMEOUT_MESSAGE, kind=UNAVAILABLE_TIMEOUT, error_class=name)
     if genai_errors is not None and isinstance(error, genai_errors.APIError):
         code = error.code if isinstance(error.code, int) else None
         status_text = str(getattr(error, "status", "") or "").upper()
-        detail = str(getattr(error, "message", "") or "").lower()
+        detail = str(getattr(error, "message", "") or "").strip().lower()
         kind = None
-        if code in (401, 403) or status_text in ("UNAUTHENTICATED", "PERMISSION_DENIED"):
+        if code in (401, 403):
             kind = UNAVAILABLE_AUTH
-        elif code == 400 and ("api key" in detail or "api_key" in detail or status_text == "FAILED_PRECONDITION"):
+        elif code == 400 and (detail.startswith("api key") or status_text == "FAILED_PRECONDITION"):
             kind = UNAVAILABLE_AUTH
         elif code == 404:
             kind = UNAVAILABLE_NOT_FOUND
-        elif code == 429 or status_text == "RESOURCE_EXHAUSTED":
+        elif code == 429:
             kind = UNAVAILABLE_RATE_LIMIT
-        elif code is not None and code >= 500:
+        elif code in (502, 503, 504):
             kind = UNAVAILABLE_SERVER
+        elif code is not None and code >= 500:
+            kind = UNAVAILABLE_INTERNAL
         if kind is None:
             return None
         return AIUnavailableError(_UNAVAILABLE_MESSAGES[kind], kind=kind, status=code, error_class=name)
-    transport = (ConnectionError,) + ((httpx.TransportError,) if httpx else ())
-    if isinstance(error, transport):
+    if (httpx is not None and isinstance(error, httpx.ConnectError)) or isinstance(error, ConnectionRefusedError):
         return AIUnavailableError(GENERIC_MESSAGE, kind=UNAVAILABLE_NETWORK, error_class=name)
-    if "quota" in str(error).lower():
-        return AIUnavailableError(OVERLOADED_MESSAGE, kind=UNAVAILABLE_RATE_LIMIT, error_class=name)
+    network_io = (ConnectionError,) + ((httpx.NetworkError, httpx.RemoteProtocolError) if httpx else ())
+    if isinstance(error, network_io):
+        return AIUnavailableError(GENERIC_MESSAGE, kind=UNAVAILABLE_CONNECTION_LOST, error_class=name)
     return None
 
 
@@ -332,6 +349,9 @@ def map_error(error: Exception, blocked_message: str) -> AIProviderError:
     message = str(error).lower()
     if "safety" in message or "blocked" in message:
         return AIContentBlockedError(blocked_message)
+    if "quota" in message:
+        # Text match only: shown as "overloaded", never trusted to fail over
+        return AIProviderError(OVERLOADED_MESSAGE)
     return AIProviderError(GENERIC_MESSAGE)
 
 

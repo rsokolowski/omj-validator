@@ -155,6 +155,26 @@ def build_spend_message(level_percent: int, spent_usd: float, limit_usd: float) 
     return f"{head}\nLast 24 h: ${spent_usd:.2f} of ${limit_usd:.2f}"
 
 
+_background_sends: set = set()
+
+
+def send_telegram_in_background(text: str) -> None:
+    """Fire-and-forget send from sync code running on the event loop.
+
+    No running loop (a script): nothing is sent - callers log the event too.
+    The task is kept referenced until it finishes so it is not GC'd mid-send.
+    """
+    import asyncio
+
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        return
+    task = loop.create_task(send_telegram_message(text))
+    _background_sends.add(task)
+    task.add_done_callback(_background_sends.discard)
+
+
 async def send_telegram_message(text: str) -> None:
     """Send a plain-text message to the configured Telegram chat.
 
