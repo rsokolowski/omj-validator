@@ -340,7 +340,7 @@ GET  /uploads/{path}                 # Serve uploaded images
      file is written. Photos go to `data/uploads/{user_id}/{year}/{etap}/{task_num}/`; the
      text is stored on `submissions.solution_text` (no file, immutable after submit)
    - AI analyzes task PDF + solution PDF + student images + the typed text, which is sent
-     after the photos as a fenced `<rozwiazanie_ucznia>` block
+     after the photos as a fenced `<rozwiazanie_ucznia_{nonce}>` block (random suffix per request)
      (`app/ai/prompt_builder.py::solution_text_block`); logs and Telegram carry its length only
    - Results stored in PostgreSQL `submissions` table
    - OMJ scoring: 0, 2, 5, or 6 points

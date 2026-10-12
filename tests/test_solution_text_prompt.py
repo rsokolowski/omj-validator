@@ -141,7 +141,20 @@ class TestPromptFiles:
     def test_abuse_prompt_covers_typed_text(self):
         prompt = build_prompt("etap2")
         assert "wpisany tekst" in prompt
-        assert "<rozwiazanie_ucznia>" in prompt
+        # The fence carries a per-request suffix: the prompt names it as such,
+        # never the bare tag the request does not use
+        assert "<rozwiazanie_ucznia_KOD>" in prompt and "</rozwiazanie_ucznia_KOD>" in prompt
+        assert "<rozwiazanie_ucznia>" not in prompt and "</rozwiazanie_ucznia>" not in prompt
+
+    def test_no_prompt_file_names_the_bare_solution_tag(self):
+        from app.config import settings
+
+        files = sorted(settings.prompts_dir.glob("*.txt"))
+        assert files
+        for path in files:
+            text = path.read_text(encoding="utf-8")
+            assert "<rozwiazanie_ucznia>" not in text, path.name
+            assert "</rozwiazanie_ucznia>" not in text, path.name
 
 
 def test_safety_block_message_fits_text_submissions():
