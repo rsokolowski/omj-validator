@@ -176,18 +176,31 @@ def _alert(primary: Key, fallback: Key, error: AIUnavailableError, opened: bool)
 _GRADING_METHODS = frozenset({"analyze_solution", "analyze_solution_stream", "analyze_private_solution_stream"})
 
 
-def _primary_cost_estimate(method: str, error: Optional[AIUnavailableError]) -> float:
-    """What the failed primary call may have cost (it reports no usage)."""
+def _primary_cost_estimate(method: str, error: Optional[AIUnavailableError], primary: Key) -> float:
+    """What the failed primary call may have cost (it reports no usage): the
+    primary model's nominal call (spend.estimated_call_cost)."""
     if error is None or error.kind != UNAVAILABLE_SERVER:
         return 0.0  # breaker open (not called) or refused before any work
-    from .spend import AUX_UNRECORDED_COST_USD, GRADING_UNRECORDED_COST_USD
+    from .spend import estimated_call_cost
 
-    return GRADING_UNRECORDED_COST_USD if method in _GRADING_METHODS else AUX_UNRECORDED_COST_USD
+    return estimated_call_cost(primary[0], primary[1], grading=method in _GRADING_METHODS)
+
+
+def _note(primary: Key, reason: str, primary_cost: float = 0.0) -> dict:
+    return {"from": label(primary), "reason": reason, "primary_estimated_cost": primary_cost}
+
+
+def failure_meta(error: BaseException) -> Optional[dict]:
+    """Meta to store for a call that failed after a failover ({"failover": note}),
+    so the failed primary's estimated cost still counts toward the daily cap;
+    None for any other failure."""
+    note = getattr(error, "failover_note", None)
+    return {"failover": note} if note else None
 
 
 def _mark(result: Any, primary: Key, reason: str, primary_cost: float = 0.0) -> Any:
     """Note the failover in the result's meta (the backup's own meta names provider + model)."""
-    note = {"from": label(primary), "reason": reason, "primary_estimated_cost": primary_cost}
+    note = _note(primary, reason, primary_cost)
     if hasattr(result, "scoring_meta"):
         result.scoring_meta = {**(result.scoring_meta or {}), "failover": note}
     elif hasattr(result, "meta"):
@@ -256,8 +269,15 @@ class FailoverProvider:
             hook = restart_hook.get()
             if hook is not None:
                 await hook()
-            result = await getattr(fallback, method)(*args, **kwargs)
-            return _mark(result, primary, error.kind, _primary_cost_estimate(method, error))
+            primary_cost = _primary_cost_estimate(method, error, primary)
+            try:
+                result = await getattr(fallback, method)(*args, **kwargs)
+            except Exception as backup_error:
+                # Both failed: the caller stores failure_meta(backup_error) on
+                # the FAILED submission / ai_usage row, so the primary's share counts
+                backup_error.failover_note = _note(primary, error.kind, primary_cost)
+                raise
+            return _mark(result, primary, error.kind, primary_cost)
         breaker.record_success(primary)
         return result
 

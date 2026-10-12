@@ -573,10 +573,9 @@ def manage_token_parent(db: Session, raw: Optional[str]) -> tuple[str, Optional[
 
 
 def _allowlisted(email: Optional[str]) -> bool:
-    from ..groups import _get_allowed_emails
+    from ..groups import is_email_allowlisted
 
-    allowed = _get_allowed_emails()
-    return bool(email and allowed and email.lower() in allowed)
+    return is_email_allowlisted(email)
 
 
 def new_users_limit_reached(db: Session, email: Optional[str], *, needs_parent: bool) -> bool:

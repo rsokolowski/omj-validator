@@ -15,7 +15,7 @@ from ..db.models import SubmissionStatus, IssueType
 from ..db.repositories import SubmissionRepository
 from ..ai import create_ai_provider, AIProviderError
 from ..ai.factory import AISpendLimitError
-from ..ai.failover import restart_hook
+from ..ai.failover import failure_meta, restart_hook
 from ..ai.messages import GENERIC_MESSAGE, OVERLOADED_MESSAGE
 from ..ai.spend import check_spend_limit
 from ..privacy import mask_user_id
@@ -69,6 +69,45 @@ def _release_reason(error: Exception) -> str:
     return "before_ai"
 
 
+async def _record_failure(
+    db: Session, submission_id: str, ai_called: bool, error: Exception, message: str
+) -> None:
+    """FAILED row + WebSocket error for a grading that did not finish. Never raises.
+
+    The session may be mid-failure (the unexpected path): rolled back first,
+    and a failing write is logged - the student still gets the message.
+    Before any AI call the slot is released and the never-graded photos are
+    deleted (release_quota); after one, the row keeps counting and carries
+    the failed-over primary's estimated cost (failover.failure_meta).
+    """
+    try:
+        db.rollback()
+        repo = SubmissionRepository(db)
+        if ai_called:
+            repo.update_status(
+                submission_id, SubmissionStatus.FAILED, error_message=message,
+                scoring_meta_update=failure_meta(error),
+            )
+        else:
+            freed = repo.release_quota(submission_id, _release_reason(error), message)
+            if freed:
+                from ..retention import delete_unreferenced_uploads
+
+                delete_unreferenced_uploads(db, freed)
+    except Exception as write_error:
+        logger.error(
+            f"[Submission {submission_id}] Could not record the failure: {type(write_error).__name__}"
+        )
+        try:
+            db.rollback()
+        except Exception:
+            pass
+    try:
+        await progress_manager.send_error(submission_id, message)
+    except Exception as send_error:
+        logger.warning(f"[Submission {submission_id}] Could not send the error: {type(send_error).__name__}")
+
+
 async def process_submission_background(
     submission_id: str,
     user_id: str,
@@ -113,8 +152,9 @@ async def process_submission_background(
     semaphore = _grading_semaphore()
     slot_taken = False
     hook_token = None
-    # Until the provider is created nothing has been sent to an AI: a failure
-    # up to there is our refusal and gives the student's daily slot back
+    # Until the analyze call starts nothing has been sent to an AI: a failure
+    # up to there (queue, spend cap, provider construction) is ours and gives
+    # the student's daily slot back
     ai_called = False
 
     # NOTE: Telegram notifications deliberately carry no user name or e-mail -
@@ -173,7 +213,6 @@ async def process_submission_background(
 
         # Create AI provider and analyze with streaming
         logger.info(f"[Submission {submission_id}] Stage 2: Creating AI provider ({_format_elapsed(start_time)})")
-        ai_called = True
         provider = create_ai_provider()
 
         # Define callback for when file upload completes
@@ -201,6 +240,7 @@ async def process_submission_background(
             await progress_manager.send_status(submission_id, "Analizuję rozwiązanie...")
 
         hook_token = restart_hook.set(on_restart)
+        ai_called = True
 
         if private_task is None:
             logger.info(f"[Submission {submission_id}] Calling analyze_solution_stream ({_format_elapsed(start_time)})")
@@ -291,16 +331,7 @@ async def process_submission_background(
             f"error={error_msg}, elapsed={total_time:.1f}s"
         )
 
-        if ai_called:
-            submission_repo.update_status(
-                submission_id,
-                SubmissionStatus.FAILED,
-                error_message=error_msg,
-            )
-        else:
-            submission_repo.release_quota(submission_id, _release_reason(e), error_msg)
-
-        await progress_manager.send_error(submission_id, error_msg)
+        await _record_failure(db, submission_id, ai_called, e, error_msg)
 
         # Notify: submission failed (fire-and-forget)
         await send_telegram_message(
@@ -319,16 +350,7 @@ async def process_submission_background(
 
         # The student sees error_message in their history: never the raw
         # exception text (it can quote model output or internals) - logs only.
-        if ai_called:
-            submission_repo.update_status(
-                submission_id,
-                SubmissionStatus.FAILED,
-                error_message=UNEXPECTED_ERROR_MESSAGE,
-            )
-        else:
-            submission_repo.release_quota(submission_id, _release_reason(e), UNEXPECTED_ERROR_MESSAGE)
-
-        await progress_manager.send_error(submission_id, UNEXPECTED_ERROR_MESSAGE)
+        await _record_failure(db, submission_id, ai_called, e, UNEXPECTED_ERROR_MESSAGE)
 
         # Notify: submission failed (fire-and-forget)
         await send_telegram_message(

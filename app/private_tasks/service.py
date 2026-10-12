@@ -11,7 +11,8 @@ from typing import Optional
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-from ..ai.spend import spend_limit_http_error
+from ..ai.factory import AISpendLimitError
+from ..ai.spend import SPEND_LIMIT_RETRY_AFTER_SECONDS, check_spend_limit
 from ..config import settings
 from ..db.models import PrivateTaskDB
 from ..db.models import AIUsageDB
@@ -181,6 +182,26 @@ def check_ai_limit(
         )
 
 
+def record_failed_call(db: Session, usage_row: Optional[AIUsageDB], error: BaseException) -> None:
+    """Keep a failed-over call's cost on its ai_usage row (failover.failure_meta).
+
+    Both providers failed: the backup reported nothing, but the primary may
+    have generated billed tokens - its estimate must still count toward the
+    daily spend cap. Any other failure leaves the row as it is. Never raises.
+    """
+    from ..ai.failover import failure_meta
+
+    meta = failure_meta(error)
+    if usage_row is None or not meta:
+        return
+    try:
+        usage_row.meta = meta
+        db.commit()
+    except Exception as e:
+        logger.warning(f"Could not record a failed AI call's cost: {type(e).__name__}")
+        db.rollback()
+
+
 def reserve_ai_calls(
     db: Session,
     user_id: str,
@@ -201,9 +222,14 @@ def reserve_ai_calls(
     for everybody - allowlisted users included: it is a money brake, not a
     fairness limit.
     """
-    spend_error = spend_limit_http_error(db)
-    if spend_error is not None:
-        raise spend_error
+    try:
+        check_spend_limit(db)
+    except AISpendLimitError as e:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=str(e),
+            headers={"Retry-After": str(SPEND_LIMIT_RETRY_AFTER_SECONDS)},
+        )
     usage = AIUsageRepository(db)
     rows = usage.record_many(user_id, kind, cost)
     try:

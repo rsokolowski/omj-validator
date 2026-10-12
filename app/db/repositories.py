@@ -690,33 +690,70 @@ class SubmissionRepository:
         submission_id: str,
         status: SubmissionStatus,
         error_message: Optional[str] = None,
+        scoring_meta_update: Optional[dict] = None,
     ) -> Optional[SubmissionDB]:
-        """Update submission status."""
+        """Update submission status (``scoring_meta_update`` is merged into scoring_meta)."""
         submission = self.get_by_id(submission_id)
         if not submission:
             return None
         submission.status = status
         if error_message is not None:
             submission.error_message = error_message
+        if scoring_meta_update:
+            submission.scoring_meta = {**(submission.scoring_meta or {}), **scoring_meta_update}
         self.db.commit()
         self.db.refresh(submission)
         return submission
 
-    def release_quota(self, submission_id: str, reason: str, error_message: str) -> Optional[SubmissionDB]:
+    def release_quota(self, submission_id: str, reason: str, error_message: str) -> list[str]:
         """FAILED with ``error_message`` and no longer counted toward the limits.
 
-        For a refusal on our side before any AI call: the student keeps the
-        slot, the history still shows what happened.
+        For a submission we never graded through no fault of the student
+        (queue full, spend cap, restart): the student keeps the slot, the
+        history still shows what happened. The row lets go of its photos -
+        never graded, and the student sends them again - and returns their
+        paths for the caller to delete (retention.delete_unreferenced_uploads:
+        an admin rerun can share them).
         """
         submission = self.get_by_id(submission_id)
         if not submission:
-            return None
+            return []
+        freed = self._release(submission, reason, error_message)
+        self.db.commit()
+        return freed
+
+    @staticmethod
+    def _release(submission: SubmissionDB, reason: str, error_message: str) -> list[str]:
+        freed = list(submission.images or [])
         submission.status = SubmissionStatus.FAILED
         submission.error_message = error_message
+        submission.images = []
         submission.scoring_meta = {**(submission.scoring_meta or {}), QUOTA_RELEASED_KEY: reason}
+        return freed
+
+    def release_interrupted(self, grace_seconds: int, error_message: str) -> tuple[int, list[str]]:
+        """At startup: release every PENDING/PROCESSING row older than ``grace_seconds``.
+
+        Grading jobs are asyncio tasks of the single worker process, so a
+        restart kills them all; their rows would otherwise stay PENDING and
+        count as in flight for SUBMISSION_TIMEOUT_SECONDS, locking students
+        out until _mark_stale_submissions_failed noticed them. Released with
+        quota_released="restart". Returns (rows released, photo paths freed).
+        """
+        threshold = datetime.now(timezone.utc) - timedelta(seconds=grace_seconds)
+        rows = (
+            self.db.query(SubmissionDB)
+            .filter(
+                SubmissionDB.status.in_([SubmissionStatus.PENDING, SubmissionStatus.PROCESSING]),
+                SubmissionDB.timestamp < threshold,
+            )
+            .all()
+        )
+        freed: list[str] = []
+        for row in rows:
+            freed.extend(self._release(row, "restart", error_message))
         self.db.commit()
-        self.db.refresh(submission)
-        return submission
+        return len(rows), freed
 
     def update_result(
         self,

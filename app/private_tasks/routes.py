@@ -115,7 +115,9 @@ def serialize_summary(row: dict) -> dict:
     }
 
 
-async def _generate_meta(provider, user_id: str, item: PrivateTaskInput) -> Optional[PrivateTaskMeta]:
+async def _generate_meta(
+    provider, user_id: str, item: PrivateTaskInput, db: Session, usage_row
+) -> Optional[PrivateTaskMeta]:
     """Hints for one task, or None when the call failed or was unreadable.
 
     The hint call is also the abuse and "is it maths" check of the text, so
@@ -128,6 +130,7 @@ async def _generate_meta(provider, user_id: str, item: PrivateTaskInput) -> Opti
         raise
     except AIProviderError as e:
         logger.warning(f"Hint generation failed for user {mask_user_id(user_id)}: {type(e).__name__}")
+        service.record_failed_call(db, usage_row, e)
         return None
     except Exception as e:
         logger.exception(f"Hint generation crashed for user {mask_user_id(user_id)}: {type(e).__name__}")
@@ -202,6 +205,7 @@ async def extract_tasks(
     try:
         result = await create_ai_provider().extract_private_tasks(saved)
     except AIProviderError as e:
+        service.record_failed_call(db, usage_row, e)
         fail(status.HTTP_502_BAD_GATEWAY, str(e))
     except Exception:
         logger.exception("Private task extraction crashed")
@@ -247,11 +251,14 @@ async def _create_from_inputs(
     """
     provider = create_ai_provider()
     try:
-        metas = await asyncio.gather(*(_generate_meta(provider, user_id, item) for item in items))
+        metas = await asyncio.gather(
+            *(_generate_meta(provider, user_id, item, db, row) for item, row in zip(items, usage_rows))
+        )
     except AIContentBlockedError:
         raise HTTPException(status_code=422, detail=REFUSED_TEXT)
     for row, meta in zip(usage_rows, metas):
-        row.meta = meta.meta if meta and meta.meta else None
+        if meta and meta.meta:  # a failed call may already carry failover cost (record_failed_call)
+            row.meta = meta.meta
     db.commit()
 
     refusals = [r for r in (_refusal(meta) for meta in metas) if r is not None]
@@ -412,7 +419,7 @@ async def update_task(
             title=fields.get("title", task.title), content=fields.get("content", task.content)
         )
         try:
-            meta = await _generate_meta(create_ai_provider(), user_id, item)
+            meta = await _generate_meta(create_ai_provider(), user_id, item, db, usage_row)
         except AIContentBlockedError:
             raise HTTPException(status_code=422, detail=REFUSED_TEXT)
         if meta is not None:
@@ -483,6 +490,7 @@ async def regenerate_hints(request: Request, task_id: str, db: Session = Depends
     try:
         meta = await create_ai_provider().generate_private_task_meta(task.title, task.content)
     except AIProviderError as e:
+        service.record_failed_call(db, usage_row, e)
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=str(e))
     usage_row.meta = meta.meta or None
     db.commit()

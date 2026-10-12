@@ -414,6 +414,7 @@ async def _call(db: Session, usage_row, user_id: str, call):
     except AIContentBlockedError:
         raise HTTPException(status_code=422, detail=REFUSED)
     except AIProviderError as e:
+        private_service.record_failed_call(db, usage_row, e)
         raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=str(e))
     except Exception:
         logger.exception("Pattern AI call crashed")

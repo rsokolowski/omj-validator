@@ -30,8 +30,7 @@ import time
 from datetime import date, datetime, timedelta, timezone
 from typing import Optional
 
-from fastapi import HTTPException, status
-from sqlalchemy import func, or_
+from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 
 from ..config import settings
@@ -41,12 +40,18 @@ from .factory import AISpendLimitError
 
 logger = logging.getLogger(__name__)
 
-# Flat estimates for calls without a recorded cost (in flight). Grading: the
-# upper end of a Claude grading (docs/model-ab-playbook.md: $0.20-0.40 with
-# Opus), so a failover burst is not underestimated; Gemini Flash costs
-# ~$0.01-0.03. Aux calls are text-only and short.
+# Estimate for a call without a recorded cost (in flight, or a failed-over
+# primary): the model's own catalog price for a nominal call at the upper end
+# of what we see (docs/model-ab-playbook.md: ~15k input and 5-15k output
+# tokens per grading, thinking billed as output). That is ~$0.38 for Claude
+# Opus 5.5 and ~$0.07-0.14 for Gemini Flash. Aux calls (extraction, hints,
+# patterns) are shorter.
+GRADING_NOMINAL_TOKENS = (20_000, 15_000)  # (input, output incl. thinking)
+AUX_NOMINAL_TOKENS = (6_000, 3_000)
+# Flat fallbacks, only for a model without a price in the catalog: the upper
+# end of a Claude Opus call, so an unknown model is never underestimated
 GRADING_UNRECORDED_COST_USD = 0.40
-AUX_UNRECORDED_COST_USD = 0.02
+AUX_UNRECORDED_COST_USD = 0.10
 
 # Where failover.py notes its estimate of the failed primary call's cost
 FAILOVER_PRIMARY_COST_PATH = ("failover", "primary_estimated_cost")
@@ -59,7 +64,8 @@ SPEND_LIMIT_MESSAGE = (
     "Spróbuj ponownie za kilka godzin."
 )
 
-# The spend window is rolling; an hour is a fair "come back later"
+# The spend window is rolling; an hour is a fair "come back later". Callers
+# answer a refused request with SPEND_LIMIT_MESSAGE and this Retry-After.
 SPEND_LIMIT_RETRY_AFTER_SECONDS = 3600
 
 # The window sum is cached briefly: it runs before every AI call, and the
@@ -82,6 +88,37 @@ def reset_alerts() -> None:
 
 def _naive_utc_now() -> datetime:
     return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
+def estimated_call_cost(provider: str, model: str, grading: bool) -> float:
+    """Conservative cost of one call to this model, before it reports usage."""
+    from .models_catalog import estimate_cost, get_model
+
+    fallback = GRADING_UNRECORDED_COST_USD if grading else AUX_UNRECORDED_COST_USD
+    if get_model(provider, model) is None:
+        return fallback
+    input_tokens, output_tokens = GRADING_NOMINAL_TOKENS if grading else AUX_NOMINAL_TOKENS
+    cost = estimate_cost(provider, model, input_tokens, output_tokens)
+    return cost if cost > 0 else fallback
+
+
+def _in_flight_model() -> tuple[str, str]:
+    """The model new calls go to (factory.resolve_active). A call that fails
+    over mid-flight is accounted afterwards from its recorded meta."""
+    from .factory import resolve_active
+
+    effective, _ = resolve_active()
+    return effective.provider, effective.model
+
+
+def _unit_costs() -> tuple[float, float]:
+    """(grading, aux) estimate for one call in flight; flat when the model is unknown."""
+    try:
+        provider, model = _in_flight_model()
+    except Exception as e:
+        logger.warning(f"[AI spend] Active model unknown ({type(e).__name__}) - flat estimates")
+        return GRADING_UNRECORDED_COST_USD, AUX_UNRECORDED_COST_USD
+    return estimated_call_cost(provider, model, True), estimated_call_cost(provider, model, False)
 
 
 def aux_in_flight_seconds() -> int:
@@ -129,16 +166,16 @@ def spent_last_24h(db: Session, now: Optional[datetime] = None) -> float:
         db.query(func.count(AIUsageDB.id))
         .filter(
             AIUsageDB.created_at >= now - timedelta(seconds=aux_in_flight_seconds()),
-            or_(AIUsageDB.meta.is_(None), usage_cost.is_(None)),
+            # A failover note without a cost is a finished (double-failed) call
+            or_(AIUsageDB.meta.is_(None), and_(usage_cost.is_(None), usage_primary.is_(None))),
         )
         .scalar()
     )
-    return (
-        float(recorded_grading or 0)
-        + float(recorded_aux or 0)
-        + (in_flight or 0) * GRADING_UNRECORDED_COST_USD
-        + (unrecorded_aux or 0) * AUX_UNRECORDED_COST_USD
-    )
+    total = float(recorded_grading or 0) + float(recorded_aux or 0)
+    if in_flight or unrecorded_aux:
+        grading_unit, aux_unit = _unit_costs()
+        total += (in_flight or 0) * grading_unit + (unrecorded_aux or 0) * aux_unit
+    return total
 
 
 def _alert(level: int, spent: float, limit: float) -> None:
@@ -192,20 +229,3 @@ def check_spend_limit(db: Session) -> None:
         logger.warning(f"[AI spend] Limit reached (${spent:.2f} / ${limit:.2f}) - AI call refused")
         raise AISpendLimitError(SPEND_LIMIT_MESSAGE)
 
-
-def spend_limit_http_error(db: Session) -> Optional[HTTPException]:
-    """The 429 for a request refused by the cap (check_spend_limit), else None.
-
-    One message and Retry-After for every route; the body is
-    {"detail": message} as raised, or the caller re-wraps ``detail`` in its
-    own shape (submit answers {"error"}).
-    """
-    try:
-        check_spend_limit(db)
-    except AISpendLimitError as e:
-        return HTTPException(
-            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail=str(e),
-            headers={"Retry-After": str(SPEND_LIMIT_RETRY_AFTER_SECONDS)},
-        )
-    return None

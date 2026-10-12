@@ -290,20 +290,12 @@ def block_reason(response) -> Optional[str]:
     return None
 
 
-# 400 FAILED_PRECONDITION is also what a File API file still PROCESSING gets
-# ("The File ... is not in an ACTIVE state"), so only these message starts
-# mean the key, billing or project is broken for every request.
-_PERMANENT_PRECONDITION_PREFIXES = (
-    "user location is not supported",
-    "gemini api free tier is not available",
-    "api key",
-    "billing",
-    "this api method requires billing",
-    "project",
-    "your project",
-    "permission",
-    "the caller does not have permission",
-)
+# 400 FAILED_PRECONDITION means the key/billing/region/project cannot serve
+# ("User location is not supported", "... enable billing ...", "Precondition
+# check failed.") - an availability error, whatever Google's wording - EXCEPT
+# for a File API upload the request itself refers to ("The File ... is not in
+# an ACTIVE state and usage is not allowed."): per request and transient.
+_REQUEST_PRECONDITION_MARKERS = ("file", "active state")
 
 
 def classify_unavailable(error: Exception) -> Optional[AIUnavailableError]:
@@ -311,9 +303,8 @@ def classify_unavailable(error: Exception) -> Optional[AIUnavailableError]:
 
     Fail closed: only signals a student cannot produce with what they send
     count as availability errors that fail the request over - 401/403
-    (incl. Gemini's 400 whose message STARTS with "API key ..." and a
-    FAILED_PRECONDITION whose message starts like a billing/region/project
-    problem - not "file not ACTIVE yet"), 404, 429, 502/503/504 and a
+    (incl. Gemini's 400 whose message STARTS with "API key ..." and any
+    FAILED_PRECONDITION except one about an uploaded file), 404, 429, 502/503/504 and a
     connection that could not be established. Timeouts, 500 INTERNAL and a
     connection dropped mid-request can be caused by the request's own
     content: they are classified (kind timeout/internal/connection_lost) so
@@ -337,7 +328,10 @@ def classify_unavailable(error: Exception) -> Optional[AIUnavailableError]:
             kind = UNAVAILABLE_AUTH
         elif code == 400 and (
             detail.startswith("api key")
-            or (status_text == "FAILED_PRECONDITION" and detail.startswith(_PERMANENT_PRECONDITION_PREFIXES))
+            or (
+                status_text == "FAILED_PRECONDITION"
+                and not any(marker in detail for marker in _REQUEST_PRECONDITION_MARKERS)
+            )
         ):
             kind = UNAVAILABLE_AUTH
         elif code == 404:

@@ -176,7 +176,7 @@ def test_availability_errors_fail_over(kind, status, alerts):
     assert result.meta["provider"] == "anthropic"
     assert result.meta["model"] == "claude-opus-5-5"
     # Only a 5xx can come after the primary generated (billed) tokens
-    expected_cost = spend.AUX_UNRECORDED_COST_USD if kind == "server" else 0.0
+    expected_cost = spend.estimated_call_cost("gemini", "gemini-3.8-flash", grading=False) if kind == "server" else 0.0
     assert result.meta["failover"] == {
         "from": "gemini/gemini-3.8-flash", "reason": kind, "primary_estimated_cost": expected_cost,
     }
@@ -422,7 +422,7 @@ def test_stream_failover_restarts_cleanly():
     assert result.scoring_meta["provider"] == "anthropic"
     assert result.scoring_meta["failover"] == {
         "from": "gemini/gemini-3.8-flash", "reason": "server",
-        "primary_estimated_cost": spend.GRADING_UNRECORDED_COST_USD,
+        "primary_estimated_cost": spend.estimated_call_cost("gemini", "gemini-3.8-flash", grading=True),
     }
 
 
@@ -455,3 +455,29 @@ def test_failover_status_for_admin():
     assert status["breaker"] == {
         "state": "closed", "open_until": None, "consecutive_failures": 0, "last_error": None,
     }
+
+
+def test_primary_estimate_is_the_primary_models_price():
+    """A Gemini Flash primary is not charged at a Claude Opus price."""
+    flash = spend.estimated_call_cost("gemini", "gemini-3.8-flash", grading=True)
+    opus = spend.estimated_call_cost("anthropic", "claude-opus-5-5", grading=True)
+    assert 0 < flash < opus <= spend.GRADING_UNRECORDED_COST_USD
+    assert spend.estimated_call_cost("anthropic", "claude-unknown", grading=True) == spend.GRADING_UNRECORDED_COST_USD
+
+
+def test_double_failure_carries_the_primary_estimate(alerts):
+    wrapper, primary, backup = pair()
+    primary.outcomes.append(unavailable("server", 503))
+    backup.outcomes.append(unavailable("server", 529))
+
+    async def run():
+        with pytest.raises(AIUnavailableError) as info:
+            await wrapper.generate_private_task_meta("T", "C")
+        await drain()
+        return info.value
+
+    error = asyncio.run(run())
+    assert failover.failure_meta(error) == {"failover": {
+        "from": "gemini/gemini-3.8-flash", "reason": "server", "primary_estimated_cost": spend.estimated_call_cost("gemini", "gemini-3.8-flash", grading=False),
+    }}
+    assert failover.failure_meta(AIUnavailableError("x", kind="server", status=503)) is None

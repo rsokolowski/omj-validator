@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from starlette.requests import HTTPConnection
 
 from .config import settings
-from .groups import _get_allowed_emails
+from .groups import is_email_allowlisted
 from .db import get_db
 from .db.models import UserDB, UserStatus
 
@@ -267,10 +267,7 @@ async def current_member_id(request: Request) -> str:
 
 def is_allowlisted(request: Request) -> bool:
     """The signed-in user's e-mail is in ALLOWED_EMAILS (rate limits skipped)."""
-    allowed = _get_allowed_emails()
-    user = get_current_user(request)
-    email = ((user or {}).get("email") or "").lower()
-    return bool(allowed and email in allowed)
+    return is_email_allowlisted((get_current_user(request) or {}).get("email"))
 
 
 def require_auth_redirect(request: Request) -> Optional[RedirectResponse]:

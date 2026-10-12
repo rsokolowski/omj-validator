@@ -19,6 +19,7 @@ from sqlalchemy.pool import StaticPool
 
 import app.main as main
 import app.auth as auth_module
+import app.groups as groups_module
 from app.config import settings
 from app.db import get_db
 from app.db.models import DeletedAccountQuotaDB, SubmissionDB, SubmissionStatus, UserDB
@@ -320,7 +321,7 @@ class TestCarryoverIsEnforcedOnSubmit:
         monkeypatch.setattr(settings, "rate_limit_submissions_per_user_per_day", 1)
         monkeypatch.setattr(settings, "public_access", True)
         monkeypatch.setattr(settings, "allowed_emails", None)
-        monkeypatch.setattr(auth_module, "_get_allowed_emails", lambda: set())
+        monkeypatch.setattr(groups_module, "_get_allowed_emails", lambda: set())
 
         # The fixture already gave this user one submission inside the window,
         # which is the whole daily budget.
@@ -345,7 +346,7 @@ class TestCarryoverIsEnforcedOnSubmit:
         monkeypatch.setattr(settings, "rate_limit_submissions_per_user_per_day", 10)
         monkeypatch.setattr(settings, "public_access", True)
         monkeypatch.setattr(settings, "allowed_emails", None)
-        monkeypatch.setattr(auth_module, "_get_allowed_emails", lambda: set())
+        monkeypatch.setattr(groups_module, "_get_allowed_emails", lambda: set())
 
         assert _post(client).status_code == 200
         db.add(UserDB(id=USER_ID, google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
@@ -401,7 +402,7 @@ class TestRetryAfterForAReturningUser:
         monkeypatch.setattr(settings, "rate_limit_submissions_per_user_per_day", 3)
         monkeypatch.setattr(settings, "public_access", True)
         monkeypatch.setattr(settings, "allowed_emails", None)
-        monkeypatch.setattr(auth_module, "_get_allowed_emails", lambda: set())
+        monkeypatch.setattr(groups_module, "_get_allowed_emails", lambda: set())
 
         assert _post(client).status_code == 200  # delete the account
         db.add(UserDB(id=USER_ID, google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
@@ -419,7 +420,7 @@ class TestRetryAfterForAReturningUser:
         self._spread_submissions(db, [23, 12, 1])
         monkeypatch.setattr(settings, "rate_limit_submissions_per_user_per_day", 3)
         monkeypatch.setattr(settings, "public_access", True)
-        monkeypatch.setattr(auth_module, "_get_allowed_emails", lambda: set())
+        monkeypatch.setattr(groups_module, "_get_allowed_emails", lambda: set())
 
         _post(client)
         db.add(UserDB(id=USER_ID, google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
@@ -437,7 +438,7 @@ class TestRetryAfterForAReturningUser:
         self._spread_submissions(db, [23, 12, 1])
         monkeypatch.setattr(settings, "rate_limit_submissions_per_user_per_day", 3)
         monkeypatch.setattr(settings, "public_access", True)
-        monkeypatch.setattr(auth_module, "_get_allowed_emails", lambda: set())
+        monkeypatch.setattr(groups_module, "_get_allowed_emails", lambda: set())
 
         _post(client)
         db.add(UserDB(id=USER_ID, google_sub=USER_ID, email=USER_EMAIL, name="Kid"))

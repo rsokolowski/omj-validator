@@ -180,6 +180,9 @@ def client_error(code, status, message="body"):
         (client_error(400, "FAILED_PRECONDITION", "Gemini API free tier is not available in your country. "
                       "Please enable billing on your project in Google AI Studio."), "auth", True),
         (client_error(400, "FAILED_PRECONDITION", "Billing account is disabled"), "auth", True),
+        # Any rewording of a billing/region problem still fails over
+        (client_error(400, "FAILED_PRECONDITION", "Precondition check failed."), "auth", True),
+        (client_error(400, "FAILED_PRECONDITION", "Usage from this region requires a paid plan"), "auth", True),
         (client_error(404, "NOT_FOUND", "models/gemini-9 is not found"), "not_found", True),
         (client_error(429, "RESOURCE_EXHAUSTED"), "rate_limit", False),
         (client_error(502, "BAD_GATEWAY"), "server", False),
@@ -227,7 +230,7 @@ def test_content_dependent_failures_never_fail_over(error, kind):
         # A File API upload not processed yet: transient, not a dead key
         client_error(400, "FAILED_PRECONDITION",
                      "The File abc123 is not in an ACTIVE state and usage is not allowed."),
-        client_error(400, "FAILED_PRECONDITION", "Precondition check failed."),
+        client_error(400, "FAILED_PRECONDITION", "File abc123 is still being processed."),
         ValueError("schema mismatch"),
         RuntimeError("Response was blocked due to SAFETY"),
         RuntimeError("You exceeded your current quota"),  # text match is not trusted to fail over

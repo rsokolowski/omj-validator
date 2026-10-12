@@ -318,14 +318,16 @@ def reserve_submission(
         return error, None, headers
     # Refused here rather than in the grading worker, so a submission made after
     # the daily AI budget ran out does not cost the student a slot (allowlisted too)
-    from .ai.spend import spend_limit_http_error
+    from .ai.factory import AISpendLimitError
+    from .ai.spend import SPEND_LIMIT_RETRY_AFTER_SECONDS, check_spend_limit
 
-    spend_error = spend_limit_http_error(db)
-    if spend_error is not None:
+    try:
+        check_spend_limit(db)
+    except AISpendLimitError as e:
         return JSONResponse(
-            {"error": spend_error.detail},
-            status_code=spend_error.status_code,
-            headers={**headers, **spend_error.headers},
+            {"error": str(e)},
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            headers={**headers, "Retry-After": str(SPEND_LIMIT_RETRY_AFTER_SECONDS)},
         ), None, headers
 
     submission = SubmissionRepository(db).create(

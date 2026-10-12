@@ -119,7 +119,7 @@ class TestMemberCheck:
         monkeypatch.setattr(auth, "get_current_user_id", lambda request: user_id)
         monkeypatch.setattr(auth, "is_group_member_async", is_member)
         monkeypatch.setattr(auth, "get_current_user", lambda request: {"user_id": user_id, "email": email})
-        monkeypatch.setattr(auth, "_get_allowed_emails", lambda: set(allowed))
+        monkeypatch.setattr("app.groups._get_allowed_emails", lambda: set(allowed))
         return auth
 
     def test_member_gets_the_id(self, monkeypatch):

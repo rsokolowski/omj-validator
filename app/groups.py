@@ -20,6 +20,12 @@ def _get_allowed_emails() -> Set[str]:
         return set()
     return {email.strip().lower() for email in settings.allowed_emails.split(",") if email.strip()}
 
+def is_email_allowlisted(email: Optional[str]) -> bool:
+    """``email`` is in ALLOWED_EMAILS (case-insensitive); False without one."""
+    allowed = _get_allowed_emails()
+    return bool(email and allowed and email.strip().lower() in allowed)
+
+
 # Thread-safe TTL cache for group membership (5 minute TTL, max 256 entries)
 _membership_cache = TTLCache(maxsize=256, ttl=300)
 _cache_lock = threading.Lock()

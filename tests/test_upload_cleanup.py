@@ -19,6 +19,7 @@ from sqlalchemy.pool import StaticPool
 
 import app.main as main
 import app.auth as auth_module
+import app.groups as groups_module
 import app.websocket.handler as handler
 from app.config import settings
 from app.db import get_db
@@ -86,7 +87,6 @@ def client(db, monkeypatch):
     monkeypatch.setattr(main, "verify_auth", lambda request: True)
     monkeypatch.setattr(main, "get_current_user_id", lambda request: USER_ID)
     monkeypatch.setattr(main, "get_current_user", lambda request: user)
-    monkeypatch.setattr(main, "_get_allowed_emails", lambda: set())
 
     async def member(request):
         return True
@@ -96,7 +96,7 @@ def client(db, monkeypatch):
     monkeypatch.setattr(auth_module, "verify_auth", lambda request: True)
     monkeypatch.setattr(auth_module, "get_current_user_id", lambda request: USER_ID)
     monkeypatch.setattr(auth_module, "is_group_member_async", member)
-    monkeypatch.setattr(auth_module, "_get_allowed_emails", lambda: set())
+    monkeypatch.setattr(groups_module, "_get_allowed_emails", lambda: set())
 
     yield TestClient(main.app)
 

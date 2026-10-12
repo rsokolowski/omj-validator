@@ -382,8 +382,8 @@ GET  /uploads/{path}                 # Serve uploaded images
    whatever `issue_type` says. Private-task text is saved only after a successful hint call
    that found it to be maths and not manipulation (create and edit). Pattern refine is
    maths-only (`off_topic` -> fixed decline, no round). `AI_DAILY_SPEND_LIMIT_USD` caps the
-   estimated 24 h spend (`app/ai/spend.py`: recorded `estimated_cost` + flat estimates for
-   calls in flight; checked in the grading worker and `reserve_ai_calls`, 429 for aux calls);
+   estimated 24 h spend (`app/ai/spend.py`: recorded `estimated_cost` + the active model's
+   nominal-call price for calls in flight + a failed-over primary's estimate; checked in the grading worker and `reserve_ai_calls`, 429 for aux calls);
    `AI_GRADING_MAX_CONCURRENT` caps parallel gradings (the rest wait as "pending").
 
 4. **Private tasks ("Moje zadania")**: photo -> `extract_private_tasks` (schema-constrained,

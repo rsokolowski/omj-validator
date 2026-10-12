@@ -48,7 +48,7 @@ from .auth import (
 )
 from .oauth import oauth
 from .privacy import mask_email, mask_user_id
-from .groups import check_group_membership, _get_allowed_emails
+from .groups import check_group_membership, is_email_allowlisted
 from .db import (
     get_db,
     UserRepository,
@@ -268,6 +268,40 @@ async def start_cleanup_task():
     task.add_done_callback(_background_tasks.discard)
 
 
+# Rows younger than this at startup are left alone: during a container swap
+# the old process may still be finishing them
+RESTART_RELEASE_GRACE_SECONDS = 60
+
+
+def release_interrupted_submissions() -> None:
+    """Release gradings a restart killed (see SubmissionRepository.release_interrupted).
+
+    The worker runs gradings as in-process asyncio tasks (production: one
+    gunicorn worker), so nothing is still grading a PENDING/PROCESSING row
+    after a restart. Without this they would count as in flight - and lock
+    the student out - for SUBMISSION_TIMEOUT_SECONDS. Never fails startup.
+    """
+    from .ai.messages import GENERIC_MESSAGE
+    from .db import SessionLocal
+    from .retention import delete_unreferenced_uploads
+
+    db = SessionLocal()
+    try:
+        released, freed = SubmissionRepository(db).release_interrupted(
+            RESTART_RELEASE_GRACE_SECONDS, GENERIC_MESSAGE
+        )
+        if released:
+            delete_unreferenced_uploads(db, freed)
+            logger.info(f"Released {released} submission(s) interrupted by the restart")
+    except Exception as e:
+        logger.error(f"Could not release interrupted submissions: {type(e).__name__}")
+    finally:
+        db.close()
+
+
+app.on_event("startup")(release_interrupted_submissions)
+
+
 @app.on_event("startup")
 def warm_ai_provider():
     """Initialize AI provider at startup to avoid latency on first request."""
@@ -433,8 +467,7 @@ async def google_auth_callback(request: Request, db: Session = Depends(get_db)):
 
         # Check if user has full access (via public access, allowlist, or Google Groups)
         has_access = await check_group_membership(email)
-        allowed_emails = _get_allowed_emails()
-        email_allowlisted = allowed_emails and email.lower() in allowed_emails
+        email_allowlisted = is_email_allowlisted(email)
 
         start_session(request, existing_user, remember=True, is_group_member=has_access, picture=picture)
 

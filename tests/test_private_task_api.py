@@ -19,6 +19,7 @@ from sqlalchemy.pool import StaticPool
 
 import app.main as main
 import app.auth as auth_module
+import app.groups as groups_module
 import app.private_tasks.routes as routes
 from app.ai.factory import AIProviderError
 from app.config import settings
@@ -109,7 +110,7 @@ def current_user(monkeypatch):
     monkeypatch.setattr(auth_module, "verify_auth", lambda request: True)
     monkeypatch.setattr(auth_module, "get_current_user_id", lambda request: state["id"])
     monkeypatch.setattr(auth_module, "is_group_member_async", member)
-    monkeypatch.setattr(auth_module, "_get_allowed_emails", lambda: set())
+    monkeypatch.setattr(groups_module, "_get_allowed_emails", lambda: set())
     return state
 
 

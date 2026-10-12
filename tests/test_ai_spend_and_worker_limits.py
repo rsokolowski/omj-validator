@@ -39,6 +39,7 @@ def session_factory(monkeypatch):
     db.close()
     spend.reset_alerts()
     breaker.reset()
+    monkeypatch.setattr(spend, "_in_flight_model", lambda: ("gemini", "gemini-3.8-flash"))
     monkeypatch.setattr(settings, "ai_daily_spend_limit_usd", 25.0)
     monkeypatch.setattr(spend, "CACHE_SECONDS", 0)
     yield factory
@@ -76,7 +77,7 @@ def test_spend_sums_recorded_costs_in_the_window(session_factory):
     assert spend.spent_last_24h(db) == pytest.approx(0.85)
 
 
-def test_unrecorded_calls_count_at_flat_estimates(session_factory):
+def test_unrecorded_calls_count_at_the_active_models_estimate(session_factory):
     db = session_factory()
     submission(db, "pending", status=SubmissionStatus.PENDING, age_hours=0)  # queued: no AI call yet
     submission(db, "processing", status=SubmissionStatus.PROCESSING, age_hours=0)
@@ -84,8 +85,44 @@ def test_unrecorded_calls_count_at_flat_estimates(session_factory):
     usage(db, age_hours=0)  # reserved, no meta yet (in flight)
     db.add(AIUsageDB(user_id=USER_ID, kind="pattern_refine", meta=None, created_at=naive_now()))
     db.commit()
-    expected = spend.GRADING_UNRECORDED_COST_USD + 2 * spend.AUX_UNRECORDED_COST_USD
+    expected = spend.estimated_call_cost("gemini", "gemini-3.8-flash", grading=True) + 2 * spend.estimated_call_cost("gemini", "gemini-3.8-flash", grading=False)
     assert spend.spent_last_24h(db) == pytest.approx(expected)
+
+
+@pytest.mark.parametrize("model, expected", [
+    (("anthropic", "claude-opus-5-5"), lambda: spend.estimated_call_cost("anthropic", "claude-opus-5-5", True)),
+    (("anthropic", "claude-from-the-future"), lambda: spend.GRADING_UNRECORDED_COST_USD),
+])
+def test_in_flight_estimate_follows_the_active_model(session_factory, monkeypatch, model, expected):
+    monkeypatch.setattr(spend, "_in_flight_model", lambda: model)
+    db = session_factory()
+    submission(db, "processing", status=SubmissionStatus.PROCESSING, age_hours=0)
+    db.commit()
+    assert spend.spent_last_24h(db) == pytest.approx(expected())
+
+
+def test_unknown_active_model_falls_back_to_flat_estimates(session_factory, monkeypatch):
+    def broken():
+        raise RuntimeError("config store down")
+
+    monkeypatch.setattr(spend, "_in_flight_model", broken)
+    db = session_factory()
+    submission(db, "processing", status=SubmissionStatus.PROCESSING, age_hours=0)
+    usage(db, age_hours=0)
+    db.commit()
+    expected = spend.GRADING_UNRECORDED_COST_USD + spend.AUX_UNRECORDED_COST_USD
+    assert spend.spent_last_24h(db) == pytest.approx(expected)
+
+
+def test_no_model_lookup_without_calls_in_flight(session_factory, monkeypatch):
+    def unexpected():
+        raise AssertionError("looked up the active model with nothing in flight")
+
+    monkeypatch.setattr(spend, "_in_flight_model", unexpected)
+    db = session_factory()
+    submission(db, "s1", cost=0.5)
+    db.commit()
+    assert spend.spent_last_24h(db) == pytest.approx(0.5)
 
 
 def test_unrecorded_calls_past_their_timeout_count_nothing(session_factory):
@@ -106,8 +143,9 @@ def test_unrecorded_calls_past_their_timeout_count_nothing(session_factory):
     assert spend.spent_last_24h(db) == 0
 
 
-def test_grading_estimate_is_the_upper_end_of_a_claude_grading():
-    assert spend.GRADING_UNRECORDED_COST_USD == pytest.approx(0.40)
+def test_flat_fallback_is_the_upper_end_of_a_claude_opus_call():
+    assert spend.GRADING_UNRECORDED_COST_USD >= spend.estimated_call_cost("anthropic", "claude-opus-5-5", True)
+    assert spend.AUX_UNRECORDED_COST_USD >= spend.estimated_call_cost("anthropic", "claude-opus-5-5", False)
 
 
 def test_check_raises_at_the_cap_and_alerts_once_per_level(session_factory, monkeypatch):
@@ -435,7 +473,167 @@ def test_worker_failover_resets_progress_and_records_the_backup(worker, monkeypa
     assert row.scoring_meta["provider"] == "anthropic"
     assert row.scoring_meta["failover"] == {
         "from": "gemini/gemini-3.8-flash", "reason": "server",
-        "primary_estimated_cost": spend.GRADING_UNRECORDED_COST_USD,
+        "primary_estimated_cost": spend.estimated_call_cost("gemini", "gemini-3.8-flash", grading=True),
     }
     # The failed primary's share counts toward the daily cap with the backup's
-    assert spend.spent_last_24h(db) == pytest.approx(0.2 + spend.GRADING_UNRECORDED_COST_USD)
+    assert spend.spent_last_24h(db) == pytest.approx(0.2 + spend.estimated_call_cost("gemini", "gemini-3.8-flash", grading=True))
+
+
+# ----------------------------------------------- failures and released slots
+
+
+def _photo(tmp_path, name):
+    path = settings.uploads_dir / USER_ID / "2024" / "etap1" / "1" / name
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(b"jpeg")
+    return path
+
+
+def test_queue_timeout_deletes_the_never_graded_photos(worker, monkeypatch, tmp_path):
+    """Resubmitting under congestion must not pile up photos nobody graded -
+    except one an admin rerun still shares."""
+    monkeypatch.setattr(settings, "data_dir", str(tmp_path))
+    monkeypatch.setattr(settings, "ai_grading_max_concurrent", 1)
+    monkeypatch.setattr(settings, "ai_grading_queue_timeout", 0.05)
+    own, shared = _photo(tmp_path, "own.jpg"), _photo(tmp_path, "shared.jpg")
+    rel = lambda path: str(path.relative_to(settings.uploads_dir))  # noqa: E731
+    db = worker["factory"]()
+    submission(db, "slow", status=SubmissionStatus.PENDING, meta={})
+    submission(db, "late", status=SubmissionStatus.PENDING, meta={})
+    db.get(SubmissionDB, "late").images = [rel(own), rel(shared)]
+    submission(db, "rerun", cost=0.01)
+    db.get(SubmissionDB, "rerun").images = [rel(shared)]
+    db.commit()
+    monkeypatch.setattr(handler, "create_ai_provider", lambda: StubProvider(delay=0.3))
+
+    async def run():
+        await asyncio.gather(grade("slow"), grade("late"))
+
+    asyncio.run(run())
+
+    db = worker["factory"]()
+    late = db.get(SubmissionDB, "late")
+    assert late.status == SubmissionStatus.FAILED and late.error_message == handler.QUEUE_TIMEOUT_MESSAGE
+    assert late.images == []
+    assert not own.exists()
+    assert shared.exists()
+
+
+def test_provider_construction_failure_releases_the_slot(worker, monkeypatch):
+    def broken():
+        raise handler.AIProviderError("Brak konfiguracji AI")
+
+    monkeypatch.setattr(handler, "create_ai_provider", broken)
+    db = worker["factory"]()
+    submission(db, "sub1", status=SubmissionStatus.PENDING, meta={})
+    db.commit()
+
+    asyncio.run(grade("sub1"))
+
+    db = worker["factory"]()
+    row = db.get(SubmissionDB, "sub1")
+    assert row.status == SubmissionStatus.FAILED
+    assert row.scoring_meta[QUOTA_RELEASED_KEY] == "before_ai"
+    assert SubmissionRepository(db).count_user_recent_submissions(USER_ID) == 0
+
+
+def test_double_failover_failure_counts_the_primary_estimate(worker, monkeypatch):
+    class Down:
+        provider_name, model_name = "gemini", "gemini-3.8-flash"
+
+        async def analyze_solution_stream(self, **kwargs):
+            raise AIUnavailableError("Serwer AI jest przeciążony.", kind="server", status=503)
+
+    backup = Down()
+    wrapper = FailoverProvider(Down(), ("anthropic", "claude-opus-5-5"), lambda p, m: backup)
+    monkeypatch.setattr(handler, "create_ai_provider", lambda: wrapper)
+    db = worker["factory"]()
+    submission(db, "sub1", status=SubmissionStatus.PENDING, meta={})
+    db.commit()
+
+    asyncio.run(grade("sub1"))
+
+    db = worker["factory"]()
+    row = db.get(SubmissionDB, "sub1")
+    assert row.status == SubmissionStatus.FAILED
+    estimate = spend.estimated_call_cost("gemini", "gemini-3.8-flash", grading=True)
+    assert row.scoring_meta["failover"]["primary_estimated_cost"] == pytest.approx(estimate)
+    assert QUOTA_RELEASED_KEY not in row.scoring_meta
+    assert spend.spent_last_24h(db) == pytest.approx(estimate)
+
+
+def test_unexpected_failure_with_a_broken_session_still_tells_the_student(worker, monkeypatch):
+    class Crashing:
+        async def analyze_solution_stream(self, **kwargs):
+            raise RuntimeError("boom")
+
+    monkeypatch.setattr(handler, "create_ai_provider", lambda: Crashing())
+
+    def no_write(*args, **kwargs):
+        raise RuntimeError("database gone")
+
+    monkeypatch.setattr(SubmissionRepository, "update_status", lambda self, sid, st, **kw: (
+        None if st == SubmissionStatus.PROCESSING else no_write()
+    ))
+    errors = []
+
+    async def capture_error(submission_id, message):
+        errors.append((submission_id, message))
+
+    monkeypatch.setattr(handler.progress_manager, "send_error", capture_error)
+    db = worker["factory"]()
+    submission(db, "sub1", status=SubmissionStatus.PENDING, meta={})
+    db.commit()
+
+    asyncio.run(grade("sub1"))
+
+    assert errors == [("sub1", handler.UNEXPECTED_ERROR_MESSAGE)]
+
+
+def test_restart_releases_interrupted_gradings(session_factory, monkeypatch, tmp_path):
+    import app.main as main
+
+    monkeypatch.setattr(settings, "data_dir", str(tmp_path))
+    monkeypatch.setattr("app.db.SessionLocal", session_factory)
+    photo = _photo(tmp_path, "a.jpg")
+    db = session_factory()
+    submission(db, "old", status=SubmissionStatus.PROCESSING, age_hours=0.1)
+    db.get(SubmissionDB, "old").images = [str(photo.relative_to(settings.uploads_dir))]
+    submission(db, "queued", status=SubmissionStatus.PENDING, age_hours=0.1)
+    db.add(SubmissionDB(
+        id="fresh", user_id=USER_ID, year="2024", etap="etap1", task_number=1, images=[],
+        status=SubmissionStatus.PENDING, timestamp=naive_now(),
+    ))
+    submission(db, "done", cost=0.01)
+    db.commit()
+
+    main.release_interrupted_submissions()
+
+    db = session_factory()
+    for sid in ("old", "queued"):
+        row = db.get(SubmissionDB, sid)
+        assert row.status == SubmissionStatus.FAILED
+        assert row.scoring_meta[QUOTA_RELEASED_KEY] == "restart"
+        assert row.error_message == handler.GENERIC_MESSAGE
+    assert db.get(SubmissionDB, "fresh").status == SubmissionStatus.PENDING  # inside the grace
+    assert db.get(SubmissionDB, "done").status == SubmissionStatus.COMPLETED
+    assert not photo.exists()
+    repo = SubmissionRepository(db)
+    assert repo.count_user_in_flight(USER_ID) == 1  # only "fresh"
+    assert repo.count_user_recent_submissions(USER_ID) == 2  # "fresh" and "done"
+
+
+def test_failed_aux_call_after_failover_keeps_the_primary_estimate(session_factory):
+    db = session_factory()
+    row = AIUsageDB(user_id=USER_ID, kind="pattern_refine", meta=None, created_at=naive_now())
+    db.add(row)
+    db.commit()
+    error = AIUnavailableError("x", kind="server", status=503)
+    error.failover_note = {"from": "gemini/gemini-3.8-flash", "reason": "server", "primary_estimated_cost": 0.05}
+
+    private_service.record_failed_call(db, row, error)
+    private_service.record_failed_call(db, row, AIUnavailableError("y", kind="server", status=503))  # no note: untouched
+
+    db.refresh(row)
+    assert row.meta == {"failover": error.failover_note}
+    assert spend.spent_last_24h(db) == pytest.approx(0.05)

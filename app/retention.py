@@ -385,6 +385,24 @@ def count_referenced_upload_paths(db: Session) -> dict[Path, int]:
     return counts
 
 
+def delete_unreferenced_uploads(db: Session, relative_paths: list[str]) -> RetentionReport:
+    """Delete the files among ``relative_paths`` that no submission row references.
+
+    For photos a released (never graded) submission let go of: an admin
+    rerun reuses the original's paths, so a file still claimed elsewhere stays.
+    """
+    report = RetentionReport()
+    if not relative_paths:
+        return report
+    counts = count_referenced_upload_paths(db)
+    deletable = [
+        p for p in relative_paths
+        if (path := resolve_upload_path(p)) is None or counts.get(path, 0) == 0
+    ]
+    delete_upload_files(deletable, report)
+    return report
+
+
 def _unreferenced_after_delete(
     relative_paths: list[str],
     reference_counts: dict[Path, int],
