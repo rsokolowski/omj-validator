@@ -148,12 +148,12 @@ test.describe('Authentication', () => {
       // (both might be empty for fresh test database)
       if (history1.submissions?.length > 0) {
         const user1Ids = history1.submissions.map((s: any) => s.user_id);
-        expect(user1Ids.every((id: string) => id !== TEST_USERS.user2.google_sub)).toBe(true);
+        expect(user1Ids.every((id: string) => id !== TEST_USERS.user2.id)).toBe(true);
       }
 
       if (history2.submissions?.length > 0) {
         const user2Ids = history2.submissions.map((s: any) => s.user_id);
-        expect(user2Ids.every((id: string) => id !== TEST_USERS.default.google_sub)).toBe(true);
+        expect(user2Ids.every((id: string) => id !== TEST_USERS.default.id)).toBe(true);
       }
     });
   });

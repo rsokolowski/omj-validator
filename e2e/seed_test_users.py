@@ -8,7 +8,7 @@ e2e tests can submit solutions with those user sessions.
 
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 # Add the app directory to the path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -100,7 +100,9 @@ def seed_users():
                 status="active",
                 email=user_data["email"],
                 name=user_data["name"],
-                created_at=datetime.now(timezone.utc),
+                # Old enough not to count against RATE_LIMIT_NEW_USERS_PER_DAY,
+                # which the registration spec needs for its new accounts
+                created_at=datetime.now(timezone.utc) - timedelta(days=30),
             )
             session.add(user)
             print(f"Created test user: {user_data['email']}")

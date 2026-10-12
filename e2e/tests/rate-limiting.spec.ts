@@ -10,7 +10,7 @@
  * E2E rate limits (configured in docker-compose.e2e.yml):
  * - RATE_LIMIT_SUBMISSIONS_PER_USER_PER_DAY: 3
  * - RATE_LIMIT_SUBMISSIONS_GLOBAL_PER_DAY: 10
- * - RATE_LIMIT_NEW_USERS_PER_DAY: 3
+ * - RATE_LIMIT_NEW_USERS_PER_DAY: 20
  *
  * TEST ISOLATION:
  * Each test resets the user's submissions before running to ensure

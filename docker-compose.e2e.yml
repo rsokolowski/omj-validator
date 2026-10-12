@@ -141,7 +141,7 @@ services:
       TRANSLATE_API_ENDPOINT: "fake-translate:8081"
 
       # Rate limits - low values for e2e testing
-      RATE_LIMIT_NEW_USERS_PER_DAY: "3"
+      RATE_LIMIT_NEW_USERS_PER_DAY: "20"  # registration spec creates accounts on every run
       RATE_LIMIT_SUBMISSIONS_PER_USER_PER_DAY: "3"
       RATE_LIMIT_SUBMISSIONS_GLOBAL_PER_DAY: "10"
 
@@ -154,6 +154,11 @@ services:
       RETENTION_PATTERN_MONTHS: "0"
       RETENTION_AI_USAGE_DAYS: "0"
       RETENTION_AUTO_PURGE: "false"
+
+      # E-mail: in-memory outbox, read by the specs through GET /api/dev/outbox
+      # (only served with E2E_MODE + console backend + real auth)
+      EMAIL_BACKEND: console
+      PUBLIC_BASE_URL: "http://localhost:3200"
 
       # Frontend URL (for OAuth, not used in e2e)
       FRONTEND_URL: "http://localhost:3200"
