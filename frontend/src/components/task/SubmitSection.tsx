@@ -288,6 +288,7 @@ export function SubmitSection({
     // WebSocket only, so after a reload the history below shows it instead
     window.history.replaceState(null, "", window.location.pathname);
     announcedAnalysisRef.current = true;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- Resuming a grading run from ?ocena= (external: URL + WebSocket)
     setUploadState({ status: "processing", statusMessage: "Oceniam rozwiązanie..." });
     setLiveMessage("Rozwiązanie zostało przesłane. Trwa ocenianie, może to potrwać do minuty.");
     connectWebSocket(`/ws/submissions/${encodeURIComponent(resumeSubmissionId)}`);

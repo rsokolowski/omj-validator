@@ -141,7 +141,11 @@ services:
       TRANSLATE_API_ENDPOINT: "fake-translate:8081"
 
       # Rate limits - low values for e2e testing
-      RATE_LIMIT_NEW_USERS_PER_DAY: "20"  # registration spec creates accounts on every run
+      RATE_LIMIT_NEW_USERS_PER_DAY: "20"
+      # Login accounts count here; the registration spec creates some on every run
+      RATE_LIMIT_NEW_PENDING_USERS_PER_DAY: "200"
+      # No Cloudflare in e2e: every request comes from the Next.js container's IP
+      RATE_LIMIT_REGISTRATIONS_PER_IP_PER_DAY: "1000"
       RATE_LIMIT_SUBMISSIONS_PER_USER_PER_DAY: "3"
       RATE_LIMIT_SUBMISSIONS_GLOBAL_PER_DAY: "10"
       # The specs fire submissions back to back without waiting for grading

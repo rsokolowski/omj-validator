@@ -367,11 +367,11 @@ def test_waiting_identity_is_consumed_even_on_429(client, db, google, monkeypatc
     from app.config import settings
 
     client.get("/auth/callback", follow_redirects=False)
-    assert client.get("/api/auth/register/state").json() == {"google": {"email": "kid@gmail.com"}}
+    assert client.get("/api/auth/register/state").json()["google"] == {"email": "kid@gmail.com"}
     monkeypatch.setattr(settings, "rate_limit_new_users_per_day", 0)
     body = {"birth_year": 2005, "accept_terms": True}
     assert client.post("/api/auth/register/google", json=body).status_code == 429
-    assert client.get("/api/auth/register/state").json() == {"google": None}
+    assert client.get("/api/auth/register/state").json()["google"] == None
 
 
 def test_callback_429_consumes_answers(client, db, google, monkeypatch):
@@ -382,7 +382,7 @@ def test_callback_429_consumes_answers(client, db, google, monkeypatch):
     response = client.get("/auth/callback", follow_redirects=False)
     assert response.headers["location"] == "/login?error=rate_limit_new_users"
     assert db.query(UserDB).count() == 0
-    assert client.get("/api/auth/register/state").json() == {"google": None}
+    assert client.get("/api/auth/register/state").json()["google"] == None
     # The next Google sign-in starts clean: nothing is created from stale answers
     monkeypatch.setattr(settings, "rate_limit_new_users_per_day", 50)
     assert client.get("/auth/callback", follow_redirects=False).headers["location"] == "/rejestracja?google=1"
@@ -409,7 +409,7 @@ def test_waiting_identity_holds_only_sub_and_email_for_10_minutes(client, db, go
     assert set(stored) == {"sub", "email", "at"}
     real_time = time_module.time
     monkeypatch.setattr(time_module, "time", lambda: real_time() + 11 * 60)
-    assert client.get("/api/auth/register/state").json() == {"google": None}
+    assert client.get("/api/auth/register/state").json()["google"] == None
 
 
 # --------------------------------------------------------------------- concurrent sends

@@ -40,9 +40,14 @@ test("the year is counted in Polish time", () => {
   assert.equal(warsawYear(new Date("2026-12-31T23:30:00Z")), 2027);
 });
 
+test("a login copied from an e-mail loses its zero-width spaces", () => {
+  assert.equal(normalizeLogin(" Kasia.\u200bB "), "kasia.b");
+});
+
 test("login rules match the backend messages", () => {
   assert.equal(normalizeLogin("  Kasia.B "), "kasia.b");
-  assert.equal(loginProblem("kasia.b"), null);
+  assert.equal(loginProblem("kasia_b-1"), null);
+  assert.match(loginProblem("kasia.b") ?? "", /znaki _ i -/);
   assert.equal(loginProblem("ab"), "Login musi mieć co najmniej 3 znaki.");
   assert.equal(loginProblem("a".repeat(33)), "Login może mieć najwyżej 32 znaki.");
   assert.equal(loginProblem("_kasia"), "Login musi zaczynać się od litery lub cyfry.");

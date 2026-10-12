@@ -16,6 +16,7 @@ import { FormCard } from "./FormCard";
 import { StepHeading } from "./StepHeading";
 import { ParentEmailField } from "./ParentEmailField";
 import { SubmitButton } from "./SubmitButton";
+import { LogoutForm } from "@/components/auth/LogoutForm";
 
 const POLL_MS = 10_000;
 // Serwer pozwala wyslac kolejna wiadomosc po 60 s (CONSENT_COOLDOWN)
@@ -273,10 +274,11 @@ export function PendingAccount({ initial }: PendingAccountProps) {
       )}
 
       <Box sx={{ mt: 3, pt: 2, borderTop: 1, borderColor: "grey.200" }}>
-        {/* Zwykly <a>: prefetch Next.js wylogowalby uzytkownika */}
-        <Button href="/logout" variant="text" sx={{ color: "grey.700", py: 1.25 }}>
-          Wyloguj
-        </Button>
+        <LogoutForm>
+          <Button type="submit" variant="text" sx={{ color: "grey.700", py: 1.25 }}>
+            Wyloguj
+          </Button>
+        </LogoutForm>
       </Box>
     </FormCard>
   );

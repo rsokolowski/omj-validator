@@ -16,9 +16,21 @@ APP_NAME = "Trener OMJ"
 OPERATOR_NAME = "Rafał Sokołowski"
 
 
+# Zero-width space: invisible, but no linkifier treats it as part of a domain
+_ZWSP = "\u200b"
+
+
+def nolink(value) -> str:
+    """Text a mail client must not turn into a link: a zero-width space after
+    every "." and "@". For identifiers someone typed at registration (a login
+    created while dots were allowed, e.g. "www.example.com", or an address)
+    that a parent's mail client would otherwise auto-link."""
+    return str(value).replace(".", "." + _ZWSP).replace("@", "@" + _ZWSP)
+
+
 @lru_cache(maxsize=1)
 def _env() -> Environment:
-    return Environment(
+    env = Environment(
         loader=FileSystemLoader(str(settings.base_dir / "templates" / "email")),
         autoescape=select_autoescape(enabled_extensions=("html",), default_for_string=False),
         undefined=StrictUndefined,
@@ -26,6 +38,8 @@ def _env() -> Environment:
         lstrip_blocks=True,
         keep_trailing_newline=True,
     )
+    env.filters["nolink"] = nolink
+    return env
 
 
 def base_url() -> str:

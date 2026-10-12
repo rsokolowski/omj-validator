@@ -38,9 +38,15 @@ class Settings(BaseSettings):
     # Session - MUST be set explicitly in production for multi-worker consistency
     session_secret_key: Optional[str] = None
 
-    # Frontend URL for OAuth redirects (only needed if frontend/backend on different domains)
-    # Not required for co-hosted deployment behind Nginx
+    # Public URL of the frontend, used for the OAuth callback URL (the API sits
+    # behind the Next.js proxy and cannot see it). Production sets it although
+    # frontend and API share one origin behind nginx. It is also trusted as an
+    # Origin by the cross-site request guard (app/csrf.py).
     frontend_url: Optional[str] = None
+    # True only when the frontend is served from a different SITE than the API.
+    # Then the session cookie needs SameSite=None and the API needs CORS; any
+    # other deployment keeps SameSite=Lax (cross-site POSTs carry no session).
+    split_deployment: bool = False
 
     @model_validator(mode="after")
     def validate_session_secret(self):
@@ -107,7 +113,17 @@ class Settings(BaseSettings):
     submission_text_max_chars: int = 20000
 
     # Rate Limiting (rolling 24h windows)
-    rate_limit_new_users_per_day: int = 50           # Max new user registrations per 24h
+    # New accounts per 24h, in two separate pools so that one cannot use up
+    # the other: accounts that need no parent (Google, 16+) and accounts that
+    # wait for (or got) a parent's consent - login accounts and under-16
+    # Google accounts, the kind anyone can create with any parent address.
+    rate_limit_new_users_per_day: int = 50           # No parent needed
+    rate_limit_new_pending_users_per_day: int = 50   # With a parent
+    # New accounts per client IP per 24h (all registration paths). A school
+    # lab shares one NAT address, so this allows a whole class (~30) to
+    # register in one lesson; counted in memory (single worker), see
+    # accounts.service.take_registration_slot
+    rate_limit_registrations_per_ip_per_day: int = 30
     rate_limit_submissions_per_user_per_day: int = 30  # Max submissions per user per 24h
     rate_limit_submissions_global_per_day: int = 500   # Max total submissions per 24h
     # Submissions of one user waiting for / in grading at the same time
@@ -180,6 +196,13 @@ class Settings(BaseSettings):
     # Date of the /regulamin text, stored with every consent record. Bump it
     # together with LAST_UPDATED in frontend/src/app/regulamin/page.tsx.
     terms_version: str = "2026-10-12"
+
+    # Cloudflare Turnstile on registration (the steps that create an account
+    # or e-mail a parent). Disabled while TURNSTILE_SECRET_KEY is unset (dev,
+    # e2e). The site key is public: the registration page gets it from
+    # GET /api/auth/register/state.
+    turnstile_site_key: Optional[str] = None
+    turnstile_secret_key: Optional[str] = None
 
     # Database
     database_url: Optional[str] = None  # Override with DATABASE_URL env var

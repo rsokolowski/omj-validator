@@ -59,7 +59,9 @@ services:
       # Database
       DATABASE_URL: postgresql://${POSTGRES_USER:-omj}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-omj}
 
-      # Public URL for OAuth callbacks (required for Docker deployment)
+      # Public URL for OAuth callbacks (required for Docker deployment). Same
+      # origin as the API behind nginx, so the session cookie stays SameSite=Lax
+      # (SPLIT_DEPLOYMENT is not set)
       FRONTEND_URL: ${FRONTEND_URL:-https://omj-validator.pl}
 
       # Authentication
@@ -121,8 +123,18 @@ services:
       RETENTION_AI_USAGE_DAYS: ${RETENTION_AI_USAGE_DAYS:-90}
       RETENTION_AUTO_PURGE: ${RETENTION_AUTO_PURGE:-true}
 
+      # Cloudflare Turnstile on registration. Leave the secret empty to switch
+      # it off (then nothing is checked); with the secret set, the site key
+      # must be set too or no one can register.
+      TURNSTILE_SITE_KEY: ${TURNSTILE_SITE_KEY:-}
+      TURNSTILE_SECRET_KEY: ${TURNSTILE_SECRET_KEY:-}
+
       # Rate Limiting (rolling 24h windows)
+      # New accounts: no-parent pool (Google, 16+) and parent-consent pool
+      # (login accounts, under-16 Google) are counted separately
       RATE_LIMIT_NEW_USERS_PER_DAY: ${RATE_LIMIT_NEW_USERS_PER_DAY:-50}
+      RATE_LIMIT_NEW_PENDING_USERS_PER_DAY: ${RATE_LIMIT_NEW_PENDING_USERS_PER_DAY:-50}
+      RATE_LIMIT_REGISTRATIONS_PER_IP_PER_DAY: ${RATE_LIMIT_REGISTRATIONS_PER_IP_PER_DAY:-30}
       RATE_LIMIT_SUBMISSIONS_PER_USER_PER_DAY: ${RATE_LIMIT_SUBMISSIONS_PER_USER_PER_DAY:-30}
       RATE_LIMIT_SUBMISSIONS_GLOBAL_PER_DAY: ${RATE_LIMIT_SUBMISSIONS_GLOBAL_PER_DAY:-500}
       RATE_LIMIT_SUBMISSIONS_IN_FLIGHT_PER_USER: ${RATE_LIMIT_SUBMISSIONS_IN_FLIGHT_PER_USER:-2}

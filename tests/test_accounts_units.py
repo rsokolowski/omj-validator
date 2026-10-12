@@ -37,12 +37,12 @@ class TestAge:
 
 
 class TestLogin:
-    @pytest.mark.parametrize("login", ["abc", "kuba_m", "a.b-c_1", "x" * 32, "007"])
+    @pytest.mark.parametrize("login", ["abc", "kuba_m", "a-b-c_1", "x" * 32, "007"])
     def test_valid(self, login):
         assert passwords.login_problem(login) is None
 
     @pytest.mark.parametrize(
-        "login", ["ab", "x" * 33, "_kuba", "kuba m", "żaba", "kuba@", ".abc"]
+        "login", ["ab", "x" * 33, "_kuba", "kuba m", "żaba", "kuba@", ".abc", "kuba.m", "www.example.com"]
     )
     def test_invalid(self, login):
         assert passwords.login_problem(login) is not None

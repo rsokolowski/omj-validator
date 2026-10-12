@@ -8,12 +8,13 @@ token to the API in a POST body - never in a query string, which would land
 in proxy access logs - and only an explicit button press changes anything.
 """
 
+import contextlib
 import logging
 import time
 from collections import defaultdict, deque
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from sqlalchemy.exc import IntegrityError
@@ -29,7 +30,7 @@ from ..auth import (
     start_session,
 )
 from ..config import settings
-from ..db import get_db
+from ..db import SessionLocal, get_db
 from ..db.models import (
     EmailTokenPurpose,
     ParentDB,
@@ -40,7 +41,7 @@ from ..email import EmailSendError, outbox
 from ..privacy import mask_email_for_display, mask_user_id
 from ..rate_limits import record_erasure_quota
 from ..retention import erase_user_data
-from . import age, passwords, service
+from . import age, passwords, service, turnstile
 from .service import EmailLimitError, SEND_FAILED_MESSAGE
 
 logger = logging.getLogger(__name__)
@@ -52,6 +53,10 @@ LOCKED_MESSAGE = "Zbyt wiele nieudanych prób logowania. Spróbuj ponownie za 15
 NEW_USERS_LIMIT_MESSAGE = (
     "Dziś założono już bardzo dużo kont, więc rejestracja jest chwilowo wstrzymana. "
     "Spróbuj jutro."
+)
+IP_LIMIT_MESSAGE = (
+    "Z tej sieci (np. szkolnej) założono dziś już bardzo dużo kont, więc kolejne można "
+    "będzie założyć jutro. Możesz też spróbować z innej sieci, np. w domu."
 )
 LINK_INVALID = "Ten link jest nieprawidłowy albo konto zostało już usunięte."
 LINK_EXPIRED = "Ten link wygasł."
@@ -123,7 +128,9 @@ def _parent_email(raw: Optional[str], own_email: Optional[str]) -> tuple[str, Op
     problem = service.email_problem(email)
     if problem:
         return email, _fail(400, problem, "invalid", field="parent_email")
-    if own_email and email == service.normalize_email(own_email):
+    # An alias of the child's own Google address (j.a.n+x@gmail.com) is
+    # still the child's mailbox: the child would consent for themselves
+    if own_email and service.same_mailbox(email, own_email):
         return email, _fail(
             400,
             "To adres Twojego konta. Wpisz adres e-mail rodzica lub opiekuna.",
@@ -139,12 +146,34 @@ def _parent_email(raw: Optional[str], own_email: Optional[str]) -> tuple[str, Op
 class GoogleRegistrationRequest(AgeFields):
     parent_email: Optional[str] = None
     accept_terms: Optional[bool] = None
+    turnstile_token: Optional[str] = None
 
 
 class LoginRegistrationRequest(AgeFields):
     login: Optional[str] = None
     password: Optional[str] = None
     parent_email: Optional[str] = None
+    turnstile_token: Optional[str] = None
+
+
+def _ip_limit() -> JSONResponse:
+    return _fail(429, IP_LIMIT_MESSAGE, "registration_ip_limit")
+
+
+async def _human_check(
+    request: Request, token: Optional[str], email: Optional[str] = None, check_ip: bool = True
+) -> Optional[JSONResponse]:
+    """The checks every registration request passes once its answers are
+    valid, before anything is created or e-mailed: the per-IP limit (checked
+    first - it is free) and Turnstile. The IP slot itself is taken only when
+    the account is created (take_registration_slot). Turnstile tokens are
+    never cached here: each request needs a fresh one, and Cloudflare
+    accepts a token only once."""
+    if check_ip and service.registration_ip_limit_reached(service.ip_hash(client_ip(request)), email):
+        return _ip_limit()
+    if not await turnstile.verify(token):
+        return _fail(400, turnstile.FAILED_MESSAGE, "turnstile_failed")
+    return None
 
 
 def _fresh_google(entry: Optional[dict]) -> Optional[dict]:
@@ -157,7 +186,10 @@ def _fresh_google(entry: Optional[dict]) -> Optional[dict]:
 async def registration_state(request: Request):
     """Whether a Google identity waits for its registration (?google=1)."""
     pending = _fresh_google(request.session.get(SESSION_PENDING_GOOGLE_KEY))
-    return {"google": {"email": pending["email"]} if pending else None}
+    return {
+        "google": {"email": pending["email"]} if pending else None,
+        "turnstile_site_key": turnstile.site_key(),
+    }
 
 
 @router.post("/api/auth/register/google")
@@ -192,12 +224,26 @@ async def register_google(
         birth_year=body.birth_year, can_consent_alone=bool(alone), parent_email=parent_email
     )
 
+    # Before the Google redirect too: answers are stored only for a request
+    # that passed, and the OAuth callback creates the account from them -
+    # once (the ticket). The IP limit is checked there, when the Google
+    # address (ALLOWED_EMAILS) is known.
+    error = await _human_check(
+        request,
+        body.turnstile_token,
+        pending_google["email"] if pending_google else None,
+        check_ip=pending_google is not None,
+    )
+    if error:
+        return error
+
     if pending_google is None:
         request.session[SESSION_PENDING_REGISTRATION_KEY] = {
             "birth_year": answers.birth_year,
             "can_consent_alone": answers.can_consent_alone,
             "parent_email": answers.parent_email,
             "at": time.time(),
+            "ticket": service.issue_registration_ticket(),
         }
         return {"action": "google", "redirect": "/login/google?register=1"}
 
@@ -223,8 +269,13 @@ async def finish_google_registration(
         )
         return {"action": "done", "redirect": _home_for(existing), "email_sent": None}
 
-    if service.new_users_limit_reached(db, identity["email"]):
+    if service.new_users_limit_reached(
+        db, identity["email"], needs_parent=answers.parent_email is not None
+    ):
         return _fail(429, NEW_USERS_LIMIT_MESSAGE, "new_users_limit")
+    ip_digest = service.ip_hash(client_ip(request))
+    if not service.take_registration_slot(ip_digest, identity["email"]):
+        return _ip_limit()
 
     try:
         user = service.create_google_user(
@@ -232,6 +283,7 @@ async def finish_google_registration(
         )
     except IntegrityError:
         db.rollback()
+        service.release_registration_slot(ip_digest)
         return _fail(409, "To konto Google jest już zarejestrowane. Zaloguj się.", "conflict")
 
     start_session(
@@ -278,8 +330,15 @@ async def register_login(
     if error:
         return error
 
-    if service.new_users_limit_reached(db, None):
+    if service.new_users_limit_reached(db, None, needs_parent=True):
         return _fail(429, NEW_USERS_LIMIT_MESSAGE, "new_users_limit")
+    error = await _human_check(request, body.turnstile_token)
+    if error:
+        return error
+    # Taken after the await above: check + record with nothing in between
+    ip_digest = service.ip_hash(client_ip(request))
+    if not service.take_registration_slot(ip_digest):
+        return _ip_limit()
 
     try:
         user = service.create_login_user(
@@ -288,6 +347,7 @@ async def register_login(
         )
     except IntegrityError:
         db.rollback()
+        service.release_registration_slot(ip_digest)
         return _fail(409, "Ten login jest zajęty. Wymyśl inny.", "login_taken", field="login")
 
     start_session(request, user, remember=False, is_group_member=await _group_access(None))
@@ -695,20 +755,41 @@ class ParentLinkRequest(BaseModel):
     email: Optional[str] = None
 
 
-@router.post("/api/parent/request-link")
-@allow_inactive_account
-async def parent_request_link(body: ParentLinkRequest, db: Session = Depends(get_db)):
-    """Always the same answer, so the page reveals nothing about who has an account."""
-    email = service.normalize_email(body.email)
-    problem = service.email_problem(email)
-    if problem:
-        return _fail(400, problem, "invalid", field="email")
-    parent = db.query(ParentDB).filter(ParentDB.email == email).first()
-    if parent is not None and parent.children:
+@contextlib.contextmanager
+def _background_session():
+    """A session of its own for work done after the response is sent (the
+    request's session is closed by then). Tests substitute theirs."""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+async def _send_manage_link_if_parent(email: str) -> None:
+    with _background_session() as db:
+        parent = db.query(ParentDB).filter(ParentDB.email == email).first()
+        if parent is None or not parent.children:
+            return
         try:
             await service.send_manage_link(db, parent)
         except (EmailLimitError, EmailSendError):
             logger.info("Parent link not sent (limit or provider failure)")
+        except Exception:
+            logger.exception("Parent link not sent (unexpected error)")
+
+
+@router.post("/api/parent/request-link")
+@allow_inactive_account
+async def parent_request_link(body: ParentLinkRequest, background: BackgroundTasks):
+    """Always the same answer, so the page reveals nothing about who has an
+    account. The lookup and the send run after the response, so neither does
+    its timing (the provider is awaited only for a known address)."""
+    email = service.normalize_email(body.email)
+    problem = service.email_problem(email)
+    if problem:
+        return _fail(400, problem, "invalid", field="email")
+    background.add_task(_send_manage_link_if_parent, email)
     return {"sent": True}
 
 
@@ -719,22 +800,32 @@ class ResetRequest(BaseModel):
     login: Optional[str] = None
 
 
+async def _send_password_reset_if_known(login: str) -> None:
+    with _background_session() as db:
+        user = db.query(UserDB).filter(UserDB.login == login).first()
+        if user is None or user.parent is None:
+            return
+        try:
+            await service.send_password_reset(db, user)
+        except (EmailLimitError, EmailSendError):
+            logger.info("Password reset not sent (limit or provider failure)")
+        except Exception:
+            logger.exception("Password reset not sent (unexpected error)")
+
+
 @router.post("/api/auth/password-reset/request")
 @allow_inactive_account
-async def password_reset_request(body: ResetRequest, db: Session = Depends(get_db)):
-    """Always the same answer; the link goes to the parent, never to the child."""
+async def password_reset_request(body: ResetRequest, background: BackgroundTasks):
+    """Always the same answer; the link goes to the parent, never to the child.
+
+    The lookup and the send run after the response: an answer that waited
+    for the e-mail provider (or failed with it) would tell whoever asks that
+    the login exists. A provider failure is therefore only logged."""
     login = passwords.normalize_login(body.login)
     if not login:
         return _fail(400, "Wpisz swój login.", "invalid", field="login")
-    user = db.query(UserDB).filter(UserDB.login == login).first() if len(login) <= 32 else None
-    if user is not None and user.parent is not None:
-        try:
-            await service.send_password_reset(db, user)
-        except EmailSendError:
-            # Unlike the "no such login" case this is our failure; say so
-            return _send_failed()
-        except EmailLimitError:
-            logger.info("Password reset not sent (limit)")
+    if len(login) <= passwords.LOGIN_MAX:
+        background.add_task(_send_password_reset_if_known, login)
     return {"sent": True}
 
 

@@ -172,6 +172,10 @@ frontend/src/
     └── types/index.ts               # TypeScript types (match FastAPI models)
 ```
 
+**Security headers**: CSP, HSTS, X-Frame-Options, nosniff and Permissions-Policy are set by
+`nginx.prod.conf` (production only); a new third-party origin in the frontend needs a CSP change
+there. Unsafe-method requests from another origin are refused by `app/csrf.py`.
+
 **API proxy**: `next.config.ts` rewrites `/api/*`, `/auth/*`, `/login/*`, `/logout`, `/pdf/*`, `/uploads/*` to FastAPI backend.
 
 ### Backend (FastAPI)
@@ -193,9 +197,10 @@ POST /api/account/delete             # Erase own account + submissions + photos 
 # endpoint is marked @allow_inactive_account (tests/test_accounts_guard.py lists them)
 POST /api/auth/login                 # login + password (+ remember); lockout 5 per (login, known device | IP); unknown devices also 20/IP, 10/login per 15 min (signed omj_device cookie)
 GET  /api/auth/login-available       # "Ten login jest zajęty" check (rate-limited)
-POST /api/auth/register/login        # Login account: always pending_parent, consent e-mail to parent
+POST /api/auth/register/login        # Login account: always pending_parent, consent e-mail to parent; new logins have no dots
 POST /api/auth/register/google       # Answers before Google (-> /login/google?register=1) or after (pending_google)
-GET  /api/auth/register/state        # Google identity (sub + e-mail) waiting for registration (10 min, consumed on use)
+                                     # Both registrations: Turnstile token (turnstile_token) + 30 accounts/IP/24 h (in memory)
+GET  /api/auth/register/state        # Google identity waiting for registration (10 min, consumed on use) + turnstile_site_key
 POST /api/auth/profile               # Year of birth for accounts created before the age step
 POST /api/account/consent/resend     # Pending screen: resend (60 s cooldown, 3/account, 5/parent per 24 h)
 POST /api/account/parent-email       # Pending screen: change the parent address (old links expire)
@@ -243,7 +248,7 @@ PUT    /api/admin/ai-config                  # Switch provider/model (pings the 
 GET  /login/google                   # Google OAuth redirect (?register=1 keeps the registration answers)
 GET  /auth/callback                  # OAuth callback: known sub -> login; unknown -> create from
                                      # pending_registration, else pending_google + /rejestracja?google=1
-GET  /logout                         # Logout
+POST /logout                         # Logout (form POST); GET /logout logs out only same-origin navigations
 ```
 
 **Static routes**:
@@ -416,6 +421,15 @@ RETENTION_AUTO_PURGE=true             # Daily in-app run (single-worker only)
 # cheap checks (bytes, header pixels, decoder) run on the whole batch first and free
 # it; a refusal once decoding started keeps it as FAILED (still counts)
 # RATE_LIMIT_SUBMISSIONS_IN_FLIGHT_PER_USER=2  # pending/processing at once
+
+# Registration abuse limits. New accounts are capped per 24 h in two pools:
+# no parent needed (Google 16+) and parent-consent accounts (login, under-16 Google)
+# RATE_LIMIT_NEW_USERS_PER_DAY=50
+# RATE_LIMIT_NEW_PENDING_USERS_PER_DAY=50
+# RATE_LIMIT_REGISTRATIONS_PER_IP_PER_DAY=30   # school NAT: a whole class
+# TURNSTILE_SITE_KEY=...      # Cloudflare Turnstile; unset secret = off (dev, e2e)
+# TURNSTILE_SECRET_KEY=...    # test keys: 1x00000000000000000000AA / 1x0000000000000000000000000000000AA
+# SPLIT_DEPLOYMENT=false      # true only if the frontend is on another site: SameSite=None + CORS
 
 # Private task limits (grading shares the submission limits)
 # RATE_LIMIT_PRIVATE_TASKS_PER_USER_PER_DAY=10

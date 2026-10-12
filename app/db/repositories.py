@@ -390,14 +390,19 @@ class UserRepository:
             return True
         return False
 
-    def count_recent_users(self, hours: int = 24) -> int:
-        """Count users created in the last N hours (for rate limiting)."""
+    def count_recent_users(self, hours: int = 24, with_parent: Optional[bool] = None) -> int:
+        """Count users created in the last N hours (for rate limiting).
+
+        with_parent: True - only accounts registered with a parent's address
+        (pending or since approved), False - only the others, None - all.
+        """
         threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
-        return (
-            self.db.query(func.count(UserDB.id))
-            .filter(UserDB.created_at >= threshold)
-            .scalar()
-        ) or 0
+        query = self.db.query(func.count(UserDB.id)).filter(UserDB.created_at >= threshold)
+        if with_parent is True:
+            query = query.filter(UserDB.parent_id.isnot(None))
+        elif with_parent is False:
+            query = query.filter(UserDB.parent_id.is_(None))
+        return query.scalar() or 0
 
     def get_rate_limit_info(self, hours: int = 24) -> tuple[int, Optional[datetime]]:
         """Get rate limit info: (count, oldest_timestamp) for new users.

@@ -144,8 +144,10 @@ app.include_router(private_tasks_router)
 app.include_router(patterns_router)
 app.include_router(accounts_router)
 
-# Determine if we're in split deployment mode (frontend on different domain)
-is_split_deployment = bool(settings.frontend_url)
+# Split deployment: frontend on a different site than the API (explicit
+# opt-in). FRONTEND_URL alone - production sets it for the OAuth callback while
+# serving everything from one origin - does not make the cookie cross-site.
+is_split_deployment = bool(settings.split_deployment and settings.frontend_url)
 
 # Add CORS middleware for split deployment (frontend on different domain)
 if is_split_deployment:
@@ -166,6 +168,15 @@ app.add_middleware(
     max_age=30 * 24 * 60 * 60,  # 30 days
     https_only=is_split_deployment or not settings.auth_disabled,  # HTTPS required for SameSite=None
     same_site="none" if is_split_deployment else "lax",  # Cross-domain requires "none"
+)
+
+# Unsafe-method requests must come from this site (app/csrf.py). Added last,
+# so it runs first: a forged request is refused before anything else runs.
+from .csrf import CrossSiteRequestGuard  # noqa: E402
+
+app.add_middleware(
+    CrossSiteRequestGuard,
+    trusted_origins=[settings.public_base_url, settings.frontend_url],
 )
 
 # Mount static files
@@ -462,7 +473,13 @@ async def _google_new_identity(
     from .accounts.routes import finish_google_registration
 
     answers = request.session.pop(SESSION_PENDING_REGISTRATION_KEY, None)
-    if not answers or _time.time() - answers.get("at", 0) > PENDING_SESSION_SECONDS:
+    # The ticket makes the stored answers single-use server-side: a replayed
+    # copy of the session cookie falls back to answering again (+ Turnstile)
+    if (
+        not answers
+        or _time.time() - answers.get("at", 0) > PENDING_SESSION_SECONDS
+        or not account_service.redeem_registration_ticket(answers.get("ticket"))
+    ):
         # Only what the registration needs, and briefly (PENDING_GOOGLE_SECONDS)
         request.session[SESSION_PENDING_GOOGLE_KEY] = {
             "sub": google_sub, "email": email, "at": _time.time()
@@ -470,8 +487,9 @@ async def _google_new_identity(
         return RedirectResponse(url="/rejestracja?google=1", status_code=status.HTTP_303_SEE_OTHER)
 
     parent_email = answers.get("parent_email")
-    if parent_email and parent_email == email.strip().lower():
+    if parent_email and account_service.same_mailbox(parent_email, email):
         # The parent's address must not be the child's own Google address
+        # (nor an alias of it: dots / +suffix in Gmail)
         request.session[SESSION_PENDING_GOOGLE_KEY] = {
             "sub": google_sub, "email": email, "at": _time.time()
         }
@@ -494,7 +512,14 @@ async def _google_new_identity(
     )
     if isinstance(result, JSONResponse):
         if result.status_code == 429:
-            return RedirectResponse(url="/login?error=rate_limit_new_users", status_code=status.HTTP_303_SEE_OTHER)
+            import json as _json
+
+            error = (
+                "rate_limit_registrations_ip"
+                if _json.loads(result.body).get("code") == "registration_ip_limit"
+                else "rate_limit_new_users"
+            )
+            return RedirectResponse(url=f"/login?error={error}", status_code=status.HTTP_303_SEE_OTHER)
         return RedirectResponse(url="/login?error=oauth_failed", status_code=status.HTTP_303_SEE_OTHER)
     return RedirectResponse(url=result["redirect"], status_code=status.HTTP_303_SEE_OTHER)
 
@@ -516,10 +541,21 @@ async def auth_limited_page(request: Request):
     )
 
 
-@app.get("/logout")
+@app.post("/logout")
+@allow_inactive_account
 async def logout(request: Request):
-    """Log out user by clearing session."""
+    """Log out (a form POST from the site; the CSRF guard refuses others)."""
     request.session.clear()
+    return RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
+
+
+@app.get("/logout")
+async def logout_link(request: Request):
+    """Old links and pages cached before logout became a POST. Logs out only
+    a navigation started on this site or typed by the user (Sec-Fetch-Site),
+    so another site cannot log anyone out with a link or an <img>."""
+    if request.headers.get("sec-fetch-site", "").lower() in ("same-origin", "none"):
+        request.session.clear()
     return RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
 
 

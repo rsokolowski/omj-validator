@@ -551,6 +551,8 @@ export type GoogleRegistrationResponse =
 
 export interface RegistrationStateResponse {
   google: { email: string } | null;
+  /** Cloudflare Turnstile site key; null when Turnstile is off (dev, e2e) */
+  turnstile_site_key: string | null;
 }
 
 export interface LoginAvailableResponse {

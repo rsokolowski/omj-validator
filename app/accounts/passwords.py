@@ -13,7 +13,10 @@ from typing import Optional
 from argon2 import PasswordHasher
 from argon2.exceptions import InvalidHashError, VerificationError, VerifyMismatchError
 
-LOGIN_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{2,31}$")
+# No dots in NEW logins: the login is shown in e-mails to the parent, and
+# "www.example.com" would turn into a link there. Accounts created while dots
+# were allowed keep their login - signing in never re-checks this rule.
+LOGIN_RE = re.compile(r"^[a-z0-9][a-z0-9_-]{2,31}$")
 LOGIN_MIN, LOGIN_MAX = 3, 32
 PASSWORD_MIN = 8
 # argon2 hashes anything, but a megabyte "password" is a cheap DoS
@@ -25,12 +28,17 @@ _hasher = PasswordHasher()
 _DUMMY_HASH = _hasher.hash("not-a-real-password-just-timing")
 
 
+# Invisible characters: e-mails show logins with a zero-width space after
+# each "." (email.templates.nolink), and a login copied from there must work
+_INVISIBLE = dict.fromkeys(map(ord, "\u200b\u200c\u200d\u2060\ufeff"))
+
+
 def normalize_login(login: Optional[str]) -> str:
-    return (login or "").strip().lower()
+    return (login or "").translate(_INVISIBLE).strip().lower()
 
 
 def login_problem(login: str) -> Optional[str]:
-    """Polish message describing what is wrong with a (normalised) login."""
+    """Polish message describing what is wrong with a new (normalised) login."""
     if len(login) < LOGIN_MIN:
         return "Login musi mieć co najmniej 3 znaki."
     if len(login) > LOGIN_MAX:
@@ -38,7 +46,7 @@ def login_problem(login: str) -> Optional[str]:
     if not LOGIN_RE.match(login):
         if not login[0].isalnum() or not login[0].isascii():
             return "Login musi zaczynać się od litery lub cyfry."
-        return "Login może zawierać tylko litery bez polskich znaków, cyfry oraz . _ -"
+        return "Login może zawierać tylko litery bez polskich znaków, cyfry oraz znaki _ i -"
     return None
 
 

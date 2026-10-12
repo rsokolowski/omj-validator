@@ -36,6 +36,7 @@ import { PasswordField } from "./PasswordField";
 import { ParentEmailField } from "./ParentEmailField";
 import { TermsCheckbox } from "./TermsCheckbox";
 import { GoogleButton } from "./GoogleButton";
+import { TurnstileWidget } from "./TurnstileWidget";
 
 type Step = "year" | "method" | "credentials" | "final";
 type Method = "google" | "login";
@@ -52,6 +53,7 @@ const STEP_OF_FIELD: Record<Field, Step> = {
 };
 
 const SAME_ADDRESS_ERROR = "To adres Twojego konta Google. Wpisz adres e-mail rodzica lub opiekuna.";
+const TURNSTILE_MISSING = "Najpierw potwierdź w ramce powyżej, że nie jesteś robotem.";
 
 type LoginCheck =
   | { state: "idle" }
@@ -93,18 +95,25 @@ export function RegistrationWizard({ currentYear, googleMode, sameAddressError }
   const [google, setGoogle] = useState<GoogleIdentity>(
     googleMode ? { state: "loading" } : { state: "expired" }
   );
+  // Cloudflare Turnstile: the site key comes from the API (null = disabled)
+  const [turnstileSiteKey, setTurnstileSiteKey] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileReset, setTurnstileReset] = useState(0);
+  const [turnstileError, setTurnstileError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!googleMode) return;
     let cancelled = false;
     accountApi
       .registrationState()
       .then((data) => {
         if (cancelled) return;
-        setGoogle(data.google ? { state: "ready", email: data.google.email } : { state: "expired" });
+        setTurnstileSiteKey(data.turnstile_site_key);
+        if (googleMode) {
+          setGoogle(data.google ? { state: "ready", email: data.google.email } : { state: "expired" });
+        }
       })
       .catch((error) => {
-        if (!cancelled) setGoogle({ state: "error", message: errorText(error) });
+        if (!cancelled && googleMode) setGoogle({ state: "error", message: errorText(error) });
       });
     return () => {
       cancelled = true;
@@ -210,6 +219,14 @@ export function RegistrationWizard({ currentYear, googleMode, sameAddressError }
   // ---------------------------------------------------------------- step 4: parent / terms, submit
 
   const handleApiError = (error: unknown) => {
+    if (error instanceof APIError && error.code === "turnstile_failed" && !turnstileSiteKey) {
+      // The site key did not arrive with the page (network blip): fetch it
+      // again, so the box the message talks about appears
+      accountApi
+        .registrationState()
+        .then((data) => setTurnstileSiteKey(data.turnstile_site_key))
+        .catch(() => undefined);
+    }
     if (error instanceof APIError && error.field && error.field in STEP_OF_FIELD) {
       const field = error.field as Field;
       setErrors((prev) => ({ ...prev, [field]: error.message }));
@@ -241,6 +258,11 @@ export function RegistrationWizard({ currentYear, googleMode, sameAddressError }
       setErrors((prev) => ({ ...prev, accept_terms: "Zaznacz zgodę, żeby założyć konto." }));
       return;
     }
+    if (turnstileSiteKey && !turnstileToken) {
+      setTurnstileError(TURNSTILE_MISSING);
+      return;
+    }
+    const human = turnstileToken ? { turnstile_token: turnstileToken } : {};
 
     const age = {
       birth_year: birthYear,
@@ -252,6 +274,7 @@ export function RegistrationWizard({ currentYear, googleMode, sameAddressError }
       if (method === "login") {
         const result = await accountApi.registerLogin({
           ...age,
+          ...human,
           login: normalizeLogin(login),
           password,
           parent_email: email,
@@ -259,13 +282,15 @@ export function RegistrationWizard({ currentYear, googleMode, sameAddressError }
         window.location.href = result.redirect;
       } else {
         const result = await accountApi.registerGoogle(
-          needsParent ? { ...age, parent_email: email } : { ...age, accept_terms: true }
+          needsParent ? { ...age, ...human, parent_email: email } : { ...age, ...human, accept_terms: true }
         );
         window.location.href = result.redirect;
       }
       // Zostajemy w stanie "wysylanie" az przegladarka przejdzie na nowa strone
     } catch (error) {
       setSubmitting(false);
+      // The token was used up (or refused): the widget fetches a new one
+      if (turnstileSiteKey) setTurnstileReset((n) => n + 1);
       handleApiError(error);
     }
   };
@@ -407,7 +432,7 @@ export function RegistrationWizard({ currentYear, googleMode, sameAddressError }
                   ? "Ten login jest wolny."
                   : loginCheck.state === "checking"
                     ? "Sprawdzamy, czy login jest wolny…"
-                    : "Nie używaj imienia i nazwiska. Możesz użyć liter (bez polskich znaków), cyfr oraz . _ -")
+                    : "Nie używaj imienia i nazwiska. Możesz użyć liter (bez polskich znaków), cyfr oraz znaków _ i -")
               }
               autoComplete="username"
               fullWidth
@@ -487,6 +512,18 @@ export function RegistrationWizard({ currentYear, googleMode, sameAddressError }
                 disabled={submitting}
               />
             </>
+          )}
+
+          {turnstileSiteKey && (
+            <TurnstileWidget
+              siteKey={turnstileSiteKey}
+              resetSignal={turnstileReset}
+              onToken={(token) => {
+                setTurnstileToken(token);
+                if (token) setTurnstileError(null);
+              }}
+              error={turnstileError ?? undefined}
+            />
           )}
 
           {method === "google" && !googleIdentity && (
