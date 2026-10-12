@@ -21,6 +21,7 @@ from PIL import Image
 
 from app.ai import requests as ai_requests
 from app.ai.factory import AIContentBlockedError, AIProviderError
+from app.ai.models_catalog import estimate_cost
 from app.ai.pattern_parsing import PATTERN_LINK_SCHEMA
 from app.ai.private_parsing import META_SCHEMA
 from app.ai.prompt_builder import CLOSING_LINE, build_prompt, solution_text_block
@@ -183,7 +184,7 @@ def test_omj_stream_request_shape_opus(make_provider, tmp_path):
     assert "system" not in kwargs
 
 
-def test_omj_stream_haiku_has_no_fallbacks_and_caches_task_pdf(make_provider):
+def test_omj_stream_haiku_has_no_fallbacks_and_no_cache_control(make_provider):
     p, log = make_provider("claude-haiku-5-5", final=message(model="claude-haiku-5-5"))
 
     asyncio.run(p.analyze_solution_stream(TASK_PDF, None, [], 2, etap="etap1", solution_text="x"))
@@ -309,8 +310,21 @@ def test_fallback_served_response_is_recorded(make_provider):
     assert result.score == 5
     assert result.scoring_meta["model"] == "claude-opus-5-5"
     assert result.scoring_meta["served_by"] == "claude-opus-5"
+    # served_by outside the catalog: priced at the requested model's rates
+    assert result.scoring_meta["estimated_cost"] == pytest.approx(
+        estimate_cost("anthropic", "claude-opus-5-5", 1000, 200, cache_read_tokens=300, cache_write_tokens=400)
+    )
 
 
+def test_fallback_served_by_catalog_model_is_priced_at_its_rates(make_provider):
+    final = message(model="claude-sonnet-5-5")
+    final.usage.iterations = [SimpleNamespace(type="message"), SimpleNamespace(type="fallback_message")]
+    p, _ = make_provider(final=final)
+    result = asyncio.run(p.analyze_solution_stream(TASK_PDF, None, [], 1, solution_text="x"))
+    assert result.scoring_meta["served_by"] == "claude-sonnet-5-5"
+    expected = estimate_cost("anthropic", "claude-sonnet-5-5", 1000, 200, cache_read_tokens=300, cache_write_tokens=400)
+    assert expected == pytest.approx(0.00506)
+    assert result.scoring_meta["estimated_cost"] == pytest.approx(expected)
 
 def test_no_served_by_without_fallback_iteration(make_provider):
     # Model name differences alone do not mean a fallback ran
@@ -484,22 +498,54 @@ def test_structured_output_schema_is_strict_and_shared_schemas_untouched(make_pr
 # --------------------------------------------------------------- ping
 
 
-def test_ping_success(make_provider):
-    p, log = make_provider("claude-haiku-5-5", final=message(text="OK"))
+@pytest.mark.parametrize("model, path", [
+    ("claude-opus-5-5", "beta"),
+    ("claude-sonnet-5-5", "beta"),
+    ("claude-haiku-5-5", "messages"),
+])
+def test_ping_uses_the_grading_request_shape(make_provider, model, path):
+    p, log = make_provider(model, final=message(text='{"ok": true}', model=model))
     assert asyncio.run(p.ping()) is None
-    [(path, kind, kwargs)] = log
-    assert (path, kind) == ("messages", "create")
-    assert kwargs["model"] == "claude-haiku-5-5"
-    assert kwargs["max_tokens"] == 64
-    assert kwargs["output_config"] == {"effort": "low"}
-    assert kwargs["messages"] == [{"role": "user", "content": "Odpowiedz jednym słowem: OK"}]
+    [(sent_path, kind, kwargs)] = log
+    assert (sent_path, kind) == (path, "create")
+    grading = p._request([anthropic_module._text_block("x")], anthropic_module.GRADING_SCHEMA, "high", grading=True)
+    # Same builder as grading: every option except content, schema, effort and max_tokens
+    for key in ("model", "thinking", "betas", "fallbacks"):
+        assert kwargs.get(key) == grading.get(key), key
+    assert kwargs["thinking"] == {"type": "adaptive", "display": "summarized"}
+    assert kwargs["max_tokens"] == anthropic_module.PING_MAX_TOKENS
+    assert kwargs["output_config"] == {
+        "format": {"type": "json_schema", "schema": anthropic_module.PING_SCHEMA},
+        "effort": "low",
+    }
+    assert anthropic_module.PING_SCHEMA["additionalProperties"] is False
+    assert blocks_of(kwargs) == [{"type": "text", "text": anthropic_module.PING_PROMPT}]
 
 
-def test_ping_failure(make_provider):
-    p, _ = make_provider(error=anthropic.AuthenticationError(message="x", response=_response(401), body=None))
+@pytest.mark.parametrize("stop_reason", ["max_tokens", "refusal", "end_turn"])
+def test_ping_any_stop_reason_is_success(make_provider, stop_reason):
+    p, _ = make_provider(final=message(text="", stop_reason=stop_reason))
+    assert asyncio.run(p.ping()) is None
+
+
+@pytest.mark.parametrize("error, expected", [
+    (anthropic.AuthenticationError(message="x", response=_response(401), body=None), "401 Unauthorized"),
+    (
+        anthropic.RateLimitError(
+            message="secret body", response=_response(429),
+            body={"type": "error", "error": {"type": "rate_limit_error", "message": "secret body"}},
+        ),
+        "429 rate_limit_error",
+    ),
+    (anthropic.InternalServerError(message="secret body", response=_response(503), body=None), "503 Service Unavailable"),
+    (asyncio.TimeoutError(), "TimeoutError"),
+])
+def test_ping_failure_names_status_not_body(make_provider, error, expected):
+    p, _ = make_provider(error=error)
     with pytest.raises(AIProviderError) as info:
         asyncio.run(p.ping())
-    assert str(info.value) == "Model claude-opus-5-5 nie odpowiada: AuthenticationError"
+    assert str(info.value) == f"Model claude-opus-5-5 nie odpowiada: {expected}"
+    assert "secret" not in str(info.value)
 
 
 def test_provider_identity_and_lazy_export(make_provider):
@@ -571,17 +617,46 @@ def test_request_over_budget_shrinks_photos_step_by_step(make_provider, tmp_path
 
 def test_request_over_budget_after_all_steps_is_friendly_error(make_provider, tmp_path, monkeypatch):
     photos = [gradient(tmp_path / f"{i}.jpg") for i in range(3)]
-    monkeypatch.setattr(anthropic_module, "REQUEST_BUDGET_BYTES", 10_000)
-    p, log = make_provider()
-    for call in (
-        lambda: p.analyze_solution_stream(TASK_PDF, None, photos, 1),
-        lambda: p.analyze_private_solution_stream("T", "C", photos),
-        lambda: p.extract_private_tasks(photos),
-    ):
+    smallest = sum(
+        anthropic_module._block_size(anthropic_module._image_block(ph, anthropic_module.REQUEST_SHRINK_STEPS[-1]))
+        for ph in photos
+    )
+    calls = {
+        "omj": lambda p: p.analyze_solution_stream(TASK_PDF, None, photos, 1),
+        "private": lambda p: p.analyze_private_solution_stream("T", "C", photos),
+        "extract": lambda p: p.extract_private_tasks(photos),
+    }
+    # Pass 1 (budget untouched): the bytes of everything but the photos, per call
+    real_photo_blocks = anthropic_module._photo_blocks
+    other: dict = {}
+
+    def spy(image_paths, other_bytes):
+        other[current] = other_bytes
+        return real_photo_blocks(image_paths, other_bytes)
+
+    monkeypatch.setattr(anthropic_module, "_photo_blocks", spy)
+    for current, call in calls.items():
+        p, _ = make_provider()
+        asyncio.run(call(p))
+    monkeypatch.setattr(anthropic_module, "_photo_blocks", real_photo_blocks)
+
+    shrinks = []
+    real_image_block = anthropic_module._image_block
+    monkeypatch.setattr(
+        anthropic_module, "_image_block", lambda path, shrink=None: shrinks.append(shrink) or real_image_block(path, shrink)
+    )
+    for name, call in calls.items():
+        # PDF + text fit; even the smallest photos do not - so every shrink step must run first
+        budget = other[name] + smallest // 2
+        assert other[name] < budget < other[name] + smallest
+        monkeypatch.setattr(anthropic_module, "REQUEST_BUDGET_BYTES", budget)
+        shrinks.clear()
+        p, log = make_provider()
         with pytest.raises(AIProviderError) as info:
-            asyncio.run(call())
+            asyncio.run(call(p))
         assert str(info.value) == "Przesłane zdjęcia są zbyt duże. Spróbuj wysłać mniej zdjęć."
-    assert log == []  # nothing was sent
+        assert shrinks == [None] * 3 + [step for step in anthropic_module.REQUEST_SHRINK_STEPS for _ in range(3)]
+        assert log == []  # nothing was sent
 
 
 # -------------------------------------------------------------- patterns

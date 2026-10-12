@@ -4,6 +4,7 @@ import asyncio
 from types import SimpleNamespace
 
 import pytest
+from google.genai import errors as genai_errors
 
 from app.ai.factory import AIProviderError
 from app.ai.providers.gemini import GeminiProvider
@@ -30,8 +31,27 @@ def test_ping_failure_raises_provider_error():
     def fail(**kwargs):
         raise RuntimeError("401 bad key")
 
-    with pytest.raises(AIProviderError):
+    with pytest.raises(AIProviderError) as info:
         asyncio.run(bare_provider(fail).ping())
+    assert str(info.value) == "Model gemini-3.8-flash nie odpowiada: RuntimeError"
+
+
+@pytest.mark.parametrize("error, expected", [
+    (genai_errors.ClientError(
+        429, {"error": {"code": 429, "status": "RESOURCE_EXHAUSTED", "message": "secret body"}}
+    ), "429 RESOURCE_EXHAUSTED"),
+    (genai_errors.ServerError(
+        503, {"error": {"code": 503, "status": "UNAVAILABLE", "message": "secret body"}}
+    ), "503 UNAVAILABLE"),
+])
+def test_ping_failure_names_http_status_not_body(error, expected):
+    def fail(**kwargs):
+        raise error
+
+    with pytest.raises(AIProviderError) as info:
+        asyncio.run(bare_provider(fail).ping())
+    assert str(info.value) == f"Model gemini-3.8-flash nie odpowiada: {expected}"
+    assert "secret" not in str(info.value)
 
 
 def test_stream_scoring_meta_carries_provider_and_usage(monkeypatch, tmp_path):

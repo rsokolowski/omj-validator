@@ -189,6 +189,17 @@ def estimate_cost(
     return input_cost + output_cost
 
 
+def _ping_status_text(error: Exception) -> str:
+    """'429 RESOURCE_EXHAUSTED' / '503 UNAVAILABLE' for an API error, else the class name.
+
+    Status code and status text only (google.genai APIError.code/.status) - never the body.
+    """
+    code = getattr(error, "code", None)
+    if not isinstance(code, int):
+        return type(error).__name__
+    return f"{code} {getattr(error, 'status', None) or ''}".strip()
+
+
 class GeminiProvider:
     """AI provider using Google Gemini API for solution analysis."""
 
@@ -344,8 +355,9 @@ class GeminiProvider:
                 timeout=30,
             )
         except Exception as e:
-            logger.error(f"[Gemini ping] {self._model_name}: {type(e).__name__}")
-            raise AIProviderError(f"Model {self._model_name} nie odpowiada: {type(e).__name__}")
+            status = _ping_status_text(e)
+            logger.error(f"[Gemini ping] {self._model_name}: {type(e).__name__} {status}")
+            raise AIProviderError(f"Model {self._model_name} nie odpowiada: {status}")
 
     def _build_content_parts(
         self,

@@ -45,7 +45,7 @@ from ...models import (
 from ...skills import get_all_skills
 from .. import requests as ai_requests
 from ..factory import AIContentBlockedError, AIProviderError
-from ..models_catalog import estimate_cost
+from ..models_catalog import estimate_cost, get_model
 from ..parsing import parse_ai_response
 from ..pattern_parsing import (
     PATTERN_LINK_SCHEMA,
@@ -69,6 +69,19 @@ logger = logging.getLogger(__name__)
 GRADING_MAX_TOKENS = 64000  # thinking counts toward it; grading always streams
 AUX_MAX_TOKENS = 16000
 PING_TIMEOUT_SECONDS = 30
+# The ping goes through the grading request builder (beta path + fallbacks,
+# adaptive thinking with summarized display, strict JSON schema) so a shape the
+# API rejects fails the admin switch instead of the first student's grading.
+# Room for some thinking at low effort; hitting max_tokens still counts as success.
+PING_MAX_TOKENS = 2048
+PING_EFFORT = "low"
+PING_PROMPT = 'Odpowiedz obiektem JSON {"ok": true}.'
+PING_SCHEMA = {
+    "type": "object",
+    "properties": {"ok": {"type": "boolean"}},
+    "required": ["ok"],
+    "additionalProperties": False,
+}
 
 # Server-side refusal fallback ("default" scalar form needs exactly this header).
 # Not for Haiku 5.5: it has no server-side fallback.
@@ -247,6 +260,19 @@ async def _notify(callback: Optional[Callable], *args) -> None:
         await result
 
 
+def _status_text(error: Exception) -> str:
+    """'429 rate_limit_error' / '503 Service Unavailable' for an HTTP error, else the class name.
+
+    Status code and status text only - never the response body.
+    """
+    status = getattr(error, "status_code", None)
+    if status is None:
+        return type(error).__name__
+    response = getattr(error, "response", None)
+    text = getattr(error, "type", None) or getattr(response, "reason_phrase", "") or ""
+    return f"{status} {text}".strip()
+
+
 def _image_bytes_kb(image_paths: list[Path]) -> float:
     return sum(p.stat().st_size for p in image_paths if p.exists()) / 1024
 
@@ -290,13 +316,15 @@ class AnthropicProvider:
         """The SDK resource: beta (for the fallback parameter) or plain messages."""
         return self._client.beta.messages if self._fallbacks else self._client.messages
 
-    def _request(self, content: list, schema: dict, effort: str, *, grading: bool) -> dict:
+    def _request(
+        self, content: list, schema: dict, effort: str, *, grading: bool, max_tokens: Optional[int] = None
+    ) -> dict:
         thinking: dict = {"type": "adaptive"}
         if grading:
             thinking["display"] = "summarized"  # default is "omitted" (empty thinking text)
         kwargs: dict = {
             "model": self._model_name,
-            "max_tokens": GRADING_MAX_TOKENS if grading else AUX_MAX_TOKENS,
+            "max_tokens": max_tokens or (GRADING_MAX_TOKENS if grading else AUX_MAX_TOKENS),
             "messages": [{"role": "user", "content": content}],
             "thinking": thinking,
             "output_config": {"format": {"type": "json_schema", "schema": schema}, "effort": effort},
@@ -367,6 +395,14 @@ class AnthropicProvider:
         output_tokens = getattr(usage, "output_tokens", 0) or 0
         cache_read = getattr(usage, "cache_read_input_tokens", 0) or 0
         cache_write = getattr(usage, "cache_creation_input_tokens", 0) or 0
+        iterations = getattr(usage, "iterations", None) or []
+        served_by = (
+            getattr(final, "model", None)
+            if any(getattr(entry, "type", None) == "fallback_message" for entry in iterations)
+            else None
+        )
+        # Top-level usage is the serving model's: price it at that model's rates when known
+        priced_as = served_by if served_by and get_model("anthropic", served_by) else self._model_name
         meta = {
             "provider": "anthropic",
             "model": self._model_name,
@@ -377,16 +413,15 @@ class AnthropicProvider:
             "thoughts_tokens": 0,
             "estimated_cost": round(
                 estimate_cost(
-                    "anthropic", self._model_name, input_tokens, output_tokens,
+                    "anthropic", priced_as, input_tokens, output_tokens,
                     cache_read_tokens=cache_read, cache_write_tokens=cache_write,
                 ),
                 6,
             ),
             "api_time": round(time.time() - started, 2),
         }
-        iterations = getattr(usage, "iterations", None) or []
-        if any(getattr(entry, "type", None) == "fallback_message" for entry in iterations):
-            meta["served_by"] = getattr(final, "model", None)
+        if served_by is not None:
+            meta["served_by"] = served_by
         return meta
 
     def _friendly_error(self, error: Exception, label: str, started: float) -> AIProviderError:
@@ -415,23 +450,23 @@ class AnthropicProvider:
     # ---------------------------------------------------------------- ping
 
     async def ping(self) -> None:
-        """One tiny call proving key + model work (admin switch). Raises AIProviderError."""
+        """One small call in the grading request shape, proving key + model + request
+        options work (admin switch). Any stop_reason counts as success. Raises AIProviderError."""
+        kwargs = self._request(
+            [_text_block(PING_PROMPT)], PING_SCHEMA, PING_EFFORT, grading=True, max_tokens=PING_MAX_TOKENS
+        )
+        started = time.time()
         try:
-            await asyncio.wait_for(
-                self._client.messages.create(
-                    model=self._model_name,
-                    max_tokens=64,
-                    messages=[{"role": "user", "content": "Odpowiedz jednym słowem: OK"}],
-                    output_config={"effort": "low"},
-                ),
-                timeout=PING_TIMEOUT_SECONDS,
-            )
+            final = await asyncio.wait_for(self._messages().create(**kwargs), timeout=PING_TIMEOUT_SECONDS)
         except Exception as e:
-            logger.error(
-                f"[Claude ping] {type(e).__name__} status={getattr(e, 'status_code', None)} "
-                f"request_id={getattr(e, 'request_id', None)}"
-            )
-            raise AIProviderError(f"Model {self._model_name} nie odpowiada: {type(e).__name__}")
+            self._friendly_error(e, "Claude ping", started)  # logs type/status/request id/400 detail
+            raise AIProviderError(f"Model {self._model_name} nie odpowiada: {_status_text(e)}")
+        usage = getattr(final, "usage", None)
+        logger.info(
+            f"[Claude ping] model={self._model_name} stop_reason={getattr(final, 'stop_reason', None)} "
+            f"input_tokens={getattr(usage, 'input_tokens', None)} output_tokens={getattr(usage, 'output_tokens', None)} "
+            f"served_by={getattr(final, 'model', None)} after {time.time() - started:.1f}s"
+        )
 
     # ---------------------------------------------------------- OMJ grading
 
