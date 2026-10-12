@@ -61,13 +61,18 @@ def _host_netloc(value: str, scheme: str) -> Optional[str]:
     return _netloc(f"{scheme}://{first}") if first else None
 
 
+def trusted_netlocs(origins: Iterable[Optional[str]]) -> frozenset:
+    return frozenset(n for n in (_netloc(o) for o in origins) if n)
+
+
 def request_allowed(
     method: str,
     headers: dict[str, str],
     scheme: str,
-    trusted_origins: Iterable[str],
+    trusted: frozenset,
 ) -> bool:
-    """Whether an HTTP request may proceed (headers: lower-case names)."""
+    """Whether an HTTP request may proceed (headers: lower-case names;
+    trusted: netlocs from trusted_netlocs)."""
     if method.upper() in SAFE_METHODS:
         return True
     origin = headers.get("origin")
@@ -75,7 +80,7 @@ def request_allowed(
         origin_netloc = _netloc(origin)
         if origin_netloc is None:  # "null" or garbage
             return False
-        allowed = {n for n in (_netloc(o) for o in trusted_origins) if n}
+        allowed = set(trusted)
         for header in ("host", "x-forwarded-host"):
             value = headers.get(header)
             if value:
@@ -94,14 +99,14 @@ class CrossSiteRequestGuard:
 
     def __init__(self, app, trusted_origins: Iterable[str] = ()):
         self.app = app
-        self.trusted_origins = tuple(o for o in trusted_origins if o)
+        self.trusted = trusted_netlocs(trusted_origins)
 
     async def __call__(self, scope, receive, send):
         if scope["type"] != "http":
             await self.app(scope, receive, send)
             return
         headers = {k.decode("latin-1").lower(): v.decode("latin-1") for k, v in scope.get("headers", [])}
-        if request_allowed(scope["method"], headers, scope.get("scheme", "http"), self.trusted_origins):
+        if request_allowed(scope["method"], headers, scope.get("scheme", "http"), self.trusted):
             await self.app(scope, receive, send)
             return
         # Path only (never the query string): some carry tokens

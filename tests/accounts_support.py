@@ -56,6 +56,7 @@ def db(tmp_path, monkeypatch):
     email_module.clear_outbox()
     account_routes._availability_hits.clear()
     service._registrations_by_ip.clear()
+    service._registration_tickets.clear()
     # E-mails sent after the response (parent link, password reset) use the
     # test's session too; TestClient runs background tasks before returning
     monkeypatch.setattr(account_routes, "_background_session", lambda: contextlib.nullcontext(session))

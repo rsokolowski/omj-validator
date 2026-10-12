@@ -219,6 +219,14 @@ export function RegistrationWizard({ currentYear, googleMode, sameAddressError }
   // ---------------------------------------------------------------- step 4: parent / terms, submit
 
   const handleApiError = (error: unknown) => {
+    if (error instanceof APIError && error.code === "turnstile_failed" && !turnstileSiteKey) {
+      // The site key did not arrive with the page (network blip): fetch it
+      // again, so the box the message talks about appears
+      accountApi
+        .registrationState()
+        .then((data) => setTurnstileSiteKey(data.turnstile_site_key))
+        .catch(() => undefined);
+    }
     if (error instanceof APIError && error.field && error.field in STEP_OF_FIELD) {
       const field = error.field as Field;
       setErrors((prev) => ({ ...prev, [field]: error.message }));

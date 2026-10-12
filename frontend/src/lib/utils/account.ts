@@ -56,8 +56,12 @@ export function isUnder16(
   return turned16 === null ? null : !turned16;
 }
 
+// E-maile pokazuja login ze spacja zerowej szerokosci po kazdej kropce
+// (email.templates.nolink) - login skopiowany z e-maila ma dzialac
+const INVISIBLE = /[\u200b\u200c\u200d\u2060\ufeff]/g;
+
 export function normalizeLogin(login: string): string {
-  return login.trim().toLowerCase();
+  return login.replace(INVISIBLE, "").trim().toLowerCase();
 }
 
 /** Same messages as passwords.login_problem; expects a normalised login. */

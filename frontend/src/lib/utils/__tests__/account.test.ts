@@ -40,6 +40,10 @@ test("the year is counted in Polish time", () => {
   assert.equal(warsawYear(new Date("2026-12-31T23:30:00Z")), 2027);
 });
 
+test("a login copied from an e-mail loses its zero-width spaces", () => {
+  assert.equal(normalizeLogin(" Kasia.\u200bB "), "kasia.b");
+});
+
 test("login rules match the backend messages", () => {
   assert.equal(normalizeLogin("  Kasia.B "), "kasia.b");
   assert.equal(loginProblem("kasia_b-1"), null);

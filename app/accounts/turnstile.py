@@ -12,8 +12,8 @@ and secret TEST_SECRET_PASS / TEST_SECRET_FAIL accept / reject any token.
 """
 
 import logging
-import uuid
 from typing import Optional
+from urllib.parse import urlsplit
 
 import httpx
 
@@ -25,7 +25,10 @@ SITEVERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
 TIMEOUT_SECONDS = 5.0
 # Turnstile tokens are at most 2048 characters
 TOKEN_MAX = 2048
-# The widget's action (data-action); checked when Cloudflare reports one
+# The widget's action (data-action), checked together with the hostname the
+# widget was solved on (PUBLIC_BASE_URL). Cloudflare's test keys report
+# neither (metadata.result_with_testing_key), so those checks are skipped
+# only for test-key results.
 ACTION = "register"
 
 TEST_SITE_KEY = "1x00000000000000000000AA"
@@ -63,11 +66,7 @@ async def verify(token: Optional[str]) -> bool:
         async with httpx.AsyncClient(timeout=TIMEOUT_SECONDS, transport=_transport) as client:
             response = await client.post(
                 SITEVERIFY_URL,
-                data={
-                    "secret": settings.turnstile_secret_key,
-                    "response": token,
-                    "idempotency_key": str(uuid.uuid4()),
-                },
+                data={"secret": settings.turnstile_secret_key, "response": token},
             )
             result = response.json()
     except (httpx.HTTPError, ValueError) as e:
@@ -77,9 +76,15 @@ async def verify(token: Optional[str]) -> bool:
         codes = result.get("error-codes") if isinstance(result, dict) else None
         logger.info(f"Turnstile token rejected: {codes}")
         return False
-    action = result.get("action")
-    if action and action != ACTION:
-        logger.info(f"Turnstile token for another action: {action!r}")
+    metadata = result.get("metadata")
+    if isinstance(metadata, dict) and metadata.get("result_with_testing_key") is True:
+        return True
+    if result.get("action") != ACTION:
+        logger.info(f"Turnstile token for another action: {result.get('action')!r}")
+        return False
+    expected_host = (urlsplit(settings.public_base_url).hostname or "").lower()
+    if (result.get("hostname") or "").lower() != expected_host:
+        logger.info(f"Turnstile token solved on another hostname: {result.get('hostname')!r}")
         return False
     return True
 

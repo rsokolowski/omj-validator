@@ -5,13 +5,13 @@ import pytest
 from starlette.middleware.sessions import SessionMiddleware
 
 import app.main as main
-from app.csrf import CrossSiteRequestGuard, request_allowed
+from app.csrf import CrossSiteRequestGuard, request_allowed, trusted_netlocs
 from app.db.models import UserDB
 
 from accounts_support import *  # noqa: F401,F403 - fixtures
 from accounts_support import PASSWORD, me, register_login, user_by_login
 
-TRUSTED = ("https://omj-validator.pl", "http://localhost:3200")
+TRUSTED = trusted_netlocs(("https://omj-validator.pl", "http://localhost:3200", None))
 
 
 def allowed(method="POST", scheme="https", **headers):

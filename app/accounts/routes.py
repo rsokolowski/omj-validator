@@ -160,12 +160,16 @@ def _ip_limit() -> JSONResponse:
     return _fail(429, IP_LIMIT_MESSAGE, "registration_ip_limit")
 
 
-async def _human_check(request: Request, token: Optional[str], email: Optional[str] = None) -> Optional[JSONResponse]:
+async def _human_check(
+    request: Request, token: Optional[str], email: Optional[str] = None, check_ip: bool = True
+) -> Optional[JSONResponse]:
     """The checks every registration request passes once its answers are
     valid, before anything is created or e-mailed: the per-IP limit (checked
     first - it is free) and Turnstile. The IP slot itself is taken only when
-    the account is created (take_registration_slot)."""
-    if service.registration_ip_limit_reached(service.ip_hash(client_ip(request)), email):
+    the account is created (take_registration_slot). Turnstile tokens are
+    never cached here: each request needs a fresh one, and Cloudflare
+    accepts a token only once."""
+    if check_ip and service.registration_ip_limit_reached(service.ip_hash(client_ip(request)), email):
         return _ip_limit()
     if not await turnstile.verify(token):
         return _fail(400, turnstile.FAILED_MESSAGE, "turnstile_failed")
@@ -221,9 +225,14 @@ async def register_google(
     )
 
     # Before the Google redirect too: answers are stored only for a request
-    # that passed, and the OAuth callback creates the account from them
+    # that passed, and the OAuth callback creates the account from them -
+    # once (the ticket). The IP limit is checked there, when the Google
+    # address (ALLOWED_EMAILS) is known.
     error = await _human_check(
-        request, body.turnstile_token, pending_google["email"] if pending_google else None
+        request,
+        body.turnstile_token,
+        pending_google["email"] if pending_google else None,
+        check_ip=pending_google is not None,
     )
     if error:
         return error
@@ -234,6 +243,7 @@ async def register_google(
             "can_consent_alone": answers.can_consent_alone,
             "parent_email": answers.parent_email,
             "at": time.time(),
+            "ticket": service.issue_registration_ticket(),
         }
         return {"action": "google", "redirect": "/login/google?register=1"}
 
@@ -263,7 +273,8 @@ async def finish_google_registration(
         db, identity["email"], needs_parent=answers.parent_email is not None
     ):
         return _fail(429, NEW_USERS_LIMIT_MESSAGE, "new_users_limit")
-    if not service.take_registration_slot(service.ip_hash(client_ip(request)), identity["email"]):
+    ip_digest = service.ip_hash(client_ip(request))
+    if not service.take_registration_slot(ip_digest, identity["email"]):
         return _ip_limit()
 
     try:
@@ -272,6 +283,7 @@ async def finish_google_registration(
         )
     except IntegrityError:
         db.rollback()
+        service.release_registration_slot(ip_digest)
         return _fail(409, "To konto Google jest już zarejestrowane. Zaloguj się.", "conflict")
 
     start_session(
@@ -324,7 +336,8 @@ async def register_login(
     if error:
         return error
     # Taken after the await above: check + record with nothing in between
-    if not service.take_registration_slot(service.ip_hash(client_ip(request))):
+    ip_digest = service.ip_hash(client_ip(request))
+    if not service.take_registration_slot(ip_digest):
         return _ip_limit()
 
     try:
@@ -334,6 +347,7 @@ async def register_login(
         )
     except IntegrityError:
         db.rollback()
+        service.release_registration_slot(ip_digest)
         return _fail(409, "Ten login jest zajęty. Wymyśl inny.", "login_taken", field="login")
 
     start_session(request, user, remember=False, is_group_member=await _group_access(None))

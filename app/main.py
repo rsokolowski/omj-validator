@@ -471,7 +471,13 @@ async def _google_new_identity(
     from .accounts.routes import finish_google_registration
 
     answers = request.session.pop(SESSION_PENDING_REGISTRATION_KEY, None)
-    if not answers or _time.time() - answers.get("at", 0) > PENDING_SESSION_SECONDS:
+    # The ticket makes the stored answers single-use server-side: a replayed
+    # copy of the session cookie falls back to answering again (+ Turnstile)
+    if (
+        not answers
+        or _time.time() - answers.get("at", 0) > PENDING_SESSION_SECONDS
+        or not account_service.redeem_registration_ticket(answers.get("ticket"))
+    ):
         # Only what the registration needs, and briefly (PENDING_GOOGLE_SECONDS)
         request.session[SESSION_PENDING_GOOGLE_KEY] = {
             "sub": google_sub, "email": email, "at": _time.time()

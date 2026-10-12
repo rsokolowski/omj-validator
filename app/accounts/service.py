@@ -625,6 +625,47 @@ def registration_ip_limit_reached(ip_digest: str, email: Optional[str] = None) -
     return len(_recent_registrations(ip_digest)) >= settings.rate_limit_registrations_per_ip_per_day
 
 
+def release_registration_slot(ip_digest: str) -> None:
+    """Give back the newest slot of this IP (the account was not created
+    after all, e.g. a concurrent request took the login first)."""
+    hits = _registrations_by_ip.get(ip_digest)
+    if hits:
+        hits.pop()
+        if not hits:
+            _registrations_by_ip.pop(ip_digest, None)
+
+
+# Answers stored before the Google redirect travel in the session, which is a
+# signed cookie held by the client: a saved copy could be replayed through
+# any number of OAuth callbacks. Each stored answer set therefore carries a
+# ticket that is valid server-side once, for REGISTRATION_TICKET_TTL (same as
+# auth.PENDING_SESSION_SECONDS). In memory, single worker; a restart only
+# means answering the questions again (with a new Turnstile check).
+REGISTRATION_TICKET_TTL = timedelta(minutes=30)
+_REGISTRATION_TICKETS_MAX = 50_000
+_registration_tickets: dict[str, datetime] = {}
+
+
+def issue_registration_ticket() -> str:
+    moment = now()
+    for ticket, issued in list(_registration_tickets.items()):
+        if moment - issued > REGISTRATION_TICKET_TTL:
+            del _registration_tickets[ticket]
+    if len(_registration_tickets) >= _REGISTRATION_TICKETS_MAX:
+        _registration_tickets.pop(next(iter(_registration_tickets)))
+    ticket = secrets.token_urlsafe(16)
+    _registration_tickets[ticket] = moment
+    return ticket
+
+
+def redeem_registration_ticket(ticket: Optional[str]) -> bool:
+    """True exactly once per issued, unexpired ticket."""
+    if not isinstance(ticket, str):
+        return False
+    issued = _registration_tickets.pop(ticket, None)
+    return issued is not None and now() - issued <= REGISTRATION_TICKET_TTL
+
+
 def take_registration_slot(ip_digest: str, email: Optional[str] = None) -> bool:
     """Count one new account for this IP; False (nothing counted) at the limit.
 

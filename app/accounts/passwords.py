@@ -28,8 +28,13 @@ _hasher = PasswordHasher()
 _DUMMY_HASH = _hasher.hash("not-a-real-password-just-timing")
 
 
+# Invisible characters: e-mails show logins with a zero-width space after
+# each "." (email.templates.nolink), and a login copied from there must work
+_INVISIBLE = dict.fromkeys(map(ord, "\u200b\u200c\u200d\u2060\ufeff"))
+
+
 def normalize_login(login: Optional[str]) -> str:
-    return (login or "").strip().lower()
+    return (login or "").translate(_INVISIBLE).strip().lower()
 
 
 def login_problem(login: str) -> Optional[str]:

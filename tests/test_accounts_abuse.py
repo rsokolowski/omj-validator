@@ -70,6 +70,17 @@ class TestDotFreeLogins:
         body = client.get("/api/auth/login-available", params={"login": "kuba.m"}).json()
         assert body["valid"] is False
 
+    def test_login_copied_from_an_email_signs_in(self, client, db):
+        """The e-mail shows "kuba.\u200bm"; pasting that must still work."""
+        parent = service.ensure_parent(db, "mama@example.com")
+        user = service.create_login_user(
+            db, login="kuba.m", password=PASSWORD, birth_year=2013, parent_email=parent.email
+        )
+        user.status = "active"
+        db.commit()
+        response = client.post("/api/auth/login", json={"login": "Kuba.\u200bm ", "password": PASSWORD})
+        assert response.status_code == 200, response.text
+
     def test_existing_dotted_login_still_signs_in(self, client, db):
         parent = service.ensure_parent(db, "mama@example.com")
         user = service.create_login_user(
@@ -225,20 +236,44 @@ class TestPerIpLimit:
         assert "127.0.0.1" not in json.dumps(list(service._registrations_by_ip))
         assert "testclient" not in json.dumps(list(service._registrations_by_ip))
 
-    def test_google_after_redirect_counts(self, client, db, google, monkeypatch):
+    def test_google_counts_at_the_callback(self, client, db, google, monkeypatch):
+        """Before the redirect the Google address is unknown (ALLOWED_EMAILS
+        could exempt it), so the limit applies when the account is created."""
         monkeypatch.setattr(settings, "rate_limit_registrations_per_ip_per_day", 1)
         register_login(client)
         client.cookies.clear()
-        # Before the redirect: refused right away, nothing stored
         response = client.post("/api/auth/register/google", json={"birth_year": 2005, "accept_terms": True})
-        assert response.status_code == 429
-        # Callback from an earlier, accepted answer: refused at creation
-        monkeypatch.setattr(settings, "rate_limit_registrations_per_ip_per_day", 2)
-        client.post("/api/auth/register/google", json={"birth_year": 2005, "accept_terms": True})
-        monkeypatch.setattr(settings, "rate_limit_registrations_per_ip_per_day", 1)
+        assert response.json()["action"] == "google"
         response = callback(client)
         assert response.headers["location"] == "/login?error=rate_limit_registrations_ip"
         assert db.query(UserDB).filter(UserDB.google_sub.isnot(None)).count() == 0
+
+    def test_google_after_redirect_is_refused_up_front(self, client, db, google, monkeypatch):
+        monkeypatch.setattr(settings, "rate_limit_registrations_per_ip_per_day", 0)
+        callback(client)
+        response = client.post("/api/auth/register/google", json={"birth_year": 2005, "accept_terms": True})
+        assert response.status_code == 429 and response.json()["code"] == "registration_ip_limit"
+
+    def test_allowlisted_google_address_bypasses_before_the_redirect(self, client, db, google, monkeypatch):
+        monkeypatch.setattr(settings, "rate_limit_registrations_per_ip_per_day", 0)
+        monkeypatch.setattr(settings, "allowed_emails", "jan.kowalski@gmail.com")
+        client.post("/api/auth/register/google", json={"birth_year": 2005, "accept_terms": True})
+        assert callback(client).headers["location"] == "/years"
+
+    def test_login_taken_by_a_concurrent_request_gives_the_slot_back(self, client, db, monkeypatch):
+        from sqlalchemy.exc import IntegrityError
+
+        monkeypatch.setattr(settings, "rate_limit_registrations_per_ip_per_day", 1)
+
+        def taken(*args, **kwargs):
+            raise IntegrityError("insert", {}, Exception("unique"))
+
+        monkeypatch.setattr(service, "create_login_user", taken)
+        assert register_login(client).status_code == 409
+        assert service._registrations_by_ip == {}
+        monkeypatch.undo()
+        monkeypatch.setattr(settings, "rate_limit_registrations_per_ip_per_day", 1)
+        assert register_login(client).status_code == 200
 
     def test_allowlisted_google_address_bypasses(self, client, db, google, monkeypatch):
         monkeypatch.setattr(settings, "rate_limit_registrations_per_ip_per_day", 0)
@@ -280,10 +315,18 @@ def siteverify(handler):
 
 
 def cloudflare_test_keys(form: dict) -> httpx.Response:
-    """Behaves like Cloudflare does for its documented test secrets."""
+    """Behaves like Cloudflare does for its documented test secrets (answers
+    recorded from the live siteverify on 2026-10-12)."""
+    testing = {"metadata": {"result_with_testing_key": True}}
     if form["secret"] == turnstile.TEST_SECRET_PASS:
-        return httpx.Response(200, json={"success": True, "error-codes": [], "action": "register"})
-    return httpx.Response(200, json={"success": False, "error-codes": ["invalid-input-response"]})
+        return httpx.Response(200, json={"success": True, "error-codes": [], "hostname": "example.com", **testing})
+    return httpx.Response(200, json={"success": False, "error-codes": ["invalid-input-response"], **testing})
+
+
+def production_answer(**fields) -> httpx.MockTransport:
+    """A real-key siteverify answer (Cloudflare reports action and hostname)."""
+    body = {"success": True, "error-codes": [], "action": "register", "hostname": "omj.example", **fields}
+    return siteverify(lambda form: httpx.Response(200, json=body))[1]
 
 
 @pytest.fixture
@@ -373,6 +416,74 @@ class TestTurnstile:
         assert db.query(UserDB).count() == 0
         body["turnstile_token"] = "t"
         assert client.post("/api/auth/register/google", json=body).status_code == 200
+
+    def test_production_answer_with_our_action_and_hostname(self, client, db, monkeypatch):
+        monkeypatch.setattr(settings, "turnstile_secret_key", "0x-real-secret")
+        monkeypatch.setattr(turnstile, "_transport", production_answer())
+        assert register_login(client, turnstile_token="t").status_code == 200
+
+    @pytest.mark.parametrize(
+        "fields",
+        [
+            {"hostname": "evil.example"},  # widget solved on another site with our site key
+            {"hostname": None},
+            {"action": ""},
+            {"action": None},
+            {"action": "login"},
+        ],
+    )
+    def test_production_answer_for_another_site_or_action_is_refused(self, client, db, monkeypatch, fields):
+        monkeypatch.setattr(settings, "turnstile_secret_key", "0x-real-secret")
+        monkeypatch.setattr(turnstile, "_transport", production_answer(**fields))
+        assert register_login(client, turnstile_token="t").json()["code"] == "turnstile_failed"
+        assert db.query(UserDB).count() == 0
+
+    def test_every_request_is_verified_nothing_cached(self, client, db, turnstile_on, monkeypatch):
+        """Cloudflare refuses a token's second use; we must ask it every time."""
+        seen = set()
+
+        def once(form):
+            if form["response"] in seen:
+                return httpx.Response(200, json={"success": False, "error-codes": ["timeout-or-duplicate"]})
+            seen.add(form["response"])
+            return cloudflare_test_keys(form)
+
+        calls, transport = siteverify(once)
+        monkeypatch.setattr(turnstile, "_transport", transport)
+        assert register_login(client, login="kid_1", turnstile_token="same").status_code == 200
+        client.cookies.clear()
+        response = register_login(client, login="kid_2", turnstile_token="same")
+        assert response.json()["code"] == "turnstile_failed"
+        assert len(calls) == 2
+
+    def test_stored_answers_create_one_account_only(self, client, db, google, turnstile_on):
+        """The answers stored before the Google redirect live in the session
+        cookie; a saved copy replayed through another callback must not
+        create a second account (nor e-mail the parent again)."""
+        body = {"birth_year": 2013, "parent_email": "ofiara@example.com", "turnstile_token": "t"}
+        assert client.post("/api/auth/register/google", json=body).json()["action"] == "google"
+        saved = dict(client.cookies)
+        assert callback(client).headers["location"] == "/konto/oczekuje"
+        assert len(messages(to="ofiara@example.com")) == 1
+
+        client.cookies.clear()
+        for name, value in saved.items():
+            client.cookies.set(name, value)
+        google.userinfo = {**google.userinfo, "sub": "g-999", "email": "inny@gmail.com"}
+        # Treated as "no answers": back to the questions, with a new Turnstile check
+        assert callback(client).headers["location"] == "/rejestracja?google=1"
+        assert db.query(UserDB).count() == 1
+        assert len(messages(to="ofiara@example.com")) == 1
+
+    def test_registration_ticket(self, monkeypatch):
+        ticket = service.issue_registration_ticket()
+        assert service.redeem_registration_ticket(ticket) is True
+        assert service.redeem_registration_ticket(ticket) is False
+        assert service.redeem_registration_ticket("made-up") is False
+        assert service.redeem_registration_ticket(None) is False
+        old = service.issue_registration_ticket()
+        service._registration_tickets[old] -= service.REGISTRATION_TICKET_TTL * 2
+        assert service.redeem_registration_ticket(old) is False
 
     def test_real_verify_disabled_returns_true(self, monkeypatch):
         monkeypatch.setattr(settings, "turnstile_secret_key", None)
