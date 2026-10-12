@@ -37,6 +37,9 @@ class ActiveModel:
 
 _lock = threading.Lock()
 _cached: Optional[tuple[float, ActiveModel]] = None
+# Bumped by every invalidation: a read that started before a write must not
+# store its (old) result after the write dropped the cache.
+_generation = 0
 _env_provider_warned = False
 
 
@@ -53,9 +56,10 @@ def env_default() -> ActiveModel:
 
 
 def invalidate_cache() -> None:
-    global _cached
+    global _cached, _generation
     with _lock:
         _cached = None
+        _generation += 1
 
 
 def _read() -> ActiveModel:
@@ -81,9 +85,11 @@ def get_active_model() -> ActiveModel:
     with _lock:
         if _cached and now - _cached[0] < CACHE_TTL_SECONDS:
             return _cached[1]
+        generation = _generation
     active = _read()
     with _lock:
-        _cached = (now, active)
+        if generation == _generation:
+            _cached = (now, active)
     return active
 
 

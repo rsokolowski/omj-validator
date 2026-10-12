@@ -235,13 +235,27 @@ export interface AiProviderOption {
   models: AiModelOption[];
 }
 
+/** The model AI calls actually use right now */
+export interface AiEffectiveModel {
+  provider: AiProviderId;
+  model: string;
+  model_label: string;
+}
+
 export interface AiConfigResponse {
+  /** The stored choice (or the server default) */
   active: AiActiveModel;
+  /** What grades - differs from `active` when the stored choice is unusable */
+  effective: AiEffectiveModel;
+  /** Why `effective` differs from `active`, else null */
+  fallback_reason: string | null;
   providers: AiProviderOption[];
 }
 
 export interface AiConfigUpdateResponse {
   active: AiActiveModel;
+  effective: AiEffectiveModel;
+  fallback_reason: string | null;
 }
 
 // User submissions types (Moje rozwiązania)

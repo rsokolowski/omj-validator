@@ -50,7 +50,7 @@ def test_unapproved_anthropic_falls_back_to_env_gemini(monkeypatch, caplog):
     use(monkeypatch, "anthropic", "claude-opus-5-5")
     provider = factory.create_ai_provider()
     assert (provider.provider_name, provider.model_name) == ("gemini", "gemini-3.8-flash")
-    assert "not approved" in caplog.text
+    assert "dostawca niezatwierdzony (RODO)" in caplog.text
 
 
 def test_active_provider_without_key_falls_back_to_env(monkeypatch):
@@ -93,3 +93,45 @@ def test_unapproved_anthropic_row_never_constructs_anthropic(monkeypatch):
     factory.create_ai_provider()
     factory.create_ai_provider()
     assert "anthropic" not in built and built == ["gemini"]
+
+
+def test_resolve_active_reports_effective_model_and_reason(monkeypatch):
+    use(monkeypatch, "anthropic", "claude-opus-5-5")
+    effective, reason = factory.resolve_active()
+    assert (effective.provider, effective.model, reason) == ("anthropic", "claude-opus-5-5", None)
+
+    monkeypatch.setattr(settings, "anthropic_processor_approved", False)
+    effective, reason = factory.resolve_active()
+    assert (effective.provider, effective.model, effective.source) == ("gemini", "gemini-3.8-flash", "env")
+    assert reason == "dostawca niezatwierdzony (RODO)"
+
+    monkeypatch.setattr(settings, "anthropic_api_key", None)
+    assert factory.resolve_active()[1] == "brak klucza API"
+
+
+def test_create_ai_provider_builds_what_resolve_active_returns(monkeypatch):
+    """One resolution for grading and the admin page: the factory follows resolve_active."""
+    monkeypatch.setattr(
+        factory, "resolve_active", lambda: (ActiveModel("anthropic", "claude-haiku-5-5", "db"), None)
+    )
+    provider = factory.create_ai_provider()
+    assert (provider.provider_name, provider.model_name) == ("anthropic", "claude-haiku-5-5")
+
+
+def test_unusable_stored_choice_is_logged_once_per_reason(monkeypatch, caplog):
+    monkeypatch.setattr(settings, "anthropic_processor_approved", False)
+    use(monkeypatch, "anthropic", "claude-opus-5-5")
+    for _ in range(3):
+        factory.create_ai_provider()
+    assert caplog.text.count("is not usable") == 1
+
+    monkeypatch.setattr(settings, "anthropic_api_key", None)  # a different reason is logged again
+    factory.create_ai_provider()
+    assert caplog.text.count("is not usable") == 2
+
+
+def test_remember_seeds_the_cache(monkeypatch):
+    use(monkeypatch, "anthropic", "claude-sonnet-5-5")
+    pinged = FakeProvider("anthropic", "claude-sonnet-5-5")
+    factory.remember("anthropic", "claude-sonnet-5-5", pinged)
+    assert factory.create_ai_provider() is pinged

@@ -21,7 +21,8 @@ ADMIN_EMAIL = "admin@example.com"
 
 
 class _StubProvider:
-    def __init__(self, error=None):
+    def __init__(self, error=None, provider=None, model=None):
+        self.provider_name, self.model_name = provider, model
         self.error = error
 
     async def ping(self):
@@ -58,11 +59,13 @@ def env(monkeypatch):
 
     def fake_build(provider, model):
         ping_state["calls"].append((provider, model))
-        return _StubProvider(ping_state["error"])
+        return _StubProvider(ping_state["error"], provider, model)
 
     monkeypatch.setattr(factory, "build_provider", fake_build)
+    factory.reset_provider_cache()
     yield session, ping_state
     session.close()
+    factory.reset_provider_cache()
     main.app.dependency_overrides.clear()
     config_store.invalidate_cache()
 
@@ -101,6 +104,8 @@ def test_get_without_row_is_env_and_hides_keys(admin):
         "provider": "gemini", "model": "gemini-3.8-flash", "model_label": "Gemini 3.8 Flash",
         "source": "env", "updated_at": None, "updated_by": None,
     }
+    assert body["effective"] == {"provider": "gemini", "model": "gemini-3.8-flash", "model_label": "Gemini 3.8 Flash"}
+    assert body["fallback_reason"] is None
     providers = {p["id"]: p for p in body["providers"]}
     assert list(providers) == ["gemini", "anthropic"]
     assert providers["gemini"]["label"] == "Google Gemini"
@@ -235,6 +240,34 @@ def test_put_success_stores_and_switches(admin):
     current = config_store.get_active_model()
     assert (current.provider, current.model, current.source) == ("anthropic", "claude-sonnet-5-5", "db")
     assert ANTHROPIC_KEY not in response.text
+    assert response.json()["effective"]["model"] == "claude-sonnet-5-5"
+    assert response.json()["fallback_reason"] is None
+
+    # The pinged instance serves the first real call - no rebuild
+    graded_by = factory.create_ai_provider()
+    assert (graded_by.provider_name, graded_by.model_name) == ("anthropic", "claude-sonnet-5-5")
+    assert ping_state["calls"] == [("anthropic", "claude-sonnet-5-5")]
+
+
+@pytest.mark.parametrize("unset, reason", [
+    ("anthropic_processor_approved", "dostawca niezatwierdzony (RODO)"),
+    ("anthropic_api_key", "brak klucza API"),
+])
+def test_get_shows_effective_model_when_stored_one_is_unusable(admin, monkeypatch, unset, reason):
+    client, session, _ = admin
+    assert client.put(
+        "/api/admin/ai-config", json={"provider": "anthropic", "model": "claude-opus-5-5"}
+    ).status_code == 200
+    monkeypatch.setattr(settings, unset, False if unset == "anthropic_processor_approved" else None)
+
+    body = client.get("/api/admin/ai-config").json()
+
+    assert (body["active"]["provider"], body["active"]["model"]) == ("anthropic", "claude-opus-5-5")
+    assert body["effective"] == {"provider": "gemini", "model": "gemini-3.8-flash", "model_label": "Gemini 3.8 Flash"}
+    assert body["fallback_reason"] == reason
+    # ... and that is exactly what grading resolves to
+    effective, why = factory.resolve_active()
+    assert (effective.provider, effective.model, why) == ("gemini", "gemini-3.8-flash", reason)
 
 
 def test_unauthenticated_is_401(env, monkeypatch):

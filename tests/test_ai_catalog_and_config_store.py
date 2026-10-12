@@ -111,6 +111,23 @@ def test_cache_is_dropped_on_set(session_factory):
     assert config_store.get_active_model().model == "gemini-3.1-pro-preview"
 
 
+def test_read_racing_a_set_does_not_cache_the_old_value(session_factory, monkeypatch):
+    """A read that began before set_active_model's commit must not refill the cache with the old row."""
+    real_read = config_store._read
+
+    def read_then_switch():
+        stale = real_read()  # the old value, read before the write below
+        with session_factory() as db:
+            config_store.set_active_model(db, "gemini", "gemini-3.1-pro-preview", "a@example.com")
+        return stale
+
+    monkeypatch.setattr(config_store, "_read", read_then_switch)
+    assert config_store.get_active_model().model == "gemini-3.8-flash"  # the racing read's own answer
+    monkeypatch.setattr(config_store, "_read", real_read)
+
+    assert config_store.get_active_model().model == "gemini-3.1-pro-preview"
+
+
 def test_set_rejects_models_outside_catalog(session_factory):
     with session_factory() as db, pytest.raises(ValueError):
         config_store.set_active_model(db, "anthropic", "claude-3-opus", "a@example.com")

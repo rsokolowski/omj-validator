@@ -85,8 +85,9 @@ export function AiConfigForm() {
     );
   }
 
-  const { active, providers } = config;
+  const { active, effective, fallback_reason: fallbackReason, providers } = config;
   const providerLabel = (id: string) => providers.find((p) => p.id === id)?.label ?? id;
+  const fallingBack = effective.provider !== active.provider || effective.model !== active.model;
   const selectedProvider = providers.find((p) => p.id === provider);
   const selectedUsable = selectedProvider ? unavailableReason(selectedProvider) === null : false;
   const unchanged = provider === active.provider && model === active.model;
@@ -108,7 +109,12 @@ export function AiConfigForm() {
     setSavedLabel(null);
     try {
       const result = await putAiConfig(selectedProvider.id, model);
-      setConfig({ ...config, active: result.active });
+      setConfig({
+        ...config,
+        active: result.active,
+        effective: result.effective,
+        fallback_reason: result.fallback_reason,
+      });
       setProvider(result.active.provider);
       setModel(result.active.model);
       setSavedLabel(`${result.active.model_label} (${providerLabel(result.active.provider)})`);
@@ -139,6 +145,12 @@ export function AiConfigForm() {
               Zmienione {new Date(active.updated_at).toLocaleString("pl-PL")}
               {active.updated_by ? ` przez ${active.updated_by}` : ""}
             </Typography>
+          )}
+          {fallingBack && (
+            <Alert severity="warning" sx={{ mt: 2 }}>
+              Zapisany model jest niedostępny ({fallbackReason ?? "nieznany powód"}) — oceny wykonuje{" "}
+              {effective.model_label} ({providerLabel(effective.provider)}).
+            </Alert>
           )}
         </Box>
 

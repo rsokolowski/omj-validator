@@ -2,9 +2,9 @@
 
 import logging
 import threading
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
-from .config_store import env_default, get_active_model
+from .config_store import ActiveModel, env_default, get_active_model
 from .models_catalog import provider_approved, provider_configured
 
 if TYPE_CHECKING:
@@ -31,10 +31,15 @@ class AIContentBlockedError(AIProviderError):
 _instances: dict[tuple[str, str], "AIProvider"] = {}
 _instances_lock = threading.Lock()
 
+# (provider, model, reason) already logged as unusable - logged once per process,
+# not on every grading call while the stored row stays unusable.
+_logged_fallbacks: set[tuple[str, str, str]] = set()
+
 
 def reset_provider_cache() -> None:
     with _instances_lock:
         _instances.clear()
+        _logged_fallbacks.clear()
 
 
 def _construct(provider: str, model: str) -> "AIProvider":
@@ -58,30 +63,63 @@ def build_provider(provider: str, model: str) -> "AIProvider":
     return _construct(provider, model)
 
 
-def _usable(provider: str) -> bool:
-    return provider_configured(provider) and provider_approved(provider)
+def remember(provider: str, model: str, instance: "AIProvider") -> None:
+    """Seed the cache with an instance already built (and pinged) by the admin switch,
+    so the first real call does not construct a client on the event loop."""
+    with _instances_lock:
+        _instances.setdefault((provider, model), instance)
+
+
+# Polish, shown on /admin/settings; also the log key for "log once".
+REASON_NO_KEY = "brak klucza API"
+REASON_NOT_APPROVED = "dostawca niezatwierdzony (RODO)"
+
+def _unusable_reason(provider: str) -> Optional[str]:
+    if not provider_configured(provider):
+        return REASON_NO_KEY
+    if not provider_approved(provider):
+        return REASON_NOT_APPROVED
+    return None
+
+
+def resolve_active(active: Optional[ActiveModel] = None) -> tuple[ActiveModel, Optional[str]]:
+    """The model AI calls actually use, and why it differs from the stored one (or None).
+
+    Single source of truth for create_ai_provider and GET /api/admin/ai-config, so
+    the admin page never shows a model other than the one grading. A stored
+    choice that cannot be used (no key, or Anthropic not yet approved as a
+    processor) falls back to the environment default rather than stopping
+    grading - or sending data to an unapproved processor.
+
+    ``active`` = an already-read stored choice (default: get_active_model()).
+    """
+    if active is None:
+        active = get_active_model()
+    if active.source == "env":
+        return active, None
+    reason = _unusable_reason(active.provider)
+    if reason is None:
+        return active, None
+    key = (active.provider, active.model, reason)
+    with _instances_lock:
+        first = key not in _logged_fallbacks
+        _logged_fallbacks.add(key)
+    if first:
+        logger.error(f"[AI] Active model {active.provider}/{active.model} is not usable ({reason}) - using env default")
+    return env_default(), reason
 
 
 def create_ai_provider() -> "AIProvider":
-    """The provider for the active model (app_settings row, else env), cached per pair.
+    """The provider for the effective model (see resolve_active), cached per pair.
 
     A run already holding an instance finishes on it; the next call picks up a
-    switch. An active choice that cannot be used (no key, or Anthropic not yet
-    approved as a processor) falls back to the environment default rather than
-    stopping grading - or sending data to an unapproved processor.
+    switch.
 
     Raises:
         AIProviderError: If the provider cannot be created (missing config, etc.)
     """
-    active = get_active_model()
-    provider, model = active.provider, active.model
-    if not _usable(provider) and active.source != "env":
-        logger.error(
-            f"[AI] Active model {provider}/{model} is not usable "
-            f"({'not approved' if provider_configured(provider) else 'no API key'}) - using env default"
-        )
-        fallback = env_default()
-        provider, model = fallback.provider, fallback.model
+    effective, _ = resolve_active()
+    provider, model = effective.provider, effective.model
     # Whatever the source: never build a provider not approved as a processor.
     # (An env Gemini without a key raises in build_provider.)
     if not provider_approved(provider):

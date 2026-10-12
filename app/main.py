@@ -97,6 +97,7 @@ from .models import (
     AiConfigResponse,
     AiConfigUpdateRequest,
     AiConfigUpdateResponse,
+    AiEffectiveModel,
     AiModelOption,
     AiProviderOption,
     DeleteAccountRequest,
@@ -1864,11 +1865,21 @@ def _active_model_out(active: "ai_config_store.ActiveModel") -> AiActiveModel:
     )
 
 
+def _effective_model_out(effective: "ai_config_store.ActiveModel") -> AiEffectiveModel:
+    info = models_catalog.get_model(effective.provider, effective.model)
+    return AiEffectiveModel(
+        provider=effective.provider,
+        model=effective.model,
+        model_label=info.label if info else effective.model,
+    )
+
+
 @app.get("/api/admin/ai-config", response_model=AiConfigResponse)
 async def admin_get_ai_config(request: Request):
-    """Active AI provider/model and the selectable catalog (admin only). Never exposes keys."""
+    """Stored and effective AI provider/model and the selectable catalog (admin only). Never exposes keys."""
     _require_admin(request)
     active = await asyncio.to_thread(ai_config_store.get_active_model)
+    effective, fallback_reason = ai_factory.resolve_active(active)
     providers = [
         AiProviderOption(
             id=provider,
@@ -1879,7 +1890,12 @@ async def admin_get_ai_config(request: Request):
         )
         for provider in models_catalog.PROVIDERS
     ]
-    return AiConfigResponse(active=_active_model_out(active), providers=providers)
+    return AiConfigResponse(
+        active=_active_model_out(active),
+        effective=_effective_model_out(effective),
+        fallback_reason=fallback_reason,
+        providers=providers,
+    )
 
 
 @app.put("/api/admin/ai-config", response_model=AiConfigUpdateResponse)
@@ -1922,8 +1938,15 @@ async def admin_put_ai_config(
     user = get_current_user(request) or {}
     email = user.get("email")
     active = ai_config_store.set_active_model(db, provider, model, email)
+    # The pinged client serves the first real call (no client build on the event loop)
+    ai_factory.remember(provider, model, candidate)
     logger.info(f"AI model changed: {old.provider}/{old.model} -> {provider}/{model} by {mask_email(email)}")
-    return AiConfigUpdateResponse(active=_active_model_out(active))
+    effective, fallback_reason = ai_factory.resolve_active(active)
+    return AiConfigUpdateResponse(
+        active=_active_model_out(active),
+        effective=_effective_model_out(effective),
+        fallback_reason=fallback_reason,
+    )
 
 
 @app.post("/api/admin/submissions/{submission_id}/rerun")
