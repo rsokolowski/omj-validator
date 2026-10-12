@@ -1,9 +1,9 @@
 """Status updates must stay Polish even when translation is unavailable.
 
 The headings broadcast during scoring are the model's own English wording, taken
-from its reasoning about the student's work. Translation is off by default in
-production (TRANSLATE_ENABLED=false), so without a fallback a Polish 12-year-old
-would watch English status lines scroll past.
+from its reasoning about the student's work. Translation is optional
+(TRANSLATE_ENABLED, default false); when it is off or fails, without a fallback a
+Polish 12-year-old would watch English status lines scroll past.
 """
 
 import pytest
@@ -47,6 +47,26 @@ class TestHeadingExtraction:
 
     def test_returns_none_without_headings(self):
         assert extract_latest_heading("plain reasoning text") is None
+
+    def test_heading_still_streaming_counts(self):
+        assert extract_latest_heading("Prose.\n\n**Checking the alg") is None
+        assert extract_latest_heading("Prose.\n\n**Checking the algebra**") == "Checking the algebra"
+
+    def test_inline_bold_is_not_a_heading(self):
+        assert extract_latest_heading("The **key** step is parity.") is None
+        assert extract_latest_heading("so x**2 + y**2 is even") is None
+
+
+class TestInlineBoldDoesNotFreezeStatus:
+    """Claude's prose can contain **emphasis**; the status must keep moving."""
+
+    def test_status_follows_paragraphs_past_inline_bold(self):
+        text = "The **key** step is parity.\n\nNow check the second case.\n\n"
+        assert extract_latest_status(text) == "Now check the second case."
+
+    def test_bold_spanning_lines_is_not_a_heading(self):
+        text = "We **assume\nthe claim** holds.\n\nThen verify the base case.\n\n"
+        assert extract_latest_status(text) == "Then verify the base case."
 
 
 class TestParagraphFallback:

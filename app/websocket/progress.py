@@ -21,8 +21,10 @@ logger = logging.getLogger(__name__)
 # Stale entry cleanup threshold (10 minutes)
 _CLEANUP_TTL_SECONDS = 600
 
-# Regex to extract **Heading** from thinking text
-HEADING_PATTERN = re.compile(r'\*\*([^*]+)\*\*')
+# A **Heading** is a whole line (Gemini's thought summaries put each on its own
+# line). Inline bold inside prose - "the **key** step", Claude's summaries - is
+# not a heading; matching it would freeze the status on that fragment.
+HEADING_PATTERN = re.compile(r'^[ \t]*\*\*([^*\n]+)\*\*[ \t]*$', re.MULTILINE)
 # Thinking without headings (Claude's summarized thinking is plain prose):
 # paragraphs end at a blank line; markdown marks are stripped from the status.
 PARAGRAPH_BREAK = re.compile(r'\n[ \t]*\n')
