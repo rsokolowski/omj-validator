@@ -138,7 +138,7 @@ def test_claude_primary_is_backed_up_by_the_env_gemini_default(monkeypatch):
     assert isinstance(wrapper, FailoverProvider)
     assert wrapper.fallback_key == ("gemini", settings.gemini_model)
     status = factory.failover_status(ActiveModel("anthropic", "claude-sonnet-5-5", "db"))
-    assert (status["provider"], status["model"], status["active"]) == ("gemini", "gemini-3.8-flash", True)
+    assert (status["provider"], status["model"], status["active"]) == ("gemini", settings.gemini_model, True)
 
 
 def test_claude_primary_without_gemini_key_has_no_backup(monkeypatch):
