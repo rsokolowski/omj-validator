@@ -351,7 +351,7 @@ async def get_task_detail(request: Request, task_id: str, db: Session = Depends(
     return {
         "task": serialize_task(task),
         "submissions": [
-            submission_repo.to_pydantic(s).model_dump(mode="json", exclude={"scoring_meta"})
+            submission_repo.to_pydantic(s).student_view()
             for s in submissions
         ],
         "stats": {

@@ -1434,7 +1434,7 @@ async def task_detail_api(
     return {
         "task": task.model_dump(mode="json"),
         "stats": stats,
-        "submissions": [s.model_dump(mode="json") for s in submissions],
+        "submissions": [s.student_view() for s in submissions],
         "pdf_links": pdf_links,
         "user": _public_user(user),
         "is_authenticated": user is not None,
@@ -1471,7 +1471,7 @@ async def task_history_api(
 
     return {
         "task": task.model_dump(mode="json"),
-        "submissions": [s.model_dump(mode="json") for s in submissions],
+        "submissions": [s.student_view() for s in submissions],
     }
 
 

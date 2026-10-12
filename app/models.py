@@ -132,6 +132,21 @@ class Submission(BaseModel):
     abuse_score: int = 0  # 0-100 confidence in abuse detection
     scoring_meta: Optional[dict] = None  # LLM metadata (model, tokens, cost, timing)
 
+    def student_view(self) -> dict:
+        """JSON for the student who made it - every non-admin endpoint uses this.
+
+        Leaves out the grading internals: scoring_meta (the model's raw
+        "thinking" trace, cost, model name) and the abuse verdict (issue_type,
+        abuse_score). Telling a student their solution was flagged as an
+        injection attempt, with a confidence score, is a free oracle for
+        tuning the next attempt. Admin endpoints keep the full record.
+        """
+        return self.model_dump(mode="json", exclude=STUDENT_HIDDEN_SUBMISSION_FIELDS)
+
+
+# Submission fields only admins see (see Submission.student_view)
+STUDENT_HIDDEN_SUBMISSION_FIELDS = frozenset({"scoring_meta", "issue_type", "abuse_score"})
+
 
 class LoginRequest(BaseModel):
     key: str
