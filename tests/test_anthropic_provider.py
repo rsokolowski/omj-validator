@@ -20,7 +20,7 @@ import pytest
 from PIL import Image
 
 from app.ai import requests as ai_requests
-from app.ai.factory import AIContentBlockedError, AIProviderError
+from app.ai.factory import AIContentBlockedError, AIProviderError, AIUnavailableError
 from app.ai.models_catalog import estimate_cost
 from app.ai.pattern_parsing import PATTERN_LINK_SCHEMA
 from app.ai.private_parsing import META_SCHEMA
@@ -112,6 +112,14 @@ def fake_client(log, **script):
         messages=FakeMessages("messages", log, script),
         beta=SimpleNamespace(messages=FakeMessages("beta", log, script)),
     )
+
+
+@pytest.fixture(autouse=True)
+def fixed_fence_nonce(monkeypatch):
+    """Fences carry a random per-request suffix; fixed so request text compares equal."""
+    from app.ai import prompt_builder
+
+    monkeypatch.setattr(prompt_builder, "fence_nonce", lambda: "n0nce0n0nce0")
 
 
 @pytest.fixture
@@ -715,3 +723,94 @@ def test_suggest_sends_shared_text_and_parses(make_provider):
     assert blocks_of(log[0][2]) == [{"type": "text", "text": ai_requests.suggest_text("zadanie", "ocena", None)}]
     assert [(s.trigger, s.action, s.category) for s in result.suggestions] == [("t", "a", "algebra")]
     assert result.meta["provider"] == "anthropic"
+
+
+# ------------------------------------------- availability (failover) errors
+
+
+@pytest.mark.parametrize(
+    "error, kind, permanent",
+    [
+        (lambda: anthropic.AuthenticationError(message="x", response=_response(401), body=None), "auth", True),
+        (lambda: anthropic.PermissionDeniedError(message="x", response=_response(403), body=None), "auth", True),
+        (lambda: anthropic.BadRequestError(
+            message="Your credit balance is too low to access the Anthropic API.", response=_response(400), body=None,
+        ), "auth", True),
+        (lambda: anthropic.NotFoundError(message="x", response=_response(404), body=None), "not_found", True),
+        (lambda: anthropic.RateLimitError(message="x", response=_response(429), body=None), "rate_limit", False),
+        (lambda: anthropic.APIStatusError(message="x", response=_response(529), body=None), "server", False),
+        (lambda: anthropic.APIStatusError(message="x", response=_response(503), body=None), "server", False),
+        (lambda: _connection_error(ConnectionRefusedError, "ConnectError"), "network", False),
+    ],
+)
+def test_availability_errors_are_unavailable(make_provider, error, kind, permanent):
+    p, _ = make_provider(error=error())
+    with pytest.raises(AIUnavailableError) as info:
+        asyncio.run(p.link_pattern_tasks({"trigger": "t", "action": "a"}, []))
+    assert info.value.kind == kind
+    assert info.value.permanent is permanent
+    assert info.value.fails_over is True
+
+
+def _connection_error(base, cause_name):
+    """APIConnectionError caused by a transport error of the given class name."""
+    error = anthropic.APIConnectionError(request=httpx2.Request("POST", "https://x.invalid"))
+    error.__cause__ = type(cause_name, (base,), {})("boom")
+    return error
+
+
+@pytest.mark.parametrize(
+    "error, kind",
+    [
+        # The request's own content can cause these: breaker only, never a per-request failover
+        (lambda: anthropic.InternalServerError(message="x", response=_response(500), body=None), "internal"),
+        (lambda: anthropic.APIConnectionError(request=httpx2.Request("POST", "https://x.invalid")), "connection_lost"),
+        (lambda: _connection_error(ConnectionResetError, "RemoteProtocolError"), "connection_lost"),
+        (lambda: anthropic.APITimeoutError(request=httpx2.Request("POST", "https://x.invalid")), "timeout"),
+    ],
+)
+def test_content_dependent_failures_do_not_fail_over(make_provider, error, kind):
+    p, _ = make_provider(error=error())
+    with pytest.raises(AIUnavailableError) as info:
+        asyncio.run(p.link_pattern_tasks({"trigger": "t", "action": "a"}, []))
+    assert info.value.kind == kind
+    assert info.value.fails_over is False
+
+
+@pytest.mark.parametrize(
+    "error",
+    [
+        lambda: anthropic.BadRequestError(message="prompt is too long", response=_response(400), body=None),
+        lambda: anthropic.APIStatusError(message="too large", response=_response(413), body=None),
+        lambda: anthropic.BadRequestError(
+            message="x credit balance is too low (quoted from the request)", response=_response(400), body=None,
+        ),
+    ],
+)
+def test_oversized_or_bad_requests_fail_closed(make_provider, error):
+    p, _ = make_provider(error=error())
+    with pytest.raises(AIProviderError) as info:
+        asyncio.run(p.link_pattern_tasks({"trigger": "t", "action": "a"}, []))
+    assert not isinstance(info.value, AIUnavailableError)
+
+
+def test_request_errors_are_not_availability(make_provider):
+    p, _ = make_provider(error=anthropic.BadRequestError(message="bad schema", response=_response(400), body=None))
+    with pytest.raises(AIProviderError) as info:
+        asyncio.run(p.link_pattern_tasks({"trigger": "t", "action": "a"}, []))
+    assert not isinstance(info.value, AIUnavailableError)
+
+
+def test_stream_timeout_is_unavailable(make_provider, monkeypatch):
+    p, _ = make_provider(delay=5.0)
+    monkeypatch.setattr(p, "get_timeout", lambda: 0.05)
+    with pytest.raises(AIUnavailableError) as info:
+        asyncio.run(p.analyze_solution_stream(TASK_PDF, None, [], 1, solution_text="x"))
+    assert info.value.kind == "timeout"
+
+
+def test_empty_aux_answer_is_an_error(make_provider):
+    p, _ = make_provider(final=message(text="", stop_reason="end_turn"))
+    with pytest.raises(AIProviderError) as info:
+        asyncio.run(p.generate_private_task_meta("Tytuł", "Treść"))
+    assert not isinstance(info.value, (AIContentBlockedError, AIUnavailableError))

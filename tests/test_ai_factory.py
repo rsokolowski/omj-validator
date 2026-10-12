@@ -134,4 +134,6 @@ def test_remember_seeds_the_cache(monkeypatch):
     use(monkeypatch, "anthropic", "claude-sonnet-5-5")
     pinged = FakeProvider("anthropic", "claude-sonnet-5-5")
     factory.remember("anthropic", "claude-sonnet-5-5", pinged)
-    assert factory.create_ai_provider() is pinged
+    provider = factory.create_ai_provider()
+    # Wrapped for failover (env Gemini backs up a Claude primary) around the pinged instance
+    assert getattr(provider, "primary", provider) is pinged

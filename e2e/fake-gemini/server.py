@@ -692,6 +692,7 @@ PRIVATE_EXTRACTION_RESPONSE = {
 }
 
 PRIVATE_META_RESPONSE = {
+    "is_math_problem": True,
     "hints": [
         "Zapisz obie liczby za pomocą jednej zmiennej.",
         "Jaka jest parzystość liczby $2n$?",
@@ -724,6 +725,7 @@ PATTERN_REFINE_RESPONSE = {
     "category": "teoria_liczb",
     "skills": [],
     "abuse_score": 0,
+    "off_topic": False,
 }
 
 PATTERN_SUGGEST_RESPONSE = {
@@ -765,10 +767,11 @@ def private_call_kind(body: dict) -> Optional[str]:
         return "pattern_suggest"
     if '"links"' in config:
         return "pattern_link"
-    if "is_math_problem" in config:
-        return "extract"
+    # Both schemas carry is_math_problem; only the hint schema has "hints"
     if '"hints"' in config:
         return "meta"
+    if "is_math_problem" in config:
+        return "extract"
     return None
 
 

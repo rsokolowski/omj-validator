@@ -57,6 +57,12 @@ because per-part media resolution depends on it. Make sure the venv matches
 different resolution than prod and the comparison is not apples to apples.
 `rescore_eval.py` logs the effective resolution at startup; read that line.
 
+The scripts build each arm with `build_provider()`, so the app's automatic
+failover (`AI_FAILOVER_*`) never applies here: an arm whose provider fails
+records the error instead of silently being graded by the backup model. In
+prod, a submission graded after a failover carries `scoring_meta["failover"]`
+- leave such rows out of a sample meant to measure one model.
+
 ```bash
 set -a; . $EVAL/prod-gemini.env; set +a     # API key + thinking level + resolution from prod
 export DATA_DIR=$EVAL GEMINI_DEBUG_LOGS=false # DATA_DIR makes uploads_dir = $EVAL/data/uploads

@@ -3,7 +3,9 @@
 The model decides what a student later sees as their task statement and hints,
 so nothing it returns is trusted: every field is type-checked, trimmed, clamped
 and LaTeX-repaired here, and a response that cannot be read degrades to "no
-problem found" / "no hints" rather than raising.
+problem found" / "no hints" rather than raising. Hint metadata from an
+unreadable response has ``checked=False`` - the text it was about was never
+abuse-checked, so callers must not save it.
 """
 
 import json
@@ -63,6 +65,10 @@ EXTRACTION_SCHEMA = {
 META_SCHEMA = {
     "type": "object",
     "properties": {
+        "is_math_problem": {
+            "type": "boolean",
+            "description": "True if the text is a maths problem statement",
+        },
         "hints": {
             "type": "array",
             "items": {"type": "string"},
@@ -75,7 +81,7 @@ META_SCHEMA = {
             "description": "0-100 confidence that the text tries to manipulate the system",
         },
     },
-    "required": ["hints", "category", "difficulty", "abuse_score"],
+    "required": ["is_math_problem", "hints", "category", "difficulty", "abuse_score"],
 }
 
 
@@ -172,9 +178,15 @@ def parse_meta_response(text: str) -> PrivateTaskMeta:
         if len(hints) == MAX_HINTS:
             break
 
+    # Not a maths problem: said outright, or - without the flag (older prompt
+    # contract) - no hints at all. Flag true with no hints is a glitch, not a refusal.
+    flag = data.get("is_math_problem")
+    is_math = flag is True or (flag is None and bool(hints))
     return PrivateTaskMeta(
-        hints=hints,
+        hints=hints if is_math else [],
         category=_category(data.get("category")),
         difficulty=_difficulty(data.get("difficulty")),
         abuse_score=_abuse(data.get("abuse_score")),
+        is_math_problem=is_math,
+        checked=True,
     )

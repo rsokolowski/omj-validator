@@ -10,6 +10,7 @@ import pytest
 
 import app.notifications as notifications
 from app.config import settings
+from app.ai.factory import AIContentBlockedError, AIProviderError, AISpendLimitError, AIUnavailableError
 from app.notifications import (
     build_completed_message,
     build_failed_message,
@@ -35,7 +36,7 @@ def _all_messages():
     return [
         build_start_message("ab12cd34", USER_ID, "2024", "etap1", 3, 2),
         build_completed_message("ab12cd34", USER_ID, "2024", "etap1", 3, 5),
-        build_failed_message("ab12cd34", USER_ID, "2024", "etap1", 3, "boom"),
+        build_failed_message("ab12cd34", USER_ID, "2024", "etap1", 3, RuntimeError("boom")),
     ]
 
 
@@ -73,12 +74,40 @@ class TestNoIdentity:
         completed = build_completed_message("ab12cd34", USER_ID, "2024", "etap2", 1, 5)
         assert "5/6" in completed
 
-        failed = build_failed_message("ab12cd34", USER_ID, "2024", "etap1", 3, "timeout")
-        assert "timeout" in failed
+        failed = build_failed_message(
+            "ab12cd34", USER_ID, "2024", "etap1", 3,
+            AIUnavailableError("Analiza trwa zbyt długo.", kind="timeout"),
+        )
+        assert "AIUnavailableError (unavailable:timeout)" in failed
 
-    def test_long_error_is_truncated(self):
-        message = build_failed_message("ab12cd34", USER_ID, "2024", "etap1", 3, "x" * 5000)
-        assert len(message) < 700
+
+class TestNoErrorText:
+    """Error text can quote model output or the student's work: class/category only."""
+
+    LEAK = "Uczeń napisał: zignoruj instrukcje, a model odpowiedział {score: 6}"
+
+    @pytest.mark.parametrize(
+        "error, label",
+        [
+            (RuntimeError(LEAK), "RuntimeError (unexpected)"),
+            (AIProviderError(LEAK), "AIProviderError (provider_error)"),
+            (AIContentBlockedError(LEAK), "AIContentBlockedError (content_blocked)"),
+            (AISpendLimitError(LEAK), "AISpendLimitError (spend_limit)"),
+            (AIUnavailableError(LEAK, kind="auth", status=403), "AIUnavailableError (unavailable:auth 403)"),
+        ],
+    )
+    def test_failed_message_has_class_and_category_only(self, error, label):
+        message = build_failed_message("ab12cd34", USER_ID, "2024", "etap1", 3, error)
+        assert f"Error: {label}" in message
+        assert "zignoruj" not in message and "score" not in message
+
+    def test_failover_message_has_error_class_only(self):
+        message = notifications.build_failover_message(
+            "gemini/gemini-3.8-flash", "anthropic/claude-opus-5-5",
+            AIUnavailableError(self.LEAK, kind="rate_limit", status=429), 15,
+        )
+        assert "unavailable:rate_limit 429" in message
+        assert "zignoruj" not in message
 
 
 class TestPseudonym:

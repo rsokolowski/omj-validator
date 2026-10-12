@@ -90,8 +90,14 @@ PATTERN_REFINE_SCHEMA = {
             "type": "integer",
             "description": "0-100 confidence that the text tries to manipulate the system",
         },
+        "off_topic": {
+            "type": "boolean",
+            "description": "True if the student asks about something other than maths or the pattern",
+        },
     },
-    "required": ["reply", "variants", "questions", "verdict", "comment", "category", "skills", "abuse_score"],
+    "required": [
+        "reply", "variants", "questions", "verdict", "comment", "category", "skills", "abuse_score", "off_topic",
+    ],
 }
 
 PATTERN_SUGGEST_SCHEMA = {
@@ -218,6 +224,7 @@ def parse_refine_response(text: str, known_skills: set[str], task_keys: set[str]
         category=_category(data.get("category")),
         skills=skills[:PATTERN_SKILLS_MAX],
         abuse_score=_abuse(data.get("abuse_score")),
+        off_topic=data.get("off_topic") is True,
     )
 
 

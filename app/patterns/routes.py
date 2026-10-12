@@ -49,6 +49,10 @@ TASK_NOT_FOUND = "Nie znaleziono zadania"
 NOT_DUE = "Ten wzorzec nie czeka dziś na powtórkę."
 REFUSED = "Tej treści nie możemy przetworzyć."
 AI_FAILED = "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
+OFF_TOPIC_REPLY = (
+    "Tutaj rozmawiamy tylko o matematyce i o Twoim wzorcu. Napisz, co chcesz "
+    "w nim zmienić, albo zapytaj o coś związanego z zadaniem."
+)
 
 
 def _now() -> datetime:
@@ -510,6 +514,12 @@ async def refine_pattern(request: Request, payload: RefineRequest, db: Session =
     result = await _call(db, usage_row, user_id, create_ai_provider().refine_pattern(
         draft, _source_text(db, source), service.compact_history(history), current, candidates,
     ))
+    if result.off_topic:
+        # Not a general chatbot: a fixed decline instead of the model's reply
+        # (which could still carry an answer), and no round - nothing in it
+        # refines the pattern. The call still counts toward the daily limit.
+        logger.info(f"Off-topic refine message declined for user {mask_user_id(user_id)}")
+        return {"off_topic": True, "reply": OFF_TOPIC_REPLY}
     if len(result.variants) < 2:
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,

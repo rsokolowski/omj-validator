@@ -21,6 +21,7 @@ import pytest
 pytest.importorskip("google.genai")
 
 from app.ai.factory import AIProviderError  # noqa: E402
+from app.ai import prompt_builder  # noqa: E402
 from app.ai.prompt_builder import build_prompt  # noqa: E402
 from app.ai.providers import gemini as gemini_module  # noqa: E402
 from app.ai.providers.gemini import GeminiProvider  # noqa: E402
@@ -74,6 +75,8 @@ def _call(coro) -> None:
 
 def build_snapshot(monkeypatch) -> dict[str, list[str]]:
     monkeypatch.setattr(gemini_module, "get_all_skills", lambda: FAKE_SKILLS)
+    # Fences carry a random per-request suffix; fixed so the text is comparable
+    monkeypatch.setattr(prompt_builder, "fence_nonce", lambda: "n0nce0n0nce0")
     captured: list = []
     p = _provider(captured)
     out: dict[str, list[str]] = {}

@@ -57,6 +57,12 @@ _background_tasks: set[asyncio.Task] = set()
 
 NOT_FOUND = "Nie znaleziono zadania"
 REFUSED_TEXT = "Nie udało się zapisać zadania. Sprawdź, czy tekst zawiera tylko treść zadania."
+# The hint call doubles as the check of the text: when it fails, nothing is saved
+NOT_CHECKED_TEXT = "Nie udało się sprawdzić treści zadania. Spróbuj ponownie za chwilę."
+NOT_MATH_TEXT = (
+    "To nie wygląda na zadanie z matematyki. Tutaj możesz dodać tylko zadanie "
+    "matematyczne - sprawdź treść i spróbuj jeszcze raz."
+)
 
 
 # --------------------------------------------------------------------- helpers
@@ -133,21 +139,44 @@ def serialize_summary(row: dict) -> dict:
 
 
 async def _generate_meta(provider, user_id: str, item: PrivateTaskInput) -> Optional[PrivateTaskMeta]:
-    """Hints for one task, or None when the call failed (task is still saved).
+    """Hints for one task, or None when the call failed or was unreadable.
 
-    A safety block is NOT a failure to shrug off: it propagates, and the caller
-    refuses to save the text, because that text was never abuse-checked.
+    The hint call is also the abuse and "is it maths" check of the text, so
+    None means the text was NOT checked - callers must not save it. A safety
+    block propagates (the text is refused, not merely unchecked).
     """
     try:
-        return await provider.generate_private_task_meta(item.title, item.content)
+        meta = await provider.generate_private_task_meta(item.title, item.content)
     except AIContentBlockedError:
         raise
     except AIProviderError as e:
-        logger.warning(f"Hint generation failed for user {mask_user_id(user_id)}: {e}")
+        logger.warning(f"Hint generation failed for user {mask_user_id(user_id)}: {type(e).__name__}")
         return None
-    except Exception as e:  # never lose the student's task over a hint call
+    except Exception as e:
         logger.exception(f"Hint generation crashed for user {mask_user_id(user_id)}: {type(e).__name__}")
         return None
+    if not meta.checked:
+        logger.warning(f"Unreadable hint response for user {mask_user_id(user_id)} - text not checked")
+        return None
+    return meta
+
+
+def _refusal(meta: Optional[PrivateTaskMeta], need_hints: bool = True) -> Optional[HTTPException]:
+    """Why the text must not be saved (unchecked, manipulation, not maths), or None.
+
+    ``need_hints=False``: the hints are not going to be used (a title-only
+    edit), so a checked answer without them is not a reason to refuse.
+    """
+    if meta is None:
+        return HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=NOT_CHECKED_TEXT)
+    if _abusive(meta.abuse_score):
+        return HTTPException(status_code=422, detail=REFUSED_TEXT)
+    if not meta.is_math_problem:
+        return HTTPException(status_code=422, detail=NOT_MATH_TEXT)
+    if need_hints and not meta.hints:
+        # Maths, but no hints came back: a glitch - try again
+        return HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=NOT_CHECKED_TEXT)
+    return None
 
 
 # --------------------------------------------------------------------- extract
@@ -234,7 +263,11 @@ async def _create_from_inputs(
     photos: list[Path],
     usage_rows: list,
 ) -> list[PrivateTaskDB]:
-    """Generate hints for each task, refuse manipulation, then save them all."""
+    """Generate hints for each task (the check of its text), then save them all - or none.
+
+    A task whose text could not be checked, was flagged, or is not maths
+    stops the whole batch: nothing unchecked is ever saved.
+    """
     provider = create_ai_provider()
     try:
         metas = await asyncio.gather(*(_generate_meta(provider, user_id, item) for item in items))
@@ -244,9 +277,14 @@ async def _create_from_inputs(
         row.meta = meta.meta if meta and meta.meta else None
     db.commit()
 
-    if any(meta is not None and _abusive(meta.abuse_score) for meta in metas):
-        logger.warning(f"Private task text flagged as manipulation for user {mask_user_id(user_id)}")
-        raise HTTPException(status_code=422, detail=REFUSED_TEXT)
+    refusals = [r for r in (_refusal(meta) for meta in metas) if r is not None]
+    if refusals:
+        # A refusal over the content (422) wins over "try again" (502)
+        refusal = min(refusals, key=lambda r: r.status_code)
+        logger.warning(
+            f"Private task text refused ({refusal.status_code}) for user {mask_user_id(user_id)}"
+        )
+        raise refusal
 
     repo = PrivateTaskRepository(db)
     created = []
@@ -260,12 +298,12 @@ async def _create_from_inputs(
                 title=item.title,
                 content=item.content,
                 source_label=item.source_label,
-                category=item.category or (meta.category if meta else None),
-                difficulty=item.difficulty or (meta.difficulty if meta else None),
-                hints=meta.hints if meta else [],
+                category=item.category or meta.category,
+                difficulty=item.difficulty or meta.difficulty,
+                hints=meta.hints,
                 origin="photo" if photos else "typed",
                 source_images=source_images,
-                extraction_meta={"hints": meta.meta} if meta and meta.meta else None,
+                extraction_meta={"hints": meta.meta} if meta.meta else None,
             )
         )
     return created
@@ -379,9 +417,12 @@ async def update_task(
         if required in fields and fields[required] is None:
             del fields[required]
 
-    if "content" in fields and fields["content"] != task.content:
-        # New text goes into the grading prompt, so it gets the same check as
-        # at creation - and the old hints no longer fit it anyway.
+    content_changed = "content" in fields and fields["content"] != task.content
+    title_changed = "title" in fields and fields["title"] != task.title
+    if content_changed or title_changed:
+        # Title and statement both go into the grading prompt, so a change to
+        # either gets the same check as at creation. Nothing is saved unless
+        # the check succeeded - a failed call refuses the edit (try again).
         [usage_row] = service.reserve_ai_calls(
             db,
             user_id,
@@ -390,7 +431,9 @@ async def update_task(
             settings.rate_limit_private_tasks_per_user_per_day,
             _is_allowlisted(request),
         )
-        item = PrivateTaskInput(title=fields.get("title", task.title), content=fields["content"])
+        item = PrivateTaskInput(
+            title=fields.get("title", task.title), content=fields.get("content", task.content)
+        )
         try:
             meta = await _generate_meta(create_ai_provider(), user_id, item)
         except AIContentBlockedError:
@@ -398,11 +441,15 @@ async def update_task(
         if meta is not None:
             usage_row.meta = meta.meta or None
             db.commit()
-            if _abusive(meta.abuse_score):
-                logger.warning(f"Edited private task text flagged for user {mask_user_id(user_id)}")
-                raise HTTPException(status_code=422, detail=REFUSED_TEXT)
-        # Failed call: keep the edit, drop the stale hints ("Wygeneruj wskazówki")
-        fields["hints"] = meta.hints if meta is not None else []
+        refusal = _refusal(meta, need_hints=content_changed)
+        if refusal is not None:
+            logger.warning(
+                f"Edited private task text refused ({refusal.status_code}) for user {mask_user_id(user_id)}"
+            )
+            raise refusal
+        if content_changed:
+            # The old hints no longer fit the new statement
+            fields["hints"] = meta.hints
 
     PrivateTaskRepository(db).update_fields(task, **fields)
     return {"task": serialize_task(task)}
@@ -463,7 +510,7 @@ async def regenerate_hints(request: Request, task_id: str, db: Session = Depends
     usage_row.meta = meta.meta or None
     db.commit()
 
-    if _abusive(meta.abuse_score):
+    if _abusive(meta.abuse_score) or not meta.is_math_problem:
         raise HTTPException(
             status_code=422,
             detail="Nie udało się wygenerować wskazówek dla tej treści.",

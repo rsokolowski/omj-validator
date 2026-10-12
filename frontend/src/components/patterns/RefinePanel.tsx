@@ -39,6 +39,8 @@ export function RefinePanel({
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Polite decline when the message was not about maths / the pattern (no round is added)
+  const [notice, setNotice] = useState<string | null>(null);
   const [showEarlier, setShowEarlier] = useState(false);
   const lastRoundRef = useRef<HTMLDivElement>(null);
   const last = rounds[rounds.length - 1];
@@ -54,9 +56,10 @@ export function RefinePanel({
     }
     setBusy(true);
     setError(null);
+    setNotice(null);
     try {
       const questions = last?.questions ?? [];
-      const { round } = await patternsApi.refine({
+      const result = await patternsApi.refine({
         draft,
         source: patternId ? undefined : source,
         history: rounds.slice(-10),
@@ -65,7 +68,12 @@ export function RefinePanel({
         category: category || null,
         pattern_id: patternId,
       });
-      onRoundsChange([...rounds, { ...round, chosen: null }]);
+      if (result.off_topic || !result.round) {
+        // Keep what the student wrote so they can rephrase it
+        setNotice(result.reply ?? "Tutaj rozmawiamy tylko o matematyce i o Twoim wzorcu.");
+        return;
+      }
+      onRoundsChange([...rounds, { ...result.round, chosen: null }]);
       setAnswers([]);
       setMessage("");
     } catch (e) {
@@ -152,6 +160,12 @@ export function RefinePanel({
         sx={{ mb: 2 }}
         slotProps={{ htmlInput: { maxLength: PATTERN_MESSAGE_MAX } }}
       />
+
+      {notice && (
+        <Alert severity="info" sx={{ mb: 2 }} data-testid="refine-off-topic">
+          {notice}
+        </Alert>
+      )}
 
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>

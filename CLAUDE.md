@@ -112,7 +112,10 @@ omj-validator/
 │   │   └── private_tasks.py # PrivateTaskRepository, AIUsageRepository
 │   └── ai/
 │       ├── protocol.py     # AIProvider interface
-│       ├── factory.py      # Provider factory: active model -> cached provider (+ GDPR approval gate)
+│       ├── factory.py      # Provider factory: active model -> cached provider (+ GDPR approval gate),
+│       │                   # error classes (AIContentBlockedError, AIUnavailableError, AISpendLimitError)
+│       ├── failover.py     # FailoverProvider + circuit breaker (backup model on availability errors)
+│       ├── spend.py        # Daily AI spend cap (AI_DAILY_SPEND_LIMIT_USD)
 │       ├── models_catalog.py # Selectable models per provider, prices, estimate_cost
 │       ├── config_store.py # Active provider/model: app_settings row, else env default
 │       ├── requests.py     # Provider-neutral request text (prompt parity across providers)
@@ -239,7 +242,7 @@ POST   /api/patterns/{id}/review             # Self-rated recall card (409 unles
 GET    /api/patterns/{id}/practice           # Linked task to solve instead of a recall card
 
 # Admin (ADMIN_EMAILS only)
-GET    /api/admin/ai-config                  # Active provider/model, catalog, per-provider key/approval state
+GET    /api/admin/ai-config                  # Active provider/model, catalog, per-provider key/approval state, failover/breaker
 PUT    /api/admin/ai-config                  # Switch provider/model (pings the model first; 502 if it fails)
 ```
 
@@ -354,6 +357,35 @@ GET  /uploads/{path}                 # Serve uploaded images
    stored row says. Switching back in the UI needs a successful Gemini ping (a Google 503/429
    blocks it - then use the env flag).
 
+   **Failover** (`app/ai/failover.py`): `create_ai_provider()` wraps the active provider in a
+   `FailoverProvider` when the backup - `AI_FAILOVER_MODEL` (default `claude-opus-5-5`), or the
+   env Gemini default when the active model is itself Claude - passes the SAME gates (key;
+   for Anthropic `ANTHROPIC_PROCESSOR_APPROVED`); otherwise the plain provider, exactly as
+   before. Fail closed: only an `AIUnavailableError` a student cannot provoke (401/403, 404,
+   429, 502/503/504/529, connection never established) fails a call over, once; never a
+   content block, abuse verdict, empty/unreadable answer or other 400. Timeouts, 500 and
+   dropped connections (content can cause them) never fail the call over - they only feed
+   the breaker. A streaming grading restarts on the backup through the worker's
+   `restart_hook`. In-process circuit breaker: key/model errors open it at once, transient
+   ones after `AI_FAILOVER_BREAKER_THRESHOLD` in a row across requests (a success resets),
+   for `AI_FAILOVER_BREAKER_MINUTES`; a Telegram alert per opening (error class only).
+   scoring_meta / ai_usage.meta name the provider/model that answered plus `failover:
+   {from, reason}`; `/admin/settings` shows backup, gate and breaker state. Scripts that call
+   `build_provider()` (A/B, rescore) never fail over.
+
+   **Safeguards**: Gemini gets `safety_settings` on every call (harassment, hate, sexual: LOW+;
+   dangerous: MEDIUM+); a prompt-level `block_reason` or a safety `finish_reason` is
+   `AIContentBlockedError`. Student text in prompts is fenced (`student_text()` `<<<NONCE ...
+   NONCE>>>`, `<rozwiazanie_ucznia_NONCE>`) with a random per-request suffix, and look-alikes
+   of a fence (any case/spacing, HTML entities, fullwidth, diacritics, zero-width) are removed
+   from the text sent (`prompt_builder.neutralise`). Snapshot tests patch `fence_nonce`. A grading `abuse_score >= PRIVATE_ABUSE_THRESHOLD` scores 0
+   whatever `issue_type` says. Private-task text is saved only after a successful hint call
+   that found it to be maths and not manipulation (create and edit). Pattern refine is
+   maths-only (`off_topic` -> fixed decline, no round). `AI_DAILY_SPEND_LIMIT_USD` caps the
+   estimated 24 h spend (`app/ai/spend.py`: recorded `estimated_cost` + flat estimates for
+   calls in flight; checked in the grading worker and `reserve_ai_calls`, 429 for aux calls);
+   `AI_GRADING_MAX_CONCURRENT` caps parallel gradings (the rest wait as "pending").
+
 4. **Private tasks ("Moje zadania")**: photo -> `extract_private_tasks` (schema-constrained,
    inline images) -> draft photos in `uploads/{user}/private/_drafts/{id}/` -> student picks
    and edits problems -> `generate_private_task_meta` (hints) -> `private_tasks` row with its
@@ -455,6 +487,17 @@ GEMINI_TIMEOUT=90
 # ANTHROPIC_EFFORT_AUX=medium         # extraction, hints, patterns
 # ANTHROPIC_TIMEOUT=180
 # ANTHROPIC_PROCESSOR_APPROVED=false  # GDPR gate: true only after Anthropic is signed off as a processor
+
+# Failover to a backup model when the active provider is unavailable (through the gate above only)
+# AI_FAILOVER_ENABLED=true
+# AI_FAILOVER_MODEL=claude-opus-5-5   # from app/ai/models_catalog.py, another provider
+# AI_FAILOVER_BREAKER_MINUTES=15      # breaker open time (all calls -> backup)
+# AI_FAILOVER_BREAKER_THRESHOLD=3     # transient errors in a row that open it
+
+# Global brakes
+# AI_DAILY_SPEND_LIMIT_USD=25         # estimated USD per rolling 24 h, 0 = off; Telegram at 80%/100%
+# AI_GRADING_MAX_CONCURRENT=4         # gradings calling the model at once
+# AI_GRADING_QUEUE_TIMEOUT=300        # max wait for a slot (s), then "przeciążony"
 
 # Note: DATABASE_URL is set in docker-compose.yml for container networking
 ```

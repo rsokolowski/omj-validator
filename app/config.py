@@ -89,6 +89,29 @@ class Settings(BaseSettings):
     # and the owner has signed off. False keeps every request on Gemini.
     anthropic_processor_approved: bool = False
 
+    # Automatic failover: when the active provider cannot serve a call
+    # (auth/permission, model gone, 429, 502/503/504, no connection) the call
+    # is retried once on AI_FAILOVER_MODEL (a Claude primary: on the env Gemini
+    # default) - only if that provider passes the gates above (key set; for
+    # Anthropic ANTHROPIC_PROCESSOR_APPROVED). Never on a content/safety block,
+    # an abuse verdict or an unreadable answer; timeouts and 500s (which the
+    # request's content can cause) only feed the breaker - app/ai/failover.py.
+    ai_failover_enabled: bool = True
+    ai_failover_model: str = "claude-opus-5-5"  # any model from app/ai/models_catalog.py
+    # Circuit breaker: after a permanent-looking error (401/403/404) - or this
+    # many transient ones in a row - every call goes straight to the backup
+    # for ai_failover_breaker_minutes.
+    ai_failover_breaker_minutes: int = 15
+    ai_failover_breaker_threshold: int = 3
+
+    # Global cap on estimated AI spend in a rolling 24 h window (USD; grading
+    # + extraction/hints/patterns). 0 disables it. Telegram alert at 80% and 100%.
+    ai_daily_spend_limit_usd: float = 25.0
+    # Grading jobs running AI calls at once in the background worker; the rest
+    # wait (status stays "pending") for at most ai_grading_queue_timeout seconds.
+    ai_grading_max_concurrent: int = 4
+    ai_grading_queue_timeout: int = 300
+
     # Google Cloud Translation v2 (for status message translation EN->PL)
     translate_enabled: bool = False  # Enable status message translation
     translate_api_key: Optional[str] = None  # API key for Translation v2 Basic
@@ -135,8 +158,9 @@ class Settings(BaseSettings):
     rate_limit_private_tasks_per_user_per_day: int = 10     # Tasks created + hint regenerations
     rate_limit_private_extracts_per_user_per_day: int = 15  # Photo -> text extractions
     rate_limit_ai_usage_global_per_day: int = 1000          # All non-submission AI calls
-    # abuse_score (0-100) at or above which extraction / hint generation is
-    # treated as a manipulation attempt and nothing is saved
+    # abuse_score (0-100) at or above which extraction / hint generation /
+    # pattern calls are treated as a manipulation attempt and nothing is saved,
+    # and a graded solution gets 0 points whatever issue_type the model chose
     private_abuse_threshold: int = 70
     # Patterns ("Wzorce"): AI calls while writing a pattern (ai_usage kinds
     # pattern_refine / pattern_suggest / pattern_link). Recall reviews make none.

@@ -94,25 +94,85 @@ def build_completed_message(
     )
 
 
+def error_category(error: BaseException) -> str:
+    """A short fixed label for an error: class + category, never its text.
+
+    Error messages can quote the model's output or the student's work (an
+    SDK error body, a parse failure), so only these labels leave the server.
+    """
+    from .ai.factory import AIContentBlockedError, AIProviderError, AISpendLimitError, AIUnavailableError
+
+    if isinstance(error, AIUnavailableError):
+        category = f"unavailable:{error.kind}"
+        if error.status:
+            category += f" {error.status}"
+    elif isinstance(error, AIContentBlockedError):
+        category = "content_blocked"
+    elif isinstance(error, AISpendLimitError):
+        category = "spend_limit"
+    elif isinstance(error, AIProviderError):
+        category = "provider_error"
+    else:
+        category = "unexpected"
+    return f"{type(error).__name__} ({category})"
+
+
 def build_failed_message(
     submission_id: str,
     user_id: str,
     year: str,
     etap: str,
     task_number: int,
-    error_msg: str,
+    error: BaseException,
 ) -> str:
-    """Build the notification text for a failed submission."""
-    # Telegram rejects messages over 4096 chars; keep the error short so the
-    # failure notification always goes through
-    if len(error_msg) > 500:
-        error_msg = error_msg[:500] + "…"
+    """Build the notification text for a failed submission (error class/category only)."""
     return (
         f"❌ Submission {submission_id} FAILED\n"
         f"{_pseudonym_line(user_id)}"
         f"Task: {year}/{etap}/zad {task_number}\n"
-        f"Error: {error_msg}"
+        f"Error: {error_category(error)}"
     )
+
+
+def build_failover_message(
+    primary: str, fallback: str, error: BaseException, breaker_open_minutes: int
+) -> str:
+    """AI failover activated: which provider failed (error class only) and where calls go now."""
+    route = (
+        f"All AI calls go to {fallback} for {breaker_open_minutes} min."
+        if breaker_open_minutes
+        else f"This call went to {fallback}."
+    )
+    return f"⚠️ AI failover: {primary} unavailable - {error_category(error)}\n{route}"
+
+
+def build_spend_message(level_percent: int, spent_usd: float, limit_usd: float) -> str:
+    """Daily AI spend crossed 80% / 100% of AI_DAILY_SPEND_LIMIT_USD."""
+    if level_percent >= 100:
+        head = "🛑 AI spend limit reached - new AI calls are refused"
+    else:
+        head = f"💸 AI spend at {level_percent}% of the daily limit"
+    return f"{head}\nLast 24 h: ${spent_usd:.2f} of ${limit_usd:.2f}"
+
+
+_background_sends: set = set()
+
+
+def send_telegram_in_background(text: str) -> None:
+    """Fire-and-forget send from sync code running on the event loop.
+
+    No running loop (a script): nothing is sent - callers log the event too.
+    The task is kept referenced until it finishes so it is not GC'd mid-send.
+    """
+    import asyncio
+
+    try:
+        loop = asyncio.get_running_loop()
+    except RuntimeError:
+        return
+    task = loop.create_task(send_telegram_message(text))
+    _background_sends.add(task)
+    task.add_done_callback(_background_sends.discard)
 
 
 async def send_telegram_message(text: str) -> None:
