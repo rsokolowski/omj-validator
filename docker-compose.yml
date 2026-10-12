@@ -69,11 +69,13 @@ services:
       TRANSLATE_API_KEY: ${TRANSLATE_API_KEY:-}
       TRANSLATE_TIMEOUT: ${TRANSLATE_TIMEOUT:-2.0}
 
-      # Telegram notifications (optional)
+      # Telegram notifications - off locally. Deliberately NOT the TELEGRAM_*
+      # names: .env usually holds the production bot, and dev test submissions
+      # would land in the production chat. Set DEV_TELEGRAM_* to opt in.
       # Never carry a user's name or e-mail - see app/notifications.py
-      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
-      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
-      TELEGRAM_PSEUDONYM_SALT: ${TELEGRAM_PSEUDONYM_SALT:-}
+      TELEGRAM_BOT_TOKEN: ${DEV_TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${DEV_TELEGRAM_CHAT_ID:-}
+      TELEGRAM_PSEUDONYM_SALT: ${DEV_TELEGRAM_PSEUDONYM_SALT:-}
 
       # Data retention - disabled locally so dev data is never silently deleted
       RETENTION_SUBMISSION_MONTHS: ${RETENTION_SUBMISSION_MONTHS:-0}
