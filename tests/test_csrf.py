@@ -130,7 +130,11 @@ class TestSessionCookie:
         response = register_login(client)
         cookie = response.headers["set-cookie"].lower()
         assert "samesite=lax" in cookie
-        assert "secure" in cookie and "httponly" in cookie
+        assert "httponly" in cookie
+        # Secure is decided at import from AUTH_DISABLED (a local .env may set it)
+        session_mw = next(m for m in main.app.user_middleware if m.cls is SessionMiddleware)
+        if session_mw.kwargs["https_only"]:
+            assert "secure" in cookie
 
 
 class TestLogout:
