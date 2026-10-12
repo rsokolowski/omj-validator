@@ -549,7 +549,7 @@ export default function RegulaminPage() {
               potrzebne, żeby poprosić go o zgodę i sprawdzić, że to on ją
               wyraża: login albo adres e-mail i nazwę z konta Google, rok
               urodzenia i adres e-mail rodzica (przy koncie założonym przed 12
-              października 2026 także dotychczasowe rozwiązania). Podstawą jest
+              października 2026 zostają też dotychczasowe rozwiązania). Podstawą jest
               obowiązek dołożenia rozsądnych starań, by sprawdzić zgodę rodzica
               (art. 6 ust. 1 lit. c w związku z art. 8 ust. 2 RODO). Takie konto
               nie może wysyłać rozwiązań ani niczego zapisywać; bez zgody jest
