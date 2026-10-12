@@ -168,8 +168,8 @@ def test_omj_stream_request_shape_opus(make_provider, tmp_path):
     assert blocks[6]["text"] == CLOSING_LINE
     assert blocks[1]["source"]["media_type"] == "application/pdf"
     assert base64.standard_b64decode(blocks[1]["source"]["data"]) == TASK_PDF.read_bytes()
-    assert "cache_control" not in blocks[1]
-    assert blocks[2]["cache_control"] == {"type": "ephemeral"}
+    # No prompt-cache breakpoint (per-task text leads the prefix; misses cost 1.25x)
+    assert not any("cache_control" in b for b in blocks)
     assert blocks[3]["source"]["media_type"] == "image/png"
     # Small photos within the limits are sent byte for byte
     assert base64.standard_b64decode(blocks[3]["source"]["data"]) == photos[0].read_bytes()
@@ -193,7 +193,7 @@ def test_omj_stream_haiku_has_no_fallbacks_and_caches_task_pdf(make_provider):
     assert "fallbacks" not in kwargs and "betas" not in kwargs
     blocks = blocks_of(kwargs)
     assert [b["type"] for b in blocks] == ["text", "document", "text", "text"]
-    assert blocks[1]["cache_control"] == {"type": "ephemeral"}
+    assert not any("cache_control" in b for b in blocks)
     assert blocks[0]["text"] == ai_requests.omj_grading_text(build_prompt("etap1"), 2, False, 0, True)
 
 
@@ -303,11 +303,22 @@ def test_max_tokens_with_truncated_json_on_aux_is_provider_error(make_provider):
 def test_fallback_served_response_is_recorded(make_provider):
     final = message(model="claude-opus-5")
     final.content.insert(0, SimpleNamespace(type="fallback"))
+    final.usage.iterations = [SimpleNamespace(type="message"), SimpleNamespace(type="fallback_message")]
     p, _ = make_provider(final=final)
     result = asyncio.run(p.analyze_solution_stream(TASK_PDF, None, [], 1, solution_text="x"))
     assert result.score == 5
     assert result.scoring_meta["model"] == "claude-opus-5-5"
     assert result.scoring_meta["served_by"] == "claude-opus-5"
+
+
+
+def test_no_served_by_without_fallback_iteration(make_provider):
+    # Model name differences alone do not mean a fallback ran
+    final = message(model="claude-opus-5-5-20261001")
+    final.usage.iterations = [SimpleNamespace(type="message")]
+    p, _ = make_provider(final=final)
+    result = asyncio.run(p.analyze_solution_stream(TASK_PDF, None, [], 1, solution_text="x"))
+    assert "served_by" not in result.scoring_meta
 
 
 # ------------------------------------------------------------- errors
@@ -367,7 +378,8 @@ def test_get_timeout_reads_settings(make_provider, monkeypatch):
 
 def test_oversized_photo_is_downscaled_in_memory(make_provider, tmp_path):
     big = tmp_path / "big.png"
-    noise = Image.frombytes("RGB", (6000, 4000), os.urandom(6000 * 4000 * 3))
+    # 2400x800 noise: ~5.8 MB raw PNG, ~7.7 MB base64 - over the 5 MB per-image limit
+    noise = Image.frombytes("RGB", (2400, 800), os.urandom(2400 * 800 * 3))
     noise.save(big, "PNG", compress_level=0)
     assert big.stat().st_size > 5 * 1024 * 1024
     before = set(tmp_path.iterdir())
@@ -451,7 +463,6 @@ def test_extraction_sends_instruction_then_photos(make_provider, tmp_path):
 
 def test_structured_output_schema_is_strict_and_shared_schemas_untouched(make_provider):
     snapshot = copy.deepcopy((RESPONSE_JSON_SCHEMA, META_SCHEMA, PATTERN_LINK_SCHEMA))
-    log = []
     p, grading_log = make_provider()
     asyncio.run(p.analyze_solution_stream(TASK_PDF, None, [], 1, solution_text="x"))
     p, meta_log = make_provider(final=message(text='{"hints": [], "category": "algebra", "difficulty": 1, "abuse_score": 0}'))
@@ -505,3 +516,127 @@ def test_missing_key_refuses_to_build(monkeypatch):
     monkeypatch.setattr(settings, "anthropic_api_key", None)
     with pytest.raises(ValueError):
         AnthropicProvider("claude-opus-5-5")
+
+
+# ------------------------------------------------------ request budget
+
+
+def gradient(path: Path, size=(2000, 1500)) -> Path:
+    """A smooth JPEG within the per-image limits (sent untouched unless the budget bites)."""
+    img = Image.linear_gradient("L").resize(size).convert("RGB")
+    img.save(path, "JPEG", quality=95)
+    return path
+
+
+def sent_images(kwargs) -> list:
+    out = []
+    for block in blocks_of(kwargs):
+        if block["type"] == "image":
+            with Image.open(io.BytesIO(base64.standard_b64decode(block["source"]["data"]))) as img:
+                out.append((block["source"]["media_type"], img.size, len(block["source"]["data"])))
+    return out
+
+
+def request_bytes(kwargs) -> int:
+    return sum(anthropic_module._block_size(b) for b in blocks_of(kwargs))
+
+
+def test_photos_fitting_the_budget_are_untouched(make_provider, tmp_path):
+    photos = [gradient(tmp_path / f"{i}.jpg") for i in range(3)]
+    p, log = make_provider()
+    asyncio.run(p.analyze_solution_stream(TASK_PDF, TASK_PDF, photos, 1, solution_text="x"))
+    images = blocks_of(log[0][2])
+    sent = [b for b in images if b["type"] == "image"]
+    assert [base64.standard_b64decode(b["source"]["data"]) for b in sent] == [ph.read_bytes() for ph in photos]
+
+
+def test_request_over_budget_shrinks_photos_step_by_step(make_provider, tmp_path, monkeypatch):
+    photos = [gradient(tmp_path / f"{i}.jpg") for i in range(10)]  # a "large set"
+    p, probe = make_provider()
+    asyncio.run(p.analyze_solution_stream(TASK_PDF, TASK_PDF, photos, 1, solution_text="x"))
+    full = request_bytes(probe[0][2])
+    # Budget just below the untouched request: the first shrink step (1600 px, q80) must fit
+    monkeypatch.setattr(anthropic_module, "REQUEST_BUDGET_BYTES", full - 1)
+    p, log = make_provider()
+
+    asyncio.run(p.analyze_solution_stream(TASK_PDF, TASK_PDF, photos, 1, solution_text="x"))
+
+    kwargs = log[0][2]
+    assert request_bytes(kwargs) <= full - 1
+    sent = sent_images(kwargs)
+    assert len(sent) == 10
+    assert all(media == "image/jpeg" and max(size) == 1600 for media, size, _ in sent)
+    assert [b["type"] for b in blocks_of(kwargs)][:3] == ["text", "document", "document"]
+
+
+def test_request_over_budget_after_all_steps_is_friendly_error(make_provider, tmp_path, monkeypatch):
+    photos = [gradient(tmp_path / f"{i}.jpg") for i in range(3)]
+    monkeypatch.setattr(anthropic_module, "REQUEST_BUDGET_BYTES", 10_000)
+    p, log = make_provider()
+    for call in (
+        lambda: p.analyze_solution_stream(TASK_PDF, None, photos, 1),
+        lambda: p.analyze_private_solution_stream("T", "C", photos),
+        lambda: p.extract_private_tasks(photos),
+    ):
+        with pytest.raises(AIProviderError) as info:
+            asyncio.run(call())
+        assert str(info.value) == "Przesłane zdjęcia są zbyt duże. Spróbuj wysłać mniej zdjęć."
+    assert log == []  # nothing was sent
+
+
+# -------------------------------------------------------------- patterns
+
+
+def test_refine_sends_shared_text_and_parses(make_provider, monkeypatch):
+    skills = [SimpleNamespace(id="skill_a", name="Umiejętność A")]
+    monkeypatch.setattr(anthropic_module, "get_all_skills", lambda: skills)
+    candidates = [{"task_key": "2024_etap1_1", "difficulty": 2, "categories": ["algebra"], "hints": ["h"]}]
+    args = dict(
+        draft={"trigger": "t", "action": "a"},
+        source_text="src",
+        history=[],
+        current={"answers": [], "message": "hej"},
+        candidates=candidates,
+    )
+    refine_json = json.dumps({
+        "reply": "Odpowiedź.",
+        "variants": [
+            {"trigger": "w1", "action": "a1", "example": "e", "note": "n", "tasks": ["2024_etap1_1", "9999_etap1_1"]},
+            {"trigger": "w2", "action": "a2", "example": "e", "note": "n", "tasks": []},
+        ],
+        "questions": ["Pytanie?"],
+        "verdict": "ok",
+        "comment": "c",
+        "category": "algebra",
+        "skills": ["skill_a", "unknown"],
+        "abuse_score": 0,
+    })
+    p, log = make_provider(final=message(text=refine_json))
+
+    result = asyncio.run(p.refine_pattern(**args))
+
+    assert blocks_of(log[0][2]) == [
+        {"type": "text", "text": ai_requests.refine_text(
+            args["draft"], args["source_text"], args["history"], args["current"], candidates, skills
+        )}
+    ]
+    assert log[0][2]["output_config"]["format"]["schema"]["additionalProperties"] is False
+    assert result.reply == "Odpowiedź."
+    # Shared parser: unknown task keys and skills are dropped
+    assert result.variants[0].tasks == ["2024_etap1_1"]
+    assert result.skills == ["skill_a"]
+    assert result.meta["provider"] == "anthropic"
+
+
+def test_suggest_sends_shared_text_and_parses(make_provider):
+    suggest_json = json.dumps({
+        "suggestions": [{"trigger": "t", "action": "a", "example": "e", "why": "w", "category": "algebra"}],
+        "abuse_score": 0,
+    })
+    p, log = make_provider(final=message(text=suggest_json))
+
+    result = asyncio.run(p.suggest_patterns("zadanie", "ocena", None))
+
+    assert blocks_of(log[0][2]) == [{"type": "text", "text": ai_requests.suggest_text("zadanie", "ocena", None)}]
+    assert [(s.trigger, s.action, s.category) for s in result.suggestions] == [("t", "a", "algebra")]
+    assert result.meta["provider"] == "anthropic"

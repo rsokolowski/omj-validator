@@ -23,6 +23,11 @@ _CLEANUP_TTL_SECONDS = 600
 
 # Regex to extract **Heading** from thinking text
 HEADING_PATTERN = re.compile(r'\*\*([^*]+)\*\*')
+# Thinking without headings (Claude's summarized thinking is plain prose):
+# paragraphs end at a blank line; markdown marks are stripped from the status.
+PARAGRAPH_BREAK = re.compile(r'\n[ \t]*\n')
+MARKDOWN_MARKS = re.compile(r'[*_`#>]+')
+STATUS_MAX_CHARS = 80
 
 
 @dataclass
@@ -55,6 +60,33 @@ def extract_latest_heading(text: str) -> Optional[str]:
     if matches:
         return matches[-1].strip()
     return None
+
+
+def extract_latest_paragraph_line(text: str) -> Optional[str]:
+    """First line of the latest COMPLETED paragraph, markdown-free, <= ~80 chars.
+
+    Only paragraphs already closed by a blank line count: the one still
+    streaming would change with every chunk (and trigger a broadcast and a
+    translation call each time).
+    """
+    completed = PARAGRAPH_BREAK.split(text)[:-1]
+    for paragraph in reversed(completed):
+        line = next((ln for ln in paragraph.splitlines() if ln.strip()), "")
+        clean = " ".join(MARKDOWN_MARKS.sub("", line).split())
+        if not clean:
+            continue
+        if len(clean) <= STATUS_MAX_CHARS:
+            return clean
+        cut = clean[:STATUS_MAX_CHARS]
+        if " " in cut:
+            cut = cut.rsplit(" ", 1)[0]
+        return cut.rstrip(" ,;:.") + "..."
+    return None
+
+
+def extract_latest_status(text: str) -> Optional[str]:
+    """The status to show: the latest **Heading** (Gemini); without any, a paragraph line."""
+    return extract_latest_heading(text) or extract_latest_paragraph_line(text)
 
 
 class ProgressManager:
@@ -155,9 +187,9 @@ class ProgressManager:
         async with self._lock:
             if submission_id in self._submissions:
                 progress = self._submissions[submission_id]
-                old_heading = extract_latest_heading(progress.thinking_buffer)
+                old_heading = extract_latest_status(progress.thinking_buffer)
                 progress.thinking_buffer += chunk
-                new_heading = extract_latest_heading(progress.thinking_buffer)
+                new_heading = extract_latest_status(progress.thinking_buffer)
 
                 # Only update and broadcast if heading changed
                 if new_heading and new_heading != old_heading:

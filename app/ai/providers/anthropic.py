@@ -84,6 +84,13 @@ MAX_IMAGE_SIDE_PX = 8000
 DOWNSCALE_LONG_SIDE_PX = 2000
 DOWNSCALE_JPEG_QUALITY = 85
 
+# Whole-request cap: the Messages API rejects a body over 32 MB (413
+# request_too_large; the SDK keeps raw PDFs at 20 MB so their base64 stays
+# under it). PDFs + photos (base64) + text are kept under a safer budget by
+# re-encoding all photos smaller, step by step, before giving up.
+REQUEST_BUDGET_BYTES = 24 * 1024 * 1024
+REQUEST_SHRINK_STEPS = ((1600, 80), (1200, 80))  # (long side px, JPEG quality)
+
 _IMAGE_MEDIA_TYPES = {
     ".jpg": "image/jpeg",
     ".jpeg": "image/jpeg",
@@ -99,6 +106,7 @@ TIMEOUT_MESSAGE = "Analiza trwa zbyt długo. Spróbuj ponownie za chwilę."
 OVERLOADED_MESSAGE = "System jest obecnie przeciążony. Spróbuj ponownie za kilka minut."
 TECHNICAL_MESSAGE = "Przepraszamy, wystąpił problem techniczny. Spróbuj ponownie później."
 GENERIC_MESSAGE = "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
+TOO_LARGE_MESSAGE = "Przesłane zdjęcia są zbyt duże. Spróbuj wysłać mniej zdjęć."
 
 
 def _strict(schema: Any) -> Any:
@@ -153,8 +161,10 @@ def _over_limits(data: bytes) -> bool:
         return max(img.size) > MAX_IMAGE_SIDE_PX
 
 
-def _to_jpeg(data: bytes) -> bytes:
-    """Re-encode in memory: upright, flattened on white, long side <= 2000 px, <= 5 MB base64."""
+def _to_jpeg(
+    data: bytes, long_side: int = DOWNSCALE_LONG_SIDE_PX, quality: int = DOWNSCALE_JPEG_QUALITY
+) -> bytes:
+    """Re-encode in memory: upright, flattened on white, long side <= long_side, <= 5 MB base64."""
     with Image.open(io.BytesIO(data)) as opened:
         img = ImageOps.exif_transpose(opened)
         if img.mode in ("RGBA", "LA") or (img.mode == "P" and "transparency" in img.info):
@@ -164,27 +174,52 @@ def _to_jpeg(data: bytes) -> bytes:
             img = flat
         else:
             img = img.convert("RGB")
-    long_side = DOWNSCALE_LONG_SIDE_PX
     while True:
         scaled = img.copy()
         scaled.thumbnail((long_side, long_side), Image.Resampling.LANCZOS)
         buffer = io.BytesIO()
-        scaled.save(buffer, "JPEG", quality=DOWNSCALE_JPEG_QUALITY)
+        scaled.save(buffer, "JPEG", quality=quality)
         out = buffer.getvalue()
         if _b64_size(len(out)) <= MAX_IMAGE_BASE64_BYTES or long_side <= 256:
             return out
         long_side = int(long_side * 0.8)
 
 
-def _image_block(path: Path) -> dict:
-    """A photo as a base64 image block; re-encoded only when over the API limits."""
+def _image_block(path: Path, shrink: Optional[tuple[int, int]] = None) -> dict:
+    """A photo as a base64 image block; re-encoded only when over the API limits.
+
+    ``shrink`` = (long side, quality) forces a re-encode (request size budget).
+    """
     data = path.read_bytes()
     media_type = _IMAGE_MEDIA_TYPES.get(path.suffix.lower())
-    if media_type is None or _over_limits(data):
+    if shrink is not None or media_type is None or _over_limits(data):
         original = len(data)
-        data, media_type = _to_jpeg(data), "image/jpeg"
+        data, media_type = _to_jpeg(data, *(shrink or ())), "image/jpeg"
         logger.info(f"[Claude] Image re-encoded in memory: {original // 1024}KB -> {len(data) // 1024}KB")
     return {"type": "image", "source": {"type": "base64", "media_type": media_type, "data": _b64(data)}}
+
+
+def _block_size(block: dict) -> int:
+    """Approximate bytes a block adds to the request body."""
+    if "source" in block:
+        return len(block["source"]["data"])
+    return len(block.get("text", "").encode("utf-8"))
+
+
+def _photo_blocks(image_paths: list[Path], other_bytes: int) -> list[dict]:
+    """Photo blocks that, with ``other_bytes`` of the rest of the request, fit REQUEST_BUDGET_BYTES."""
+    blocks = [_image_block(path) for path in image_paths]
+    for shrink in (None, *REQUEST_SHRINK_STEPS):
+        if shrink is not None:
+            blocks = [_image_block(path, shrink) for path in image_paths]
+        total = other_bytes + sum(_block_size(b) for b in blocks)
+        if total <= REQUEST_BUDGET_BYTES:
+            return blocks
+        logger.info(
+            f"[Claude] Request {total // 1024}KB over budget {REQUEST_BUDGET_BYTES // 1024}KB "
+            f"at shrink={shrink}, photos={len(image_paths)}"
+        )
+    raise AIProviderError(TOO_LARGE_MESSAGE)
 
 
 def _final_text(final: Any) -> str:
@@ -226,6 +261,11 @@ class AnthropicProvider:
             raise ValueError("ANTHROPIC_API_KEY is required. Set it in your .env file.")
         self._model_name = model
         self._fallbacks = model in FALLBACK_MODELS
+        # The overall wall-clock limit is anthropic_timeout, enforced by
+        # asyncio.wait_for around each call (same semantics as Gemini's
+        # gemini_timeout). The SDK timeout below is per HTTP request, so its
+        # retries (default 2: connection errors, 408/409/429/5xx) only fit in
+        # when a failure is fast; a slow one runs into the wall-clock limit.
         self._client = anthropic.AsyncAnthropic(
             api_key=settings.anthropic_api_key,
             base_url=settings.anthropic_api_base_url or None,
@@ -291,6 +331,7 @@ class AnthropicProvider:
                 return await stream.get_final_message()
 
         api_start = time.time()
+        # Wall-clock limit for the whole stream, SDK retries included (see __init__)
         final = await asyncio.wait_for(consume(), timeout=self.get_timeout())
         return "".join(thinking), final, time.time() - api_start, request_id[0]
 
@@ -317,6 +358,9 @@ class AnthropicProvider:
         Thinking is billed inside output_tokens, hence thoughts_tokens=0.
         Top-level usage covers the attempt that produced the answer; with a
         server-side fallback that is the fallback model (named in served_by).
+        A fallback ran when usage.iterations has a "fallback_message" entry
+        (shared/model-migration.md, "Reading the response"); the top-level
+        model then names the model that served the answer.
         """
         usage = getattr(final, "usage", None)
         input_tokens = getattr(usage, "input_tokens", 0) or 0
@@ -340,9 +384,9 @@ class AnthropicProvider:
             ),
             "api_time": round(time.time() - started, 2),
         }
-        served_by = getattr(final, "model", None)
-        if isinstance(served_by, str) and served_by and served_by != self._model_name:
-            meta["served_by"] = served_by
+        iterations = getattr(usage, "iterations", None) or []
+        if any(getattr(entry, "type", None) == "fallback_message" for entry in iterations):
+            meta["served_by"] = getattr(final, "model", None)
         return meta
 
     def _friendly_error(self, error: Exception, label: str, started: float) -> AIProviderError:
@@ -400,8 +444,13 @@ class AnthropicProvider:
         task_number: int,
         solution_text: Optional[str],
     ) -> list:
-        """Blocks in Gemini's order; the cache breakpoint sits on the last PDF."""
-        blocks = [
+        """Blocks in Gemini's order.
+
+        No prompt-cache breakpoint: the prefix starts with per-task grading
+        text, so a cache entry would rarely be hit while every miss would pay
+        the 1.25x cache-write rate on the PDFs.
+        """
+        head = [
             _text_block(
                 ai_requests.omj_grading_text(
                     prompt_text, task_number, solution_pdf_path is not None, len(image_paths), bool(solution_text)
@@ -410,13 +459,11 @@ class AnthropicProvider:
             _pdf_block(task_pdf_path),
         ]
         if solution_pdf_path is not None:
-            blocks.append(_pdf_block(solution_pdf_path))
-        blocks[-1]["cache_control"] = {"type": "ephemeral"}
-        blocks.extend(_image_block(path) for path in image_paths)
-        if solution_text:
-            blocks.append(_text_block(solution_text_block(solution_text)))
-        blocks.append(_text_block(CLOSING_LINE))
-        return blocks
+            head.append(_pdf_block(solution_pdf_path))
+        tail = [_text_block(solution_text_block(solution_text))] if solution_text else []
+        tail.append(_text_block(CLOSING_LINE))
+        photos = _photo_blocks(image_paths, sum(_block_size(b) for b in head + tail))
+        return head + photos + tail
 
     async def analyze_solution(
         self,
@@ -466,24 +513,35 @@ class AnthropicProvider:
             # No upload step: the request is about to be sent
             await _notify(on_upload_complete)
 
-            kwargs = self._request(content, GRADING_SCHEMA, settings.anthropic_effort, grading=True)
-            thinking, final, api_time, request_id = await self._stream(kwargs, on_thinking, on_feedback)
-            text = self._checked_text(final, request_id, grading=True)
-            result = parse_ai_response(text, provider_name="Claude", etap=etap)
-            total_time = time.time() - start_time
-            result.scoring_meta = {
-                **(result.scoring_meta or {}),
-                **self._usage_meta(final, start_time),
-                "thinking": thinking,
-                "api_time": api_time,
-                "total_time": total_time,
-            }
-            self._log_response("Claude Stream Response", result.scoring_meta, final, request_id, thinking, text)
-            return result
+            return await self._grade(content, etap, "Claude Stream Response", on_thinking, on_feedback, start_time)
         except AIProviderError:
             raise
         except Exception as e:
             raise self._friendly_error(e, "Claude Stream", start_time)
+
+    async def _grade(
+        self,
+        content: list,
+        etap: str,
+        label: str,
+        on_thinking: Optional[Callable[[str], Any]],
+        on_feedback: Optional[Callable[[str], Any]],
+        start_time: float,
+    ) -> SubmissionResult:
+        """Stream one grading request and turn it into a SubmissionResult with scoring_meta."""
+        kwargs = self._request(content, GRADING_SCHEMA, settings.anthropic_effort, grading=True)
+        thinking, final, api_time, request_id = await self._stream(kwargs, on_thinking, on_feedback)
+        text = self._checked_text(final, request_id, grading=True)
+        result = parse_ai_response(text, provider_name="Claude", etap=etap)
+        result.scoring_meta = {
+            **(result.scoring_meta or {}),
+            **self._usage_meta(final, start_time),
+            "thinking": thinking,
+            "api_time": api_time,
+            "total_time": time.time() - start_time,
+        }
+        self._log_response(label, result.scoring_meta, final, request_id, thinking, text)
+        return result
 
     def _log_response(self, label: str, meta: dict, final: Any, request_id, thinking: str, text: str) -> None:
         logger.info(
@@ -500,18 +558,17 @@ class AnthropicProvider:
     def _private_content(
         self, task_title: str, task_content: str, image_paths: list[Path], solution_text: Optional[str]
     ) -> list:
-        blocks = [
-            _text_block(
-                ai_requests.private_grading_text(task_title, task_content, len(image_paths), bool(solution_text))
-            )
-        ]
-        for index, path in enumerate(image_paths, 1):
-            blocks.append(_text_block(ai_requests.photo_label(index)))
-            blocks.append(_image_block(path))
-        if solution_text:
-            blocks.append(_text_block(solution_text_block(solution_text)))
-        blocks.append(_text_block(CLOSING_LINE))
-        return blocks
+        head = _text_block(
+            ai_requests.private_grading_text(task_title, task_content, len(image_paths), bool(solution_text))
+        )
+        labels = [_text_block(ai_requests.photo_label(index)) for index in range(1, len(image_paths) + 1)]
+        tail = [_text_block(solution_text_block(solution_text))] if solution_text else []
+        tail.append(_text_block(CLOSING_LINE))
+        photos = _photo_blocks(image_paths, sum(_block_size(b) for b in [head, *labels, *tail]))
+        blocks = [head]
+        for label, photo in zip(labels, photos):
+            blocks += [label, photo]
+        return blocks + tail
 
     async def analyze_private_solution_stream(
         self,
@@ -535,21 +592,10 @@ class AnthropicProvider:
             )
             await _notify(on_upload_complete)
 
-            kwargs = self._request(content, GRADING_SCHEMA, settings.anthropic_effort, grading=True)
-            thinking, final, api_time, request_id = await self._stream(kwargs, on_thinking, None)
-            text = self._checked_text(final, request_id, grading=True)
             # Private tasks are graded on the etap2 ladder (0, 2, 5, 6)
-            result = parse_ai_response(text, provider_name="Claude", etap="etap2")
-            total_time = time.time() - start_time
-            result.scoring_meta = {
-                **(result.scoring_meta or {}),
-                **self._usage_meta(final, start_time),
-                "thinking": thinking,
-                "api_time": api_time,
-                "total_time": total_time,
-            }
-            self._log_response("Claude Private Stream Response", result.scoring_meta, final, request_id, thinking, text)
-            return result
+            return await self._grade(
+                content, "etap2", "Claude Private Stream Response", on_thinking, None, start_time
+            )
         except AIProviderError:
             raise
         except Exception as e:
@@ -580,10 +626,13 @@ class AnthropicProvider:
         """Read every problem statement off photos of a page."""
         started = time.time()
         try:
-            images = await asyncio.to_thread(lambda: [_image_block(path) for path in image_paths])
+            instruction = _text_block(ai_requests.extract_text())
+            images = await asyncio.to_thread(_photo_blocks, image_paths, _block_size(instruction))
+        except AIProviderError:
+            raise
         except Exception as e:
             raise self._friendly_error(e, "Claude Extract", started)
-        content = [_text_block(ai_requests.extract_text()), *images]
+        content = [instruction, *images]
         text, meta = await self._create_json(content, EXTRACTION_SCHEMA_STRICT, "Claude Extract")
         result = parse_extraction_response(text)
         result.meta = meta

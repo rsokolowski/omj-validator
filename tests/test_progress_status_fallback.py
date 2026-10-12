@@ -14,6 +14,8 @@ from app.websocket.progress import (
     ProgressManager,
     StatusMessage,
     extract_latest_heading,
+    extract_latest_paragraph_line,
+    extract_latest_status,
 )
 
 
@@ -45,6 +47,36 @@ class TestHeadingExtraction:
 
     def test_returns_none_without_headings(self):
         assert extract_latest_heading("plain reasoning text") is None
+
+
+class TestParagraphFallback:
+    """Thinking without **Heading** markers (Claude's summarized thinking is prose)."""
+
+    def test_heading_wins_when_present(self):
+        text = "**Checking the algebra**\nSome prose.\n\nAnother paragraph.\n\n"
+        assert extract_latest_status(text) == "Checking the algebra"
+
+    def test_first_line_of_latest_completed_paragraph(self):
+        text = "Let me verify the algebra.\nMore detail.\n\nNow the parity case.\n\nStill stream"
+        assert extract_latest_paragraph_line(text) == "Now the parity case."
+
+    def test_unfinished_paragraph_is_ignored(self):
+        assert extract_latest_paragraph_line("Let me verify the algebra: expanding") is None
+        assert extract_latest_status("plain reasoning text") is None
+
+    def test_markdown_is_stripped(self):
+        assert extract_latest_paragraph_line("## *Checking* `x` _now_\n\n") == "Checking x now"
+
+    def test_long_line_is_truncated_on_a_word_boundary(self):
+        line = (
+            "Let me verify the algebra: expanding both squares gives a sum which equals "
+            "eight times something plus two"
+        )
+        status = extract_latest_paragraph_line(line + "\n\n")
+        assert status.endswith("...")
+        assert len(status) <= 83
+        assert line.startswith(status[:-3])
+        assert line[len(status) - 3] == " "  # cut at a space, not mid-word
 
 
 @pytest.mark.asyncio
@@ -123,6 +155,19 @@ class TestUntranslatedFallback:
             manager._submissions[submission_id].current_status
             == UNTRANSLATED_STATUS_FALLBACK
         )
+
+    async def test_paragraph_status_is_sent_once_per_completed_paragraph(self, manager, monkeypatch):
+        monkeypatch.setattr(settings, "translate_enabled", True)
+        monkeypatch.setattr(
+            "app.websocket.progress.translate_to_polish_optional",
+            _fake_translate("Sprawdzam algebrę"),
+        )
+        submission_id = await _register(manager)
+
+        for chunk in ["Let me verify ", "the algebra.", "\n\n", "Next I check ", "parity"]:
+            await manager.send_thinking(submission_id, chunk)
+
+        assert manager.sent == ["Sprawdzam algebrę"]
 
     async def test_nothing_is_sent_without_a_heading(self, manager, monkeypatch):
         monkeypatch.setattr(settings, "translate_enabled", False)
