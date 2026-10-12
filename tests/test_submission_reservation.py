@@ -428,3 +428,22 @@ class TestOmjSubmitRequiresAccess:
         assert code == 403
         assert db.query(SubmissionDB).count() == 0
         assert files_left() == []
+
+
+class TestSpendLimitAtSubmit:
+    @pytest.mark.parametrize("url", [OMJ_URL, PRIVATE_URL])
+    def test_exhausted_ai_budget_refuses_without_taking_a_slot(self, app, db, monkeypatch, started, url):
+        from app.ai import spend
+        from app.ai.factory import AISpendLimitError
+
+        def over(db):
+            raise AISpendLimitError(spend.SPEND_LIMIT_MESSAGE)
+
+        monkeypatch.setattr(spend, "check_spend_limit", over)
+
+        [code] = asyncio.run(fire(app, url, 1, small_jpeg()))
+
+        assert code == 429
+        assert db.query(SubmissionDB).count() == 0
+        assert files_left() == []
+        assert started == []
