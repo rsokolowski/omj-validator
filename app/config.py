@@ -38,9 +38,15 @@ class Settings(BaseSettings):
     # Session - MUST be set explicitly in production for multi-worker consistency
     session_secret_key: Optional[str] = None
 
-    # Frontend URL for OAuth redirects (only needed if frontend/backend on different domains)
-    # Not required for co-hosted deployment behind Nginx
+    # Public URL of the frontend, used for the OAuth callback URL (the API sits
+    # behind the Next.js proxy and cannot see it). Production sets it although
+    # frontend and API share one origin behind nginx. It is also trusted as an
+    # Origin by the cross-site request guard (app/csrf.py).
     frontend_url: Optional[str] = None
+    # True only when the frontend is served from a different SITE than the API.
+    # Then the session cookie needs SameSite=None and the API needs CORS; any
+    # other deployment keeps SameSite=Lax (cross-site POSTs carry no session).
+    split_deployment: bool = False
 
     @model_validator(mode="after")
     def validate_session_secret(self):

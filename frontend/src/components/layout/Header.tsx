@@ -14,8 +14,10 @@ import {
   Button,
   Container,
   Badge,
+  ButtonBase,
 } from "@mui/material";
 import { useAuth } from "@/lib/hooks/useAuth";
+import { LogoutForm } from "@/components/auth/LogoutForm";
 import { APP_NAME } from "@/lib/utils/constants";
 import { patternsApi } from "@/lib/api/patterns";
 
@@ -267,16 +269,15 @@ export function Header() {
                         />
                       )}
                     </Box>
-                    {/* Use regular anchor to avoid Next.js prefetch triggering logout */}
                     {/* Kolor #9ca3af dawal 2,54:1; #4b5563 daje 7,56:1 (WCAG 1.4.3) */}
-                    <a
-                      href="/logout"
-                      style={{ textDecoration: "none", color: "#4b5563" }}
-                    >
-                      <Typography sx={{ fontSize: "0.875rem" }}>
+                    <LogoutForm>
+                      <ButtonBase
+                        type="submit"
+                        sx={{ color: "#4b5563", fontSize: "0.875rem", fontFamily: "inherit", borderRadius: 1 }}
+                      >
                         Wyloguj
-                      </Typography>
-                    </a>
+                      </ButtonBase>
+                    </LogoutForm>
                   </Box>
                 ) : (
                   <Link href="/login" style={{ textDecoration: "none" }}>

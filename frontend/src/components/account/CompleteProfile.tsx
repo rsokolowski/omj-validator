@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { Alert, Box, Link as MuiLink, Typography } from "@mui/material";
+import { Alert, Box, ButtonBase, Typography } from "@mui/material";
 import { APIError } from "@/lib/api/client";
 import { accountApi, errorText } from "@/lib/api/account";
 import {
@@ -18,6 +18,7 @@ import { SubmitButton } from "./SubmitButton";
 import { BirthYearFields } from "./BirthYearFields";
 import { ParentEmailField } from "./ParentEmailField";
 import { TermsCheckbox } from "./TermsCheckbox";
+import { LogoutForm } from "@/components/auth/LogoutForm";
 
 type Step = "year" | "final";
 type Field = "birth_year" | "turned_16" | "parent_email" | "accept_terms";
@@ -222,10 +223,14 @@ export function CompleteProfile({ currentYear, ownEmail }: CompleteProfileProps)
 
       <Typography variant="body2" sx={{ mt: 4, pt: 2, borderTop: 1, borderColor: "grey.200", color: "grey.600" }}>
         Nie chcesz teraz?{" "}
-        {/* Zwykly <a>: prefetch Next.js wylogowalby uzytkownika */}
-        <MuiLink href="/logout" sx={{ color: "primary.main" }}>
-          Wyloguj się
-        </MuiLink>
+        <LogoutForm>
+          <ButtonBase
+            type="submit"
+            sx={{ color: "primary.main", font: "inherit", textDecoration: "underline", verticalAlign: "baseline" }}
+          >
+            Wyloguj się
+          </ButtonBase>
+        </LogoutForm>
       </Typography>
     </FormCard>
   );

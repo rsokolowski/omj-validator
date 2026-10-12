@@ -142,8 +142,10 @@ app.include_router(private_tasks_router)
 app.include_router(patterns_router)
 app.include_router(accounts_router)
 
-# Determine if we're in split deployment mode (frontend on different domain)
-is_split_deployment = bool(settings.frontend_url)
+# Split deployment: frontend on a different site than the API (explicit
+# opt-in). FRONTEND_URL alone - production sets it for the OAuth callback while
+# serving everything from one origin - does not make the cookie cross-site.
+is_split_deployment = bool(settings.split_deployment and settings.frontend_url)
 
 # Add CORS middleware for split deployment (frontend on different domain)
 if is_split_deployment:
@@ -164,6 +166,15 @@ app.add_middleware(
     max_age=30 * 24 * 60 * 60,  # 30 days
     https_only=is_split_deployment or not settings.auth_disabled,  # HTTPS required for SameSite=None
     same_site="none" if is_split_deployment else "lax",  # Cross-domain requires "none"
+)
+
+# Unsafe-method requests must come from this site (app/csrf.py). Added last,
+# so it runs first: a forged request is refused before anything else runs.
+from .csrf import CrossSiteRequestGuard  # noqa: E402
+
+app.add_middleware(
+    CrossSiteRequestGuard,
+    trusted_origins=[settings.public_base_url, settings.frontend_url],
 )
 
 # Mount static files
@@ -522,10 +533,21 @@ async def auth_limited_page(request: Request):
     )
 
 
-@app.get("/logout")
+@app.post("/logout")
+@allow_inactive_account
 async def logout(request: Request):
-    """Log out user by clearing session."""
+    """Log out (a form POST from the site; the CSRF guard refuses others)."""
     request.session.clear()
+    return RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
+
+
+@app.get("/logout")
+async def logout_link(request: Request):
+    """Old links and pages cached before logout became a POST. Logs out only
+    a navigation started on this site or typed by the user (Sec-Fetch-Site),
+    so another site cannot log anyone out with a link or an <img>."""
+    if request.headers.get("sec-fetch-site", "").lower() in ("same-origin", "none"):
+        request.session.clear()
     return RedirectResponse(url="/years", status_code=status.HTTP_303_SEE_OTHER)
 
 

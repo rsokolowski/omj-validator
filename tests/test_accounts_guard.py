@@ -38,6 +38,7 @@ EXEMPT = {
     ("POST", "/api/parent/request-link"),
     ("POST", "/api/parent/children/{child_id}/delete"),
     ("POST", "/api/parent/children/{child_id}/password"),
+    ("POST", "/logout"),
 }
 
 SAMPLE_PARAMS = {"year": "2024", "etap": "etap1", "num": "1", "n": "1", "link_id": "1"}
