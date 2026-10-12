@@ -101,11 +101,16 @@ omj-validator/
 │   │   └── private_tasks.py # PrivateTaskRepository, AIUsageRepository
 │   └── ai/
 │       ├── protocol.py     # AIProvider interface
-│       ├── factory.py      # Provider factory
+│       ├── factory.py      # Provider factory: active model -> cached provider (+ GDPR approval gate)
+│       ├── models_catalog.py # Selectable models per provider, prices, estimate_cost
+│       ├── config_store.py # Active provider/model: app_settings row, else env default
+│       ├── requests.py     # Provider-neutral request text (prompt parity across providers)
+│       ├── schemas.py      # Provider-neutral JSON schemas for grading responses
 │       ├── parsing.py      # JSON parsing, OMJ score normalization
 │       ├── private_parsing.py # Validation of extraction / hint responses
 │       └── providers/
-│           └── gemini.py   # Gemini API integration
+│           ├── gemini.py   # Gemini API integration
+│           └── anthropic.py # Claude (Anthropic Messages API) integration
 ├── data/                    # Runtime data
 │   ├── tasks/              # Task metadata JSON files (tracked, MIT)
 │   ├── task_content/       # Task statements from the PDFs (git-ignored, generated)
@@ -136,6 +141,7 @@ frontend/src/
 │   ├── years/[year]/[etap]/page.tsx # Task list for etap
 │   ├── task/[year]/[etap]/[num]/page.tsx  # Task detail with submission
 │   ├── progress/page.tsx            # Task progression graph
+│   ├── admin/                       # Admin: submissions, settings (AI provider/model switch)
 │   ├── moje-zadania/                # Private tasks: list, nowe (add), [id] (task)
 │   ├── wzorce/                      # Patterns: list, nowy, [id], powtorka (review)
 │   └── login/page.tsx               # Google OAuth login
@@ -191,6 +197,10 @@ POST   /api/patterns/{id}/suggest-links      # AI picks OMJ tasks from server-ch
 POST   /api/patterns/{id}/links              # Link a task by hand; PATCH/DELETE .../links/{link_id}
 POST   /api/patterns/{id}/review             # Self-rated recall card (409 unless due)
 GET    /api/patterns/{id}/practice           # Linked task to solve instead of a recall card
+
+# Admin (ADMIN_EMAILS only)
+GET    /api/admin/ai-config                  # Active provider/model, catalog, per-provider key/approval state
+PUT    /api/admin/ai-config                  # Switch provider/model (pings the model first; 502 if it fails)
 ```
 
 **Auth routes**:
@@ -220,6 +230,8 @@ GET  /uploads/{path}                 # Serve uploaded images
   private task (`private_task_id`) - check constraint `ck_submissions_task_ref`.
   Any new OMJ aggregate over `submissions` must filter `private_task_id IS NULL`.
 - `ai_usage` - Content-free log of non-submission AI calls (extraction, hints, patterns), for rate limits
+- `app_settings` - Key/value runtime settings; holds the active AI provider + model chosen in
+  `/admin/settings` (no row = env default, Gemini `GEMINI_MODEL`)
 - `patterns`, `pattern_links`, `pattern_reviews` - Student-written problem-solving patterns
   ("Wzorce") with spaced repetition, linked tasks and a review log; owner-only.
   `submissions.pattern_id` (SET NULL) marks a solution submitted as practice of a pattern.
@@ -278,7 +290,17 @@ GET  /uploads/{path}                 # Serve uploaded images
    - Results stored in PostgreSQL `submissions` table
    - OMJ scoring: 0, 2, 5, or 6 points
 
-3. **AI Integration**: Uses Gemini File API. Prompts in `prompts/` (see `app/ai/prompt_builder.py`).
+3. **AI Integration**: One provider at a time - Gemini (File API) or Claude (Anthropic Messages
+   API, PDFs and photos inline) - chosen by an admin in `/admin/settings` from
+   `app/ai/models_catalog.py`; `create_ai_provider()` reads the choice (`app_settings`, else env)
+   on every call, so a switch applies to the next request without a restart. Claude is usable
+   only with `ANTHROPIC_API_KEY` and `ANTHROPIC_PROCESSOR_APPROVED=true` (GDPR gate); an
+   unusable choice falls back to the env Gemini default. Both providers send the same text
+   (`app/ai/requests.py`), so `scripts/rescore_eval.py --provider` A/Bs compare models, not
+   prompts (`docs/model-ab-playbook.md`). Prompts in `prompts/` (see `app/ai/prompt_builder.py`).
+   **Rollback**: `ANTHROPIC_PROCESSOR_APPROVED=false` + api restart forces Gemini whatever the
+   stored row says. Switching back in the UI needs a successful Gemini ping (a Google 503/429
+   blocks it - then use the env flag).
 
 4. **Private tasks ("Moje zadania")**: photo -> `extract_private_tasks` (schema-constrained,
    inline images) -> draft photos in `uploads/{user}/private/_drafts/{id}/` -> student picks
@@ -344,11 +366,19 @@ RETENTION_AUTO_PURGE=true             # Daily in-app run (single-worker only)
 # Typed solutions: cap in code points, mirrored in frontend/src/lib/utils/constants.ts
 # SUBMISSION_TEXT_MAX_CHARS=20000
 
-# AI
-AI_PROVIDER=gemini
+# AI - the active provider/model is chosen at runtime in /admin/settings (app_settings);
+# the env below is only the default until an admin saves a choice.
+AI_PROVIDER=gemini                   # Only "gemini"; anything else is ignored with a warning
 GEMINI_API_KEY=...                   # Required
-GEMINI_MODEL=gemini-2.0-flash
+GEMINI_MODEL=gemini-3.8-flash        # Default model when no app_settings row exists
 GEMINI_TIMEOUT=90
+
+# Anthropic (Claude) - optional, selectable in /admin/settings
+# ANTHROPIC_API_KEY=...
+# ANTHROPIC_EFFORT=high               # grading
+# ANTHROPIC_EFFORT_AUX=medium         # extraction, hints, patterns
+# ANTHROPIC_TIMEOUT=180
+# ANTHROPIC_PROCESSOR_APPROVED=false  # GDPR gate: true only after Anthropic is signed off as a processor
 
 # Note: DATABASE_URL is set in docker-compose.yml for container networking
 ```

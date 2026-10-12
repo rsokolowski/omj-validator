@@ -14,7 +14,7 @@ from typing import Optional
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from .models import AdminAccessLogDB, DeletedAccountQuotaDB, UserDB, SubmissionDB, SubmissionStatus, IssueType
+from .models import AdminAccessLogDB, AppSettingDB, DeletedAccountQuotaDB, UserDB, SubmissionDB, SubmissionStatus, IssueType
 from ..models import Submission, SubmissionStatus as PydanticSubmissionStatus, IssueType as PydanticIssueType
 from ..config import settings
 from ..privacy import mask_email, mask_user_id
@@ -112,6 +112,28 @@ class AdminAccessLogRepository:
             .filter(AdminAccessLogDB.subject_user_id == user_id)
             .update({AdminAccessLogDB.subject_user_id: hash_user_id(user_id)})
         )
+
+
+class AppSettingsRepository:
+    """Key/value runtime settings (app_settings)."""
+
+    def __init__(self, db: Session):
+        self.db = db
+
+    def get(self, key: str) -> Optional[AppSettingDB]:
+        return self.db.get(AppSettingDB, key)
+
+    def set(self, key: str, value: dict, updated_by: Optional[str]) -> AppSettingDB:
+        row = self.get(key)
+        if row is None:
+            row = AppSettingDB(key=key, value=value, updated_by=updated_by)
+            self.db.add(row)
+        else:
+            row.value = value
+            row.updated_by = updated_by  # updated_at: column onupdate
+        self.db.commit()
+        self.db.refresh(row)
+        return row
 
 
 class DeletedAccountQuotaRepository:

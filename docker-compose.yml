@@ -53,7 +53,7 @@ services:
       GOOGLE_GROUP_EMAIL: ${GOOGLE_GROUP_EMAIL:-}
       GOOGLE_SERVICE_ACCOUNT_JSON: ${GOOGLE_SERVICE_ACCOUNT_JSON:-}
 
-      # AI Provider
+      # AI Provider (AI_PROVIDER only accepts gemini; the active model is chosen in /admin/settings)
       AI_PROVIDER: ${AI_PROVIDER:-gemini}
       GEMINI_API_KEY: ${GEMINI_API_KEY:?GEMINI_API_KEY is required}
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.8-flash}
@@ -63,6 +63,13 @@ services:
       GEMINI_MEDIA_RESOLUTION_IMAGES: ${GEMINI_MEDIA_RESOLUTION_IMAGES:-high}
       GEMINI_DEBUG_LOGS: ${GEMINI_DEBUG_LOGS:-false}
       GEMINI_DISABLE_FILE_CACHE: ${GEMINI_DISABLE_FILE_CACHE:-false}
+      # Anthropic (Claude) - selectable in /admin/settings once approved.
+      # PROCESSOR_APPROVED stays false here; set it in .env after the GDPR sign-off.
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_EFFORT: ${ANTHROPIC_EFFORT:-high}
+      ANTHROPIC_EFFORT_AUX: ${ANTHROPIC_EFFORT_AUX:-medium}
+      ANTHROPIC_TIMEOUT: ${ANTHROPIC_TIMEOUT:-180}
+      ANTHROPIC_PROCESSOR_APPROVED: ${ANTHROPIC_PROCESSOR_APPROVED:-false}
 
       # Translation (EN->PL for status messages)
       TRANSLATE_ENABLED: ${TRANSLATE_ENABLED:-false}

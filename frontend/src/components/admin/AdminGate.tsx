@@ -1,0 +1,78 @@
+import { ReactNode } from "react";
+import { redirect } from "next/navigation";
+import { Box, Paper, Alert, Typography } from "@mui/material";
+import { serverFetch, APIError } from "@/lib/api/server";
+import { AdminMeResponse } from "@/lib/types";
+import { PageHeader } from "@/components/layout/PageHeader";
+
+type AdminStatusResult =
+  | { type: "success"; data: AdminMeResponse }
+  | { type: "auth_error" }
+  | { type: "server_error"; message: string };
+
+async function getAdminStatus(): Promise<AdminStatusResult> {
+  try {
+    const data = await serverFetch<AdminMeResponse>("/api/admin/me");
+    return { type: "success", data };
+  } catch (error) {
+    if (error instanceof APIError && (error.status === 401 || error.status === 403)) {
+      return { type: "auth_error" };
+    }
+    return { type: "server_error", message: error instanceof Error ? error.message : "Unknown error" };
+  }
+}
+
+/**
+ * Server-side admin check shared by the /admin pages: redirects to login when
+ * signed out, shows "Brak dostępu" to non-admins and renders children otherwise.
+ */
+export async function AdminGate({ loginNext, children }: { loginNext: string; children: ReactNode }) {
+  const result = await getAdminStatus();
+
+  // Handle server errors (show error message instead of auth error)
+  if (result.type === "server_error") {
+    return (
+      <Box>
+        <PageHeader title="Panel administratora" />
+        <Paper sx={{ p: 4, textAlign: "center" }}>
+          <Alert severity="error" sx={{ mb: 2 }}>
+            Błąd serwera
+          </Alert>
+          <Typography variant="body1" color="text.secondary">
+            Nie udało się załadować panelu: {result.message}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            Spróbuj ponownie później.
+          </Typography>
+        </Paper>
+      </Box>
+    );
+  }
+
+  // Redirect to login if not authenticated
+  if (result.type === "auth_error" || !result.data.is_authenticated) {
+    redirect(`/login?next=${encodeURIComponent(loginNext)}`);
+  }
+
+  // Show access denied if not admin
+  if (!result.data.is_admin) {
+    return (
+      <Box>
+        <PageHeader title="Panel administratora" />
+        <Paper sx={{ p: 4, textAlign: "center" }}>
+          <Alert severity="error" sx={{ mb: 2 }}>
+            Brak dostępu
+          </Alert>
+          <Typography variant="body1" color="text.secondary">
+            Nie masz uprawnień do panelu administracyjnego.
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            Skontaktuj się z administratorem, jeśli uważasz, że to błąd.
+          </Typography>
+        </Paper>
+      </Box>
+    );
+  }
+
+  return <>{children}</>;
+}

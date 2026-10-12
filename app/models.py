@@ -273,6 +273,57 @@ class DeleteAccountResponse(BaseModel):
     deleted_files: int
 
 
+# ==================== Admin: AI provider/model ====================
+
+
+class AiConfigUpdateRequest(BaseModel):
+    """Body of PUT /api/admin/ai-config."""
+    provider: str = Field(max_length=32)
+    model: str = Field(max_length=128)
+
+
+class AiModelOption(BaseModel):
+    id: str
+    label: str
+
+
+class AiProviderOption(BaseModel):
+    id: str
+    label: str
+    configured: bool  # API key set (the key itself is never sent)
+    approved: bool    # GDPR: may student data go to this provider
+    models: list[AiModelOption]
+
+
+class AiActiveModel(BaseModel):
+    provider: str
+    model: str
+    model_label: str
+    source: str  # "db" | "env"
+    updated_at: Optional[datetime] = None
+    updated_by: Optional[str] = None
+
+
+class AiEffectiveModel(BaseModel):
+    """The model AI calls actually use right now."""
+    provider: str
+    model: str
+    model_label: str
+
+
+class AiConfigResponse(BaseModel):
+    active: AiActiveModel          # the stored choice (or the env default)
+    effective: AiEffectiveModel    # what grades - differs when the stored choice is unusable
+    fallback_reason: Optional[str] = None  # why effective != active, else None
+    providers: list[AiProviderOption]
+
+
+class AiConfigUpdateResponse(BaseModel):
+    active: AiActiveModel
+    effective: AiEffectiveModel
+    fallback_reason: Optional[str] = None
+
+
 # ==================== Private tasks (Moje zadania) ====================
 
 

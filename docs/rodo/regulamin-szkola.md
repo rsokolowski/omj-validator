@@ -113,7 +113,8 @@ Uczniowi zabrania się:
 ## § 7. Sztuczna inteligencja — jak działa i czego się po niej nie spodziewać
 
 1. Ocena punktowa i informacja zwrotna są generowane przez **system sztucznej inteligencji**
-   (model językowy dostarczany przez Google), a nie przez człowieka. Żaden nauczyciel nie
+   (model językowy dostarczany przez Google lub Anthropic — w danym momencie przez jednego
+   z nich, wybranego przez Administratora Narzędzia), a nie przez człowieka. Żaden nauczyciel nie
    sprawdza wyniku przed pokazaniem go Uczniowi.
 2. **Ocena AI bywa błędna.** Typowe przyczyny: nieczytelne pismo, rysunek geometryczny, zdjęcie
    pod kątem lub nieostre, rozwiązanie poprawne, ale zapisane inną metodą niż wzorcowa, brak
@@ -158,8 +159,14 @@ Uczniowi zabrania się:
    po dane konkretnego Ucznia jest rejestrowane (kto, czyje dane, jaki zasób, kiedy — bez
    treści i bez frazy wyszukiwania). Uczeń i rodzic mogą wystąpić o informację z tego dziennika.
    Zapisy przechowywane są przez [UZUPEŁNIĆ — wartość domyślna narzędzia: 12 miesięcy].
-4. Fotografie rozwiązań są przekazywane dostawcy usługi sztucznej inteligencji **bez danych
-   identyfikujących Ucznia** i usuwane z jego infrastruktury po zakończeniu analizy.
+4. Fotografie rozwiązań są przekazywane dostawcy usługi sztucznej inteligencji (w danym
+   momencie jednemu: Google albo Anthropic) **bez danych identyfikujących Ucznia**. Google
+   usuwa pliki ze swojej infrastruktury po zakończeniu analizy; Anthropic otrzymuje fotografie
+   w treści zapytania, bez zapisywania plików. Google może przechowywać zapisy techniczne
+   maksymalnie 55 dni, wyłącznie w celu wykrywania naruszeń zasad korzystania z usługi.
+   Anthropic usuwa przesłane treści i odpowiedzi w ciągu 30 dni, a dłużej przechowuje je
+   wyłącznie w razie egzekwowania zasad korzystania z usługi lub obowiązku prawnego. Szczegóły
+   w klauzuli informacyjnej.
 5. Kontakt w sprawach ochrony danych: inspektor ochrony danych Szkoły, [E-MAIL IOD].
 
 ## § 9. Dostępność Narzędzia i ograniczenie odpowiedzialności

@@ -1,7 +1,7 @@
 # Anthropic (Claude) provider and runtime AI model switch — design
 
 Date: 2026-10-12
-Status: approved in discussion, awaiting written-spec review
+Status: implemented 2026-10-12 (this text was aligned with the implementation afterwards)
 
 ## Context and goal
 
@@ -32,7 +32,7 @@ This feature adds:
 | Model choice | Curated list only, no free text |
 | Curated models | Gemini: `gemini-3.8-flash`, `gemini-3.1-pro-preview`. Claude: `claude-opus-5-5`, `claude-sonnet-5-5`, `claude-haiku-5-5` |
 | Storage | New `app_settings` table, one row `ai_model` |
-| Default without a row | `AI_PROVIDER` + `GEMINI_MODEL` from the environment, exactly as today |
+| Default without a row | Gemini with `GEMINI_MODEL` from the environment; `AI_PROVIDER` other than `gemini` is ignored with a warning |
 | API keys | Environment only (`GEMINI_API_KEY`, `ANTHROPIC_API_KEY`); never in the DB, never in the UI |
 | Provider structure | Separate `AnthropicProvider` class; provider-neutral pieces extracted from `gemini.py` |
 | A/B tooling | `rescore_eval.py`, `ab_compare.py` take `--provider` / `--model` |
@@ -45,7 +45,7 @@ This feature adds:
 | column | type | notes |
 |---|---|---|
 | `key` | `String(64)` PK | `"ai_model"` is the only key for now |
-| `value` | `JSONB` | `{"provider": "anthropic", "model": "claude-opus-5-5"}` |
+| `value` | `JSON` (`sa.JSON`; tests run on SQLite) | `{"provider": "anthropic", "model": "claude-opus-5-5"}` |
 | `updated_at` | `DateTime(tz)` | server default `now()` |
 | `updated_by` | `String` nullable | admin's e-mail; null for seeds |
 
@@ -69,9 +69,11 @@ def set_active_model(provider, model, updated_by) -> ActiveModel  # writes + dro
 ```
 
 - `get_active_model()` reads the row through a short-lived session; on no row,
-  an unknown model, or a DB error it falls back to the environment
-  (`settings.ai_provider`, `settings.gemini_model`) and logs a warning — a
-  broken config row must never stop grading.
+  an unknown model, or a DB error it falls back to the environment default
+  (`env_default()`: always Gemini with `settings.gemini_model`) and logs a
+  warning — a broken config row must never stop grading. The environment
+  default is never Claude: `AI_PROVIDER` set to anything other than `gemini`
+  is ignored with a one-time warning.
 - The 30 s TTL is what makes a switch visible to other workers. Prod runs one
   gunicorn worker, so in practice the change is immediate (the cache is dropped
   on write in the same process).
@@ -97,14 +99,19 @@ def models_for(provider) -> list[ModelInfo]
 |---|---|---|---|
 | gemini | `gemini-3.8-flash` | Gemini 3.8 Flash | `_FLASH_PRICING` (promo through 2026-12-31) |
 | gemini | `gemini-3.1-pro-preview` | Gemini 3.1 Pro (preview) | 2.00 / 12.00, long tier 4.00 / 18.00 above 200k |
-| anthropic | `claude-opus-5-5` | Claude Opus 5.5 | 4.00 / 20.00 |
-| anthropic | `claude-sonnet-5-5` | Claude Sonnet 5.5 | 2.00 / 10.00 |
-| anthropic | `claude-haiku-5-5` | Claude Haiku 5.5 | 0.10 / 0.50 (0.50 / 2.50 above 100k input) |
+| anthropic | `claude-opus-5-5` | Claude Opus 5.5 | 4.00 / 20.00; cache read 0.20, cache write 5.00 |
+| anthropic | `claude-sonnet-5-5` | Claude Sonnet 5.5 | 2.00 / 10.00; cache read 0.20, cache write 2.50 |
+| anthropic | `claude-haiku-5-5` | Claude Haiku 5.5 | 0.10 / 0.50 (0.50 / 2.50 above 100k prompt tokens); cache read 0.01, cache write 0.125 |
 
 `GEMINI_PRICING` stays in `gemini.py` (the A/B scripts and older `scoring_meta`
 rows reference models that are no longer selectable); the catalog's Gemini
-entries point at it. Claude cache reads are priced from the same table
-(`cache_read` key; 0.1x input) so the estimate is not inflated by caching.
+entries are empty and `estimate_cost` delegates to it. Claude entries carry
+explicit `cache_read` / `cache_write` rates (write = 5-minute TTL, 1.25x input;
+Opus 5.5's cache read is 0.20, not 0.1x input). In Haiku's long tier
+(prompt tokens incl. cache reads/writes above `long_threshold`) the cache rates
+are derived from the long input rate: read 0.1x, write 1.25x `long_input`.
+Claude thinking tokens are part of `output_tokens`, so `thoughts_tokens` is 0
+for Claude.
 
 `GEMINI_MODEL` from the environment may name a model outside the catalog
 (e.g. `gemini-3.7-flash`); that keeps working as the env fallback, the admin
@@ -118,20 +125,37 @@ monkeypatches stay valid):
 ```python
 _instances: dict[tuple[str, str], AIProvider] = {}
 
+def resolve_active(active=None) -> tuple[ActiveModel, str | None]:
+    active = active or get_active_model()
+    if active.source != "env" and not usable(active.provider):  # no key / not approved
+        return env_default(), reason                       # always Gemini; Polish reason
+    return active, None
+
 def create_ai_provider() -> AIProvider:
-    active = get_active_model()
-    key = (active.provider, active.model)
-    if key not in _instances:
-        _instances[key] = _build(active.provider, active.model)
+    effective, _ = resolve_active()
+    provider, model = effective.provider, effective.model
+    if not provider_approved(provider):
+        raise AIProviderError(...)                         # gate on the resolved provider
+    key = (provider, model)
+    if key not in _instances:                              # under a lock
+        _instances[key] = build_provider(provider, model)
     return _instances[key]
 ```
 
-- `_build` raises `AIProviderError` when the provider's API key is missing,
-  same as today for Gemini.
-- Selecting Claude while `ANTHROPIC_PROCESSOR_APPROVED` is false: the factory
-  logs an error and falls back to the env Gemini model rather than send data to
-  an unapproved processor (defence in depth; the admin endpoint already refuses
-  to save it, section 6).
+- `build_provider(provider, model)` (fresh, uncached; also used by the admin
+  ping and the A/B scripts) raises `AIProviderError` when the provider's API
+  key is missing, same as today for Gemini; `_construct` does the actual
+  instantiation.
+- A stored choice that is not usable (no key, or Claude while
+  `ANTHROPIC_PROCESSOR_APPROVED` is false): `resolve_active` logs an error
+  (once per provider, model and reason) and falls back to the env default
+  (Gemini) rather than stop grading or send data to an unapproved processor
+  (defence in depth; the admin endpoint already refuses to save it, section
+  6). The same function feeds `GET /api/admin/ai-config`, so the page shows
+  the model that actually grades.
+- The approval gate is then checked again on whatever provider was resolved,
+  whatever its source: a provider not approved as a processor is never built
+  (`AIProviderError`).
 - A grading run that already holds an instance finishes on it; the next call
   picks up the new one. Old instances stay cached (at most five models — no
   eviction needed).
@@ -147,7 +171,8 @@ same shape — the precondition for a fair A/B:
 | new module | moved out of `gemini.py` |
 |---|---|
 | `app/ai/schemas.py` | `RESPONSE_JSON_SCHEMA` and the extraction / meta / refine / suggest / link schemas |
-| `app/ai/prompt_builder.py` (exists) | prompt loading (`_load_prompt`), `_student_text`, `_draft_text`, `_answers_text`, `_conversation_text` and the text assembly of each call |
+| `app/ai/prompt_builder.py` (exists) | prompt files: loading and caching (`build_prompt`, `load_private_prompt`), plus the typed-solution block (`solution_text_block`), `solution_shape_line` and `CLOSING_LINE` |
+| `app/ai/requests.py` (new) | the text assembly of each call: `omj_grading_text`, `private_grading_text`, `photo_label`, `extract_text`, `meta_text`, `student_text`, `draft_text`, `answers_text`, `conversation_text`, `refine_text`, `suggest_text`, `link_text` |
 | `app/ai/parsing.py` (exists) | anything left in `gemini.py` that turns raw JSON into `SubmissionResult` / private / pattern results |
 
 What stays Gemini-only: File API upload + 24h cache, media resolution ladder,
@@ -173,14 +198,20 @@ Uses the official `anthropic` SDK (`AsyncAnthropic`), pinned in
 
 ### Request shape
 
+- **Prompt parity**: every request (grading and auxiliary) is ONE user message
+  whose blocks carry exactly the text of `app/ai/requests.py` in Gemini's
+  order. There is no `system` prompt split — an A/B between providers must
+  compare models, not prompt layouts.
 - **Grading** (`analyze_solution`, `analyze_solution_stream`,
-  `analyze_private_solution_stream`): one user message containing, in the same
-  order as the Gemini call, the task PDF and official-solution PDF as base64
-  `document` blocks (OMJ only), the student photos as base64 `image` blocks,
-  then the prompt text and the fenced `<rozwiazanie_ucznia>` block from
-  `prompt_builder.solution_text_block`. The instruction part goes in `system`.
-- `cache_control: {"type": "ephemeral"}` on the last PDF block, so repeated
-  submissions to the same task reuse the PDF prefix.
+  `analyze_private_solution_stream`): OMJ grading sends the grading text, the
+  task PDF and official-solution PDF (if any) as base64 `document` blocks, the
+  student photos as base64 `image` blocks, the fenced `<rozwiazanie_ucznia>`
+  block from `prompt_builder.solution_text_block` (if any) and the closing
+  line. Private grading: the same without PDFs, with the task text instead.
+- **No `cache_control`** on the PDFs: the prefix starts with per-task grading
+  text, so a cache entry would rarely be hit, while every miss pays the 1.25x
+  cache-write rate on the PDFs. `cache_read_tokens` / `cache_write_tokens` are
+  still read from the usage and priced.
 - `thinking: {"type": "adaptive", "display": "summarized"}`; streamed
   `thinking_delta` text goes to `on_thinking`, which feeds the existing
   WebSocket path (headings + optional translation) unchanged. `on_upload_complete`
@@ -198,9 +229,14 @@ Uses the official `anthropic` SDK (`AsyncAnthropic`), pinned in
   server-side fallback). A final `stop_reason == "refusal"` raises
   `AIContentBlockedError` — the same contract as a Gemini safety block.
 - Images: photos are already sanitised JPEG/PNG/WebP from `app/uploads.py`;
-  HEIC is converted on upload. Images over the Messages API per-image size /
-  dimension limits (take the current values from the API docs at implementation
-  time) are downscaled in memory before encoding, never on disk.
+  HEIC is converted on upload. A photo over the per-image limits (5 MB
+  base64, 8000 px per side) is re-encoded in memory to a JPEG of at most
+  2000 px on the long side, never on disk.
+- Request-size budget: the API rejects bodies over 32 MB, so PDFs + photos
+  (base64) + text are kept under a 24 MB budget by re-encoding all photos
+  smaller step by step (1600 px, then 1200 px, JPEG quality 80); if the request
+  is still over budget the student gets "Przesłane zdjęcia są zbyt duże.
+  Spróbuj wysłać mniej zdjęć."
 
 ### Errors
 
@@ -208,15 +244,28 @@ Uses the official `anthropic` SDK (`AsyncAnthropic`), pinned in
 `APITimeoutError` -> `AIProviderError` with the same Polish user-facing
 messages `GeminiProvider._friendly_error` produces; `BadRequestError` ->
 `AIProviderError` with a generic message and the detail in the log.
-`AuthenticationError` -> `AIProviderError("Błąd konfiguracji dostawcy AI")`.
-SDK retries (default 2) stay on.
+`AuthenticationError` / `PermissionDeniedError` -> `AIProviderError` with the
+child-friendly "Przepraszamy, wystąpił problem techniczny. Spróbuj ponownie
+później." (a configuration problem is not something to show a student; the
+log carries the error type, status and request id). SDK retries (default 2)
+stay on.
 
 ### `scoring_meta`
 
 Both providers write `provider`, `model`, `input_tokens`, `output_tokens`,
-`cache_read_tokens` (Claude) / `thoughts_tokens` (Gemini), `cost_usd`,
-`api_time`, `total_time`, `thinking`. Adding `provider` to Gemini rows is the
-only change on the Gemini side; rows without it are Gemini by definition.
+`thoughts_tokens` (0 for Claude), `estimated_cost` (the existing Gemini key,
+kept for both), `api_time`, `total_time`, `thinking`; Claude also
+`cache_read_tokens`, `cache_write_tokens` and, when a server-side fallback
+answered, `served_by`. Adding `provider` to Gemini rows is the only change on
+the Gemini side; rows without it are Gemini by definition.
+
+### Live status from thinking
+
+The WebSocket status line comes from `**Heading**` markers in the thinking
+stream (Gemini). Claude's summarized thinking is plain prose, so
+`app/websocket/progress.py` falls back to the first line of the latest
+completed paragraph (markdown stripped, at most ~80 characters) when the
+thinking has no heading.
 
 ## 6. Admin API and UI
 
@@ -224,26 +273,36 @@ only change on the Gemini side; rows without it are Gemini by definition.
 
 ```
 GET /api/admin/ai-config
-  -> {active: {provider, model, source, updated_at, updated_by},
+  -> {active: {provider, model, model_label, source, updated_at, updated_by},
+      effective: {provider, model, model_label},   # what grades (resolve_active)
+      fallback_reason: str | null,                 # why effective != active
       providers: [{id, label, configured, approved,
                    models: [{id, label}]}]}
 
 PUT /api/admin/ai-config   body {provider, model}
-  -> 200 {active: ...}
+  -> 200 {active: ..., effective: ..., fallback_reason: ...}
   -> 400 model not in catalog
   -> 409 provider API key not configured, or anthropic not approved (GDPR gate)
-  -> 502 test call failed (message from the provider error)
+  -> 502 test call failed, timed out, or raised an unexpected error
+         (provider error message, or a generic one); nothing is saved
 ```
 
 - Both behind `_require_admin`.
 - `PUT` runs a test call before saving: a new protocol method
-  `async ping() -> None` on both providers sends one minimal request
-  ("Odpowiedz: OK", small `max_tokens`, lowest effort) to the chosen model
-  through a freshly built provider, with a 30 s timeout. Any non-error response
-  counts as success (a `max_tokens` stop is fine — thinking may use the budget);
-  an exception means 502 and nothing is saved.
+  `async ping() -> None` on both providers sends one small request to the
+  chosen model through a freshly built provider, with a 30 s timeout. Claude's
+  ping goes through the grading request builder (beta path + fallbacks on
+  Opus/Sonnet, adaptive thinking, a tiny strict JSON schema, `effort: low`,
+  `max_tokens` 2048), so a request shape the API rejects fails here and not on
+  a student's grading. Any non-error response counts as success (a
+  `max_tokens` stop is fine — thinking may use the budget); any exception,
+  including the timeout, means 502 and nothing is saved. The 502 detail names
+  the HTTP status code and status text when there is one (`429
+  RESOURCE_EXHAUSTED`, `503 Service Unavailable`), never the response body.
+- After a successful `PUT` the pinged instance seeds the factory cache, so the
+  first real call does not build a client.
 - The change is logged at INFO (`AI model changed: gemini/gemini-3.8-flash ->
-  anthropic/claude-opus-5-5 by <admin e-mail>`). It is not written to
+  anthropic/claude-opus-5-5 by <masked admin e-mail>`, via `mask_email`). It is not written to
   `admin_access_log` — that table records access to other users' data, which
   this is not; `app_settings.updated_by/updated_at` keep the last change.
 
@@ -251,7 +310,8 @@ PUT /api/admin/ai-config   body {provider, model}
 
 - Link from the existing admin page header ("Ustawienia AI").
 - Shows the active provider + model, its source (baza / konfiguracja serwera),
-  who changed it and when.
+  who changed it and when. When the stored model is unusable, a warning:
+  "Zapisany model jest niedostępny ({reason}) — oceny wykonuje {effective}."
 - Provider radio + model select (models of the chosen provider). A provider
   with no key or not approved is disabled with the reason as helper text.
 - "Zapisz" -> spinner "Sprawdzam model…" -> success toast or the error from
@@ -262,12 +322,15 @@ PUT /api/admin/ai-config   body {provider, model}
 ## 7. A/B tooling
 
 - `scripts/rescore_eval.py`: `--provider {gemini,anthropic}` and `--model`
-  (catalog ids, plus any id for Gemini as before); builds the provider through
-  `factory._build`, so prompts and parsing are identical to prod. Token usage
-  and cost come from the result's `scoring_meta` instead of monkeypatching
-  `generate_content`.
-- `scripts/ab_compare.py`: cost from the catalog pricing; output columns
-  labelled `provider/model`.
+  (catalog ids for Claude, any id for Gemini as before); Claude is built
+  through `factory.build_provider`, Gemini directly as `GeminiProvider(model)`,
+  and both grade through `analyze_solution_stream`, so prompts and parsing are
+  identical to prod. Token usage and cost come from the result's
+  `scoring_meta` instead of monkeypatching `generate_content`. The Claude arm
+  refuses to run unless `ANTHROPIC_PROCESSOR_APPROVED` is true.
+- `scripts/ab_compare.py`: cost from the row's `estimated_cost`, else from
+  the pricing tables (older Gemini result files); arms labelled
+  `provider/model`.
 - `docs/model-ab-playbook.md`: how to run a Claude arm; note that the A/B runs
   send prod photos to Anthropic, so they need the same GDPR approval as prod use.
 
@@ -362,7 +425,7 @@ Backend (pytest, existing fixtures):
   nothing is saved; 200 saves `updated_by`.
 - `test_anthropic_provider.py`, against a stubbed `AsyncAnthropic`: request
   contents for OMJ grading (PDF blocks, image blocks, solution text block,
-  cache_control, schema, effort, fallbacks only on Opus/Sonnet); private
+  no cache_control, schema, effort, fallbacks only on Opus/Sonnet); private
   grading without PDFs; thinking deltas reach `on_thinking`; refusal ->
   `AIContentBlockedError`; error mapping; `scoring_meta` fields and cost.
 - Gemini request snapshot test (section 4) taken before the refactor.

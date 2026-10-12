@@ -72,8 +72,10 @@ Zmienne środowiskowe (`.env`):
 |---------|------|
 | `AUTH_KEY` | Klucz dostępu do aplikacji |
 | `GEMINI_API_KEY` | Klucz API Google Gemini do analizy rozwiązań |
-| `GEMINI_MODEL` | Model do użycia (domyślnie: `gemini-3.8-flash`) |
-| `AI_PROVIDER` | Dostawca AI (obecnie tylko `gemini`) |
+| `GEMINI_MODEL` | Domyślny model Gemini, używany dopóki administrator nie wybierze modelu w `/admin/settings` (domyślnie: `gemini-3.8-flash`) |
+| `AI_PROVIDER` | Domyślny dostawca AI - tylko `gemini`; dostawcę i model wybiera się w trakcie działania aplikacji w `/admin/settings` |
+| `ANTHROPIC_API_KEY` | Klucz API Anthropic (Claude), opcjonalny - drugi dostawca do wyboru w `/admin/settings` |
+| `ANTHROPIC_PROCESSOR_APPROVED` | `true` dopiero po zatwierdzeniu Anthropic jako podmiotu przetwarzającego (RODO); domyślnie `false` - wtedy modele Claude są niedostępne |
 
 ## Źródła materiałów
 

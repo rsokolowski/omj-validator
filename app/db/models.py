@@ -27,6 +27,7 @@ from sqlalchemy import (
     Date,
     SmallInteger,
     UniqueConstraint,
+    func,
 )
 from sqlalchemy.orm import relationship
 
@@ -506,3 +507,18 @@ class AdminAccessLogDB(Base):
             f"<AdminAccessLog {self.resource} by {self.admin_email} "
             f"at {self.created_at}>"
         )
+
+
+class AppSettingDB(Base):
+    """Runtime settings an admin can change without a deploy.
+
+    Only "ai_model" ({"provider", "model"}) today. Secrets never go here - API
+    keys stay in the environment.
+    """
+
+    __tablename__ = "app_settings"
+
+    key = Column(String(64), primary_key=True)
+    value = Column(JSON, nullable=False)
+    updated_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now(), onupdate=func.now())
+    updated_by = Column(String, nullable=True)

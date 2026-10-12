@@ -88,8 +88,18 @@ from .storage import (
     _load_all_tasks,
 )
 from .ai import create_ai_provider, AIProviderError
+from .ai import config_store as ai_config_store
+from .ai import factory as ai_factory
+from .ai import models_catalog
 from .models import (
     ACCOUNT_DELETE_CONFIRMATION,
+    AiActiveModel,
+    AiConfigResponse,
+    AiConfigUpdateRequest,
+    AiConfigUpdateResponse,
+    AiEffectiveModel,
+    AiModelOption,
+    AiProviderOption,
     DeleteAccountRequest,
     DeleteAccountResponse,
     SubmissionResult,
@@ -1832,6 +1842,111 @@ async def admin_me(request: Request):
         "is_authenticated": user is not None,
         "is_admin": _is_admin(request),
     }
+
+
+# A real round trip to the model; longer than any sane ping, shorter than a proxy timeout.
+AI_CONFIG_PING_TIMEOUT_SECONDS = 35
+
+ANTHROPIC_NOT_APPROVED_DETAIL = (
+    "Dostawca Anthropic nie jest jeszcze zatwierdzony jako podmiot przetwarzający "
+    "(ANTHROPIC_PROCESSOR_APPROVED)."
+)
+
+
+def _active_model_out(active: "ai_config_store.ActiveModel") -> AiActiveModel:
+    info = models_catalog.get_model(active.provider, active.model)
+    return AiActiveModel(
+        provider=active.provider,
+        model=active.model,
+        model_label=info.label if info else active.model,
+        source=active.source,
+        updated_at=ensure_utc(active.updated_at) if active.updated_at else None,
+        updated_by=active.updated_by,
+    )
+
+
+def _effective_model_out(effective: "ai_config_store.ActiveModel") -> AiEffectiveModel:
+    info = models_catalog.get_model(effective.provider, effective.model)
+    return AiEffectiveModel(
+        provider=effective.provider,
+        model=effective.model,
+        model_label=info.label if info else effective.model,
+    )
+
+
+@app.get("/api/admin/ai-config", response_model=AiConfigResponse)
+async def admin_get_ai_config(request: Request):
+    """Stored and effective AI provider/model and the selectable catalog (admin only). Never exposes keys."""
+    _require_admin(request)
+    active = await asyncio.to_thread(ai_config_store.get_active_model)
+    effective, fallback_reason = ai_factory.resolve_active(active)
+    providers = [
+        AiProviderOption(
+            id=provider,
+            label=models_catalog.PROVIDER_LABELS[provider],
+            configured=models_catalog.provider_configured(provider),
+            approved=models_catalog.provider_approved(provider),
+            models=[AiModelOption(id=m.id, label=m.label) for m in models_catalog.models_for(provider)],
+        )
+        for provider in models_catalog.PROVIDERS
+    ]
+    return AiConfigResponse(
+        active=_active_model_out(active),
+        effective=_effective_model_out(effective),
+        fallback_reason=fallback_reason,
+        providers=providers,
+    )
+
+
+@app.put("/api/admin/ai-config", response_model=AiConfigUpdateResponse)
+async def admin_put_ai_config(
+    request: Request,
+    body: AiConfigUpdateRequest,
+    db: Session = Depends(get_db),
+):
+    """Switch the AI provider/model for new AI calls (admin only).
+
+    Nothing is stored unless the model answers a ping, so a typo or a dead key
+    can never leave grading pointed at a model that does not work.
+    """
+    _require_admin(request)
+    provider, model = body.provider, body.model
+    if models_catalog.get_model(provider, model) is None:
+        raise HTTPException(status_code=400, detail="Nieznany model.")
+    if not models_catalog.provider_configured(provider):
+        raise HTTPException(status_code=409, detail="Brak klucza API dla tego dostawcy.")
+    if not models_catalog.provider_approved(provider):
+        raise HTTPException(status_code=409, detail=ANTHROPIC_NOT_APPROVED_DETAIL)
+
+    try:
+        candidate = ai_factory.build_provider(provider, model)
+        await asyncio.wait_for(candidate.ping(), AI_CONFIG_PING_TIMEOUT_SECONDS)
+    except AIProviderError as e:
+        logger.warning(f"[AI config] Ping of {provider}/{model} failed: {type(e).__name__}")
+        raise HTTPException(status_code=502, detail=str(e))
+    except asyncio.TimeoutError:
+        logger.warning(f"[AI config] Ping of {provider}/{model} timed out")
+        raise HTTPException(
+            status_code=502,
+            detail=f"Model {model} nie odpowiedział w ciągu {AI_CONFIG_PING_TIMEOUT_SECONDS} s.",
+        )
+    except Exception as e:
+        logger.error(f"[AI config] Ping of {provider}/{model} raised {type(e).__name__}")
+        raise HTTPException(status_code=502, detail=f"Nie udało się sprawdzić modelu {model}.")
+
+    old = await asyncio.to_thread(ai_config_store.get_active_model)
+    user = get_current_user(request) or {}
+    email = user.get("email")
+    active = ai_config_store.set_active_model(db, provider, model, email)
+    # The pinged client serves the first real call (no client build on the event loop)
+    ai_factory.remember(provider, model, candidate)
+    logger.info(f"AI model changed: {old.provider}/{old.model} -> {provider}/{model} by {mask_email(email)}")
+    effective, fallback_reason = ai_factory.resolve_active(active)
+    return AiConfigUpdateResponse(
+        active=_active_model_out(active),
+        effective=_effective_model_out(effective),
+        fallback_reason=fallback_reason,
+    )
 
 
 @app.post("/api/admin/submissions/{submission_id}/rerun")

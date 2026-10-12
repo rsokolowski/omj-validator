@@ -16,7 +16,7 @@ const RETENTION_PATTERNS = "24 miesiące";
 const RETENTION_AI_USAGE = "90 dni";
 const RETENTION_ADMIN_AUDIT = "12 miesięcy";
 
-const LAST_UPDATED = "wrzesień 2026";
+const LAST_UPDATED = "12 października 2026";
 
 export const metadata: Metadata = {
   title: "Regulamin i polityka prywatności",
@@ -72,9 +72,10 @@ export default function RegulaminPage() {
             rekrutację. To trenażer.
           </li>
           <li>
-            <strong>Twoje zdjęcie kartki albo wpisany tekst rozwiązania (i rysunek) są wysyłane do firmy Google</strong>,
-            żeby program mógł je przeczytać i ocenić. Nie wysyłamy tam Twojego
-            imienia, nazwiska ani adresu e-mail.
+            <strong>Twoje zdjęcie kartki albo wpisany tekst rozwiązania (i rysunek) są wysyłane do firmy Google albo Anthropic</strong>,
+            żeby program mógł je przeczytać i ocenić. Serwis używa w danej
+            chwili tylko jednej z tych firm, więc rozwiązanie nie trafia do obu
+            naraz. Nie wysyłamy tam Twojego imienia, nazwiska ani adresu e-mail.
           </li>
           <li>
             <strong>Nie podpisuj kartki</strong> imieniem i nazwiskiem. Serwis i
@@ -155,7 +156,8 @@ export default function RegulaminPage() {
           <Typography paragraph>
             <strong>
               Punkty i komentarze są generowane przez sztuczną inteligencję
-              (model językowy Google Gemini) i mogą być błędne.
+              (model językowy Google Gemini lub Anthropic Claude) i mogą być
+              błędne.
             </strong>{" "}
             Program myli się najczęściej wtedy, gdy pismo jest nieczytelne, gdy
             zadanie ma rysunek, gdy zdjęcie jest zrobione pod kątem albo gdy
@@ -415,10 +417,15 @@ export default function RegulaminPage() {
 
         <Section title="7. Komu przekazujemy dane">
           <Typography paragraph>
-            <strong>Google &ndash; analiza rozwiązania (Gemini API).</strong>{" "}
-            Twoje zdjęcia i wpisany tekst rozwiązania razem z treścią zadania i
-            rozwiązaniem wzorcowym są przesyłane do usługi Google Gemini, która wykonuje ocenę. Ważne
-            szczegóły:
+            <strong>Dostawca analizy rozwiązania (AI).</strong> Twoje zdjęcia i
+            wpisany tekst rozwiązania razem z treścią zadania i rozwiązaniem
+            wzorcowym są przesyłane do usługi sztucznej inteligencji, która
+            wykonuje ocenę. Serwis może korzystać z jednej z dwóch firm:{" "}
+            <strong>Google</strong> (Gemini) albo <strong>Anthropic</strong>{" "}
+            (Claude).{" "}
+            <strong>W danej chwili używa tylko jednej z nich</strong> &ndash;
+            wybiera ją administrator. Twoje rozwiązanie jest wysyłane tylko do
+            tej jednej, nie do obu naraz. Zasady wspólne dla obu firm:
           </Typography>
           <Box component="ul" sx={{ pl: 3, mb: 2 }}>
             <li>
@@ -430,20 +437,26 @@ export default function RegulaminPage() {
               rozwiązania i treść zadania, a nazwy plików są losowe,
             </li>
             <li>
-              pliki są <strong>usuwane</strong> z infrastruktury Google zaraz po
-              zakończeniu analizy,
-            </li>
-            <li>
-              przy pracy ze <strong>wzorcami</strong> do Gemini trafia tylko tekst:
+              przy pracy ze <strong>wzorcami</strong> trafia tam tylko tekst:
               szkic wzorca, Twoje odpowiedzi, treść zadania, przy którym go
               zauważyłeś, i informacja zwrotna z oceny &ndash; bez zdjęć i bez
               danych konta,
             </li>
             <li>
-              przy <strong>własnych zadaniach</strong> do Google trafia też zdjęcie
+              przy <strong>własnych zadaniach</strong> trafia tam też zdjęcie
               strony z zadaniem (żeby odczytać jego treść) i sama treść zadania
-              (żeby przygotować wskazówki i ocenić rozwiązanie); zdjęcia te nie są
-              przechowywane u Google po zakończeniu analizy,
+              (żeby przygotować wskazówki i ocenić rozwiązanie).
+            </li>
+          </Box>
+          <Typography paragraph>
+            <strong>Google (Gemini API)</strong> &ndash; gdy serwis używa
+            Google:
+          </Typography>
+          <Box component="ul" sx={{ pl: 3, mb: 2 }}>
+            <li>
+              pliki, także zdjęcia stron z własnymi zadaniami, są{" "}
+              <strong>usuwane</strong> z infrastruktury Google zaraz po
+              zakończeniu analizy,
             </li>
             <li>
               korzystamy z <strong>płatnej wersji usługi</strong>, w której
@@ -454,10 +467,31 @@ export default function RegulaminPage() {
             </li>
           </Box>
           <Typography paragraph>
+            <strong>Anthropic (Claude API)</strong> &ndash; gdy serwis używa
+            Anthropic:
+          </Typography>
+          <Box component="ul" sx={{ pl: 3, mb: 2 }}>
+            <li>
+              zdjęcia są wysyłane razem z prośbą o ocenę, a{" "}
+              <strong>nie jako osobne pliki</strong> zapisywane u Anthropic,
+            </li>
+            <li>
+              Anthropic <strong>usuwa</strong> przesłane treści i odpowiedzi w
+              ciągu 30 dni. Dłużej może je zatrzymać tylko wtedy, gdy sprawdza
+              naruszenie zasad korzystania z usługi albo gdy wymaga tego prawo,
+            </li>
+            <li>
+              Anthropic zgodnie z umową{" "}
+              <strong>nie może wykorzystywać</strong> przesyłanych treści do
+              trenowania swoich modeli.
+            </li>
+          </Box>
+          <Typography paragraph>
             <strong>Google &ndash; pozostałe usługi.</strong> Logowanie odbywa się
             przez usługę Google. Komunikaty o postępie analizy mogą być
             tłumaczone z angielskiego na polski przez usługę Google Cloud
-            Translation.
+            Translation &ndash; niezależnie od tego, która firma ocenia
+            rozwiązanie.
           </Typography>
           <Typography paragraph>
             <strong>Dostawca ochrony i przesyłu ruchu.</strong> Połączenie z
@@ -505,14 +539,14 @@ export default function RegulaminPage() {
 
         <Section title="8. Przekazywanie danych poza Unię Europejską">
           <Typography paragraph>
-            Usługi Google, z których korzysta serwis, oznaczają{" "}
+            Korzystanie z usług Google albo Anthropic oznacza{" "}
             <strong>
               przekazanie zdjęcia Twojej pracy do Stanów Zjednoczonych
             </strong>
-            .
+            . Podstawa prawna tego przekazania jest u każdej z tych firm inna.
           </Typography>
           <Typography paragraph>
-            Podstawą tego przekazania jest{" "}
+            <strong>Google.</strong> Podstawą przekazania jest{" "}
             <strong>
               decyzja Komisji Europejskiej stwierdzająca odpowiedni stopień
               ochrony danych
@@ -526,8 +560,16 @@ export default function RegulaminPage() {
             została zaskarżona. Sąd Unii Europejskiej wyrokiem z 3 września 2025
             r. w sprawie T-553/23 oddalił skargę, ale odwołanie do Trybunału
             Sprawiedliwości Unii Europejskiej jest w toku. Decyzja nadal
-            obowiązuje. Gdyby przestała obowiązywać, przekazywanie danych zostanie
-            wstrzymane.
+            obowiązuje. Gdyby przestała obowiązywać, przekazywanie danych do
+            Google zostanie wstrzymane.
+          </Typography>
+          <Typography paragraph>
+            <strong>Anthropic.</strong> Podstawą przekazania są{" "}
+            <strong>standardowe klauzule umowne</strong> przyjęte przez Komisję
+            Europejską (art. 46 ust. 2 lit. c RODO). Są one częścią umowy o
+            przetwarzaniu danych zawartej z Anthropic Ireland, Limited. To
+            gotowe zapisy przygotowane przez Komisję Europejską, w których
+            odbiorca danych spoza Unii zobowiązuje się je chronić.
           </Typography>
         </Section>
 
@@ -786,7 +828,8 @@ export default function RegulaminPage() {
             Serwis jest udostępniany bezpłatnie, &bdquo;tak jak jest&rdquo; (ang.
             &bdquo;as is&rdquo;), bez gwarancji nieprzerwanego działania i bez
             gwarancji poprawności ocen. Przerwy mogą wynikać z prac technicznych,
-            awarii, wyczerpania limitów lub niedostępności usług Google.
+            awarii, wyczerpania limitów lub niedostępności usług Google albo
+            Anthropic.
           </Typography>
           <Typography paragraph>
             Administrator nie ponosi odpowiedzialności za skutki polegania na
