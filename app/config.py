@@ -164,6 +164,21 @@ class Settings(BaseSettings):
     # False when scaling out and run scripts/purge_expired_data.py from cron.
     retention_auto_purge: bool = True
 
+    # Transactional e-mail (parent consent, password reset, parent links).
+    # "console" logs subject + masked recipient + links and keeps the last 50
+    # messages in memory (GET /api/dev/outbox in e2e); "resend" sends through
+    # the Resend API (EU region, domain omj-validator.pl).
+    email_backend: str = "console"
+    resend_api_key: Optional[str] = None
+    resend_api_url: str = "https://api.resend.com/emails"
+    email_from: str = "OMJ Validator <noreply@omj-validator.pl>"
+    email_reply_to: str = "kontakt@omj-validator.pl"
+    # Absolute links in e-mails (and the e-mail logo) are built from this
+    public_base_url: str = "https://omj-validator.pl"
+    # Date of the /regulamin text, stored with every consent record. Bump it
+    # together with LAST_UPDATED in frontend/src/app/regulamin/page.tsx.
+    terms_version: str = "2026-10-12"
+
     # Database
     database_url: Optional[str] = None  # Override with DATABASE_URL env var
 

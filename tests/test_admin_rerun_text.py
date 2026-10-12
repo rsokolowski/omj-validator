@@ -31,7 +31,7 @@ def db(tmp_path, monkeypatch):
     )
     Base.metadata.create_all(bind=engine)
     session = sessionmaker(bind=engine)()
-    session.add(UserDB(google_sub=USER_ID, email="kid@example.com", name="Kid"))
+    session.add(UserDB(id=USER_ID, google_sub=USER_ID, email="kid@example.com", name="Kid"))
     session.add(SubmissionDB(id="orig0001", user_id=USER_ID, year="2024", etap="etap1",
                              task_number=1, images=[], solution_text=TEXT,
                              status=SubmissionStatus.COMPLETED, score=5, feedback="ok"))

@@ -50,7 +50,7 @@ def session_factory(monkeypatch):
     monkeypatch.setattr(handler, "SessionLocal", factory)
 
     db = factory()
-    db.add(UserDB(google_sub=USER_ID, email="a@example.com"))
+    db.add(UserDB(id=USER_ID, google_sub=USER_ID, email="a@example.com"))
     db.add(PrivateTaskDB(id=TASK_ID, user_id=USER_ID, title="Parzystość",
                          content="Wykaż, że $n^2+n$ jest parzyste.", hints=[],
                          source_images=[], origin="typed"))

@@ -20,7 +20,9 @@ from app.db.models import Base, UserDB
 DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://e2e:e2e@localhost:5432/omj_e2e")
 
 # Test users - must match e2e/tests/utils/auth.ts TEST_USERS
-# Note: UserDB only has google_sub, email, name, created_at, updated_at
+# Google accounts of adults (birth_year 2000, active), so the age step and the
+# parent-consent guard stay out of the way of the other specs. users.id equals
+# the Google sub, like every account created before login accounts existed.
 TEST_USERS = [
     {
         "google_sub": "test-user-sub-123",
@@ -85,14 +87,17 @@ def seed_users():
     try:
         for user_data in TEST_USERS:
             # Check if user already exists
-            existing = session.query(UserDB).filter_by(google_sub=user_data["google_sub"]).first()
+            existing = session.query(UserDB).filter_by(id=user_data["google_sub"]).first()
             if existing:
                 print(f"User {user_data['email']} already exists, skipping")
                 continue
 
             # Create user
             user = UserDB(
+                id=user_data["google_sub"],
                 google_sub=user_data["google_sub"],
+                birth_year=2000,
+                status="active",
                 email=user_data["email"],
                 name=user_data["name"],
                 created_at=datetime.now(timezone.utc),

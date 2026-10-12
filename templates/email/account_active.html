@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% import "_macros.html" as ui %}
+{% block preheader %}Dziękujemy za zgodę. Konto {{ child_identifier }} działa.{% endblock %}
+{% block content %}
+            <h1 style="margin:0 0 16px 0; font-size:22px; line-height:1.3; font-weight:700; color:#111827;">Konto Twojego dziecka jest aktywne</h1>
+            <p style="margin:0 0 16px 0;">Dziękujemy za zgodę! Konto <strong style="word-break:break-all;">{{ child_identifier }}</strong> w serwisie {{ app_name }} już działa &ndash; dziecko może przesyłać rozwiązania.</p>
+            <p style="margin:0 0 16px 0;">Na stronie rodzica w każdej chwili możesz usunąć konto razem ze wszystkimi danymi{% if is_login_account %} albo ustawić dziecku nowe hasło{% endif %}. Zachowaj tę wiadomość &ndash; link działa 30 dni, a nowy wyślemy Ci po wpisaniu adresu na stronie {{ site_label }}/rodzic.</p>
+            {{ ui.button(manage_url, "Otwórz stronę rodzica") }}
+{% endblock %}

@@ -1,0 +1,11 @@
+Strona rodzica
+
+Dzień dobry,
+
+oto link do strony rodzica w serwisie {{ app_name }}. Zobaczysz tam konta dziecka powiązane z tym adresem. Możesz usunąć konto razem ze wszystkimi danymi, a przy koncie z loginem - ustawić nowe hasło.
+
+Otwórz stronę rodzica:
+{{ manage_url }}
+
+Link działa 30 dni. Jeśli nikt z Was o niego nie prosił, zignoruj tę wiadomość.
+{% include "_footer.txt" %}

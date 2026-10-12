@@ -298,54 +298,64 @@ class UserRepository:
     def __init__(self, db: Session):
         self.db = db
 
+    def get(self, user_id: str) -> Optional[UserDB]:
+        """Get user by our own id (``users.id``)."""
+        return self.db.get(UserDB, user_id)
+
     def get_by_google_sub(self, google_sub: str) -> Optional[UserDB]:
-        """Get user by Google sub ID."""
+        """Get user by Google identity ('sub' claim)."""
         return self.db.query(UserDB).filter(UserDB.google_sub == google_sub).first()
+
+    def get_by_login(self, login: str) -> Optional[UserDB]:
+        """Get a login/password account (logins are stored lower-case)."""
+        return self.db.query(UserDB).filter(UserDB.login == login.strip().lower()).first()
 
     def get_by_email(self, email: str) -> Optional[UserDB]:
         """Get user by email address."""
         return self.db.query(UserDB).filter(UserDB.email == email).first()
+
+    def update_google_profile(self, user: UserDB, email: str, name: Optional[str]) -> UserDB:
+        """Refresh the Google profile on every Google login."""
+        user.email = email
+        user.name = name
+        user.updated_at = datetime.now(timezone.utc)
+        self.db.commit()
+        self.db.refresh(user)
+        logger.debug(f"Updated user: {mask_email(email)}")
+        return user
 
     def create_or_update(
         self,
         google_sub: str,
         email: str,
         name: Optional[str] = None,
+        **fields,
     ) -> UserDB:
-        """Create a new user or update existing one.
+        """Create a Google user (``id == google_sub``) or refresh its profile.
 
-        Called on every OAuth login to ensure user exists and
-        profile info is up-to-date.
+        Used for the dev "anonymous" account and by tests; real Google
+        registrations go through app/accounts/service.py, which gives new
+        users a random id.
         """
         user = self.get_by_google_sub(google_sub)
 
         if user:
-            # Update existing user
-            user.email = email
-            user.name = name
-            user.updated_at = datetime.now(timezone.utc)
-            logger.debug(f"Updated user: {mask_email(email)}")
-        else:
-            # Create new user
-            user = UserDB(
-                google_sub=google_sub,
-                email=email,
-                name=name,
-            )
-            self.db.add(user)
-            logger.info(f"Created new user: {mask_email(email)}")
+            return self.update_google_profile(user, email, name)
 
+        user = UserDB(id=google_sub, google_sub=google_sub, email=email, name=name, **fields)
+        self.db.add(user)
+        logger.info(f"Created new user: {mask_email(email)}")
         self.db.commit()
         self.db.refresh(user)
         return user
 
-    def delete(self, google_sub: str) -> bool:
+    def delete(self, user_id: str) -> bool:
         """Delete a user and all their submissions (cascade)."""
-        user = self.get_by_google_sub(google_sub)
+        user = self.get(user_id)
         if user:
             self.db.delete(user)
             self.db.commit()
-            logger.info(f"Deleted user: {mask_email(user.email)}")
+            logger.info(f"Deleted user: {mask_user_id(user_id)}")
             return True
         return False
 
@@ -353,7 +363,7 @@ class UserRepository:
         """Count users created in the last N hours (for rate limiting)."""
         threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
         return (
-            self.db.query(func.count(UserDB.google_sub))
+            self.db.query(func.count(UserDB.id))
             .filter(UserDB.created_at >= threshold)
             .scalar()
         ) or 0
@@ -368,7 +378,7 @@ class UserRepository:
         threshold = datetime.now(timezone.utc) - timedelta(hours=hours)
         result = (
             self.db.query(
-                func.count(UserDB.google_sub),
+                func.count(UserDB.id),
                 func.min(UserDB.created_at),
             )
             .filter(UserDB.created_at >= threshold)
@@ -379,7 +389,7 @@ class UserRepository:
         return count, oldest
 
     def search_by_email(self, query: str, limit: int = 10) -> list[UserDB]:
-        """Search users by email prefix (case-insensitive).
+        """Search users by email or login prefix (case-insensitive).
 
         Used for admin panel autocomplete.
 
@@ -395,8 +405,8 @@ class UserRepository:
             return []
         return (
             self.db.query(UserDB)
-            .filter(UserDB.email.ilike(f"{query}%"))
-            .order_by(UserDB.email)
+            .filter(UserDB.email.ilike(f"{query}%") | UserDB.login.ilike(f"{query}%"))
+            .order_by(UserDB.email, UserDB.login)
             .limit(limit)
             .all()
         )
@@ -408,23 +418,20 @@ class UserRepository:
         """
         return self.db.query(UserDB).order_by(UserDB.email).all()
 
-    def get_by_google_subs(self, google_subs: list[str]) -> dict[str, UserDB]:
-        """Get multiple users by Google sub IDs in a single query.
-
-        Args:
-            google_subs: List of Google sub IDs
+    def get_by_ids(self, user_ids: list[str]) -> dict[str, UserDB]:
+        """Get multiple users by id in a single query.
 
         Returns:
-            Dict mapping google_sub to UserDB
+            Dict mapping users.id to UserDB
         """
-        if not google_subs:
+        if not user_ids:
             return {}
         users = (
             self.db.query(UserDB)
-            .filter(UserDB.google_sub.in_(google_subs))
+            .filter(UserDB.id.in_(user_ids))
             .all()
         )
-        return {user.google_sub: user for user in users}
+        return {user.id: user for user in users}
 
 
 class SubmissionRepository:

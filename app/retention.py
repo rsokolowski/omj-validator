@@ -33,6 +33,10 @@ from .db.models import (
     AIUsageDB,
     AdminAccessLogDB,
     DeletedAccountQuotaDB,
+    EmailTokenDB,
+    LoginFailureDB,
+    ParentDB,
+    UserStatus,
     PatternDB,
     PrivateTaskDB,
     SubmissionDB,
@@ -52,7 +56,8 @@ DAYS_PER_MONTH = 30.44
 # exceed the time between writing the files and inserting the submission row.
 ORPHAN_GRACE_HOURS = 24
 
-# A user id is a Google 'sub' (digits) or "anonymous" in dev. Anything with a
+# A user id is a Google 'sub' (digits, older accounts), a uuid4 hex or
+# "anonymous" in dev. Anything with a
 # path separator or a dot segment must never reach a filesystem path.
 _SAFE_USER_ID = re.compile(r"^[A-Za-z0-9_@.-]+$")
 
@@ -69,6 +74,10 @@ class RetentionReport:
     private_tasks_deleted: int = 0
     patterns_deleted: int = 0
     ai_usage_purged: int = 0
+    unconfirmed_accounts_deleted: int = 0
+    email_tokens_purged: int = 0
+    login_failures_purged: int = 0
+    parents_deleted: int = 0
     files_deleted: int = 0
     files_missing: int = 0  # already gone - fine, keeps the run idempotent
     files_skipped_unsafe: int = 0  # path escaped uploads_dir - never touched
@@ -90,6 +99,10 @@ class RetentionReport:
         self.private_tasks_deleted += other.private_tasks_deleted
         self.patterns_deleted += other.patterns_deleted
         self.ai_usage_purged += other.ai_usage_purged
+        self.unconfirmed_accounts_deleted += other.unconfirmed_accounts_deleted
+        self.email_tokens_purged += other.email_tokens_purged
+        self.login_failures_purged += other.login_failures_purged
+        self.parents_deleted += other.parents_deleted
         self.files_deleted += other.files_deleted
         self.files_missing += other.files_missing
         self.files_skipped_unsafe += other.files_skipped_unsafe
@@ -114,7 +127,11 @@ class RetentionReport:
             f"purged {self.audit_entries_purged} admin audit entries, "
             f"deleted {self.private_tasks_deleted} idle private tasks, "
             f"deleted {self.patterns_deleted} idle patterns, "
-            f"purged {self.ai_usage_purged} AI usage rows "
+            f"purged {self.ai_usage_purged} AI usage rows, "
+            f"deleted {self.unconfirmed_accounts_deleted} accounts without parent consent, "
+            f"purged {self.email_tokens_purged} e-mail links, "
+            f"{self.login_failures_purged} login failures, "
+            f"{self.parents_deleted} parent addresses "
             f"(missing files: {self.files_missing}, unsafe paths skipped: "
             f"{self.files_skipped_unsafe})"
         )
@@ -792,7 +809,7 @@ def delete_inactive_accounts(
 
     candidates = (
         db.query(UserDB)
-        .outerjoin(last_submission, UserDB.google_sub == last_submission.c.user_id)
+        .outerjoin(last_submission, UserDB.id == last_submission.c.user_id)
         .filter(
             UserDB.updated_at < naive_cutoff,
             (last_submission.c.last_submission_at.is_(None))
@@ -804,24 +821,24 @@ def delete_inactive_accounts(
     )
 
     for user in candidates:
-        if user.google_sub == "anonymous":
+        if user.id == "anonymous":
             continue
         if (user.email or "").lower() in admin_emails:
             continue
 
         if dry_run:
             # Count the files without touching them or the row
-            report.merge(erase_user_data(db, user.google_sub, dry_run=True))
+            report.merge(erase_user_data(db, user.id, dry_run=True))
             report.accounts_deleted += 1
             # erase_user_data counts submissions too; that is what we want in
             # the combined report, but the account itself is the headline number
             continue
 
         logger.info(
-            f"Retention: deleting inactive account {mask_user_id(user.google_sub)} "
+            f"Retention: deleting inactive account {mask_user_id(user.id)} "
             f"(last activity before {naive_cutoff})"
         )
-        report.merge(erase_user_data(db, user.google_sub))
+        report.merge(erase_user_data(db, user.id))
         report.accounts_deleted += 1
 
     return report
@@ -839,12 +856,105 @@ def run_retention(db: Session, dry_run: bool = False) -> RetentionReport:
     report.merge(purge_expired_quota_tombstones(db, dry_run=dry_run))
     report.merge(purge_expired_admin_audit(db, dry_run=dry_run))
     report.merge(purge_expired_ai_usage(db, dry_run=dry_run))
-    # Last: it deletes whole accounts, so it should see the state the passes
-    # above left behind rather than racing them
+    report.merge(purge_expired_email_tokens(db, dry_run=dry_run))
+    report.merge(purge_login_failures(db, dry_run=dry_run))
+    # Last: they delete whole accounts, so they should see the state the
+    # passes above left behind rather than racing them
+    report.merge(delete_unconfirmed_accounts(db, dry_run=dry_run))
     report.merge(delete_inactive_accounts(db, dry_run=dry_run))
+    report.merge(delete_childless_parents(db, dry_run=dry_run))
     report.dry_run = dry_run
     logger.info(report.summary())
     return report
+
+
+# --- Parent consent (accounts of children under 16, login accounts) ---------
+
+# A pending account is erased this long after pending_since without consent.
+# Mirrored by app/accounts/service.PENDING_TTL (the date shown on screen).
+UNCONFIRMED_ACCOUNT_DAYS = 14
+# E-mailed links are kept this long after they expire (rate-limit log, support)
+EMAIL_TOKEN_KEEP_DAYS = 30
+LOGIN_FAILURE_KEEP_HOURS = 24
+# A parent row without children is kept while its e-mail log still counts
+# against the 24 h sending limits (a child changing the parent address must
+# not reset them)
+CHILDLESS_PARENT_GRACE_HOURS = 24
+
+
+def _naive_now() -> datetime:
+    return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
+def delete_unconfirmed_accounts(db: Session, dry_run: bool = False) -> RetentionReport:
+    """Erase accounts still waiting for a parent 14 days after pending_since."""
+    report = RetentionReport(dry_run=dry_run)
+    cutoff = _naive_now() - timedelta(days=UNCONFIRMED_ACCOUNT_DAYS)
+    users = (
+        db.query(UserDB)
+        .filter(UserDB.status == UserStatus.PENDING_PARENT, UserDB.pending_since < cutoff)
+        .all()
+    )
+    for user in users:
+        user_id = user.id
+        if not dry_run:
+            logger.info(f"Retention: erasing account {mask_user_id(user_id)} - no parent consent in 14 days")
+        report.merge(erase_user_data(db, user_id, dry_run=dry_run))
+        report.unconfirmed_accounts_deleted += 1
+    return report
+
+
+def purge_expired_email_tokens(db: Session, dry_run: bool = False) -> RetentionReport:
+    report = RetentionReport(dry_run=dry_run)
+    cutoff = _naive_now() - timedelta(days=EMAIL_TOKEN_KEEP_DAYS)
+    query = db.query(EmailTokenDB).filter(EmailTokenDB.expires_at < cutoff)
+    if dry_run:
+        report.email_tokens_purged = query.count()
+    else:
+        report.email_tokens_purged = query.delete(synchronize_session=False)
+        db.commit()
+    return report
+
+
+def purge_login_failures(db: Session, dry_run: bool = False) -> RetentionReport:
+    report = RetentionReport(dry_run=dry_run)
+    cutoff = _naive_now() - timedelta(hours=LOGIN_FAILURE_KEEP_HOURS)
+    query = db.query(LoginFailureDB).filter(LoginFailureDB.at < cutoff)
+    if dry_run:
+        report.login_failures_purged = query.count()
+    else:
+        report.login_failures_purged = query.delete(synchronize_session=False)
+        db.commit()
+    return report
+
+
+def delete_childless_parents(db: Session, dry_run: bool = False) -> RetentionReport:
+    """Parent addresses no child points at any more (e.g. the child corrected
+    a typo in the address), once their e-mail log is older than 24 h."""
+    report = RetentionReport(dry_run=dry_run)
+    recent = _naive_now() - timedelta(hours=CHILDLESS_PARENT_GRACE_HOURS)
+    has_child = db.query(UserDB.id).filter(UserDB.parent_id == ParentDB.id).exists()
+    recent_mail = (
+        db.query(EmailTokenDB.id)
+        .filter(EmailTokenDB.parent_id == ParentDB.id, EmailTokenDB.created_at >= recent)
+        .exists()
+    )
+    parents = db.query(ParentDB).filter(~has_child, ~recent_mail).all()
+    report.parents_deleted = len(parents)
+    if not dry_run and parents:
+        for parent in parents:
+            db.delete(parent)  # cascade removes its e-mail links
+        db.commit()
+    return report
+
+
+def _delete_parent_if_childless(db: Session, parent_id: str) -> None:
+    """Called inside an erasure (no commit here)."""
+    if db.query(UserDB.id).filter(UserDB.parent_id == parent_id).first() is not None:
+        return
+    parent = db.get(ParentDB, parent_id)
+    if parent is not None:
+        db.delete(parent)
 
 
 # --- Right to erasure (RODO art. 17) ----------------------------------------
@@ -876,9 +986,14 @@ def erase_user_data(db: Session, user_id: str, dry_run: bool = False) -> Retenti
 
         AdminAccessLogRepository(db).pseudonymize_subject(user_id)
 
-        user = db.query(UserDB).filter(UserDB.google_sub == user_id).first()
+        user = db.get(UserDB, user_id)
         if user:
-            db.delete(user)  # cascade removes submissions
+            parent_id = user.parent_id
+            db.delete(user)  # cascade removes submissions, consents, e-mail links
+            db.flush()
+            # A parent row exists only for its children (same transaction)
+            if parent_id:
+                _delete_parent_if_childless(db, parent_id)
         else:
             # No user row (should not happen) - remove the submissions directly
             for submission in submissions:

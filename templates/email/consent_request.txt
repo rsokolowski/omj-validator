@@ -1,0 +1,27 @@
+Prośba o zgodę rodzica
+
+Dzień dobry,
+
+ten adres został podany jako adres rodzica lub opiekuna przy zakładaniu konta w serwisie {{ app_name }} ({{ site_label }}). To bezpłatny, niekomercyjny trener do zadań z Olimpiady Matematycznej Juniorów. Prowadzi go osoba prywatna - {{ operator_name }}.
+
+{{ child_identifier_label }}: {{ child_identifier }}
+
+Co to oznacza dla dziecka:
+- Dziecko przesyła zdjęcia albo wpisane rozwiązania zadań. Ocenia je automatycznie model sztucznej inteligencji (Google Gemini lub Anthropic Claude) - ocena jest poglądowa i może być błędna.
+- Rozwiązania przechowujemy przez {{ submission_retention }}. Konto, z którego nikt nie korzysta przez {{ inactive_retention }}, usuwamy.
+- Nie ma reklam i nie wykorzystujemy danych w celach marketingowych.
+- Konto i wszystkie dane możesz usunąć w każdej chwili na stronie rodzica.
+
+Dopóki nie wyrazisz zgody, dziecko może tylko przeglądać zadania - nie prześle żadnego rozwiązania.
+
+Wyrażam zgodę:
+{{ consent_url }}
+
+Nie zgadzam się - usuń konto:
+{{ decline_url }}
+
+Link otworzy stronę, na której jeszcze raz potwierdzisz wybór. Jest ważny do {{ deadline }}.
+Regulamin i polityka prywatności: {{ terms_url }}
+
+Dlaczego dostajesz tę wiadomość? Ktoś podał ten adres jako adres rodzica przy zakładaniu konta. Jeśli to pomyłka, po prostu zignoruj tę wiadomość - konto zostanie usunięte po 14 dniach.
+{% include "_footer.txt" %}

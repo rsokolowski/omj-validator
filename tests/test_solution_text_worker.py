@@ -36,7 +36,7 @@ def session_factory(monkeypatch):
     factory = sessionmaker(bind=engine)
     monkeypatch.setattr(handler, "SessionLocal", factory)
     db = factory()
-    db.add(UserDB(google_sub=USER_ID, email="a@example.com"))
+    db.add(UserDB(id=USER_ID, google_sub=USER_ID, email="a@example.com"))
     db.add(SubmissionDB(id="sub00001", user_id=USER_ID, year="2024", etap="etap1",
                         task_number=1, images=[], solution_text=TEXT,
                         status=SubmissionStatus.PENDING))
