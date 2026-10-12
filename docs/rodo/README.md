@@ -51,6 +51,7 @@ i podstawą prawną przetwarzania**. Dobór dokumentu zaczyna się od ustalenia 
 | Plik | Czego dotyczy | Dla kogo | Wariant |
 |---|---|---|---|
 | [`dpia.md`](dpia.md) | Ocena skutków dla ochrony danych (art. 35 RODO). Dokument główny: opis operacji przetwarzania, przepływy danych, test niezbędności i proporcjonalności, rejestr 17 ryzyk z oszacowaniem i środkami, ryzyka szczątkowe, zgodność z AI Act i prawem autorskim, plan wdrożenia środków. | inspektor ochrony danych, dyrektor, administrator | **A i B** |
+| [`ocena-skutkow-transferu-anthropic.md`](ocena-skutkow-transferu-anthropic.md) | Ocena skutków transferu do USA dla Anthropic (Claude API) — wymagana, bo transfer opiera się na standardowych klauzulach umownych, a nie na decyzji o adekwatności. Warunek ustawienia `ANTHROPIC_PROCESSOR_APPROVED=true`. | administrator, inspektor ochrony danych | **A i B** (tylko gdy używany jest Anthropic) |
 | [`klauzula-informacyjna-szkola.md`](klauzula-informacyjna-szkola.md) | Klauzula informacyjna (art. 13 RODO). Część A — dla rodziców, część B — prostym językiem dla ucznia (art. 12 ust. 1 RODO wymaga formy zrozumiałej dla dziecka). | rodzice, uczniowie | **B** |
 | [`regulamin-szkola.md`](regulamin-szkola.md) | Regulamin korzystania z narzędzia: zasady dla ucznia, zakazy, opis działania AI, rozgraniczenie „trenażer, nie ocenianie", prawa autorskie. | uczniowie, nauczyciele | **B** |
 | `../../frontend/src/app/regulamin/page.tsx` | Regulamin i polityka prywatności serwisu publicznego (strona w aplikacji). | użytkownicy serwisu | **A** |

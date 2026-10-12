@@ -344,7 +344,9 @@ udokumentować, że jej własny klucz jest kluczem płatnym (fakturowanym projek
 
 **Anthropic — warunki komercyjne.** Claude API jest udostępniane na warunkach komercyjnych
 Anthropic (Commercial Terms, obowiązujące od 17.06.2025); stroną umowy dla klientów z EOG jest
-**Anthropic Ireland, Limited**. Warunki stanowią, że Anthropic nie może trenować modeli na
+**Anthropic Ireland, Limited**. W wariancie A konto API administratora jest zarejestrowane jako
+konto klienta z EOG (potwierdzone 12.10.2026); w wariancie B szkoła musi to ustalić dla
+własnego konta [UZUPEŁNIĆ]. Warunki stanowią, że Anthropic nie może trenować modeli na
 treściach klienta (Customer Content) przekazywanych w ramach usług, i włączają przez odesłanie
 Data Processing Addendum (obowiązujący od 24.02.2025). Wejścia i wyjścia API są usuwane
 **w ciągu 30 dni** — z wyjątkiem plików Files API (aplikacja z niego nie korzysta), odrębnej
@@ -805,17 +807,20 @@ są różne.
 odpowiedni stopień ochrony w ramach **EU-US Data Privacy Framework** (art. 45 RODO). Decyzja
 obowiązuje i jest ważną podstawą przekazania.
 
-**Anthropic.** Uczestnictwa Anthropic w EU-US Data Privacy Framework **nie potwierdzono**
-(stan na 12.10.2026). Podstawą transferu są więc **standardowe klauzule umowne** (art. 46
+**Anthropic.** Anthropic **nie uczestniczy** w EU-US Data Privacy Framework — w oficjalnym
+rejestrze nie ma go ani wśród uczestników aktywnych, ani nieaktywnych (sprawdzono 12.10.2026),
+a jego polityka prywatności nie powołuje się na ten program. Podstawą transferu są więc **standardowe klauzule umowne** (art. 46
 ust. 2 lit. c RODO) zawarte w DPA Anthropic — moduł drugi (administrator → podmiot
 przetwarzający) i/lub moduł trzeci (podmiot przetwarzający → podmiot przetwarzający). Inaczej
 niż przy decyzji o adekwatności, przekazanie na podstawie klauzul wymaga od administratora
 udokumentowanej oceny skutków transferu (czy prawo i praktyka państwa odbiorcy pozwalają
-odbiorcy wywiązać się z klauzul) — [UZUPEŁNIĆ: notatka z oceny skutków transferu do Anthropic,
-sporządzona przed ustawieniem `ANTHROPIC_PROCESSOR_APPROVED=true`].
-
-[UZUPEŁNIĆ: potwierdzić lub podwyższyć ocenę R6 po wykonaniu oceny skutków transferu dla
-Anthropic (SCC)]
+odbiorcy wywiązać się z klauzul). Ocenę sporządzono:
+[ocena-skutkow-transferu-anthropic.md](ocena-skutkow-transferu-anthropic.md) (12.10.2026,
+wymaga zatwierdzenia przez administratora). Wniosek: transfer może się odbywać — zabezpieczenia
+EO 14086 obejmują wszystkie dane przekazywane do USA niezależnie od narzędzia transferu, a dane
+(rozwiązania zadań bez identyfikatorów ucznia) mają znikomą wartość dla służb. **Ocena R6
+pozostaje bez zmian dla obu dostawców**; przy Anthropic ryzyko systemowe jest nieco wyższe
+(brak decyzji o adekwatności dla tego importera), ale nie zmienia żadnego czynnika skali.
 
 Ryzyko dla transferu do Google ma charakter **rezydualny i systemowy**, nie operacyjny: Sąd Unii
 Europejskiej wyrokiem z 3 września 2025 r. w sprawie **T-553/23 (Latombe)** oddalił skargę
@@ -839,9 +844,9 @@ opiera się decyzja.
 - weryfikacja, że Google figuruje na liście uczestników DPF (przy wdrożeniu i przy każdym
   przeglądzie DPIA), oraz zawarcie umowy powierzenia obejmującej standardowe klauzule umowne
   jako podstawę zapasową,
-- **sprawdzenie w rejestrze DPF, czy Anthropic przystąpił do programu** — przy każdym przeglądzie
-  DPIA; do czasu potwierdzenia jedyną podstawą transferu do Anthropic pozostają standardowe
-  klauzule umowne (plan wdrożenia, poz. 21),
+- **sprawdzenie w rejestrze DPF, czy Anthropic przystąpił do programu** — wykonane 12.10.2026
+  (brak wpisu), powtarzane przy każdym przeglądzie DPIA; do czasu przystąpienia jedyną podstawą
+  transferu do Anthropic pozostają standardowe klauzule umowne (plan wdrożenia, poz. 21),
 - **plan awaryjny — częściowo spełniony**: warstwa dostawcy AI jest w kodzie wydzielona za
   wspólnym interfejsem, a aplikacja ma już dwóch dostawców (Google, Anthropic), między którymi
   administrator przełącza się bez restartu. U obu przetwarzanie obejmuje jednak transfer do USA,
@@ -1284,6 +1289,32 @@ nauki i ich nie rozpowszechniał.
 `/pdf/...` i do pełnych treści zadań za uwierzytelnieniem. **Nie jest to obecnie zaimplementowane
 w kodzie** — wymaga zmiany, której autor niniejszego dokumentu nie wprowadził.
 
+### 7.5 Zasady Anthropic dla usług dostępnych dla małoletnich
+
+Dotyczy tylko okresów, w których aktywnym dostawcą AI jest Anthropic. To nie przepis prawa,
+lecz **warunek umowny**: naruszenie grozi zawieszeniem lub zamknięciem konta API, czyli utratą
+dostawcy — nie karą dla administratora.
+
+Usage Policy Anthropic definiuje małoletniego jako osobę poniżej 18 lat i wymaga, by
+organizacje, które **dają małoletnim możliwość bezpośredniej interakcji z produktem
+korzystającym z API**, stosowały dodatkowe wytyczne („Guidelines for Organizations Serving
+Minors", aktualizacja 16.03.2026). Trener OMJ się do nich kwalifikuje: uczniowie przesyłają
+prace i czytają odpowiedzi modelu, a przy wzorcach wymieniają z modelem wiadomości.
+
+| Wymóg Anthropic | Stan w Trenerze OMJ |
+|---|---|
+| **Zgodność z prawem** ochrony dzieci i danych, **jawnie zadeklarowana** na stronie lub w dokumentacji publicznej | RODO opisane w `/regulamin`; brak wprost wyrażonej deklaracji zgodności z przepisami o ochronie dzieci — [DO DECYZJI: dodać jedno zdanie do `/regulamin`] |
+| **Informacja, że użytkownik rozmawia z AI**, a nie z człowiekiem | spełnione: stopka każdej strony („…generowane przez AI…”) i `/regulamin` |
+| Środki techniczne odpowiednie do zastosowania (przykłady Anthropic, nie lista zamknięta): weryfikacja wieku, moderacja treści, monitorowanie i zgłaszanie, materiały edukacyjne | częściowo: odpowiedzi modelu są ograniczone schematem JSON i promptem do oceny rozwiązania; wykrywanie prób manipulacji (`abuse_score`, `issue_type`); panel administratora. Brak weryfikacji wieku i zgody rodzica (plan wdrożenia, poz. 3) i brak osobnej warstwy moderacji |
+| Systemowy prompt bezpieczeństwa dzieci, który Anthropic „może udostępnić” | nieużywany — [DO DECYZJI: zapytać Anthropic, czy jest dostępny dla tego zastosowania] |
+| Okresowe audyty Anthropic; przy wysokim odsetku naruszeń — zalecenia, a w razie ich niewdrożenia zawieszenie konta | przyjęte do wiadomości |
+
+Wniosek: przy obecnym zakresie (ocena rozwiązań zadań matematycznych, odpowiedzi ograniczone
+schematem) ryzyko naruszenia zasad jest niskie, a jedyne braki formalne to deklaracja
+zgodności w `/regulamin` i weryfikacja wieku, która i tak jest otwartym środkiem tej DPIA.
+Przed ustawieniem `ANTHROPIC_PROCESSOR_APPROVED=true` należy ponownie sprawdzić Usage Policy
+(nowa wersja obowiązuje od 12.11.2026).
+
 ---
 
 ## 8. Plan wdrożenia środków
@@ -1314,8 +1345,8 @@ Kolumny do wypełnienia przez administratora — to jest lista zadań, nie dekla
 | 18 | Wprowadzić przegląd próbki ocen i mierzyć odsetek błędnych | R1 | niski | [ ] | [ ] | [ ] |
 | 19 | Rozważyć skrócenie czasu życia sesji poniżej 30 dni | R10 | niski | [ ] | [ ] | [ ] |
 | 20 | Rozważyć rezygnację z zapisywania imienia i nazwiska | 3.1 | niski | [ ] | [ ] | [ ] |
-| 21 | Sprawdzić w rejestrze DPF, czy Anthropic uczestniczy w programie; do potwierdzenia transfer opiera się wyłącznie na standardowych klauzulach umownych | R6 | średni | [ ] | [ ] | [ ] |
-| 22 | Przed ustawieniem `ANTHROPIC_PROCESSOR_APPROVED=true`: zaakceptować DPA Anthropic, sporządzić ocenę skutków transferu, wpisać Anthropic do rejestru czynności i ponownie sprawdzić ustalenia z sekcji 2.5 | R6, R6a | wysoki | [ ] | [ ] | [ ] |
+| 21 | ~~Sprawdzić w rejestrze DPF, czy Anthropic uczestniczy w programie~~ | R6 | średni | autor | — | **WYKONANE** 12.10.2026 — brak wpisu (aktywni i nieaktywni); transfer na podstawie standardowych klauzul umownych; sprawdzać przy każdym przeglądzie |
+| 22 | Przed ustawieniem `ANTHROPIC_PROCESSOR_APPROVED=true`: zaakceptować DPA Anthropic, sporządzić ocenę skutków transferu, wpisać Anthropic do rejestru czynności i ponownie sprawdzić ustalenia z sekcji 2.5 | R6, R6a | wysoki | [ ] | [ ] | w toku: DPA zaakceptowany z Commercial Terms (konto z EOG); ocena skutków transferu sporządzona 12.10.2026 — czeka na zatwierdzenie; pozostaje rejestr czynności i zatwierdzenie oceny |
 
 ---
 
