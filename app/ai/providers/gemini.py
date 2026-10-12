@@ -31,14 +31,9 @@ from ..pattern_parsing import (
     parse_suggest_response,
 )
 from ..parsing import parse_ai_response
-from ..prompt_builder import (
-    CLOSING_LINE,
-    build_prompt,
-    build_private_scoring_prompt,
-    load_private_prompt,
-    solution_shape_line,
-    solution_text_block,
-)
+from ..prompt_builder import CLOSING_LINE, build_prompt, solution_text_block
+from .. import requests as ai_requests
+from ..schemas import RESPONSE_JSON_SCHEMA
 from ..private_parsing import (
     EXTRACTION_SCHEMA,
     META_SCHEMA,
@@ -192,31 +187,6 @@ def estimate_cost(
     input_cost = (input_tokens / 1_000_000) * in_rate
     output_cost = ((output_tokens + thoughts_tokens) / 1_000_000) * out_rate
     return input_cost + output_cost
-
-# JSON schema for structured output - forces Gemini to return valid JSON
-RESPONSE_JSON_SCHEMA = {
-    "type": "object",
-    "properties": {
-        "score": {
-            "type": "integer",
-            "description": "Score according to OMJ criteria (0, 2, 5, or 6 for etap2/3; 0, 1, or 3 for etap1)"
-        },
-        "feedback": {
-            "type": "string",
-            "description": "Constructive feedback in Polish explaining the score"
-        },
-        "issue_type": {
-            "type": "string",
-            "enum": ["none", "wrong_task", "injection"],
-            "description": "Type of issue detected: none (normal), wrong_task (wrong problem), injection (manipulation attempt)"
-        },
-        "abuse_score": {
-            "type": "integer",
-            "description": "Confidence score 0-100 for abuse detection"
-        }
-    },
-    "required": ["score", "feedback", "issue_type", "abuse_score"]
-}
 
 
 class GeminiProvider:
@@ -397,34 +367,26 @@ class GeminiProvider:
         content_parts = []
         result_idx = 0
 
-        # Start with system prompt
-        full_prompt = prompt_text
-        full_prompt += f"\n\n## Zadanie {task_number}\n"
-        full_prompt += "Przeanalizuj poniższe pliki.\n\n"
+        # The text (provider-neutral) labels the parts in the order added below
+        full_prompt = ai_requests.omj_grading_text(
+            prompt_text, task_number, has_solution_pdf, num_images, bool(solution_text)
+        )
 
         # Task PDF
-        full_prompt += "### Treść zadania (PDF):\n"
         task_file = uploaded_files[result_idx]
         result_idx += 1
         content_parts.append(task_file)
-        full_prompt += f"Znajdź 'Zadanie {task_number}.' w dokumencie powyżej.\n\n"
 
         # Solution PDF if exists
         if has_solution_pdf:
-            full_prompt += "### Oficjalne rozwiązanie (TYLKO do weryfikacji, NIE pokazuj uczniowi):\n"
             solution_file = uploaded_files[result_idx]
             result_idx += 1
             content_parts.append(solution_file)
-            full_prompt += "\n"
 
         # Student images - use per-part ULTRA_HIGH resolution for Gemini 3
-        full_prompt += "### Rozwiązanie ucznia:\n"
-        full_prompt += solution_shape_line(num_images, bool(solution_text))
         image_resolution = self._get_media_resolution(settings.gemini_media_resolution_images)
 
         for i in range(num_images):
-            full_prompt += f"Zdjęcie {i + 1}:\n"
-
             if self._is_gemini_3 and image_paths and i < len(image_paths):
                 # Gemini 3: Use inline bytes with per-part ULTRA_HIGH resolution
                 img_path = image_paths[i]
@@ -1171,7 +1133,7 @@ class GeminiProvider:
         """Read every problem statement off photos of a page."""
         parts, uploaded = await self._image_parts(image_paths)
         try:
-            text, meta = await self._generate_json([load_private_prompt("extract"), *parts], EXTRACTION_SCHEMA)
+            text, meta = await self._generate_json([ai_requests.extract_text(), *parts], EXTRACTION_SCHEMA)
         finally:
             await self._cleanup_files(uploaded, skip_cached=False)
         result = parse_extraction_response(text)
@@ -1180,37 +1142,12 @@ class GeminiProvider:
 
     async def generate_private_task_meta(self, title: str, content: str) -> PrivateTaskMeta:
         """Hints, category and difficulty for a task statement (text only)."""
-        prompt = (
-            f"{load_private_prompt('meta')}\n\n"
-            f"## Tytuł zadania\n{title}\n\n"
-            f"## Treść zadania\n{content}\n"
-        )
-        text, meta = await self._generate_json([prompt], META_SCHEMA)
+        text, meta = await self._generate_json([ai_requests.meta_text(title, content)], META_SCHEMA)
         result = parse_meta_response(text)
         result.meta = meta
         return result
 
     # ------------------------------------------------------------ patterns
-
-    @staticmethod
-    def _student_text(text: Optional[str]) -> str:
-        """Student-controlled text as fenced data (the fence cannot be closed early)."""
-        cleaned = (text or "").replace("<<<", "").replace(">>>", "").strip()
-        return f"<<<\n{cleaned or '(brak)'}\n>>>"
-
-    @staticmethod
-    def _draft_text(draft: dict) -> str:
-        if draft.get("trigger") or draft.get("action"):
-            lines = [
-                f"Wyzwalacz: {draft.get('trigger', '')}",
-                f"Akcja: {draft.get('action', '')}",
-            ]
-            if draft.get("example"):
-                lines.append(f"Przykład: {draft['example']}")
-            if draft.get("raw"):
-                lines.append(f"Notatka: {draft['raw']}")
-            return "\n".join(lines)
-        return draft.get("raw", "")
 
     async def refine_pattern(
         self,
@@ -1227,73 +1164,15 @@ class GeminiProvider:
         ``candidates`` are the OMJ tasks the model may name as evidence.
         """
         skills = get_all_skills()
-        skill_lines = "\n".join(f"- {s.id}: {s.name}" for s in skills)
-        task_lines = []
-        for c in candidates:
-            hints = " | ".join(c.get("hints") or [])
-            task_lines.append(
-                f"- {c['task_key']} | trudność {c.get('difficulty') or '?'} | "
-                f"{', '.join(c.get('categories') or [])} | {hints}"
-            )
-        prompt = (
-            f"{load_private_prompt('pattern_refine')}\n\n"
-            f"## Lista umiejętności (skills)\n{skill_lines}\n\n"
-            f"## Zadania OMJ (klucz | trudność | działy | nasze wskazówki)\n"
-            f"{chr(10).join(task_lines) or '(brak listy - nie podawaj zadań)'}\n\n"
-            f"## Zadanie, przy którym uczeń zauważył wzorzec\n{self._student_text(source_text)}\n\n"
-            f"## Dotychczasowa rozmowa\n{self._student_text(self._conversation_text(history))}\n\n"
-            f"## Aktualny szkic wzorca ucznia (z formularza)\n{self._student_text(self._draft_text(draft))}\n\n"
-            f"## Odpowiedzi ucznia na Twoje ostatnie pytania\n"
-            f"{self._student_text(self._answers_text(current.get('answers') or []))}\n\n"
-            f"## Wiadomość ucznia do Ciebie\n{self._student_text(current.get('message'))}\n"
-        )
+        prompt = ai_requests.refine_text(draft, source_text, history, current, candidates, skills)
         text, meta = await self._generate_json([prompt], PATTERN_REFINE_SCHEMA)
         result = parse_refine_response(text, {s.id for s in skills}, {c["task_key"] for c in candidates})
         result.meta = meta
         return result
 
-    @staticmethod
-    def _answers_text(pairs: list[dict]) -> str:
-        return "\n".join(f"Pytanie: {p['question']}\nOdpowiedź: {p['answer']}" for p in pairs)
-
-    @classmethod
-    def _conversation_text(cls, history: list[dict]) -> str:
-        """The refine rounds so far, turn by turn, including the versions offered."""
-        blocks = []
-        for number, turn in enumerate(history, 1):
-            lines = [f"### Runda {number}"]
-            if turn.get("draft"):
-                lines.append(f"Uczeń - szkic: {cls._draft_text(turn['draft'])}")
-            if turn.get("answers"):
-                lines.append(f"Uczeń - odpowiedzi:\n{cls._answers_text(turn['answers'])}")
-            if turn.get("message"):
-                lines.append(f"Uczeń - wiadomość: {turn['message']}")
-            if turn.get("reply"):
-                lines.append(f"Ty - odpowiedź: {turn['reply']}")
-            lines.append(f"Ty - ocena szkicu: {turn.get('verdict')}; {turn.get('comment') or ''}")
-            for index, variant in enumerate(turn.get("variants") or [], 1):
-                tasks = ", ".join(variant.get("tasks") or []) or "brak"
-                lines.append(
-                    f"Ty - wersja {index}: Kiedy widzę {variant.get('trigger')} -> {variant.get('action')}"
-                    f" (uwaga: {variant.get('note') or '-'}; zadania: {tasks})"
-                )
-            if turn.get("questions"):
-                lines.append(f"Ty - pytania: {' / '.join(turn['questions'])}")
-            chosen = turn.get("chosen")
-            lines.append(
-                f"Uczeń wybrał wersję {chosen + 1}" if isinstance(chosen, int) else "Uczeń nie wybrał żadnej wersji"
-            )
-            blocks.append("\n".join(lines))
-        return "\n\n".join(blocks)
-
     async def suggest_patterns(self, task_text: str, feedback: str, draft: Optional[str]) -> SuggestResult:
         """1-3 patterns worth remembering from a graded solution."""
-        prompt = (
-            f"{load_private_prompt('pattern_suggest')}\n\n"
-            f"## Treść zadania\n{self._student_text(task_text)}\n\n"
-            f"## Ocena rozwiązania ucznia\n{self._student_text(feedback)}\n\n"
-            f"## Szkic wzorca ucznia\n{self._student_text(draft)}\n"
-        )
+        prompt = ai_requests.suggest_text(task_text, feedback, draft)
         text, meta = await self._generate_json([prompt], PATTERN_SUGGEST_SCHEMA)
         result = parse_suggest_response(text)
         result.meta = meta
@@ -1301,18 +1180,7 @@ class GeminiProvider:
 
     async def link_pattern_tasks(self, pattern: dict, candidates: list[dict]) -> LinkResult:
         """Up to 5 of the server's candidate OMJ tasks that exercise the pattern."""
-        lines = []
-        for c in candidates:
-            hints = " | ".join(c.get("hints") or [])
-            lines.append(
-                f"- {c['task_key']} | trudność {c.get('difficulty') or '?'} | "
-                f"{', '.join(c.get('categories') or [])} | {hints}"
-            )
-        prompt = (
-            f"{load_private_prompt('pattern_link')}\n\n"
-            f"## Wzorzec ucznia\n{self._student_text(self._draft_text(pattern))}\n\n"
-            f"## Kandydaci\n" + "\n".join(lines) + "\n"
-        )
+        prompt = ai_requests.link_text(pattern, candidates)
         text, meta = await self._generate_json([prompt], PATTERN_LINK_SCHEMA)
         result = parse_link_response(text, {c["task_key"] for c in candidates})
         result.meta = meta
@@ -1335,16 +1203,13 @@ class GeminiProvider:
         )
         uploaded: list = []
         try:
-            prompt = (
-                f"{build_private_scoring_prompt()}\n\n"
-                f"## Treść zadania (tekst podany przez ucznia)\n"
-                f"### {task_title}\n{task_content}\n\n"
-                f"### Rozwiązanie ucznia:\n{solution_shape_line(len(image_paths), bool(solution_text))}"
+            prompt = ai_requests.private_grading_text(
+                task_title, task_content, len(image_paths), bool(solution_text)
             )
             image_parts, uploaded = await self._image_parts(image_paths)
             contents = [prompt]
             for index, part in enumerate(image_parts, 1):
-                contents.append(f"Zdjęcie {index}:")
+                contents.append(ai_requests.photo_label(index))
                 contents.append(part)
             if solution_text:
                 contents.append(solution_text_block(solution_text))
