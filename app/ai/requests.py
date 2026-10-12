@@ -61,6 +61,7 @@ def extract_text() -> str:
 
 
 def meta_text(title: str, content: str) -> str:
+    """Request for hints, category and difficulty of a private task statement."""
     return (
         f"{load_private_prompt('meta')}\n\n"
         f"## Tytuł zadania\n{title}\n\n"
@@ -78,6 +79,7 @@ def student_text(text: Optional[str]) -> str:
 
 
 def draft_text(draft: dict) -> str:
+    """A pattern draft as labelled lines (trigger/action/example/note), else its raw note."""
     if draft.get("trigger") or draft.get("action"):
         lines = [
             f"Wyzwalacz: {draft.get('trigger', '')}",
@@ -92,6 +94,7 @@ def draft_text(draft: dict) -> str:
 
 
 def answers_text(pairs: list[dict]) -> str:
+    """The student's answers to the previous round's questions, question by question."""
     return "\n".join(f"Pytanie: {p['question']}\nOdpowiedź: {p['answer']}" for p in pairs)
 
 
@@ -163,6 +166,7 @@ def refine_text(
 
 
 def suggest_text(task_text: str, feedback: str, draft: Optional[str]) -> str:
+    """Request for patterns worth remembering from a graded solution (all inputs fenced)."""
     return (
         f"{load_private_prompt('pattern_suggest')}\n\n"
         f"## Treść zadania\n{student_text(task_text)}\n\n"
@@ -172,6 +176,7 @@ def suggest_text(task_text: str, feedback: str, draft: Optional[str]) -> str:
 
 
 def link_text(pattern: dict, candidates: list[dict]) -> str:
+    """Request to pick OMJ tasks exercising a pattern from server-chosen candidates."""
     return (
         f"{load_private_prompt('pattern_link')}\n\n"
         f"## Wzorzec ucznia\n{student_text(draft_text(pattern))}\n\n"

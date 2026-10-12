@@ -49,6 +49,11 @@ def _provider(captured: list) -> GeminiProvider:
 
     p = GeminiProvider.__new__(GeminiProvider)
     p._model_name = "gemini-3.8-flash"
+    # Forced False (the real gemini-3.8-flash would be True): only the Gemini 3
+    # branches build SDK media parts (inline bytes + per-part media_resolution)
+    # and a thinking_level config. The snapshot pins request TEXT, which both
+    # branches send identically; with False the photos and PDFs stay as the
+    # plain placeholder strings below, so no real files or SDK types are needed.
     p._is_gemini_3 = False
     p._disable_file_cache = True
     p.provider_name = "gemini"
