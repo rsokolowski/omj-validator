@@ -51,8 +51,9 @@ jednocześnie dwa kryteria z wykazu:
    narzędzia są uczniowie klas VII–VIII szkoły podstawowej, typowo w wieku 10–15 lat.
 2. **Innowacyjne wykorzystanie lub zastosowanie nowych rozwiązań technologicznych.** Ocena pracy
    ucznia i wygenerowanie informacji zwrotnej odbywa się przez duży model językowy
-   (Google Gemini lub Anthropic Claude — jeden aktywny w danym momencie, wybierany przez
-   administratora), któremu przekazywane są fotografie odręcznej pracy dziecka.
+   (podstawowo Google Gemini; zapasowo Anthropic Claude — automatycznie, gdy Gemini API jest
+   niedostępne, albo po ręcznym przełączeniu przez administratora), któremu przekazywane są
+   fotografie odręcznej pracy dziecka.
 
 Do tego dochodzą przesłanki uzupełniające, które same nie przesądzają obowiązku, ale podnoszą
 poziom ryzyka: przekazanie danych do państwa trzeciego (USA), przetwarzanie na dużą skalę
@@ -77,9 +78,9 @@ i jest odnotowane w ryzyku R16.
 
 Uczeń wybiera archiwalne zadanie olimpijskie, rozwiązuje je odręcznie na kartce, fotografuje
 kartkę telefonem i przesyła zdjęcia przez przeglądarkę. Zamiast zdjęcia (albo obok niego) uczeń może wpisać rozwiązanie w przeglądarce jako tekst ze wzorami i dołączyć rysunek wykonany w przeglądarce (wysyłany jako obraz PNG). System przesyła te zdjęcia razem z PDF-em
-zawierającym treści zadań i PDF-em z rozwiązaniami wzorcowymi do modelu AI (Google Gemini
-lub Anthropic Claude — jeden aktywny w danym momencie, wybierany przez administratora) wraz
-z instrukcją odtwarzającą oficjalne kryteria punktacji OMJ. Model zwraca:
+zawierającym treści zadań i PDF-em z rozwiązaniami wzorcowymi do modelu AI (podstawowo
+Google Gemini, zapasowo Anthropic Claude — zob. 2.5 i R6a) wraz z instrukcją odtwarzającą
+oficjalne kryteria punktacji OMJ. Model zwraca:
 
 - liczbę punktów (0/1/3 dla etapu I, 0/2/5/6 dla etapów II i III),
 - kilkuzdaniową informację zwrotną po polsku (4–7 zdań), która ma wskazać mocne strony i luki
@@ -88,6 +89,8 @@ z instrukcją odtwarzającą oficjalne kryteria punktacji OMJ. Model zwraca:
   `injection` (próba manipulacji oceną) wraz z liczbą 0–100 wyrażającą pewność klasyfikacji.
 
 Wynik jest zapisywany, a uczeń widzi go w historii swoich prób i na grafie postępów.
+Klasyfikacja nieprawidłowości, liczba 0–100 i tok rozumowania modelu nie są pokazywane
+uczniowi (API ucznia ich nie zwraca); widzi je administrator.
 
 ### 2.2 Kategorie osób, których dane dotyczą
 
@@ -107,7 +110,7 @@ Wynik jest zapisywany, a uczeń widzi go w historii swoich prób i na grafie pos
 | `google_sub` | trwały identyfikator konta Google; pusty przy koncie z loginem | token OAuth (claim `sub`) |
 | `email` | adres e-mail konta Google; pusty przy koncie z loginem (nie zbieramy e-maila dziecka) | token OAuth |
 | `name` | imię i nazwisko lub nazwa wyświetlana (tylko konta Google) | token OAuth |
-| `login` | login konta bez e-maila (3–32 znaki, małe litery; formularz prosi, by nie był imieniem i nazwiskiem) | uczeń |
+| `login` | login konta bez e-maila (3–32 znaki: małe litery, cyfry, `_` i `-`; nowe loginy bez kropek, bo login trafia do e-maila rodzica i nie może zamienić się tam w link; formularz prosi, by nie był imieniem i nazwiskiem) | uczeń |
 | `password_hash` | skrót hasła argon2id; samego hasła serwis nie zna | uczeń |
 | `birth_year` | rok urodzenia (bez dnia i miesiąca); pusty przy kontach sprzed wprowadzenia pytania — uzupełniany przy najbliższej wizycie | uczeń |
 | `status`, `pending_since` | `active` albo `pending_parent` (konto czeka na zgodę rodzica) i od kiedy | system |
@@ -200,12 +203,12 @@ kopia treści zadania, według której oceniono rozwiązanie (`task_snapshot`).
 | `submissions.pattern_id` | wzorzec ćwiczony danym rozwiązaniem (po usunięciu wzorca — NULL, zgłoszenie zostaje) |
 
 **Tabela `ai_usage`** (licznik wywołań modelu niebędących zgłoszeniem — odczyt zadania ze
-zdjęcia, generowanie wskazówek):
+zdjęcia, generowanie wskazówek, wzorce):
 
 | Pole | Treść |
 |---|---|
 | `user_id` | kto wywołał |
-| `kind` | `private_extract` / `private_create` / `private_regen` |
+| `kind` | `private_extract` / `private_create` / `private_regen` / `pattern_refine` / `pattern_suggest` / `pattern_link` |
 | `created_at` | kiedy |
 | `meta` | model, liczba tokenów, szacowany koszt, czas — **bez treści** |
 
@@ -219,7 +222,7 @@ rozliczalności — art. 5 ust. 2 RODO):
 | Pole | Treść |
 |---|---|
 | `admin_email` | adres e-mail administratora, który sięgnął po dane |
-| `subject_user_id` | identyfikator użytkownika, którego dane oglądano (pusty przy listach nieograniczonych do jednej osoby); **zastępowany nieodwracalnym skrótem, gdy ten użytkownik usunie konto** |
+| `subject_user_id` | identyfikator użytkownika, którego dane oglądano (pusty przy zbiorczej liście zgłoszeń wszystkich użytkowników i przy wyszukiwaniu — wtedy w `resource_id` jest tylko liczba wyników); **zastępowany nieodwracalnym skrótem, gdy ten użytkownik usunie konto** |
 | `resource` | rodzaj zasobu: `upload` (zdjęcie), `admin_submissions_list`, `admin_user_search`, `admin_submission_rerun` |
 | `resource_id` | identyfikator konkretnego obiektu (np. identyfikator zgłoszenia lub ścieżka pliku) |
 | `created_at` | data i godzina |
@@ -229,37 +232,46 @@ frazy wyszukiwania (fraza sama byłaby daną osobową). Nie jest wystawiony prze
 odbywa się bezpośrednio z bazy podczas audytu. Dostęp administratora do własnych danych nie jest
 rejestrowany (to szum, nie zdarzenie audytowe). Nieudany zapis do dziennika nie przerywa operacji
 administratora, tylko trafia do logu ostrzeżeń — jest to świadomy kompromis dostępności nad
-kompletnością śladu, wart odnotowania przy audycie.
+kompletnością śladu, wart odnotowania przy audycie. Dziennik obejmuje wyłącznie dostęp przez
+aplikację: **bezpośredni dostęp administratora do serwera, bazy danych i plików nie jest w nim
+rejestrowany**. Przeglądanie zbiorczej listy zgłoszeń wszystkich użytkowników daje jeden wpis bez
+wskazania osoby, choć lista pokazuje dane wielu uczniów.
 
 **Tabela `deleted_account_quota`** (pseudonimowy znacznik limitu po usunięciu konta):
 
 | Pole | Treść |
 |---|---|
-| `user_hash` | HMAC-SHA256 identyfikatora Google, liczony kluczem serwera; nieodwracalny i bezużyteczny bez tego klucza |
+| `user_hash` | HMAC-SHA256 identyfikatora Google (przy koncie z loginem — identyfikatora konta), liczony kluczem serwera; nieodwracalny i bezużyteczny bez tego klucza |
 | `submission_count` | liczba zgłoszeń wysłanych w oknie limitu |
+| `ai_usage_count` | liczba wywołań modelu przy zadaniach prywatnych i wzorcach (`ai_usage`) w oknie limitu |
 | `oldest_submission_at` | znacznik najstarszego liczonego zgłoszenia (do nagłówków `Retry-After`) |
 | `expires_at` | koniec okna, po którym wpis jest kasowany |
 
-Wpis powstaje **wyłącznie** wtedy, gdy usuwane konto miało zgłoszenia w oknie 24 godzin, i jest
-usuwany, gdy okno się zamknie. Nie zawiera imienia, nazwiska, adresu e-mail ani czytelnego
+Wpis powstaje **wyłącznie** wtedy, gdy usuwane konto miało w oknie 24 godzin zgłoszenia albo
+wywołania modelu przy zadaniach prywatnych lub wzorcach, i jest usuwany po zamknięciu okna (przez
+dobowy przebieg retencji — w najgorszym razie ok. 48 godzin po ostatnim zgłoszeniu lub
+wywołaniu). Nie zawiera imienia, nazwiska, adresu e-mail ani czytelnego
 identyfikatora. Cel: uniemożliwić obejście limitu dobowego przez usunięcie konta i zalogowanie
 się ponownie tym samym kontem Google — bez tego jeden użytkownik mógłby wyczerpać budżet całego
 wdrożenia (zob. R8). Podstawa: art. 6 ust. 1 lit. f RODO (cel A4).
 
 **Pliki na dysku serwera:** fotografie w katalogu
-`data/uploads/{id_konta}/{rok}/{etap}/{nr_zadania}/{losowy_uuid}.{jpg|png|webp|heic}`.
+`data/uploads/{id_konta}/{rok}/{etap}/{nr_zadania}/{losowy_uuid}.jpg`.
 Nazwa pliku jest losowa i nie zawiera danych ucznia, ale **struktura katalogów zawiera
 identyfikator konta** (przy kontach sprzed 12.10.2026 równy identyfikatorowi Google). Limity: maksymalnie 10 plików na zgłoszenie, 10 MB na plik,
-dozwolone typy JPEG/PNG/WebP/HEIC. Zdjęcia większe niż 2048 px w którymkolwiek wymiarze są
-zmniejszane i zapisywane ponownie jako JPEG (co usuwa metadane EXIF); **zdjęcia mniejsze
-zachowują oryginalne metadane EXIF, w tym potencjalnie współrzędne GPS** — zob. ryzyko R4.
+50 megapikseli (sprawdzane z nagłówka, przed dekodowaniem — ochrona przed „bombami
+dekompresyjnymi”), dozwolone typy JPEG/PNG/WebP/HEIC. **Każde zdjęcie, niezależnie od rozmiaru,
+jest dekodowane, obracane zgodnie ze znacznikiem orientacji i zapisywane od nowa jako JPEG
+z samych pikseli** (`app/uploads.py`), co usuwa metadane EXIF/XMP, w tym współrzędne GPS;
+zdjęcia większe niż 2048 px są przy tym zmniejszane. Pliku, którego nie da się zdekodować (a więc
+oczyścić z metadanych), serwis nie zapisuje — odrzuca go.
 
 **Pliki zadań prywatnych:** `data/uploads/{id_konta}/private/{id_zadania}/source/` (zdjęcia
 strony z zadaniem, osobna kopia dla każdego zadania) i `data/uploads/{id_konta}/private/{id_zadania}/`
 (zdjęcia rozwiązań). Zdjęcia wysłane do odczytu, ale niezatwierdzone jako zadanie, leżą
 w `.../private/_drafts/{id_szkicu}/` i są usuwane przy zatwierdzeniu albo przez przebieg
 retencji po 24 godzinach. Wszystkie przechodzą ten sam proces co zdjęcia rozwiązań
-(usunięcie EXIF, w tym GPS, ponowne zapisanie jako JPEG).
+(ponowne zapisanie jako JPEG, co usuwa EXIF, w tym GPS).
 
 **Dane, które faktycznie znajdują się na fotografii kartki** — kategoria najbardziej wrażliwa
 i najsłabiej kontrolowana. Uczniowie odruchowo podpisują prace. Realnie na zdjęciach pojawiają
@@ -277,10 +289,24 @@ flagę uprawnień oraz znacznik czasu ostatniej weryfikacji uprawnień. **Zdjęc
 zapisywane w bazie danych** — jest tylko odnośnikiem trzymanym w sesji (obecny regulamin serwisu
 publicznego twierdził inaczej; nowa treść to prostuje).
 
-**Logi aplikacji.** Zapisywane do dziennika kontenera Docker. Zawierają m.in. adres e-mail
-użytkownika przy każdym udanym logowaniu, skrócony identyfikator użytkownika przy zgłoszeniach,
-nazwy i rozmiary plików, wynik punktowy oraz treści błędów. Dla logów nie zdefiniowano dotąd
-okresu retencji — zob. R17.
+**Logi aplikacji.** Zapisywane do dziennika kontenera Docker. Zawierają m.in. informacje
+o logowaniach, identyfikatory zgłoszeń, nazwy i rozmiary plików, wynik punktowy oraz treści
+błędów. Adresy e-mail i identyfikatory użytkowników są maskowane (`app/privacy.py`,
+np. `jan***@***`). Dzienniki są ograniczone objętościowo (rotacja `json-file`, sekcja 2.7),
+więc po usunięciu konta wpisy z identyfikatorami jego zgłoszeń zostają do nadpisania — zob. R13.
+
+**Dane przetwarzane przy rejestracji poza bazą.** (1) Limit nowych kont na adres IP
+(30 na dobę): serwer trzyma **w pamięci procesu** (nie w bazie) HMAC adresu IP z sekretem
+serwera i znaczniki czasu z ostatnich 24 godzin; restart serwera je kasuje. (2) **Cloudflare
+Turnstile** na krokach rejestracji, które tworzą konto lub wysyłają e-mail do rodzica:
+przeglądarka ładuje skrypt i ramkę z `challenges.cloudflare.com` i przekazuje Cloudflare dane
+techniczne przeglądarki oraz adres IP; serwer wysyła do Cloudflare tylko sekret i jednorazowy
+token (bez `remoteip`) — zob. R21.
+
+**Dane w przeglądarce ucznia.** `localStorage` przechowuje stan minutnika próbnych zawodów
+(etap, czas zakończenia) — nie trafia na serwer. Przy koncie Google przeglądarka pobiera
+zdjęcie profilowe bezpośrednio z serwerów Google (adres z sesji), więc Google widzi to
+żądanie.
 
 ### 2.4 Cele przetwarzania i podstawy prawne
 
@@ -292,7 +318,7 @@ okresu retencji — zob. R17.
 | A1a | Weryfikacja zgody rodzica, odzyskanie dostępu do konta z loginem, strona rodzica | adres e-mail rodzica, login lub e-mail konta Google dziecka, skróty linków | jw. (A1); wysyłka przez Resend |
 | A2 | Ocena przesłanego rozwiązania i wygenerowanie informacji zwrotnej | fotografie, treść pracy, wynik, informacja zwrotna | art. 6 ust. 1 lit. a — jw. |
 | A3 | Prowadzenie historii prób i grafu postępów | wyniki, daty, identyfikatory zadań | art. 6 ust. 1 lit. a — jw. |
-| A4 | Bezpieczeństwo usługi, limity liczby zgłoszeń, wykrywanie nadużyć i prób manipulacji oceną, ochrona logowania przed odgadywaniem haseł, limity wysyłki e-maili | `issue_type`, `abuse_score`, liczniki zgłoszeń, logi, `login_failures`, dziennik wysyłki (`email_tokens`) | art. 6 ust. 1 lit. f — prawnie uzasadniony interes administratora polegający na zapewnieniu integralności i dostępności usługi (motyw 49 RODO) |
+| A4 | Bezpieczeństwo usługi, limity liczby zgłoszeń, wykrywanie nadużyć i prób manipulacji oceną, ochrona logowania przed odgadywaniem haseł, limity wysyłki e-maili, ochrona rejestracji przed automatami, powiadomienia techniczne, kopie zapasowe | `issue_type`, `abuse_score`, liczniki zgłoszeń, logi, `login_failures`, dziennik wysyłki (`email_tokens`), HMAC adresu IP w pamięci, token Turnstile, powiadomienia Telegram | art. 6 ust. 1 lit. f — prawnie uzasadniony interes administratora polegający na zapewnieniu integralności i dostępności usługi (motyw 49 RODO) |
 | A5 | Rozpatrywanie żądań osób, których dane dotyczą, i obrona przed roszczeniami | korespondencja, minimalny zapis o wykonaniu żądania | art. 6 ust. 1 lit. c (art. 12 RODO) oraz art. 6 ust. 1 lit. f |
 
 **Dlaczego zgoda rodzica, a nie sam prawnie uzasadniony interes — uzasadnienie wyboru**
@@ -326,10 +352,24 @@ Prawnie uzasadniony interes pozostaje podstawą **wyłącznie** dla celu A4 (bez
 i limity). Jest to świadome rozdzielenie: gdyby wykrywanie nadużyć opierało się na zgodzie,
 użytkownik mógłby ją wycofać i tym samym wyłączyć mechanizm ochronny.
 
-> **Luka do zamknięcia (R15).** Art. 8 ust. 2 RODO wymaga „rozsądnych starań" o weryfikację,
-> że zgodę wyraziła osoba sprawująca władzę rodzicielską. Obecnie serwis dysponuje wyłącznie
-> polem wyboru („Akceptuję regulamin…") na ekranie logowania, co samo w sobie takich starań nie
-> stanowi. Rekomendowane środki w sekcji 6, R15.
+> **Weryfikacja zgody (R15) — wdrożona 12.10.2026.** Art. 8 ust. 2 RODO wymaga „rozsądnych
+> starań" o weryfikację, że zgodę wyraziła osoba sprawująca władzę rodzicielską. Serwis pyta
+> o rok urodzenia, a za osobę poniżej 16 lat (i przy każdym koncie z loginem) zbiera zgodę
+> rodzica potwierdzaną odnośnikiem e-mail; osoba od 16 lat zaznacza zgodę sama — od 13.10.2026
+> w polu odrębnym od akceptacji regulaminu (art. 7 ust. 2). Szczegóły w R15.
+>
+> **Konto czekające na zgodę** (do 14 dni): dane konta, rok urodzenia i adres rodzica są
+> przetwarzane na podstawie A1 — art. 6 ust. 1 lit. c w zw. z art. 8 ust. 2 RODO (obowiązek
+> rozsądnych starań o weryfikację zgody). Konto nie może niczego zapisać ani wywołać AI.
+>
+> **Konta sprzed 12.10.2026 bez roku urodzenia.** Do czasu podania roku urodzenia konto nie
+> może niczego zapisać ani wywołać AI (`require_active_user`), ale jego dotychczasowe dane
+> (zgłoszenia, zdjęcia) są przechowywane dalej na podstawie akceptacji z rejestracji sprzed
+> wprowadzenia pytania o wiek — która, jeśli użytkownik ma mniej niż 16 lat, nie była skuteczną
+> zgodą. Środki: blokada zapisu, możliwość usunięcia konta bez podawania roku (panel „Moje
+> rozwiązania” jest wyłączony z przekierowania na krok uzupełnienia), retencja zgłoszeń
+> 24 miesiące i wygasanie kont nieaktywnych po 36 miesiącach. [DO DECYZJI: czy usuwać konta,
+> które nie uzupełnią roku urodzenia w określonym terminie — plan wdrożenia, poz. 25].
 
 **Wariant B — administrator: szkoła publiczna**
 
@@ -366,12 +406,13 @@ zadaniu. Konsekwencje, które trzeba przyjąć świadomie:
 | Podmiot | Rola | Co otrzymuje | Ramy prawne |
 |---|---|---|---|
 | Google Ireland Ltd. / Google LLC — usługa logowania (OAuth 2.0) | odrębny administrator dla swojego konta użytkownika | fakt logowania do naszej aplikacji; my otrzymujemy `sub`, e-mail, imię i nazwisko, adres zdjęcia profilowego | zakres `openid email profile` |
-| Google — Gemini API (płatny poziom usługi) | podmiot przetwarzający (jeden z dwóch alternatywnych dostawców AI — zob. wiersz Anthropic) | **fotografie pracy ucznia i/lub wpisany przez ucznia tekst rozwiązania** (w tym rysunki wykonane w przeglądarce), PDF zadań, PDF rozwiązań wzorcowych, instrukcja oceniania; przy zadaniach prywatnych także **zdjęcie strony z zadaniem** (odczyt treści) i **treść zadania** (wskazówki, ocena) — zdjęcia zwykle przesyłane w treści zapytania, a zestawy powyżej 14 MB przez File API i usuwane zaraz po analizie; **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Gemini API Additional Terms + Google Cloud Data Processing Addendum; transfer: EU-US Data Privacy Framework |
-| Anthropic Ireland, Limited / Anthropic, PBC — Claude API | podmiot przetwarzający, **alternatywny wobec Gemini API**: w danym momencie aktywny jest jeden z dwóch dostawców, wybrany przez administratora, i tylko on otrzymuje dane danej analizy | te same kategorie danych co Gemini API (wiersz wyżej), także przy zadaniach prywatnych i wzorcach — wszystkie zdjęcia i PDF-y przesyłane w treści zapytania (base64), **bez File API**, więc po stronie Anthropic nie powstają przechowywane pliki; wejścia i wyjścia API usuwane **w ciągu 30 dni** (wyjątki: egzekwowanie Usage Policy, obowiązek prawny); **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Commercial Terms (zakaz trenowania modeli na Customer Content) + Data Processing Addendum włączony do nich przez odesłanie; transfer: standardowe klauzule umowne (DPA, moduł drugi i/lub trzeci); podwykonawcy: anthropic.com/subprocessors (15 dni na sprzeciw) |
+| Google — Gemini API (płatny poziom usługi) | podmiot przetwarzający (jeden z dwóch alternatywnych dostawców AI — zob. wiersz Anthropic) | **fotografie pracy ucznia i/lub wpisany przez ucznia tekst rozwiązania** (w tym rysunki wykonane w przeglądarce), PDF zadań, PDF rozwiązań wzorcowych, instrukcja oceniania; przy zadaniach prywatnych także **zdjęcie strony z zadaniem** (odczyt treści) i **treść zadania** (wskazówki, ocena) — przy ocenie zgłoszenia zdjęcia są zawsze wgrywane do File API (a przy modelach Gemini 3 wysyłane dodatkowo w treści zapytania) i usuwane zaraz po analizie; przy odczycie zadania prywatnego zdjęcia idą w treści zapytania, a zestawy powyżej 14 MB przez File API, też usuwane po analizie; **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta. Dostawca **podstawowy** | Gemini API Additional Terms + Google Cloud Data Processing Addendum; transfer: EU-US Data Privacy Framework |
+| Anthropic Ireland, Limited / Anthropic, PBC — Claude API | podmiot przetwarzający, **zapasowy wobec Gemini API**: dostaje dane, gdy Gemini API jest niedostępne (automatyczne przełączenie, `app/ai/failover.py`) albo gdy administrator ręcznie wybierze Claude; jedno i drugie możliwe tylko przy `ANTHROPIC_PROCESSOR_APPROVED=true` (R6a). Przy przełączeniu w trakcie analizy ta sama praca trafia do obu dostawców | te same kategorie danych co Gemini API (wiersz wyżej), także przy zadaniach prywatnych i wzorcach — wszystkie zdjęcia i PDF-y przesyłane w treści zapytania (base64), **bez File API**, więc po stronie Anthropic nie powstają przechowywane pliki; wejścia i wyjścia API usuwane **w ciągu 30 dni** (wyjątki: egzekwowanie Usage Policy, obowiązek prawny); **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Commercial Terms (zakaz trenowania modeli na Customer Content) + Data Processing Addendum włączony do nich przez odesłanie; transfer: standardowe klauzule umowne (DPA, moduł drugi i/lub trzeci); podwykonawcy: anthropic.com/subprocessors (15 dni na sprzeciw) |
 | Google — Cloud Translation API v2 (funkcja opcjonalna, `TRANSLATE_ENABLED`) | podmiot przetwarzający | krótkie nagłówki toku rozumowania modelu tłumaczone z angielskiego na polski — **dotyczą treści pracy ucznia**; dotyczy obu dostawców AI, więc przy aktywnym Claude nagłówki trafiają do Google | jak Gemini API |
 | Resend (spółka z USA; pełna nazwa strony umowy wg DPA [DO POTWIERDZENIA]) — wysyłka e-maili transakcyjnych | podmiot przetwarzający | **adres e-mail rodzica** i treść wiadomości: prośba o zgodę, potwierdzenie aktywacji, link do strony rodzica, link zmiany hasła — a w treści **adres konta Google dziecka albo jego login** (bez imienia i nazwiska, bez innych danych dziecka) i jednorazowe linki. Domena `omj-validator.pl` zweryfikowana, region wysyłki eu-west-1 (Irlandia) | DPA Resend (resend.com/legal/dpa); transfer: Resend uczestniczy w EU-US Data Privacy Framework [DO POTWIERDZENIA przy przeglądzie: wpis w rejestrze DPF]; wiadomości nie trafiają do Telegramu ani logów (adresy maskowane, treści nie są logowane) |
 | Cloudflare, Inc. | podmiot przetwarzający | ruch HTTPS między użytkownikiem a serwerem (tunel, terminacja TLS) | [DO USTALENIA: potwierdzić zawarcie DPA / warunki Cloudflare i wpisać do rejestru] |
-| Telegram FZ-LLC | odbiorca powiadomień technicznych | komunikaty operacyjne: identyfikator zgłoszenia, oznaczenie zadania, liczba zdjęć, liczba znaków wpisanego tekstu (nigdy sam tekst), wynik punktowy, treść błędu. **Bez imienia, nazwiska, e-maila i identyfikatora użytkownika.** Funkcja wyłączana konfiguracją | brak umowy powierzenia — zob. R12; **w wariancie B zalecane wyłączenie** |
+| Cloudflare, Inc. — Turnstile (rejestracja) | [DO USTALENIA: rola — podmiot przetwarzający czy odrębny administrator wg warunków Turnstile] | przeglądarka: dane techniczne przeglądarki i adres IP (skrypt i ramka z `challenges.cloudflare.com`); serwer: tylko sekret i jednorazowy token, bez adresu IP i danych konta | jak wiersz wyżej; zob. R21 |
+| Telegram FZ-LLC (Zjednoczone Emiraty Arabskie) | odbiorca powiadomień technicznych | komunikaty operacyjne: identyfikator zgłoszenia, oznaczenie zadania, liczba zdjęć, liczba znaków wpisanego tekstu (nigdy sam tekst), wynik punktowy, przy błędzie wyłącznie klasa i kategoria błędu (bez treści); ponadto alarmy bez danych użytkowników (przełączenie dostawcy AI, budżet dzienny). **Bez imienia, nazwiska, e-maila i identyfikatora użytkownika** (pseudonim HMAC wyłączony). Dane spseudonimizowane — nadal osobowe (motyw 26). W wariancie A włączone; historia czatu nie jest automatycznie usuwana | brak umowy powierzenia, brak decyzji o adekwatności dla ZEA i brak SCC — zob. R11; **w wariancie B zalecane wyłączenie** |
 | Dostawca hostingu / miejsce serwera | — | całość danych | wariant A: serwer własny autora; wariant B: [UZUPEŁNIĆ: infrastruktura szkoły / dostawca] |
 
 **Poziom płatny Gemini API — dlaczego to ma znaczenie.** Produkcja korzysta z płatnego klucza API.
@@ -396,15 +437,19 @@ porównania: na płatnym poziomie Gemini API logi są przechowywane do 55 dni. A
 do Claude zdjęcia i PDF-y wyłącznie w treści zapytania (base64), nigdy przez Files API, więc
 u Anthropic nie powstają przechowywane pliki, a przesłane treści podlegają opisanemu wyżej
 30-dniowemu okresowi usuwania. Odpowiednikiem warunku brzegowego dla Gemini jest tu blokada
-w kodzie: Claude nie może zostać wybrany w panelu administratora, dopóki na serwerze nie
-ustawiono `ANTHROPIC_PROCESSOR_APPROVED=true` (zob. R6a). Powyższe ustalenia sprawdzono
+w kodzie: Claude nie może zostać wybrany w panelu administratora ani użyty jako zapasowy przy
+automatycznym przełączeniu, dopóki na serwerze nie ustawiono
+`ANTHROPIC_PROCESSOR_APPROVED=true` (zob. R6a). Stan na 12.10.2026: zmienna **nie** jest
+ustawiona w produkcji, więc dane do Anthropic nie trafiają. Powyższe ustalenia sprawdzono
 12.10.2026 w źródłach Anthropic; należy je sprawdzić ponownie przed publikacją i przy każdym
 przeglądzie.
 
-Dodatkowo, przy Gemini: fotografie są przesyłane do Gemini File API na czas analizy
-i **usuwane po jej zakończeniu** przez kod aplikacji (usuwanie „najlepszym staraniem" — błąd
-usunięcia jest logowany, ale nie przerywa działania; niezależnie od tego pliki wygasają po
-stronie Google po ok. 48 godz.).
+Dodatkowo, przy Gemini: przy ocenie zgłoszenia fotografie są zawsze wgrywane do Gemini File
+API na czas analizy (przy odczycie zadania prywatnego — tylko zestawy powyżej 14 MB) i **usuwane
+po jej zakończeniu** przez kod aplikacji, także gdy analiza się nie powiedzie (usuwanie
+„najlepszym staraniem" — błąd usunięcia jest zapisywany w logu jako ostrzeżenie, ale nie przerywa
+działania; niezależnie od tego pliki wygasają po stronie Google po 48 godz.). Wszystkie zapytania
+do Gemini mają włączone filtry bezpieczeństwa (`safety_settings`).
 PDF-y z zadaniami są celowo utrzymywane w pamięci podręcznej Gemini do 24 godzin, bo nie
 zawierają danych osobowych.
 
@@ -432,12 +477,13 @@ zawierają danych osobowych.
     │  4. przesłanie 1–10 fotografii  ──►  zapis na dysku serwera
     │                                       data/uploads/{sub}/{rok}/{etap}/{nr}/
     │
-    │  5. wysłanie do aktywnego dostawcy AI (zawsze tylko jednego z dwóch):
+    │  5. wysłanie do dostawcy AI — Gemini; Claude tylko zapasowo (niedostępność
+    │     Gemini albo wybór administratora) i tylko przy ANTHROPIC_PROCESSOR_APPROVED:
     │       • fotografie ucznia
     │       • PDF z zadaniami
     │       • PDF z rozwiązaniami
     │       • instrukcja oceniania po polsku
-    │     Gemini: fotografie w treści zapytania lub (>14 MB) przez File API,
+    │     Gemini: fotografie przez File API (Gemini 3: także w treści zapytania),
     │       kasowane po analizie; PDF-y w pamięci podręcznej do 24 h
     │     Claude: wszystko w treści zapytania (base64), bez File API;
     │       wejścia i wyjścia usuwane przez Anthropic w ciągu 30 dni
@@ -461,36 +507,43 @@ zawierają danych osobowych.
     │
     │  7. zapis wyniku w PostgreSQL (w tym surowa odpowiedź modelu w scoring_meta)
     │  8. przesłanie wyniku do przeglądarki ucznia przez WebSocket
-    │  9. powiadomienie techniczne bez tożsamości
-    └──────────────────────────────────────► [Telegram — poza EOG]
+    │  9. powiadomienie techniczne bez tożsamości (numer zgłoszenia, zadanie,
+    │     liczba zdjęć/znaków, wynik, klasa błędu)
+    └──────────────────────────────────────► [Telegram — ZEA, poza EOG, bez umowy]
+
+Cały ruch przeglądarka ↔ serwer przechodzi przez Cloudflare (terminacja TLS na brzegu
+Cloudflare); przy rejestracji przeglądarka łączy się też z Cloudflare Turnstile (R21).
 ```
 
-Dane nie opuszczają tej ścieżki. Nie ma analityki zewnętrznej, reklam, mechanizmów śledzących
-ani udostępniania danych podmiotom komercyjnym.
+Dane nie opuszczają tej ścieżki (poza kopiami zapasowymi serwera, sekcja 2.7). Nie ma
+analityki zewnętrznej, reklam, mechanizmów śledzących ani udostępniania danych podmiotom
+komercyjnym.
 
 ### 2.7 Okresy przechowywania
 
 | Dane | Okres | Parametr konfiguracji | Uwagi |
 |---|---|---|---|
 | Zgłoszenie (wiersz w bazie) **wraz z fotografiami pracy** | **24 miesiące** od utworzenia | `RETENTION_SUBMISSION_MONTHS` | mechanizm usuwa wiersz i pliki łącznie; ustawienie 0 lub braku wartości **wyłącza** wygasanie — niedopuszczalne we wdrożeniu produkcyjnym. Okres dobrany tak, by objąć dwa lata szkolne, przez które biegnie cykl olimpijski |
-| Surowy zapis toku rozumowania modelu w `scoring_meta` | **90 dni** od utworzenia | `RETENTION_SCORING_THINKING_DAYS` | zapis odtwarza treść pracy ucznia dosłownie, dlatego jest usuwany znacznie wcześniej niż samo zgłoszenie; pozostałe metadane (nazwa modelu, liczba tokenów, koszt, czasy) nie są danymi osobowymi i zostają |
+| Surowy zapis toku rozumowania modelu w `scoring_meta` | **90 dni** od utworzenia | `RETENTION_SCORING_THINKING_DAYS` | zapis odtwarza treść pracy ucznia dosłownie, dlatego jest usuwany znacznie wcześniej niż samo zgłoszenie; zostają metadane techniczne (model, tokeny, koszt, czasy, ewentualne przełączenie dostawcy), a przy zgłoszeniach do zadań prywatnych także `task_snapshot` (treść ocenianego zadania) — do usunięcia zgłoszenia |
 | Konto użytkownika (`users`) wraz ze wszystkim, co do niego należy | **36 miesięcy** bez logowania i bez zgłoszenia | `RETENTION_INACTIVE_ACCOUNT_MONTHS` | aktywność liczona jako późniejsza z dwóch dat: ostatniego logowania i ostatniego zgłoszenia (sesja trwa 30 dni, więc sam znacznik logowania byłby mylący). Pomijane są konta administracyjne i konto deweloperskie. Okres dłuższy niż retencja zgłoszeń, by wracający uczeń zastał swoją historię |
 | Zadanie prywatne (`private_tasks`) wraz ze zdjęciami zadania, wskazówkami i zgłoszeniami do niego | **24 miesiące** od ostatniej aktywności (dodanie, edycja, zgłoszenie) | `RETENTION_PRIVATE_TASK_MONTHS` | uczeń może usunąć zadanie w każdej chwili; zgłoszenia do zadania prywatnego podlegają też ogólnej retencji zgłoszeń |
 | Wzorzec (`patterns`) wraz z historią dopracowania, powiązaniami i dziennikiem powtórek (w tym tekstami wpisanymi z pamięci) | **24 miesiące** od ostatniej aktywności (edycja, runda z modelem, powtórka, ocena rozwiązania ćwiczącego wzorzec) | `RETENTION_PATTERN_MONTHS` | uczeń może usunąć wzorzec w każdej chwili; zgłoszenia, które go ćwiczyły, zostają (bez powiązania) |
 | Szkic odczytu zadania (zdjęcia niezatwierdzone jako zadanie) | **24 godziny** | przebieg plików osieroconych | usuwany też natychmiast po zatwierdzeniu |
-| Licznik wywołań modelu (`ai_usage`) | **90 dni** | `RETENTION_AI_USAGE_DAYS` | bez treści; potrzebny do limitów dobowych i rozliczenia kosztów |
+| Licznik wywołań modelu (`ai_usage`: zadania prywatne i wzorce) | **90 dni** | `RETENTION_AI_USAGE_DAYS` | bez treści; potrzebny do limitów dobowych, budżetu dziennego i rozliczenia kosztów |
 | Dziennik dostępu administratora (`admin_access_log`) | **12 miesięcy** od zdarzenia | `RETENTION_ADMIN_AUDIT_MONTHS` | dość długo, by zbadać skargę, dość krótko, by nie stać się archiwum tego, kto na kogo patrzył |
-| Pseudonimowy znacznik limitu po usunięciu konta (`deleted_account_quota`) | do zamknięcia okna limitu, czyli **maks. 24 godziny** od ostatniego zgłoszenia | okno limitu (24 h) | usuwany automatycznie; powstaje tylko wtedy, gdy konto miało zgłoszenia w oknie |
+| Pseudonimowy znacznik limitu po usunięciu konta (`deleted_account_quota`) | do zamknięcia okna limitu, czyli **24 godziny** od ostatniego zgłoszenia lub wywołania modelu (przy dobowym przebiegu retencji — do ok. 48 godzin) | okno limitu (24 h) | usuwany automatycznie; powstaje tylko wtedy, gdy konto miało w oknie zgłoszenia albo wywołania modelu przy zadaniach prywatnych lub wzorcach |
 | Konto czekające na zgodę rodzica (`status = pending_parent`) wraz ze wszystkim, co do niego należy | **14 dni** od `pending_since` (założenie konta albo podanie adresu rodzica przy koncie sprzed 12.10.2026) | stała w kodzie (`app/retention.py`) | po kliknięciu „Nie zgadzam się” — natychmiast; zmiana adresu rodzica nie przedłuża terminu |
 | Adres e-mail rodzica (`parents`) | dopóki istnieje konto dziecka z nim powiązane; po usunięciu ostatniego konta albo zastąpieniu adresu — najpóźniej **24 godziny** od ostatniej wiadomości (od razu, jeśli w ostatniej dobie nic na ten adres nie wysłano) | stała w kodzie | doba utrzymuje dziennik wysyłki, żeby usunięcie konta albo zmiana adresu nie zerowały limitów (ochrona skrzynki rodzica) |
 | Zapis zgody (`consents`), rok urodzenia, login, skrót hasła | razem z kontem | — | |
 | Skróty linków wysłanych rodzicowi (`email_tokens`) | **30 dni** od wygaśnięcia (link: zgoda 14 dni, zmiana hasła 1 godzina, strona rodzica 30 dni) | stała w kodzie | dziennik do limitów wysyłki i wyjaśniania zgłoszeń |
 | Nieudane próby logowania (`login_failures`) | **24 godziny** | stała w kodzie | IP tylko jako HMAC |
+| HMAC adresu IP przy rejestracji (limit kont na adres) | **24 godziny**, wyłącznie w pamięci procesu | `RATE_LIMIT_REGISTRATIONS_PER_IP_PER_DAY` | nie trafia do bazy ani do kopii zapasowych; restart serwera kasuje |
+| Powiadomienia Telegram (czat administratora) | **bez automatycznego usuwania** | — | treść: sekcja 2.5; [DO DECYZJI: okres i sposób czyszczenia historii czatu — plan wdrożenia, poz. 23] |
 | Pliki osierocone (bez odpowiadającego zgłoszenia) | usuwane przy każdym przebiegu retencji | `RETENTION_AUTO_PURGE` (przebieg dobowy) | zabezpieczenie na wypadek niepowodzenia usunięcia plików |
 | Cookie sesyjne | do 30 dni; 12 godzin przy logowaniu loginem i hasłem bez „Zapamiętaj mnie” (wartości zaszyte w kodzie) | — | zmiana hasła unieważnia wszystkie sesje konta (`session_version`) |
 | Dzienniki aplikacji (dziennik kontenera) | **ograniczone objętościowo**: 50 MB × 5 plików na usługę (250 MB), najstarsze wpisy nadpisywane | `docker-compose.prod.yml` (`x-logging`) | rotacja wdrożona; przy obecnym ruchu odpowiada to kilku miesiącom, ale jest to limit objętości, a nie gwarantowany okres — zob. R13 |
 | Kopie zapasowe bazy | [UZUPEŁNIĆ] | — | usunięcie danych musi obejmować także kopie po upływie cyklu ich rotacji |
-| Dane po samodzielnym usunięciu konta przez użytkownika | usuwane niezwłocznie | funkcja usunięcia konta | usuwane są: konto, wszystkie zgłoszenia (kaskadowo) i wszystkie pliki; w dzienniku dostępu administratora identyfikator jest zastępowany nieodwracalnym skrótem; pozostaje wyłącznie znacznik limitu opisany wyżej; kopie zapasowe — po cyklu rotacji |
+| Dane po samodzielnym usunięciu konta przez użytkownika | usuwane niezwłocznie | funkcja usunięcia konta | usuwane są: konto, wszystkie zgłoszenia, zadania prywatne, wzorce, zgody (kaskadowo) i wszystkie pliki; w dzienniku dostępu administratora identyfikator jest zastępowany nieodwracalnym skrótem. **Zostają czasowo:** znacznik limitu (wyżej); skróty linków z `email_tokens` z `user_id = NULL` (do 30 dni od wygaśnięcia) i adres rodzica bez innych dzieci (doba); wpisy w dziennikach aplikacji z identyfikatorami zgłoszeń i maskowanym identyfikatorem konta (do nadpisania); powiadomienia Telegram (bez automatycznego usuwania); kopie zapasowe (do ok. 6 miesięcy); rejestry dostawców AI (Google do 55 dni, Anthropic do 30 dni) — wszystko ujawnione w regulaminie, pkt 11 |
 | Dane po wygaszeniu serwisu (wariant A) | usunięcie całości nie później niż [UZUPEŁNIĆ] od zamknięcia serwisu | — | użytkownicy informowani z wyprzedzeniem [UZUPEŁNIĆ: np. 30 dni] |
 
 **Uwagi:**
@@ -583,17 +636,23 @@ Dane, których niezbędności **nie** wykazano i które podlegają weryfikacji:
 
 - do modelu AI **nie trafia** żaden identyfikator ucznia: ani e-mail, ani imię i nazwisko,
   ani `sub`; nazwy plików są losowymi identyfikatorami,
-- dane danej analizy trafiają tylko do jednego dostawcy AI — aktywnego w chwili jej wykonania,
+- dane danej analizy trafiają do jednego dostawcy AI; wyjątkiem jest automatyczne przełączenie
+  w trakcie analizy, gdy Gemini przestanie odpowiadać (wtedy ta sama praca trafia też do Claude,
+  R6a),
 - przy Gemini fotografie są usuwane z infrastruktury Google zaraz po zakończeniu analizy; przy
   Claude są przesyłane wyłącznie w treści zapytania (bez File API), a wejścia i wyjścia API
   Anthropic usuwa w ciągu 30 dni,
-- powiadomienia techniczne nie zawierają tożsamości użytkownika (opcjonalny, nieodwracalny
-  pseudonim HMAC jest domyślnie wyłączony),
+- powiadomienia techniczne nie zawierają tożsamości użytkownika ani treści błędów, tylko klasę
+  błędu (opcjonalny, nieodwracalny pseudonim HMAC jest domyślnie wyłączony),
+- każde przesłane zdjęcie jest zapisywane od nowa jako JPEG bez metadanych (EXIF, GPS),
+- API ucznia nie zwraca toku rozumowania modelu ani liczby `abuse_score`,
 - pliki użytkownika są serwowane wyłącznie po zalogowaniu i po sprawdzeniu, że należą do tego
   użytkownika,
 - limity liczby zgłoszeń ograniczają objętość gromadzonych danych,
 - adresy e-mail i identyfikatory są maskowane w dziennikach aplikacji,
-- każde sięgnięcie administratora po cudze dane zostawia ślad w dzienniku dostępu,
+- sięgnięcie administratora przez aplikację po zdjęcie, listę zgłoszeń konkretnego ucznia,
+  wyszukiwanie i ponowną analizę zostawia ślad w dzienniku dostępu (z ograniczeniami opisanymi
+  w 2.3 i R3),
 - kod jest jawny (licencja MIT), co umożliwia niezależną weryfikację powyższych twierdzeń.
 
 ### 3.3 Rozważone i odrzucone rozwiązania alternatywne
@@ -613,9 +672,9 @@ Dane, których niezbędności **nie** wykazano i które podlegają weryfikacji:
 | Informacja (art. 13–14) | regulamin i polityka prywatności w serwisie, język przystępny dla dziecka i rodzica | klauzula informacyjna dla ucznia i rodzica (`klauzula-informacyjna-szkola.md`) |
 | Dostęp (art. 15) | historia prób i zdjęcia widoczne w panelu „Moje rozwiązania"; kopia całości na żądanie e-mailem; na żądanie także informacja z dziennika dostępu administratora, kto i kiedy sięgał po dane tej osoby | jw. + wniosek do szkoły |
 | Sprostowanie (art. 16) | e-mail do administratora | wniosek do szkoły |
-| Usunięcie (art. 17) | **samodzielne usunięcie konta wraz ze zdjęciami i historią** w panelu użytkownika; alternatywnie e-mail. Przeżywa je wyłącznie pseudonimowy znacznik limitu (maks. 24 h, sekcja 2.3), ujawniony w polityce prywatności; w dzienniku dostępu administratora identyfikator zastępowany jest nieodwracalnym skrótem | wniosek; ograniczone art. 17 ust. 3 lit. b, w praktyce realizowane przy rezygnacji z narzędzia |
+| Usunięcie (art. 17) | **samodzielne usunięcie konta wraz ze zdjęciami, historią, zadaniami prywatnymi i wzorcami** w panelu użytkownika (dostępne także dla kont bez roku urodzenia i czekających na zgodę) albo przez rodzica na stronie rodzica; alternatywnie e-mail. Czasowo zostają ślady wymienione w sekcji 2.7 (wiersz „Dane po samodzielnym usunięciu konta”), ujawnione w regulaminie, pkt 11 | wniosek; ograniczone art. 17 ust. 3 lit. b, w praktyce realizowane przy rezygnacji z narzędzia |
 | Ograniczenie (art. 18) | e-mail | wniosek |
-| Przenoszenie (art. 20) | przysługuje (podstawa: zgoda) | **nie przysługuje** (podstawa: lit. e) |
+| Przenoszenie (art. 20) | przysługuje (podstawa: zgoda); realizowane ręcznie na żądanie e-mailem — serwis nie ma funkcji eksportu | **nie przysługuje** (podstawa: lit. e) |
 | Sprzeciw (art. 21) | wobec celu A4 (uzasadniony interes) | **przysługuje** wobec całości; skutek: zaprzestanie korzystania z narzędzia przez ucznia |
 | Cofnięcie zgody (art. 7 ust. 3) | w każdej chwili, bez wpływu na zgodność z prawem przetwarzania przed cofnięciem | nie dotyczy |
 | Skarga (art. 77) | Prezes UODO, ul. Stawki 2, 00-193 Warszawa | jw. |
@@ -655,7 +714,8 @@ na 10 pracach ocenionych ręcznie (po dwa przebiegi, `docs/model-ab-2026-09-05.m
 `docs/model-ab-2026-10-12.md`) model produkcyjny zgodził się z człowiekiem w 20/20 i 19/20
 przebiegach; jedyna rozbieżność dotyczyła trzystronicowej pracy z wieloma skreśleniami, a
 obrócone, blade zdjęcie oceniono poprawnie. Rysunków i metod innych niż wzorcowa próba nie
-obejmowała. Skala punktowa OMJ jest przy tym skokowa (0/2/5/6) —
+obejmowała. Skala punktowa OMJ jest przy tym skokowa (0/2/5/6 w etapach II i III, 0/1/3
+w etapie I) —
 pomyłka o jeden stopień to różnica między „prawie nic" a „prawie wszystko".
 
 Skutek dla dziecka nie jest formalny, lecz psychologiczny i realny: zaniżona ocena zniechęca
@@ -726,13 +786,16 @@ prób, czyli do tego, do czego jest ono najbardziej przydatne (efekt mrożący).
 - zasada, że dane z narzędzia nie są przekazywane innym nauczycielom, wychowawcy ani rodzicom
   bez wyraźnego powodu i podstawy,
 - poinformowanie ucznia wprost, kto widzi jego prace (klauzula informacyjna),
-- **[WDROŻONE] dziennik dostępu administratora** (`admin_access_log`, sekcja 2.3): każde
-  odczytanie cudzego zdjęcia, wyświetlenie listy zgłoszeń, wyszukanie użytkownika i ponowne
-  uruchomienie oceny zostawia wpis (kto, czyje dane, jaki zasób, kiedy) — bez treści i bez frazy
-  wyszukiwania. Retencja 12 miesięcy. Pozwala wykazać rozliczalność (art. 5 ust. 2) i odpowiedzieć
-  osobie na pytanie „kto oglądał moje dane". Ograniczenia, o których trzeba pamiętać przy audycie:
-  dziennik nie jest wystawiony żadnym API (odczyt bezpośrednio z bazy), a nieudany zapis nie
-  przerywa operacji administratora, więc ślad nie jest gwarantowany w 100%;
+- **[WDROŻONE] dziennik dostępu administratora** (`admin_access_log`, sekcja 2.3): odczytanie
+  cudzego zdjęcia, wyświetlenie listy zgłoszeń konkretnego ucznia i ponowne uruchomienie oceny
+  zostawia wpis (kto, czyje dane, jaki zasób, kiedy); wyszukanie użytkownika i przegląd zbiorczej
+  listy zgłoszeń wszystkich użytkowników — wpis bez wskazania osoby. Bez treści i bez frazy
+  wyszukiwania. Retencja 12 miesięcy. Pozwala wykazać rozliczalność (art. 5 ust. 2) i częściowo
+  odpowiedzieć osobie na pytanie „kto oglądał moje dane". Ograniczenia, o których trzeba pamiętać
+  przy audycie: dziennik nie jest wystawiony żadnym API (odczyt bezpośrednio z bazy); nieudany
+  zapis nie przerywa operacji administratora; zbiorcza lista pokazuje dane wielu uczniów, a
+  zostawia jeden wpis bez osoby; **bezpośredni dostęp do serwera, bazy i plików nie jest
+  rejestrowany** — ślad nie jest więc pełny;
 - **[DO ROZWAŻENIA]** okresowy przegląd dziennika przez osobę inną niż administrator — sam
   dziennik nikogo nie powstrzymuje, dopóki nikt do niego nie zagląda.
 
@@ -749,19 +812,19 @@ przedmioty i osoby w tle kadru. Zdarza się, że margines zeszytu zawiera treśc
 To samo dotyczy tekstu rozwiązania wpisanego w przeglądarce: uczeń może go podpisać albo dopisać
 treści niezwiązane z zadaniem, a tekst trafia do modelu AI tak samo jak zdjęcie.
 
-Dodatkowo: fotografie o wymiarach poniżej 2048 px **nie są przetwarzane ponownie i zachowują
-oryginalne metadane EXIF**, które w zdjęciach z telefonu regularnie zawierają współrzędne GPS
-miejsca wykonania — czyli zwykle adres domowy dziecka. Zdjęcia większe są zmniejszane i zapisywane
-jako nowy plik JPEG, co metadane usuwa. Skutkiem jest sytuacja, w której **usunięcie danych
-lokalizacyjnych zależy od rozdzielczości aparatu**, co nie jest świadomym środkiem ochronnym.
+Metadane zdjęć z telefonu (EXIF) regularnie zawierają współrzędne GPS miejsca wykonania — czyli
+zwykle adres domowy dziecka. **Ten problem jest zamknięty:** każde przesłane zdjęcie, niezależnie
+od rozmiaru i formatu (także HEIC), jest dekodowane i zapisywane od nowa jako JPEG z samych
+pikseli, więc metadane nie trafiają ani na dysk serwera, ani do dostawcy AI; pliku, którego nie
+da się zdekodować, serwis nie przyjmuje (sekcja 2.3).
 
 Wszystkie te dane trafiają następnie do modelu AI, mimo że aplikacja starannie nie przekazuje mu
 tożsamości użytkownika. Minimalizacja po stronie bazy danych jest więc częściowo pozorna.
 
 Środki:
 
-- **usuwanie metadanych EXIF ze wszystkich zapisywanych fotografii, niezależnie od rozmiaru**
-  (zmiana jednolinijkowa w module obsługi przesyłania; **zalecana jako pilna**),
+- **[WDROŻONE] usuwanie metadanych EXIF ze wszystkich zapisywanych fotografii, niezależnie od
+  rozmiaru** (ponowne zapisanie jako JPEG, `app/uploads.py`),
 - komunikat w interfejsie przy przesyłaniu: „Nie podpisuj kartki imieniem i nazwiskiem.
   Fotografuj samą pracę, bez otoczenia. System i tak wie, czyja to praca.",
 - ograniczony okres retencji fotografii (sekcja 2.7; rekomendacja: skrócić go niezależnie od okresu retencji samych wyników),
@@ -822,6 +885,9 @@ bez rozwiązania wzorcowego.
   neutralizowane), więc treść zadania nie może wstrzyknąć kodu do przeglądarki ucznia ani
   administratora,
 - próba manipulacji modelem w zdjęciu lub tekście zadania (`abuse_score` ≥ 70) blokuje zapis,
+- treść, która nie jest zadaniem matematycznym, jest odrzucana przy odczycie i tworzeniu zadania,
+- przy Gemini zapytania mają włączone filtry bezpieczeństwa; blokada bezpieczeństwa nigdy nie
+  powoduje przełączenia na drugiego dostawcę (R6a),
 - osobne limity dobowe na odczyty zdjęć (15) i tworzenie zadań/wskazówek (10) oraz limit
   globalny (1000), liczone przed wywołaniem modelu; usunięcie konta ich nie zeruje,
 - na stronie zadania i przy wyniku widnieje informacja, że ocena powstała bez rozwiązania
@@ -842,7 +908,9 @@ sformułowania, które dziecko przyjmuje, oraz zadania do ćwiczenia.
 - do modelu trafia tylko tekst potrzebny do rundy (szkic, odpowiedź, treść zadania źródłowego,
   informacja zwrotna z oceny) — bez zdjęć, e-maila, imienia i identyfikatora ucznia; tekst ucznia
   jest w instrukcji oznaczony jako dane, nie polecenia,
-- próba manipulacji (`abuse_score` ≥ 70) albo blokada bezpieczeństwa kończy rundę bez wyniku,
+- próba manipulacji (`abuse_score` ≥ 70) albo blokada bezpieczeństwa kończy rundę bez wyniku;
+  prośby niezwiązane z matematyką model grzecznie odrzuca (instrukcja systemowa), a przy Gemini
+  działają filtry bezpieczeństwa,
 - model wybiera zadania OMJ wyłącznie z listy przygotowanej przez serwer; klucze spoza listy są
   odrzucane, a model nie dostaje treści zadań OMJ, tylko nasze wskazówki,
 - każda propozycja modelu wymaga świadomego wyboru ucznia (wersja, wzorzec, zadanie);
@@ -908,7 +976,8 @@ opiera się decyzja.
   transferu do Anthropic pozostają standardowe klauzule umowne (plan wdrożenia, poz. 21),
 - **plan awaryjny — częściowo spełniony**: warstwa dostawcy AI jest w kodzie wydzielona za
   wspólnym interfejsem, a aplikacja ma już dwóch dostawców (Google, Anthropic), między którymi
-  administrator przełącza się bez restartu. U obu przetwarzanie obejmuje jednak transfer do USA,
+  administrator przełącza się bez restartu, a przy niedostępności Gemini aplikacja przełącza się
+  sama (R6a). U obu przetwarzanie obejmuje jednak transfer do USA,
   więc luka pozostaje: administrator powinien wskazać dostawcę zapasowego przetwarzającego dane
   w EOG i orientacyjny czas przełączenia — [UZUPEŁNIĆ],
 - monitorowanie losów odwołania w sprawie Latombe i gotowość do wstrzymania przekazywania
@@ -919,7 +988,9 @@ opiera się decyzja.
 ### R6a. Przełączenie dostawcy AI — zmiana podmiotu przetwarzającego
 
 **Źródło:** administrator wybiera w panelu („Ustawienia AI”) aktywnego dostawcę i model;
-zmiana działa od razu, bez restartu. Przełączenie z Google na Anthropic (lub odwrotnie) oznacza,
+zmiana działa od razu, bez restartu. Od 12.10.2026 aplikacja przełącza się także **automatycznie**
+na model zapasowy (`AI_FAILOVER_MODEL`, domyślnie Claude), gdy Gemini API jest niedostępne
+(`app/ai/failover.py`). Przełączenie z Google na Anthropic (lub odwrotnie) oznacza,
 że od tej chwili dane uczniów trafiają do innego podmiotu przetwarzającego — na innej podstawie
 transferu (DPF albo standardowe klauzule umowne) i z innym okresem przechowywania po stronie
 dostawcy. Zrobione bez przygotowania, przełączenie wyprzedziłoby dokumentację i umowę.
@@ -932,12 +1003,20 @@ dostawcy. Zrobione bez przygotowania, przełączenie wyprzedziłoby dokumentacj�
 - zapis nowego ustawienia następuje dopiero po udanym wywołaniu testowym wybranego modelu,
 - tabela `app_settings` przechowuje, kto i kiedy ostatnio zmienił dostawcę i model; każda zmiana
   trafia też do dziennika aplikacji (z ograniczeniami opisanymi w R13),
-- obaj dostawcy są opisani w niniejszej ocenie, klauzuli informacyjnej i regulaminie, więc
-  przełączenie między nimi nie zmienia informacji przekazanej użytkownikom; dodanie trzeciego
-  dostawcy wymaga przeglądu DPIA (sekcja 9),
-- dane danej analizy trafiają wyłącznie do dostawcy aktywnego w chwili jej wykonania. Skutek,
-  o którym trzeba pamiętać: ponowna analiza zlecona przez administratora po przełączeniu wysyła
-  to samo rozwiązanie także do drugiego dostawcy.
+- **automatyczne przełączenie podlega tej samej blokadzie**: model zapasowy od Anthropic jest
+  używany tylko przy `ANTHROPIC_PROCESSOR_APPROVED=true` (bez niej aplikacja działa dokładnie jak
+  bez przełączania). Przełącza wyłącznie niedostępność, której uczeń nie może wywołać treścią
+  pracy (401/403/404, 429, 502/503/504/529, brak połączenia) — **nigdy** blokada bezpieczeństwa,
+  werdykt nadużycia ani nieczytelna odpowiedź, więc drugi dostawca nie staje się sposobem na
+  obejście filtrów pierwszego; najwyżej jedno przełączenie na wywołanie; każde przełączenie
+  trafia do logu, do `scoring_meta` (`failover`) i jako alarm do Telegramu (klasa błędu, bez
+  danych ucznia),
+- obaj dostawcy są opisani w niniejszej ocenie, klauzuli informacyjnej i regulaminie (Google
+  jako podstawowy, Anthropic jako zapasowy), więc przełączenie między nimi nie zmienia informacji
+  przekazanej użytkownikom; dodanie trzeciego dostawcy wymaga przeglądu DPIA (sekcja 9),
+- dane danej analizy trafiają zwykle do jednego dostawcy. Skutki, o których trzeba pamiętać:
+  przełączenie automatyczne w trakcie analizy wysyła tę samą pracę do obu (Gemini zdążył ją
+  otrzymać), a ponowna analiza zlecona przez administratora po przełączeniu — także.
 
 **Informowanie IOD i rejestr czynności (wariant B).** Rejestr czynności przetwarzania (art. 30
 RODO) wymienia od początku **obu** dostawców jako odbiorców i oba transfery do USA, a IOD opiniuje
@@ -962,7 +1041,9 @@ do darmowego narzędzia dodatkowego), stąd niska waga — ale ryzyko zmiany war
 przez dostawcę przekłada się na R6.
 
 Środki: wydzielony interfejs dostawcy AI; **[WDROŻONE] drugi dostawca** (Anthropic obok Google),
-na którego administrator może przełączyć się bez restartu (R6a); monitorowanie komunikatów
+na którego administrator może przełączyć się bez restartu, oraz **[WDROŻONE, nieaktywne do
+zatwierdzenia Anthropic] automatyczne przełączenie** przy niedostępności Gemini (R6a);
+monitorowanie komunikatów
 o wycofywaniu modeli; okresowy (co najmniej roczny) przegląd warunków przetwarzania danych
 u obu dostawców; odnotowanie w DPIA, że przejście na dostawcę innego niż dwaj opisani
 w sekcji 2.5 wymaga aktualizacji rejestru czynności i klauzuli informacyjnej.
@@ -975,8 +1056,16 @@ w sekcji 2.5 wymaga aktualizacji rejestru czynności i klauzuli informacyjnej.
 
 Każde zgłoszenie kosztuje — wywołanie modelu na fotografiach w wysokiej rozdzielczości z PDF-ami
 zadań jest operacją płatną. Bez limitów jedno konto mogłoby wyczerpać budżet całego wdrożenia.
-Obecna konfiguracja: 30 zgłoszeń na użytkownika na dobę, 500 zgłoszeń łącznie na dobę,
-50 nowych kont na dobę. Lista adresów uprzywilejowanych omija limity.
+Obecna konfiguracja: 30 zgłoszeń na użytkownika na dobę, najwyżej 2 zgłoszenia jednego
+ucznia oceniane jednocześnie, 500 zgłoszeń łącznie na dobę, najwyżej 4 oceny wykonywane
+równolegle; nowe konta: 50 na dobę bez rodzica i osobno 50 z rodzicem, a z jednego adresu IP 30
+na dobę (Turnstile przy rejestracji, R21). **Budżet dzienny AI** (`AI_DAILY_SPEND_LIMIT_USD`,
+domyślnie 25 USD w oknie 24 h, liczony z szacowanych kosztów, łącznie dla ocen, zadań
+prywatnych i wzorców): po jego wyczerpaniu wszystkie funkcje AI są wstrzymane dla wszystkich
+użytkowników, aż w oknie zwolni się miejsce; alarm do administratora przy 80% i 100%. Miejsce
+w limicie dobowym jest rezerwowane przed przetworzeniem zdjęć, więc równoległe żądania nie mogą
+go przekroczyć; zgłoszenie odrzucone przez serwer przed wywołaniem AI zwraca miejsce. Lista
+adresów uprzywilejowanych omija limity liczby zgłoszeń.
 
 Skutek: limit globalny jest **wspólny dla wszystkich** — intensywna praca kilku uczniów
 (np. przed zawodami) może odciąć pozostałych, a komunikat brzmi wtedy „system osiągnął dzienny
@@ -1027,7 +1116,14 @@ Skutek naruszenia byłby trwały i dotyczyłby dzieci — stąd najwyższa waga.
   rejestr naruszeń. W wariancie B — procedura szkolna; w wariancie A — [UZUPEŁNIĆ, brak],
 - w wariancie B: umiejscowienie serwera w infrastrukturze szkoły objętej jej polityką
   bezpieczeństwa; jeśli u zewnętrznego dostawcy — umowa powierzenia (art. 28) i weryfikacja
-  lokalizacji przetwarzania.
+  lokalizacji przetwarzania,
+- **[WDROŻONE 12.10.2026] zabezpieczenia aplikacji:** nagłówki bezpieczeństwa w nginx (CSP,
+  HSTS, zakaz osadzania w ramce, `nosniff`, Permissions-Policy); ochrona przed CSRF (ciasteczko
+  sesji `SameSite=Lax` oraz sprawdzanie `Origin`/`Sec-Fetch-Site` przy każdym żądaniu
+  zmieniającym dane, wylogowanie metodą POST); odrzucanie „bomb dekompresyjnych” (zdjęcia
+  powyżej 50 MP — z nagłówka, przed dekodowaniem; dekodowanie poza pętlą zdarzeń); rezerwacja
+  limitów przed przetwarzaniem i serializacja wysyłki e-maili z limitem (brak wyścigów
+  pozwalających przekroczyć limity).
 
 ---
 
@@ -1043,7 +1139,8 @@ przestaje działać od razu. Ujawnienie klucza podpisującego pozwoliłoby sfał
 dowolnego użytkownika, w tym administratora. Długi czas życia sesji na współdzielonym urządzeniu
 (komputer w pracowni, tablet rodzinny) oznacza, że kolejna osoba może zobaczyć prace poprzedniej.
 
-Środki: transmisja wyłącznie po HTTPS z flagą `Secure`; klucz podpisujący ustawiany wyłącznie ze
+Środki: transmisja wyłącznie po HTTPS z flagą `Secure`; ciasteczko `SameSite=Lax` (nie jest
+wysyłane z cudzych stron przy POST) i ochrona CSRF (R9); klucz podpisujący ustawiany wyłącznie ze
 zmiennej środowiskowej i objęty rotacją [UZUPEŁNIĆ: częstotliwość]; widoczna funkcja wylogowania;
 komunikat zalecający wylogowanie na urządzeniu współdzielonym; [DO ROZWAŻENIA] skrócenie czasu
 życia sesji w wariancie szkolnym (30 dni to wartość dobrana dla wygody, nie dla bezpieczeństwa).
@@ -1054,19 +1151,29 @@ komunikat zalecający wylogowanie na urządzeniu współdzielonym; [DO ROZWAŻEN
 
 **P = 2 · W = 1 · poziom = 2 (niskie) → szczątkowe: 1 (niskie)**
 
-Aplikacja może wysyłać powiadomienia o cyklu życia zgłoszenia na czat obsługiwany przez
-Telegram FZ-LLC (podmiot spoza EOG, bez zawartej umowy powierzenia). Powiadomienia zawierają
-wyłącznie dane operacyjne: identyfikator zgłoszenia, oznaczenie zadania, liczbę zdjęć, wynik
-i treść błędu — **bez imienia, nazwiska, e-maila i identyfikatora użytkownika**; opcjonalny,
-nieodwracalny pseudonim jest domyślnie wyłączony. Sam identyfikator zgłoszenia jest jednak
-danymi osobowymi pośrednio (pozwala administratorowi ustalić ucznia w panelu), a **treść błędu
-— skracana do 500 znaków — może w skrajnym przypadku zawierać fragment odpowiedzi modelu
-dotyczącej pracy ucznia.**
+Aplikacja wysyła powiadomienia o cyklu życia zgłoszenia na czat obsługiwany przez Telegram
+FZ-LLC (Zjednoczone Emiraty Arabskie — poza EOG, bez umowy powierzenia, bez decyzji
+o adekwatności i bez standardowych klauzul umownych). W wariancie A funkcja jest włączona.
+Powiadomienia zawierają wyłącznie dane operacyjne: identyfikator zgłoszenia, oznaczenie
+zadania, liczbę zdjęć i znaków wpisanego tekstu, wynik, a przy błędzie **tylko klasę
+i kategorię błędu** (od 12.10.2026 bez treści błędu, która mogła cytować odpowiedź modelu);
+do tego alarmy bez danych użytkowników (przełączenie dostawcy AI, budżet dzienny). **Bez
+imienia, nazwiska, e-maila i identyfikatora użytkownika**; opcjonalny, nieodwracalny pseudonim
+jest wyłączony (`TELEGRAM_PSEUDONYM_SALT` nieustawiony). Dane są jednak spseudonimizowane, a nie
+anonimowe — administrator może po identyfikatorze zgłoszenia ustalić ucznia w panelu — więc
+pozostają danymi osobowymi (motyw 26 RODO). Historia czatu nie jest automatycznie usuwana
+i przeżywa usunięcie konta.
 
-Środki: funkcja domyślnie wyłączona i włączana wyłącznie świadomą konfiguracją; **w wariancie B
-zalecane pozostawienie wyłączonej** albo zastąpienie kanałem wewnętrznym szkoły (poczta
-służbowa); przegląd treści komunikatów o błędach pod kątem możliwości wycieku treści pracy;
-odnotowanie w rejestrze czynności przetwarzania, jeśli funkcja jest używana.
+Ocena: przekazanie do Telegramu nie ma podstawy z rozdziału V RODO innej niż minimalizacja
+treści; jest to **świadomie odnotowana luka** — waga niska (bez treści pracy i tożsamości), ale
+formalnie nierozwiązana. [DO DECYZJI administratora: zastąpić Telegram kanałem w EOG (np.
+e-mail przez dostawcę z umową), ograniczyć powiadomienia do alarmów bez identyfikatorów
+zgłoszeń albo przyjąć ryzyko z uzasadnieniem — plan wdrożenia, poz. 23.]
+
+Środki: brak tożsamości i treści w komunikatach; ujawnienie odbiorcy, kraju i braku umowy
+w regulaminie (pkt 7–8, 11); **w wariancie B zalecane pozostawienie wyłączonej** albo zastąpienie
+kanałem wewnętrznym szkoły (poczta służbowa); odnotowanie w rejestrze czynności przetwarzania;
+okresowe czyszczenie historii czatu [DO USTALENIA].
 
 ---
 
@@ -1101,6 +1208,9 @@ wprost identyfikujących dziecko. **Rotacja dzienników została skonfigurowana*
 rozwiązania: jest to limit **objętości, a nie czasu**, więc przy niskim ruchu wpis może
 przetrwać dłużej, niż wynikałoby z deklarowanego okresu; dodatkowo maskowany prefiks trzech
 znaków wraz z kontekstem może w małej grupie pozwolić na powiązanie z osobą.
+
+Po usunięciu konta wpisy z identyfikatorami jego zgłoszeń i maskowanym identyfikatorem konta
+zostają w dziennikach do nadpisania — ujawnione w regulaminie (pkt 11).
 
 Środki: **[WDROŻONE]** maskowanie adresów e-mail i identyfikatorów w dziennikach;
 **[WDROŻONE]** rotacja dzienników z twardym limitem objętości; **[DO ROZWAŻENIA]** rotacja
@@ -1156,7 +1266,14 @@ rodzica.
   link do regulaminu; dowód zgody w tabeli `consents` (art. 7 ust. 1),
 - **strona rodzica** z każdej wiadomości: lista kont dzieci, usunięcie konta (= cofnięcie
   zgody), nowe hasło przy koncie z loginem,
-- adres rodzica musi być inny niż adres konta Google dziecka.
+- adres rodzica musi być inny niż adres konta Google dziecka — także po sprowadzeniu aliasów
+  Gmaila (kropki, „+dopisek”, `googlemail.com`) do jednej postaci,
+- osoba od 16 lat zaznacza akceptację regulaminu i zgodę na przetwarzanie w **dwóch osobnych
+  polach** (od 13.10.2026; art. 7 ust. 2),
+- ochrona rejestracji przed automatami: Cloudflare Turnstile, limit kont z jednego adresu IP
+  (30 na dobę) i osobne pule dzienne dla kont z rodzicem i bez (R8, R21); nowe loginy bez kropek
+  (login pokazywany w e-mailu do rodzica nie może stać się linkiem); formularz zmiany hasła
+  zawsze odpowiada „wysłano”, bez względu na to, czy login istnieje.
 
 **Ryzyko szczątkowe — świadomie zaakceptowane: dziecko może podać jako adres rodzica drugi
 własny adres** i samo kliknąć zgodę. Żaden mechanizm dostępny w bezpłatnej usłudze internetowej
@@ -1193,9 +1310,17 @@ zamyka wcześniejszą lukę polegającą na tym, że po usunięciu zgłoszeń zo
 z identyfikatorem Google, adresem e-mail i nazwiskiem dziecka. Aktywność liczona jako późniejsza
 z dat: ostatniego logowania i ostatniego zgłoszenia.
 
-**Pozostała luka:** kopie zapasowe nadal nie mają ustalonego okresu, a dzienniki aplikacji są
-ograniczone objętościowo, a nie czasowo (R13) — dlatego ryzyko szczątkowe wynosi **2 (niskie)**
-zamiast możliwego 1.
+**Kopie zapasowe (od 12.10.2026):** codzienna szyfrowana kopia całego serwera (zrzut bazy
+i przesłane pliki) na osobny dysk w tej samej lokalizacji; przechowywane 7 kopii dziennych,
+4 tygodniowe i 6 miesięcznych — dane usunięte z serwisu znikają z kopii po ok. 6 miesiącach
+(ujawnione w regulaminie, pkt 9 i 11). W okresie 22.06–12.10.2026 kopii nie wykonywano.
+Rekomendacja: przy odtworzeniu serwisu z kopii ponownie wykonać usunięcia dokonane po dacie
+kopii (konta usunięte przez użytkowników i rodziców) [DO USTALENIA: sposób — np. dziennik
+usunięć bez danych osobowych albo ręczna procedura].
+
+**Pozostała luka:** dzienniki aplikacji są ograniczone objętościowo, a nie czasowo (R13),
+a historia powiadomień Telegram nie jest automatycznie usuwana (R11) — dlatego ryzyko szczątkowe
+wynosi **2 (niskie)** zamiast możliwego 1.
 
 ---
 
@@ -1265,12 +1390,34 @@ w produkcji).
 Wysyłka wymaga przekazania dostawcy adresu rodzica i treści wiadomości (login albo e-mail konta
 Google dziecka, jednorazowe linki). Resend to firma z USA.
 
-Środki: umowa powierzenia (DPA Resend); region wysyłki w UE (eu-west-1); transfer w ramach
-EU-US Data Privacy Framework [DO POTWIERDZENIA przy przeglądzie: aktywny wpis w rejestrze DPF];
+Środki: umowa powierzenia (DPA Resend włączony do warunków korzystania z usługi, bez odrębnego
+podpisu); region wysyłki w UE (eu-west-1), ale przetwarzanie odbywa się głównie w USA; transfer
+na podstawie standardowych klauzul umownych (decyzja Komisji 2021/914) zawartych w DPA oraz
+EU-US Data Privacy Framework (stan potwierdzony 12.10.2026);
 w wiadomości wyłącznie dane niezbędne do zidentyfikowania konta (bez imienia i nazwiska, zdjęć,
 wyników); własna zweryfikowana domena nadawcy (SPF/DKIM) ogranicza podszywanie się pod serwis;
 awaria dostawcy nie blokuje konta — dziecko może ponowić wysyłkę, a nieudana wysyłka nie zużywa
 limitu.
+
+---
+
+### R21. Cloudflare — tunel z terminacją TLS i Turnstile
+
+**P = 1 · W = 2 · poziom = 2 (niskie) → szczątkowe: 2 (niskie)**
+
+Cały ruch między przeglądarką a serwerem przechodzi przez Cloudflare, Inc. (USA): połączenie
+HTTPS kończy się na brzegu Cloudflare, który dalej przesyła je tunelem do serwera. Cloudflare ma
+więc techniczny dostęp do całego ruchu — w tym zdjęć prac, treści rozwiązań, ciasteczek sesji
+i adresów IP. Od 12.10.2026 rejestracja korzysta też z Cloudflare Turnstile: przeglądarka ładuje
+skrypt i ramkę z `challenges.cloudflare.com` i przekazuje Cloudflare dane techniczne przeglądarki
+oraz adres IP; serwer weryfikuje token, wysyłając tylko sekret i token (bez `remoteip`, bez
+danych konta), a przy niedostępności Cloudflare rejestracja jest odmawiana (fail closed).
+
+Środki: brak dodatkowych danych przekazywanych przez serwer do Turnstile; Turnstile tylko na
+krokach rejestracji, które tworzą konto lub wysyłają e-mail do rodzica; ujawnienie w regulaminie
+(pkt 4, 7, 8). [DO USTALENIA: potwierdzić DPA Cloudflare, podstawę transferu (DPF i/lub SCC)
+i rolę Cloudflare przy Turnstile — sekcja 2.5, plan wdrożenia, poz. 24.] W wariancie B — ocenić,
+czy instancja szkolna w ogóle korzysta z Cloudflare.
 
 ---
 
@@ -1281,14 +1428,14 @@ limitu.
 | R1 | Błędna ocena i jej wpływ na dziecko | **6 wysokie** | 3 średnie |
 | R2 | Informacja zwrotna ujawniająca rozwiązanie | 2 niskie | 2 niskie |
 | R3 | Wgląd administratora/nauczyciela w niepowodzenia ucznia | 4 średnie | 2 niskie (dziennik dostępu wdrożony) |
-| R4 | Dane nadmiarowe na fotografii kartki (w tym EXIF/GPS) | **6 wysokie** | 3 średnie |
+| R4 | Dane nadmiarowe na fotografii kartki (EXIF/GPS usuwane ze wszystkich zdjęć) | **6 wysokie** | 3 średnie |
 | R5 | Manipulacja oceną i skutki fałszywej detekcji | 4 średnie | 2 niskie |
 | R6 | Przekazanie danych do USA | 4 średnie | 3 średnie |
 | R7 | Uzależnienie od jednego dostawcy AI | 2 niskie | 2 niskie |
 | R8 | Limity i koszt jako mechanizm dostępności | 2 niskie | 1 niskie (znacznik po usunięciu konta wdrożony) |
 | R9 | Naruszenie bezpieczeństwa serwera lub bazy | **6 wysokie** | 3 średnie |
 | R10 | Przejęcie sesji | 2 niskie | 2 niskie |
-| R11 | Powiadomienia poza EOG | 2 niskie | 1 niskie |
+| R11 | Powiadomienia poza EOG (Telegram) | 2 niskie | 1 niskie (bez treści i tożsamości; brak podstawy transferu — do decyzji) |
 | R12 | Tłumaczenie komunikatów przez usługę zewnętrzną | 2 niskie | 1 niskie |
 | R13 | Dane osobowe w dziennikach | 3 średnie | 1 niskie (maskowanie i rotacja wdrożone) |
 | R14 | Zmiana administratora i wygaszenie serwisu | 2 niskie | 1 niskie |
@@ -1298,6 +1445,7 @@ limitu.
 | R18 | Odgadywanie haseł do kont z loginem | 4 średnie | 2 niskie |
 | R19 | Odzyskiwanie dostępu i linki do rodziców | **6 wysokie** | 2 niskie |
 | R20 | Dostawca poczty e-mail (Resend) | 2 niskie | 1 niskie |
+| R21 | Cloudflare — terminacja TLS i Turnstile | 2 niskie | 2 niskie (DPA do potwierdzenia) |
 
 **Ryzyka pozostające po zastosowaniu środków — świadomie zaakceptowane:**
 
@@ -1434,7 +1582,8 @@ w kodzie** — wymaga zmiany, której autor niniejszego dokumentu nie wprowadzi�
 
 ### 7.5 Zasady Anthropic dla usług dostępnych dla małoletnich
 
-Dotyczy tylko okresów, w których aktywnym dostawcą AI jest Anthropic. To nie przepis prawa,
+Dotyczy tylko okresów, w których używany jest Anthropic (wybór administratora albo automatyczne
+przełączenie przy niedostępności Gemini, R6a). To nie przepis prawa,
 lecz **warunek umowny**: naruszenie grozi zawieszeniem lub zamknięciem konta API, czyli utratą
 dostawcy — nie karą dla administratora.
 
@@ -1446,9 +1595,9 @@ prace i czytają odpowiedzi modelu, a przy wzorcach wymieniają z modelem wiadom
 
 | Wymóg Anthropic | Stan w Trenerze OMJ |
 |---|---|
-| **Zgodność z prawem** ochrony dzieci i danych, **jawnie zadeklarowana** na stronie lub w dokumentacji publicznej | spełnione: `/regulamin`, pkt 3 („Zgodność z przepisami”); w wariancie B — regulamin szkoły |
+| **Zgodność z prawem** ochrony dzieci i danych, **jawnie zadeklarowana** na stronie lub w dokumentacji publicznej | spełnione: `/regulamin`, pkt 3 („Zgodność z przepisami” — od 13.10.2026 sformułowane jako „serwis jest projektowany tak, by spełniać wymogi…”, bez deklaracji bezwzględnej); w wariancie B — regulamin szkoły |
 | **Informacja, że użytkownik rozmawia z AI**, a nie z człowiekiem | spełnione: stopka każdej strony („…generowane przez AI…”) i `/regulamin` |
-| Środki techniczne odpowiednie do zastosowania (przykłady Anthropic, nie lista zamknięta): weryfikacja wieku, moderacja treści, monitorowanie i zgłaszanie, materiały edukacyjne | w dużej mierze: rok urodzenia i zgoda rodzica e-mailem dla osób poniżej 16 lat, a konto bez zgody nie może wywołać AI (R15, wdrożone 12.10.2026); odpowiedzi modelu ograniczone schematem JSON i promptem do oceny rozwiązania; wykrywanie prób manipulacji (`abuse_score`, `issue_type`); panel administratora. Brak osobnej warstwy moderacji |
+| Środki techniczne odpowiednie do zastosowania (przykłady Anthropic, nie lista zamknięta): weryfikacja wieku, moderacja treści, monitorowanie i zgłaszanie, materiały edukacyjne | w dużej mierze: rok urodzenia i zgoda rodzica e-mailem dla osób poniżej 16 lat, a konto bez zgody nie może wywołać AI (R15, wdrożone 12.10.2026); odpowiedzi modelu ograniczone schematem JSON i promptem do oceny rozwiązania; wykrywanie prób manipulacji (`abuse_score`, `issue_type`); zadania prywatne tylko matematyczne (inne odrzucane), we wzorcach prośby niezwiązane z matematyką grzecznie odrzucane; API ucznia nie zwraca toku rozumowania ani `abuse_score`; budżet dzienny AI i limity; panel administratora. Filtry bezpieczeństwa włączone przy Gemini; przy Claude brak osobnej warstwy moderacji poza odmowami samego modelu |
 | Systemowy prompt bezpieczeństwa dzieci, który Anthropic „może udostępnić” | nieużywany — [DO DECYZJI: zapytać Anthropic, czy jest dostępny dla tego zastosowania] |
 | Okresowe audyty Anthropic; przy wysokim odsetku naruszeń — zalecenia, a w razie ich niewdrożenia zawieszenie konta | przyjęte do wiadomości |
 
@@ -1491,6 +1640,10 @@ Kolumny do wypełnienia przez administratora — to jest lista zadań, nie dekla
 | 20 | Rozważyć rezygnację z zapisywania imienia i nazwiska | 3.1 | niski | [ ] | [ ] | [ ] |
 | 21 | ~~Sprawdzić w rejestrze DPF, czy Anthropic uczestniczy w programie~~ | R6 | średni | autor | — | **WYKONANE** 12.10.2026 — brak wpisu (aktywni i nieaktywni); transfer na podstawie standardowych klauzul umownych; sprawdzać przy każdym przeglądzie |
 | 22 | Przed ustawieniem `ANTHROPIC_PROCESSOR_APPROVED=true`: zaakceptować DPA Anthropic, sporządzić ocenę skutków transferu, wpisać Anthropic do rejestru czynności i ponownie sprawdzić ustalenia z sekcji 2.5 | R6, R6a | wysoki | [ ] | [ ] | w toku: DPA zaakceptowany z Commercial Terms (konto z EOG); ocena skutków transferu sporządzona 12.10.2026 — czeka na zatwierdzenie; pozostaje rejestr czynności i zatwierdzenie oceny |
+| 23 | Rozstrzygnąć powiadomienia Telegram: kanał w EOG z umową albo ograniczenie treści albo udokumentowana akceptacja ryzyka; ustalić czyszczenie historii czatu | R11 | średni | [ ] | [ ] | [ ] |
+| 24 | Potwierdzić DPA Cloudflare, podstawę transferu (DPF/SCC) i rolę przy Turnstile; wpisać do rejestru czynności | R21 | średni | [ ] | [ ] | [ ] |
+| 25 | Zdecydować o kontach sprzed 12.10.2026 bez roku urodzenia (np. usunięcie po określonym terminie) | R15 | średni | [ ] | [ ] | [ ] |
+| 26 | Procedura ponownego wykonania usunięć po odtworzeniu serwisu z kopii zapasowej | R16 | niski | [ ] | [ ] | [ ] |
 
 ---
 
@@ -1499,7 +1652,8 @@ Kolumny do wypełnienia przez administratora — to jest lista zadań, nie dekla
 DPIA podlega przeglądowi co najmniej raz na 12 miesięcy oraz **niezwłocznie** w razie:
 
 - wprowadzenia dostawcy AI innego niż dwaj opisani w sekcji 2.5, pierwszego włączenia
-  Anthropic jako aktywnego dostawcy, zmiany modelu AI albo zmiany warunków przetwarzania danych
+  Anthropic (ustawienia `ANTHROPIC_PROCESSOR_APPROVED=true`, które uruchamia też automatyczne
+  przełączanie), zmiany modelu AI albo zmiany warunków przetwarzania danych
   przez któregokolwiek z dostawców (w tym przystąpienia Anthropic do DPF),
 - przejścia na bezpłatny poziom API (unieważnia wnioski oceny),
 - jakiejkolwiek zmiany zasady, że wynik nie jest oceną szkolną,
