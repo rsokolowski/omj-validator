@@ -369,7 +369,7 @@ zadaniu. Konsekwencje, które trzeba przyjąć świadomie:
 | Google — Gemini API (płatny poziom usługi) | podmiot przetwarzający (jeden z dwóch alternatywnych dostawców AI — zob. wiersz Anthropic) | **fotografie pracy ucznia i/lub wpisany przez ucznia tekst rozwiązania** (w tym rysunki wykonane w przeglądarce), PDF zadań, PDF rozwiązań wzorcowych, instrukcja oceniania; przy zadaniach prywatnych także **zdjęcie strony z zadaniem** (odczyt treści) i **treść zadania** (wskazówki, ocena) — zdjęcia zwykle przesyłane w treści zapytania, a zestawy powyżej 14 MB przez File API i usuwane zaraz po analizie; **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Gemini API Additional Terms + Google Cloud Data Processing Addendum; transfer: EU-US Data Privacy Framework |
 | Anthropic Ireland, Limited / Anthropic, PBC — Claude API | podmiot przetwarzający, **alternatywny wobec Gemini API**: w danym momencie aktywny jest jeden z dwóch dostawców, wybrany przez administratora, i tylko on otrzymuje dane danej analizy | te same kategorie danych co Gemini API (wiersz wyżej), także przy zadaniach prywatnych i wzorcach — wszystkie zdjęcia i PDF-y przesyłane w treści zapytania (base64), **bez File API**, więc po stronie Anthropic nie powstają przechowywane pliki; wejścia i wyjścia API usuwane **w ciągu 30 dni** (wyjątki: egzekwowanie Usage Policy, obowiązek prawny); **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Commercial Terms (zakaz trenowania modeli na Customer Content) + Data Processing Addendum włączony do nich przez odesłanie; transfer: standardowe klauzule umowne (DPA, moduł drugi i/lub trzeci); podwykonawcy: anthropic.com/subprocessors (15 dni na sprzeciw) |
 | Google — Cloud Translation API v2 (funkcja opcjonalna, `TRANSLATE_ENABLED`) | podmiot przetwarzający | krótkie nagłówki toku rozumowania modelu tłumaczone z angielskiego na polski — **dotyczą treści pracy ucznia**; dotyczy obu dostawców AI, więc przy aktywnym Claude nagłówki trafiają do Google | jak Gemini API |
-| Resend (spółka z USA; pełna nazwa strony umowy wg DPA [DO POTWIERDZENIA]) — wysyłka e-maili transakcyjnych | podmiot przetwarzający | **adres e-mail rodzica** i treść wiadomości: prośba o zgodę, potwierdzenie aktywacji, link do strony rodzica, link zmiany hasła — a w treści **adres konta Google dziecka albo jego login** (bez imienia i nazwiska, bez innych danych dziecka) i jednorazowe linki. Domena `omj-validator.pl` zweryfikowana, region wysyłki eu-west-1 (Irlandia) | DPA Resend (resend.com/legal/dpa); transfer: Resend uczestniczy w EU-US Data Privacy Framework [DO POTWIERDZENIA przy przeglądzie: wpis w rejestrze DPF]; wiadomości nie trafiają do Telegramu ani logów (adresy maskowane, treści nie są logowane) |
+| Resend (spółka z USA) — wysyłka e-maili transakcyjnych | podmiot przetwarzający | **adres e-mail rodzica** i treść wiadomości: prośba o zgodę, potwierdzenie aktywacji, link do strony rodzica, link zmiany hasła — a w treści **adres konta Google dziecka albo jego login** (bez imienia i nazwiska, bez innych danych dziecka) i jednorazowe linki. Domena `omj-validator.pl` zweryfikowana, region wysyłki eu-west-1 (Irlandia) | DPA Resend (resend.com/legal/dpa, wersja z 31.12.2025) — włączony do warunków usługi, wiąże z chwilą ich akceptacji, bez osobnego podpisu (sprawdzone 12.10.2026); transfer: standardowe klauzule umowne (decyzja Komisji 2021/914, DPA pkt 1.16) oraz EU-US Data Privacy Framework (DPA pkt 11.1; certyfikacja ogłoszona przez Resend 13.03.2025) — [DO POTWIERDZENIA przy przeglądzie: aktywny wpis w rejestrze dataprivacyframework.gov]; wiadomości nie trafiają do Telegramu ani logów (adresy maskowane, treści nie są logowane) |
 | Cloudflare, Inc. | podmiot przetwarzający | ruch HTTPS między użytkownikiem a serwerem (tunel, terminacja TLS) | [DO USTALENIA: potwierdzić zawarcie DPA / warunki Cloudflare i wpisać do rejestru] |
 | Telegram FZ-LLC | odbiorca powiadomień technicznych | komunikaty operacyjne: identyfikator zgłoszenia, oznaczenie zadania, liczba zdjęć, liczba znaków wpisanego tekstu (nigdy sam tekst), wynik punktowy, treść błędu. **Bez imienia, nazwiska, e-maila i identyfikatora użytkownika.** Funkcja wyłączana konfiguracją | brak umowy powierzenia — zob. R12; **w wariancie B zalecane wyłączenie** |
 | Dostawca hostingu / miejsce serwera | — | całość danych | wariant A: serwer własny autora; wariant B: [UZUPEŁNIĆ: infrastruktura szkoły / dostawca] |
@@ -489,7 +489,7 @@ ani udostępniania danych podmiotom komercyjnym.
 | Pliki osierocone (bez odpowiadającego zgłoszenia) | usuwane przy każdym przebiegu retencji | `RETENTION_AUTO_PURGE` (przebieg dobowy) | zabezpieczenie na wypadek niepowodzenia usunięcia plików |
 | Cookie sesyjne | do 30 dni; 12 godzin przy logowaniu loginem i hasłem bez „Zapamiętaj mnie” (wartości zaszyte w kodzie) | — | zmiana hasła unieważnia wszystkie sesje konta (`session_version`) |
 | Dzienniki aplikacji (dziennik kontenera) | **ograniczone objętościowo**: 50 MB × 5 plików na usługę (250 MB), najstarsze wpisy nadpisywane | `docker-compose.prod.yml` (`x-logging`) | rotacja wdrożona; przy obecnym ruchu odpowiada to kilku miesiącom, ale jest to limit objętości, a nie gwarantowany okres — zob. R13 |
-| Kopie zapasowe bazy | [UZUPEŁNIĆ] | — | usunięcie danych musi obejmować także kopie po upływie cyklu ich rotacji |
+| Kopie zapasowe (baza i przesłane pliki) | **do 6 miesięcy**: kopie dzienne z 7 dni, tygodniowe z 4 tygodni, miesięczne z 6 miesięcy | `/usr/local/sbin/sokodom-backup` (Borg, szyfrowanie repokey-blake2, osobny dysk w tym samym lokalu) | usunięte dane znikają z kopii najpóźniej po ok. 6 miesiącach; kopia poza lokalem (GCS) planowana. Między 22.06 a 12.10.2026 kopie nie powstawały (awaria dysku) |
 | Dane po samodzielnym usunięciu konta przez użytkownika | usuwane niezwłocznie | funkcja usunięcia konta | usuwane są: konto, wszystkie zgłoszenia (kaskadowo) i wszystkie pliki; w dzienniku dostępu administratora identyfikator jest zastępowany nieodwracalnym skrótem; pozostaje wyłącznie znacznik limitu opisany wyżej; kopie zapasowe — po cyklu rotacji |
 | Dane po wygaszeniu serwisu (wariant A) | usunięcie całości nie później niż [UZUPEŁNIĆ] od zamknięcia serwisu | — | użytkownicy informowani z wyprzedzeniem [UZUPEŁNIĆ: np. 30 dni] |
 
@@ -1005,7 +1005,8 @@ zawiera wyłącznie konta służbowe; jawne poinformowanie o limitach w regulami
 Zbiór jest atrakcyjny: fotografie prac dzieci, ich imiona i nazwiska, adresy e-mail i wyniki,
 w jednym miejscu. W wariancie A serwis działa na komputerze w lokalu autora, wystawionym do
 internetu przez tunel Cloudflare; baza w kontenerze z danymi na dysku hosta; kopie zapasowe
-wykonywane ręcznie poleceniem `pg_dump` (zgodnie z dokumentacją wdrożeniową). W wariancie B
+wykonywane codziennie automatycznie (Borg, szyfrowane, osobny dysk w tym samym lokalu; zrzut bazy
+`pg_dumpall` przed każdą kopią), nieudana kopia wysyła alert. W wariancie B
 infrastrukturę zapewnia szkoła.
 
 Skutek naruszenia byłby trwały i dotyczyłby dzieci — stąd najwyższa waga.
@@ -1468,18 +1469,18 @@ Kolumny do wypełnienia przez administratora — to jest lista zadań, nie dekla
 |---|---|---|---|---|---|---|
 | 1 | ~~Ustalić i skonfigurować okresy retencji (sekcja 2.7)~~ | R16 | wysoki | autor | — | **WDROŻONE** (24 mies. / 90 dni / 36 mies. / 12 mies.); wariant B potwierdza wartości |
 | 1a | ~~Dodać automatyczne usuwanie kont nieaktywnych~~ | R16 | wysoki | autor | — | **WDROŻONE** (36 miesięcy bez aktywności) |
-| 2 | Usuwać metadane EXIF ze **wszystkich** fotografii, nie tylko zmniejszanych | R4 | wysoki | [ ] | [ ] | [ ] |
+| 2 | ~~Usuwać metadane EXIF ze **wszystkich** fotografii, nie tylko zmniejszanych~~ | R4 | wysoki | autor | — | **WDROŻONE** (każde zdjęcie, także HEIC, jest ponownie kodowane bez metadanych — `app/uploads.py`; sprawdzone 12.10.2026) |
 | 3 | ~~Wdrożyć weryfikację wieku i zgody rodzica (wariant A)~~ | R15 | wysoki | autor | — | **WDROŻONE** 12.10.2026 (rok urodzenia, zgoda rodzica e-mailem, strona rodzica, 14 dni) |
-| 3a | Potwierdzić wpis Resend w rejestrze DPF i zachować DPA Resend w dokumentacji | R20 | średni | [ ] | [ ] | [ ] |
+| 3a | Potwierdzić wpis Resend w rejestrze DPF i zachować DPA Resend w dokumentacji | R20 | średni | autor | — | DPA sprawdzony 12.10.2026 (SCC + DPF, bez osobnego podpisu); do zrobienia: zrzut aktywnego wpisu z rejestru DPF |
 | 4 | ~~Wdrożyć rejestr dostępu administratora do cudzych danych~~ | R3 | wysoki | autor | — | **WDROŻONE** (`admin_access_log`, retencja 12 mies.) |
 | 4a | Wprowadzić okresowy przegląd dziennika dostępu przez osobę inną niż administrator | R3 | średni | [ ] | [ ] | [ ] |
 | 5 | Oznaczyć w interfejsie każdą treść pochodzącą od AI | R1, art. 50 AI Act | wysoki | [ ] | [ ] | [ ] |
 | 6 | Sporządzić rejestr czynności przetwarzania | R17 | wysoki | [ ] | [ ] | [ ] |
 | 7 | Opracować procedurę reakcji na naruszenie (72 h) | R9, R17 | wysoki | [ ] | [ ] | [ ] |
 | 8 | Zamknąć dostęp do PDF i treści zadań za logowaniem (wariant B) | prawo autorskie | wysoki | [ ] | [ ] | [ ] |
-| 9 | Potwierdzić, że klucz Gemini API jest kluczem płatnym | warunek brzegowy | wysoki | [ ] | [ ] | [ ] |
-| 10 | Ustawić rotację i retencję dzienników aplikacji (maskowanie adresów e-mail **już wdrożone**) | R13 | średni | [ ] | [ ] | [ ] |
-| 11 | Zautomatyzować i przetestować kopie zapasowe; zaszyfrować | R9 | średni | [ ] | [ ] | [ ] |
+| 9 | ~~Potwierdzić, że klucz Gemini API jest kluczem płatnym~~ | warunek brzegowy | wysoki | autor | — | **POTWIERDZONE** 12.10.2026 (płatny klucz, projekt z rozliczeniem) |
+| 10 | ~~Ustawić rotację i retencję dzienników aplikacji~~ (maskowanie adresów e-mail **już wdrożone**) | R13 | średni | autor | — | **WDROŻONE** (50 MB × 5 plików na usługę, `docker-compose.prod.yml`) |
+| 11 | Zautomatyzować i przetestować kopie zapasowe; zaszyfrować | R9 | średni | autor | — | zautomatyzowane i szyfrowane od 12.10.2026 (Borg, codziennie, osobny dysk); do zrobienia: kopia poza lokalem (GCS) i próba odtworzenia |
 | 12 | Wystawić upoważnienia do przetwarzania (art. 29) | R3 | średni | [ ] | [ ] | [ ] |
 | 13 | Dobrać limity zgłoszeń do liczebności grupy | R8 | średni | [ ] | [ ] | [ ] |
 | 14 | Wyłączyć powiadomienia zewnętrzne i tłumaczenie w wariancie szkolnym | R11, R12 | średni | [ ] | [ ] | [ ] |
