@@ -6,7 +6,7 @@ Nothing in this module writes a full e-mail address or a token to a log.
 """
 
 import asyncio
-import functools
+import contextlib
 import hashlib
 import hmac
 import logging
@@ -15,7 +15,7 @@ import secrets
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
-from typing import Awaitable, Callable, Optional, TypeVar
+from typing import Callable, Optional
 
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -40,18 +40,29 @@ from . import passwords
 # Rate-limited sends check the send log, await the provider and only then write
 # the log rows (a failed send must not use up a slot). Without serialising,
 # concurrent requests would all pass the check before any row exists. The API
-# runs one worker (Dockerfile), so a process-wide lock is enough; sends are rare.
-_limited_send_lock = asyncio.Lock()
-_F = TypeVar("_F", bound=Callable[..., Awaitable[None]])
+# runs one worker (Dockerfile), so in-process locks are enough. They are keyed
+# by the parent (the unit a mail-bomb targets) and the account, so a flood
+# aimed at one address never delays e-mails to anyone else.
+_send_locks: dict[str, asyncio.Lock] = {}
 
 
-def _serialized(func: _F) -> _F:
-    @functools.wraps(func)
-    async def wrapper(*args, **kwargs):
-        async with _limited_send_lock:
-            return await func(*args, **kwargs)
-
-    return wrapper  # type: ignore[return-value]
+@contextlib.asynccontextmanager
+async def _send_lock(*keys: str):
+    """Hold the locks for ``keys`` (acquired in sorted order: no deadlock)."""
+    ordered = sorted(set(keys))
+    held: list[tuple[str, asyncio.Lock]] = []
+    try:
+        for key in ordered:
+            lock = _send_locks.setdefault(key, asyncio.Lock())
+            await lock.acquire()
+            held.append((key, lock))
+        yield
+    finally:
+        for key, lock in reversed(held):
+            lock.release()
+            # Drop idle locks so the dict does not grow with every address
+            if not lock.locked() and not getattr(lock, "_waiters", None):
+                _send_locks.pop(key, None)
 
 logger = logging.getLogger(__name__)
 
@@ -329,8 +340,7 @@ def invalidate_consent_tokens(db: Session, user: UserDB) -> None:
         token.expires_at = moment
 
 
-@_serialized
-async def send_consent_email(
+async def _send_consent_email(
     db: Session,
     user: UserDB,
     parent: Optional[ParentDB] = None,
@@ -448,8 +458,7 @@ async def send_account_active_email(db: Session, user: UserDB, manage_raw: str) 
 # --------------------------------------------------------------------- reset
 
 
-@_serialized
-async def send_password_reset(db: Session, user: UserDB) -> None:
+async def _send_password_reset(db: Session, user: UserDB) -> None:
     """E-mail the parent a reset link. Raises EmailLimitError / EmailSendError."""
     parent = user.parent
     if parent is None or not user.login:
@@ -504,8 +513,7 @@ def set_password(db: Session, user: UserDB, password: str) -> None:
 # --------------------------------------------------------------------- manage
 
 
-@_serialized
-async def send_manage_link(db: Session, parent: ParentDB) -> None:
+async def _send_manage_link(db: Session, parent: ParentDB) -> None:
     """E-mail a link to the parent page. Raises EmailLimitError / EmailSendError.
 
     The limit counts every manage link sent to the address in 24 h, including
@@ -726,3 +734,32 @@ def clear_login_failures(db: Session, login: Optional[str], actor: Optional[str]
     if actor is not None:
         query = query.filter(LoginFailureDB.ip_hash == actor)
     query.delete(synchronize_session=False)
+
+
+# --------------------------------------------------------------------- locked entry points
+
+
+async def send_consent_email(
+    db: Session,
+    user: UserDB,
+    parent: Optional[ParentDB] = None,
+    on_sent: Optional[Callable[[], None]] = None,
+) -> None:
+    """See _send_consent_email; serialised per parent address and account."""
+    target = parent or user.parent
+    keys = [f"user:{user.id}"] + ([f"parent:{target.id}"] if target is not None else [])
+    async with _send_lock(*keys):
+        await _send_consent_email(db, user, parent, on_sent)
+
+
+async def send_password_reset(db: Session, user: UserDB) -> None:
+    """See _send_password_reset; serialised per parent address and account."""
+    keys = [f"user:{user.id}"] + ([f"parent:{user.parent.id}"] if user.parent is not None else [])
+    async with _send_lock(*keys):
+        await _send_password_reset(db, user)
+
+
+async def send_manage_link(db: Session, parent: ParentDB) -> None:
+    """See _send_manage_link; serialised per parent address."""
+    async with _send_lock(f"parent:{parent.id}"):
+        await _send_manage_link(db, parent)

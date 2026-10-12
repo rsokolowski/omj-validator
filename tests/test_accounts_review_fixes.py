@@ -443,3 +443,35 @@ def test_concurrent_sends_cannot_overrun_the_send_limit(client, db, monkeypatch)
     results = asyncio.run(burst())
     assert results.count("sent") == service.MANAGE_PER_PARENT_PER_DAY - 1
     assert len(sent) == service.MANAGE_PER_PARENT_PER_DAY - 1
+
+
+def test_a_slow_send_to_one_parent_does_not_hold_up_another(client, db, monkeypatch):
+    """Send locks are per address: one address flooded or slow must not
+    delay e-mails to anyone else."""
+    import asyncio
+
+    register_login(client, login="ala_k", parent_email="a@example.com")
+    register_login(client, login="ola_k", parent_email="b@example.com")
+    parent_a = user_by_login(db, "ala_k").parent
+    parent_b = user_by_login(db, "ola_k").parent
+    order = []
+    release_a = asyncio.Event()
+
+    async def send(to, subject, html, text):
+        if to == "a@example.com":
+            await release_a.wait()
+        order.append(to)
+        if to == "b@example.com":
+            release_a.set()
+
+    monkeypatch.setattr(service, "send_email", send)
+
+    async def both():
+        await asyncio.wait_for(
+            asyncio.gather(service.send_manage_link(db, parent_a), service.send_manage_link(db, parent_b)),
+            timeout=5,
+        )
+
+    asyncio.run(both())
+    assert order == ["b@example.com", "a@example.com"]
+    assert service._send_locks == {}
