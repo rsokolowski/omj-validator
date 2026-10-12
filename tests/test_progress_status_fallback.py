@@ -78,6 +78,15 @@ class TestParagraphFallback:
         assert line.startswith(status[:-3])
         assert line[len(status) - 3] == " "  # cut at a space, not mid-word
 
+    def test_word_ending_exactly_at_the_limit_is_kept(self):
+        line = "a" * 75 + " word" + " tail"  # char 81 is a space: "word" is whole
+        assert len(line[:80]) == 80 and line[80] == " "
+        assert extract_latest_paragraph_line(line + "\n\n") == "a" * 75 + " word..."
+
+    def test_single_long_word_is_cut_at_the_limit(self):
+        status = extract_latest_paragraph_line("x" * 120 + "\n\n")
+        assert status == "x" * 80 + "..."
+
 
 @pytest.mark.asyncio
 class TestUntranslatedFallback:

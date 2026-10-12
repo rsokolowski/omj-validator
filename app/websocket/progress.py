@@ -77,9 +77,9 @@ def extract_latest_paragraph_line(text: str) -> Optional[str]:
             continue
         if len(clean) <= STATUS_MAX_CHARS:
             return clean
-        cut = clean[:STATUS_MAX_CHARS]
-        if " " in cut:
-            cut = cut.rsplit(" ", 1)[0]
+        # One char past the limit: a space there means the word before it is whole
+        cut = clean[: STATUS_MAX_CHARS + 1]
+        cut = cut.rsplit(" ", 1)[0] if " " in cut else cut[:STATUS_MAX_CHARS]
         return cut.rstrip(" ,;:.") + "..."
     return None
 
