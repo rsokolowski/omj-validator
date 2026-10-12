@@ -75,20 +75,35 @@ obowiązkowe — jest dobrowolne (punkt 3), a Państwu przysługuje prawo sprzec
 
 ## 5. Jakie dane przetwarzamy
 
-**Dane konta:**
+**Dane konta** (narzędzie obsługuje dwa sposoby logowania — [UZUPEŁNIĆ: który dopuszcza
+Szkoła; usunąć niepotrzebny]):
 
-- identyfikator konta [UZUPEŁNIĆ: szkolnego konta Google / Microsoft / innego],
-- adres e-mail,
-- imię i nazwisko lub nazwa wyświetlana konta.
+- przy logowaniu kontem Google [UZUPEŁNIĆ: szkolnym / prywatnym]: identyfikator konta Google,
+  adres e-mail, imię i nazwisko lub nazwa wyświetlana konta,
+- przy koncie z loginem i hasłem: login i skrót hasła (samego hasła narzędzie nie zna),
+- rok urodzenia (bez dnia i miesiąca),
+- adres e-mail rodzica lub opiekuna oraz zapis jego zgody — przy uczniach poniżej 16 lat
+  i przy każdym koncie z loginem [UZUPEŁNIĆ: wyjściowa wersja narzędzia zawsze o niego prosi;
+  jeśli Szkoła wyłączy ten mechanizm w kodzie, usunąć ten punkt].
 
 **Dane związane z ćwiczeniem zadań:**
 
-- fotografie odręcznych rozwiązań przesłane przez ucznia,
+- fotografie odręcznych rozwiązań, rysunki wykonane w przeglądarce i rozwiązania wpisane
+  w przeglądarce jako tekst,
 - informacja, które zadanie i kiedy było rozwiązywane,
 - liczba punktów przyznana przez system oraz treść informacji zwrotnej,
 - informacja techniczna o przebiegu analizy,
 - automatyczne oznaczenie, jeśli system uzna, że przesłana praca dotyczy innego zadania
-  albo zawiera próbę manipulowania oceną (np. dopisek „daj mi 6 punktów") — patrz punkt 8.
+  albo zawiera próbę manipulowania oceną (np. dopisek „daj mi 6 punktów") — patrz punkt 8,
+- jeśli uczeń z nich korzysta: **własne zadania** (treść i zdjęcie strony z zadaniem,
+  wygenerowane wskazówki) i **wzorce** (notatki ucznia o sposobach rozwiązywania, przebieg ich
+  dopracowania z programem, historia powtórek),
+- techniczny zapis wywołań programu przy własnych zadaniach i wzorcach (bez treści) —
+  potrzebny do limitów dobowych.
+
+**Dane techniczne:** ciasteczko sesji i — przy logowaniu loginem — ciasteczko urządzenia,
+skrót adresu IP przy nieudanych próbach logowania, dzienniki serwera (adresy e-mail
+i identyfikatory są w nich skracane), dziennik dostępu administratora (punkt 6a).
 
 **Prosimy zwrócić uwagę:** na fotografii kartki znajduje się wszystko, co uczeń na niej
 napisał lub co znalazło się w kadrze. Prosimy przypomnieć dziecku, żeby **nie podpisywało
@@ -99,15 +114,21 @@ bo uczeń jest zalogowany.
 
 | Odbiorca | Co otrzymuje | Uwagi |
 |---|---|---|
-| **Google** (Gemini API) — dostawca systemu sztucznej inteligencji, alternatywny wobec Anthropic | fotografie rozwiązania oraz treść zadania | **Nie przekazujemy** imienia, nazwiska, adresu e-mail ani identyfikatora konta ucznia. Pliki są usuwane z infrastruktury dostawcy zaraz po analizie. Korzystamy z płatnego poziomu usługi, na którym dostawca zobowiązuje się nie wykorzystywać przesyłanych treści do trenowania swoich modeli, a rejestry techniczne przechowuje maksymalnie 55 dni wyłącznie w celu wykrywania naruszeń zasad korzystania z usługi. |
-| **Anthropic** (Claude API) — dostawca systemu sztucznej inteligencji, alternatywny wobec Google | fotografie rozwiązania oraz treść zadania | **Nie przekazujemy** imienia, nazwiska, adresu e-mail ani identyfikatora konta ucznia. Zdjęcia są przesyłane bezpośrednio w zapytaniu, bez zapisywania ich u dostawcy jako plików. Dostawca usuwa przesłane treści i odpowiedzi w ciągu 30 dni — dłużej tylko wtedy, gdy wymaga tego egzekwowanie zasad korzystania z usługi albo obowiązek prawny. Zgodnie z warunkami umowy dostawca nie może wykorzystywać przesyłanych treści do trenowania swoich modeli. Stroną umowy jest Anthropic Ireland, Limited. |
+| **Google** (Gemini API) — dostawca systemu sztucznej inteligencji, **podstawowy** | fotografie i tekst rozwiązania oraz treść zadania (przy własnych zadaniach także zdjęcie strony z zadaniem; przy wzorcach — tekst wzorca) | **Nie przekazujemy** imienia, nazwiska, adresu e-mail ani identyfikatora konta ucznia. Pliki są usuwane z infrastruktury dostawcy zaraz po analizie (gdyby usunięcie się nie udało — Google kasuje je po 48 godzinach). Korzystamy z płatnego poziomu usługi, na którym dostawca zobowiązuje się nie wykorzystywać przesyłanych treści do trenowania swoich modeli, a rejestry techniczne przechowuje maksymalnie 55 dni wyłącznie w celu wykrywania naruszeń zasad korzystania z usługi. |
+| **Anthropic** (Claude API) — dostawca systemu sztucznej inteligencji, **zapasowy** | jak wyżej | **Nie przekazujemy** imienia, nazwiska, adresu e-mail ani identyfikatora konta ucznia. Zdjęcia są przesyłane bezpośrednio w zapytaniu, bez zapisywania ich u dostawcy jako plików. Dostawca usuwa przesłane treści i odpowiedzi w ciągu 30 dni — dłużej tylko wtedy, gdy wymaga tego egzekwowanie zasad korzystania z usługi albo obowiązek prawny. Zgodnie z warunkami umowy dostawca nie może wykorzystywać przesyłanych treści do trenowania swoich modeli. Stroną umowy jest Anthropic Ireland, Limited. |
 | **Google** — usługa logowania | informacja o logowaniu do narzędzia | dotyczy konta [UZUPEŁNIĆ: szkolnego / innego] |
 | [UZUPEŁNIĆ, jeśli dotyczy: dostawca hostingu / firma obsługująca infrastrukturę informatyczną szkoły] | dostęp techniczny do systemu | na podstawie umowy powierzenia przetwarzania (art. 28 RODO) |
+| [JEŚLI DOTYCZY] **Cloudflare, Inc.** — pośrednictwo w przesyłaniu ruchu (tunel) i ochrona rejestracji przed automatami (Turnstile) | cały ruch między przeglądarką a narzędziem (połączenie szyfrowane kończy się na serwerach Cloudflare); przy rejestracji — dane techniczne przeglądarki i adres IP | [UZUPEŁNIĆ: umowa powierzenia / warunki Cloudflare]; usunąć wiersz, jeśli instancja szkolna nie korzysta z Cloudflare |
+| [JEŚLI DOTYCZY] **Resend** — wysyłka wiadomości e-mail do rodziców | adres e-mail rodzica i treść wiadomości (adres konta Google albo login dziecka, linki) | umowa powierzenia włączona do warunków usługi; usunąć wiersz, jeśli Szkoła nie wysyła tych wiadomości albo używa innej poczty |
+| [ZALECANE WYŁĄCZENIE] **Telegram FZ-LLC** (Zjednoczone Emiraty Arabskie) — powiadomienia techniczne dla administratora | numer zgłoszenia, oznaczenie zadania, liczba zdjęć i znaków tekstu, wynik, rodzaj błędu — bez imienia, nazwiska, e-maila i identyfikatora ucznia | brak umowy powierzenia i brak podstawy przekazania poza EOG; w instancji szkolnej funkcję należy wyłączyć i usunąć ten wiersz |
 | Nauczyciel prowadzący i administrator narzędzia | dostęp do prac i wyników uczniów | wyłącznie osoby upoważnione przez dyrektora szkoły, w zakresie niezbędnym do prowadzenia zajęć i obsługi zgłoszeń |
 
-Narzędzie korzysta w danym momencie **tylko z jednego** z dwóch dostawców sztucznej
-inteligencji — Google albo Anthropic — wybranego przez administratora narzędzia. Rozwiązanie
-ucznia trafia wyłącznie do tego dostawcy, który jest aktywny w chwili analizy.
+Narzędzie korzysta na co dzień z **Google**. **Anthropic** jest dostawcą zapasowym: narzędzie
+przełącza się na niego automatycznie, gdy usługa Google jest niedostępna, a administrator
+narzędzia może go też wybrać ręcznie — jedno i drugie dopiero po ustawieniu w konfiguracji
+zgody na tego dostawcę (zob. `dpia.md`, R6a). Rozwiązanie ucznia trafia zwykle tylko do jednego
+dostawcy; jeśli Google przestanie odpowiadać w trakcie analizy, ta sama praca jest wysyłana od
+nowa do Anthropic, więc trafia do obu.
 [UZUPEŁNIĆ: jeżeli Szkoła dopuszcza tylko jednego dostawcę, usunąć wiersz drugiego, ten akapit
 i odpowiedni akapit w punkcie 7 oraz w części B]
 
@@ -116,22 +137,25 @@ podmiotom poza wymienionymi.
 
 ## 6a. Kto zaglądał w dane ucznia — dziennik dostępu
 
-Narzędzie prowadzi **osobny dziennik dostępu**: za każdym razem, gdy osoba z uprawnieniami
-administracyjnych sięgnie po dane konkretnego ucznia (otworzy zdjęcie rozwiązania, listę zgłoszeń,
-wyszuka użytkownika lub zleci ponowną analizę), zapisywane są: adres e-mail tej osoby, informacja
-czyich danych dotyczył dostęp, rodzaj zasobu oraz data i godzina.
+Narzędzie prowadzi **osobny dziennik dostępu**. Otwarcie zdjęcia rozwiązania, listy zgłoszeń
+konkretnego ucznia, wyszukanie użytkownika i ponowna analiza są zapisywane: adres e-mail osoby
+z uprawnieniami administracyjnymi, czyich danych dotyczył dostęp (przy wyszukiwaniu — tylko
+liczba znalezionych osób), rodzaj zasobu oraz data i godzina. Przegląd zbiorczej listy zgłoszeń
+wszystkich uczniów jest zapisywany bez wskazania, czyich danych dotyczył. Bezpośredni dostęp
+administratora do serwera i bazy danych nie jest rejestrowany w tym dzienniku, a nieudany zapis
+do dziennika nie wstrzymuje operacji — dziennik może więc być niepełny.
 
 Dziennik **nie zawiera treści** — ani zdjęć, ani informacji zwrotnych, ani wyników, ani wpisanej
-frazy wyszukiwania. Służy wyłącznie rozliczalności (art. 5 ust. 2 RODO): pozwala odpowiedzieć na
+frazy wyszukiwania. Służy wyłącznie rozliczalności (art. 5 ust. 2 RODO): pomaga odpowiedzieć na
 pytanie „kto oglądał moje dane i kiedy". Na wniosek ucznia lub rodzica Szkoła udziela informacji
 z tego dziennika. Gdy uczeń usunie konto, jego identyfikator w dzienniku jest zastępowany
 nieodwracalnym skrótem — ślad zdarzenia zostaje, ale nie da się już ustalić, kogo dotyczyło.
 
 ## 7. Przekazywanie danych poza Europejski Obszar Gospodarczy
 
-Analiza rozwiązań odbywa się z wykorzystaniem usług **Google** albo **Anthropic** (punkt 6),
-co wiąże się z przekazaniem fotografii pracy do Stanów Zjednoczonych. Podstawa przekazania
-zależy od tego, który dostawca jest aktywny.
+Analiza rozwiązań odbywa się z wykorzystaniem usług **Google**, a zapasowo **Anthropic**
+(punkt 6), co wiąże się z przekazaniem fotografii i tekstu pracy do Stanów Zjednoczonych.
+Podstawa przekazania jest u każdego dostawcy inna.
 
 **Google.** Podstawą przekazania jest **decyzja Komisji Europejskiej stwierdzająca odpowiedni stopień
 ochrony danych** w ramach programu EU-US Data Privacy Framework (art. 45 RODO). Oznacza to,
@@ -148,8 +172,13 @@ Europejską (art. 46 ust. 2 lit. c RODO), zawarte w umowie powierzenia przetwarz
 z Anthropic Ireland, Limited. Są to wzorcowe postanowienia umowne, w których odbiorca danych
 spoza Europejskiego Obszaru Gospodarczego zobowiązuje się zapewnić im ochronę.
 
-Kopię informacji o zabezpieczeniach przekazywania danych można uzyskać, kontaktując się
-z inspektorem ochrony danych.
+[JEŚLI DOTYCZY] **Resend** przetwarza dane głównie w USA na podstawie standardowych klauzul
+umownych (decyzja Komisji (UE) 2021/914) i EU-US Data Privacy Framework. **Cloudflare** —
+[UZUPEŁNIĆ: podstawa przekazania wg umowy z Cloudflare]. Telegram — patrz punkt 6 (zalecane
+wyłączenie).
+
+Kopię standardowych klauzul umownych i informacji o pozostałych zabezpieczeniach przekazywania
+danych można uzyskać, kontaktując się z inspektorem ochrony danych.
 
 ## 8. Zautomatyzowane podejmowanie decyzji i profilowanie
 
@@ -165,10 +194,11 @@ Informujemy o tym wprost:
   decyzja, o której mowa w art. 22 RODO.
 - **Automatyczne wykrywanie nieprawidłowości.** System sprawdza, czy przesłana praca dotyczy
   wybranego zadania i czy nie zawiera prób wymuszenia wyższej oceny. Jeśli coś takiego wykryje,
-  przyznaje 0 punktów i zapisuje takie oznaczenie przy zgłoszeniu. Oznaczenie widzi nauczyciel
-  lub administrator narzędzia. **System może się w tym pomylić** — dlatego oznaczenie samo
-  w sobie nie jest dowodem nieuczciwości i nie pociąga za sobą żadnych konsekwencji bez
-  sprawdzenia przez człowieka. Można je zakwestionować, kontaktując się z nauczycielem.
+  automatycznie przyznaje 0 punktów w tej próbie i zapisuje takie oznaczenie przy zgłoszeniu.
+  Oznaczenie widzi nauczyciel lub administrator narzędzia. **System może się w tym pomylić** —
+  dlatego oznaczenie samo w sobie nie jest dowodem nieuczciwości i poza wynikiem 0 punktów
+  w tej jednej próbie nie pociąga za sobą żadnych konsekwencji bez sprawdzenia przez człowieka.
+  Można je zakwestionować, kontaktując się z nauczycielem.
 - **Podgląd postępów.** Wyniki są zestawiane w prosty obraz postępów ucznia (które zadania
   zostały opanowane). Jest to profilowanie w rozumieniu RODO, o niewielkim stopniu
   ingerencji, służące wyłącznie doborowi kolejnych zadań do ćwiczenia.
@@ -185,9 +215,11 @@ i są w narzędziu odpowiednio oznaczone.
 | Szczegółowy zapis analizy wykonanej przez model (odtwarza treść pracy ucznia słowo w słowo) | [UZUPEŁNIĆ — wartość domyślna narzędzia: 90 dni] |
 | Konto ucznia | [UZUPEŁNIĆ — wartość domyślna narzędzia: usuwane automatycznie po 36 miesiącach bez logowania i bez przesłanego rozwiązania. Szkoła może przyjąć krótszy okres, np. do zakończenia nauki w Szkole] |
 | Zapisy dostępu administratora lub nauczyciela do danych ucznia (punkt 6a) | [UZUPEŁNIĆ — wartość domyślna narzędzia: 12 miesięcy] |
-| Pseudonimowy zapis wykorzystanego limitu po usunięciu konta (punkt 10a) | maksymalnie 24 godziny |
-| Rejestry techniczne (logi serwera) | [UZUPEŁNIĆ — **uwaga:** narzędzie nie ustala tego okresu samo; wymaga skonfigurowania rotacji dzienników po stronie Szkoły. Nie wpisywać wartości, dopóki nie zostanie skonfigurowana] |
-| Kopie zapasowe | [UZUPEŁNIĆ] |
+| Własne zadania i wzorce ucznia | [UZUPEŁNIĆ — wartość domyślna narzędzia: 24 miesiące od ostatniej aktywności] |
+| Techniczny zapis wywołań programu przy własnych zadaniach i wzorcach | [UZUPEŁNIĆ — wartość domyślna narzędzia: 90 dni] |
+| Pseudonimowy zapis wykorzystanego limitu po usunięciu konta (punkt 10a) | 24 godziny od ostatniego zgłoszenia (przy dobowym sprzątaniu — do ok. 48 godzin) |
+| Rejestry techniczne (logi serwera) | [UZUPEŁNIĆ — domyślna konfiguracja produkcyjna narzędzia (`docker-compose.prod.yml`) ogranicza je objętościowo: 50 MB × 5 plików na usługę, najstarsze wpisy są nadpisywane. To limit objętości, a nie okres — opisać mechanizm albo skonfigurować rotację czasową] |
+| Kopie zapasowe | [UZUPEŁNIĆ: częstotliwość, liczba przechowywanych kopii i najdłuższy czas, po którym usunięte dane znikają z kopii] |
 
 Po upływie tych okresów dane są usuwane automatycznie. Uczeń lub rodzic może też w każdej
 chwili wystąpić o wcześniejsze usunięcie danych — patrz punkt 10.
@@ -218,19 +250,27 @@ przesłanymi zdjęciami i historią wyników.
 
 ## 10a. Co zostaje po usunięciu konta
 
-Po usunięciu konta znikają: konto, wszystkie fotografie rozwiązań i cała historia wyników;
-w dzienniku dostępu (punkt 6a) identyfikator ucznia zastępowany jest nieodwracalnym skrótem.
+Po usunięciu konta znikają: konto, wszystkie fotografie rozwiązań, cała historia wyników,
+własne zadania i wzorce; w dzienniku dostępu (punkt 6a) identyfikator ucznia zastępowany jest
+nieodwracalnym skrótem.
 
-Zostaje **jedna rzecz** i informujemy o niej wprost: nieodwracalny skrót identyfikatora konta
-wraz z liczbą rozwiązań przesłanych w ciągu ostatniej doby. Zapis nie zawiera imienia, nazwiska,
-adresu e-mail, zdjęć ani wyników i nie pozwala odtworzyć tożsamości ucznia.
+Przez pewien czas zostają jeszcze ślady bez imienia, nazwiska, adresu e-mail, zdjęć i treści
+rozwiązań — informujemy o nich wprost:
 
-Powód: limity liczby zgłoszeń chronią dostępność narzędzia dla całej grupy i są liczone na
-podstawie przesłanych rozwiązań. Bez tego zapisu usunięcie konta i ponowne zalogowanie się byłoby
-sposobem na wyzerowanie limitu i wyczerpanie puli przeznaczonej dla pozostałych uczniów. Zapis
-jest usuwany automatycznie najpóźniej **24 godziny** po ostatnim przesłanym rozwiązaniu, czyli
-razem z wygaśnięciem samego limitu. Jeżeli uczeń nie przesłał niczego w ciągu doby przed
-usunięciem konta, zapis w ogóle nie powstaje.
+- **zapis wykorzystanego limitu**: nieodwracalny skrót identyfikatora konta wraz z liczbą
+  rozwiązań i wywołań programu (własne zadania, wzorce) z ostatniej doby. Powód: limity chronią
+  dostępność narzędzia dla całej grupy; bez tego zapisu usunięcie konta i ponowne zalogowanie się
+  byłoby sposobem na wyzerowanie limitu. Zapis jest usuwany automatycznie, gdy wygasa sam limit
+  — dobę po ostatnim zgłoszeniu lub wywołaniu (przy dobowym sprzątaniu najpóźniej po ok. 48
+  godzinach). Jeżeli uczeń nie korzystał z narzędzia w ciągu doby przed usunięciem konta, zapis
+  w ogóle nie powstaje;
+- **dzienniki serwera** z numerami zgłoszeń i skróconymi identyfikatorami — do ich nadpisania
+  (punkt 9);
+- **kopie zapasowe** — do upływu okresu z punktu 9;
+- [JEŚLI DOTYCZY] skróty linków wysłanych rodzicowi, już bez powiązania z kontem — do 30 dni
+  od wygaśnięcia linku;
+- u dostawców sztucznej inteligencji — rejestry techniczne Google do 55 dni, treści u Anthropic
+  do 30 dni (punkt 6).
 
 ## 11. Czy podanie danych jest obowiązkowe
 
@@ -262,9 +302,9 @@ robisz zdjęcie i wysyłasz. Program pisze, ile punktów by za to było i co mo�
 ## Co się dzieje z Twoim zdjęciem
 
 1. Zdjęcie zapisuje się na szkolnym serwerze.
-2. Zdjęcie jest wysyłane do firmy Google albo Anthropic, żeby program mógł je przeczytać
-   i ocenić. Program używa w danej chwili tylko jednej z tych firm, więc zdjęcie nie trafia
-   do obu naraz. **Nie wysyłamy tam Twojego imienia, nazwiska ani adresu e-mail** — tylko
+2. Zdjęcie jest wysyłane do firmy Google w USA, żeby program mógł je przeczytać i ocenić.
+   Gdy usługa Google nie działa, zastępuje ją firma Anthropic (też USA) — wtedy zdjęcie może
+   trafić do obu. **Nie wysyłamy tam Twojego imienia, nazwiska ani adresu e-mail** — tylko
    samo zdjęcie pracy i treść zadania. Żadna z tych firm nie trzyma zdjęcia na stałe.
    Google kasuje zdjęcie po sprawdzeniu, ale może przez najwyżej 55 dni trzymać zapisy
    techniczne (tylko po to, żeby wykrywać nadużycia). Anthropic kasuje przesłane zdjęcie
@@ -290,8 +330,8 @@ robisz zdjęcie i wysyłasz. Program pisze, ile punktów by za to było i co mo�
 Nie musisz się bać, że program pokaże nauczycielowi, ile razy Ci nie wyszło. Właśnie po to
 jest ten program — żeby próbować i się mylić.
 
-Za każdym razem, gdy ktoś z uprawnieniami zajrzy w Twoje prace, narzędzie zapisuje: kto, kiedy
-i czego dotyczyło. Możesz o to zapytać.
+Gdy ktoś z uprawnieniami otworzy w narzędziu zdjęcie Twojej pracy albo listę Twoich zgłoszeń,
+narzędzie zapisuje: kto, kiedy i czego dotyczyło. Możesz o to zapytać.
 
 ## Nie oszukuj programu
 
@@ -303,11 +343,14 @@ myli się także tutaj — jeśli uważasz, że to pomyłka, powiedz nauczycielo
 
 - Możesz zobaczyć wszystkie swoje dane, jakie mamy.
 - Możesz poprosić o poprawienie danych, jeśli są błędne.
-- Możesz **sam usunąć swoje konto** — razem ze zdjęciami i wynikami. Zniknie prawie wszystko:
-  na najwyżej jeden dzień zostaje sama liczba rozwiązań, które wysłałeś w ostatniej dobie,
-  zapisana tak, że nie da się z niej odczytać, kto to był. Jest po to, żeby kasowanie konta nie
-  było sposobem na omijanie dziennego limitu. Potem znika samo.
-- Możesz zapytać, **kto zaglądał w Twoje dane** — narzędzie to zapisuje.
+- Możesz **sam usunąć swoje konto** — razem ze zdjęciami, wynikami, własnymi zadaniami
+  i wzorcami. Zniknie prawie wszystko: na dzień, dwa zostaje sama liczba rozwiązań, które
+  wysłałeś w ostatniej dobie, zapisana tak, że nie da się z niej odczytać, kto to był. Jest po
+  to, żeby kasowanie konta nie było sposobem na omijanie dziennego limitu. Potem znika samo.
+  Przez jakiś czas zostają też ślady techniczne bez Twojego imienia i rozwiązań, np. w kopiach
+  zapasowych.
+- Możesz zapytać, **kto zaglądał w Twoje dane** — narzędzie zapisuje, gdy ktoś otwiera Twoje
+  prace.
 - Możesz w każdej chwili przestać korzystać z programu. Nikt nie będzie miał o to pretensji
   i nie wpłynie to na Twoje oceny.
 - Jeśli uważasz, że ktoś źle obchodzi się z Twoimi danymi, Ty lub Twój rodzic możecie napisać

@@ -54,17 +54,26 @@ i podstawą prawną przetwarzania**. Dobór dokumentu zaczyna się od ustalenia 
 
 | Plik | Czego dotyczy | Dla kogo | Wariant |
 |---|---|---|---|
-| [`dpia.md`](dpia.md) | Ocena skutków dla ochrony danych (art. 35 RODO). Dokument główny: opis operacji przetwarzania, przepływy danych, test niezbędności i proporcjonalności, rejestr 17 ryzyk z oszacowaniem i środkami, ryzyka szczątkowe, zgodność z AI Act i prawem autorskim, plan wdrożenia środków. | inspektor ochrony danych, dyrektor, administrator | **A i B** |
+| [`dpia.md`](dpia.md) | Ocena skutków dla ochrony danych (art. 35 RODO). Dokument główny: opis operacji przetwarzania, przepływy danych, test niezbędności i proporcjonalności, rejestr ryzyk (R1–R21) z oszacowaniem i środkami, ryzyka szczątkowe, zgodność z AI Act i prawem autorskim, plan wdrożenia środków. | inspektor ochrony danych, dyrektor, administrator | **A i B** |
 | [`ocena-skutkow-transferu-anthropic.md`](ocena-skutkow-transferu-anthropic.md) | Ocena skutków transferu do USA dla Anthropic (Claude API) — wymagana, bo transfer opiera się na standardowych klauzulach umownych, a nie na decyzji o adekwatności. Warunek ustawienia `ANTHROPIC_PROCESSOR_APPROVED=true`. | administrator, inspektor ochrony danych | **A i B** (tylko gdy używany jest Anthropic) |
 | [`klauzula-informacyjna-szkola.md`](klauzula-informacyjna-szkola.md) | Klauzula informacyjna (art. 13 RODO). Część A — dla rodziców, część B — prostym językiem dla ucznia (art. 12 ust. 1 RODO wymaga formy zrozumiałej dla dziecka). | rodzice, uczniowie | **B** |
 | [`regulamin-szkola.md`](regulamin-szkola.md) | Regulamin korzystania z narzędzia: zasady dla ucznia, zakazy, opis działania AI, rozgraniczenie „trenażer, nie ocenianie", prawa autorskie. | uczniowie, nauczyciele | **B** |
 | `../../frontend/src/app/regulamin/page.tsx` | Regulamin i polityka prywatności serwisu publicznego (strona w aplikacji). | użytkownicy serwisu | **A** |
 
+**Zmiana z 13 października 2026:** Google jako dostawca podstawowy, **Anthropic jako zapasowy**
+z automatycznym przełączeniem przy niedostępności Gemini (za tą samą blokadą
+`ANTHROPIC_PROCESSOR_APPROVED`); **Telegram** opisany jako odbiorca spoza EOG bez umowy;
+**Cloudflare** (terminacja TLS, Turnstile przy rejestracji) jako nowe ryzyko R21; dziennik
+dostępu administratora opisany z ograniczeniami; lista śladów po usunięciu konta; kopie
+zapasowe; budżet dzienny AI i nowe limity; osobne pola akceptacji regulaminu i zgody (16+).
+W DPIA: 2.3–2.7, 3.2, 3.4, R3, R4, R6a, R8, R9, R11, R15, R16, R20, R21, plan poz. 23–26;
+w regulaminie serwisu punkty 1, 3–13, 16.
+
 **Zmiana z 12 października 2026 (2):** rok urodzenia przy rejestracji, **zgoda rodzica
 e-mailem** dla osób poniżej 16 lat i dla kont z loginem i hasłem, strona rodzica (usunięcie
 konta = cofnięcie zgody, nowe hasło), **Resend** jako podmiot przetwarzający (wysyłka
-e-maili, region wysyłki w UE, firma z USA w programie DPF). W DPIA: 2.1, 2.5, 2.6, R18–R21;
-w regulaminie serwisu punkty 3–9, 11, 12.
+e-maili; region wysyłki w UE, przetwarzanie głównie w USA — standardowe klauzule umowne
+i DPF). W DPIA: 2.1, 2.5, 2.6, R15, R18–R20; w regulaminie serwisu punkty 3–9, 11, 12.
 
 **Zmiana z 12 października 2026:** drugi, alternatywny dostawca AI — **Anthropic (Claude API)**
 obok Google (Gemini API); w danym momencie aktywny jest jeden, wybrany przez administratora.
@@ -94,7 +103,9 @@ dokumenty korzystają.
   administratora. Wartości domyślne zaimplementowane w narzędziu (`app/config.py`) i obowiązujące
   w serwisie publicznym: zgłoszenia wraz ze zdjęciami **24 miesiące**, surowy zapis rozumowania
   modelu **90 dni**, konta nieaktywne **36 miesięcy**, dziennik dostępu administratora
-  **12 miesięcy**, pseudonimowy znacznik limitu po usunięciu konta **maks. 24 godziny**,
+  **12 miesięcy**, pseudonimowy znacznik limitu po usunięciu konta (zgłoszenia i wywołania AI
+  przy zadaniach prywatnych i wzorcach) **24 godziny** od ostatniego użycia (przy dobowym
+  przebiegu retencji do ok. 48 godzin),
   konto czekające na zgodę rodzica **14 dni**, adres e-mail rodzica — dopóki istnieje konto
   dziecka z nim powiązane (adres zastąpiony innym: doba), skróty linków wysłanych rodzicom
   **30 dni od wygaśnięcia**, nieudane próby logowania **24 godziny** (stałe w
@@ -130,7 +141,8 @@ dokumenty korzystają.
 8. **Prawa do treści zadań** — brak publicznej licencji OMJ na redystrybucję. Rozważyć
    wystąpienie do Stowarzyszenia na rzecz Edukacji Matematycznej o zgodę.
 9. **Anthropic jako dostawca AI — tylko po zatwierdzeniu.** Wyboru Claude w panelu nie da się
-   dokonać, dopóki na serwerze nie ustawiono `ANTHROPIC_PROCESSOR_APPROVED=true`. Ustawić ją
+   dokonać, a automatyczne przełączenie na Claude przy niedostępności Gemini nie działa, dopóki
+   na serwerze nie ustawiono `ANTHROPIC_PROCESSOR_APPROVED=true`. Ustawić ją
    dopiero po akceptacji DPA Anthropic i ocenie skutków transferu (podstawą są standardowe
    klauzule umowne, nie DPF) — albo, jeśli szkoła korzysta tylko z Google, zostawić wyłączoną
    i usunąć Anthropic z klauzuli informacyjnej i regulaminu.
@@ -138,6 +150,10 @@ dokumenty korzystają.
 ### Wykonać w konfiguracji instancji szkolnej
 
 - wyłączyć powiadomienia zewnętrzne (Telegram) — brak umowy powierzenia, podmiot spoza EOG,
+  brak podstawy przekazania (DPIA, R11),
+- ustalić, czy instancja korzysta z Cloudflare (tunel, Turnstile przy rejestracji) i z Resend
+  (e-maile do rodziców); jeśli tak — umowy i wpis do klauzuli, jeśli nie — usunąć te wiersze
+  z klauzuli (DPIA, R20, R21),
 - wyłączyć tłumaczenie komunikatów przez zewnętrzną usługę albo udokumentować je w rejestrze
   czynności (nagłówki dotyczą treści pracy ucznia),
 - ograniczyć listę kont administracyjnych i wystawić upoważnienia z art. 29 RODO,
