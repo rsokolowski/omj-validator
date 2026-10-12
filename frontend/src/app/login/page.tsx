@@ -13,6 +13,8 @@ const ERROR_MESSAGES: Record<string, string> = {
   oauth_failed: "Nie udało się zalogować przez Google. Spróbuj jeszcze raz.",
   rate_limit_new_users:
     "Dziś założono już bardzo dużo kont, więc rejestracja jest chwilowo wstrzymana. Spróbuj jutro.",
+  rate_limit_registrations_ip:
+    "Z tej sieci (np. szkolnej) założono dziś już bardzo dużo kont, więc kolejne można będzie założyć jutro. Możesz też spróbować z innej sieci, np. w domu.",
   oauth_not_configured: "Logowanie przez Google jest teraz niedostępne. Zaloguj się loginem i hasłem.",
 };
 

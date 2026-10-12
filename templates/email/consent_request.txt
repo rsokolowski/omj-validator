@@ -4,7 +4,7 @@ Dzień dobry,
 
 ten adres został podany jako adres rodzica lub opiekuna przy zakładaniu konta w serwisie {{ app_name }} ({{ site_label }}). To bezpłatny, niekomercyjny trener do zadań z Olimpiady Matematycznej Juniorów. Prowadzi go osoba prywatna - {{ operator_name }}.
 
-{{ child_identifier_label }}: {{ child_identifier }}
+{{ child_identifier_label }}: {{ child_identifier|nolink }}
 
 Co to oznacza dla dziecka:
 - Dziecko przesyła zdjęcia albo wpisane rozwiązania zadań. Ocenia je automatycznie model sztucznej inteligencji (Google Gemini lub Anthropic Claude) - ocena jest poglądowa i może być błędna.

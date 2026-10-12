@@ -468,8 +468,9 @@ async def _google_new_identity(
         return RedirectResponse(url="/rejestracja?google=1", status_code=status.HTTP_303_SEE_OTHER)
 
     parent_email = answers.get("parent_email")
-    if parent_email and parent_email == email.strip().lower():
+    if parent_email and account_service.same_mailbox(parent_email, email):
         # The parent's address must not be the child's own Google address
+        # (nor an alias of it: dots / +suffix in Gmail)
         request.session[SESSION_PENDING_GOOGLE_KEY] = {
             "sub": google_sub, "email": email, "at": _time.time()
         }
@@ -492,7 +493,14 @@ async def _google_new_identity(
     )
     if isinstance(result, JSONResponse):
         if result.status_code == 429:
-            return RedirectResponse(url="/login?error=rate_limit_new_users", status_code=status.HTTP_303_SEE_OTHER)
+            import json as _json
+
+            error = (
+                "rate_limit_registrations_ip"
+                if _json.loads(result.body).get("code") == "registration_ip_limit"
+                else "rate_limit_new_users"
+            )
+            return RedirectResponse(url=f"/login?error={error}", status_code=status.HTTP_303_SEE_OTHER)
         return RedirectResponse(url="/login?error=oauth_failed", status_code=status.HTTP_303_SEE_OTHER)
     return RedirectResponse(url=result["redirect"], status_code=status.HTTP_303_SEE_OTHER)
 

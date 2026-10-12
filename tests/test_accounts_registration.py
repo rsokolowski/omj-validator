@@ -114,7 +114,7 @@ class TestLoginRegistration:
     def test_new_user_limit(self, client, db, monkeypatch):
         from app.config import settings
 
-        monkeypatch.setattr(settings, "rate_limit_new_users_per_day", 1)
+        monkeypatch.setattr(settings, "rate_limit_new_pending_users_per_day", 1)
         assert register_login(client).status_code == 200
         response = register_login(client, login="ola_k")
         assert response.status_code == 429
@@ -155,7 +155,7 @@ class TestGoogleRegistration:
         assert response.headers["location"] == "/rejestracja?google=1"
         assert db.query(UserDB).count() == 0
         assert me(client)["is_authenticated"] is False
-        assert client.get("/api/auth/register/state").json() == {"google": {"email": "kid@gmail.com"}}
+        assert client.get("/api/auth/register/state").json()["google"] == {"email": "kid@gmail.com"}
 
     def test_finish_after_google_under_16(self, client, db, google):
         callback(client)
@@ -170,7 +170,8 @@ class TestGoogleRegistration:
         assert user.status == "pending_parent"
         assert user.parent.email == "mama@example.com"
         (message,) = messages(to="mama@example.com")
-        assert "kid@gmail.com" in message["text"]
+        # Shown with zero-width spaces so mail clients do not link it
+        assert "kid@gmail.com" in message["text"].replace("\u200b", "")
         assert "Kowalski" not in message["text"] + message["html"]  # no display name
         assert me(client)["account"]["status"] == "pending_parent"
 
@@ -230,7 +231,7 @@ class TestGoogleRegistration:
         callback(client)
         real_time = time_module.time
         monkeypatch.setattr(time_module, "time", lambda: real_time() + 31 * 60)
-        assert client.get("/api/auth/register/state").json() == {"google": None}
+        assert client.get("/api/auth/register/state").json()["google"] == None
 
     def test_new_user_limit_applies_to_google(self, client, db, google, monkeypatch):
         from app.config import settings

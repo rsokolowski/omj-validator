@@ -48,10 +48,12 @@ export const accountApi = {
   registrationState: () => fetchAPI<RegistrationStateResponse>("/api/auth/register/state"),
 
   registerLogin: (
-    body: AgeAnswers & { login: string; password: string; parent_email: string }
+    body: AgeAnswers & { login: string; password: string; parent_email: string; turnstile_token?: string }
   ) => post<RedirectResponse>("/api/auth/register/login", body),
 
-  registerGoogle: (body: AgeAnswers & { parent_email?: string; accept_terms?: boolean }) =>
+  registerGoogle: (
+    body: AgeAnswers & { parent_email?: string; accept_terms?: boolean; turnstile_token?: string }
+  ) =>
     post<GoogleRegistrationResponse>("/api/auth/register/google", body),
 
   completeProfile: (body: AgeAnswers & { parent_email?: string; accept_terms?: boolean }) =>

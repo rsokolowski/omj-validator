@@ -42,7 +42,8 @@ test("the year is counted in Polish time", () => {
 
 test("login rules match the backend messages", () => {
   assert.equal(normalizeLogin("  Kasia.B "), "kasia.b");
-  assert.equal(loginProblem("kasia.b"), null);
+  assert.equal(loginProblem("kasia_b-1"), null);
+  assert.match(loginProblem("kasia.b") ?? "", /znaki _ i -/);
   assert.equal(loginProblem("ab"), "Login musi mieć co najmniej 3 znaki.");
   assert.equal(loginProblem("a".repeat(33)), "Login może mieć najwyżej 32 znaki.");
   assert.equal(loginProblem("_kasia"), "Login musi zaczynać się od litery lub cyfry.");

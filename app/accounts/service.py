@@ -137,6 +137,30 @@ def normalize_email(email: Optional[str]) -> str:
     return (email or "").strip().lower()
 
 
+# Domains where Google delivers "j.a.n+x@gmail.com" to "jan@gmail.com"
+_GMAIL_DOMAINS = frozenset({"gmail.com", "googlemail.com"})
+
+
+def mailbox_key(email: Optional[str]) -> str:
+    """The mailbox an address delivers to, for comparing two addresses: a
+    +suffix is dropped everywhere, and for Gmail the dots in the local part
+    too (googlemail.com is gmail.com). Never stored, never used to send."""
+    email = normalize_email(email)
+    local, at, domain = email.rpartition("@")
+    if not at:
+        return email
+    local = local.split("+", 1)[0]
+    if domain in _GMAIL_DOMAINS:
+        local = local.replace(".", "")
+        domain = "gmail.com"
+    return f"{local}@{domain}"
+
+
+def same_mailbox(a: Optional[str], b: Optional[str]) -> bool:
+    """Whether two addresses reach the same person (aliases included)."""
+    return bool(normalize_email(a)) and bool(normalize_email(b)) and mailbox_key(a) == mailbox_key(b)
+
+
 def email_problem(email: str) -> Optional[str]:
     if not email:
         return "Wpisz adres e-mail."
@@ -548,17 +572,74 @@ def manage_token_parent(db: Session, raw: Optional[str]) -> tuple[str, Optional[
 # --------------------------------------------------------------------- users
 
 
-def new_users_limit_reached(db: Session, email: Optional[str]) -> bool:
-    """rate_limit_new_users_per_day, bypassed by ALLOWED_EMAILS."""
+def _allowlisted(email: Optional[str]) -> bool:
     from ..groups import _get_allowed_emails
 
+    allowed = _get_allowed_emails()
+    return bool(email and allowed and email.lower() in allowed)
+
+
+def new_users_limit_reached(db: Session, email: Optional[str], *, needs_parent: bool) -> bool:
+    """The global cap on new accounts per 24 h, bypassed by ALLOWED_EMAILS.
+
+    Two pools: accounts registered with a parent's address count against
+    rate_limit_new_pending_users_per_day, the rest (Google, 16+) against
+    rate_limit_new_users_per_day. Anyone can create the first kind with
+    made-up answers, so a flood of them must not lock everyone else out.
+    """
     from ..db.repositories import UserRepository
 
-    allowed = _get_allowed_emails()
-    if email and allowed and email.lower() in allowed:
+    if _allowlisted(email):
         return False
-    recent = UserRepository(db).count_recent_users(hours=24)
-    return recent >= settings.rate_limit_new_users_per_day
+    recent = UserRepository(db).count_recent_users(hours=24, with_parent=needs_parent)
+    limit = (
+        settings.rate_limit_new_pending_users_per_day
+        if needs_parent
+        else settings.rate_limit_new_users_per_day
+    )
+    return recent >= limit
+
+
+# New accounts per client IP (HMAC, see ip_hash), rolling 24 h, in memory: the
+# API runs one worker (as for the send locks above). A restart forgets the
+# counts, which only ever errs towards letting someone register.
+REGISTRATION_IP_WINDOW = timedelta(hours=24)
+_REGISTRATION_IP_MAX_KEYS = 50_000
+_registrations_by_ip: dict[str, list[datetime]] = {}
+
+
+def _recent_registrations(ip_digest: str) -> list[datetime]:
+    since = now() - REGISTRATION_IP_WINDOW
+    hits = [t for t in _registrations_by_ip.get(ip_digest, ()) if t > since]
+    if hits:
+        _registrations_by_ip[ip_digest] = hits
+    else:
+        _registrations_by_ip.pop(ip_digest, None)
+    return hits
+
+
+def registration_ip_limit_reached(ip_digest: str, email: Optional[str] = None) -> bool:
+    """Whether this IP may not register another account now (no side effect)."""
+    if _allowlisted(email):
+        return False
+    return len(_recent_registrations(ip_digest)) >= settings.rate_limit_registrations_per_ip_per_day
+
+
+def take_registration_slot(ip_digest: str, email: Optional[str] = None) -> bool:
+    """Count one new account for this IP; False (nothing counted) at the limit.
+
+    Check and record happen with no await in between, so parallel requests
+    cannot all slip through on the same last slot.
+    """
+    if _allowlisted(email):
+        return True
+    if registration_ip_limit_reached(ip_digest):
+        return False
+    if ip_digest not in _registrations_by_ip and len(_registrations_by_ip) >= _REGISTRATION_IP_MAX_KEYS:
+        # Bound memory: forget the oldest key (insertion order)
+        _registrations_by_ip.pop(next(iter(_registrations_by_ip)))
+    _registrations_by_ip.setdefault(ip_digest, []).append(now())
+    return True
 
 
 @dataclass

@@ -5,6 +5,7 @@ when auth is enabled, so the TestClient talks https. E-mail goes to the
 console backend's in-memory outbox; tokens are read back from the links.
 """
 
+import contextlib
 import re
 from datetime import datetime, timedelta, timezone
 from urllib.parse import parse_qs, urlparse
@@ -41,6 +42,10 @@ def db(tmp_path, monkeypatch):
     monkeypatch.setattr(settings, "email_backend", "console")
     monkeypatch.setattr(settings, "public_base_url", "https://omj.example")
     monkeypatch.setattr(settings, "rate_limit_new_users_per_day", 50)
+    monkeypatch.setattr(settings, "rate_limit_new_pending_users_per_day", 50)
+    monkeypatch.setattr(settings, "rate_limit_registrations_per_ip_per_day", 30)
+    monkeypatch.setattr(settings, "turnstile_secret_key", None)
+    monkeypatch.setattr(settings, "turnstile_site_key", None)
     # Age arithmetic is pinned to one year so the tests do not age
     monkeypatch.setattr(age, "current_year", lambda: THIS_YEAR)
     engine = create_engine(
@@ -50,6 +55,10 @@ def db(tmp_path, monkeypatch):
     session = sessionmaker(bind=engine)()
     email_module.clear_outbox()
     account_routes._availability_hits.clear()
+    service._registrations_by_ip.clear()
+    # E-mails sent after the response (parent link, password reset) use the
+    # test's session too; TestClient runs background tasks before returning
+    monkeypatch.setattr(account_routes, "_background_session", lambda: contextlib.nullcontext(session))
     yield session
     session.close()
     email_module.clear_outbox()

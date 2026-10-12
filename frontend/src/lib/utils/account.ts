@@ -13,7 +13,9 @@ export const LOGIN_MIN = 3;
 export const LOGIN_MAX = 32;
 export const PASSWORD_MIN = 8;
 export const PASSWORD_MAX = 200;
-const LOGIN_RE = /^[a-z0-9][a-z0-9._-]{2,31}$/;
+// No dots: the login appears in e-mails to the parent, where a dotted one
+// could turn into a link (passwords.LOGIN_RE)
+const LOGIN_RE = /^[a-z0-9][a-z0-9_-]{2,31}$/;
 // Loose shape check; the backend has the final word
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const EMAIL_MAX = 254;
@@ -64,7 +66,7 @@ export function loginProblem(login: string): string | null {
   if (login.length > LOGIN_MAX) return "Login może mieć najwyżej 32 znaki.";
   if (!LOGIN_RE.test(login)) {
     if (!/^[a-z0-9]/.test(login)) return "Login musi zaczynać się od litery lub cyfry.";
-    return "Login może zawierać tylko litery bez polskich znaków, cyfry oraz . _ -";
+    return "Login może zawierać tylko litery bez polskich znaków, cyfry oraz znaki _ i -";
   }
   return null;
 }
