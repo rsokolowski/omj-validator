@@ -46,6 +46,9 @@ services:
       - no-new-privileges:true
     cap_drop:
       - ALL
+    # A runaway request (e.g. a huge photo decode) gets the api OOM-killed and
+    # restarted instead of starving PostgreSQL and the rest of the host.
+    mem_limit: 2g
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8100/health"]
       interval: 30s

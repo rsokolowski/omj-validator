@@ -6,9 +6,12 @@ left on disk after a rejected request) hold everywhere, not just where they
 were first written.
 """
 
+import asyncio
 import logging
 import unicodedata
 import uuid
+import warnings
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Callable, Optional as OptionalType
 
@@ -50,6 +53,29 @@ HEIF_SUPPORTED = register_heif_decoder()
 # Max image dimensions for AI API compatibility
 MAX_IMAGE_DIMENSION = 2048
 
+# Largest photo we agree to decode, in pixels. A PNG compresses a blank
+# 12000x12000 page into half a megabyte, and decoding it took 16 s of CPU and
+# 3.3 GB of RAM on the single production worker - a decompression bomb well
+# under the upload size limit. 50 MP still admits the 48 MP mode of recent
+# phones (8064x6048); anything bigger is refused from its header, before a
+# single pixel is decoded. Pillow's own guard is set to the same value and its
+# warning made an error, so every opener (HEIC included) stops there too.
+MAX_IMAGE_PIXELS = 50_000_000
+Image.MAX_IMAGE_PIXELS = MAX_IMAGE_PIXELS
+warnings.simplefilter("error", Image.DecompressionBombWarning)
+
+# Decoding runs in these threads, never on the event loop: one slow photo must
+# not freeze every other request (and the WebSockets) of the single worker. Two
+# at a time also caps the memory a burst of large photos can take.
+IMAGE_DECODE_WORKERS = 2
+_image_executor = ThreadPoolExecutor(
+    max_workers=IMAGE_DECODE_WORKERS, thread_name_prefix="image-normalize"
+)
+
+
+class ImageTooLargeError(Exception):
+    """The photo has more pixels than MAX_IMAGE_PIXELS; it was not decoded."""
+
 
 def discard_uploads(saved_paths: list[Path], current: OptionalType[Path] = None) -> None:
     """Remove every file written by a submission request that ends in an error.
@@ -68,6 +94,15 @@ def discard_uploads(saved_paths: list[Path], current: OptionalType[Path] = None)
 
 
 HEIF_EXTENSIONS = {".heic", ".heif"}
+
+
+def too_large_image_message(filename: OptionalType[str]) -> str:
+    """Polish error for a photo over MAX_IMAGE_PIXELS."""
+    name = filename or "zdjęcie"
+    return (
+        f"Plik {name} ma za dużą rozdzielczość (maksymalnie "
+        f"{MAX_IMAGE_PIXELS // 1_000_000} megapikseli). Zmniejsz zdjęcie i prześlij ponownie."
+    )
 
 
 def unprocessable_image_message(filename: OptionalType[str], ext: str) -> str:
@@ -144,12 +179,22 @@ def normalize_uploaded_image(file_path: Path) -> OptionalType[Path]:
     A file Pillow cannot decode cannot have its metadata removed either, so it
     is refused instead of being stored as-is - storing an un-sanitizable photo
     would defeat the whole point of this function.
+
+    A photo over MAX_IMAGE_PIXELS raises ImageTooLargeError instead, so the
+    student is told what is actually wrong with it. The size comes from the
+    header; nothing is decoded first.
+
+    Blocking and CPU/memory heavy - save_uploaded_images runs it in a thread.
     """
     tmp_path = file_path.with_name(file_path.name + ".tmp.jpg")
     target_path = file_path.with_suffix(".jpg")
 
     try:
         with Image.open(file_path) as img:
+            # Before load/convert: the header alone says how big the decode is
+            if img.width * img.height > MAX_IMAGE_PIXELS:
+                raise ImageTooLargeError(f"{img.width}x{img.height}")
+
             # Camera rotation flag first, metadata removal second
             oriented = ImageOps.exif_transpose(img) or img
 
@@ -173,6 +218,10 @@ def normalize_uploaded_image(file_path: Path) -> OptionalType[Path]:
             # Written to a temp file first so a failure mid-encode cannot destroy
             # the upload we already have.
             flattened.save(tmp_path, "JPEG", quality=85)
+    except (ImageTooLargeError, Image.DecompressionBombError, Image.DecompressionBombWarning) as e:
+        tmp_path.unlink(missing_ok=True)
+        logger.warning(f"Image refused for {file_path.suffix}: too many pixels ({e})")
+        raise ImageTooLargeError(str(e)) from None
     except Exception as e:
         tmp_path.unlink(missing_ok=True)
         logger.warning(
@@ -286,7 +335,7 @@ async def save_uploaded_images(
     gone. An unexpected exception also cleans up before propagating.
 
     ``normalize`` defaults to normalize_uploaded_image, looked up at call time
-    so tests can substitute it.
+    so tests can substitute it. It runs in _image_executor, off the event loop.
     """
     normalize = normalize or (lambda p: normalize_uploaded_image(p))
     saved_paths: list[Path] = []
@@ -331,7 +380,16 @@ async def save_uploaded_images(
 
             # Strip EXIF/GPS, fix orientation, downscale. Returns the final path -
             # normalization always re-encodes to JPEG, so the name can change.
-            normalized_path = normalize(file_path)
+            try:
+                normalized_path = await asyncio.get_running_loop().run_in_executor(
+                    _image_executor, normalize, file_path
+                )
+            except ImageTooLargeError:
+                discard_uploads(saved_paths, file_path)
+                return [], JSONResponse(
+                    {"error": too_large_image_message(img.filename)},
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                )
             if normalized_path is None:
                 # Could not be decoded, so its metadata could not be removed
                 # either. Storing it would ship the photo's GPS coordinates to
