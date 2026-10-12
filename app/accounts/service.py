@@ -5,6 +5,8 @@ Timestamps here are naive UTC, like every other DateTime column in the app.
 Nothing in this module writes a full e-mail address or a token to a log.
 """
 
+import asyncio
+import functools
 import hashlib
 import hmac
 import logging
@@ -13,7 +15,7 @@ import secrets
 import uuid
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
-from typing import Callable, Optional
+from typing import Awaitable, Callable, Optional, TypeVar
 
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -33,6 +35,23 @@ from ..email import EmailSendError, send_email
 from ..email.templates import base_url, months_pl, render
 from ..privacy import mask_email_for_display, mask_user_id
 from . import passwords
+
+
+# Rate-limited sends check the send log, await the provider and only then write
+# the log rows (a failed send must not use up a slot). Without serialising,
+# concurrent requests would all pass the check before any row exists. The API
+# runs one worker (Dockerfile), so a process-wide lock is enough; sends are rare.
+_limited_send_lock = asyncio.Lock()
+_F = TypeVar("_F", bound=Callable[..., Awaitable[None]])
+
+
+def _serialized(func: _F) -> _F:
+    @functools.wraps(func)
+    async def wrapper(*args, **kwargs):
+        async with _limited_send_lock:
+            return await func(*args, **kwargs)
+
+    return wrapper  # type: ignore[return-value]
 
 logger = logging.getLogger(__name__)
 
@@ -310,6 +329,7 @@ def invalidate_consent_tokens(db: Session, user: UserDB) -> None:
         token.expires_at = moment
 
 
+@_serialized
 async def send_consent_email(
     db: Session,
     user: UserDB,
@@ -428,6 +448,7 @@ async def send_account_active_email(db: Session, user: UserDB, manage_raw: str) 
 # --------------------------------------------------------------------- reset
 
 
+@_serialized
 async def send_password_reset(db: Session, user: UserDB) -> None:
     """E-mail the parent a reset link. Raises EmailLimitError / EmailSendError."""
     parent = user.parent
@@ -483,6 +504,7 @@ def set_password(db: Session, user: UserDB, password: str) -> None:
 # --------------------------------------------------------------------- manage
 
 
+@_serialized
 async def send_manage_link(db: Session, parent: ParentDB) -> None:
     """E-mail a link to the parent page. Raises EmailLimitError / EmailSendError.
 

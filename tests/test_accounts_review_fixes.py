@@ -410,3 +410,36 @@ def test_waiting_identity_holds_only_sub_and_email_for_10_minutes(client, db, go
     real_time = time_module.time
     monkeypatch.setattr(time_module, "time", lambda: real_time() + 11 * 60)
     assert client.get("/api/auth/register/state").json() == {"google": None}
+
+
+# --------------------------------------------------------------------- concurrent sends
+
+
+def test_concurrent_sends_cannot_overrun_the_send_limit(client, db, monkeypatch):
+    """The limit is checked before the send and logged after it; parallel
+    requests must not all pass the check before the first one is logged."""
+    import asyncio
+
+    register_login(client)  # the consent e-mail already carries one manage link
+    parent = user_by_login(db, "kuba_m").parent
+    sent = []
+
+    async def slow_send(to, subject, html, text):
+        await asyncio.sleep(0.01)
+        sent.append(to)
+
+    monkeypatch.setattr(service, "send_email", slow_send)
+
+    async def attempt():
+        try:
+            await service.send_manage_link(db, parent)
+            return "sent"
+        except service.EmailLimitError:
+            return "limited"
+
+    async def burst():
+        return await asyncio.gather(*(attempt() for _ in range(5)))
+
+    results = asyncio.run(burst())
+    assert results.count("sent") == service.MANAGE_PER_PARENT_PER_DAY - 1
+    assert len(sent) == service.MANAGE_PER_PARENT_PER_DAY - 1
