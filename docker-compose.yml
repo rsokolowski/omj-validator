@@ -84,6 +84,11 @@ services:
       TELEGRAM_CHAT_ID: ${DEV_TELEGRAM_CHAT_ID:-}
       TELEGRAM_PSEUDONYM_SALT: ${DEV_TELEGRAM_PSEUDONYM_SALT:-}
 
+      # E-mail: console by default - messages and their links go to the API log
+      EMAIL_BACKEND: ${EMAIL_BACKEND:-console}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-http://localhost:3000}
+
       # Data retention - disabled locally so dev data is never silently deleted
       RETENTION_SUBMISSION_MONTHS: ${RETENTION_SUBMISSION_MONTHS:-0}
       RETENTION_SCORING_THINKING_DAYS: ${RETENTION_SCORING_THINKING_DAYS:-0}

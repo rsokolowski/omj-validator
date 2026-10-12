@@ -103,17 +103,43 @@ Wynik jest zapisywany, a uczeń widzi go w historii swoich prób i na grafie pos
 
 | Pole | Treść | Źródło |
 |---|---|---|
-| `google_sub` | trwały identyfikator konta Google, klucz główny | token OAuth (claim `sub`) |
-| `email` | adres e-mail konta Google | token OAuth |
-| `name` | imię i nazwisko lub nazwa wyświetlana | token OAuth |
+| `id` | identyfikator konta, klucz główny; dla kont sprzed 12.10.2026 równy identyfikatorowi Google (kolumna nazywała się `google_sub`), dla nowych losowy (`uuid4`) | system |
+| `google_sub` | trwały identyfikator konta Google; pusty przy koncie z loginem | token OAuth (claim `sub`) |
+| `email` | adres e-mail konta Google; pusty przy koncie z loginem (nie zbieramy e-maila dziecka) | token OAuth |
+| `name` | imię i nazwisko lub nazwa wyświetlana (tylko konta Google) | token OAuth |
+| `login` | login konta bez e-maila (3–32 znaki, małe litery; formularz prosi, by nie był imieniem i nazwiskiem) | uczeń |
+| `password_hash` | skrót hasła argon2id; samego hasła serwis nie zna | uczeń |
+| `birth_year` | rok urodzenia (bez dnia i miesiąca); pusty przy kontach sprzed wprowadzenia pytania — uzupełniany przy najbliższej wizycie | uczeń |
+| `status`, `pending_since` | `active` albo `pending_parent` (konto czeka na zgodę rodzica) i od kiedy | system |
+| `parent_id` | powiązanie z adresem rodzica (`parents`) | system |
+| `session_version` | licznik zmian hasła — unieważnia stare sesje | system |
 | `created_at`, `updated_at` | znaczniki czasu | system |
+
+**Tabela `parents`:** `id`, `email` (adres rodzica lub opiekuna, małymi literami), `created_at`.
+Jeden wiersz na adres, wspólny dla rodzeństwa; usuwany razem z ostatnim kontem dziecka.
+
+**Tabela `consents`** — dowód zgody (art. 7 ust. 1 RODO): `user_id`, `kind` (`self` — osoba
+od 16 lat zaznaczyła zgodę; `parent` — rodzic kliknął „Wyrażam zgodę”), `parent_id`,
+`terms_version` (data wersji regulaminu), `given_at`. **Bez adresu IP i bez danych urządzenia.**
+Usuwana z kontem.
+
+**Tabela `email_tokens`** — linki wysłane rodzicowi: `token_hash` (SHA-256; sam link istnieje
+tylko w wiadomości), `purpose` (`consent` 14 dni, jednorazowy; `password_reset` 1 godzina,
+jednorazowy; `parent_manage` 30 dni, wielokrotnego użytku), `user_id`, `parent_id`,
+`created_at`, `expires_at`, `used_at`. Służy też jako dziennik wysyłki do limitów
+(3 prośby o zgodę na konto i 5 na adres rodzica na dobę, 3 linki zmiany hasła na konto,
+3 linki do strony rodzica na adres). Usuwana 30 dni po wygaśnięciu.
+
+**Tabela `login_failures`:** `login`, `ip_hash` (HMAC adresu IP z sekretem serwera — nie sam
+adres), `at`. Blokada: 5 nieudanych prób na login albo 20 z jednego adresu w 15 minut.
+Usuwana po 24 godzinach.
 
 **Tabela `submissions`** (jedno zgłoszenie = jedna próba rozwiązania):
 
 | Pole | Treść |
 |---|---|
 | `id` | 8-znakowy identyfikator zgłoszenia |
-| `user_id` | powiązanie z użytkownikiem (`google_sub`) |
+| `user_id` | powiązanie z użytkownikiem (`users.id`) |
 | `year`, `etap`, `task_number` | które zadanie |
 | `timestamp`, `created_at` | kiedy |
 | `status` | pending / processing / completed / failed |
@@ -132,7 +158,7 @@ np. z broszury lub zbioru; od września 2026):
 | Pole | Treść |
 |---|---|
 | `id` | 12-znakowy losowy identyfikator |
-| `user_id` | właściciel (`google_sub`); zadanie widzi **wyłącznie** właściciel, API zwraca 404 każdemu innemu |
+| `user_id` | właściciel (`users.id`); zadanie widzi **wyłącznie** właściciel, API zwraca 404 każdemu innemu |
 | `title`, `content` | tytuł i treść zadania — wpisane przez ucznia albo odczytane przez model ze zdjęcia i zatwierdzone przez ucznia |
 | `source_label`, `category`, `difficulty` | źródło (np. „IKOMJ 4.3”), kategoria, trudność |
 | `hints` | 0–4 wskazówki wygenerowane przez model |
@@ -210,15 +236,15 @@ się ponownie tym samym kontem Google — bez tego jeden użytkownik mógłby wy
 wdrożenia (zob. R8). Podstawa: art. 6 ust. 1 lit. f RODO (cel A4).
 
 **Pliki na dysku serwera:** fotografie w katalogu
-`data/uploads/{google_sub}/{rok}/{etap}/{nr_zadania}/{losowy_uuid}.{jpg|png|webp|heic}`.
+`data/uploads/{id_konta}/{rok}/{etap}/{nr_zadania}/{losowy_uuid}.{jpg|png|webp|heic}`.
 Nazwa pliku jest losowa i nie zawiera danych ucznia, ale **struktura katalogów zawiera
-identyfikator konta Google**. Limity: maksymalnie 10 plików na zgłoszenie, 10 MB na plik,
+identyfikator konta** (przy kontach sprzed 12.10.2026 równy identyfikatorowi Google). Limity: maksymalnie 10 plików na zgłoszenie, 10 MB na plik,
 dozwolone typy JPEG/PNG/WebP/HEIC. Zdjęcia większe niż 2048 px w którymkolwiek wymiarze są
 zmniejszane i zapisywane ponownie jako JPEG (co usuwa metadane EXIF); **zdjęcia mniejsze
 zachowują oryginalne metadane EXIF, w tym potencjalnie współrzędne GPS** — zob. ryzyko R4.
 
-**Pliki zadań prywatnych:** `data/uploads/{google_sub}/private/{id_zadania}/source/` (zdjęcia
-strony z zadaniem, osobna kopia dla każdego zadania) i `data/uploads/{google_sub}/private/{id_zadania}/`
+**Pliki zadań prywatnych:** `data/uploads/{id_konta}/private/{id_zadania}/source/` (zdjęcia
+strony z zadaniem, osobna kopia dla każdego zadania) i `data/uploads/{id_konta}/private/{id_zadania}/`
 (zdjęcia rozwiązań). Zdjęcia wysłane do odczytu, ale niezatwierdzone jako zadanie, leżą
 w `.../private/_drafts/{id_szkicu}/` i są usuwane przy zatwierdzeniu albo przez przebieg
 retencji po 24 godzinach. Wszystkie przechodzą ten sam proces co zdjęcia rozwiązań
@@ -232,8 +258,10 @@ notatki na marginesie niezwiązane z matematyką, fragmenty innych prac, a w tle
 mieszkania lub inne osoby. Wpisany w przeglądarce tekst rozwiązania może zawierać ten sam
 nadmiar (podpis imieniem i nazwiskiem, klasę, szkołę, dopiski niezwiązane z zadaniem).
 
-**Sesja (cookie).** Podpisane kryptograficznie ciasteczko sesyjne Starlette, ważne 30 dni,
-przechowuje: `google_sub`, `email`, `name`, adres URL zdjęcia profilowego Google,
+**Sesja (cookie).** Podpisane kryptograficznie ciasteczko sesyjne Starlette, ważne do 30 dni
+(przy logowaniu loginem i hasłem bez „Zapamiętaj mnie” — 12 godzin, termin zapisany w sesji),
+przechowuje: identyfikator konta, `session_version`, termin wygaśnięcia, `email`, `login`, `name`,
+adres URL zdjęcia profilowego Google,
 flagę uprawnień oraz znacznik czasu ostatniej weryfikacji uprawnień. **Zdjęcie profilowe nie jest
 zapisywane w bazie danych** — jest tylko odnośnikiem trzymanym w sesji (obecny regulamin serwisu
 publicznego twierdził inaczej; nowa treść to prostuje).
@@ -249,10 +277,11 @@ okresu retencji — zob. R17.
 
 | # | Cel | Zakres danych | Podstawa prawna |
 |---|---|---|---|
-| A1 | Prowadzenie konta i umożliwienie korzystania z narzędzia | `google_sub`, e-mail, imię i nazwisko | art. 6 ust. 1 lit. a RODO — zgoda rodzica lub opiekuna prawnego (art. 8 ust. 1 RODO w zw. z art. 8 ustawy z 10.05.2018 o ochronie danych osobowych) |
+| A1 | Prowadzenie konta i umożliwienie korzystania z narzędzia | identyfikator konta, `google_sub`, e-mail, imię i nazwisko albo login i skrót hasła; rok urodzenia; adres e-mail rodzica; zapis zgody | art. 6 ust. 1 lit. a RODO — zgoda osoby od 16 lat albo zgoda rodzica lub opiekuna prawnego weryfikowana e-mailem (art. 8 ust. 1–2 RODO w zw. z art. 8 ustawy z 10.05.2018 o ochronie danych osobowych); rok urodzenia i adres rodzica — art. 6 ust. 1 lit. c w zw. z art. 8 ust. 2 RODO (obowiązek rozsądnych starań o weryfikację) |
+| A1a | Weryfikacja zgody rodzica, odzyskanie dostępu do konta z loginem, strona rodzica | adres e-mail rodzica, login lub e-mail konta Google dziecka, skróty linków | jw. (A1); wysyłka przez Resend |
 | A2 | Ocena przesłanego rozwiązania i wygenerowanie informacji zwrotnej | fotografie, treść pracy, wynik, informacja zwrotna | art. 6 ust. 1 lit. a — jw. |
 | A3 | Prowadzenie historii prób i grafu postępów | wyniki, daty, identyfikatory zadań | art. 6 ust. 1 lit. a — jw. |
-| A4 | Bezpieczeństwo usługi, limity liczby zgłoszeń, wykrywanie nadużyć i prób manipulacji oceną | `issue_type`, `abuse_score`, liczniki zgłoszeń, logi | art. 6 ust. 1 lit. f — prawnie uzasadniony interes administratora polegający na zapewnieniu integralności i dostępności usługi (motyw 49 RODO) |
+| A4 | Bezpieczeństwo usługi, limity liczby zgłoszeń, wykrywanie nadużyć i prób manipulacji oceną, ochrona logowania przed odgadywaniem haseł, limity wysyłki e-maili | `issue_type`, `abuse_score`, liczniki zgłoszeń, logi, `login_failures`, dziennik wysyłki (`email_tokens`) | art. 6 ust. 1 lit. f — prawnie uzasadniony interes administratora polegający na zapewnieniu integralności i dostępności usługi (motyw 49 RODO) |
 | A5 | Rozpatrywanie żądań osób, których dane dotyczą, i obrona przed roszczeniami | korespondencja, minimalny zapis o wykonaniu żądania | art. 6 ust. 1 lit. c (art. 12 RODO) oraz art. 6 ust. 1 lit. f |
 
 **Dlaczego zgoda rodzica, a nie sam prawnie uzasadniony interes — uzasadnienie wyboru**
@@ -329,6 +358,7 @@ zadaniu. Konsekwencje, które trzeba przyjąć świadomie:
 | Google — Gemini API (płatny poziom usługi) | podmiot przetwarzający (jeden z dwóch alternatywnych dostawców AI — zob. wiersz Anthropic) | **fotografie pracy ucznia i/lub wpisany przez ucznia tekst rozwiązania** (w tym rysunki wykonane w przeglądarce), PDF zadań, PDF rozwiązań wzorcowych, instrukcja oceniania; przy zadaniach prywatnych także **zdjęcie strony z zadaniem** (odczyt treści) i **treść zadania** (wskazówki, ocena) — zdjęcia zwykle przesyłane w treści zapytania, a zestawy powyżej 14 MB przez File API i usuwane zaraz po analizie; **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Gemini API Additional Terms + Google Cloud Data Processing Addendum; transfer: EU-US Data Privacy Framework |
 | Anthropic Ireland, Limited / Anthropic, PBC — Claude API | podmiot przetwarzający, **alternatywny wobec Gemini API**: w danym momencie aktywny jest jeden z dwóch dostawców, wybrany przez administratora, i tylko on otrzymuje dane danej analizy | te same kategorie danych co Gemini API (wiersz wyżej), także przy zadaniach prywatnych i wzorcach — wszystkie zdjęcia i PDF-y przesyłane w treści zapytania (base64), **bez File API**, więc po stronie Anthropic nie powstają przechowywane pliki; wejścia i wyjścia API usuwane **w ciągu 30 dni** (wyjątki: egzekwowanie Usage Policy, obowiązek prawny); **nie przekazujemy** e-maila, imienia, nazwiska ani identyfikatora konta | Commercial Terms (zakaz trenowania modeli na Customer Content) + Data Processing Addendum włączony do nich przez odesłanie; transfer: standardowe klauzule umowne (DPA, moduł drugi i/lub trzeci); podwykonawcy: anthropic.com/subprocessors (15 dni na sprzeciw) |
 | Google — Cloud Translation API v2 (funkcja opcjonalna, `TRANSLATE_ENABLED`) | podmiot przetwarzający | krótkie nagłówki toku rozumowania modelu tłumaczone z angielskiego na polski — **dotyczą treści pracy ucznia**; dotyczy obu dostawców AI, więc przy aktywnym Claude nagłówki trafiają do Google | jak Gemini API |
+| Resend (spółka z USA; pełna nazwa strony umowy wg DPA [DO POTWIERDZENIA]) — wysyłka e-maili transakcyjnych | podmiot przetwarzający | **adres e-mail rodzica** i treść wiadomości: prośba o zgodę, potwierdzenie aktywacji, link do strony rodzica, link zmiany hasła — a w treści **adres konta Google dziecka albo jego login** (bez imienia i nazwiska, bez innych danych dziecka) i jednorazowe linki. Domena `omj-validator.pl` zweryfikowana, region wysyłki eu-west-1 (Irlandia) | DPA Resend (resend.com/legal/dpa); transfer: Resend uczestniczy w EU-US Data Privacy Framework [DO POTWIERDZENIA przy przeglądzie: wpis w rejestrze DPF]; wiadomości nie trafiają do Telegramu ani logów (adresy maskowane, treści nie są logowane) |
 | Cloudflare, Inc. | podmiot przetwarzający | ruch HTTPS między użytkownikiem a serwerem (tunel, terminacja TLS) | [DO USTALENIA: potwierdzić zawarcie DPA / warunki Cloudflare i wpisać do rejestru] |
 | Telegram FZ-LLC | odbiorca powiadomień technicznych | komunikaty operacyjne: identyfikator zgłoszenia, oznaczenie zadania, liczba zdjęć, liczba znaków wpisanego tekstu (nigdy sam tekst), wynik punktowy, treść błędu. **Bez imienia, nazwiska, e-maila i identyfikatora użytkownika.** Funkcja wyłączana konfiguracją | brak umowy powierzenia — zob. R12; **w wariancie B zalecane wyłączenie** |
 | Dostawca hostingu / miejsce serwera | — | całość danych | wariant A: serwer własny autora; wariant B: [UZUPEŁNIĆ: infrastruktura szkoły / dostawca] |
@@ -371,14 +401,22 @@ zawierają danych osobowych.
 
 ```
 [Uczeń: przeglądarka]
-    │  1. logowanie
+    │  0. rejestracja: rok urodzenia; konto Google albo login + hasło;
+    │     poniżej 16 lat i przy loginie — adres e-mail rodzica
+    │  1. logowanie (Google albo login + hasło)
     ▼
 [Google OAuth]  ──────► zwraca: sub, e-mail, imię i nazwisko, URL zdjęcia profilowego
     │
     ▼
 [Serwer aplikacji (FastAPI) — za tunelem Cloudflare]
-    │  2. zapis konta w PostgreSQL (sub, e-mail, imię i nazwisko)
-    │  3. cookie sesyjne (30 dni, podpisane, HTTPS)
+    │  2. zapis konta w PostgreSQL (sub, e-mail, imię i nazwisko albo login i skrót
+    │     hasła; rok urodzenia; adres rodzica w `parents`)
+    │  2a. konto poniżej 16 lat / z loginem: status „czeka na zgodę”, prośba do rodzica
+    ├──────────────────────────────────────► [Resend — wysyłka z UE, firma z USA / DPF]
+    │                                          ──► [skrzynka rodzica] ──► strona /rodzic/zgoda
+    │                                              (rodzic klika „Wyrażam zgodę” — POST;
+    │                                               zapis w `consents`, konto aktywne)
+    │  3. cookie sesyjne (do 30 dni / 12 h, podpisane, HTTPS)
     │
     │  4. przesłanie 1–10 fotografii  ──►  zapis na dysku serwera
     │                                       data/uploads/{sub}/{rok}/{etap}/{nr}/
@@ -432,8 +470,13 @@ ani udostępniania danych podmiotom komercyjnym.
 | Licznik wywołań modelu (`ai_usage`) | **90 dni** | `RETENTION_AI_USAGE_DAYS` | bez treści; potrzebny do limitów dobowych i rozliczenia kosztów |
 | Dziennik dostępu administratora (`admin_access_log`) | **12 miesięcy** od zdarzenia | `RETENTION_ADMIN_AUDIT_MONTHS` | dość długo, by zbadać skargę, dość krótko, by nie stać się archiwum tego, kto na kogo patrzył |
 | Pseudonimowy znacznik limitu po usunięciu konta (`deleted_account_quota`) | do zamknięcia okna limitu, czyli **maks. 24 godziny** od ostatniego zgłoszenia | okno limitu (24 h) | usuwany automatycznie; powstaje tylko wtedy, gdy konto miało zgłoszenia w oknie |
+| Konto czekające na zgodę rodzica (`status = pending_parent`) wraz ze wszystkim, co do niego należy | **14 dni** od `pending_since` (założenie konta albo podanie adresu rodzica przy koncie sprzed 12.10.2026) | stała w kodzie (`app/retention.py`) | po kliknięciu „Nie zgadzam się” — natychmiast; zmiana adresu rodzica nie przedłuża terminu |
+| Adres e-mail rodzica (`parents`) | dopóki istnieje konto dziecka z nim powiązane; usuwany w tej samej transakcji co ostatnie konto; adres zastąpiony innym — po **24 godzinach** | stała w kodzie | doba utrzymuje dziennik wysyłki, żeby zmiana adresu nie zerowała limitów |
+| Zapis zgody (`consents`), rok urodzenia, login, skrót hasła | razem z kontem | — | |
+| Skróty linków wysłanych rodzicowi (`email_tokens`) | **30 dni** od wygaśnięcia (link: zgoda 14 dni, zmiana hasła 1 godzina, strona rodzica 30 dni) | stała w kodzie | dziennik do limitów wysyłki i wyjaśniania zgłoszeń |
+| Nieudane próby logowania (`login_failures`) | **24 godziny** | stała w kodzie | IP tylko jako HMAC |
 | Pliki osierocone (bez odpowiadającego zgłoszenia) | usuwane przy każdym przebiegu retencji | `RETENTION_AUTO_PURGE` (przebieg dobowy) | zabezpieczenie na wypadek niepowodzenia usunięcia plików |
-| Cookie sesyjne | 30 dni (wartość zaszyta w kodzie) | — | |
+| Cookie sesyjne | do 30 dni; 12 godzin przy logowaniu loginem i hasłem bez „Zapamiętaj mnie” (wartości zaszyte w kodzie) | — | zmiana hasła unieważnia wszystkie sesje konta (`session_version`) |
 | Dzienniki aplikacji (dziennik kontenera) | **ograniczone objętościowo**: 50 MB × 5 plików na usługę (250 MB), najstarsze wpisy nadpisywane | `docker-compose.prod.yml` (`x-logging`) | rotacja wdrożona; przy obecnym ruchu odpowiada to kilku miesiącom, ale jest to limit objętości, a nie gwarantowany okres — zob. R13 |
 | Kopie zapasowe bazy | [UZUPEŁNIĆ] | — | usunięcie danych musi obejmować także kopie po upływie cyklu ich rotacji |
 | Dane po samodzielnym usunięciu konta przez użytkownika | usuwane niezwłocznie | funkcja usunięcia konta | usuwane są: konto, wszystkie zgłoszenia (kaskadowo) i wszystkie pliki; w dzienniku dostępu administratora identyfikator jest zastępowany nieodwracalnym skrótem; pozostaje wyłącznie znacznik limitu opisany wyżej; kopie zapasowe — po cyklu rotacji |
@@ -976,8 +1019,11 @@ Skutek naruszenia byłby trwały i dotyczyłby dzieci — stąd najwyższa waga.
 
 **P = 1 · W = 2 · poziom = 2 (niskie) → szczątkowe: 2 (niskie)**
 
-Sesja jest przechowywana w podpisanym ciasteczku ważnym **30 dni**, zawierającym e-mail, imię
-i nazwisko oraz flagę uprawnień. Ujawnienie klucza podpisującego pozwoliłoby sfałszować sesję
+Sesja jest przechowywana w podpisanym ciasteczku ważnym **do 30 dni** (logowanie loginem
+i hasłem bez „Zapamiętaj mnie”: **12 godzin**), zawierającym identyfikator konta, e-mail lub
+login, imię i nazwisko oraz flagę uprawnień. Każde zapytanie sprawdza w bazie, czy konto nadal
+istnieje i czy `session_version` się zgadza — sesja usuniętego konta albo sprzed zmiany hasła
+przestaje działać od razu. Ujawnienie klucza podpisującego pozwoliłoby sfałszować sesję
 dowolnego użytkownika, w tym administratora. Długi czas życia sesji na współdzielonym urządzeniu
 (komputer w pracowni, tablet rodzinny) oznacza, że kolejna osoba może zobaczyć prace poprzedniej.
 
@@ -1065,35 +1111,48 @@ transferu danych — i to jest właśnie powód, dla którego wybrano tę drogę
 
 ---
 
-### R15. Brak weryfikacji wieku i zgody rodzica (dotyczy wariantu A)
+### R15. Weryfikacja wieku i zgody rodzica (dotyczy wariantu A)
 
-**P = 3 · W = 2 · poziom = 6 (wysokie) → szczątkowe: 4 (średnie)**
+**P = 3 · W = 2 · poziom = 6 (wysokie) → szczątkowe: 3 (średnie)**
 
 Serwis publiczny opiera przetwarzanie na zgodzie, a jego użytkownikami są w większości dzieci
 poniżej 16 lat. Art. 8 ust. 2 RODO wymaga „rozsądnych starań" o weryfikację, że zgodę wyraziła
-lub zaaprobowała osoba sprawująca władzę rodzicielską. Obecnie serwis: **nie pyta o wiek**
-i **nie weryfikuje zgody rodzica** — dysponuje wyłącznie polem wyboru z akceptacją regulaminu.
-Konsekwencją jest ryzyko, że przetwarzanie odbywa się bez ważnej podstawy prawnej, co jest wadą
-poważniejszą niż którekolwiek z ryzyk technicznych w tym rejestrze.
+lub zaaprobowała osoba sprawująca władzę rodzicielską. Do 12.10.2026 serwis nie pytał o wiek
+i dysponował wyłącznie polem wyboru z akceptacją regulaminu — oświadczeniem dziecka, nie
+rodzica.
 
-Środki:
+Środki (**wdrożone 12.10.2026**):
 
-- pytanie o rok urodzenia (lub wybór „mam mniej niż 16 lat") przy pierwszym logowaniu,
-- dla użytkowników poniżej 16 lat — potwierdzenie zgody przez rodzica: podanie adresu e-mail
-  rodzica i potwierdzenie odnośnikiem wysłanym na ten adres (mechanizm dwustopniowy).
-  To rozwiązanie proporcjonalne do niskiego ryzyka usługi, zgodne z art. 8 ust. 2
-  („z uwzględnieniem dostępnej technologii"). Wymaga przetwarzania jednej dodatkowej danej
-  (adresu e-mail rodzica) — należy ją objąć retencją i klauzulą,
-- do czasu wdrożenia: wyraźna, widoczna informacja przed logowaniem, że osoba poniżej 16 lat
-  może korzystać z serwisu wyłącznie za wiedzą i zgodą rodzica, oraz łatwa ścieżka kontaktu dla
-  rodzica żądającego usunięcia konta dziecka,
-- **rozwiązanie docelowe i najlepsze: wariant B.** W instancji szkolnej problem znika, bo
-  podstawą nie jest zgoda, lecz zadanie realizowane w interesie publicznym, a uczeń loguje się
-  kontem szkolnym. Jest to istotny argument merytoryczny za przejściem na model szkolny,
-  niezależny od względów organizacyjnych.
+- **rok urodzenia** przy rejestracji (sam rok — minimalizacja); przy roczniku kończącym 16 lat
+  w bieżącym roku dodatkowe pytanie „Czy masz już ukończone 16 lat?”; konta założone wcześniej
+  odpowiadają przy najbliższej wizycie, a do tego czasu nie mogą niczego zapisać,
+- **poniżej 16 lat i przy każdym koncie z loginem** — adres e-mail rodzica i **potwierdzenie
+  odnośnikiem** wysłanym na ten adres (EDPB, wytyczne 05/2020 w sprawie zgody, pkt 132–137:
+  przy usłudze o niskim ryzyku weryfikacja e-mailem jest wystarczająca). Do czasu zgody konto
+  jest **nieaktywne**: można przeglądać zadania, ale nie przesłać rozwiązania, wywołać AI ani
+  niczego zapisać (jeden mechanizm w kodzie, `require_active_user`, obejmuje każdy endpoint
+  zapisu; test przechodzi po całej tabeli tras),
+- link w wiadomości **otwiera stronę**, decyzja zapada dopiero po kliknięciu przycisku (skanery
+  poczty otwierają linki); „Nie zgadzam się” usuwa konto natychmiast; brak zgody przez 14 dni
+  — konto usuwane ze wszystkimi danymi,
+- wiadomość do rodzica podaje, kto prowadzi serwis, którego konta dotyczy (e-mail konta Google
+  albo login — **bez innych danych wpisanych przez dziecko**), co i jak długo przetwarzamy oraz
+  link do regulaminu; dowód zgody w tabeli `consents` (art. 7 ust. 1),
+- **strona rodzica** z każdej wiadomości: lista kont dzieci, usunięcie konta (= cofnięcie
+  zgody), nowe hasło przy koncie z loginem,
+- adres rodzica musi być inny niż adres konta Google dziecka.
 
-Ryzyko szczątkowe pozostaje średnie, bo żaden mechanizm weryfikacji wieku dostępny w darmowej
-usłudze internetowej nie jest szczelny.
+**Ryzyko szczątkowe — świadomie zaakceptowane: dziecko może podać jako adres rodzica drugi
+własny adres** i samo kliknąć zgodę. Żaden mechanizm dostępny w bezpłatnej usłudze internetowej
+(bez weryfikacji tożsamości, płatności czy dokumentu) tego nie wyklucza, a silniejsze metody
+wymagałyby przetwarzania znacznie większej ilości danych rodzica i dziecka. Zgodnie z wytycznymi
+EDPB 05/2020 przy niskim ryzyku usługi uznajemy weryfikację e-mailem za proporcjonalną.
+Ograniczenia: regulamin i formularz wprost proszą o adres rodzica; rodzic, który dowie się
+o koncie, może je usunąć sam (strona rodzica) albo przez kontakt; konto bez prawdziwej zgody
+nie uzyskuje dostępu do niczego ponad treści publiczne, dopóki ktoś nie kliknie zgody.
+
+**Rozwiązanie docelowe dla szkół: wariant B.** W instancji szkolnej podstawą nie jest zgoda,
+lecz zadanie realizowane w interesie publicznym.
 
 ---
 
@@ -1140,6 +1199,62 @@ ochrony danych szkoły i czy poinformowano IOD.
 
 ---
 
+### R18. Odgadywanie haseł do kont z loginem
+
+**P = 2 · W = 2 · poziom = 4 (średnie) → szczątkowe: 2 (niskie)**
+
+Konta z loginem i hasłem (od 12.10.2026) to pierwsze w serwisie konta chronione hasłem
+znanym serwisowi. Dzieci wybierają hasła słabe, a loginy bywają przewidywalne.
+
+Środki: hasło co najmniej 8 znaków, sprawdzane z listą 10 000 najpopularniejszych haseł i różne
+od loginu (bez wymagań co do rodzaju znaków — zalecenia NIST SP 800-63B; podpowiedź „kilka
+słów”); skrót argon2id; **blokada 15 minut po 5 nieudanych próbach na login albo 20 z jednego
+adresu IP**; jeden komunikat „Nieprawidłowy login lub hasło” dla nieistniejącego loginu
+i złego hasła, ten sam komunikat blokady dla obu; czas odpowiedzi wyrównany (weryfikacja
+skrótu także dla nieistniejącego loginu); adres IP zapisywany tylko jako HMAC i tylko przez
+24 godziny; sprawdzanie zajętości loginu przy rejestracji ograniczone liczbowo (ujawnia
+istnienie loginu — świadomie przyjęte dla wygody rejestracji). Za Cloudflare adres klienta
+pochodzi z nagłówka `CF-Connecting-IP`.
+
+---
+
+### R19. Odzyskiwanie dostępu i linki wysyłane rodzicom
+
+**P = 2 · W = 3 · poziom = 6 (wysokie) → szczątkowe: 2 (niskie)**
+
+Link do zmiany hasła i link do strony rodzica dają władzę nad kontem dziecka (zmiana hasła,
+usunięcie konta). Ryzyka: przechwycenie linku, zalanie skrzynki rodzica wiadomościami, użycie
+formularzy do sprawdzania, kto ma konto.
+
+Środki: linki to 256-bitowe losowe tokeny, w bazie tylko ich SHA-256; link zmiany hasła ważny
+**godzinę i jednorazowy**, link zgody **14 dni i jednorazowy**, link do strony rodzica
+**30 dni**; zmiana hasła **unieważnia wszystkie sesje** konta i nigdy nikogo nie loguje (rodzic
+jest zwykle na swoim telefonie); link resetu trafia **wyłącznie do rodzica**, nigdy do dziecka;
+formularze „nie pamiętam hasła” i „wyślij mi link” zawsze odpowiadają tak samo, bez względu na
+to, czy konto lub adres istnieje; limity wysyłki (3 prośby o zgodę na konto i 5 na adres rodzica,
+3 linki resetu na konto, 3 linki do strony rodzica na adres — na dobę; przycisk ponownej wysyłki
+zablokowany na 60 s); strona rodzica pokazuje tylko konta powiązane z adresem, do którego
+należy link; wiadomości nie trafiają do logów (adresy maskowane, bez treści, bez linków
+w produkcji).
+
+---
+
+### R20. Dostawca poczty e-mail (Resend)
+
+**P = 1 · W = 2 · poziom = 2 (niskie) → szczątkowe: 1 (niskie)**
+
+Wysyłka wymaga przekazania dostawcy adresu rodzica i treści wiadomości (login albo e-mail konta
+Google dziecka, jednorazowe linki). Resend to firma z USA.
+
+Środki: umowa powierzenia (DPA Resend); region wysyłki w UE (eu-west-1); transfer w ramach
+EU-US Data Privacy Framework [DO POTWIERDZENIA przy przeglądzie: aktywny wpis w rejestrze DPF];
+w wiadomości wyłącznie dane niezbędne do zidentyfikowania konta (bez imienia i nazwiska, zdjęć,
+wyników); własna zweryfikowana domena nadawcy (SPF/DKIM) ogranicza podszywanie się pod serwis;
+awaria dostawcy nie blokuje konta — dziecko może ponowić wysyłkę, a nieudana wysyłka nie zużywa
+limitu.
+
+---
+
 ## 6. Podsumowanie ryzyk i ryzyko szczątkowe (art. 35 ust. 7 lit. c)
 
 | # | Ryzyko | Przed środkami | Po środkach |
@@ -1158,9 +1273,12 @@ ochrony danych szkoły i czy poinformowano IOD.
 | R12 | Tłumaczenie komunikatów przez usługę zewnętrzną | 2 niskie | 1 niskie |
 | R13 | Dane osobowe w dziennikach | 3 średnie | 1 niskie (maskowanie i rotacja wdrożone) |
 | R14 | Zmiana administratora i wygaszenie serwisu | 2 niskie | 1 niskie |
-| R15 | Brak weryfikacji wieku i zgody rodzica (wariant A) | **6 wysokie** | 4 średnie |
+| R15 | Weryfikacja wieku i zgody rodzica (wariant A) | **6 wysokie** | 3 średnie (rok urodzenia i zgoda rodzica e-mailem wdrożone; drugi adres dziecka — zaakceptowane) |
 | R16 | Przechowywanie bezterminowe | **6 wysokie** | 2 niskie (retencja i wygasanie kont wdrożone) |
 | R17 | Braki w dokumentacji i rozliczalności | 4 średnie | 1 niskie |
+| R18 | Odgadywanie haseł do kont z loginem | 4 średnie | 2 niskie |
+| R19 | Odzyskiwanie dostępu i linki do rodziców | **6 wysokie** | 2 niskie |
+| R20 | Dostawca poczty e-mail (Resend) | 2 niskie | 1 niskie |
 
 **Ryzyka pozostające po zastosowaniu środków — świadomie zaakceptowane:**
 
@@ -1175,7 +1293,9 @@ ochrony danych szkoły i czy poinformowano IOD.
    czynniki pozostają poza wpływem administratora. Wymaga monitorowania.
 4. **Bezpieczeństwo infrastruktury (R9, poziom średni).** Typowe dla każdego wdrożenia
    samodzielnie utrzymywanego; obniżane środkami organizacyjnymi, nie eliminowane.
-5. **Weryfikacja wieku (R15, poziom średni, tylko wariant A).** Znika w wariancie B.
+5. **Weryfikacja wieku (R15, poziom średni, tylko wariant A).** Weryfikacja zgody rodzica
+   e-mailem jest wdrożona; pozostaje możliwość, że dziecko poda drugi własny adres — przyjęte
+   jako proporcjonalne przy niskim ryzyku usługi (EDPB 05/2020). Znika w wariancie B.
 
 **Czy wymagane są uprzednie konsultacje z Prezesem UODO (art. 36 ust. 1)?**
 Konsultacja jest obowiązkowa, gdy DPIA wskazuje, że przetwarzanie powodowałoby **wysokie
@@ -1330,7 +1450,8 @@ Kolumny do wypełnienia przez administratora — to jest lista zadań, nie dekla
 | 1 | ~~Ustalić i skonfigurować okresy retencji (sekcja 2.7)~~ | R16 | wysoki | autor | — | **WDROŻONE** (24 mies. / 90 dni / 36 mies. / 12 mies.); wariant B potwierdza wartości |
 | 1a | ~~Dodać automatyczne usuwanie kont nieaktywnych~~ | R16 | wysoki | autor | — | **WDROŻONE** (36 miesięcy bez aktywności) |
 | 2 | Usuwać metadane EXIF ze **wszystkich** fotografii, nie tylko zmniejszanych | R4 | wysoki | [ ] | [ ] | [ ] |
-| 3 | Wdrożyć weryfikację wieku i zgody rodzica (wariant A) | R15 | wysoki | [ ] | [ ] | [ ] |
+| 3 | ~~Wdrożyć weryfikację wieku i zgody rodzica (wariant A)~~ | R15 | wysoki | autor | — | **WDROŻONE** 12.10.2026 (rok urodzenia, zgoda rodzica e-mailem, strona rodzica, 14 dni) |
+| 3a | Potwierdzić wpis Resend w rejestrze DPF i zachować DPA Resend w dokumentacji | R20 | średni | [ ] | [ ] | [ ] |
 | 4 | ~~Wdrożyć rejestr dostępu administratora do cudzych danych~~ | R3 | wysoki | autor | — | **WDROŻONE** (`admin_access_log`, retencja 12 mies.) |
 | 4a | Wprowadzić okresowy przegląd dziennika dostępu przez osobę inną niż administrator | R3 | średni | [ ] | [ ] | [ ] |
 | 5 | Oznaczyć w interfejsie każdą treść pochodzącą od AI | R1, art. 50 AI Act | wysoki | [ ] | [ ] | [ ] |
@@ -1347,7 +1468,7 @@ Kolumny do wypełnienia przez administratora — to jest lista zadań, nie dekla
 | 16 | Udokumentować ocenę z art. 6 ust. 3 AI Act | AI Act | średni | [ ] | [ ] | [ ] |
 | 17 | Uregulować prawa do treści zadań (zgoda SEM lub odnośniki) | prawo autorskie | średni | [ ] | [ ] | [ ] |
 | 18 | Wprowadzić przegląd próbki ocen i mierzyć odsetek błędnych | R1 | niski | [ ] | [ ] | [ ] |
-| 19 | Rozważyć skrócenie czasu życia sesji poniżej 30 dni | R10 | niski | [ ] | [ ] | [ ] |
+| 19 | Rozważyć skrócenie czasu życia sesji poniżej 30 dni | R10 | niski | [ ] | [ ] | częściowo: konta z loginem 12 h bez „Zapamiętaj mnie” |
 | 20 | Rozważyć rezygnację z zapisywania imienia i nazwiska | 3.1 | niski | [ ] | [ ] | [ ] |
 | 21 | ~~Sprawdzić w rejestrze DPF, czy Anthropic uczestniczy w programie~~ | R6 | średni | autor | — | **WYKONANE** 12.10.2026 — brak wpisu (aktywni i nieaktywni); transfer na podstawie standardowych klauzul umownych; sprawdzać przy każdym przeglądzie |
 | 22 | Przed ustawieniem `ANTHROPIC_PROCESSOR_APPROVED=true`: zaakceptować DPA Anthropic, sporządzić ocenę skutków transferu, wpisać Anthropic do rejestru czynności i ponownie sprawdzić ustalenia z sekcji 2.5 | R6, R6a | wysoki | [ ] | [ ] | w toku: DPA zaakceptowany z Commercial Terms (konto z EOG); ocena skutków transferu sporządzona 12.10.2026 — czeka na zatwierdzenie; pozostaje rejestr czynności i zatwierdzenie oceny |

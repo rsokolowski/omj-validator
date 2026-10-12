@@ -25,10 +25,14 @@ i podstawą prawną przetwarzania**. Dobór dokumentu zaczyna się od ustalenia 
 ### Wariant A — serwis publiczny `omj-validator.pl`
 
 - Administrator: **Rafał Sokołowski**, osoba fizyczna prowadząca niekomercyjny serwis.
-- Użytkownik: dowolne dziecko logujące się prywatnym kontem Google.
-- Podstawa przetwarzania: **zgoda rodzica lub opiekuna** (art. 6 ust. 1 lit. a RODO)
-  — bo grupa docelowa jest poniżej progu 16 lat obowiązującego w Polsce; oraz prawnie
-  uzasadniony interes (lit. f) dla bezpieczeństwa i limitów.
+- Użytkownik: dowolne dziecko logujące się prywatnym kontem Google albo loginem i hasłem
+  (konto dla dziecka bez adresu e-mail; zawsze z adresem rodzica).
+- Podstawa przetwarzania: **zgoda** (art. 6 ust. 1 lit. a RODO) — osoby od 16 lat (pole
+  wyboru przy rejestracji), a za osobę młodszą i przy każdym koncie z loginem **zgoda rodzica
+  lub opiekuna weryfikowana e-mailem** (art. 8 ust. 2 RODO; wytyczne EDPB 05/2020, pkt
+  132–137): konto czeka nieaktywne, aż rodzic kliknie „Wyrażam zgodę” na stronie otwartej
+  z wiadomości; bez zgody jest usuwane po 14 dniach. Oraz prawnie uzasadniony interes
+  (lit. f) dla bezpieczeństwa i limitów.
 - Dokument regulujący: **`frontend/src/app/regulamin/page.tsx`** — regulamin i polityka
   prywatności są częścią samego serwisu, a nie plikiem w tym katalogu.
 
@@ -55,6 +59,12 @@ i podstawą prawną przetwarzania**. Dobór dokumentu zaczyna się od ustalenia 
 | [`klauzula-informacyjna-szkola.md`](klauzula-informacyjna-szkola.md) | Klauzula informacyjna (art. 13 RODO). Część A — dla rodziców, część B — prostym językiem dla ucznia (art. 12 ust. 1 RODO wymaga formy zrozumiałej dla dziecka). | rodzice, uczniowie | **B** |
 | [`regulamin-szkola.md`](regulamin-szkola.md) | Regulamin korzystania z narzędzia: zasady dla ucznia, zakazy, opis działania AI, rozgraniczenie „trenażer, nie ocenianie", prawa autorskie. | uczniowie, nauczyciele | **B** |
 | `../../frontend/src/app/regulamin/page.tsx` | Regulamin i polityka prywatności serwisu publicznego (strona w aplikacji). | użytkownicy serwisu | **A** |
+
+**Zmiana z 12 października 2026 (2):** rok urodzenia przy rejestracji, **zgoda rodzica
+e-mailem** dla osób poniżej 16 lat i dla kont z loginem i hasłem, strona rodzica (usunięcie
+konta = cofnięcie zgody, nowe hasło), **Resend** jako podmiot przetwarzający (wysyłka
+e-maili, region wysyłki w UE, firma z USA w programie DPF). W DPIA: 2.1, 2.5, 2.6, R18–R21;
+w regulaminie serwisu punkty 3–9, 11, 12.
 
 **Zmiana z 12 października 2026:** drugi, alternatywny dostawca AI — **Anthropic (Claude API)**
 obok Google (Gemini API); w danym momencie aktywny jest jeden, wybrany przez administratora.
@@ -84,7 +94,13 @@ dokumenty korzystają.
   administratora. Wartości domyślne zaimplementowane w narzędziu (`app/config.py`) i obowiązujące
   w serwisie publicznym: zgłoszenia wraz ze zdjęciami **24 miesiące**, surowy zapis rozumowania
   modelu **90 dni**, konta nieaktywne **36 miesięcy**, dziennik dostępu administratora
-  **12 miesięcy**, pseudonimowy znacznik limitu po usunięciu konta **maks. 24 godziny**.
+  **12 miesięcy**, pseudonimowy znacznik limitu po usunięciu konta **maks. 24 godziny**,
+  konto czekające na zgodę rodzica **14 dni**, adres e-mail rodzica — dopóki istnieje konto
+  dziecka z nim powiązane (adres zastąpiony innym: doba), skróty linków wysłanych rodzicom
+  **30 dni od wygaśnięcia**, nieudane próby logowania **24 godziny** (stałe w
+  `app/retention.py`, nie konfiguracja). W wariancie B zgoda rodzica nie jest podstawą
+  przetwarzania — instancja szkolna może te mechanizmy zostawić jako weryfikację kontaktu
+  z rodzicem albo je wyłączyć w kodzie; do decyzji szkoły,
   Dzienniki serwera są ograniczone **objętościowo** (50 MB × 5 plików na usługę), a nie
   czasowo — opisywać mechanizm, nie liczbę dni,
 - limity liczby zgłoszeń dobrane do liczebności grupy,

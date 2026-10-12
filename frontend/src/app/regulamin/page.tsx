@@ -16,7 +16,11 @@ const RETENTION_PATTERNS = "24 miesiące";
 const RETENTION_AI_USAGE = "90 dni";
 const RETENTION_ADMIN_AUDIT = "12 miesięcy";
 
+// Zmieniajac tekst, zmien tez TERMS_VERSION w app/config.py (data zapisywana
+// przy kazdej zgodzie) - obie wartosci opisuja te sama wersje dokumentu.
 const LAST_UPDATED = "12 października 2026";
+// Konto czekajace na zgode rodzica - app/accounts/service.py PENDING_TTL
+const PENDING_DAYS = 14;
 
 export const metadata: Metadata = {
   title: "Regulamin i polityka prywatności",
@@ -202,30 +206,71 @@ export default function RegulaminPage() {
             W Polsce dziecko może samodzielnie zgodzić się na przetwarzanie
             swoich danych w usłudze internetowej dopiero od{" "}
             <strong>16 lat</strong> (art. 8 RODO w związku z art. 8 ustawy z 10
-            maja 2018 r. o ochronie danych osobowych). Dlatego:
+            maja 2018 r. o ochronie danych osobowych). Dlatego przy zakładaniu
+            konta pytamy o <strong>rok urodzenia</strong> (sam rok, bez dnia i
+            miesiąca). Jeśli kończysz 16 lat w tym roku, pytamy jeszcze, czy masz
+            je już ukończone.
           </Typography>
           <Box component="ul" sx={{ pl: 3, mb: 2 }}>
             <li>
               <strong>
-                jeśli masz mniej niż 16 lat, możesz korzystać z serwisu wyłącznie
-                za wiedzą i zgodą rodzica lub opiekuna prawnego
+                Jeśli masz mniej niż 16 lat, podajesz adres e-mail rodzica lub
+                opiekuna prawnego, a my wysyłamy mu prośbę o zgodę.
               </strong>{" "}
-              &ndash; to on wyraża zgodę na przetwarzanie Twoich danych;
+              To rodzic decyduje, czy możesz korzystać z serwisu.
             </li>
             <li>
-              zaznaczając zgodę przy zakładaniu konta, oświadczasz, że masz
-              ukończone 16 lat albo że Twój rodzic lub opiekun zapoznał się z tym
-              dokumentem i zgadza się na korzystanie przez Ciebie z serwisu;
+              Dopóki rodzic nie potwierdzi zgody, możesz się zalogować i
+              przeglądać zadania, ale <strong>nie możesz przesyłać rozwiązań</strong>{" "}
+              ani niczego zapisywać.
             </li>
             <li>
-              rodzic lub opiekun może w każdej chwili napisać na adres{" "}
-              <MuiLink href={`mailto:${CONTACT_EMAIL}`}>
-                {CONTACT_EMAIL}
-              </MuiLink>{" "}
-              i zażądać usunięcia konta dziecka wraz ze wszystkimi danymi.
-              Żądanie jest realizowane bez zbędnej zwłoki.
+              Jeśli rodzic nie potwierdzi konta w ciągu {PENDING_DAYS} dni,
+              usuwamy je razem ze wszystkimi danymi. Jeśli kliknie &bdquo;Nie
+              zgadzam się&rdquo;, usuwamy je od razu.
+            </li>
+            <li>
+              Konto z loginem i hasłem (dla osób bez adresu e-mail, punkt 4)
+              zawsze wymaga zgody rodzica &ndash; niezależnie od wieku, bo adres
+              rodzica jest jedynym sposobem odzyskania dostępu.
+            </li>
+            <li>
+              Jeśli Twoje konto powstało, zanim wprowadziliśmy te zasady, przy
+              najbliższej wizycie zapytamy o rok urodzenia. Gdy masz mniej niż 16
+              lat, Twoje konto też poczeka na zgodę rodzica (dotychczasowe dane
+              zostają, obowiązuje ta sama zasada {PENDING_DAYS} dni).
             </li>
           </Box>
+          <Typography paragraph>
+            <strong>Co dostaje rodzic.</strong> Wiadomość e-mail z informacją,
+            kim jesteśmy, którego konta dotyczy prośba (adres konta Google
+            dziecka albo login), jakie dane przetwarzamy i jak długo, oraz dwa
+            przyciski: &bdquo;Wyrażam zgodę&rdquo; i &bdquo;Nie zgadzam się
+            &ndash; usuń konto&rdquo;. Przyciski otwierają stronę, na której
+            rodzic potwierdza wybór. Każda nasza wiadomość do rodzica zawiera też
+            link do <strong>strony rodzica</strong>.
+          </Typography>
+          <Typography paragraph>
+            <strong>Strona rodzica</strong> (
+            <MuiLink component={Link} href="/rodzic">
+              omj-validator.pl/rodzic
+            </MuiLink>
+            ) pokazuje konta dzieci powiązane z adresem rodzica. Rodzic może tam
+            w każdej chwili <strong>usunąć konto dziecka razem ze wszystkimi
+            danymi</strong> &ndash; to jest zarazem cofnięcie zgody &ndash; a przy
+            koncie z loginem ustawić nowe hasło. Link działa 30 dni; nowy
+            wyślemy po wpisaniu adresu na tej stronie. Rodzic może też w każdej
+            chwili napisać na adres{" "}
+            <MuiLink href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</MuiLink>.
+          </Typography>
+          <Typography paragraph>
+            <strong>Jak sprawdzamy, że to rodzic.</strong> Zgodę potwierdza
+            kliknięcie w link wysłany na podany adres. Przy serwisie o niskim
+            ryzyku to rozsądny, proporcjonalny sposób weryfikacji (wytyczne
+            Europejskiej Rady Ochrony Danych 05/2020 w sprawie zgody), ale nie
+            daje pewności, że adres naprawdę należy do rodzica. Prosimy: podaj
+            prawdziwy adres rodzica lub opiekuna.
+          </Typography>
           <Typography paragraph>
             <strong>Informacja dla rodziców i opiekunów.</strong> Zachęcamy do
             przeczytania punktów 5&ndash;9 tego dokumentu. Opisują one dokładnie,
@@ -247,19 +292,41 @@ export default function RegulaminPage() {
 
         <Section title="4. Konto i logowanie">
           <Typography paragraph>
-            Logowanie odbywa się przez konto Google (OAuth 2.0). Serwis{" "}
-            <strong>nie zna i nie przechowuje Twojego hasła</strong> &ndash;
-            uwierzytelnienie odbywa się po stronie Google.
+            Konto możesz założyć na dwa sposoby:
           </Typography>
+          <Box component="ul" sx={{ pl: 3, mb: 2 }}>
+            <li>
+              <strong>przez konto Google</strong> (OAuth 2.0) &ndash; serwis{" "}
+              <strong>nie zna Twojego hasła do Google</strong>, uwierzytelnienie
+              odbywa się po stronie Google;
+            </li>
+            <li>
+              <strong>loginem i hasłem</strong> &ndash; dla osób, które nie mają
+              adresu e-mail. Nie pytamy wtedy o Twój adres e-mail. Zapisujemy
+              login, rok urodzenia, adres e-mail rodzica i{" "}
+              <strong>skrót hasła</strong> (argon2id) &ndash; samego hasła nie
+              znamy i nie da się go z tego skrótu odczytać. Nie używaj imienia i
+              nazwiska jako loginu. Jeśli zapomnisz hasła, link do ustawienia
+              nowego wyślemy <strong>rodzicowi</strong>.
+            </li>
+          </Box>
           <Typography paragraph>
             Konto jest potrzebne po to, żebyś widział wyłącznie swoje prace i
             swoją historię wyników oraz żeby działały limity chroniące serwis
             przed nadużyciami. Bez konta serwis nie może działać.
           </Typography>
           <Typography paragraph>
-            Nie udostępniaj swojego konta innym osobom. Na komputerze, z którego
-            korzysta więcej osób (szkoła, biblioteka, komputer rodzinny), wyloguj
-            się po zakończeniu pracy &ndash; sesja pozostaje aktywna do 30 dni.
+            Nie udostępniaj swojego konta innym osobom. Po zalogowaniu przez
+            Google sesja trwa do 30 dni. Po zalogowaniu loginem i hasłem trwa 12
+            godzin, a do 30 dni tylko wtedy, gdy zaznaczysz &bdquo;Zapamiętaj mnie
+            na tym urządzeniu&rdquo;. Na komputerze, z którego korzysta więcej
+            osób (szkoła, biblioteka, komputer rodzinny), nie zaznaczaj tej opcji
+            i wyloguj się po zakończeniu pracy. Zmiana hasła wylogowuje konto na
+            wszystkich urządzeniach.
+          </Typography>
+          <Typography paragraph>
+            Po 5 nieudanych próbach logowania na ten sam login logowanie jest
+            wstrzymywane na 15 minut (chroni to przed odgadywaniem haseł).
           </Typography>
         </Section>
 
@@ -275,6 +342,35 @@ export default function RegulaminPage() {
             <li>
               adres zdjęcia profilowego &ndash; przechowywany wyłącznie w Twojej
               sesji (w ciasteczku), <strong>nie zapisujemy go w bazie danych</strong>.
+            </li>
+          </Box>
+          <Typography paragraph>
+            <strong>Konto z loginem i hasłem</strong> (zamiast danych z Google):
+            login i skrót hasła (argon2id).
+          </Typography>
+          <Typography paragraph>
+            <strong>Wiek i zgoda</strong> (każde konto):
+          </Typography>
+          <Box component="ul" sx={{ pl: 3, mb: 2 }}>
+            <li>rok urodzenia (bez dnia i miesiąca),</li>
+            <li>
+              adres e-mail rodzica lub opiekuna &ndash; przy koncie osoby poniżej
+              16 lat i przy każdym koncie z loginem,
+            </li>
+            <li>
+              zapis zgody: czyja to zgoda (Twoja albo rodzica), kiedy ją wyrażono
+              i której wersji regulaminu dotyczyła &ndash; bez adresu IP i bez
+              informacji o urządzeniu,
+            </li>
+            <li>
+              linki, które wysłaliśmy rodzicowi: zapisujemy tylko ich skrót
+              kryptograficzny (sam link jest wyłącznie w wiadomości), cel oraz
+              kiedy został wysłany, wykorzystany i kiedy wygasa &ndash; to także
+              podstawa limitów wysyłki,
+            </li>
+            <li>
+              nieudane próby logowania loginem i hasłem: wpisany login, czas i
+              skrót kryptograficzny adresu IP (nie sam adres).
             </li>
           </Box>
           <Typography paragraph>
@@ -348,8 +444,8 @@ export default function RegulaminPage() {
             użytkownikom.
           </Typography>
           <Typography paragraph>
-            <strong>Dane techniczne:</strong> ciasteczko sesyjne (ważne 30 dni,
-            podpisane kryptograficznie) oraz dzienniki serwera zawierające m.in.
+            <strong>Dane techniczne:</strong> ciasteczko sesyjne (ważne do 30 dni,
+            podpisane kryptograficznie; patrz punkt 4) oraz dzienniki serwera zawierające m.in.
             informacje o logowaniach i błędach. W dziennikach adresy e-mail są
             skracane tak, by nie identyfikowały osoby.
           </Typography>
@@ -391,9 +487,13 @@ export default function RegulaminPage() {
               </strong>{" "}
               &ndash; podstawą jest <strong>zgoda</strong> (art. 6 ust. 1 lit. a
               RODO), a w przypadku osób poniżej 16. roku życia zgoda rodzica lub
-              opiekuna prawnego (art. 8 RODO). Zgodę wyrażasz, zakładając konto,
-              i możesz ją w każdej chwili cofnąć &ndash; najprościej usuwając
-              konto.
+              opiekuna prawnego (art. 8 RODO). Mając co najmniej 16 lat, wyrażasz
+              zgodę, zaznaczając ją przy zakładaniu konta. Za osobę młodszą
+              &ndash; i przy każdym koncie z loginem &ndash; zgodę wyraża rodzic,
+              klikając &bdquo;Wyrażam zgodę&rdquo; na stronie otwartej z
+              wiadomości e-mail. Zgodę można w każdej chwili cofnąć &ndash;
+              najprościej usuwając konto (rodzic może to zrobić na stronie
+              rodzica).
             </li>
             <li>
               <strong>
@@ -404,8 +504,10 @@ export default function RegulaminPage() {
               administratora (art. 6 ust. 1 lit. f RODO), polegający na
               utrzymaniu serwisu w działaniu i ochronie go przed nadużyciami.
               Na tej podstawie prowadzimy też dziennik dostępu administratora do
-              danych (punkt 7) oraz krótkotrwały, pseudonimowy zapis
-              wykorzystanego limitu po usunięciu konta (punkt 11). Te operacje
+              danych (punkt 7), krótkotrwały, pseudonimowy zapis
+              wykorzystanego limitu po usunięciu konta (punkt 11), zapis
+              nieudanych prób logowania oraz zapis wysłanych wiadomości
+              potrzebny do limitów wysyłki. Te operacje
               nie mogą zależeć od zgody, bo wtedy każdy mógłby wyłączyć
               zabezpieczenia.
             </li>
@@ -495,11 +597,22 @@ export default function RegulaminPage() {
             </li>
           </Box>
           <Typography paragraph>
-            <strong>Google &ndash; pozostałe usługi.</strong> Logowanie odbywa się
-            przez usługę Google. Komunikaty o postępie analizy mogą być
+            <strong>Google &ndash; pozostałe usługi.</strong> Logowanie kontem
+            Google odbywa się przez usługę Google. Komunikaty o postępie analizy mogą być
             tłumaczone z angielskiego na polski przez usługę Google Cloud
             Translation &ndash; niezależnie od tego, która firma ocenia
             rozwiązanie.
+          </Typography>
+          <Typography paragraph>
+            <strong>Dostawca poczty e-mail.</strong> Wiadomości do rodziców
+            (prośba o zgodę, potwierdzenie aktywacji konta, link do strony
+            rodzica, zmiana hasła) wysyłamy przez firmę <strong>Resend</strong>,
+            która robi to w naszym imieniu na podstawie umowy powierzenia
+            przetwarzania danych. Resend otrzymuje adres e-mail rodzica i treść
+            wiadomości &ndash; a w niej adres konta Google dziecka albo jego
+            login. Żadnych innych danych dziecka (zdjęć, rozwiązań, wyników) tam
+            nie przekazujemy. Wiadomości są wysyłane z centrum danych w Unii
+            Europejskiej (Irlandia).
           </Typography>
           <Typography paragraph>
             <strong>Dostawca ochrony i przesyłu ruchu.</strong> Połączenie z
@@ -572,6 +685,14 @@ export default function RegulaminPage() {
             Google zostanie wstrzymane.
           </Typography>
           <Typography paragraph>
+            <strong>Resend.</strong> Wiadomości e-mail wychodzą z centrum danych
+            w Unii Europejskiej, ale Resend jest firmą amerykańską, więc adres
+            e-mail rodzica i treść wiadomości mogą być dostępne z USA. Resend jest
+            uczestnikiem programu EU-US Data Privacy Framework &ndash; podstawą
+            jest ta sama decyzja Komisji Europejskiej co w przypadku Google (art.
+            45 RODO), z tym samym zastrzeżeniem co do toczącego się postępowania.
+          </Typography>
+          <Typography paragraph>
             <strong>Anthropic.</strong> Podstawą przekazania są{" "}
             <strong>standardowe klauzule umowne</strong> przyjęte przez Komisję
             Europejską (art. 46 ust. 2 lit. c RODO). Są one częścią umowy o
@@ -628,7 +749,33 @@ export default function RegulaminPage() {
               punkt 7) &ndash; przez {RETENTION_ADMIN_AUDIT} od zdarzenia.
             </li>
             <li>
-              <strong>Ciasteczko sesyjne</strong> &ndash; 30 dni.
+              <strong>Konto czekające na zgodę rodzica</strong> &ndash;{" "}
+              {PENDING_DAYS} dni od założenia (przy koncie założonym wcześniej:
+              od podania adresu rodzica). Bez zgody jest usuwane razem ze
+              wszystkimi danymi, a po kliknięciu &bdquo;Nie zgadzam się&rdquo;
+              &ndash; od razu.
+            </li>
+            <li>
+              <strong>Rok urodzenia, login, skrót hasła i zapis zgody</strong>{" "}
+              &ndash; razem z kontem.
+            </li>
+            <li>
+              <strong>Adres e-mail rodzica</strong> &ndash; dopóki jest z nim
+              powiązane choć jedno konto dziecka. Po usunięciu ostatniego konta
+              adres jest usuwany od razu, a adres zastąpiony innym (np. po
+              poprawieniu literówki) &ndash; po dobie.
+            </li>
+            <li>
+              <strong>Linki wysłane rodzicowi</strong> (ich skróty) &ndash; 30
+              dni od wygaśnięcia. Link do zgody jest ważny 14 dni, do zmiany
+              hasła godzinę, do strony rodzica 30 dni.
+            </li>
+            <li>
+              <strong>Nieudane próby logowania</strong> &ndash; 24 godziny.
+            </li>
+            <li>
+              <strong>Ciasteczko sesyjne</strong> &ndash; do 30 dni (12 godzin
+              przy logowaniu loginem i hasłem bez &bdquo;Zapamiętaj mnie&rdquo;).
             </li>
             <li>
               <strong>Dzienniki techniczne serwera</strong> &ndash;
@@ -731,6 +878,16 @@ export default function RegulaminPage() {
               nieodwracalna. Jeden wyjątek opisujemy niżej.
             </li>
             <li>
+              <strong>Rodzic lub opiekun</strong> może usunąć konto dziecka
+              samodzielnie na{" "}
+              <MuiLink component={Link} href="/rodzic">
+                stronie rodzica
+              </MuiLink>{" "}
+              &ndash; link jest w każdej wiadomości od nas, a nowy wyślemy po
+              wpisaniu adresu na tej stronie. Usunięcie konta jest zarazem
+              cofnięciem zgody.
+            </li>
+            <li>
               <strong>Podgląd swoich danych</strong> &ndash; swoje zgłoszenia,
               zdjęcia i wyniki widzisz w panelu &bdquo;Moje rozwiązania&rdquo;.
             </li>
@@ -776,8 +933,12 @@ export default function RegulaminPage() {
           <Typography paragraph>
             Połączenie z serwisem jest szyfrowane (HTTPS). Zdjęcia są dostępne
             wyłącznie po zalogowaniu i tylko dla właściciela konta oraz
-            administratora. Baza danych nie jest dostępna z internetu. Serwis nie
-            przechowuje haseł.
+            administratora. Baza danych nie jest dostępna z internetu. Hasła do
+            kont Google w ogóle do nas nie trafiają, a hasła do kont z loginem
+            przechowujemy wyłącznie jako skrót argon2id &ndash; samego hasła nie
+            znamy. Logowanie jest chronione limitem nieudanych prób, a linki
+            wysyłane rodzicom są jednorazowe albo krótko ważne i zapisujemy tylko
+            ich skróty.
           </Typography>
           <Typography paragraph>
             Żadne zabezpieczenia nie dają stuprocentowej pewności. Gdyby doszło do

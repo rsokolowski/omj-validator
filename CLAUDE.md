@@ -67,6 +67,11 @@ python populate_metadata_gemini.py             # Alternative using Gemini API
 
 **Note**: Development uses Docker Compose for the full stack. Google OAuth is disabled by default (`AUTH_DISABLED=true`) since it requires an external URL for callbacks.
 
+```bash
+# Render every e-mail template with sample data -> tmp/email-previews/*.html
+./venv/bin/python scripts/render_email_previews.py
+```
+
 ## Architecture
 
 ### Project Structure
@@ -83,8 +88,14 @@ omj-validator/
 ├── app/                     # FastAPI backend (Python)
 │   ├── main.py             # Routes (JSON APIs + legacy HTML)
 │   ├── config.py           # Pydantic settings
-│   ├── auth.py             # Session-based auth helpers
+│   ├── auth.py             # Sessions, current_account, require_active_user (app-level guard)
 │   ├── oauth.py            # Google OAuth (Authlib)
+│   ├── accounts/           # Registration, login/password, age step, parent consent, parent page, reset
+│   │   ├── routes.py       # /api/auth/*, /api/account/*, /api/parent/*, /api/dev/outbox
+│   │   ├── service.py      # Users, parents, consents, e-mailed tokens, e-mail limits, login lockout
+│   │   ├── age.py          # Year-of-birth arithmetic (16 this year -> follow-up question)
+│   │   └── passwords.py    # Login/password rules, argon2id, data/common-passwords.txt
+│   ├── email/              # send_email (console | resend) + Jinja templates in templates/email/
 │   ├── groups.py           # Access control (email allowlist or Google Groups)
 │   ├── storage.py          # Task loading (dir scan + LRU cache)
 │   ├── models.py           # Pydantic models
@@ -144,7 +155,11 @@ frontend/src/
 │   ├── admin/                       # Admin: submissions, settings (AI provider/model switch)
 │   ├── moje-zadania/                # Private tasks: list, nowe (add), [id] (task)
 │   ├── wzorce/                      # Patterns: list, nowy, [id], powtorka (review)
-│   └── login/page.tsx               # Google OAuth login
+│   ├── login/page.tsx               # Google button + login/password form
+│   ├── rejestracja/                 # Registration stepper (year of birth, method, parent e-mail)
+│   ├── konto/oczekuje, konto/uzupelnij  # Waiting for parent consent; year of birth for old accounts
+│   ├── rodzic/, rodzic/zgoda/       # Parent page (token from e-mail) and the consent page
+│   └── reset-hasla/, reset-hasla/nowe/  # Password reset (link goes to the parent)
 ├── components/
 │   ├── layout/                      # Header, Footer, Breadcrumb
 │   ├── task/                        # TaskCard, SubmitSection, SolutionTextEditor, FormulaDialog (MathLive), DrawingDialog (Excalidraw), HintsSection
@@ -163,7 +178,7 @@ frontend/src/
 
 **JSON API routes** (used by Next.js frontend):
 ```
-GET  /api/auth/me                    # Current user info
+GET  /api/auth/me                    # Current user + account {status, needs_profile, login_method, pending}
 GET  /api/years                      # All years
 GET  /api/years/{year}               # Etaps for year
 GET  /api/years/{year}/{etap}        # Tasks for etap
@@ -172,6 +187,26 @@ GET  /api/task/{year}/{etap}/{num}/history  # Submission history
 GET  /api/progress/data              # Task progression data
 POST /task/{year}/{etap}/{num}/submit       # Submit solution: images (photos/drawings) and/or solution_text
 POST /api/account/delete             # Erase own account + submissions + photos (RODO art. 17)
+
+# Accounts (app/accounts/routes.py). Every write route of the app runs require_active_user:
+# a pending_parent account or one without birth_year gets 403 {detail, code} unless the
+# endpoint is marked @allow_inactive_account (tests/test_accounts_guard.py lists them)
+POST /api/auth/login                 # login + password (+ remember); lockout 5/login, 20/IP per 15 min
+GET  /api/auth/login-available       # "Ten login jest zajęty" check (rate-limited)
+POST /api/auth/register/login        # Login account: always pending_parent, consent e-mail to parent
+POST /api/auth/register/google       # Answers before Google (-> /login/google?register=1) or after (pending_google)
+GET  /api/auth/register/state        # Google identity waiting for registration (30 min)
+POST /api/auth/profile               # Year of birth for accounts created before the age step
+POST /api/account/consent/resend     # Pending screen: resend (60 s cooldown, 3/account, 5/parent per 24 h)
+POST /api/account/parent-email       # Pending screen: change the parent address (old links expire)
+GET  /api/parent/consent?t=          # Consent page data - GET never mutates
+POST /api/parent/consent             # {token, decision: accept|decline}; decline erases the account
+POST /api/parent/consent/resend      # New link from an expired one (account still pending)
+GET  /api/parent/children?t=         # Parent page: children of this parent address
+POST /api/parent/children/{id}/delete|password  # Erase a child / set a new password (bumps session_version)
+POST /api/parent/request-link        # E-mail a parent-page link (same answer for unknown addresses)
+POST /api/auth/password-reset/request|confirm, GET .../check  # Reset link goes to the parent
+GET  /api/dev/outbox                 # Console-backend e-mails; only E2E_MODE + EMAIL_BACKEND=console + auth on
 
 # Private tasks ("Moje zadania") - owner only, someone else's id is a 404
 POST   /api/private-tasks/extract            # Photos -> draft {draft_id, problems[]} (AI)
@@ -205,8 +240,9 @@ PUT    /api/admin/ai-config                  # Switch provider/model (pings the 
 
 **Auth routes**:
 ```
-GET  /login/google                   # Google OAuth redirect
-GET  /auth/callback                  # OAuth callback
+GET  /login/google                   # Google OAuth redirect (?register=1 keeps the registration answers)
+GET  /auth/callback                  # OAuth callback: known sub -> login; unknown -> create from
+                                     # pending_registration, else pending_google + /rejestracja?google=1
 GET  /logout                         # Logout
 ```
 
@@ -219,7 +255,17 @@ GET  /uploads/{path}                 # Serve uploaded images
 ### Database (PostgreSQL)
 
 **Tables**:
-- `users` - Google OAuth users (google_sub PK, email, name)
+- `users` - Accounts: `id` PK (equals the Google sub for accounts created before 2026-10-12,
+  when the column was renamed from `google_sub`; uuid4 hex for new ones), `google_sub` (Google
+  identity, NULL for login accounts), `email`/`name` (Google only), `login` + `password_hash`
+  (argon2id) for children without e-mail, `birth_year` (NULL = not asked yet), `status`
+  (`active` / `pending_parent`), `pending_since`, `parent_id`, `session_version`.
+  Every `user_id` FK points at `users.id`; use `google_sub` only for the Google identity.
+- `parents` - Parent e-mail addresses (shared by siblings), deleted with the last child
+- `consents` - Proof of consent: `self` (16+) or `parent`, terms_version, given_at (no IP)
+- `email_tokens` - SHA-256 of links e-mailed to parents (consent 14 d, password_reset 1 h,
+  parent_manage 30 d); also the send log for the e-mail rate limits
+- `login_failures` - Failed password logins (login, HMAC of IP), 24 h
 - `submissions` - Solution submissions (user_id FK, year, etap, task_number, score, feedback)
 - `deleted_account_quota` - Short-lived, pseudonymous rate-limit tombstones left by
   self-service account deletion, so erasing an account cannot reset the daily limit
@@ -344,8 +390,18 @@ SESSION_SECRET_KEY=dev-secret-key-change-in-production
 # GOOGLE_GROUP_EMAIL=your-group@googlegroups.com
 # GOOGLE_SERVICE_ACCOUNT_JSON={...}
 
+# Transactional e-mail (parent consent, password reset, parent links)
+EMAIL_BACKEND=console                 # "console" (logs + in-memory outbox) or "resend"
+# RESEND_API_KEY=re_...               # required with resend (prod compose refuses to start without it)
+# EMAIL_FROM=OMJ Validator <noreply@omj-validator.pl>
+# EMAIL_REPLY_TO=kontakt@omj-validator.pl
+# PUBLIC_BASE_URL=https://omj-validator.pl   # absolute links + e-mail logo
+# TERMS_VERSION=2026-10-12            # stored with each consent; bump with LAST_UPDATED in /regulamin
+
 # Data retention (RODO art. 5(1)(e) - storage limitation)
 # 0 disables a pass; docker-compose.yml disables both for local dev.
+# Fixed in app/retention.py (not configurable): pending_parent accounts 14 days,
+# email_tokens 30 days after expiry, login_failures 24 h, childless parents.
 RETENTION_SUBMISSION_MONTHS=24        # Submission row + uploaded photos + typed text
 RETENTION_SCORING_THINKING_DAYS=90    # Raw AI "thinking" trace in scoring_meta
 RETENTION_INACTIVE_ACCOUNT_MONTHS=36  # Accounts with no login and no submission
