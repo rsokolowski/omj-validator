@@ -11,6 +11,8 @@ from typing import Optional
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
+from ..ai.factory import AISpendLimitError
+from ..ai.spend import check_spend_limit
 from ..config import settings
 from ..db.models import PrivateTaskDB
 from ..db.models import AIUsageDB
@@ -31,6 +33,8 @@ DRAFT_ID_PATTERN = re.compile(r"^[0-9a-f]{16}$")
 # An unconfirmed draft is usable this long; the orphan sweep removes it after
 # the same period (retention.ORPHAN_GRACE_HOURS)
 DRAFT_TTL_SECONDS = 24 * 3600
+# The spend window is rolling; an hour is a fair "come back later"
+SPEND_LIMIT_RETRY_AFTER_SECONDS = 3600
 
 
 def new_draft_id() -> str:
@@ -195,7 +199,19 @@ def reserve_ai_calls(
     reservations, so neither can slip past the limit on a count taken before
     the other one landed (at worst both are refused, never both admitted).
     The returned rows get their usage meta filled in after the call.
+
+    The global daily spend cap (AI_DAILY_SPEND_LIMIT_USD) is checked first,
+    for everybody - allowlisted users included: it is a money brake, not a
+    fairness limit.
     """
+    try:
+        check_spend_limit(db)
+    except AISpendLimitError as e:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail=str(e),
+            headers={"Retry-After": str(SPEND_LIMIT_RETRY_AFTER_SECONDS)},
+        )
     usage = AIUsageRepository(db)
     rows = usage.record_many(user_id, kind, cost)
     try:

@@ -49,6 +49,11 @@ def get_model(provider: str, model: str) -> Optional[ModelInfo]:
     return next((m for m in CATALOG if m.provider == provider and m.id == model), None)
 
 
+def find_model(model: str) -> Optional[ModelInfo]:
+    """A catalog model by id alone (ids are unique across providers)."""
+    return next((m for m in CATALOG if m.id == model), None)
+
+
 def models_for(provider: str) -> list[ModelInfo]:
     return [m for m in CATALOG if m.provider == provider]
 

@@ -1934,6 +1934,7 @@ async def admin_get_ai_config(request: Request):
         effective=_effective_model_out(effective),
         fallback_reason=fallback_reason,
         providers=providers,
+        failover=ai_factory.failover_status(effective),
     )
 
 
@@ -1985,6 +1986,7 @@ async def admin_put_ai_config(
         active=_active_model_out(active),
         effective=_effective_model_out(effective),
         fallback_reason=fallback_reason,
+        failover=ai_factory.failover_status(effective),
     )
 
 

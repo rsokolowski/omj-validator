@@ -4,8 +4,9 @@ import logging
 import threading
 from typing import TYPE_CHECKING, Optional
 
+from ..config import settings
 from .config_store import ActiveModel, env_default, get_active_model
-from .models_catalog import provider_approved, provider_configured
+from .models_catalog import find_model, provider_approved, provider_configured
 
 if TYPE_CHECKING:
     from .protocol import AIProvider
@@ -72,6 +73,8 @@ class AISpendLimitError(AIProviderError):
 
 # One instance per (provider, model): client construction costs ~1.3s
 _instances: dict[tuple[str, str], "AIProvider"] = {}
+# FailoverProvider per (primary provider, model, backup provider, model)
+_wrappers: dict[tuple[str, str, str, str], "AIProvider"] = {}
 _instances_lock = threading.Lock()
 
 # (provider, model, reason) already logged as unusable - logged once per process,
@@ -82,6 +85,7 @@ _logged_fallbacks: set[tuple[str, str, str]] = set()
 def reset_provider_cache() -> None:
     with _instances_lock:
         _instances.clear()
+        _wrappers.clear()
         _logged_fallbacks.clear()
 
 
@@ -152,19 +156,12 @@ def resolve_active(active: Optional[ActiveModel] = None) -> tuple[ActiveModel, O
     return env_default(), reason
 
 
-def create_ai_provider() -> "AIProvider":
-    """The provider for the effective model (see resolve_active), cached per pair.
+def _cached_provider(provider: str, model: str) -> "AIProvider":
+    """The cached instance for (provider, model), built on first use.
 
-    A run already holding an instance finishes on it; the next call picks up a
-    switch.
-
-    Raises:
-        AIProviderError: If the provider cannot be created (missing config, etc.)
+    Never builds a provider not approved as a processor (GDPR gate); an
+    unconfigured one raises in build_provider.
     """
-    effective, _ = resolve_active()
-    provider, model = effective.provider, effective.model
-    # Whatever the source: never build a provider not approved as a processor.
-    # (An env Gemini without a key raises in build_provider.)
     if not provider_approved(provider):
         raise AIProviderError(f"Provider {provider} is not approved as a data processor")
     key = (provider, model)
@@ -175,3 +172,78 @@ def create_ai_provider() -> "AIProvider":
         with _instances_lock:
             instance = _instances.setdefault(key, instance)
     return instance
+
+
+# Polish, shown on /admin/settings when failover would not apply
+FAILOVER_OFF = "wyłączone (AI_FAILOVER_ENABLED)"
+FAILOVER_UNKNOWN_MODEL = "model spoza katalogu (AI_FAILOVER_MODEL)"
+FAILOVER_SAME_PROVIDER = "ten sam dostawca co aktywny model"
+
+
+def _failover_blocker(primary_provider: str) -> tuple[Optional[tuple[str, str]], Optional[str]]:
+    """(backup (provider, model), None) when failover applies, else (None, why not)."""
+    if not settings.ai_failover_enabled:
+        return None, FAILOVER_OFF
+    info = find_model(settings.ai_failover_model)
+    if info is None:
+        return None, FAILOVER_UNKNOWN_MODEL
+    # The existing GDPR gate, unchanged: no key or no processor approval = no failover
+    reason = _unusable_reason(info.provider)
+    if reason is not None:
+        return None, reason
+    if info.provider == primary_provider:
+        return None, FAILOVER_SAME_PROVIDER
+    return (info.provider, info.id), None
+
+
+def failover_target(primary_provider: str) -> Optional[tuple[str, str]]:
+    """The backup (provider, model) for a primary of this provider, or None."""
+    return _failover_blocker(primary_provider)[0]
+
+
+def failover_status(effective: ActiveModel) -> dict:
+    """Failover state for GET /api/admin/ai-config - no keys, no content."""
+    from .failover import breaker
+
+    info = find_model(settings.ai_failover_model)
+    target, reason = _failover_blocker(effective.provider)
+    return {
+        "enabled": settings.ai_failover_enabled,
+        "provider": info.provider if info else None,
+        "model": settings.ai_failover_model,
+        "model_label": info.label if info else settings.ai_failover_model,
+        # The fallback provider may receive student data (key + GDPR approval)
+        "gate_open": bool(info and _unusable_reason(info.provider) is None),
+        "active": target is not None,
+        "inactive_reason": reason,
+        "breaker_minutes": settings.ai_failover_breaker_minutes,
+        "breaker_threshold": settings.ai_failover_breaker_threshold,
+        "breaker": breaker.state((effective.provider, effective.model)),
+    }
+
+
+def create_ai_provider() -> "AIProvider":
+    """The provider for the effective model (see resolve_active), cached per pair.
+
+    Wrapped in a FailoverProvider when a backup is usable (failover_target);
+    otherwise the plain provider, exactly as without failover. A run already
+    holding an instance finishes on it; the next call picks up a switch.
+
+    Raises:
+        AIProviderError: If the provider cannot be created (missing config, etc.)
+    """
+    effective, _ = resolve_active()
+    provider, model = effective.provider, effective.model
+    primary = _cached_provider(provider, model)
+    target = failover_target(provider)
+    if target is None:
+        return primary
+    from .failover import FailoverProvider
+
+    key = (provider, model, *target)
+    with _instances_lock:
+        wrapper = _wrappers.get(key)
+        if wrapper is None or wrapper.primary is not primary:
+            wrapper = FailoverProvider(primary, target, _cached_provider)
+            _wrappers[key] = wrapper
+    return wrapper

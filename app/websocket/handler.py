@@ -14,6 +14,8 @@ from ..db.session import SessionLocal
 from ..db.models import SubmissionStatus, IssueType
 from ..db.repositories import SubmissionRepository
 from ..ai import create_ai_provider, AIProviderError
+from ..ai.failover import restart_hook
+from ..ai.spend import check_spend_limit
 from ..privacy import mask_user_id
 from ..storage import get_task_pdf_path, get_solution_pdf_path
 from ..patterns.service import apply_practice_result
@@ -31,6 +33,25 @@ logger = logging.getLogger(__name__)
 def _format_elapsed(start_time: float) -> str:
     """Format elapsed time since start_time."""
     return f"{time.time() - start_time:.1f}s"
+
+
+QUEUE_STATUS = "Czekam w kolejce..."
+UNEXPECTED_ERROR_MESSAGE = "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę."
+QUEUE_TIMEOUT_MESSAGE = "System jest obecnie przeciążony. Spróbuj ponownie za kilka minut."
+
+# (event loop, semaphore, limit): at most AI_GRADING_MAX_CONCURRENT gradings
+# call the model at once; the rest wait with status PENDING. Bound to the
+# running loop (asyncio primitives are per loop; tests start a loop per run).
+_grading_slots: Optional[tuple[asyncio.AbstractEventLoop, asyncio.Semaphore, int]] = None
+
+
+def _grading_semaphore() -> asyncio.Semaphore:
+    global _grading_slots
+    loop = asyncio.get_running_loop()
+    limit = max(1, settings.ai_grading_max_concurrent)
+    if _grading_slots is None or _grading_slots[0] is not loop or _grading_slots[2] != limit:
+        _grading_slots = (loop, asyncio.Semaphore(limit), limit)
+    return _grading_slots[1]
 
 
 async def process_submission_background(
@@ -74,11 +95,25 @@ async def process_submission_background(
     # Get a new database session for the background task
     # Use SessionLocal directly (not get_db dependency) for background tasks
     db = SessionLocal()
+    semaphore = _grading_semaphore()
+    slot_taken = False
+    hook_token = None
 
     # NOTE: Telegram notifications deliberately carry no user name or e-mail -
     # see the privacy note in app/notifications.py before changing this.
     try:
         submission_repo = SubmissionRepository(db)
+
+        # Global cap on gradings running at once: a burst must not fan out
+        # unbounded AI calls. Waiting jobs stay PENDING.
+        if semaphore.locked():
+            logger.info(f"[Submission {submission_id}] Waiting for a grading slot")
+            await progress_manager.send_status(submission_id, QUEUE_STATUS)
+        try:
+            await asyncio.wait_for(semaphore.acquire(), timeout=settings.ai_grading_queue_timeout)
+        except asyncio.TimeoutError:
+            raise AIProviderError(QUEUE_TIMEOUT_MESSAGE)
+        slot_taken = True
 
         # Update status to PROCESSING
         logger.debug(f"[Submission {submission_id}] Updating DB status to PROCESSING")
@@ -112,6 +147,9 @@ async def process_submission_background(
                 f"solution={solution_pdf.name if solution_pdf and solution_pdf.exists() else 'N/A'}"
             )
 
+        # Global daily spend cap - before any AI call is made
+        check_spend_limit(db)
+
         # Create AI provider and analyze with streaming
         logger.info(f"[Submission {submission_id}] Stage 2: Creating AI provider ({_format_elapsed(start_time)})")
         provider = create_ai_provider()
@@ -130,6 +168,17 @@ async def process_submission_background(
             if thinking_chunks == 1:
                 logger.debug(f"[Submission {submission_id}] First thinking chunk received ({_format_elapsed(start_time)})")
             await progress_manager.send_thinking(submission_id, chunk)
+
+        # Failover restarts a grading on the backup provider: drop the
+        # primary's partial progress, the student sees the analysis go on.
+        async def on_restart():
+            nonlocal thinking_chunks
+            logger.info(f"[Submission {submission_id}] Restarting on the backup AI provider ({_format_elapsed(start_time)})")
+            thinking_chunks = 0
+            await progress_manager.reset_thinking(submission_id)
+            await progress_manager.send_status(submission_id, "Analizuję rozwiązanie...")
+
+        hook_token = restart_hook.set(on_restart)
 
         if private_task is None:
             logger.info(f"[Submission {submission_id}] Calling analyze_solution_stream ({_format_elapsed(start_time)})")
@@ -243,16 +292,15 @@ async def process_submission_background(
             f"error_type={type(e).__name__}, error={error_msg}, elapsed={total_time:.1f}s"
         )
 
+        # The student sees error_message in their history: never the raw
+        # exception text (it can quote model output or internals) - logs only.
         submission_repo.update_status(
             submission_id,
             SubmissionStatus.FAILED,
-            error_message=error_msg,
+            error_message=UNEXPECTED_ERROR_MESSAGE,
         )
 
-        await progress_manager.send_error(
-            submission_id,
-            "Przepraszamy, coś poszło nie tak. Spróbuj ponownie za chwilę.",
-        )
+        await progress_manager.send_error(submission_id, UNEXPECTED_ERROR_MESSAGE)
 
         # Notify: submission failed (fire-and-forget)
         await send_telegram_message(
@@ -262,6 +310,10 @@ async def process_submission_background(
         )
 
     finally:
+        if hook_token is not None:
+            restart_hook.reset(hook_token)
+        if slot_taken:
+            semaphore.release()
         # Close the database session
         total_time = time.time() - start_time
         logger.debug(f"[Submission {submission_id}] Cleanup: closing DB session (total={total_time:.1f}s)")

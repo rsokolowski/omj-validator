@@ -311,17 +311,40 @@ class AiEffectiveModel(BaseModel):
     model_label: str
 
 
+class AiBreakerState(BaseModel):
+    """Failover circuit breaker for the effective model (in-process)."""
+    state: str  # "closed" | "open" (open = every call goes to the backup)
+    open_until: Optional[datetime] = None
+    consecutive_failures: int = 0
+    last_error: Optional[str] = None  # "auth 403", "timeout" - kind/status only
+
+
+class AiFailoverStatus(BaseModel):
+    enabled: bool                  # AI_FAILOVER_ENABLED
+    provider: Optional[str] = None  # the backup model's provider (None: not in the catalog)
+    model: str                     # AI_FAILOVER_MODEL
+    model_label: str
+    gate_open: bool                # backup provider has a key and GDPR approval
+    active: bool                   # failover applies to the effective model right now
+    inactive_reason: Optional[str] = None  # why not, in Polish
+    breaker_minutes: int
+    breaker_threshold: int
+    breaker: AiBreakerState
+
+
 class AiConfigResponse(BaseModel):
     active: AiActiveModel          # the stored choice (or the env default)
     effective: AiEffectiveModel    # what grades - differs when the stored choice is unusable
     fallback_reason: Optional[str] = None  # why effective != active, else None
     providers: list[AiProviderOption]
+    failover: Optional[AiFailoverStatus] = None
 
 
 class AiConfigUpdateResponse(BaseModel):
     active: AiActiveModel
     effective: AiEffectiveModel
     fallback_reason: Optional[str] = None
+    failover: Optional[AiFailoverStatus] = None
 
 
 # ==================== Private tasks (Moje zadania) ====================

@@ -245,6 +245,35 @@ export interface AiEffectiveModel {
   model_label: string;
 }
 
+/** Failover circuit breaker of the effective model (server process memory) */
+export interface AiBreakerState {
+  /** "open" = every AI call goes straight to the backup model */
+  state: "open" | "closed";
+  open_until: string | null;
+  consecutive_failures: number;
+  /** Kind and status of the last failure, e.g. "auth 403" - never a message */
+  last_error: string | null;
+}
+
+/** Automatic failover to a backup model when the active provider is unavailable */
+export interface AiFailoverStatus {
+  /** AI_FAILOVER_ENABLED */
+  enabled: boolean;
+  /** Provider of the backup model, null when AI_FAILOVER_MODEL is not in the catalog */
+  provider: AiProviderId | null;
+  model: string;
+  model_label: string;
+  /** The backup provider has a key and GDPR approval */
+  gate_open: boolean;
+  /** Failover applies to the effective model right now */
+  active: boolean;
+  /** Why failover does not apply, else null */
+  inactive_reason: string | null;
+  breaker_minutes: number;
+  breaker_threshold: number;
+  breaker: AiBreakerState;
+}
+
 export interface AiConfigResponse {
   /** The stored choice (or the server default) */
   active: AiActiveModel;
@@ -253,12 +282,14 @@ export interface AiConfigResponse {
   /** Why `effective` differs from `active`, else null */
   fallback_reason: string | null;
   providers: AiProviderOption[];
+  failover: AiFailoverStatus | null;
 }
 
 export interface AiConfigUpdateResponse {
   active: AiActiveModel;
   effective: AiEffectiveModel;
   fallback_reason: string | null;
+  failover: AiFailoverStatus | null;
 }
 
 // User submissions types (Moje rozwiązania)

@@ -83,6 +83,27 @@ class Settings(BaseSettings):
     # and the owner has signed off. False keeps every request on Gemini.
     anthropic_processor_approved: bool = False
 
+    # Automatic failover: when the active provider cannot serve a call
+    # (auth/permission, model gone, quota/429, 5xx, network, timeout) the call
+    # is retried once on AI_FAILOVER_MODEL - only if that provider passes the
+    # gates above (key set; for Anthropic ANTHROPIC_PROCESSOR_APPROVED). Never
+    # on a content/safety block, an abuse verdict or an unreadable answer.
+    ai_failover_enabled: bool = True
+    ai_failover_model: str = "claude-opus-5-5"  # any model from app/ai/models_catalog.py
+    # Circuit breaker: after a permanent-looking error (401/403/404) - or this
+    # many transient ones in a row - every call goes straight to the backup
+    # for ai_failover_breaker_minutes.
+    ai_failover_breaker_minutes: int = 15
+    ai_failover_breaker_threshold: int = 3
+
+    # Global cap on estimated AI spend in a rolling 24 h window (USD; grading
+    # + extraction/hints/patterns). 0 disables it. Telegram alert at 80% and 100%.
+    ai_daily_spend_limit_usd: float = 25.0
+    # Grading jobs running AI calls at once in the background worker; the rest
+    # wait (status stays "pending") for at most ai_grading_queue_timeout seconds.
+    ai_grading_max_concurrent: int = 4
+    ai_grading_queue_timeout: int = 300
+
     # Google Cloud Translation v2 (for status message translation EN->PL)
     translate_enabled: bool = False  # Enable status message translation
     translate_api_key: Optional[str] = None  # API key for Translation v2 Basic

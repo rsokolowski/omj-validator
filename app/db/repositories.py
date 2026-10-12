@@ -45,8 +45,15 @@ def ensure_utc(dt: datetime | None) -> datetime | None:
 
 logger = logging.getLogger(__name__)
 
-# Submissions older than this are considered stale and marked as failed
-SUBMISSION_TIMEOUT_SECONDS = settings.gemini_timeout + 60  # AI timeout + buffer
+# Submissions older than this are considered stale and marked as failed: the
+# longest a healthy grading can take - waiting for a grading slot, the primary
+# provider's timeout and, after a failover, the backup's - plus a buffer.
+SUBMISSION_TIMEOUT_SECONDS = (
+    settings.ai_grading_queue_timeout
+    + settings.gemini_timeout
+    + settings.anthropic_timeout
+    + 60
+)
 
 
 def hash_user_id(user_id: str) -> str:

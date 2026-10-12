@@ -302,3 +302,54 @@ def test_put_unexpected_error_is_502(admin, monkeypatch, where):
     assert response.json()["detail"] == "Nie udało się sprawdzić modelu claude-opus-5-5."
     assert "secret-ish" not in response.text
     assert _stored(session) is None
+
+
+# ------------------------------------------------------------------ failover
+
+
+def test_get_shows_failover_status(admin, monkeypatch):
+    from app.ai.factory import AIUnavailableError
+    from app.ai.failover import breaker
+
+    monkeypatch.setattr(settings, "ai_failover_enabled", True)
+    monkeypatch.setattr(settings, "ai_failover_model", "claude-opus-5-5")
+    breaker.reset()
+    breaker.record_failure(("gemini", "gemini-3.8-flash"), AIUnavailableError("x", kind="auth", status=403))
+    client, _, _ = admin
+
+    failover = client.get("/api/admin/ai-config").json()["failover"]
+
+    breaker.reset()
+    assert failover["enabled"] is True
+    assert failover["active"] is True
+    assert failover["gate_open"] is True
+    assert (failover["provider"], failover["model"], failover["model_label"]) == (
+        "anthropic", "claude-opus-5-5", "Claude Opus 5.5",
+    )
+    assert failover["breaker"]["state"] == "open"
+    assert failover["breaker"]["last_error"] == "auth 403"
+    assert failover["breaker"]["open_until"]
+
+
+def test_failover_inactive_while_gdpr_gate_closed(admin, monkeypatch):
+    monkeypatch.setattr(settings, "ai_failover_enabled", True)
+    monkeypatch.setattr(settings, "anthropic_processor_approved", False)
+    client, _, _ = admin
+
+    failover = client.get("/api/admin/ai-config").json()["failover"]
+
+    assert failover["gate_open"] is False
+    assert failover["active"] is False
+    assert failover["inactive_reason"] == factory.REASON_NOT_APPROVED
+    assert failover["breaker"]["state"] == "closed"
+
+
+def test_put_returns_failover_for_the_new_model(admin, monkeypatch):
+    monkeypatch.setattr(settings, "ai_failover_model", "claude-opus-5-5")
+    client, _, _ = admin
+
+    body = client.put("/api/admin/ai-config", json={"provider": "anthropic", "model": "claude-sonnet-5-5"}).json()
+
+    # A Claude primary has no Claude backup
+    assert body["failover"]["active"] is False
+    assert body["failover"]["inactive_reason"] == factory.FAILOVER_SAME_PROVIDER

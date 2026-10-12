@@ -220,6 +220,13 @@ class ProgressManager:
             msg = StatusMessage(submission_id=submission_id, message=translated_heading)
             await self._broadcast(submission_id, msg)
 
+    async def reset_thinking(self, submission_id: str) -> None:
+        """Forget the thinking seen so far (grading restarted on the backup provider)."""
+        async with self._lock:
+            progress = self._submissions.get(submission_id)
+            if progress is not None:
+                progress.thinking_buffer = ""
+
     async def send_completed(
         self,
         submission_id: str,

@@ -21,7 +21,13 @@ import {
   Typography,
 } from "@mui/material";
 import { APIError, getAiConfig, putAiConfig } from "@/lib/api/client";
-import type { AiActiveModel, AiConfigResponse, AiProviderId, AiProviderOption } from "@/lib/types";
+import type {
+  AiActiveModel,
+  AiConfigResponse,
+  AiFailoverStatus,
+  AiProviderId,
+  AiProviderOption,
+} from "@/lib/types";
 
 function errorText(error: unknown): string {
   if (error instanceof APIError || error instanceof Error) return error.message;
@@ -114,6 +120,7 @@ export function AiConfigForm() {
         active: result.active,
         effective: result.effective,
         fallback_reason: result.fallback_reason,
+        failover: result.failover,
       });
       setProvider(result.active.provider);
       setModel(result.active.model);
@@ -208,11 +215,72 @@ export function AiConfigForm() {
           )}
         </Stack>
 
+        {config.failover && <FailoverStatus failover={config.failover} providerLabel={providerLabel} />}
+
         {savedLabel && (
           <Alert severity="success">Zapisano. Nowe oceny będą wykonywane modelem {savedLabel}.</Alert>
         )}
         {saveError && <Alert severity="error">{saveError}</Alert>}
       </Stack>
     </Paper>
+  );
+}
+
+/** Read-only failover state: backup model, GDPR gate, circuit breaker (configured in the server env). */
+function FailoverStatus({
+  failover,
+  providerLabel,
+}: {
+  failover: AiFailoverStatus;
+  providerLabel: (id: string) => string;
+}) {
+  const { breaker } = failover;
+  const breakerOpen = breaker.state === "open";
+  const backup = `${failover.model_label}${failover.provider ? ` (${providerLabel(failover.provider)})` : ""}`;
+  return (
+    <Box component="section" aria-label="Zapasowy model">
+      <Stack direction="row" spacing={1} sx={{ alignItems: "center", flexWrap: "wrap", mb: 1 }}>
+        <Typography variant="subtitle1" component="h3">
+          Zapasowy model: {backup}
+        </Typography>
+        <Chip
+          size="small"
+          label={failover.active ? "aktywny" : "nieaktywny"}
+          color={failover.active ? "success" : "default"}
+          variant="outlined"
+        />
+        <Chip
+          size="small"
+          label={failover.gate_open ? "RODO: zatwierdzony" : "RODO: niezatwierdzony"}
+          color={failover.gate_open ? "success" : "warning"}
+          variant="outlined"
+        />
+      </Stack>
+      <Typography variant="body2" color="text.secondary">
+        Gdy aktywny dostawca nie odpowiada (klucz, limit, awaria, przekroczony czas), wywołanie jest
+        powtarzane raz na modelu zapasowym. Nigdy po zablokowaniu treści przez filtr bezpieczeństwa.
+        Ustawienia: AI_FAILOVER_ENABLED, AI_FAILOVER_MODEL.
+      </Typography>
+      {!failover.active && failover.inactive_reason && (
+        <Typography variant="body2" sx={{ mt: 0.5 }}>
+          Nie działa: {failover.inactive_reason}.
+        </Typography>
+      )}
+      {failover.active && (
+        <Alert severity={breakerOpen ? "warning" : "info"} sx={{ mt: 1 }}>
+          {breakerOpen
+            ? `Aktywny dostawca uznany za niedostępny${breaker.last_error ? ` (${breaker.last_error})` : ""} — wszystkie wywołania idą do modelu zapasowego${
+                breaker.open_until ? ` do ${new Date(breaker.open_until).toLocaleTimeString("pl-PL")}` : ""
+              }.`
+            : `Bezpiecznik zamknięty — wywołania idą do aktywnego modelu${
+                breaker.consecutive_failures
+                  ? ` (błędy z rzędu: ${breaker.consecutive_failures}/${failover.breaker_threshold}${
+                      breaker.last_error ? `, ostatni: ${breaker.last_error}` : ""
+                    })`
+                  : ""
+              }. Otwiera się od razu po błędzie klucza/modelu albo po ${failover.breaker_threshold} przejściowych błędach z rzędu, na ${failover.breaker_minutes} min.`}
+        </Alert>
+      )}
+    </Box>
   );
 }
