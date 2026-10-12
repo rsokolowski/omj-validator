@@ -49,9 +49,27 @@ class TestRequestAllowed:
     def test_other_port_is_another_origin(self):
         assert not allowed(host="localhost:8000", origin="http://localhost:9999")
 
-    @pytest.mark.parametrize("origin", ["null", "", "file://", "omj-validator.pl", "javascript:alert(1)"])
-    def test_opaque_or_garbage_origin_is_refused(self, origin):
+    @pytest.mark.parametrize("origin", ["", "file://", "omj-validator.pl", "javascript:alert(1)"])
+    def test_garbage_origin_is_refused(self, origin):
         assert not allowed(host="omj-validator.pl", origin=origin)
+        assert not allowed(host="omj-validator.pl", origin=origin, sec_fetch_site="same-origin")
+
+    @pytest.mark.parametrize("site", ["same-origin", "none"])
+    def test_null_origin_from_a_no_referrer_page_passes(self, site):
+        """A same-origin POST from a page with referrer policy no-referrer
+        (/rodzic, /rodzic/zgoda, /reset-hasla/nowe) sends Origin: null - measured
+        in Chromium and Firefox for a form POST (logout), per spec for fetch()."""
+        assert allowed(host="omj-validator.pl", origin="null", sec_fetch_site=site)
+        assert allowed(host="omj-validator.pl", origin="NULL", sec_fetch_site=site)
+
+    @pytest.mark.parametrize("site", ["cross-site", "same-site"])
+    def test_null_origin_from_elsewhere_is_refused(self, site):
+        """Sandboxed frames and cross-site redirects also send Origin: null."""
+        assert not allowed(host="omj-validator.pl", origin="null", sec_fetch_site=site)
+
+    def test_null_origin_without_fetch_metadata_is_refused(self):
+        """Only a browser sends Origin: null, so missing metadata is not a curl-like client."""
+        assert not allowed(host="omj-validator.pl", origin="null")
 
     @pytest.mark.parametrize("site", ["cross-site", "same-site", "Cross-Site"])
     def test_no_origin_but_cross_site_fetch_metadata_is_refused(self, site):
@@ -112,6 +130,25 @@ class TestGuardOnTheApp:
         )
         assert response.status_code == 200, response.text
 
+    def test_null_origin_same_origin_post_passes(self, client, db):
+        """Parent consent page (referrer policy no-referrer): Origin: null + same-origin."""
+        response = client.post(
+            "/api/parent/consent/view",
+            headers={"origin": "null", "sec-fetch-site": "same-origin"},
+            json={"token": "x" * 43},
+        )
+        assert response.status_code == 200, response.text
+        assert response.json()["state"] == "invalid"
+
+    def test_null_origin_cross_site_post_is_refused(self, client, db):
+        response = client.post(
+            "/api/parent/consent/view",
+            headers={"origin": "null", "sec-fetch-site": "cross-site"},
+            json={"token": "x" * 43},
+        )
+        assert response.status_code == 403
+        assert response.json()["code"] == "cross_site"
+
     def test_preflight_and_reads_pass(self, client, db):
         assert client.get("/api/auth/me", headers=EVIL).status_code == 200
 
@@ -154,6 +191,15 @@ class TestLogout:
         self._logged_in(client, db)
         assert user_by_login(db, "kuba_m").status == "pending_parent"
         client.post("/logout", follow_redirects=False)
+        assert me(client)["is_authenticated"] is False
+
+    def test_post_from_a_no_referrer_page_logs_out(self, client, db):
+        """The logout form on /rodzic (referrer policy no-referrer) posts Origin: null."""
+        self._logged_in(client, db)
+        response = client.post(
+            "/logout", headers={"origin": "null", "sec-fetch-site": "same-origin"}, follow_redirects=False
+        )
+        assert response.status_code == 303
         assert me(client)["is_authenticated"] is False
 
     def test_forged_post_does_not_log_out(self, client, db):

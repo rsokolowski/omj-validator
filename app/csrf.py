@@ -8,8 +8,14 @@ attributes and of how a browser treats a "same-site" sibling domain:
 - With an ``Origin`` header (every browser sends one on a cross-origin POST,
   and on same-origin ones too) the origin must be this site: the host the
   request was made to (``Host`` / ``X-Forwarded-Host`` - the Next.js proxy
-  sets the latter), ``PUBLIC_BASE_URL`` or ``FRONTEND_URL``. ``Origin: null``
-  (sandboxed frames, some redirects) is refused.
+  sets the latter), ``PUBLIC_BASE_URL`` or ``FRONTEND_URL``. Any other
+  origin, or garbage, is refused.
+- ``Origin: null`` carries no origin: a browser sends it for a same-origin
+  POST from a page with referrer policy ``no-referrer`` (the parent pages and
+  the password reset set that; Chromium and Firefox do it for a form POST such
+  as the logout button, the Fetch spec also for fetch()), but also from
+  sandboxed frames and after cross-site redirects. Sec-Fetch-Site decides it,
+  and without one it is refused - only a browser sends ``null``.
 - Without ``Origin``, ``Sec-Fetch-Site`` decides when present: only
   ``same-origin`` and ``none`` (typed by the user) pass.
 - Without either header the request did not come from a modern browser page
@@ -76,9 +82,13 @@ def request_allowed(
     if method.upper() in SAFE_METHODS:
         return True
     origin = headers.get("origin")
+    fetch_site = headers.get("sec-fetch-site")
+    if origin is not None and origin.strip().lower() == "null":
+        # Opaque origin: only fetch metadata can tell same-origin from a sandboxed frame
+        return fetch_site is not None and fetch_site.strip().lower() in ALLOWED_FETCH_SITES
     if origin is not None:
         origin_netloc = _netloc(origin)
-        if origin_netloc is None:  # "null" or garbage
+        if origin_netloc is None:  # garbage
             return False
         allowed = set(trusted)
         for header in ("host", "x-forwarded-host"):
@@ -88,7 +98,6 @@ def request_allowed(
                 if own:
                     allowed.add(own)
         return origin_netloc in allowed
-    fetch_site = headers.get("sec-fetch-site")
     if fetch_site is not None:
         return fetch_site.strip().lower() in ALLOWED_FETCH_SITES
     return True
