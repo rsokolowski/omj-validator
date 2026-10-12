@@ -1,14 +1,14 @@
 # Playbook: A/B testing a new scoring model
 
-Use this whenever Google ships a new Gemini model and the question is "should
-prod switch?". The whole thing takes about an hour of wall clock for a
+Use this whenever Google or Anthropic ships a new model and the question is
+"should prod switch?". The whole thing takes about an hour of wall clock for a
 10-submission sample, most of it waiting on the API and reading photos.
 
 The short version:
 
 1. Pull a stratified sample of real submissions from prod (rows + photos).
 2. Rescore the sample with the current prod model AND the candidate, using the
-   prod prompt, prod Gemini settings and the prod-pinned SDK, so the only
+   prod prompt, prod provider settings and the prod-pinned SDK, so the only
    variable is the model name.
 3. Grade the sample yourself against the official solution PDFs before you
    look at either model's output. This is the ground truth. The prod score
@@ -25,8 +25,8 @@ Everything below assumes you run from the repo root with the venv present
 | Script | Purpose |
 |---|---|
 | `scripts/ab_fetch_prod_sample.sh` | SSH to the NUC, pick submissions, copy rows + photos + prod Gemini env to a local dir |
-| `scripts/rescore_eval.py` | Re-run `GeminiProvider.analyze_solution` on the sample with one model, record score, feedback, latency, real token usage |
-| `scripts/ab_compare.py` | Merge result files from several models (and your human review) into a markdown report with agreement, cost and latency |
+| `scripts/rescore_eval.py` | Re-run the prod provider's `analyze_solution_stream` on the sample with one `--provider`/`--model`, record score, feedback, latency, token usage and estimated cost from `scoring_meta` |
+| `scripts/ab_compare.py` | Merge result files from several models (and your human review) into a markdown report with agreement, cost and latency; arms are labelled `provider/model` |
 
 ## Step 1 - sample
 
@@ -62,7 +62,7 @@ set -a; . $EVAL/prod-gemini.env; set +a     # API key + thinking level + resolut
 export DATA_DIR=$EVAL GEMINI_DEBUG_LOGS=false # DATA_DIR makes uploads_dir = $EVAL/data/uploads
 
 for M in gemini-3.7-flash gemini-3.8-flash; do
-  GEMINI_MODEL=$M ./venv/bin/python scripts/rescore_eval.py \
+  ./venv/bin/python scripts/rescore_eval.py --model $M \
       $EVAL/sample.json $EVAL/results_$M.json > $EVAL/run_$M.log 2>&1 &
 done
 wait
@@ -78,6 +78,38 @@ pass at flash pricing.
 If a model is missing from `GEMINI_PRICING` in `app/ai/providers/gemini.py`
 the log says so. Add it (from https://ai.google.dev/gemini-api/docs/pricing)
 before running the report, otherwise the cost column is wrong.
+
+### Claude arm
+
+Running a Claude model on the sample **sends prod student photos to
+Anthropic**. That is the same processing as using Claude in prod, so it needs
+the same sign-off first: Anthropic approved as a processor (DPA accepted, RODO
+docs updated - see `docs/rodo/`) and `ANTHROPIC_PROCESSOR_APPROVED=true`.
+`rescore_eval.py --provider anthropic` refuses to start without it. Do not
+flip the flag just to run the A/B.
+
+```bash
+export ANTHROPIC_API_KEY=...          # from the Anthropic console, never commit it
+export ANTHROPIC_PROCESSOR_APPROVED=true   # only after the sign-off above
+# optional, same defaults as prod: ANTHROPIC_EFFORT=high ANTHROPIC_TIMEOUT=180
+
+M=claude-haiku-5-5
+./venv/bin/python scripts/rescore_eval.py --provider anthropic --model $M \
+    $EVAL/sample.json $EVAL/results_$M.json > $EVAL/run_$M.log 2>&1
+```
+
+`--model` must be a Claude model listed in `app/ai/models_catalog.py`
+(`CATALOG`); that is where its prices live, and the script refuses unknown
+ids rather than reporting a cost of 0. Run it next to the current Gemini prod
+model (above) so the report has the baseline.
+
+Cost hint: grading uses `ANTHROPIC_EFFORT` (default `high`) with adaptive
+thinking, and Claude bills thinking as output tokens - the report's "thoughts
+tok" column is 0 for Claude arms, the thinking is inside the output count and
+the cost. Rough order of magnitude, assuming ~15k input and 5-15k output
+tokens per submission at catalog prices: about $0.01 per submission with
+Haiku 5.5, $0.10-0.20 with Sonnet 5.5, $0.20-0.40 with Opus 5.5. Check the
+`$` figure on the first lines of the run log before launching a larger sample.
 
 ## Step 3 - grade the sample yourself
 
@@ -114,6 +146,12 @@ Scoring reminders, from the official scoring sheets:
     --human $EVAL/human_review.json
 ```
 
+Add `--result claude-haiku-5-5=$EVAL/results_claude-haiku-5-5.json` for a
+Claude arm. Each arm shows up as `provider/label`; result files written
+before rows carried a provider are read as Gemini. Cost is the
+`estimated_cost` each row recorded (the figure prod stores), or for older
+files an estimate from the pricing tables.
+
 The report has four parts. Read them in this order:
 
 1. **Agreement with human review.** Exact matches, matches within one rung of
@@ -127,8 +165,9 @@ The report has four parts. Read them in this order:
    Also check the Polish text itself: 3.8-flash once produced corrupted words
    in prod ("Ŵe", "żee" for "że"), see
    [model-ab-2026-09-05.md](model-ab-2026-09-05.md#production-observations).
-3. **Cost and latency.** Thinking tokens dominate cost at `thinking_level=high`.
-   Watch the max latency against `GEMINI_TIMEOUT` in prod (`.env.prod`);
+3. **Cost and latency.** Thinking tokens dominate cost at `thinking_level=high`
+   (Gemini) and `ANTHROPIC_EFFORT=high` (Claude).
+   Watch the max latency against `GEMINI_TIMEOUT` / `ANTHROPIC_TIMEOUT` in prod (`.env.prod`);
    a model that occasionally thinks for 100 s is one that will time out for
    real users on a bad day.
 4. **Scores table.** The raw numbers, with the stored prod score for context.
@@ -146,10 +185,15 @@ concluding anything.
 
 ## Step 5 - ship or shelve
 
-To switch prod: change `GEMINI_MODEL` in `.env.prod` on the NUC, add the
-pricing entry if you have not yet, and restart via `./deploy.sh`. Also update
-the default in `app/config.py`, `.env.example` and `.env.prod.example` so the
-next fresh install matches.
+To switch prod: pick the model in `/admin/settings` (the choice is stored in
+the `app_settings` table and takes effect on the next submission, no restart).
+The admin page only lists models from `app/ai/models_catalog.py`, so a new
+model needs a catalog entry (and, for Gemini, a `GEMINI_PRICING` entry) and a
+deploy first. `GEMINI_MODEL` in `.env.prod` is only the default used when no
+choice has been saved; update it, and the default in `app/config.py`,
+`.env.example` and `.env.prod.example`, when Gemini's default model changes.
+Switching prod to Claude needs the processor sign-off described under
+"Claude arm".
 
 Either way, record the outcome in a commit message or a short note in this
 directory (`docs/model-ab-YYYY-MM-DD.md`): sample ids, both models' agreement
@@ -159,7 +203,8 @@ numbers, cost, and the decision. Then:
 rm -rf $EVAL
 ```
 
-The sample directory holds student photos and the prod API key. Do not leave
+The sample directory holds student photos and the prod API key (and the
+result files hold model feedback on student work). Do not leave
 it around and never commit it.
 
 ## Past experiments
