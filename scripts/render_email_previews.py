@@ -26,7 +26,7 @@ def samples() -> dict[str, tuple[str, dict]]:
     consent = f"{base}/rodzic/zgoda?t={SAMPLE_TOKEN}"
     return {
         "consent_request": (
-            "Prośba o zgodę — konto Twojego dziecka w OMJ Validator",
+            "Prośba o zgodę — konto Twojego dziecka w serwisie Trener OMJ",
             {
                 "child_identifier_label": "Konto Google dziecka",
                 "child_identifier": "jan.kowalski.2013@gmail.com",
@@ -39,7 +39,7 @@ def samples() -> dict[str, tuple[str, dict]]:
             },
         ),
         "consent_request_login": (
-            "Prośba o zgodę — konto Twojego dziecka w OMJ Validator",
+            "Prośba o zgodę — konto Twojego dziecka w serwisie Trener OMJ",
             {
                 "child_identifier_label": "Login dziecka",
                 "child_identifier": "kuba_m",
@@ -64,7 +64,7 @@ def samples() -> dict[str, tuple[str, dict]]:
             "Zmiana hasła — konto kuba_m",
             {"login": "kuba_m", "reset_url": f"{base}/reset-hasla/nowe?t={SAMPLE_TOKEN}", "manage_url": manage},
         ),
-        "manage_link": ("Link do strony rodzica — OMJ Validator", {"manage_url": manage}),
+        "manage_link": ("Link do strony rodzica — Trener OMJ", {"manage_url": manage}),
     }
 
 

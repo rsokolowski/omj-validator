@@ -325,8 +325,12 @@ export default function RegulaminPage() {
             wszystkich urządzeniach.
           </Typography>
           <Typography paragraph>
-            Po 5 nieudanych próbach logowania na ten sam login logowanie jest
-            wstrzymywane na 15 minut (chroni to przed odgadywaniem haseł).
+            Po 5 nieudanych próbach logowania na ten sam login z jednego
+            urządzenia lub sieci logowanie jest tam wstrzymywane na 15 minut
+            (chroni to przed odgadywaniem haseł). Urządzenie, na którym już się
+            zalogowałeś, zapamiętujemy w osobnym ciasteczku, więc czyjeś próby
+            zgadywania Twojego hasła z innego miejsca nie zablokują Ci
+            logowania na Twoim urządzeniu.
           </Typography>
         </Section>
 
@@ -370,7 +374,8 @@ export default function RegulaminPage() {
             </li>
             <li>
               nieudane próby logowania loginem i hasłem: wpisany login, czas i
-              skrót kryptograficzny adresu IP (nie sam adres).
+              skrót kryptograficzny adresu IP albo ciasteczka urządzenia (nie sam
+              adres).
             </li>
           </Box>
           <Typography paragraph>
@@ -445,7 +450,10 @@ export default function RegulaminPage() {
           </Typography>
           <Typography paragraph>
             <strong>Dane techniczne:</strong> ciasteczko sesyjne (ważne do 30 dni,
-            podpisane kryptograficznie; patrz punkt 4) oraz dzienniki serwera zawierające m.in.
+            podpisane kryptograficznie; patrz punkt 4), przy logowaniu loginem i
+            hasłem także ciasteczko urządzenia (rok; zawiera wyłącznie skrót
+            kryptograficzny loginu, potrzebny do ochrony przed blokowaniem
+            logowania) oraz dzienniki serwera zawierające m.in.
             informacje o logowaniach i błędach. W dziennikach adresy e-mail są
             skracane tak, by nie identyfikowały osoby.
           </Typography>
@@ -762,12 +770,15 @@ export default function RegulaminPage() {
             <li>
               <strong>Adres e-mail rodzica</strong> &ndash; dopóki jest z nim
               powiązane choć jedno konto dziecka. Po usunięciu ostatniego konta
-              adres jest usuwany od razu, a adres zastąpiony innym (np. po
-              poprawieniu literówki) &ndash; po dobie.
+              albo zastąpieniu adresu innym (np. po poprawieniu literówki) jest
+              usuwany najpóźniej po dobie od ostatniej wiadomości &ndash; tyle
+              liczą się limity wysyłki, które chronią skrzynkę rodzica przed
+              zasypaniem wiadomościami.
             </li>
             <li>
               <strong>Linki wysłane rodzicowi</strong> (ich skróty) &ndash; 30
-              dni od wygaśnięcia. Link do zgody jest ważny 14 dni, do zmiany
+              dni od wygaśnięcia; po usunięciu konta przestają wskazywać na
+              dziecko. Link do zgody jest ważny 14 dni, do zmiany
               hasła godzinę, do strony rodzica 30 dni.
             </li>
             <li>
@@ -775,7 +786,8 @@ export default function RegulaminPage() {
             </li>
             <li>
               <strong>Ciasteczko sesyjne</strong> &ndash; do 30 dni (12 godzin
-              przy logowaniu loginem i hasłem bez &bdquo;Zapamiętaj mnie&rdquo;).
+              przy logowaniu loginem i hasłem bez &bdquo;Zapamiętaj mnie&rdquo;);
+              ciasteczko urządzenia &ndash; rok.
             </li>
             <li>
               <strong>Dzienniki techniczne serwera</strong> &ndash;

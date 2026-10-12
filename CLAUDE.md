@@ -191,7 +191,7 @@ POST /api/account/delete             # Erase own account + submissions + photos 
 # Accounts (app/accounts/routes.py). Every write route of the app runs require_active_user:
 # a pending_parent account or one without birth_year gets 403 {detail, code} unless the
 # endpoint is marked @allow_inactive_account (tests/test_accounts_guard.py lists them)
-POST /api/auth/login                 # login + password (+ remember); lockout 5/login, 20/IP per 15 min
+POST /api/auth/login                 # login + password (+ remember); lockout 5 per (login, device|IP), 20/IP, 30/login per 15 min (known device exempt from the last two)
 GET  /api/auth/login-available       # "Ten login jest zajęty" check (rate-limited)
 POST /api/auth/register/login        # Login account: always pending_parent, consent e-mail to parent
 POST /api/auth/register/google       # Answers before Google (-> /login/google?register=1) or after (pending_google)
@@ -199,13 +199,13 @@ GET  /api/auth/register/state        # Google identity waiting for registration 
 POST /api/auth/profile               # Year of birth for accounts created before the age step
 POST /api/account/consent/resend     # Pending screen: resend (60 s cooldown, 3/account, 5/parent per 24 h)
 POST /api/account/parent-email       # Pending screen: change the parent address (old links expire)
-GET  /api/parent/consent?t=          # Consent page data - GET never mutates
+POST /api/parent/consent/view        # Consent page data (token in the body - never in a query string)
 POST /api/parent/consent             # {token, decision: accept|decline}; decline erases the account
 POST /api/parent/consent/resend      # New link from an expired one (account still pending)
-GET  /api/parent/children?t=         # Parent page: children of this parent address
+POST /api/parent/children            # Parent page: children of this parent address
 POST /api/parent/children/{id}/delete|password  # Erase a child / set a new password (bumps session_version)
 POST /api/parent/request-link        # E-mail a parent-page link (same answer for unknown addresses)
-POST /api/auth/password-reset/request|confirm, GET .../check  # Reset link goes to the parent
+POST /api/auth/password-reset/request|check|confirm  # Reset link goes to the parent
 GET  /api/dev/outbox                 # Console-backend e-mails; only E2E_MODE + EMAIL_BACKEND=console + auth on
 
 # Private tasks ("Moje zadania") - owner only, someone else's id is a 404
@@ -264,7 +264,8 @@ GET  /uploads/{path}                 # Serve uploaded images
 - `parents` - Parent e-mail addresses (shared by siblings), deleted with the last child
 - `consents` - Proof of consent: `self` (16+) or `parent`, terms_version, given_at (no IP)
 - `email_tokens` - SHA-256 of links e-mailed to parents (consent 14 d, password_reset 1 h,
-  parent_manage 30 d); also the send log for the e-mail rate limits
+  parent_manage 30 d); also the send log for the e-mail rate limits, so erasing an account
+  only nulls `user_id` (FK SET NULL) and a childless parent row waits 24 h
 - `login_failures` - Failed password logins (login, HMAC of IP), 24 h
 - `submissions` - Solution submissions (user_id FK, year, etap, task_number, score, feedback)
 - `deleted_account_quota` - Short-lived, pseudonymous rate-limit tombstones left by
@@ -393,7 +394,7 @@ SESSION_SECRET_KEY=dev-secret-key-change-in-production
 # Transactional e-mail (parent consent, password reset, parent links)
 EMAIL_BACKEND=console                 # "console" (logs + in-memory outbox) or "resend"
 # RESEND_API_KEY=re_...               # required with resend (prod compose refuses to start without it)
-# EMAIL_FROM=OMJ Validator <noreply@omj-validator.pl>
+# EMAIL_FROM=Trener OMJ <noreply@omj-validator.pl>
 # EMAIL_REPLY_TO=kontakt@omj-validator.pl
 # PUBLIC_BASE_URL=https://omj-validator.pl   # absolute links + e-mail logo
 # TERMS_VERSION=2026-10-12            # stored with each consent; bump with LAST_UPDATED in /regulamin

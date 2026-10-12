@@ -171,7 +171,7 @@ class Settings(BaseSettings):
     email_backend: str = "console"
     resend_api_key: Optional[str] = None
     resend_api_url: str = "https://api.resend.com/emails"
-    email_from: str = "OMJ Validator <noreply@omj-validator.pl>"
+    email_from: str = "Trener OMJ <noreply@omj-validator.pl>"
     email_reply_to: str = "kontakt@omj-validator.pl"
     # Absolute links in e-mails (and the e-mail logo) are built from this
     public_base_url: str = "https://omj-validator.pl"

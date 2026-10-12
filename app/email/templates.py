@@ -11,8 +11,7 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined, select_autoes
 
 from ..config import settings
 
-# Shown in the message body; the sender name and subjects follow the spec
-# ("OMJ Validator"), the site itself calls the app "Trener OMJ".
+# The name the site uses; also the sender name (EMAIL_FROM) and the subjects
 APP_NAME = "Trener OMJ"
 OPERATOR_NAME = "Rafał Sokołowski"
 

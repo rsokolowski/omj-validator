@@ -103,7 +103,7 @@ services:
       # Transactional e-mail (parent consent, password reset) through Resend
       EMAIL_BACKEND: ${EMAIL_BACKEND:-resend}
       RESEND_API_KEY: ${RESEND_API_KEY:?RESEND_API_KEY is required (parent consent e-mails)}
-      EMAIL_FROM: ${EMAIL_FROM:-OMJ Validator <noreply@omj-validator.pl>}
+      EMAIL_FROM: ${EMAIL_FROM:-Trener OMJ <noreply@omj-validator.pl>}
       EMAIL_REPLY_TO: ${EMAIL_REPLY_TO:-kontakt@omj-validator.pl}
       PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-https://omj-validator.pl}
       TERMS_VERSION: ${TERMS_VERSION:-2026-10-12}

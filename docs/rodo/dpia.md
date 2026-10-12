@@ -128,11 +128,19 @@ tylko w wiadomości), `purpose` (`consent` 14 dni, jednorazowy; `password_reset`
 jednorazowy; `parent_manage` 30 dni, wielokrotnego użytku), `user_id`, `parent_id`,
 `created_at`, `expires_at`, `used_at`. Służy też jako dziennik wysyłki do limitów
 (3 prośby o zgodę na konto i 5 na adres rodzica na dobę, 3 linki zmiany hasła na konto,
-3 linki do strony rodzica na adres). Usuwana 30 dni po wygaśnięciu.
+3 linki do strony rodzica na adres). Usuwana 30 dni po wygaśnięciu. Przy usunięciu konta
+wiersze **zostają** z `user_id = NULL` (bez danych dziecka) — inaczej „usuń konto i załóż
+ponownie” zerowałoby limit wysyłki na adres rodzica.
 
 **Tabela `login_failures`:** `login`, `ip_hash` (HMAC adresu IP z sekretem serwera — nie sam
-adres), `at`. Blokada: 5 nieudanych prób na login albo 20 z jednego adresu w 15 minut.
-Usuwana po 24 godzinach.
+adres — albo, dla urządzenia, na którym ten login już się logował, HMAC ciasteczka
+urządzenia), `at`. Blokada w 15 minutach: 5 nieudanych prób na parę login + urządzenie/adres;
+spoza znanego urządzenia dodatkowo 20 z jednego adresu i 30 na login łącznie. Usuwana po
+24 godzinach.
+
+**Ciasteczko urządzenia `omj_device`** (rok, HttpOnly): lista skrótów HMAC loginów, które
+zalogowały się na tym urządzeniu — bez loginu w jawnej postaci. Dzięki niemu zgadywanie hasła
+dziecka z innego miejsca nie blokuje logowania na urządzeniu dziecka.
 
 **Tabela `submissions`** (jedno zgłoszenie = jedna próba rozwiązania):
 
@@ -471,7 +479,7 @@ ani udostępniania danych podmiotom komercyjnym.
 | Dziennik dostępu administratora (`admin_access_log`) | **12 miesięcy** od zdarzenia | `RETENTION_ADMIN_AUDIT_MONTHS` | dość długo, by zbadać skargę, dość krótko, by nie stać się archiwum tego, kto na kogo patrzył |
 | Pseudonimowy znacznik limitu po usunięciu konta (`deleted_account_quota`) | do zamknięcia okna limitu, czyli **maks. 24 godziny** od ostatniego zgłoszenia | okno limitu (24 h) | usuwany automatycznie; powstaje tylko wtedy, gdy konto miało zgłoszenia w oknie |
 | Konto czekające na zgodę rodzica (`status = pending_parent`) wraz ze wszystkim, co do niego należy | **14 dni** od `pending_since` (założenie konta albo podanie adresu rodzica przy koncie sprzed 12.10.2026) | stała w kodzie (`app/retention.py`) | po kliknięciu „Nie zgadzam się” — natychmiast; zmiana adresu rodzica nie przedłuża terminu |
-| Adres e-mail rodzica (`parents`) | dopóki istnieje konto dziecka z nim powiązane; usuwany w tej samej transakcji co ostatnie konto; adres zastąpiony innym — po **24 godzinach** | stała w kodzie | doba utrzymuje dziennik wysyłki, żeby zmiana adresu nie zerowała limitów |
+| Adres e-mail rodzica (`parents`) | dopóki istnieje konto dziecka z nim powiązane; po usunięciu ostatniego konta albo zastąpieniu adresu — najpóźniej **24 godziny** od ostatniej wiadomości (od razu, jeśli w ostatniej dobie nic na ten adres nie wysłano) | stała w kodzie | doba utrzymuje dziennik wysyłki, żeby usunięcie konta albo zmiana adresu nie zerowały limitów (ochrona skrzynki rodzica) |
 | Zapis zgody (`consents`), rok urodzenia, login, skrót hasła | razem z kontem | — | |
 | Skróty linków wysłanych rodzicowi (`email_tokens`) | **30 dni** od wygaśnięcia (link: zgoda 14 dni, zmiana hasła 1 godzina, strona rodzica 30 dni) | stała w kodzie | dziennik do limitów wysyłki i wyjaśniania zgłoszeń |
 | Nieudane próby logowania (`login_failures`) | **24 godziny** | stała w kodzie | IP tylko jako HMAC |
@@ -1208,8 +1216,10 @@ znanym serwisowi. Dzieci wybierają hasła słabe, a loginy bywają przewidywaln
 
 Środki: hasło co najmniej 8 znaków, sprawdzane z listą 10 000 najpopularniejszych haseł i różne
 od loginu (bez wymagań co do rodzaju znaków — zalecenia NIST SP 800-63B; podpowiedź „kilka
-słów”); skrót argon2id; **blokada 15 minut po 5 nieudanych próbach na login albo 20 z jednego
-adresu IP**; jeden komunikat „Nieprawidłowy login lub hasło” dla nieistniejącego loginu
+słów”); skrót argon2id; **blokada 15 minut po 5 nieudanych próbach na parę login +
+urządzenie/adres IP**, a spoza urządzenia, na którym login już się logował, także po 20 próbach
+z jednego adresu i 30 na login łącznie — zgadujący z innego miejsca nie może więc zablokować
+dziecku logowania na jego urządzeniu (ciasteczko `omj_device` ze skrótem loginu); jeden komunikat „Nieprawidłowy login lub hasło” dla nieistniejącego loginu
 i złego hasła, ten sam komunikat blokady dla obu; czas odpowiedzi wyrównany (weryfikacja
 skrótu także dla nieistniejącego loginu); adres IP zapisywany tylko jako HMAC i tylko przez
 24 godziny; sprawdzanie zajętości loginu przy rejestracji ograniczone liczbowo (ujawnia
