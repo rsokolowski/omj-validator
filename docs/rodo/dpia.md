@@ -133,13 +133,16 @@ wiersze **zostają** z `user_id = NULL` (bez danych dziecka) — inaczej „usu�
 ponownie” zerowałoby limit wysyłki na adres rodzica.
 
 **Tabela `login_failures`:** `login`, `ip_hash` (HMAC adresu IP z sekretem serwera — nie sam
-adres — albo, dla urządzenia, na którym ten login już się logował, HMAC ciasteczka
-urządzenia), `at`. Blokada w 15 minutach: 5 nieudanych prób na parę login + urządzenie/adres;
-spoza znanego urządzenia dodatkowo 20 z jednego adresu i 30 na login łącznie. Usuwana po
+adres — albo, dla urządzenia, na którym ten login już się logował obecnym hasłem, HMAC
+identyfikatora urządzenia i loginu), `at`. Blokada w 15 minutach: 5 nieudanych prób na parę
+login + urządzenie/adres; spoza znanego urządzenia dodatkowo 20 z jednego adresu i 10 na login
+łącznie. Udane logowanie czyści tylko próby z tego samego urządzenia/adresu. Usuwana po
 24 godzinach.
 
-**Ciasteczko urządzenia `omj_device`** (rok, HttpOnly): lista skrótów HMAC loginów, które
-zalogowały się na tym urządzeniu — bez loginu w jawnej postaci. Dzięki niemu zgadywanie hasła
+**Ciasteczko urządzenia `omj_device`** (rok, HttpOnly, podpisane sekretem serwera): losowy
+identyfikator urządzenia (`token_urlsafe(16)`, nie identyfikuje osoby) i znaczniki
+HMAC(identyfikator + login + `session_version`) loginów, które zalogowały się na tym urządzeniu
+— bez loginu w jawnej postaci. Zmiana hasła unieważnia znacznik. Dzięki niemu zgadywanie hasła
 dziecka z innego miejsca nie blokuje logowania na urządzeniu dziecka.
 
 **Tabela `submissions`** (jedno zgłoszenie = jedna próba rozwiązania):
@@ -1217,9 +1220,10 @@ znanym serwisowi. Dzieci wybierają hasła słabe, a loginy bywają przewidywaln
 Środki: hasło co najmniej 8 znaków, sprawdzane z listą 10 000 najpopularniejszych haseł i różne
 od loginu (bez wymagań co do rodzaju znaków — zalecenia NIST SP 800-63B; podpowiedź „kilka
 słów”); skrót argon2id; **blokada 15 minut po 5 nieudanych próbach na parę login +
-urządzenie/adres IP**, a spoza urządzenia, na którym login już się logował, także po 20 próbach
-z jednego adresu i 30 na login łącznie — zgadujący z innego miejsca nie może więc zablokować
-dziecku logowania na jego urządzeniu (ciasteczko `omj_device` ze skrótem loginu); jeden komunikat „Nieprawidłowy login lub hasło” dla nieistniejącego loginu
+urządzenie/adres IP**, a spoza urządzenia, na którym login już się logował obecnym hasłem,
+także po 20 próbach z jednego adresu i 10 na login łącznie — zgadujący z innego miejsca nie
+może więc zablokować dziecku logowania na jego urządzeniu (podpisane ciasteczko `omj_device`
+z losowym identyfikatorem urządzenia; zmiana hasła unieważnia znacznik); jeden komunikat „Nieprawidłowy login lub hasło” dla nieistniejącego loginu
 i złego hasła, ten sam komunikat blokady dla obu; czas odpowiedzi wyrównany (weryfikacja
 skrótu także dla nieistniejącego loginu); adres IP zapisywany tylko jako HMAC i tylko przez
 24 godziny; sprawdzanie zajętości loginu przy rejestracji ograniczone liczbowo (ujawnia

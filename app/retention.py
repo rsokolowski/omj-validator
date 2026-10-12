@@ -25,7 +25,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Iterable, Optional
 
-from sqlalchemy import func
+from sqlalchemy import exists as sql_exists, func
 from sqlalchemy.orm import Session
 
 from .config import settings
@@ -927,18 +927,25 @@ def purge_login_failures(db: Session, dry_run: bool = False) -> RetentionReport:
     return report
 
 
-def delete_childless_parents(db: Session, dry_run: bool = False) -> RetentionReport:
-    """Parent addresses no child points at any more (e.g. the child corrected
-    a typo in the address), once their e-mail log is older than 24 h."""
-    report = RetentionReport(dry_run=dry_run)
+def _mailed_recently(parent_id_column):
+    """EXISTS: an e-mail went to this parent within the grace period.
+
+    Its email_tokens rows are the per-parent send log; while they count
+    against the 24 h limits the parent row (and with it the log) must stay.
+    """
     recent = _naive_now() - timedelta(hours=CHILDLESS_PARENT_GRACE_HOURS)
-    has_child = db.query(UserDB.id).filter(UserDB.parent_id == ParentDB.id).exists()
-    recent_mail = (
-        db.query(EmailTokenDB.id)
-        .filter(EmailTokenDB.parent_id == ParentDB.id, EmailTokenDB.created_at >= recent)
-        .exists()
+    return (
+        sql_exists()
+        .where(EmailTokenDB.parent_id == parent_id_column, EmailTokenDB.created_at >= recent)
     )
-    parents = db.query(ParentDB).filter(~has_child, ~recent_mail).all()
+
+
+def delete_childless_parents(db: Session, dry_run: bool = False) -> RetentionReport:
+    """Parent addresses no child points at any more (the child was erased or
+    corrected a typo in the address), once their e-mail log is older than 24 h."""
+    report = RetentionReport(dry_run=dry_run)
+    has_child = sql_exists().where(UserDB.parent_id == ParentDB.id)
+    parents = db.query(ParentDB).filter(~has_child, ~_mailed_recently(ParentDB.id)).all()
     report.parents_deleted = len(parents)
     if not dry_run and parents:
         for parent in parents:
@@ -951,21 +958,13 @@ def _delete_parent_if_childless(db: Session, parent_id: str) -> None:
     """Called inside an erasure (no commit here).
 
     The parent row goes with its last child - unless we e-mailed that address
-    in the last 24 h. Its email_tokens are the per-parent send log, and
-    deleting them would let "delete the account, register again" mail-bomb
-    the address past the daily limit; delete_childless_parents removes such a
-    row on the first daily run after the grace period.
+    in the last 24 h (_mailed_recently): deleting its send log would let
+    "delete the account, register again" mail-bomb the address past the daily
+    limit. delete_childless_parents removes such a row after the grace period.
     """
     if db.query(UserDB.id).filter(UserDB.parent_id == parent_id).first() is not None:
         return
-    recent = _naive_now() - timedelta(hours=CHILDLESS_PARENT_GRACE_HOURS)
-    recently_mailed = (
-        db.query(EmailTokenDB.id)
-        .filter(EmailTokenDB.parent_id == parent_id, EmailTokenDB.created_at >= recent)
-        .first()
-        is not None
-    )
-    if recently_mailed:
+    if db.query(_mailed_recently(parent_id)).scalar():
         return
     parent = db.get(ParentDB, parent_id)
     if parent is not None:
@@ -1004,9 +1003,13 @@ def erase_user_data(db: Session, user_id: str, dry_run: bool = False) -> Retenti
         user = db.get(UserDB, user_id)
         if user:
             parent_id = user.parent_id
-            db.delete(user)  # cascade removes submissions, consents, e-mail links
+            # Cascade removes submissions, private tasks, patterns, consents;
+            # the account's e-mail links are kept with user_id NULL (FK SET
+            # NULL) as the parent's send log until their own retention
+            db.delete(user)
             db.flush()
-            # A parent row exists only for its children (same transaction)
+            # A parent row exists only for its children (same transaction,
+            # unless its send log still counts - see _delete_parent_if_childless)
             if parent_id:
                 _delete_parent_if_childless(db, parent_id)
         else:

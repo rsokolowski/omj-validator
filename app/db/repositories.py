@@ -140,24 +140,19 @@ def quota_identity(db: Session, user_id: str) -> str:
     """Who stands behind an account, for the erasure tombstone.
 
     Erasing an account and registering again must not hand out a fresh daily
-    budget, so the tombstone is keyed by something that survives the erasure:
+    budget, so a Google account's tombstone is keyed by its Google sub: the
+    same Google account registering again gets a new random id but the same
+    key. Accounts created before login accounts existed have
+    ``id == google_sub``, so their key - and every tombstone written before -
+    is unchanged. Login accounts are keyed by their id: a new login account
+    needs a fresh parent confirmation, which is friction enough.
 
-    * Google accounts: the Google sub. Accounts created before login accounts
-      existed have ``id == google_sub``, so their key (and every tombstone
-      written before this change) is unchanged; newer ones have a random id
-      that a re-registration would not reproduce.
-    * Login accounts: the parent's e-mail address - a new login with the same
-      parent is the same budget (siblings share it while a tombstone lives,
-      which errs on the safe side).
-    * Anything else (dev "anonymous"): the id.
+    ``db.get`` reads the identity map first, so on a request path where the
+    account is already loaded (current_account) this costs no query.
     """
     user = db.get(UserDB, user_id)
-    if user is None:
-        return user_id
-    if user.google_sub:
+    if user is not None and user.google_sub:
         return user.google_sub
-    if user.parent is not None:
-        return f"parent:{user.parent.email}"
     return user_id
 
 
@@ -166,14 +161,17 @@ class DeletedAccountQuotaRepository:
 
     Every method takes the account id and keys the tombstone by
     quota_identity(), so record (before erasure) and lookup (from the new
-    account) meet.
+    account) meet. The key is computed once per account per repository.
     """
 
     def __init__(self, db: Session):
         self.db = db
+        self._keys: dict[str, str] = {}
 
     def _key(self, user_id: str) -> str:
-        return hash_user_id(quota_identity(self.db, user_id))
+        if user_id not in self._keys:
+            self._keys[user_id] = hash_user_id(quota_identity(self.db, user_id))
+        return self._keys[user_id]
 
     def record_deletion(
         self,

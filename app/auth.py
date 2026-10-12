@@ -61,11 +61,14 @@ async def _refresh_group_membership_if_needed(request: Request) -> None:
 REMEMBER_SESSION_SECONDS = 30 * 24 * 60 * 60
 SHORT_SESSION_SECONDS = 12 * 60 * 60
 
-# Registration answers stored before the Google redirect, and a Google
-# identity waiting for its registration to be finished (both 30 minutes)
+# Registration answers stored before the Google redirect (30 minutes), and a
+# Google identity waiting for its registration to be finished: sub + e-mail
+# only, 10 minutes (a shared school computer must not hand it to the next
+# child). Both are consumed - removed from the session - on first use.
 SESSION_PENDING_REGISTRATION_KEY = "pending_registration"
 SESSION_PENDING_GOOGLE_KEY = "pending_google"
 PENDING_SESSION_SECONDS = 30 * 60
+PENDING_GOOGLE_SECONDS = 10 * 60
 
 
 def safe_next_path(next_url: Optional[str]) -> Optional[str]:

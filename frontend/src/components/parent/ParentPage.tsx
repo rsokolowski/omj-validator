@@ -24,7 +24,7 @@ import { StepHeading } from "@/components/account/StepHeading";
 import { ConfirmDialog } from "@/components/account/ConfirmDialog";
 import { PasswordField } from "@/components/account/PasswordField";
 import { ParentLinkRequest } from "./ParentLinkRequest";
-import { LinkTokenLoading, useLinkToken } from "@/components/account/LinkToken";
+import { forgetLinkToken, LinkTokenLoading, useLinkToken } from "@/components/account/LinkToken";
 
 type View =
   | { kind: "loading" }
@@ -141,6 +141,8 @@ function ParentPageView({ token }: { token: string | null }) {
 
   const onDeleted = (child: ParentChild, remaining: number) => {
     if (remaining <= 0) {
+      // Nie ma juz kont pod tym adresem - link nie jest potrzebny
+      forgetLinkToken();
       setView({ kind: "all_deleted" });
       return;
     }
@@ -454,7 +456,7 @@ function PasswordDialog({ open, token, child, onClose, onChanged, onLinkProblem 
 
 /** Odczytuje token z linku (i chowa go z paska adresu), potem pokazuje strone. */
 export function ParentPage({ token: tokenFromUrl }: { token: string | null }) {
-  const link = useLinkToken(tokenFromUrl, "omj-link-rodzic");
+  const link = useLinkToken(tokenFromUrl);
   if (!link.ready) return <LinkTokenLoading />;
   return <ParentPageView token={link.token} />;
 }

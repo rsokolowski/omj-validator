@@ -51,16 +51,16 @@ CONSENT_COOLDOWN = timedelta(seconds=60)
 RESET_PER_ACCOUNT_PER_DAY = 3
 MANAGE_PER_PARENT_PER_DAY = 3
 
-# Login lockout. Failures are counted per (login, actor): the actor is the
-# device when the browser carries our device cookie for this login (it signed
-# in there before), otherwise the client IP. Someone guessing a child's
-# password from elsewhere locks only their own attempts; the child's device
-# keeps its own counter, so the child cannot be locked out from it.
+# Login lockout (15-minute window). A device where a login already signed in
+# with its current password carries a tag for it in the device cookie; its
+# failures count on their own (5), and no global cap applies to it - whoever
+# holds a valid tag knew the current password. Every other attempt counts per
+# (login, IP) (5), per IP (20) and per login (10). Guessing a child's password
+# from elsewhere therefore never locks the child's own device.
 LOGIN_FAILURE_WINDOW = timedelta(minutes=15)
 LOGIN_MAX_FAILURES_PER_ACTOR = 5
-# Not for known devices: one IP guessing many logins, many IPs guessing one
 LOGIN_MAX_FAILURES_PER_IP = 20
-LOGIN_MAX_FAILURES_PER_LOGIN = 30
+LOGIN_MAX_FAILURES_PER_LOGIN = 10
 DEVICE_COOKIE = "omj_device"
 DEVICE_COOKIE_MAX_TAGS = 10
 DEVICE_COOKIE_MAX_AGE = 365 * 24 * 60 * 60
@@ -208,14 +208,42 @@ class EmailLimitError(Exception):
 # --------------------------------------------------------------------- parents
 
 
-def get_or_create_parent(db: Session, email: str) -> ParentDB:
-    """Parent row for a normalised address (flushed, not committed)."""
-    parent = db.query(ParentDB).filter(ParentDB.email == email).first()
-    if parent is None:
-        parent = ParentDB(id=uuid.uuid4().hex, email=email, created_at=now())
-        db.add(parent)
-        db.flush()
-    return parent
+def ensure_parent(db: Session, email: str) -> ParentDB:
+    """Parent row for a normalised address, created and COMMITTED on its own.
+
+    INSERT ... ON CONFLICT DO NOTHING, then SELECT: two requests naming the
+    same address never wait on each other's uncommitted row, and the row is
+    never part of a transaction that is still open when an e-mail goes out.
+    A row left without children (the account creation failed, or the e-mail
+    did) is removed by retention (delete_childless_parents).
+
+    Commits the session: call it before making any other change.
+    """
+    if db.get_bind().dialect.name == "postgresql":
+        from sqlalchemy.dialects.postgresql import insert
+    else:
+        from sqlalchemy.dialects.sqlite import insert
+
+    db.execute(
+        insert(ParentDB)
+        .values(id=uuid.uuid4().hex, email=email, created_at=now())
+        .on_conflict_do_nothing(index_elements=["email"])
+    )
+    db.commit()
+    return db.query(ParentDB).filter(ParentDB.email == email).one()
+
+
+def end_read_transaction(db: Session) -> None:
+    """Close the session's transaction before awaiting an e-mail provider.
+
+    Sending can take seconds; a transaction open across the await would keep
+    its locks (and a connection) for that long - and an uncommitted INSERT of
+    a unique value makes every concurrent request for the same value wait.
+    Callers commit their writes first; anything still pending here is a bug.
+    """
+    if db.new or db.dirty or db.deleted:
+        raise RuntimeError("uncommitted changes would be held across an e-mail send")
+    db.commit()
 
 
 def child_identifier(user: UserDB) -> tuple[str, str]:
@@ -291,10 +319,11 @@ async def send_consent_email(
     """Send the consent request to ``parent`` (default: the user's parent).
 
     Raises EmailLimitError (nothing sent) or EmailSendError (provider failed).
-    The token rows - which are also the rate-limit log - are written only
-    after a successful send, so a failure never uses up a slot. ``on_sent``
-    runs after a successful send, inside the same commit (e.g. switching the
-    account to the new parent address).
+    No transaction is open while the provider is awaited. The token rows -
+    which are also the rate-limit log - are written only after a successful
+    send, so a failure never uses up a slot. ``on_sent`` runs after a
+    successful send, in the same short commit as the token rows (e.g.
+    switching the account to the new parent address).
     """
     parent = parent or user.parent
     if parent is None:
@@ -309,6 +338,8 @@ async def send_consent_email(
     )
     label, identifier = child_identifier(user)
     deadline = pending_deadline(user) or (now() + PENDING_TTL)
+    to = parent.email
+    user_id = user.id
     subject = "Prośba o zgodę — konto Twojego dziecka w serwisie Trener OMJ"
     html, text = render(
         "consent_request",
@@ -322,13 +353,15 @@ async def send_consent_email(
         inactive_retention=months_pl(settings.retention_inactive_account_months or 36),
         deadline=date_pl(min(deadline, consent_row.expires_at)),
     )
-    await send_email(parent.email, subject, html, text)
+    end_read_transaction(db)
+    await send_email(to, subject, html, text)
+    # One short transaction after the send: the caller's switch + the log rows
     if on_sent is not None:
         on_sent()
     db.add(consent_row)
     db.add(manage_row)
     db.commit()
-    logger.info(f"Consent e-mail sent for user {mask_user_id(user.id)}")
+    logger.info(f"Consent e-mail sent for user {mask_user_id(user_id)}")
 
 
 async def try_send_consent_email(db: Session, user: UserDB) -> bool:
@@ -373,6 +406,8 @@ async def send_account_active_email(db: Session, user: UserDB, manage_raw: str) 
     parent = user.parent
     if parent is None:
         return
+    to = parent.email
+    user_id = user.id
     label, identifier = child_identifier(user)
     subject = "Konto Twojego dziecka jest aktywne"
     html, text = render(
@@ -383,10 +418,11 @@ async def send_account_active_email(db: Session, user: UserDB, manage_raw: str) 
         is_login_account=user.is_login_account,
         manage_url=manage_url(manage_raw),
     )
+    end_read_transaction(db)
     try:
-        await send_email(parent.email, subject, html, text)
+        await send_email(to, subject, html, text)
     except EmailSendError:
-        logger.warning(f"Account-active e-mail failed for user {mask_user_id(user.id)}")
+        logger.warning(f"Account-active e-mail failed for user {mask_user_id(user_id)}")
 
 
 # --------------------------------------------------------------------- reset
@@ -415,11 +451,14 @@ async def send_password_reset(db: Session, user: UserDB) -> None:
         reset_url=reset_url(reset_raw),
         manage_url=manage_url(manage_raw),
     )
-    await send_email(parent.email, subject, html, text)
+    to = parent.email
+    user_id = user.id
+    end_read_transaction(db)
+    await send_email(to, subject, html, text)
     db.add(reset_row)
     db.add(manage_row)
     db.commit()
-    logger.info(f"Password reset e-mail sent for user {mask_user_id(user.id)}")
+    logger.info(f"Password reset e-mail sent for user {mask_user_id(user_id)}")
 
 
 def set_password(db: Session, user: UserDB, password: str) -> None:
@@ -458,7 +497,9 @@ async def send_manage_link(db: Session, parent: ParentDB) -> None:
     )
     subject = "Link do strony rodzica — Trener OMJ"
     html, text = render("manage_link", subject=subject, manage_url=manage_url(manage_raw))
-    await send_email(parent.email, subject, html, text)
+    to = parent.email
+    end_read_transaction(db)
+    await send_email(to, subject, html, text)
     db.add(manage_row)
     db.commit()
 
@@ -500,6 +541,7 @@ class AgeAnswers:
 def create_google_user(
     db: Session, *, sub: str, email: str, name: Optional[str], answers: AgeAnswers
 ) -> UserDB:
+    parent = ensure_parent(db, answers.parent_email) if answers.parent_email else None
     user = UserDB(
         id=uuid.uuid4().hex,
         google_sub=sub,
@@ -510,8 +552,8 @@ def create_google_user(
     )
     db.add(user)
     db.flush()
-    if answers.parent_email:
-        set_pending(user, get_or_create_parent(db, answers.parent_email))
+    if parent is not None:
+        set_pending(user, parent)
     else:
         record_consent(db, user, ConsentKind.SELF)
     db.commit()
@@ -524,7 +566,7 @@ def create_login_user(
     db: Session, *, login: str, password: str, birth_year: int, parent_email: str
 ) -> UserDB:
     """Login accounts always wait for a parent, whatever the age."""
-    parent = get_or_create_parent(db, parent_email)
+    parent = ensure_parent(db, parent_email)
     user = UserDB(
         id=uuid.uuid4().hex,
         login=login,
@@ -573,28 +615,58 @@ def ip_hash(ip: Optional[str]) -> str:
     return _hmac(ip or "unknown")
 
 
-def device_tag(login: str) -> str:
-    """What the device cookie remembers about a login: a keyed digest only."""
-    return _hmac(f"device:{login}")[:32]
+def _device_serializer():
+    from itsdangerous import URLSafeSerializer
+
+    return URLSafeSerializer(settings.session_secret_key or "", salt="omj-device")
 
 
-def device_tags(cookie_value: Optional[str]) -> list[str]:
-    tags = [tag for tag in (cookie_value or "").split(".") if tag]
-    return tags[-DEVICE_COOKIE_MAX_TAGS:]
+@dataclass
+class Device:
+    """The device cookie: a random id (identifies nobody) and the tags of the
+    logins that signed in here with their current password."""
+
+    device_id: Optional[str]
+    tags: list
 
 
-def with_device_tag(cookie_value: Optional[str], login: str) -> str:
-    """Cookie value after a successful login on this device (newest last)."""
-    tag = device_tag(login)
-    tags = [t for t in device_tags(cookie_value) if t != tag] + [tag]
-    return ".".join(tags[-DEVICE_COOKIE_MAX_TAGS:])
+def read_device(cookie_value: Optional[str]) -> Device:
+    if not cookie_value:
+        return Device(None, [])
+    try:
+        data = _device_serializer().loads(cookie_value)
+    except Exception:  # bad signature, tampering, old format
+        return Device(None, [])
+    device_id = data.get("d") if isinstance(data, dict) else None
+    tags = data.get("t") if isinstance(data, dict) else None
+    if not isinstance(device_id, str) or not isinstance(tags, list):
+        return Device(None, [])
+    return Device(device_id, [t for t in tags if isinstance(t, str)][-DEVICE_COOKIE_MAX_TAGS:])
 
 
-def login_actor(login: str, ip: Optional[str], cookie_value: Optional[str]) -> tuple[str, bool]:
+def device_tag(device_id: str, login: str, session_version: int) -> str:
+    """Bound to the password: a reset bumps session_version and voids it."""
+    return _hmac(f"device-tag:{device_id}:{login}:{session_version}")[:32]
+
+
+def device_cookie_after_login(device: Device, login: str, session_version: int) -> str:
+    """Signed cookie value with this login's current tag (newest last)."""
+    device_id = device.device_id or secrets.token_urlsafe(16)
+    tag = device_tag(device_id, login, session_version)
+    tags = [t for t in device.tags if t != tag] + [tag]
+    return _device_serializer().dumps({"d": device_id, "t": tags[-DEVICE_COOKIE_MAX_TAGS:]})
+
+
+def login_actor(
+    login: str, ip: Optional[str], device: Device, user: Optional[UserDB]
+) -> tuple[str, bool]:
     """(actor digest, known device) for counting this attempt."""
-    tag = device_tag(login)
-    if tag in device_tags(cookie_value):
-        return _hmac(f"actor-device:{tag}"), True
+    if (
+        user is not None
+        and device.device_id
+        and device_tag(device.device_id, login, user.session_version or 0) in device.tags
+    ):
+        return _hmac(f"actor-device:{device.device_id}:{login}"), True
     return ip_hash(ip), False
 
 
@@ -623,6 +695,12 @@ def record_login_failure(db: Session, login: str, actor: str) -> None:
     db.commit()
 
 
-def clear_login_failures(db: Session, login: Optional[str]) -> None:
-    if login:
-        db.query(LoginFailureDB).filter(LoginFailureDB.login == login).delete()
+def clear_login_failures(db: Session, login: Optional[str], actor: Optional[str] = None) -> None:
+    """A successful login clears its own actor's failures only; a new
+    password (actor=None) clears the login's whole slate."""
+    if not login:
+        return
+    query = db.query(LoginFailureDB).filter(LoginFailureDB.login == login)
+    if actor is not None:
+        query = query.filter(LoginFailureDB.ip_hash == actor)
+    query.delete(synchronize_session=False)

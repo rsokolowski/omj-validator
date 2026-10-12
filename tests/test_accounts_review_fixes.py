@@ -63,31 +63,54 @@ class TestQuotaTombstone:
         assert quota_identity(db, "104857") == "104857"
         assert hash_user_id(quota_identity(db, "104857")) == hash_user_id("104857")
 
-    def test_login_accounts_are_keyed_by_the_parent_address(self, client, db):
-        from app.rate_limits import record_erasure_quota
-        from app.retention import erase_user_data
+    def test_login_accounts_are_keyed_by_their_own_id(self, client, db):
+        from app.db.repositories import quota_identity
 
-        register_login(client)
-        first = user_by_login(db, "kuba_m")
-        first_id = first.id
-        _submission(db, first_id, "s0000002")
-        record_erasure_quota(db, first_id)
-        erase_user_data(db, first_id)
-
-        register_login(make_client(db), login="kuba_nowy")
-        again = user_by_login(db, "kuba_nowy")
-        count, _ = DeletedAccountQuotaRepository(db).get_user_carryover(again.id)
-        assert count == 1
-
-    def test_parent_deleting_the_child_leaves_the_tombstone_too(self, client, other_client, db):
         register_login(client)
         user = user_by_login(db, "kuba_m")
-        token = consent_token()
-        manage = other_client.post("/api/parent/consent", json={"token": token, "decision": "accept"}).json()["manage_url"].split("t=")[1]
-        _submission(db, user.id, "s0000003")
-        other_client.post(f"/api/parent/children/{user.id}/delete", json={"token": manage})
-        register_login(make_client(db), login="kuba_nowy")
-        assert DeletedAccountQuotaRepository(db).get_user_carryover(user_by_login(db, "kuba_nowy").id)[0] == 1
+        assert quota_identity(db, user.id) == user.id
+
+    def test_parent_deleting_a_google_child_leaves_the_tombstone(self, other_client, db, monkeypatch):
+        """Parent-page erasure records the tombstone too: the same Google
+        account registering again carries the used quota."""
+        from app.accounts import service as svc
+
+        db.add(UserDB(id="c" * 32, google_sub="g-9", email="kid9@gmail.com", birth_year=2012))
+        db.commit()
+        child = db.get(UserDB, "c" * 32)
+        parent = svc.ensure_parent(db, "mama@example.com")
+        child = db.get(UserDB, "c" * 32)
+        svc.set_pending(child, parent)
+        db.commit()
+        raw, row = svc._new_token("parent_manage", parent.id, None, svc.MANAGE_TOKEN_TTL)
+        db.add(row)
+        db.commit()
+        _submission(db, "c" * 32, "s0000003")
+        assert other_client.post(f"/api/parent/children/{'c' * 32}/delete", json={"token": raw}).json()["deleted"]
+        db.add(UserDB(id="d" * 32, google_sub="g-9", email="kid9@gmail.com", birth_year=2012))
+        db.commit()
+        assert DeletedAccountQuotaRepository(db).get_user_carryover("d" * 32)[0] == 1
+
+    def test_key_is_computed_once_per_repository(self, db):
+        from sqlalchemy import event
+
+        db.add(UserDB(id="e" * 32, google_sub="g-e", email="e@gmail.com", birth_year=2005))
+        db.commit()
+        db.expire_all()
+        repo = DeletedAccountQuotaRepository(db)
+        statements = []
+        listener = lambda *args: statements.append(args[2])  # noqa: E731
+        event.listen(db.get_bind(), "before_cursor_execute", listener)
+        try:
+            repo.get_user_carryover("e" * 32)
+            first = len(statements)
+            repo.get_user_carryover("e" * 32)
+            repo.get_user_ai_usage_carryover("e" * 32)
+        finally:
+            event.remove(db.get_bind(), "before_cursor_execute", listener)
+        user_lookups = [sql for sql in statements if "FROM users" in sql]
+        assert len(user_lookups) == 1, user_lookups
+        assert first >= 1
 
 
 # --------------------------------------------------------------------- 3. tokens never in API query strings
@@ -146,9 +169,12 @@ def test_new_password_spends_every_other_reset_link(client, other_client, db):
 # --------------------------------------------------------------------- 6. lockout
 
 
-def _login(c, password=PASSWORD, ip=None):
-    headers = {"cf-connecting-ip": ip} if ip else {}
-    return c.post("/api/auth/login", json={"login": "kuba_m", "password": password}, headers=headers)
+def _login(c, password=PASSWORD, ip="10.0.0.1"):
+    return c.post(
+        "/api/auth/login",
+        json={"login": "kuba_m", "password": password},
+        headers={"cf-connecting-ip": ip},
+    )
 
 
 class TestLockout:
@@ -159,28 +185,75 @@ class TestLockout:
 
     def test_attacker_elsewhere_cannot_lock_the_child_out(self, db, account):
         child = make_client(db)
-        assert _login(child, ip="10.0.0.1").status_code == 200  # the child's device, remembered
+        assert _login(child, ip="10.0.0.1").status_code == 200  # the child's device, now known
         attacker = make_client(db)
-        for i in range(40):
+        for i in range(12):
             _login(attacker, password="zgaduje haslo", ip=f"10.9.{i}.1")
-        # The attacker is throttled ...
-        assert _login(attacker, password="zgaduje haslo", ip="10.9.99.1").status_code == 429
-        # ... the child on their own device is not
+        # Unknown devices hit the per-login cap of 10 ...
+        assert _login(make_client(db), ip="10.9.99.1").status_code == 429
+        # ... the child's own device does not
         assert _login(child, ip="10.0.0.1").status_code == 200
 
-    def test_same_ip_lockout_after_five(self, db, account):
+    def test_shared_computer_device_a_does_not_lock_device_b(self, db, account):
+        """Two devices that both signed in before: failures on one stay there."""
+        device_a, device_b = make_client(db), make_client(db)
+        assert _login(device_a, ip="10.5.5.5").status_code == 200
+        assert _login(device_b, ip="10.5.5.5").status_code == 200  # same school network
+        for _ in range(5):
+            assert _login(device_a, password="zle haslo zle", ip="10.5.5.5").status_code == 401
+        assert _login(device_a, ip="10.5.5.5").status_code == 429
+        assert _login(device_b, ip="10.5.5.5").status_code == 200
+
+    def test_password_change_voids_the_device_tag(self, db, account):
+        device = make_client(db)
+        assert _login(device).status_code == 200
+        user = user_by_login(db, "kuba_m")
+        service.set_password(db, user, "nowe dobre haslo")
+        db.commit()
+        # Old tag no longer matches: this device now counts as unknown
+        for _ in range(5):
+            assert _login(device, password="zle haslo zle", ip="10.3.3.3").status_code == 401
+        assert _login(device, password="nowe dobre haslo", ip="10.3.3.3").status_code == 429
+        # From a fresh device on another network the new password works
+        assert _login(make_client(db), password="nowe dobre haslo", ip="10.4.4.4").status_code == 200
+
+    def test_unknown_device_caps(self, db, account):
         attacker = make_client(db)
         for _ in range(5):
             assert _login(attacker, password="zgaduje haslo", ip="10.1.1.1").status_code == 401
-        assert _login(attacker, ip="10.1.1.1").status_code == 429
-        # A different IP is still fine (below the global throttle)
-        assert _login(make_client(db), ip="10.1.1.2").status_code == 200
+        assert _login(attacker, ip="10.1.1.1").status_code == 429  # per (login, IP)
+        assert _login(make_client(db), ip="10.1.1.2").status_code == 200  # other IP, below 10
 
-    def test_device_cookie_holds_no_login(self, db, account):
-        child = make_client(db)
-        response = _login(child, ip="10.0.0.1")
+        # 20 per IP, across logins
+        guesser = make_client(db)
+        for i in range(20):
+            guesser.post("/api/auth/login", json={"login": f"inny{i}", "password": "cokolwiek tam"},
+                         headers={"cf-connecting-ip": "10.7.7.7"})
+        assert _login(guesser, ip="10.7.7.7").status_code == 429
+
+    def test_success_clears_only_its_own_failures(self, db, account):
+        from app.db.models import LoginFailureDB
+
+        attacker = make_client(db)
+        for _ in range(3):
+            _login(attacker, password="zgaduje haslo", ip="10.8.8.8")
+        assert _login(make_client(db), ip="10.0.0.9").status_code == 200
+        assert db.query(LoginFailureDB).count() == 3
+
+    def test_forged_or_foreign_cookie_is_ignored(self, db, account):
+        device = make_client(db)
+        _login(device)
+        device.cookies.set(service.DEVICE_COOKIE, device.cookies.get(service.DEVICE_COOKIE) + "x")
+        for _ in range(5):
+            _login(device, password="zle haslo zle", ip="10.6.6.6")
+        assert _login(device, ip="10.6.6.6").status_code == 429  # counted as unknown
+
+    def test_device_cookie_is_signed_random_and_holds_no_login(self, db, account):
+        response = _login(make_client(db))
         cookie = response.cookies.get(service.DEVICE_COOKIE)
         assert cookie and "kuba" not in cookie
+        device = service.read_device(cookie)
+        assert device.device_id and len(device.tags) == 1
         assert "httponly" in response.headers["set-cookie"].lower()
 
     def test_messages_stay_generic(self, db, account):
@@ -208,9 +281,67 @@ def test_failed_send_leaves_the_old_parent_and_links(client, db, monkeypatch):
     assert me(client)["account"]["pending"]["parent_email"] == "m***@example.com"
     view = client.post("/api/parent/consent/view", json={"token": old_token}).json()
     assert view["state"] == "valid"
+    # At most a childless parent row is left, which retention removes
     from app.db.models import ParentDB
+    from app.retention import delete_childless_parents
 
+    assert delete_childless_parents(db).parents_deleted == 1
     assert db.query(ParentDB).filter(ParentDB.email == "tata@example.com").count() == 0
+
+
+# --------------------------------------------------------------------- 1. no transaction across a send
+
+
+@pytest.fixture
+def send_watch(db, monkeypatch):
+    """A send_email that records whether the session held a transaction."""
+    from app.email import send_email as real_send
+
+    seen = []
+
+    async def watching(*args, **kwargs):
+        seen.append({"in_transaction": db.in_transaction(), "pending": bool(db.new or db.dirty or db.deleted)})
+        await real_send(*args, **kwargs)
+
+    monkeypatch.setattr(service, "send_email", watching)
+    return seen
+
+
+def test_no_transaction_is_open_while_any_e_mail_is_sent(client, other_client, db, send_watch):
+    register_login(client)                                             # consent (registration)
+    age_tokens(db, hours=0.1)
+    client.post("/api/account/consent/resend")                        # consent (resend)
+    age_tokens(db, hours=0.1)
+    client.post("/api/account/parent-email", json={"parent_email": "tata@example.com"})  # change
+    token = consent_token("tata@example.com")
+    other_client.post("/api/parent/consent", json={"token": token, "decision": "accept"})  # active
+    other_client.post("/api/parent/request-link", json={"email": "tata@example.com"})     # manage
+    other_client.post("/api/auth/password-reset/request", json={"login": "kuba_m"})       # reset
+    assert len(send_watch) == 6, send_watch
+    assert all(not call["in_transaction"] and not call["pending"] for call in send_watch), send_watch
+
+
+def test_parent_row_is_committed_before_the_send(client, db, monkeypatch):
+    """Concurrent requests for the same address must not wait on an
+    uncommitted INSERT: the row is visible from another connection."""
+    from sqlalchemy.orm import sessionmaker
+
+    from app.db.models import ParentDB
+    from app.email import send_email as real_send
+
+    register_login(client)
+    age_tokens(db, hours=0.1)
+    other_session = sessionmaker(bind=db.get_bind())()
+    seen = []
+
+    async def watching(*args, **kwargs):
+        seen.append(other_session.query(ParentDB).filter(ParentDB.email == "tata@example.com").count())
+        await real_send(*args, **kwargs)
+
+    monkeypatch.setattr(service, "send_email", watching)
+    client.post("/api/account/parent-email", json={"parent_email": "tata@example.com"})
+    other_session.close()
+    assert seen == [1]
 
 
 # --------------------------------------------------------------------- 8. Google registration state
@@ -231,21 +362,19 @@ def google(monkeypatch):
     monkeypatch.setattr(main, "check_group_membership", member)
 
 
-def test_new_user_limit_keeps_the_waiting_identity(client, db, google, monkeypatch):
+def test_waiting_identity_is_consumed_even_on_429(client, db, google, monkeypatch):
+    """A shared computer must not hand a Google identity to the next child."""
     from app.config import settings
 
     client.get("/auth/callback", follow_redirects=False)
+    assert client.get("/api/auth/register/state").json() == {"google": {"email": "kid@gmail.com"}}
     monkeypatch.setattr(settings, "rate_limit_new_users_per_day", 0)
     body = {"birth_year": 2005, "accept_terms": True}
     assert client.post("/api/auth/register/google", json=body).status_code == 429
-    # Still waiting - the child can retry without going back to Google
-    assert client.get("/api/auth/register/state").json() == {"google": {"email": "kid@gmail.com"}}
-    monkeypatch.setattr(settings, "rate_limit_new_users_per_day", 50)
-    assert client.post("/api/auth/register/google", json=body).json()["action"] == "done"
     assert client.get("/api/auth/register/state").json() == {"google": None}
 
 
-def test_callback_429_keeps_answers_and_identity(client, db, google, monkeypatch):
+def test_callback_429_consumes_answers(client, db, google, monkeypatch):
     from app.config import settings
 
     client.post("/api/auth/register/google", json={"birth_year": 2005, "accept_terms": True})
@@ -253,4 +382,31 @@ def test_callback_429_keeps_answers_and_identity(client, db, google, monkeypatch
     response = client.get("/auth/callback", follow_redirects=False)
     assert response.headers["location"] == "/login?error=rate_limit_new_users"
     assert db.query(UserDB).count() == 0
-    assert client.get("/api/auth/register/state").json() == {"google": {"email": "kid@gmail.com"}}
+    assert client.get("/api/auth/register/state").json() == {"google": None}
+    # The next Google sign-in starts clean: nothing is created from stale answers
+    monkeypatch.setattr(settings, "rate_limit_new_users_per_day", 50)
+    assert client.get("/auth/callback", follow_redirects=False).headers["location"] == "/rejestracja?google=1"
+    assert db.query(UserDB).count() == 0
+
+
+def test_waiting_identity_holds_only_sub_and_email_for_10_minutes(client, db, google, monkeypatch):
+    import time as time_module
+
+    from app.auth import SESSION_PENDING_GOOGLE_KEY
+
+    client.get("/auth/callback", follow_redirects=False)
+    stored = {}
+
+    @main.app.get("/__test/pending")
+    async def peek(request: __import__("fastapi").Request):  # pragma: no cover - test helper route
+        stored.update(request.session.get(SESSION_PENDING_GOOGLE_KEY) or {})
+        return {}
+
+    try:
+        client.get("/__test/pending")
+    finally:
+        main.app.router.routes.pop()
+    assert set(stored) == {"sub", "email", "at"}
+    real_time = time_module.time
+    monkeypatch.setattr(time_module, "time", lambda: real_time() + 11 * 60)
+    assert client.get("/api/auth/register/state").json() == {"google": None}

@@ -2,45 +2,40 @@
 
 import { useEffect, useSyncExternalStore } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
+import { LINK_TOKEN_STATE_KEY, splitTokenFromUrl, tokenFromState } from "@/lib/utils/linkToken";
 import { FormCard } from "./FormCard";
 
 const noopSubscribe = () => () => undefined;
 
-function readStored(key: string): string | null {
-  try {
-    return window.sessionStorage.getItem(key);
-  } catch {
-    return null;
-  }
-}
-
 /**
- * Token z linku w e-mailu (?t=...). Po odczytaniu znika z paska adresu
- * (history.replaceState), zeby nie trafil do historii, zakladek, zrzutow
- * ekranu ani dziennikow serwera przy kolejnych zapytaniach; na czas karty
- * zostaje w sessionStorage, wiec odswiezenie strony dalej dziala.
- * Do API token idzie wylacznie w tresci zapytania POST.
+ * Token z linku w e-mailu (?t=...). Po odczytaniu przenosimy go do stanu
+ * biezacego wpisu historii i usuwamy z paska adresu (history.replaceState),
+ * zeby nie zostal w adresie, historii, zakladkach ani naglowku Referer.
+ * Odswiezenie tego samego wpisu znajduje go w history.state; nowe wejscie na
+ * goly adres tokenu nie ma. Do API token idzie wylacznie w tresci POST.
+ *
+ * Stan przekazujemy BEZ wewnetrznych kluczy Next.js (__NA): wtedy Next
+ * dopisuje swoje, uaktualnia adres w routerze i zachowuje nasz klucz.
  */
-export function useLinkToken(fromUrl: string | null, storageKey: string): { ready: boolean; token: string | null } {
+export function useLinkToken(fromUrl: string | null): { ready: boolean; token: string | null } {
   // false na serwerze i przy hydratacji, true po zamontowaniu w przegladarce
   const isClient = useSyncExternalStore(noopSubscribe, () => true, () => false);
 
   useEffect(() => {
     if (!fromUrl) return;
-    try {
-      window.sessionStorage.setItem(storageKey, fromUrl);
-    } catch {
-      // Tryb prywatny bez sessionStorage - odswiezenie wtedy nie zadziala, reszta tak
-    }
-    const url = new URL(window.location.href);
-    if (url.searchParams.has("t")) {
-      url.searchParams.delete("t");
-      window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
-    }
-  }, [fromUrl, storageKey]);
+    const { cleanUrl } = splitTokenFromUrl(window.location.href);
+    window.history.replaceState({ [LINK_TOKEN_STATE_KEY]: fromUrl }, "", cleanUrl);
+  }, [fromUrl]);
 
   if (!isClient) return { ready: false, token: null };
-  return { ready: true, token: fromUrl ?? readStored(storageKey) };
+  return { ready: true, token: fromUrl ?? tokenFromState(window.history.state) };
+}
+
+/** Po dzialaniu konczacym (zgoda, usuniecie konta, nowe haslo) token nie jest juz potrzebny. */
+export function forgetLinkToken(): void {
+  if (tokenFromState(window.history.state)) {
+    window.history.replaceState({}, "", splitTokenFromUrl(window.location.href).cleanUrl);
+  }
 }
 
 export function LinkTokenLoading() {

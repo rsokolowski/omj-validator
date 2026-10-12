@@ -12,7 +12,7 @@ import { FormCard } from "@/components/account/FormCard";
 import { StepHeading } from "@/components/account/StepHeading";
 import { PasswordField } from "@/components/account/PasswordField";
 import { SubmitButton } from "@/components/account/SubmitButton";
-import { LinkTokenLoading, useLinkToken } from "@/components/account/LinkToken";
+import { forgetLinkToken, LinkTokenLoading, useLinkToken } from "@/components/account/LinkToken";
 
 type View =
   | { kind: "loading" }
@@ -60,6 +60,7 @@ function PasswordResetConfirmView({ token }: { token: string | null }) {
     setError(null);
     try {
       await accountApi.passwordResetConfirm(token, password);
+      forgetLinkToken();
       setActed(true);
       setView({ kind: "done" });
     } catch (err) {
@@ -186,7 +187,7 @@ function PasswordResetConfirmView({ token }: { token: string | null }) {
 
 /** Odczytuje token z linku (i chowa go z paska adresu), potem pokazuje strone. */
 export function PasswordResetConfirm({ token: tokenFromUrl }: { token: string | null }) {
-  const link = useLinkToken(tokenFromUrl, "omj-link-haslo");
+  const link = useLinkToken(tokenFromUrl);
   if (!link.ready) return <LinkTokenLoading />;
   return <PasswordResetConfirmView token={link.token} />;
 }

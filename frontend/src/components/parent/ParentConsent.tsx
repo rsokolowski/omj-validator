@@ -19,7 +19,7 @@ import { FormCard } from "@/components/account/FormCard";
 import { StepHeading } from "@/components/account/StepHeading";
 import { ConfirmDialog } from "@/components/account/ConfirmDialog";
 import { ChildIdentifier } from "./ChildIdentifier";
-import { LinkTokenLoading, useLinkToken } from "@/components/account/LinkToken";
+import { forgetLinkToken, LinkTokenLoading, useLinkToken } from "@/components/account/LinkToken";
 
 type View =
   | { kind: "loading" }
@@ -72,6 +72,8 @@ function ParentConsentView({ token, declineIntent }: ParentConsentProps) {
     setActionError(null);
     try {
       const result = await parentApi.decide(token, decision);
+      // Decyzja zapadla - link nie jest juz potrzebny w tym wpisie historii
+      forgetLinkToken();
       setActed(true);
       setDialogOpen(false);
       setView(
@@ -394,7 +396,7 @@ function LinkProblem({ state, focus = false, child, canResend, resent, resending
 
 /** Odczytuje token z linku (i chowa go z paska adresu), potem pokazuje strone. */
 export function ParentConsent({ token: tokenFromUrl, declineIntent }: ParentConsentProps) {
-  const link = useLinkToken(tokenFromUrl, "omj-link-zgoda");
+  const link = useLinkToken(tokenFromUrl);
   if (!link.ready) return <LinkTokenLoading />;
   return <ParentConsentView token={link.token} declineIntent={declineIntent} />;
 }

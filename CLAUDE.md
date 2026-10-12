@@ -191,11 +191,11 @@ POST /api/account/delete             # Erase own account + submissions + photos 
 # Accounts (app/accounts/routes.py). Every write route of the app runs require_active_user:
 # a pending_parent account or one without birth_year gets 403 {detail, code} unless the
 # endpoint is marked @allow_inactive_account (tests/test_accounts_guard.py lists them)
-POST /api/auth/login                 # login + password (+ remember); lockout 5 per (login, device|IP), 20/IP, 30/login per 15 min (known device exempt from the last two)
+POST /api/auth/login                 # login + password (+ remember); lockout 5 per (login, known device | IP); unknown devices also 20/IP, 10/login per 15 min (signed omj_device cookie)
 GET  /api/auth/login-available       # "Ten login jest zajęty" check (rate-limited)
 POST /api/auth/register/login        # Login account: always pending_parent, consent e-mail to parent
 POST /api/auth/register/google       # Answers before Google (-> /login/google?register=1) or after (pending_google)
-GET  /api/auth/register/state        # Google identity waiting for registration (30 min)
+GET  /api/auth/register/state        # Google identity (sub + e-mail) waiting for registration (10 min, consumed on use)
 POST /api/auth/profile               # Year of birth for accounts created before the age step
 POST /api/account/consent/resend     # Pending screen: resend (60 s cooldown, 3/account, 5/parent per 24 h)
 POST /api/account/parent-email       # Pending screen: change the parent address (old links expire)

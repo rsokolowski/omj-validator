@@ -576,8 +576,8 @@ class DeletedAccountQuotaDB(Base):
 
     __tablename__ = "deleted_account_quota"
 
-    # HMAC-SHA256 of repositories.quota_identity() (Google sub, or the parent's
-    # address for login accounts), hex - see repositories.hash_user_id
+    # HMAC-SHA256 of repositories.quota_identity() (the Google sub for Google
+    # accounts, the account id otherwise), hex - see repositories.hash_user_id
     user_hash = Column(String(64), primary_key=True)
 
     # Submissions the deleted account made inside the rate limit window

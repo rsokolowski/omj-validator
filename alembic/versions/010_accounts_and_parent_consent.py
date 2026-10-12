@@ -135,19 +135,31 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    # The old schema keys users by their Google sub. Login accounts (no Google
-    # id) cannot exist there, and Google accounts created after 010 have a
-    # random id that every FK and upload directory uses - renaming id back to
-    # google_sub would silently swap their identity. Refuse instead.
+    # Only a database that never used the new flows can go back: the old
+    # schema has no place for login accounts, years of birth, pending accounts,
+    # parent addresses or consent records, and Google accounts created after
+    # 010 have a random id that every FK and upload directory uses - renaming
+    # id back to google_sub would silently swap their identity.
     bind = op.get_bind()
-    count = bind.execute(
-        sa.text("SELECT count(*) FROM users WHERE google_sub IS NULL OR id <> google_sub")
-    ).scalar()
-    if count:
+    checks = {
+        "accounts not keyed by their Google sub (login accounts, or Google accounts created after 010)":
+            "SELECT count(*) FROM users WHERE google_sub IS NULL OR id <> google_sub",
+        "accounts with a year of birth or waiting for a parent":
+            "SELECT count(*) FROM users WHERE birth_year IS NOT NULL OR status <> 'active'",
+        "parent addresses": "SELECT count(*) FROM parents",
+        "consent records": "SELECT count(*) FROM consents",
+    }
+    found = [
+        f"{count} {label}"
+        for label, sql in checks.items()
+        if (count := bind.execute(sa.text(sql)).scalar())
+    ]
+    if found:
         raise RuntimeError(
-            f"Cannot downgrade below 010: {count} account(s) were created after it "
-            "(login/password accounts, or Google accounts whose id is not their Google sub). "
-            "Erase them first, or restore a backup taken before the upgrade."
+            "Cannot downgrade below 010: the new account flows were used ("
+            + "; ".join(found)
+            + "). Downgrading would lose or mix up this data. Restore a backup taken "
+            "before the upgrade instead."
         )
 
     op.drop_table("login_failures")

@@ -295,7 +295,7 @@ export function RegistrationWizard({ currentYear, googleMode, sameAddressError }
           </Alert>
         ) : (
           <Typography sx={{ color: "grey.700", mb: 3 }}>
-            Od logowania przez Google minęło ponad 30 minut, więc dla bezpieczeństwa musimy
+            Od logowania przez Google minęło ponad 10 minut, więc dla bezpieczeństwa musimy
             poprosić o nie jeszcze raz. Nic nie przepadło — zaloguj się i dokończ zakładanie konta.
           </Typography>
         )}

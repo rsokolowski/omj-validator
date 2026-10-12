@@ -451,31 +451,35 @@ async def _google_new_identity(
     """A Google identity with no account yet.
 
     With answers from /rejestracja in the session the account is created now;
-    without them nothing is created - the identity waits in the session
-    (30 minutes) and the child finishes the registration at
+    without them nothing is created - the identity (sub + e-mail) waits in
+    the session for 10 minutes and the child finishes the registration at
     /rejestracja?google=1.
     """
     import time as _time
 
     from .accounts.routes import finish_google_registration
 
-    identity = {"sub": google_sub, "email": email, "name": name, "picture": picture, "at": _time.time()}
-    # The identity waits in the session whatever happens next; it is dropped
-    # only when the account is created (start_session replaces the session)
-    request.session[SESSION_PENDING_GOOGLE_KEY] = identity
-    answers = request.session.get(SESSION_PENDING_REGISTRATION_KEY)
+    answers = request.session.pop(SESSION_PENDING_REGISTRATION_KEY, None)
     if not answers or _time.time() - answers.get("at", 0) > PENDING_SESSION_SECONDS:
-        request.session.pop(SESSION_PENDING_REGISTRATION_KEY, None)
+        # Only what the registration needs, and briefly (PENDING_GOOGLE_SECONDS)
+        request.session[SESSION_PENDING_GOOGLE_KEY] = {
+            "sub": google_sub, "email": email, "at": _time.time()
+        }
         return RedirectResponse(url="/rejestracja?google=1", status_code=status.HTTP_303_SEE_OTHER)
 
     parent_email = answers.get("parent_email")
     if parent_email and parent_email == email.strip().lower():
         # The parent's address must not be the child's own Google address
-        request.session.pop(SESSION_PENDING_REGISTRATION_KEY, None)
+        request.session[SESSION_PENDING_GOOGLE_KEY] = {
+            "sub": google_sub, "email": email, "at": _time.time()
+        }
         return RedirectResponse(
             url="/rejestracja?google=1&blad=ten-sam-adres", status_code=status.HTTP_303_SEE_OTHER
         )
 
+    # This identity comes straight from Google in this request: name and
+    # picture are used for the new account, then consumed with the answers
+    identity = {"sub": google_sub, "email": email, "name": name, "picture": picture}
     result = await finish_google_registration(
         request,
         db,

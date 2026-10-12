@@ -92,6 +92,14 @@ def test_upgrade_keeps_ids_and_foreign_keys(engine, monkeypatch):
         session.commit()
         assert session.get(SubmissionDB, "sub00001").user.email == "kid@gmail.com"
 
+        # ensure_parent's INSERT ... ON CONFLICT DO NOTHING on PostgreSQL
+        from app.accounts.service import ensure_parent
+
+        first = ensure_parent(session, "tata@example.com")
+        again = ensure_parent(session, "tata@example.com")
+        assert first.id == again.id
+        assert ensure_parent(session, "mama@example.com").id == "p" * 32
+
         # Neither Google nor login: refused by ck_users_identity
         session.add(UserDB(id="v" * 32, email="x@example.com"))
         with pytest.raises(IntegrityError):
@@ -110,16 +118,36 @@ def test_upgrade_keeps_ids_and_foreign_keys(engine, monkeypatch):
             assert conn.execute(text("SELECT count(*) FROM submissions")).scalar() == 0
             assert conn.execute(text("SELECT count(*) FROM ai_usage")).scalar() == 0
 
-        # A Google account created after 010 has a random id: downgrading would
-        # swap its identity, so the downgrade refuses (as it does for login accounts)
-        session.add(UserDB(id="n" * 32, google_sub="g-new", email="new@gmail.com", birth_year=2005))
-        session.commit()
+        # Downgrade only on a database that never used the new flows: each of
+        # these alone makes it refuse
         session.query(UserDB).filter(UserDB.login.isnot(None)).delete()
         session.commit()
-        with pytest.raises(RuntimeError, match="Cannot downgrade below 010"):
-            _alembic(monkeypatch, "downgrade", "009")
-        session.query(UserDB).filter(UserDB.id == "n" * 32).delete()
-        session.commit()
+        refusals = [
+            # first, so the cases after it are refused for their own reason
+            ("a parent address", None, "DELETE FROM parents"),  # the row from above is still there
+            ("a Google account with a random id",
+             "INSERT INTO users (id, google_sub, email, created_at, updated_at, status, session_version) "
+             "VALUES ('nnnn', 'g-new', 'new@gmail.com', now(), now(), 'active', 0)",
+             "DELETE FROM users WHERE id = 'nnnn'"),
+            ("a year of birth",
+             "UPDATE users SET birth_year = 2005",
+             "UPDATE users SET birth_year = NULL"),
+            ("a pending account",
+             "UPDATE users SET status = 'pending_parent'",
+             "UPDATE users SET status = 'active'"),
+            ("a consent record",
+             "INSERT INTO consents (user_id, kind, terms_version, given_at) "
+             "VALUES ('104857600000000000002', 'self', '2026-10-12', now())",
+             "DELETE FROM consents"),
+        ]
+        for label, setup, cleanup in refusals:
+            if setup:
+                with engine.begin() as conn:
+                    conn.execute(text(setup))
+            with pytest.raises(RuntimeError, match="Cannot downgrade below 010"):
+                _alembic(monkeypatch, "downgrade", "009")
+            with engine.begin() as conn:
+                conn.execute(text(cleanup))
     finally:
         session.close()
 

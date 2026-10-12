@@ -22,7 +22,7 @@ from sqlalchemy.orm import Session
 from ..auth import (
     SESSION_PENDING_GOOGLE_KEY,
     SESSION_PENDING_REGISTRATION_KEY,
-    PENDING_SESSION_SECONDS,
+    PENDING_GOOGLE_SECONDS,
     allow_inactive_account,
     current_account,
     safe_next_path,
@@ -147,8 +147,8 @@ class LoginRegistrationRequest(AgeFields):
     parent_email: Optional[str] = None
 
 
-def _fresh(entry: Optional[dict]) -> Optional[dict]:
-    if not entry or time.time() - entry.get("at", 0) > PENDING_SESSION_SECONDS:
+def _fresh_google(entry: Optional[dict]) -> Optional[dict]:
+    if not entry or time.time() - entry.get("at", 0) > PENDING_GOOGLE_SECONDS:
         return None
     return entry
 
@@ -156,7 +156,7 @@ def _fresh(entry: Optional[dict]) -> Optional[dict]:
 @router.get("/api/auth/register/state")
 async def registration_state(request: Request):
     """Whether a Google identity waits for its registration (?google=1)."""
-    pending = _fresh(request.session.get(SESSION_PENDING_GOOGLE_KEY))
+    pending = _fresh_google(request.session.get(SESSION_PENDING_GOOGLE_KEY))
     return {"google": {"email": pending["email"]} if pending else None}
 
 
@@ -179,7 +179,7 @@ async def register_google(
     if alone and not body.accept_terms:
         return _fail(400, "Zaznacz zgodę, żeby założyć konto.", "invalid", field="accept_terms")
 
-    pending_google = _fresh(request.session.get(SESSION_PENDING_GOOGLE_KEY))
+    pending_google = _fresh_google(request.session.get(SESSION_PENDING_GOOGLE_KEY))
     parent_email = None
     if not alone:
         parent_email, error = _parent_email(
@@ -209,15 +209,17 @@ async def finish_google_registration(
 ):
     """Create the Google user from verified identity + answers and log in.
 
-    The waiting identity and answers leave the session only once the account
-    exists (start_session replaces the session): after a 429 or 409 the child
-    can try again without going back to Google.
+    The waiting identity and answers are consumed here, whatever the outcome:
+    after a 429 or 409 the child signs in with Google again. On a shared
+    computer a lingering identity could end up on another child's account.
     """
+    request.session.pop(SESSION_PENDING_GOOGLE_KEY, None)
+    request.session.pop(SESSION_PENDING_REGISTRATION_KEY, None)
+
     existing = db.query(UserDB).filter(UserDB.google_sub == identity["sub"]).first()
     if existing is not None:  # registered meanwhile (second tab) - just log in
         start_session(
-            request, existing, remember=True,
-            is_group_member=await _group_access(existing.email), picture=identity.get("picture"),
+            request, existing, remember=True, is_group_member=await _group_access(existing.email),
         )
         return {"action": "done", "redirect": _home_for(existing), "email_sent": None}
 
@@ -233,8 +235,8 @@ async def finish_google_registration(
         return _fail(409, "To konto Google jest już zarejestrowane. Zaloguj się.", "conflict")
 
     start_session(
-        request, user, remember=True,
-        is_group_member=await _group_access(user.email), picture=identity.get("picture"),
+        request, user, remember=True, is_group_member=await _group_access(user.email),
+        picture=identity.get("picture"),
     )
     email_sent = None
     if user.status == UserStatus.PENDING_PARENT:
@@ -354,12 +356,12 @@ async def login_with_password(
     if not login or not password:
         return _fail(400, "Wpisz login i hasło.", "invalid")
 
-    device_cookie = request.cookies.get(service.DEVICE_COOKIE)
-    actor, known_device = service.login_actor(login, client_ip(request), device_cookie)
+    user = db.query(UserDB).filter(UserDB.login == login).first()
+    device = service.read_device(request.cookies.get(service.DEVICE_COOKIE))
+    actor, known_device = service.login_actor(login, client_ip(request), device, user)
     if service.login_locked(db, login, actor, known_device):
         return _fail(429, LOCKED_MESSAGE, "login_locked")
 
-    user = db.query(UserDB).filter(UserDB.login == login).first()
     ok = passwords.verify_password(user.password_hash if user else None, password[: passwords.PASSWORD_MAX])
     if not ok or user is None:
         service.record_login_failure(db, login, actor)
@@ -368,17 +370,18 @@ async def login_with_password(
 
     if passwords.needs_rehash(user.password_hash):
         user.password_hash = passwords.hash_password(password)
-    service.clear_login_failures(db, login)
+    service.clear_login_failures(db, login, actor)
     # A sign-in is activity: delete_inactive_accounts counts from updated_at
     user.updated_at = service.now()
+    session_version = user.session_version or 0
     db.commit()
 
     start_session(request, user, remember=body.remember, is_group_member=await _group_access(None))
-    # Remember that this login succeeded on this device (a keyed digest, no
-    # personal data) - its failed attempts are then counted separately
+    # Remember this device for this login (random device id + a tag bound to
+    # the current password); its failed attempts are then counted on their own
     response.set_cookie(
         service.DEVICE_COOKIE,
-        service.with_device_tag(device_cookie, login),
+        service.device_cookie_after_login(device, login, session_version),
         max_age=service.DEVICE_COOKIE_MAX_AGE,
         httponly=True,
         secure=not settings.auth_disabled,
@@ -427,8 +430,9 @@ async def complete_profile(
     parent_email, error = _parent_email(body.parent_email, account.email)
     if error:
         return error
+    parent = service.ensure_parent(db, parent_email)  # commits on its own
     account.birth_year = body.birth_year
-    service.set_pending(account, service.get_or_create_parent(db, parent_email))
+    service.set_pending(account, parent)
     db.commit()
     email_sent = await service.try_send_consent_email(db, account)
     return {"redirect": "/konto/oczekuje", "email_sent": email_sent}
@@ -482,23 +486,25 @@ async def change_parent_email(
     if error:
         return error
 
-    parent = service.get_or_create_parent(db, parent_email)
+    # (a) the address row, committed on its own (no lock held across the send)
+    parent = service.ensure_parent(db, parent_email)
+    new_parent_id = parent.id
 
     def switch_parent() -> None:
-        # Only once the new e-mail is out: until then the old links and the
-        # old address stay exactly as they were
+        # (d) only once the new e-mail is out, in the short commit that also
+        # writes the new link: until then the old address and links stand
         service.invalidate_consent_tokens(db, account)
-        account.parent_id = parent.id
+        account.parent_id = new_parent_id
 
-    # The previous parent row stays until the daily retention pass: its
-    # e-mail log keeps counting against the limits for 24 h.
+    # (b, c) the new links exist only in memory until the send succeeds.
+    # The previous parent row stays until retention: its e-mail log keeps
+    # counting against the limits for 24 h. On failure nothing is pending;
+    # at most a childless parent row is left for retention.
     try:
         await service.send_consent_email(db, account, parent, on_sent=switch_parent)
     except EmailLimitError as e:
-        db.rollback()
         return _limit_response(e)
     except EmailSendError:
-        db.rollback()
         return _send_failed()
     db.refresh(account)
     return {"sent": True, "account": service.account_summary(db, account)}

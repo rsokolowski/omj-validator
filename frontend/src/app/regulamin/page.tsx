@@ -374,8 +374,8 @@ export default function RegulaminPage() {
             </li>
             <li>
               nieudane próby logowania loginem i hasłem: wpisany login, czas i
-              skrót kryptograficzny adresu IP albo ciasteczka urządzenia (nie sam
-              adres).
+              skrót kryptograficzny adresu IP albo identyfikatora urządzenia (nie
+              sam adres).
             </li>
           </Box>
           <Typography paragraph>
@@ -451,9 +451,12 @@ export default function RegulaminPage() {
           <Typography paragraph>
             <strong>Dane techniczne:</strong> ciasteczko sesyjne (ważne do 30 dni,
             podpisane kryptograficznie; patrz punkt 4), przy logowaniu loginem i
-            hasłem także ciasteczko urządzenia (rok; zawiera wyłącznie skrót
-            kryptograficzny loginu, potrzebny do ochrony przed blokowaniem
-            logowania) oraz dzienniki serwera zawierające m.in.
+            hasłem także ciasteczko urządzenia (rok; zawiera losowy identyfikator
+            urządzenia i podpisane skróty kryptograficzne loginów, które się na
+            nim zalogowały &ndash; nie identyfikuje osoby, służy tylko temu, by
+            cudze próby zgadywania hasła nie blokowały logowania na Twoim
+            urządzeniu; po zmianie hasła przestaje działać dla tego loginu)
+            oraz dzienniki serwera zawierające m.in.
             informacje o logowaniach i błędach. W dziennikach adresy e-mail są
             skracane tak, by nie identyfikowały osoby.
           </Typography>
