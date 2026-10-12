@@ -183,3 +183,40 @@ class TestResendBackend:
         monkeypatch.setattr(settings, "resend_api_key", "re_test")
         with pytest.raises(email_module.EmailSendError):
             await email_module.send_email("mama@example.com", "Temat", "<p>x</p>", "x")
+
+
+class TestWebSocketSession:
+    def test_websocket_reads_the_user_from_the_session(self, client, db):
+        """The progress socket authenticates with the same session as HTTP
+        (it used to decode the cookie by hand and broke on the new format)."""
+        from datetime import datetime, timezone
+
+        from app.db.models import SubmissionDB, SubmissionStatus
+
+        db.add(UserDB(id="w1", google_sub="w1", email="w@gmail.com", birth_year=2000))
+        db.add(SubmissionDB(id="ws000001", user_id="w1", year="2024", etap="etap1", task_number=1,
+                            images=[], status=SubmissionStatus.COMPLETED, score=6, feedback="ok",
+                            timestamp=datetime.now(timezone.utc).replace(tzinfo=None)))
+        db.commit()
+        client.cookies.set("session", signed_cookie({"user": {"user_id": "w1", "session_version": 0}}))
+        with client.websocket_connect("/ws/submissions/ws000001") as ws:
+            message = ws.receive_json()
+        assert message.get("type") != "error", message
+
+    def test_websocket_refuses_someone_elses_submission(self, client, db):
+        from datetime import datetime, timezone
+
+        from starlette.websockets import WebSocketDisconnect
+
+        from app.db.models import SubmissionDB, SubmissionStatus
+
+        db.add(UserDB(id="w1", google_sub="w1", email="w@gmail.com", birth_year=2000))
+        db.add(UserDB(id="w2", google_sub="w2", email="x@gmail.com", birth_year=2000))
+        db.add(SubmissionDB(id="ws000002", user_id="w2", year="2024", etap="etap1", task_number=1,
+                            images=[], status=SubmissionStatus.COMPLETED, score=6, feedback="ok",
+                            timestamp=datetime.now(timezone.utc).replace(tzinfo=None)))
+        db.commit()
+        client.cookies.set("session", signed_cookie({"user": {"user_id": "w1", "session_version": 0}}))
+        with pytest.raises(WebSocketDisconnect):
+            with client.websocket_connect("/ws/submissions/ws000002") as ws:
+                ws.receive_json()

@@ -917,39 +917,16 @@ async def websocket_submission_progress(
     Connect after calling POST /task/{year}/{etap}/{num}/submit.
     Receives progress updates as JSON messages.
     """
-    from itsdangerous import TimestampSigner
-    import base64
-    import json
     from .db.models import SubmissionStatus
     from .websocket.handler import websocket_submission_handler
     from .websocket.progress import progress_manager
 
-    # Get user from session cookie
-    # WebSocket connections include cookies automatically
-    user_id = None
-
-    if settings.auth_disabled:
-        user_id = "anonymous"
-    else:
-        try:
-            # Decode session cookie using same method as SessionMiddleware
-            session_cookie = websocket.cookies.get("session")
-            if session_cookie:
-                # Starlette SessionMiddleware uses TimestampSigner + base64 + JSON
-                signer = TimestampSigner(settings.session_secret_key)
-                # max_age matches the middleware config (30 days)
-                data = signer.unsign(session_cookie, max_age=30 * 24 * 60 * 60)
-                session_data = json.loads(base64.b64decode(data))
-                user = session_data.get(SESSION_USER_KEY)
-                if user:
-                    user_id = user.get("user_id")
-                    logger.info(f"[WebSocket] Session decoded, user_id={mask_user_id(user_id)}")
-                else:
-                    logger.warning(f"[WebSocket] No user in session data")
-            else:
-                logger.warning(f"[WebSocket] No session cookie found. Cookies: {list(websocket.cookies.keys())}")
-        except Exception as e:
-            logger.warning(f"[WebSocket] Session decode failed: {e}")
+    # SessionMiddleware decodes the cookie for WebSockets too, and the app-level
+    # current_account dependency has already dropped a stale session (deleted
+    # account, password changed), so the regular helper is the whole check.
+    user_id = get_current_user_id(websocket)
+    if not user_id:
+        logger.warning("[WebSocket] No signed-in user in the session")
 
     # Verify submission exists
     submission_repo = SubmissionRepository(db)
