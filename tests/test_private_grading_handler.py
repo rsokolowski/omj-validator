@@ -9,6 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import app.websocket.handler as handler
+from app.notifications import take_digest_message
 from app.ai.factory import AIProviderError
 from app.db.models import PrivateTaskDB, SubmissionDB, SubmissionStatus, UserDB
 from app.db.session import Base
@@ -63,12 +64,6 @@ def session_factory(monkeypatch):
 
 def run(provider, monkeypatch, image_paths, solution_text=None):
     monkeypatch.setattr(handler, "create_ai_provider", lambda: provider)
-    sent = []
-
-    async def capture(text):
-        sent.append(text)
-
-    monkeypatch.setattr(handler, "send_telegram_message", capture)
     asyncio.run(
         handler.process_submission_background(
             submission_id="sub00001",
@@ -82,7 +77,8 @@ def run(provider, monkeypatch, image_paths, solution_text=None):
             solution_text=solution_text,
         )
     )
-    return sent
+    digest = take_digest_message()
+    return [digest] if digest else []
 
 
 def test_private_submission_is_graded_against_task_text(session_factory, monkeypatch, tmp_path):
@@ -103,7 +99,7 @@ def test_private_submission_is_graded_against_task_text(session_factory, monkeyp
     assert provider.calls[0][:2] == ("Parzystość", "Wykaż, że $n^2+n$ jest parzyste.")
     # Notifications never carry the task title or statement
     assert sent and all("Parzysto" not in text and "n^2" not in text for text in sent)
-    assert any("private" in text for text in sent)
+    assert "1 graded" in sent[0]
 
 
 def test_private_submission_failure_is_recorded(session_factory, monkeypatch, tmp_path):
@@ -128,4 +124,4 @@ def test_text_only_private_submission_reaches_the_provider(session_factory, monk
     assert provider.calls[0][3] == text
     # Only the length leaves the server
     assert sent and all("Niech" not in message for message in sent)
-    assert any("text: " in message and "chars" in message for message in sent)
+    assert "1 graded" in sent[0]

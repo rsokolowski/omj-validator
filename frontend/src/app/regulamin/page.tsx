@@ -697,20 +697,6 @@ export default function RegulaminPage() {
             danych konta.
           </Typography>
           <Typography paragraph>
-            <strong>Powiadomienia techniczne.</strong> Administrator dostaje
-            automatyczne powiadomienia o działaniu serwisu przez komunikator{" "}
-            <strong>Telegram</strong> (Telegram FZ-LLC, Zjednoczone Emiraty
-            Arabskie). Powiadomienie o zgłoszeniu zawiera: numer zgłoszenia,
-            oznaczenie zadania, liczbę zdjęć, liczbę znaków wpisanego tekstu,
-            wynik, a przy błędzie tylko jego rodzaj (bez treści błędu).{" "}
-            <strong>Nie zawiera</strong> imienia, nazwiska, adresu e-mail,
-            identyfikatora konta ani treści rozwiązania. Mimo to traktujemy je
-            jako dane osobowe, bo administrator może po numerze zgłoszenia
-            ustalić w serwisie, czyje to zgłoszenie. Z Telegramem nie mamy
-            umowy powierzenia przetwarzania danych, a historia czatu nie jest
-            automatycznie usuwana.
-          </Typography>
-          <Typography paragraph>
             <strong>Nikt inny.</strong> Nie sprzedajemy danych, nie przekazujemy
             ich reklamodawcom, nie korzystamy z zewnętrznej analityki ani
             mechanizmów śledzących. Inni użytkownicy nie widzą Twoich prac ani
@@ -798,14 +784,6 @@ export default function RegulaminPage() {
             Cloudflare, Inc. uczestniczy w programie EU-US Data Privacy
             Framework (art. 45 RODO), a jego umowa powierzenia przewiduje
             dodatkowo standardowe klauzule umowne.
-          </Typography>
-          <Typography paragraph>
-            <strong>Telegram.</strong> Telegram FZ-LLC ma siedzibę w
-            Zjednoczonych Emiratach Arabskich. Komisja Europejska nie wydała dla
-            tego kraju decyzji o odpowiednim stopniu ochrony, a z Telegramem nie
-            mamy standardowych klauzul umownych. Dlatego wysyłamy tam wyłącznie
-            dane techniczne opisane w punkcie 7, z których bez dostępu do naszej
-            bazy danych nie da się ustalić, kogo dotyczą.
           </Typography>
           <Typography paragraph>
             Kopię standardowych klauzul umownych i informacje o pozostałych
@@ -912,10 +890,6 @@ export default function RegulaminPage() {
               treści rozwiązań, a adresy e-mail i identyfikatory kont są w nich
               skracane tak, by nie identyfikowały osoby
               (np. &bdquo;jan***@***&rdquo;).
-            </li>
-            <li>
-              <strong>Powiadomienia techniczne w Telegramie</strong> (punkt 7)
-              &ndash; nie są usuwane automatycznie.
             </li>
             <li>
               <strong>Kopie zapasowe</strong> &ndash; codziennie wykonujemy
@@ -1067,11 +1041,6 @@ export default function RegulaminPage() {
               <strong>dzienniki techniczne serwera</strong> &ndash; wpisy z
               numerami zgłoszeń i skróconymi identyfikatorami zostają do czasu
               ich nadpisania (zwykle kilka miesięcy, punkt 9);
-            </li>
-            <li>
-              <strong>powiadomienia w Telegramie</strong> &ndash; numery
-              zgłoszeń, oznaczenia zadań i wyniki (punkt 7) nie są usuwane
-              automatycznie;
             </li>
             <li>
               <strong>kopie zapasowe</strong> &ndash; usunięte dane znikają z

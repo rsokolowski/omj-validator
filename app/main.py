@@ -268,6 +268,18 @@ async def start_cleanup_task():
     task.add_done_callback(_background_tasks.discard)
 
 
+@app.on_event("startup")
+async def start_telegram_digest():
+    """Anonymous submission counts to Telegram every few minutes (app/notifications.py)."""
+    from .notifications import digest_loop
+
+    if not settings.telegram_bot_token or not settings.telegram_chat_id:
+        return
+    task = asyncio.create_task(digest_loop())
+    _background_tasks.add(task)
+    task.add_done_callback(_background_tasks.discard)
+
+
 # Rows younger than this at startup are left alone: during a container swap
 # the old process may still be finishing them
 RESTART_RELEASE_GRACE_SECONDS = 60

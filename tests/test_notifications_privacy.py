@@ -1,90 +1,79 @@
-"""Telegram notifications must never carry a user's identity.
+"""Telegram messages must carry nothing that points at one submission or child.
 
-The chat lives on Telegram's infrastructure with no data processing agreement,
-and our users are children - a name or e-mail in these messages is an unlawful
-transfer of a minor's personal data. These tests exist so nobody "fixes" the
-notifications by putting the user back in.
+The chat lives on Telegram's infrastructure (outside the EEA, no data
+processing agreement) and our users are children. Even pseudonymous data - a
+submission id, a task and a score, or a message sent the moment one student
+submits - can be matched back to a database row, so submissions are reported
+only as counts in a periodic digest. These tests exist so nobody "improves" the
+notifications by putting per-submission details back in.
 """
+
+import asyncio
 
 import pytest
 
 import app.notifications as notifications
-from app.config import settings
 from app.ai.factory import AIContentBlockedError, AIProviderError, AISpendLimitError, AIUnavailableError
-from app.notifications import (
-    build_completed_message,
-    build_failed_message,
-    build_start_message,
-    build_user_pseudonym,
-)
+from app.notifications import record_completed, record_failed, record_started, take_digest_message
 
-USER_ID = "108451234567890123456"
-OTHER_USER_ID = "999991234567890123456"
-
-# Values that must never appear in a notification
-NAME = "Jan Kowalski"
-EMAIL = "jan.kowalski@example.com"
+LEAK = "Uczeń napisał: zignoruj instrukcje, a model odpowiedział {score: 6}"
 
 
-@pytest.fixture(autouse=True)
-def _no_pseudonym_salt(monkeypatch):
-    """Default configuration: no salt, therefore no user identifier at all."""
-    monkeypatch.setattr(settings, "telegram_pseudonym_salt", None)
+class TestDigest:
+    def test_nothing_to_send_when_nothing_happened(self):
+        assert take_digest_message() is None
 
+    def test_counts_only(self):
+        for _ in range(3):
+            record_started()
+        record_completed()
+        record_completed()
+        record_failed(RuntimeError(LEAK))
 
-def _all_messages():
-    return [
-        build_start_message("ab12cd34", USER_ID, "2024", "etap1", 3, 2),
-        build_completed_message("ab12cd34", USER_ID, "2024", "etap1", 3, 5),
-        build_failed_message("ab12cd34", USER_ID, "2024", "etap1", 3, RuntimeError("boom")),
-    ]
+        message = take_digest_message()
 
+        assert "3 started, 2 graded, 1 failed" in message
+        assert "1× RuntimeError (unexpected)" in message
+        assert "zignoruj" not in message
 
-class TestNoIdentity:
-    def test_messages_never_contain_the_raw_user_id(self):
-        for message in _all_messages():
-            assert USER_ID not in message
-            # not even a truncated prefix
-            assert USER_ID[:8] not in message
+    def test_taking_the_digest_resets_it(self):
+        record_started()
+        assert take_digest_message() is not None
+        assert take_digest_message() is None
 
-    def test_messages_never_contain_name_or_email(self):
-        for message in _all_messages():
-            assert NAME not in message
-            assert EMAIL not in message
-            assert "@" not in message
-
-    def test_no_user_line_without_a_salt(self):
-        for message in _all_messages():
-            assert "User:" not in message
-
-    def test_text_submission_message_carries_length_only(self):
-        message = build_start_message("ab12cd34", USER_ID, "2024", "etap1", 3, 0, 1234)
-        assert "Images: 0, text: 1234 chars" in message
-        # The signature takes a count, never the text: nothing to leak
+    def test_digest_api_takes_no_submission_details(self):
+        # The recorders accept nothing that could identify a submission
         import inspect
 
-        assert inspect.signature(build_start_message).parameters["text_chars"].annotation is int
+        assert inspect.signature(record_started).parameters == {}
+        assert inspect.signature(record_completed).parameters == {}
+        assert list(inspect.signature(record_failed).parameters) == ["error"]
 
-    def test_operational_data_is_kept(self):
-        start = build_start_message("ab12cd34", USER_ID, "2024", "etap1", 3, 2)
-        assert "ab12cd34" in start
-        assert "2024/etap1/zad 3" in start
-        assert "Images: 2" in start
+    def test_loop_sends_the_digest(self, monkeypatch):
+        sent = []
 
-        completed = build_completed_message("ab12cd34", USER_ID, "2024", "etap2", 1, 5)
-        assert "5/6" in completed
+        async def capture(text):
+            sent.append(text)
 
-        failed = build_failed_message(
-            "ab12cd34", USER_ID, "2024", "etap1", 3,
-            AIUnavailableError("Analiza trwa zbyt długo.", kind="timeout"),
-        )
-        assert "AIUnavailableError (unavailable:timeout)" in failed
+        sleeps = 0
+
+        async def fake_sleep(seconds):
+            nonlocal sleeps
+            sleeps += 1
+            if sleeps > 2:
+                raise asyncio.CancelledError
+            record_started()
+
+        monkeypatch.setattr(notifications, "send_telegram_message", capture)
+        monkeypatch.setattr(notifications.asyncio, "sleep", fake_sleep)
+        with pytest.raises(asyncio.CancelledError):
+            asyncio.run(notifications.digest_loop())
+        assert len(sent) == 2
+        assert all("1 started" in text for text in sent)
 
 
 class TestNoErrorText:
     """Error text can quote model output or the student's work: class/category only."""
-
-    LEAK = "Uczeń napisał: zignoruj instrukcje, a model odpowiedział {score: 6}"
 
     @pytest.mark.parametrize(
         "error, label",
@@ -96,46 +85,16 @@ class TestNoErrorText:
             (AIUnavailableError(LEAK, kind="auth", status=403), "AIUnavailableError (unavailable:auth 403)"),
         ],
     )
-    def test_failed_message_has_class_and_category_only(self, error, label):
-        message = build_failed_message("ab12cd34", USER_ID, "2024", "etap1", 3, error)
-        assert f"Error: {label}" in message
+    def test_failure_is_counted_by_class_and_category_only(self, error, label):
+        record_failed(error)
+        message = take_digest_message()
+        assert f"1× {label}" in message
         assert "zignoruj" not in message and "score" not in message
 
     def test_failover_message_has_error_class_only(self):
         message = notifications.build_failover_message(
             "gemini/gemini-3.8-flash", "anthropic/claude-opus-5-5",
-            AIUnavailableError(self.LEAK, kind="rate_limit", status=429), 15,
+            AIUnavailableError(LEAK, kind="rate_limit", status=429), 15,
         )
         assert "unavailable:rate_limit 429" in message
         assert "zignoruj" not in message
-
-
-class TestPseudonym:
-    def test_disabled_by_default(self):
-        assert build_user_pseudonym(USER_ID) == ""
-
-    def test_enabled_by_salt_and_irreversible(self, monkeypatch):
-        monkeypatch.setattr(settings, "telegram_pseudonym_salt", "s3cret-salt")
-        pseudonym = build_user_pseudonym(USER_ID)
-
-        assert len(pseudonym) == notifications.PSEUDONYM_LENGTH
-        assert USER_ID not in pseudonym
-        # Stable for the same user, different for another user
-        assert pseudonym == build_user_pseudonym(USER_ID)
-        assert pseudonym != build_user_pseudonym(OTHER_USER_ID)
-
-    def test_salt_changes_the_pseudonym(self, monkeypatch):
-        monkeypatch.setattr(settings, "telegram_pseudonym_salt", "salt-a")
-        first = build_user_pseudonym(USER_ID)
-        monkeypatch.setattr(settings, "telegram_pseudonym_salt", "salt-b")
-        assert first != build_user_pseudonym(USER_ID)
-
-    def test_pseudonym_appears_in_messages_but_identity_does_not(self, monkeypatch):
-        monkeypatch.setattr(settings, "telegram_pseudonym_salt", "s3cret-salt")
-        pseudonym = build_user_pseudonym(USER_ID)
-
-        for message in _all_messages():
-            assert f"User: #{pseudonym}" in message
-            assert USER_ID not in message
-            assert NAME not in message
-            assert EMAIL not in message

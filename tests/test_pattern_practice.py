@@ -188,10 +188,6 @@ def test_worker_grades_even_when_the_pattern_hook_fails(factory, monkeypatch, tm
     monkeypatch.setattr(handler, "apply_practice_result", boom)
     monkeypatch.setattr(handler, "create_ai_provider", lambda: StubProvider())
 
-    async def quiet(text):
-        return None
-
-    monkeypatch.setattr(handler, "send_telegram_message", quiet)
     image = tmp_path / "a.jpg"
     image.write_bytes(b"x")
 
@@ -217,10 +213,6 @@ def test_worker_applies_practice_result(factory, monkeypatch, tmp_path):
     db.close()
     monkeypatch.setattr(handler, "create_ai_provider", lambda: StubProvider())
 
-    async def quiet(text):
-        return None
-
-    monkeypatch.setattr(handler, "send_telegram_message", quiet)
     image = tmp_path / "a.jpg"
     image.write_bytes(b"x")
 

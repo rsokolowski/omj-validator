@@ -1,97 +1,75 @@
-"""Telegram notifications for submission lifecycle events.
+"""Telegram notifications: an anonymous submission digest and operational alerts.
 
 Fire-and-forget notifier: sends plain-text messages to a Telegram chat via the
 bot configured in settings. Every failure is swallowed and logged as a warning
 so a Telegram outage can never affect submission processing.
 
-PRIVACY / RODO - DO NOT ADD USER IDENTITY BACK IN.
-Notifications leave our infrastructure and land in a Telegram chat hosted by
-Telegram FZ-LLC (a third country, no data processing agreement in place). Our
-users are children aged 10-15, so any name, e-mail or raw user id sent here
-would be an undocumented transfer of a minor's personal data to another
-processor. Messages therefore carry only operational data: submission id, task,
-score, image count and error reason. An admin who needs to know *who* submitted
-looks the submission up by its id in the admin panel, where access is
+PRIVACY / RODO - NOTHING THAT POINTS AT ONE SUBMISSION OR ONE CHILD.
+The chat is hosted by Telegram FZ-LLC (outside the EEA, no data processing
+agreement). Our users are children, so nothing sent there may be personal data
+- not even pseudonymous: a submission id, a task and a score, or a message sent
+the moment one student submits, can be matched back to a row in our database.
+Submissions are therefore reported only as counts per DIGEST window (how many
+started, were graded, failed - and failure categories), sent at the end of the
+window. Operational alerts (AI failover, spend limit) carry no user data at all.
+Whoever needs details looks them up in the admin panel, where access is
 authenticated and logged.
-
-If distinguishing users in the chat is operationally useful, set
-TELEGRAM_PSEUDONYM_SALT and a short, irreversible HMAC pseudonym is added. It is
-off by default - prefer no identity at all.
 """
 
-import hashlib
-import hmac
+import asyncio
 import logging
+from collections import Counter
 
 import httpx
 
 from .config import settings
-from .scoring import get_max_score
 
 logger = logging.getLogger(__name__)
 
 # Telegram Bot API base
 TELEGRAM_API_URL = "https://api.telegram.org"
 
-# Length of the hex pseudonym. 8 hex chars = 32 bits: enough to tell a handful
-# of concurrent users apart in a chat, useless as an identifier on its own.
-PSEUDONYM_LENGTH = 8
+# One digest per window, and only when something happened in it
+DIGEST_MINUTES = 15
+
+_digest: Counter = Counter()
+_failures: Counter = Counter()
 
 
-def build_user_pseudonym(user_id: str) -> str:
-    """Return a short, irreversible pseudonym for a user, or "" when disabled.
-
-    Uses HMAC-SHA256 with a secret salt so the digest cannot be reversed by
-    hashing candidate user ids. Returns an empty string (no pseudonym in the
-    message at all) unless TELEGRAM_PSEUDONYM_SALT is configured - see the
-    module docstring for why the default is "no identity".
-    """
-    salt = settings.telegram_pseudonym_salt
-    if not salt or not user_id:
-        return ""
-    digest = hmac.new(salt.encode("utf-8"), user_id.encode("utf-8"), hashlib.sha256)
-    return digest.hexdigest()[:PSEUDONYM_LENGTH]
+def record_started() -> None:
+    _digest["started"] += 1
 
 
-def _pseudonym_line(user_id: str) -> str:
-    """Optional "User: <pseudonym>" line, empty when pseudonyms are disabled."""
-    pseudonym = build_user_pseudonym(user_id)
-    return f"User: #{pseudonym}\n" if pseudonym else ""
+def record_completed() -> None:
+    _digest["completed"] += 1
 
 
-def build_start_message(
-    submission_id: str,
-    user_id: str,
-    year: str,
-    etap: str,
-    task_number: int,
-    image_count: int,
-    text_chars: int = 0,
-) -> str:
-    """Build the notification text for a submission that started processing."""
-    return (
-        f"📥 New submission {submission_id}\n"
-        f"{_pseudonym_line(user_id)}"
-        f"Task: {year}/{etap}/zad {task_number}\n"
-        f"Images: {image_count}, text: {text_chars} chars"
-    )
+def record_failed(error: BaseException) -> None:
+    _digest["failed"] += 1
+    _failures[error_category(error)] += 1
 
 
-def build_completed_message(
-    submission_id: str,
-    user_id: str,
-    year: str,
-    etap: str,
-    task_number: int,
-    score: int,
-) -> str:
-    """Build the notification text for a completed submission."""
-    max_score = get_max_score(etap)
-    return (
-        f"✅ Submission {submission_id} scored {score}/{max_score}\n"
-        f"{_pseudonym_line(user_id)}"
-        f"Task: {year}/{etap}/zad {task_number}"
-    )
+def take_digest_message() -> str | None:
+    """The counts since the last call as a message (None if nothing happened); resets them."""
+    if not _digest:
+        return None
+    started, completed, failed = _digest["started"], _digest["completed"], _digest["failed"]
+    lines = [
+        f"📊 Last {DIGEST_MINUTES} min: {started} started, {completed} graded, {failed} failed"
+    ]
+    lines += [f"  {count}× {category}" for category, count in _failures.most_common()]
+    _digest.clear()
+    _failures.clear()
+    return "\n".join(lines)
+
+
+async def digest_loop() -> None:
+    """Send the submission digest every DIGEST_MINUTES (started at app startup)."""
+    while True:
+        await asyncio.sleep(DIGEST_MINUTES * 60)
+        message = take_digest_message()
+        if message:
+            await send_telegram_message(message)
 
 
 def error_category(error: BaseException) -> str:
@@ -115,23 +93,6 @@ def error_category(error: BaseException) -> str:
     else:
         category = "unexpected"
     return f"{type(error).__name__} ({category})"
-
-
-def build_failed_message(
-    submission_id: str,
-    user_id: str,
-    year: str,
-    etap: str,
-    task_number: int,
-    error: BaseException,
-) -> str:
-    """Build the notification text for a failed submission (error class/category only)."""
-    return (
-        f"❌ Submission {submission_id} FAILED\n"
-        f"{_pseudonym_line(user_id)}"
-        f"Task: {year}/{etap}/zad {task_number}\n"
-        f"Error: {error_category(error)}"
-    )
 
 
 def build_failover_message(
@@ -164,8 +125,6 @@ def send_telegram_in_background(text: str) -> None:
     No running loop (a script): nothing is sent - callers log the event too.
     The task is kept referenced until it finishes so it is not GC'd mid-send.
     """
-    import asyncio
-
     try:
         loop = asyncio.get_running_loop()
     except RuntimeError:

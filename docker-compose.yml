@@ -91,7 +91,6 @@ services:
       # Never carry a user's name or e-mail - see app/notifications.py
       TELEGRAM_BOT_TOKEN: ${DEV_TELEGRAM_BOT_TOKEN:-}
       TELEGRAM_CHAT_ID: ${DEV_TELEGRAM_CHAT_ID:-}
-      TELEGRAM_PSEUDONYM_SALT: ${DEV_TELEGRAM_PSEUDONYM_SALT:-}
 
       # E-mail: console by default - messages and their links go to the API log
       EMAIL_BACKEND: ${EMAIL_BACKEND:-console}

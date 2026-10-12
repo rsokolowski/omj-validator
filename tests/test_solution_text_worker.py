@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import app.websocket.handler as handler
+from app.notifications import take_digest_message
 from app.db.models import SubmissionDB, SubmissionStatus, UserDB
 from app.db.session import Base
 from app.models import SubmissionResult
@@ -52,12 +53,6 @@ def test_omj_worker_passes_text_and_no_images(session_factory, monkeypatch, tmp_
     monkeypatch.setattr(handler, "get_solution_pdf_path", lambda year, etap: None)
     provider = StubProvider()
     monkeypatch.setattr(handler, "create_ai_provider", lambda: provider)
-    sent = []
-
-    async def capture(text):
-        sent.append(text)
-
-    monkeypatch.setattr(handler, "send_telegram_message", capture)
     statuses = []
 
     async def capture_status(submission_id, message):
@@ -78,7 +73,7 @@ def test_omj_worker_passes_text_and_no_images(session_factory, monkeypatch, tmp_
     assert db.query(SubmissionDB).one().status == SubmissionStatus.COMPLETED
     assert any(f"text_chars={len(TEXT)}" in r.message for r in caplog.records)
     assert all(TEXT not in r.message for r in caplog.records)
-    assert all(TEXT not in message for message in sent)
+    assert TEXT not in (take_digest_message() or "")
     # No photos to upload: the first stage names the solution, not "files"
     assert statuses[0] == "Przesyłam rozwiązanie..."
     assert "Przesyłam pliki..." not in statuses

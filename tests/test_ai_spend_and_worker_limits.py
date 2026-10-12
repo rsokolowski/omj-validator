@@ -10,6 +10,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import app.websocket.handler as handler
+from app.notifications import take_digest_message
 from app.ai import spend
 from app.ai.factory import AISpendLimitError, AIUnavailableError
 from app.ai.failover import FailoverProvider, breaker, restart_hook
@@ -251,18 +252,13 @@ def worker(session_factory, monkeypatch, tmp_path):
     task_pdf.write_bytes(b"%PDF-1.4 fake")
     monkeypatch.setattr(handler, "get_task_pdf_path", lambda year, etap: task_pdf)
     monkeypatch.setattr(handler, "get_solution_pdf_path", lambda year, etap: None)
-    sent: list[str] = []
     statuses: list[tuple[str, str]] = []
-
-    async def capture(text):
-        sent.append(text)
 
     async def capture_status(submission_id, message):
         statuses.append((submission_id, message))
 
-    monkeypatch.setattr(handler, "send_telegram_message", capture)
     monkeypatch.setattr(handler.progress_manager, "send_status", capture_status)
-    return {"sent": sent, "statuses": statuses, "factory": session_factory}
+    return {"statuses": statuses, "factory": session_factory}
 
 
 def grade(sid):
@@ -289,7 +285,7 @@ def test_spend_cap_fails_the_grading_before_any_ai_call(worker, monkeypatch):
     row = db.get(SubmissionDB, "sub1")
     assert row.status == SubmissionStatus.FAILED
     assert row.error_message == spend.SPEND_LIMIT_MESSAGE
-    assert any("AISpendLimitError (spend_limit)" in m for m in worker["sent"])
+    assert "AISpendLimitError (spend_limit)" in (take_digest_message() or "")
     # Refused on our side before any AI call: the student keeps the slot
     assert row.scoring_meta[QUOTA_RELEASED_KEY] == "spend_limit"
     assert SubmissionRepository(db).count_user_recent_submissions(USER_ID) == 1  # only "spent"
@@ -411,9 +407,9 @@ def test_failed_submission_telegram_carries_no_error_text(worker, monkeypatch):
 
     asyncio.run(grade("sub1"))
 
-    failed = [m for m in worker["sent"] if "FAILED" in m]
-    assert failed and "RuntimeError (unexpected)" in failed[0]
-    assert all("zignoruj" not in m for m in worker["sent"])
+    digest = take_digest_message() or ""
+    assert "1 failed" in digest and "RuntimeError (unexpected)" in digest
+    assert "zignoruj" not in digest
     # The student's history shows the generic message, never the raw exception text
     row = worker["factory"]().get(SubmissionDB, "sub1")
     assert row.status == SubmissionStatus.FAILED

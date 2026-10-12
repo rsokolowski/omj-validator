@@ -62,7 +62,7 @@ i podstawą prawną przetwarzania**. Dobór dokumentu zaczyna się od ustalenia 
 
 **Zmiana z 13 października 2026:** Google jako dostawca podstawowy, **Anthropic jako zapasowy**
 z automatycznym przełączeniem przy niedostępności Gemini (za tą samą blokadą
-`ANTHROPIC_PROCESSOR_APPROVED`); **Telegram** opisany jako odbiorca spoza EOG bez umowy;
+`ANTHROPIC_PROCESSOR_APPROVED`); **Telegram** dostaje tylko zestawienia liczbowe i alarmy (bez danych osobowych);
 **Cloudflare** (terminacja TLS, Turnstile przy rejestracji) jako nowe ryzyko R21; dziennik
 dostępu administratora opisany z ograniczeniami; lista śladów po usunięciu konta; kopie
 zapasowe; budżet dzienny AI i nowe limity; osobne pola akceptacji regulaminu i zgody (16+).
@@ -149,8 +149,8 @@ dokumenty korzystają.
 
 ### Wykonać w konfiguracji instancji szkolnej
 
-- wyłączyć powiadomienia zewnętrzne (Telegram) — brak umowy powierzenia, podmiot spoza EOG,
-  brak podstawy przekazania (DPIA, R11),
+- wyłączyć powiadomienia zewnętrzne (Telegram) albo upewnić się, że wysyłane są wyłącznie
+  zestawienia liczbowe bez danych osobowych (DPIA, R11),
 - ustalić, czy instancja korzysta z Cloudflare (tunel, Turnstile przy rejestracji) i z Resend
   (e-maile do rodziców); jeśli tak — umowy i wpis do klauzuli, jeśli nie — usunąć te wiersze
   z klauzuli (DPIA, R20, R21),

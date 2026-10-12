@@ -412,7 +412,7 @@ zadaniu. Konsekwencje, które trzeba przyjąć świadomie:
 | Resend (spółka z USA) — wysyłka e-maili transakcyjnych | podmiot przetwarzający | **adres e-mail rodzica** i treść wiadomości: prośba o zgodę, potwierdzenie aktywacji, link do strony rodzica, link zmiany hasła — a w treści **adres konta Google dziecka albo jego login** (bez imienia i nazwiska, bez innych danych dziecka) i jednorazowe linki. Domena `omj-validator.pl` zweryfikowana, region wysyłki eu-west-1 (Irlandia) | DPA Resend (resend.com/legal/dpa, wersja z 31.12.2025) — włączony do warunków usługi, wiąże z chwilą ich akceptacji, bez osobnego podpisu (sprawdzone 12.10.2026); transfer: standardowe klauzule umowne (decyzja Komisji 2021/914, DPA pkt 1.16) oraz EU-US Data Privacy Framework (DPA pkt 11.1; certyfikacja ogłoszona przez Resend 13.03.2025) — [DO POTWIERDZENIA przy przeglądzie: aktywny wpis w rejestrze dataprivacyframework.gov]; wiadomości nie trafiają do Telegramu ani logów (adresy maskowane, treści nie są logowane) |
 | Cloudflare, Inc. | podmiot przetwarzający | ruch HTTPS między użytkownikiem a serwerem (tunel, terminacja TLS) | Cloudflare Customer DPA (wersja 6.4 z 3.04.2026): SCC z decyzji 2021/914 (pkt 1.1(g)) i EU-US DPF (pkt 6.4) — sprawdzone 12.10.2026; [DO USTALENIA: DPA wiąże z chwilą akceptacji i odwołuje się do umowy Self-Serve — potwierdzić, że obejmuje plan bezpłatny, i zaakceptować go w panelu, jeśli trzeba] |
 | Cloudflare, Inc. — Turnstile (rejestracja) | [DO USTALENIA: rola — podmiot przetwarzający czy odrębny administrator wg warunków Turnstile] | przeglądarka: dane techniczne przeglądarki i adres IP (skrypt i ramka z `challenges.cloudflare.com`); serwer: tylko sekret i jednorazowy token, bez adresu IP i danych konta | jak wiersz wyżej; zob. R21 |
-| Telegram FZ-LLC (Zjednoczone Emiraty Arabskie) | odbiorca powiadomień technicznych | komunikaty operacyjne: identyfikator zgłoszenia, oznaczenie zadania, liczba zdjęć, liczba znaków wpisanego tekstu (nigdy sam tekst), wynik punktowy, przy błędzie wyłącznie klasa i kategoria błędu (bez treści); ponadto alarmy bez danych użytkowników (przełączenie dostawcy AI, budżet dzienny). **Bez imienia, nazwiska, e-maila i identyfikatora użytkownika** (pseudonim HMAC wyłączony). Dane spseudonimizowane — nadal osobowe (motyw 26). W wariancie A włączone; historia czatu nie jest automatycznie usuwana | brak umowy powierzenia, brak decyzji o adekwatności dla ZEA i brak SCC — zob. R11; **w wariancie B zalecane wyłączenie** |
+| Telegram FZ-LLC (Zjednoczone Emiraty Arabskie) | — (nie otrzymuje danych osobowych) | od 13.10.2026 wyłącznie zestawienie liczbowe zgłoszeń co 15 minut (rozpoczęte / ocenione / nieudane z kategorią błędu) i alarmy operacyjne bez danych użytkowników; wcześniejsza historia czatu (identyfikatory zgłoszeń, zadania, wyniki) do usunięcia — poz. 23 | nie dotyczy (brak danych osobowych) — zob. R11; w wariancie B zalecane wyłączenie |
 | Dostawca hostingu / miejsce serwera | — | całość danych | wariant A: serwer własny autora; wariant B: [UZUPEŁNIĆ: infrastruktura szkoły / dostawca] |
 
 **Poziom płatny Gemini API — dlaczego to ma znaczenie.** Produkcja korzysta z płatnego klucza API.
@@ -507,8 +507,8 @@ zawierają danych osobowych.
     │
     │  7. zapis wyniku w PostgreSQL (w tym surowa odpowiedź modelu w scoring_meta)
     │  8. przesłanie wyniku do przeglądarki ucznia przez WebSocket
-    │  9. powiadomienie techniczne bez tożsamości (numer zgłoszenia, zadanie,
-    │     liczba zdjęć/znaków, wynik, klasa błędu)
+    │  9. co 15 min zestawienie liczbowe (rozpoczęte / ocenione / nieudane),
+    │     bez danych osobowych
     └──────────────────────────────────────► [Telegram — ZEA, poza EOG, bez umowy]
 
 Cały ruch przeglądarka ↔ serwer przechodzi przez Cloudflare (terminacja TLS na brzegu
@@ -538,12 +538,12 @@ komercyjnym.
 | Skróty linków wysłanych rodzicowi (`email_tokens`) | **30 dni** od wygaśnięcia (link: zgoda 14 dni, zmiana hasła 1 godzina, strona rodzica 30 dni) | stała w kodzie | dziennik do limitów wysyłki i wyjaśniania zgłoszeń |
 | Nieudane próby logowania (`login_failures`) | **24 godziny** | stała w kodzie | IP tylko jako HMAC |
 | HMAC adresu IP przy rejestracji (limit kont na adres) | **24 godziny**, wyłącznie w pamięci procesu | `RATE_LIMIT_REGISTRATIONS_PER_IP_PER_DAY` | nie trafia do bazy ani do kopii zapasowych; restart serwera kasuje |
-| Powiadomienia Telegram (czat administratora) | **bez automatycznego usuwania** | — | treść: sekcja 2.5; [DO DECYZJI: okres i sposób czyszczenia historii czatu — plan wdrożenia, poz. 23] |
+| Powiadomienia Telegram (czat administratora) | od 13.10.2026 bez danych osobowych (zestawienia liczbowe, alarmy) | — | historia sprzed 13.10.2026 do usunięcia — plan wdrożenia, poz. 23 |
 | Pliki osierocone (bez odpowiadającego zgłoszenia) | usuwane przy każdym przebiegu retencji | `RETENTION_AUTO_PURGE` (przebieg dobowy) | zabezpieczenie na wypadek niepowodzenia usunięcia plików |
 | Cookie sesyjne | do 30 dni; 12 godzin przy logowaniu loginem i hasłem bez „Zapamiętaj mnie” (wartości zaszyte w kodzie) | — | zmiana hasła unieważnia wszystkie sesje konta (`session_version`) |
 | Dzienniki aplikacji (dziennik kontenera) | **ograniczone objętościowo**: 50 MB × 5 plików na usługę (250 MB), najstarsze wpisy nadpisywane | `docker-compose.prod.yml` (`x-logging`) | rotacja wdrożona; przy obecnym ruchu odpowiada to kilku miesiącom, ale jest to limit objętości, a nie gwarantowany okres — zob. R13 |
 | Kopie zapasowe (baza i przesłane pliki) | **do 6 miesięcy**: kopie dzienne z 7 dni, tygodniowe z 4 tygodni, miesięczne z 6 miesięcy | `/usr/local/sbin/sokodom-backup` (Borg, szyfrowanie repokey-blake2, osobny dysk w tym samym lokalu) | usunięte dane znikają z kopii najpóźniej po ok. 6 miesiącach; kopia poza lokalem (GCS) planowana. Między 22.06 a 12.10.2026 kopie nie powstawały (awaria dysku) |
-| Dane po samodzielnym usunięciu konta przez użytkownika | usuwane niezwłocznie | funkcja usunięcia konta | usuwane są: konto, wszystkie zgłoszenia, zadania prywatne, wzorce, zgody (kaskadowo) i wszystkie pliki; w dzienniku dostępu administratora identyfikator jest zastępowany nieodwracalnym skrótem. **Zostają czasowo:** znacznik limitu (wyżej); skróty linków z `email_tokens` z `user_id = NULL` (do 30 dni od wygaśnięcia) i adres rodzica bez innych dzieci (doba); wpisy w dziennikach aplikacji z identyfikatorami zgłoszeń i maskowanym identyfikatorem konta (do nadpisania); powiadomienia Telegram (bez automatycznego usuwania); kopie zapasowe (do ok. 6 miesięcy); rejestry dostawców AI (Google do 55 dni, Anthropic do 30 dni) — wszystko ujawnione w regulaminie, pkt 11 |
+| Dane po samodzielnym usunięciu konta przez użytkownika | usuwane niezwłocznie | funkcja usunięcia konta | usuwane są: konto, wszystkie zgłoszenia, zadania prywatne, wzorce, zgody (kaskadowo) i wszystkie pliki; w dzienniku dostępu administratora identyfikator jest zastępowany nieodwracalnym skrótem. **Zostają czasowo:** znacznik limitu (wyżej); skróty linków z `email_tokens` z `user_id = NULL` (do 30 dni od wygaśnięcia) i adres rodzica bez innych dzieci (doba); wpisy w dziennikach aplikacji z identyfikatorami zgłoszeń i maskowanym identyfikatorem konta (do nadpisania); powiadomienia Telegram sprzed 13.10.2026 (do usunięcia, poz. 23); kopie zapasowe (do ok. 6 miesięcy); rejestry dostawców AI (Google do 55 dni, Anthropic do 30 dni) — wszystko ujawnione w regulaminie, pkt 11 |
 | Dane po wygaszeniu serwisu (wariant A) | usunięcie całości nie później niż [UZUPEŁNIĆ] od zamknięcia serwisu | — | użytkownicy informowani z wyprzedzeniem [UZUPEŁNIĆ: np. 30 dni] |
 
 **Uwagi:**
@@ -1152,27 +1152,20 @@ komunikat zalecający wylogowanie na urządzeniu współdzielonym; [DO ROZWAŻEN
 
 **P = 2 · W = 1 · poziom = 2 (niskie) → szczątkowe: 1 (niskie)**
 
-Aplikacja wysyła powiadomienia o cyklu życia zgłoszenia na czat obsługiwany przez Telegram
-FZ-LLC (Zjednoczone Emiraty Arabskie — poza EOG, bez umowy powierzenia, bez decyzji
-o adekwatności i bez standardowych klauzul umownych). W wariancie A funkcja jest włączona.
-Powiadomienia zawierają wyłącznie dane operacyjne: identyfikator zgłoszenia, oznaczenie
-zadania, liczbę zdjęć i znaków wpisanego tekstu, wynik, a przy błędzie **tylko klasę
-i kategorię błędu** (od 12.10.2026 bez treści błędu, która mogła cytować odpowiedź modelu);
-do tego alarmy bez danych użytkowników (przełączenie dostawcy AI, budżet dzienny). **Bez
-imienia, nazwiska, e-maila i identyfikatora użytkownika**; opcjonalny, nieodwracalny pseudonim
-jest wyłączony (`TELEGRAM_PSEUDONYM_SALT` nieustawiony). Dane są jednak spseudonimizowane, a nie
-anonimowe — administrator może po identyfikatorze zgłoszenia ustalić ucznia w panelu — więc
-pozostają danymi osobowymi (motyw 26 RODO). Historia czatu nie jest automatycznie usuwana
-i przeżywa usunięcie konta.
+Administrator dostaje powiadomienia na czat obsługiwany przez Telegram FZ-LLC (Zjednoczone
+Emiraty Arabskie — poza EOG, bez umowy powierzenia, bez decyzji o adekwatności i bez
+standardowych klauzul umownych). **Od 13.10.2026 nie trafia tam nic, co wskazuje na jedno
+zgłoszenie lub jednego ucznia:** o zgłoszeniach wysyłane jest wyłącznie zestawienie liczbowe co
+15 minut (ile rozpoczęto, oceniono i ile się nie powiodło, z klasą i kategorią błędu), a poza tym
+alarmy operacyjne bez danych użytkowników (przełączenie dostawcy AI, budżet dzienny, kopie
+zapasowe). Zestawienie zbiorcze, wysyłane na koniec okna, nie pozwala powiązać wiadomości
+z wierszem w bazie (ani po identyfikatorze, ani po czasie), więc nie są to dane osobowe
+(motyw 26 RODO) i przekazanie nie wymaga podstawy z rozdziału V. Do 12.10.2026 powiadomienia
+zawierały identyfikator zgłoszenia, zadanie i wynik (dane spseudonimizowane); tę historię czatu
+należy usunąć (plan wdrożenia, poz. 23).
 
-Ocena: przekazanie do Telegramu nie ma podstawy z rozdziału V RODO innej niż minimalizacja
-treści; jest to **świadomie odnotowana luka** — waga niska (bez treści pracy i tożsamości), ale
-formalnie nierozwiązana. [DO DECYZJI administratora: zastąpić Telegram kanałem w EOG (np.
-e-mail przez dostawcę z umową), ograniczyć powiadomienia do alarmów bez identyfikatorów
-zgłoszeń albo przyjąć ryzyko z uzasadnieniem — plan wdrożenia, poz. 23.]
-
-Środki: brak tożsamości i treści w komunikatach; ujawnienie odbiorcy, kraju i braku umowy
-w regulaminie (pkt 7–8, 11); **w wariancie B zalecane pozostawienie wyłączonej** albo zastąpienie
+Środki: wyłącznie zestawienia liczbowe i alarmy bez danych użytkowników
+(`app/notifications.py`, testy `tests/test_notifications_privacy.py`); **w wariancie B zalecane pozostawienie wyłączonej** albo zastąpienie
 kanałem wewnętrznym szkoły (poczta służbowa); odnotowanie w rejestrze czynności przetwarzania;
 okresowe czyszczenie historii czatu [DO USTALENIA].
 
@@ -1320,8 +1313,8 @@ kopii (konta usunięte przez użytkowników i rodziców) [DO USTALENIA: sposób 
 usunięć bez danych osobowych albo ręczna procedura].
 
 **Pozostała luka:** dzienniki aplikacji są ograniczone objętościowo, a nie czasowo (R13),
-a historia powiadomień Telegram nie jest automatycznie usuwana (R11) — dlatego ryzyko szczątkowe
-wynosi **2 (niskie)** zamiast możliwego 1.
+a historia powiadomień Telegram sprzed 13.10.2026 czeka na usunięcie (R11) — dlatego ryzyko
+szczątkowe wynosi **2 (niskie)** zamiast możliwego 1.
 
 ---
 
@@ -1436,7 +1429,7 @@ czy instancja szkolna w ogóle korzysta z Cloudflare.
 | R8 | Limity i koszt jako mechanizm dostępności | 2 niskie | 1 niskie (znacznik po usunięciu konta wdrożony) |
 | R9 | Naruszenie bezpieczeństwa serwera lub bazy | **6 wysokie** | 3 średnie |
 | R10 | Przejęcie sesji | 2 niskie | 2 niskie |
-| R11 | Powiadomienia poza EOG (Telegram) | 2 niskie | 1 niskie (bez treści i tożsamości; brak podstawy transferu — do decyzji) |
+| R11 | Powiadomienia poza EOG (Telegram) | 2 niskie | 1 niskie (od 13.10.2026 tylko zestawienia liczbowe, bez danych osobowych; stara historia czatu do usunięcia) |
 | R12 | Tłumaczenie komunikatów przez usługę zewnętrzną | 2 niskie | 1 niskie |
 | R13 | Dane osobowe w dziennikach | 3 średnie | 1 niskie (maskowanie i rotacja wdrożone) |
 | R14 | Zmiana administratora i wygaszenie serwisu | 2 niskie | 1 niskie |
@@ -1641,9 +1634,9 @@ Kolumny do wypełnienia przez administratora — to jest lista zadań, nie dekla
 | 20 | Rozważyć rezygnację z zapisywania imienia i nazwiska | 3.1 | niski | [ ] | [ ] | [ ] |
 | 21 | ~~Sprawdzić w rejestrze DPF, czy Anthropic uczestniczy w programie~~ | R6 | średni | autor | — | **WYKONANE** 12.10.2026 — brak wpisu (aktywni i nieaktywni); transfer na podstawie standardowych klauzul umownych; sprawdzać przy każdym przeglądzie |
 | 22 | Przed ustawieniem `ANTHROPIC_PROCESSOR_APPROVED=true`: zaakceptować DPA Anthropic, sporządzić ocenę skutków transferu, wpisać Anthropic do rejestru czynności i ponownie sprawdzić ustalenia z sekcji 2.5 | R6, R6a | wysoki | [ ] | [ ] | w toku: DPA zaakceptowany z Commercial Terms (konto z EOG); ocena skutków transferu sporządzona 12.10.2026 — czeka na zatwierdzenie; pozostaje rejestr czynności i zatwierdzenie oceny |
-| 23 | Rozstrzygnąć powiadomienia Telegram: kanał w EOG z umową albo ograniczenie treści albo udokumentowana akceptacja ryzyka; ustalić czyszczenie historii czatu | R11 | średni | [ ] | [ ] | [ ] |
+| 23 | ~~Rozstrzygnąć powiadomienia Telegram~~ — **WDROŻONE** 13.10.2026: tylko zestawienia liczbowe i alarmy; do zrobienia: usunąć historię czatu sprzed 13.10.2026 | R11 | średni | autor | — | w toku |
 | 24 | Potwierdzić DPA Cloudflare, podstawę transferu (DPF/SCC) i rolę przy Turnstile; wpisać do rejestru czynności | R21 | średni | [ ] | [ ] | [ ] |
-| 25 | Zdecydować o kontach sprzed 12.10.2026 bez roku urodzenia (np. usunięcie po określonym terminie) | R15 | średni | [ ] | [ ] | [ ] |
+| 25 | ~~Zdecydować o kontach sprzed 12.10.2026 bez roku urodzenia~~ | R15 | średni | autor | — | **DECYZJA** 13.10.2026: konta zostają (kilka kont); przy następnym logowaniu pytanie o rok urodzenia i — dla osób poniżej 16 lat — zgoda rodzica, możliwość samodzielnego usunięcia konta; usuwane z ogólną retencją kont nieaktywnych (36 mies.) |
 | 26 | Procedura ponownego wykonania usunięć po odtworzeniu serwisu z kopii zapasowej | R16 | niski | [ ] | [ ] | [ ] |
 
 ---

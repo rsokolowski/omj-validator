@@ -22,10 +22,9 @@ from ..privacy import mask_user_id
 from ..storage import get_task_pdf_path, get_solution_pdf_path
 from ..patterns.service import apply_practice_result
 from ..notifications import (
-    send_telegram_message,
-    build_start_message,
-    build_completed_message,
-    build_failed_message,
+    record_completed,
+    record_failed,
+    record_started,
 )
 from .progress import progress_manager
 
@@ -177,13 +176,8 @@ async def process_submission_background(
         logger.debug(f"[Submission {submission_id}] Updating DB status to PROCESSING")
         submission_repo.update_status(submission_id, SubmissionStatus.PROCESSING)
 
-        # Notify: submission started processing (fire-and-forget)
-        await send_telegram_message(
-            build_start_message(
-                submission_id, user_id, year, etap, task_number, len(image_paths),
-                len(solution_text or ""),
-            )
-        )
+        # Counted in the anonymous Telegram digest (see app/notifications.py)
+        record_started()
 
         # Stage 1: Uploading files
         logger.info(f"[Submission {submission_id}] Stage 1: Preparing file upload ({_format_elapsed(start_time)})")
@@ -310,12 +304,7 @@ async def process_submission_background(
             feedback=result.feedback,
         )
 
-        # Notify: submission completed (fire-and-forget)
-        await send_telegram_message(
-            build_completed_message(
-                submission_id, user_id, year, etap, task_number, result.score
-            )
-        )
+        record_completed()
 
         total_time = time.time() - start_time
         logger.info(
@@ -333,12 +322,7 @@ async def process_submission_background(
 
         await _record_failure(db, submission_id, ai_called, e, error_msg)
 
-        # Notify: submission failed (fire-and-forget)
-        await send_telegram_message(
-            build_failed_message(
-                submission_id, user_id, year, etap, task_number, e
-            )
-        )
+        record_failed(e)
 
     except Exception as e:
         error_msg = str(e)
@@ -352,12 +336,7 @@ async def process_submission_background(
         # exception text (it can quote model output or internals) - logs only.
         await _record_failure(db, submission_id, ai_called, e, UNEXPECTED_ERROR_MESSAGE)
 
-        # Notify: submission failed (fire-and-forget)
-        await send_telegram_message(
-            build_failed_message(
-                submission_id, user_id, year, etap, task_number, e
-            )
-        )
+        record_failed(e)
 
     finally:
         if hook_token is not None:

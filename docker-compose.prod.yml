@@ -112,7 +112,6 @@ services:
       # Telegram notifications (optional)
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
       TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
-      TELEGRAM_PSEUDONYM_SALT: ${TELEGRAM_PSEUDONYM_SALT:-}
 
       # Transactional e-mail (parent consent, password reset) through Resend
       EMAIL_BACKEND: ${EMAIL_BACKEND:-resend}

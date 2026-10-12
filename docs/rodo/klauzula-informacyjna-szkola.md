@@ -120,7 +120,6 @@ bo uczeń jest zalogowany.
 | [UZUPEŁNIĆ, jeśli dotyczy: dostawca hostingu / firma obsługująca infrastrukturę informatyczną szkoły] | dostęp techniczny do systemu | na podstawie umowy powierzenia przetwarzania (art. 28 RODO) |
 | [JEŚLI DOTYCZY] **Cloudflare, Inc.** — pośrednictwo w przesyłaniu ruchu (tunel) i ochrona rejestracji przed automatami (Turnstile) | cały ruch między przeglądarką a narzędziem (połączenie szyfrowane kończy się na serwerach Cloudflare); przy rejestracji — dane techniczne przeglądarki i adres IP | [UZUPEŁNIĆ: umowa powierzenia / warunki Cloudflare]; usunąć wiersz, jeśli instancja szkolna nie korzysta z Cloudflare |
 | [JEŚLI DOTYCZY] **Resend** — wysyłka wiadomości e-mail do rodziców | adres e-mail rodzica i treść wiadomości (adres konta Google albo login dziecka, linki) | umowa powierzenia włączona do warunków usługi; usunąć wiersz, jeśli Szkoła nie wysyła tych wiadomości albo używa innej poczty |
-| [ZALECANE WYŁĄCZENIE] **Telegram FZ-LLC** (Zjednoczone Emiraty Arabskie) — powiadomienia techniczne dla administratora | numer zgłoszenia, oznaczenie zadania, liczba zdjęć i znaków tekstu, wynik, rodzaj błędu — bez imienia, nazwiska, e-maila i identyfikatora ucznia | brak umowy powierzenia i brak podstawy przekazania poza EOG; w instancji szkolnej funkcję należy wyłączyć i usunąć ten wiersz |
 | Nauczyciel prowadzący i administrator narzędzia | dostęp do prac i wyników uczniów | wyłącznie osoby upoważnione przez dyrektora szkoły, w zakresie niezbędnym do prowadzenia zajęć i obsługi zgłoszeń |
 
 Narzędzie korzysta na co dzień z **Google**. **Anthropic** jest dostawcą zapasowym: narzędzie
@@ -174,8 +173,8 @@ spoza Europejskiego Obszaru Gospodarczego zobowiązuje się zapewnić im ochron�
 
 [JEŚLI DOTYCZY] **Resend** przetwarza dane głównie w USA na podstawie standardowych klauzul
 umownych (decyzja Komisji (UE) 2021/914) i EU-US Data Privacy Framework. **Cloudflare** —
-[UZUPEŁNIĆ: podstawa przekazania wg umowy z Cloudflare]. Telegram — patrz punkt 6 (zalecane
-wyłączenie).
+[UZUPEŁNIĆ: podstawa przekazania wg umowy z Cloudflare]. Powiadomienia techniczne (Telegram), jeśli są włączone, zawierają wyłącznie zestawienia liczbowe
+bez danych osobowych.
 
 Kopię standardowych klauzul umownych i informacji o pozostałych zabezpieczeniach przekazywania
 danych można uzyskać, kontaktując się z inspektorem ochrony danych.

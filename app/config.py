@@ -118,15 +118,11 @@ class Settings(BaseSettings):
     translate_timeout: float = 2.0  # Translation timeout in seconds
     translate_api_endpoint: Optional[str] = None  # Custom endpoint for e2e testing
 
-    # Telegram notifications (for submission lifecycle alerts)
-    # Feature disabled unless both are set. Token lives only in .env / .env.prod.
+    # Telegram notifications: anonymous submission digest + operational alerts
+    # (app/notifications.py). Disabled unless both are set. Token lives only in
+    # .env / .env.prod.
     telegram_bot_token: Optional[str] = None
     telegram_chat_id: Optional[str] = None
-    # Optional secret salt. When set, notifications carry a short irreversible
-    # HMAC pseudonym so an admin can tell concurrent submissions apart. Leave
-    # unset (default) to send no user identifier at all - notifications must
-    # never contain a child's name or e-mail, see app/notifications.py.
-    telegram_pseudonym_salt: Optional[str] = None
 
     # App Configuration
     upload_max_size_mb: int = 10
