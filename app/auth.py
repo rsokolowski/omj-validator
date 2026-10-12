@@ -1,12 +1,17 @@
-"""Authentication module using Google OAuth sessions."""
+"""Authentication: sessions (Google or login + password) and the account guard."""
 
 import time
 from typing import Optional
+from urllib.parse import urlsplit
 
-from fastapi import Request, HTTPException, status
+from fastapi import Depends, Request, HTTPException, status
 from fastapi.responses import RedirectResponse
+from sqlalchemy.orm import Session
+from starlette.requests import HTTPConnection
 
 from .config import settings
+from .db import get_db
+from .db.models import UserDB, UserStatus
 
 # Session key for storing user info
 SESSION_USER_KEY = "user"
@@ -50,37 +55,132 @@ async def _refresh_group_membership_if_needed(request: Request) -> None:
         logger.debug(f"Group membership refresh failed, will retry: {e}")
 
 
+# Session lifetimes. Starlette's cookie lives 30 days (SessionMiddleware
+# max_age); a session started without "Zapamiętaj mnie" carries its own,
+# shorter expiry, checked on every read.
+REMEMBER_SESSION_SECONDS = 30 * 24 * 60 * 60
+SHORT_SESSION_SECONDS = 12 * 60 * 60
+
+# Registration answers stored before the Google redirect (30 minutes), and a
+# Google identity waiting for its registration to be finished: sub + e-mail
+# only, 10 minutes (a shared school computer must not hand it to the next
+# child). Both are consumed - removed from the session - on first use.
+SESSION_PENDING_REGISTRATION_KEY = "pending_registration"
+SESSION_PENDING_GOOGLE_KEY = "pending_google"
+PENDING_SESSION_SECONDS = 30 * 60
+PENDING_GOOGLE_SECONDS = 10 * 60
+
+
+def safe_next_path(next_url: Optional[str]) -> Optional[str]:
+    """``next_url`` if it is a same-site path, else None (open-redirect guard).
+
+    Browsers normalise "\\" to "/" and drop tabs/newlines, so "/\\evil.com",
+    "/%5Cevil.com" or "/\t/evil.com" would all become "//evil.com". Only a
+    plain path is accepted: one leading "/", no backslash (raw or encoded),
+    no control characters, no scheme and no host.
+    """
+    if not next_url or not isinstance(next_url, str) or len(next_url) > 2000:
+        return None
+    if not next_url.startswith("/") or next_url[1:2] in ("/", "\\"):
+        return None
+    if "\\" in next_url or "%5c" in next_url.lower():
+        return None
+    if any(ord(ch) < 0x20 or ord(ch) == 0x7F for ch in next_url):
+        return None
+    lowered = next_url.lower()
+    if any(code in lowered for code in ("%09", "%0a", "%0d", "%00")):
+        return None
+    parsed = urlsplit(next_url)
+    if parsed.scheme or parsed.netloc:
+        return None
+    return next_url
+
+
+def start_session(
+    request: Request,
+    user,
+    *,
+    remember: bool,
+    is_group_member: bool,
+    picture: Optional[str] = None,
+) -> dict:
+    """Log ``user`` (a UserDB row) in: replace whatever the session held."""
+    now = time.time()
+    request.session.clear()
+    session_user = {
+        "user_id": user.id,
+        "session_version": user.session_version or 0,
+        "expires_at": now + (REMEMBER_SESSION_SECONDS if remember else SHORT_SESSION_SECONDS),
+        "email": user.email,
+        "login": user.login,
+        "name": user.name or user.login or "",
+        "picture": picture,
+        "is_group_member": is_group_member,
+        "membership_checked_at": now,
+    }
+    request.session[SESSION_USER_KEY] = session_user
+    return session_user
+
+
 def get_current_user(request: Request) -> Optional[dict]:
     """
     Get current user from session.
 
     Returns:
-        User dict with keys: google_sub, email, name, picture, is_group_member
-        None if not authenticated
+        User dict with keys: user_id, session_version, expires_at, email
+        (None for login accounts), login, name, picture, is_group_member.
+        None if not authenticated or the session expired.
+
+    A session started before login accounts existed carries ``google_sub``
+    instead of ``user_id``. For those users ``users.id`` equals the Google
+    sub, so it is read as the id and the session is rewritten in place -
+    nobody is logged out by the deploy.
     """
     # Auth disabled = anonymous user with full access
     if settings.auth_disabled:
         return {
-            "google_sub": "anonymous",
+            "user_id": "anonymous",
             "email": "anonymous@localhost",
+            "login": None,
             "name": "Anonymous (auth disabled)",
             "picture": None,
             "is_group_member": True,
         }
 
-    return request.session.get(SESSION_USER_KEY)
+    user = request.session.get(SESSION_USER_KEY)
+    if not user:
+        return None
+
+    if not user.get("user_id"):
+        legacy_id = user.get("google_sub")
+        if not legacy_id:
+            request.session.pop(SESSION_USER_KEY, None)
+            return None
+        user = {key: value for key, value in user.items() if key != "google_sub"}
+        user["user_id"] = legacy_id
+        user.setdefault("session_version", 0)
+        user.setdefault("login", None)
+        user["expires_at"] = time.time() + REMEMBER_SESSION_SECONDS
+        request.session[SESSION_USER_KEY] = user
+
+    expires_at = user.get("expires_at")
+    if expires_at is not None and time.time() > expires_at:
+        request.session.pop(SESSION_USER_KEY, None)
+        return None
+
+    return user
 
 
 def get_current_user_id(request: Request) -> Optional[str]:
     """
-    Get the Google sub (user ID) of the current user.
+    Get the id (``users.id``) of the current user.
 
     Returns:
-        Google sub string if authenticated, None otherwise
+        User id string if authenticated, None otherwise
     """
     user = get_current_user(request)
     if user:
-        return user.get("google_sub")
+        return user.get("user_id")
     return None
 
 
@@ -195,3 +295,90 @@ def require_group_member_redirect(request: Request) -> Optional[RedirectResponse
         return RedirectResponse(url="/auth/limited", status_code=status.HTTP_303_SEE_OTHER)
 
     return None
+
+
+# --- Account state (DB) and the guard on write endpoints --------------------
+
+# Codes the frontend reacts to (403 bodies carry {"detail", "code"})
+CODE_PARENT_CONSENT_PENDING = "parent_consent_pending"
+CODE_PROFILE_INCOMPLETE = "profile_incomplete"
+
+PARENT_CONSENT_PENDING_MESSAGE = (
+    "Twoje konto czeka na zgodę rodzica. Do tego czasu możesz przeglądać zadania, "
+    "ale nie możesz przesyłać rozwiązań ani niczego zapisywać."
+)
+PROFILE_INCOMPLETE_MESSAGE = "Uzupełnij rok urodzenia, żeby korzystać ze wszystkich funkcji."
+
+_SAFE_METHODS = frozenset({"GET", "HEAD", "OPTIONS"})
+_ALLOW_INACTIVE_ATTR = "__allow_inactive_account__"
+
+
+class AccountInactiveError(Exception):
+    """Raised by the guard; app/main.py turns it into 403 {"detail", "code"}."""
+
+    def __init__(self, code: str, detail: str):
+        super().__init__(detail)
+        self.code = code
+        self.detail = detail
+
+
+def allow_inactive_account(endpoint):
+    """Mark a write endpoint a pending / incomplete account may still call.
+
+    Put it UNDER the route decorator. Only for the account's own lifecycle:
+    finishing registration, the parent e-mail, deleting the account, logging
+    in and out, token-based parent pages.
+    """
+    setattr(endpoint, _ALLOW_INACTIVE_ATTR, True)
+    return endpoint
+
+
+def current_account(conn: HTTPConnection, db: Session = Depends(get_db)) -> Optional[UserDB]:
+    """The signed-in user's row, or None (anonymous, dev mode, stale session).
+
+    Runs for every request (app-level dependency). A session whose user no
+    longer exists (erased by a parent, retention, self-deletion) or whose
+    session_version is older than the row's (password reset) is cleared here,
+    so it cannot be used for anything afterwards.
+    """
+    if settings.auth_disabled:
+        return None
+    user = get_current_user(conn)  # type: ignore[arg-type] - only .session is used
+    if not user:
+        return None
+    row = db.get(UserDB, user["user_id"])
+    if row is None or (row.session_version or 0) != (user.get("session_version") or 0):
+        conn.session.pop(SESSION_USER_KEY, None)
+        return None
+    return row
+
+
+def account_block_reason(account: Optional[UserDB]) -> Optional[AccountInactiveError]:
+    """Why this account may not write, or None when it may."""
+    if account is None:
+        return None
+    if account.birth_year is None:
+        return AccountInactiveError(CODE_PROFILE_INCOMPLETE, PROFILE_INCOMPLETE_MESSAGE)
+    if account.status != UserStatus.ACTIVE:
+        return AccountInactiveError(CODE_PARENT_CONSENT_PENDING, PARENT_CONSENT_PENDING_MESSAGE)
+    return None
+
+
+def require_active_user(
+    conn: HTTPConnection,
+    account: Optional[UserDB] = Depends(current_account),
+) -> None:
+    """App-level guard: a pending or incomplete account cannot write.
+
+    Applied to every route through ``FastAPI(dependencies=...)``, so a new
+    endpoint cannot forget it. Reads (GET/HEAD/OPTIONS) and WebSockets pass;
+    endpoints marked with @allow_inactive_account pass. Anonymous requests
+    pass too - the endpoint's own authentication answers 401.
+    """
+    if conn.scope.get("type") != "http" or conn.scope.get("method") in _SAFE_METHODS:
+        return
+    if getattr(conn.scope.get("endpoint"), _ALLOW_INACTIVE_ATTR, False):
+        return
+    reason = account_block_reason(account)
+    if reason is not None:
+        raise reason

@@ -15,7 +15,7 @@ const SESSION_COOKIE_NAME = 'session';
 
 // Test users
 export interface TestUser {
-  google_sub: string;
+  id: string;
   email: string;
   name: string;
   picture: string | null;
@@ -25,7 +25,7 @@ export interface TestUser {
 export const TEST_USERS = {
   // Standard test user with full access
   default: {
-    google_sub: 'test-user-sub-123',
+    id: 'test-user-sub-123',
     email: 'test-user@example.com',
     name: 'Test User',
     picture: null,
@@ -34,7 +34,7 @@ export const TEST_USERS = {
 
   // Second test user for cross-user tests
   user2: {
-    google_sub: 'test-user-sub-456',
+    id: 'test-user-sub-456',
     email: 'test-user-2@example.com',
     name: 'Test User 2',
     picture: null,
@@ -43,7 +43,7 @@ export const TEST_USERS = {
 
   // Admin user
   admin: {
-    google_sub: 'test-admin-sub-789',
+    id: 'test-admin-sub-789',
     email: 'test-admin@example.com',
     name: 'Test Admin',
     picture: null,
@@ -52,7 +52,7 @@ export const TEST_USERS = {
 
   // User without group membership (can log in but restricted access)
   restricted: {
-    google_sub: 'test-restricted-sub-000',
+    id: 'test-restricted-sub-000',
     email: 'restricted@example.com',
     name: 'Restricted User',
     picture: null,
@@ -62,7 +62,7 @@ export const TEST_USERS = {
   // User subject to rate limits (NOT in ALLOWED_EMAILS)
   // Use for testing rate limiting behavior
   rateLimited: {
-    google_sub: 'test-ratelimit-sub-111',
+    id: 'test-ratelimit-sub-111',
     email: 'ratelimited@example.com',
     name: 'Rate Limited User',
     picture: null,
@@ -71,7 +71,7 @@ export const TEST_USERS = {
 
   // Second rate-limited user for cross-user rate limit tests
   rateLimited2: {
-    google_sub: 'test-ratelimit-sub-222',
+    id: 'test-ratelimit-sub-222',
     email: 'ratelimited2@example.com',
     name: 'Rate Limited User 2',
     picture: null,
@@ -80,7 +80,7 @@ export const TEST_USERS = {
 
   // Additional rate-limited users for isolated tests
   rateLimited3: {
-    google_sub: 'test-ratelimit-sub-333',
+    id: 'test-ratelimit-sub-333',
     email: 'ratelimited3@example.com',
     name: 'Rate Limited User 3',
     picture: null,
@@ -88,7 +88,7 @@ export const TEST_USERS = {
   } as TestUser,
 
   rateLimited4: {
-    google_sub: 'test-ratelimit-sub-444',
+    id: 'test-ratelimit-sub-444',
     email: 'ratelimited4@example.com',
     name: 'Rate Limited User 4',
     picture: null,
@@ -96,7 +96,7 @@ export const TEST_USERS = {
   } as TestUser,
 
   rateLimited5: {
-    google_sub: 'test-ratelimit-sub-555',
+    id: 'test-ratelimit-sub-555',
     email: 'ratelimited5@example.com',
     name: 'Rate Limited User 5',
     picture: null,
@@ -104,7 +104,7 @@ export const TEST_USERS = {
   } as TestUser,
 
   rateLimited6: {
-    google_sub: 'test-ratelimit-sub-666',
+    id: 'test-ratelimit-sub-666',
     email: 'ratelimited6@example.com',
     name: 'Rate Limited User 6',
     picture: null,
@@ -165,9 +165,15 @@ function createSignature(data: string, secret: string): string {
  */
 function createSessionCookie(user: TestUser): string {
   // Session data structure (matches Starlette SessionMiddleware)
+  // users.id equals the Google sub for these seeded Google accounts
+  // (e2e/seed_test_users.py); session_version 0 = never had a password reset
+  const { id, ...profile } = user;
   const sessionData = {
     user: {
-      ...user,
+      ...profile,
+      user_id: id,
+      session_version: 0,
+      login: null,
       membership_checked_at: Math.floor(Date.now() / 1000),
     },
   };

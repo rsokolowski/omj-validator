@@ -3,6 +3,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { TimerProvider } from "@/lib/contexts/TimerContext";
 import { Header } from "@/components/layout/Header";
+import { AccountGate } from "@/components/account/AccountGate";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingTimer } from "@/components/practice/FloatingTimer";
 import {
@@ -98,6 +99,7 @@ export default function RootLayout({
           <ThemeProvider>
             <TimerProvider>
               <Header />
+              <AccountGate />
               <main id="tresc-glowna" tabIndex={-1} className="flex-1 py-8">
                 <div className="max-w-[1200px] mx-auto px-6">
                   {children}

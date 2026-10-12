@@ -14,6 +14,11 @@ from .models import (
     AppSettingDB,
     PrivateTaskDB,
     AIUsageDB,
+    ParentDB,
+    ConsentDB,
+    EmailTokenDB,
+    LoginFailureDB,
+    UserStatus,
 )
 from .repositories import (
     UserRepository,
@@ -40,6 +45,11 @@ __all__ = [
     "AppSettingDB",
     "PrivateTaskDB",
     "AIUsageDB",
+    "ParentDB",
+    "ConsentDB",
+    "EmailTokenDB",
+    "LoginFailureDB",
+    "UserStatus",
     # Repositories
     "UserRepository",
     "SubmissionRepository",

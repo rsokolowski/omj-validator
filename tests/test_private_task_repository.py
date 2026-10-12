@@ -30,8 +30,8 @@ def db(monkeypatch):
     engine = create_engine("sqlite://")
     Base.metadata.create_all(bind=engine)
     session = sessionmaker(bind=engine)()
-    session.add(UserDB(google_sub=USER_ID, email="a@example.com"))
-    session.add(UserDB(google_sub=OTHER_USER_ID, email="b@example.com"))
+    session.add(UserDB(id=USER_ID, google_sub=USER_ID, email="a@example.com"))
+    session.add(UserDB(id=OTHER_USER_ID, google_sub=OTHER_USER_ID, email="b@example.com"))
     session.commit()
     yield session
     session.close()

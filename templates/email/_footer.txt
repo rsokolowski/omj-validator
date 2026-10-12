@@ -1,0 +1,7 @@
+
+--
+Strona rodzica (konta dziecka, usuwanie konta, nowe hasło; link działa 30 dni):
+{{ manage_url }}
+
+Pytania? Napisz do nas: {{ contact_email }}
+Serwis prowadzi {{ operator_name }}. To wiadomość automatyczna z serwisu {{ site_label }}.

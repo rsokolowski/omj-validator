@@ -32,7 +32,7 @@ def db(tmp_path, monkeypatch):
     )
     Base.metadata.create_all(bind=engine)
     session = sessionmaker(bind=engine)()
-    session.add(UserDB(google_sub=USER_ID, email="kid@example.com", name="Kid"))
+    session.add(UserDB(id=USER_ID, google_sub=USER_ID, email="kid@example.com", name="Kid"))
     session.commit()
     yield session
     session.close()

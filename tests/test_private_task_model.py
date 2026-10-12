@@ -23,7 +23,7 @@ def db():
     engine = create_engine("sqlite://")
     Base.metadata.create_all(bind=engine)
     session = sessionmaker(bind=engine)()
-    session.add(UserDB(google_sub=USER_ID, email="a@example.com", name="A"))
+    session.add(UserDB(id=USER_ID, google_sub=USER_ID, email="a@example.com", name="A"))
     session.commit()
     yield session
     session.close()

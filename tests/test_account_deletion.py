@@ -47,7 +47,7 @@ def db(tmp_path, monkeypatch):
     session = sessionmaker(bind=engine)()
 
     for user_id, email in ((USER_ID, USER_EMAIL), (OTHER_USER_ID, "other@example.com")):
-        session.add(UserDB(google_sub=user_id, email=email, name="Kid"))
+        session.add(UserDB(id=user_id, google_sub=user_id, email=email, name="Kid"))
         directory = settings.uploads_dir / user_id / "2024" / "etap1" / "1"
         directory.mkdir(parents=True, exist_ok=True)
         (directory / "page1.jpg").write_bytes(b"x" * 1024)
@@ -81,7 +81,7 @@ def client(db, monkeypatch):
 
     main.app.dependency_overrides[get_db] = override_get_db
 
-    user = {"google_sub": USER_ID, "email": USER_EMAIL, "name": "Kid"}
+    user = {"user_id": USER_ID, "email": USER_EMAIL, "name": "Kid"}
     monkeypatch.setattr(main, "verify_auth", lambda request: True)
     monkeypatch.setattr(main, "get_current_user_id", lambda request: USER_ID)
     monkeypatch.setattr(main, "get_current_user", lambda request: user)
@@ -104,7 +104,7 @@ def _post(client, confirmation=ACCOUNT_DELETE_CONFIRMATION):
 
 
 def user_exists(db, user_id: str) -> bool:
-    return db.query(UserDB).filter(UserDB.google_sub == user_id).first() is not None
+    return db.query(UserDB).filter(UserDB.id == user_id).first() is not None
 
 
 class TestSuccess:
@@ -131,7 +131,7 @@ class TestSuccess:
     def test_session_is_invalidated(self, client, db):
         client.cookies.set(
             "session",
-            _signed_session_cookie({"user": {"google_sub": USER_ID, "email": USER_EMAIL}}),
+            _signed_session_cookie({"user": {"user_id": USER_ID, "email": USER_EMAIL}}),
         )
 
         response = _post(client)
@@ -306,7 +306,7 @@ class TestCarryoverIsEnforcedOnSubmit:
 
         # Erase the account, then come back as the same Google user
         assert _post(client).status_code == 200
-        db.add(UserDB(google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
+        db.add(UserDB(id=USER_ID, google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
         db.commit()
 
         still_blocked = self._submit(client)
@@ -325,7 +325,7 @@ class TestCarryoverIsEnforcedOnSubmit:
         monkeypatch.setattr(main, "_get_allowed_emails", lambda: set())
 
         assert _post(client).status_code == 200
-        db.add(UserDB(google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
+        db.add(UserDB(id=USER_ID, google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
         db.commit()
 
         response = self._submit(client)
@@ -380,7 +380,7 @@ class TestRetryAfterForAReturningUser:
         monkeypatch.setattr(main, "_get_allowed_emails", lambda: set())
 
         assert _post(client).status_code == 200  # delete the account
-        db.add(UserDB(google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
+        db.add(UserDB(id=USER_ID, google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
         db.commit()
 
         response = self._submit(client)
@@ -398,7 +398,7 @@ class TestRetryAfterForAReturningUser:
         monkeypatch.setattr(main, "_get_allowed_emails", lambda: set())
 
         _post(client)
-        db.add(UserDB(google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
+        db.add(UserDB(id=USER_ID, google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
         db.commit()
 
         response = self._submit(client)
@@ -416,7 +416,7 @@ class TestRetryAfterForAReturningUser:
         monkeypatch.setattr(main, "_get_allowed_emails", lambda: set())
 
         _post(client)
-        db.add(UserDB(google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
+        db.add(UserDB(id=USER_ID, google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
         db.commit()
 
         blocked = self._submit(client)

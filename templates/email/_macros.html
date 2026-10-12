@@ -1,0 +1,18 @@
+{# Shared pieces of the e-mail templates. Bulletproof button: a table cell with
+   the background colour, so the button survives clients that strip padding
+   from links. #}
+{% macro button(url, label, primary=True) -%}
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 12px 0;">
+  <tr>
+    {% if primary %}
+    <td align="center" bgcolor="#2563eb" style="border-radius:8px; background-color:#2563eb;">
+      <a href="{{ url }}" target="_blank" style="display:inline-block; padding:14px 26px; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; font-size:16px; font-weight:700; line-height:20px; color:#ffffff; text-decoration:none; border-radius:8px;">{{ label }}</a>
+    </td>
+    {% else %}
+    <td align="center" bgcolor="#ffffff" style="border-radius:8px; background-color:#ffffff; border:1px solid #d1d5db;">
+      <a href="{{ url }}" target="_blank" style="display:inline-block; padding:12px 22px; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; font-size:15px; font-weight:600; line-height:20px; color:#374151; text-decoration:none; border-radius:8px;">{{ label }}</a>
+    </td>
+    {% endif %}
+  </tr>
+</table>
+{%- endmacro %}

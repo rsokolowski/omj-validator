@@ -32,3 +32,15 @@ def mask_user_id(user_id: Optional[str]) -> str:
     if not user_id:
         return "<none>"
     return f"{user_id[:8]}..."
+
+
+def mask_email_for_display(email: Optional[str]) -> str:
+    """Mask an e-mail shown back to a user: "anna.nowak@gmail.com" -> "a***@gmail.com".
+
+    For screens, not logs: the domain stays so a child can tell which of the
+    parent's addresses we wrote to, the local part does not.
+    """
+    if not email or "@" not in email:
+        return ""
+    local, _, domain = email.partition("@")
+    return f"{local[:1]}***@{domain}"

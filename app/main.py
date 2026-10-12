@@ -28,7 +28,15 @@ from sqlalchemy.orm import Session
 
 from .config import settings
 from .auth import (
-    SESSION_USER_KEY,
+    SESSION_PENDING_GOOGLE_KEY,
+    SESSION_PENDING_REGISTRATION_KEY,
+    PENDING_SESSION_SECONDS,
+    AccountInactiveError,
+    allow_inactive_account,
+    current_account,
+    require_active_user,
+    safe_next_path,
+    start_session,
     verify_auth,
     require_auth_redirect,
     get_current_user,
@@ -43,7 +51,6 @@ from .db import (
     get_db,
     UserRepository,
     SubmissionRepository,
-    DeletedAccountQuotaRepository,
     AdminAccessLogRepository,
 )
 from .db.repositories import ensure_utc
@@ -110,14 +117,30 @@ from .progress import build_progress_data, get_all_categories, get_prerequisite_
 from .skills import get_skills_by_ids
 from .scoring import get_max_score
 
-app = FastAPI(title="OMJ Validator", description="Walidator rozwiązań OMJ")
+# require_active_user runs for every route: an account waiting for parent
+# consent (or for its year of birth) cannot write anything, and a new endpoint
+# cannot forget the check. Exceptions are marked @allow_inactive_account.
+app = FastAPI(
+    title="OMJ Validator",
+    description="Walidator rozwiązań OMJ",
+    dependencies=[Depends(require_active_user)],
+)
+
+
+@app.exception_handler(AccountInactiveError)
+async def _account_inactive_handler(request: Request, exc: AccountInactiveError):
+    return JSONResponse({"detail": exc.detail, "code": exc.code}, status_code=status.HTTP_403_FORBIDDEN)
+
 
 from .private_tasks import router as private_tasks_router  # noqa: E402
 from .patterns.routes import router as patterns_router  # noqa: E402
 from .patterns import service as pattern_service  # noqa: E402
+from .accounts.routes import router as accounts_router  # noqa: E402
+from .accounts import service as account_service  # noqa: E402
 
 app.include_router(private_tasks_router)
 app.include_router(patterns_router)
+app.include_router(accounts_router)
 
 # Determine if we're in split deployment mode (frontend on different domain)
 is_split_deployment = bool(settings.frontend_url)
@@ -205,6 +228,7 @@ def create_anonymous_user_if_needed():
                 google_sub="anonymous",
                 email="anonymous@localhost",
                 name="Anonymous (auth disabled)",
+                birth_year=2000,
             )
             logger.info("Created anonymous user for local development")
     finally:
@@ -334,6 +358,11 @@ async def google_login(request: Request, next: str = None):
     if next:
         request.session["login_next"] = next
 
+    # Answers from /rejestracja travel with ?register=1; a plain "Zaloguj
+    # przez Google" must not pick up an abandoned registration's answers
+    if request.query_params.get("register") != "1":
+        request.session.pop(SESSION_PENDING_REGISTRATION_KEY, None)
+
     # Use frontend URL for callback if configured (for separate frontend deployment)
     if settings.frontend_url:
         redirect_uri = f"{settings.frontend_url}/auth/callback"
@@ -373,66 +402,38 @@ async def google_auth_callback(request: Request, db: Session = Depends(get_db)):
                 status_code=status.HTTP_303_SEE_OTHER,
             )
 
-        # Check rate limit for NEW user registrations
+        email = user_info["email"]
+        name = user_info.get("name", "")
+        picture = user_info.get("picture")
+        next_url = request.session.pop("login_next", None)
+
         user_repo = UserRepository(db)
         existing_user = user_repo.get_by_google_sub(google_sub)
 
-        if not existing_user:
-            # New user - check if they're in the allowlist (bypass rate limit)
-            allowed_emails = _get_allowed_emails()
-            user_email_lower = user_info["email"].lower()
-            is_allowlisted = allowed_emails and user_email_lower in allowed_emails
+        if existing_user is None:
+            return await _google_new_identity(request, db, google_sub, email, name, picture)
 
-            if not is_allowlisted:
-                # Check rate limit for new users
-                recent_users = user_repo.count_recent_users(hours=24)
-                if recent_users >= settings.rate_limit_new_users_per_day:
-                    logger.warning(
-                        f"New user rate limit exceeded: {recent_users}/{settings.rate_limit_new_users_per_day} "
-                        f"(blocked: {mask_email(user_info['email'])})"
-                    )
-                    return RedirectResponse(
-                        url="/login?error=rate_limit_new_users",
-                        status_code=status.HTTP_303_SEE_OTHER,
-                    )
-
-        # Create or update user in database
-        user_repo.create_or_update(
-            google_sub=google_sub,
-            email=user_info["email"],
-            name=user_info.get("name", ""),
-        )
+        # Known Google identity: refresh the profile and log in
+        user_repo.update_google_profile(existing_user, email, name)
 
         # Check if user has full access (via public access, allowlist, or Google Groups)
-        has_access = await check_group_membership(user_info["email"])
-
-        # Check allowlist separately for logging (used for rate limit bypass)
+        has_access = await check_group_membership(email)
         allowed_emails = _get_allowed_emails()
-        is_allowlisted = allowed_emails and user_info["email"].lower() in allowed_emails
+        is_allowlisted = allowed_emails and email.lower() in allowed_emails
 
-        # Get the return URL before modifying session
-        next_url = request.session.pop("login_next", None)
-
-        # Store user in session (including google_sub for user identification)
-        import time
-        request.session[SESSION_USER_KEY] = {
-            "google_sub": google_sub,
-            "email": user_info["email"],
-            "name": user_info.get("name", ""),
-            "picture": user_info.get("picture"),
-            "is_group_member": has_access,
-            "membership_checked_at": time.time(),  # Track when we last checked membership
-        }
+        start_session(request, existing_user, remember=True, is_group_member=has_access, picture=picture)
 
         logger.info(
-            f"User logged in: {mask_email(user_info['email'])} "
+            f"User logged in: {mask_email(email)} "
             f"(has_access: {has_access}, allowlisted: {is_allowlisted})"
         )
 
         # Redirect to the original page or default to /years
         # Validate that redirect URL is a safe relative path (prevent open redirect)
         redirect_url = "/years"
-        if next_url and next_url.startswith("/") and not next_url.startswith("//"):
+        if existing_user.status != "active":
+            redirect_url = "/konto/oczekuje"
+        elif safe_next_path(next_url):
             redirect_url = next_url
         return RedirectResponse(url=redirect_url, status_code=status.HTTP_303_SEE_OTHER)
 
@@ -442,6 +443,58 @@ async def google_auth_callback(request: Request, db: Session = Depends(get_db)):
             url="/login?error=oauth_failed",
             status_code=status.HTTP_303_SEE_OTHER,
         )
+
+
+async def _google_new_identity(
+    request: Request, db: Session, google_sub: str, email: str, name: str, picture: OptionalType[str]
+):
+    """A Google identity with no account yet.
+
+    With answers from /rejestracja in the session the account is created now;
+    without them nothing is created - the identity (sub + e-mail) waits in
+    the session for 10 minutes and the child finishes the registration at
+    /rejestracja?google=1.
+    """
+    import time as _time
+
+    from .accounts.routes import finish_google_registration
+
+    answers = request.session.pop(SESSION_PENDING_REGISTRATION_KEY, None)
+    if not answers or _time.time() - answers.get("at", 0) > PENDING_SESSION_SECONDS:
+        # Only what the registration needs, and briefly (PENDING_GOOGLE_SECONDS)
+        request.session[SESSION_PENDING_GOOGLE_KEY] = {
+            "sub": google_sub, "email": email, "at": _time.time()
+        }
+        return RedirectResponse(url="/rejestracja?google=1", status_code=status.HTTP_303_SEE_OTHER)
+
+    parent_email = answers.get("parent_email")
+    if parent_email and parent_email == email.strip().lower():
+        # The parent's address must not be the child's own Google address
+        request.session[SESSION_PENDING_GOOGLE_KEY] = {
+            "sub": google_sub, "email": email, "at": _time.time()
+        }
+        return RedirectResponse(
+            url="/rejestracja?google=1&blad=ten-sam-adres", status_code=status.HTTP_303_SEE_OTHER
+        )
+
+    # This identity comes straight from Google in this request: name and
+    # picture are used for the new account, then consumed with the answers
+    identity = {"sub": google_sub, "email": email, "name": name, "picture": picture}
+    result = await finish_google_registration(
+        request,
+        db,
+        identity,
+        account_service.AgeAnswers(
+            birth_year=answers["birth_year"],
+            can_consent_alone=bool(answers.get("can_consent_alone")),
+            parent_email=parent_email,
+        ),
+    )
+    if isinstance(result, JSONResponse):
+        if result.status_code == 429:
+            return RedirectResponse(url="/login?error=rate_limit_new_users", status_code=status.HTTP_303_SEE_OTHER)
+        return RedirectResponse(url="/login?error=oauth_failed", status_code=status.HTTP_303_SEE_OTHER)
+    return RedirectResponse(url=result["redirect"], status_code=status.HTTP_303_SEE_OTHER)
 
 
 @app.get("/auth/limited", response_class=HTMLResponse)
@@ -750,7 +803,7 @@ async def submit_solution(
     # Check rate limits (skip for allowlisted users)
     allowed_emails = _get_allowed_emails()
     user = get_current_user(request)
-    user_email_lower = user.get("email", "").lower() if user else ""
+    user_email_lower = (user.get("email") or "").lower() if user else ""
     is_allowlisted = allowed_emails and user_email_lower in allowed_emails
 
     submission_repo = SubmissionRepository(db)
@@ -870,39 +923,16 @@ async def websocket_submission_progress(
     Connect after calling POST /task/{year}/{etap}/{num}/submit.
     Receives progress updates as JSON messages.
     """
-    from itsdangerous import TimestampSigner
-    import base64
-    import json
     from .db.models import SubmissionStatus
     from .websocket.handler import websocket_submission_handler
     from .websocket.progress import progress_manager
 
-    # Get user from session cookie
-    # WebSocket connections include cookies automatically
-    user_id = None
-
-    if settings.auth_disabled:
-        user_id = "anonymous"
-    else:
-        try:
-            # Decode session cookie using same method as SessionMiddleware
-            session_cookie = websocket.cookies.get("session")
-            if session_cookie:
-                # Starlette SessionMiddleware uses TimestampSigner + base64 + JSON
-                signer = TimestampSigner(settings.session_secret_key)
-                # max_age matches the middleware config (30 days)
-                data = signer.unsign(session_cookie, max_age=30 * 24 * 60 * 60)
-                session_data = json.loads(base64.b64decode(data))
-                user = session_data.get(SESSION_USER_KEY)
-                if user:
-                    user_id = user.get("google_sub")
-                    logger.info(f"[WebSocket] Session decoded, user_id={mask_user_id(user_id)}")
-                else:
-                    logger.warning(f"[WebSocket] No user in session data")
-            else:
-                logger.warning(f"[WebSocket] No session cookie found. Cookies: {list(websocket.cookies.keys())}")
-        except Exception as e:
-            logger.warning(f"[WebSocket] Session decode failed: {e}")
+    # SessionMiddleware decodes the cookie for WebSockets too, and the app-level
+    # current_account dependency has already dropped a stale session (deleted
+    # account, password changed), so the regular helper is the whole check.
+    user_id = get_current_user_id(websocket)
+    if not user_id:
+        logger.warning("[WebSocket] No signed-in user in the session")
 
     # Verify submission exists
     submission_repo = SubmissionRepository(db)
@@ -1114,7 +1144,7 @@ async def reset_user_submissions(
             detail="Authentication required",
         )
 
-    user_id = user.get("google_sub")
+    user_id = user.get("user_id")
     if not user_id:
         raise HTTPException(
             status_code=401,
@@ -1142,12 +1172,12 @@ async def reset_user_patterns(request: Request, db: Session = Depends(get_db)):
     if not settings.e2e_mode:
         raise HTTPException(status_code=404, detail="Not found")
     user = get_current_user(request)
-    if not user or not user.get("google_sub"):
+    if not user or not user.get("user_id"):
         raise HTTPException(status_code=401, detail="Authentication required")
 
     from .db.models import PatternDB
 
-    patterns = db.query(PatternDB).filter(PatternDB.user_id == user["google_sub"]).all()
+    patterns = db.query(PatternDB).filter(PatternDB.user_id == user["user_id"]).all()
     for pattern in patterns:
         db.delete(pattern)
     db.commit()
@@ -1160,13 +1190,13 @@ async def make_pattern_due(pattern_id: str, request: Request, db: Session = Depe
     if not settings.e2e_mode:
         raise HTTPException(status_code=404, detail="Not found")
     user = get_current_user(request)
-    if not user or not user.get("google_sub"):
+    if not user or not user.get("user_id"):
         raise HTTPException(status_code=401, detail="Authentication required")
 
     from .db.patterns import PatternRepository
     from .patterns import srs
 
-    pattern = PatternRepository(db).get_owned(pattern_id, user["google_sub"])
+    pattern = PatternRepository(db).get_owned(pattern_id, user["user_id"])
     if pattern is None:
         raise HTTPException(status_code=404, detail="Not found")
     pattern.due_on = srs.today_warsaw()
@@ -1213,12 +1243,36 @@ async def reset_all_submissions(
 # --- JSON API Endpoints for Next.js Frontend ---
 
 
+def _public_user(user: OptionalType[dict]) -> OptionalType[dict]:
+    """The session user as the frontend sees it (no session bookkeeping)."""
+    if not user:
+        return None
+    return {
+        "id": user.get("user_id"),
+        "email": user.get("email"),
+        "login": user.get("login"),
+        "name": user.get("name") or user.get("login") or "",
+        "picture": user.get("picture"),
+        "is_group_member": bool(user.get("is_group_member")),
+    }
+
+
 @app.get("/api/auth/me")
-async def get_current_user_api(request: Request):
-    """Get current user from session (for Next.js frontend)."""
+async def get_current_user_api(
+    request: Request,
+    db: Session = Depends(get_db),
+    account=Depends(current_account),
+):
+    """Get current user from session (for Next.js frontend).
+
+    ``account`` tells the frontend where the account stands: active, waiting
+    for a parent (``pending`` with the masked parent address and the deletion
+    date), or missing its year of birth (``needs_profile``).
+    """
     user = get_current_user(request)
     return {
-        "user": user,
+        "user": _public_user(user),
+        "account": account_service.account_summary(db, account) if account is not None else None,
         "is_authenticated": user is not None,
         "is_admin": _is_admin(request),
         # Whether POST /api/account/delete would work for this session, so the
@@ -1236,7 +1290,7 @@ async def years_api(request: Request):
     user = get_current_user(request)
     return {
         "years": years,
-        "user": user,
+        "user": _public_user(user),
         "is_authenticated": user is not None,
     }
 
@@ -1268,7 +1322,7 @@ async def year_detail_api(request: Request, year: str):
     return {
         "year": year,
         "etaps": etaps,
-        "user": user,
+        "user": _public_user(user),
         "is_authenticated": user is not None,
     }
 
@@ -1321,7 +1375,7 @@ async def etap_detail_api(
         "year": year,
         "etap": etap,
         "tasks": tasks,
-        "user": user,
+        "user": _public_user(user),
         "is_authenticated": user is not None,
     }
 
@@ -1378,7 +1432,7 @@ async def task_detail_api(
         "stats": stats,
         "submissions": [s.model_dump(mode="json") for s in submissions],
         "pdf_links": pdf_links,
-        "user": user,
+        "user": _public_user(user),
         "is_authenticated": user is not None,
         "can_submit": can_submit,
         "skills_required": [s.model_dump(mode="json") for s in skills_required],
@@ -1557,6 +1611,7 @@ def _can_delete_account(request: Request) -> bool:
 
 
 @app.post("/api/account/delete", response_model=DeleteAccountResponse)
+@allow_inactive_account
 async def delete_my_account(
     request: Request,
     payload: DeleteAccountRequest,
@@ -1601,28 +1656,11 @@ async def delete_my_account(
 
     from .retention import erase_user_data
 
-    # Carry the used quota over the deletion, otherwise erasing the account is a
-    # free rate limit reset (see DeletedAccountQuotaDB). Recorded first: if the
-    # erasure then fails, we have over-counted a still-existing account by its
-    # own submissions, which is safe. The reverse order would not be.
-    submission_repo = SubmissionRepository(db)
-    used_count, used_oldest, used_newest = submission_repo.get_user_rate_limit_window(
-        user_id, hours=24
-    )
-    # Same for AI calls made while creating private tasks (ai_usage rows)
-    from .db import AIUsageRepository
+    # Carry the used quota over the deletion (keyed by the Google identity or
+    # the parent's address, so registering again does not reset it)
+    from .rate_limits import record_erasure_quota
 
-    ai_count, _, ai_newest = AIUsageRepository(db).user_total_window(user_id, hours=24)
-    quota_repo = DeletedAccountQuotaRepository(db)
-    quota_repo.purge_expired()
-    quota_repo.record_deletion(
-        user_id,
-        used_count,
-        used_oldest,
-        used_newest,
-        ai_usage_count=ai_count,
-        ai_usage_newest_at=ai_newest,
-    )
+    record_erasure_quota(db, user_id)
 
     report = erase_user_data(db, user_id)
 
@@ -1650,7 +1688,7 @@ def _is_admin(request: Request) -> bool:
         return False
 
     admin_emails = {e.strip().lower() for e in admin_emails_str.split(",") if e.strip()}
-    user_email = user.get("email", "").lower()
+    user_email = (user.get("email") or "").lower()
     return user_email in admin_emails
 
 
@@ -1688,7 +1726,7 @@ def _write_admin_access(
             resource=resource,
             subject_user_id=subject_user_id,
             resource_id=resource_id,
-            admin_user_id=admin.get("google_sub"),
+            admin_user_id=admin.get("user_id"),
         )
     finally:
         audit_db.close()
@@ -1755,7 +1793,7 @@ async def admin_submissions(
 
     # Batch fetch all users in a single query to avoid N+1
     user_ids = list(set(sub.user_id for sub in db_submissions))
-    users_by_id = user_repo.get_by_google_subs(user_ids)
+    users_by_id = user_repo.get_by_ids(user_ids)
 
     private_tasks = _private_tasks_by_id(db, db_submissions)
 
@@ -1767,7 +1805,7 @@ async def admin_submissions(
         submissions.append({
             "id": sub.id,
             "user_id": sub.user_id,
-            "user_email": user.email if user else None,
+            "user_email": (user.email or (f"login: {user.login}" if user.login else None)) if user else None,
             "user_name": user.name if user else None,
             "year": sub.year,
             "etap": sub.etap,
@@ -1824,8 +1862,9 @@ async def admin_users_search(
     return {
         "users": [
             {
-                "google_sub": user.google_sub,
-                "email": user.email,
+                "id": user.id,
+                # Login accounts have no e-mail; the admin picker shows the login
+                "email": user.email or (f"login: {user.login}" if user.login else ""),
                 "name": user.name,
             }
             for user in users
@@ -1838,7 +1877,7 @@ async def admin_me(request: Request):
     """Check if current user is admin."""
     user = get_current_user(request)
     return {
-        "user": user,
+        "user": _public_user(user),
         "is_authenticated": user is not None,
         "is_admin": _is_admin(request),
     }

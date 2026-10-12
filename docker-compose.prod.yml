@@ -100,6 +100,14 @@ services:
       TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
       TELEGRAM_PSEUDONYM_SALT: ${TELEGRAM_PSEUDONYM_SALT:-}
 
+      # Transactional e-mail (parent consent, password reset) through Resend
+      EMAIL_BACKEND: ${EMAIL_BACKEND:-resend}
+      RESEND_API_KEY: ${RESEND_API_KEY:?RESEND_API_KEY is required (parent consent e-mails)}
+      EMAIL_FROM: ${EMAIL_FROM:-Trener OMJ <noreply@omj-validator.pl>}
+      EMAIL_REPLY_TO: ${EMAIL_REPLY_TO:-kontakt@omj-validator.pl}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-https://omj-validator.pl}
+      TERMS_VERSION: ${TERMS_VERSION:-2026-10-12}
+
       # Data retention (RODO art. 5(1)(e)) - 0 disables a pass, do not do that here
       RETENTION_SUBMISSION_MONTHS: ${RETENTION_SUBMISSION_MONTHS:-24}
       RETENTION_SCORING_THINKING_DAYS: ${RETENTION_SCORING_THINKING_DAYS:-90}

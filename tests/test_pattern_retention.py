@@ -26,7 +26,7 @@ def db(tmp_path, monkeypatch):
     engine = create_engine("sqlite://")
     Base.metadata.create_all(bind=engine)
     session = sessionmaker(bind=engine)()
-    session.add(UserDB(google_sub=USER_ID, email="kid@example.com"))
+    session.add(UserDB(id=USER_ID, google_sub=USER_ID, email="kid@example.com"))
     session.commit()
     yield session
     session.close()

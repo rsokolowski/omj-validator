@@ -42,8 +42,8 @@ def db(tmp_path, monkeypatch):
     engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
     Base.metadata.create_all(bind=engine)
     session = sessionmaker(bind=engine)()
-    session.add(UserDB(google_sub=USER_ID, email="kid@example.com"))
-    session.add(UserDB(google_sub=OTHER_USER_ID, email="other@example.com"))
+    session.add(UserDB(id=USER_ID, google_sub=USER_ID, email="kid@example.com"))
+    session.add(UserDB(id=OTHER_USER_ID, google_sub=OTHER_USER_ID, email="other@example.com"))
     session.add(PrivateTaskDB(id=PRIVATE_ID, user_id=USER_ID, title="Wymyślone",
                               content="Wymyślone zadanie o parzystości.", hints=[],
                               source_images=[], origin="typed"))
@@ -57,7 +57,7 @@ def client(db, monkeypatch):
     main.app.dependency_overrides[get_db] = lambda: db
     monkeypatch.setattr(main, "get_task_pdf_path", lambda year, etap: FIXTURE_TASK_PDF)
     monkeypatch.setattr(main, "get_solution_pdf_path", lambda year, etap: None)
-    user = {"google_sub": USER_ID, "email": "kid@example.com"}
+    user = {"user_id": USER_ID, "email": "kid@example.com"}
     for module in (main, private_routes):
         monkeypatch.setattr(module, "verify_auth", lambda request: True)
         monkeypatch.setattr(module, "get_current_user_id", lambda request: USER_ID)

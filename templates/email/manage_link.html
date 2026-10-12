@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% import "_macros.html" as ui %}
+{% block preheader %}Tu zobaczysz konta dziecka i możesz nimi zarządzać.{% endblock %}
+{% block content %}
+            <h1 style="margin:0 0 16px 0; font-size:22px; line-height:1.3; font-weight:700; color:#111827;">Strona rodzica</h1>
+            <p style="margin:0 0 16px 0;">Dzień dobry,</p>
+            <p style="margin:0 0 16px 0;">oto link do strony rodzica w serwisie {{ app_name }}. Zobaczysz tam konta dziecka powiązane z tym adresem. Możesz usunąć konto razem ze wszystkimi danymi, a przy koncie z loginem &ndash; ustawić nowe hasło.</p>
+            {{ ui.button(manage_url, "Otwórz stronę rodzica") }}
+            <p style="margin:8px 0 0 0; font-size:14px; color:#4b5563;">Link działa 30 dni. Jeśli nikt z Was o niego nie prosił, zignoruj tę wiadomość.</p>
+{% endblock %}

@@ -50,7 +50,7 @@ def db(tmp_path, monkeypatch):
     )
     Base.metadata.create_all(bind=engine)
     session = sessionmaker(bind=engine)()
-    session.add(UserDB(google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
+    session.add(UserDB(id=USER_ID, google_sub=USER_ID, email=USER_EMAIL, name="Kid"))
     session.commit()
     yield session
     session.close()
@@ -81,7 +81,7 @@ def client(db, monkeypatch):
     monkeypatch.setattr(main, "get_task_pdf_path", lambda year, etap: FIXTURE_TASK_PDF)
     monkeypatch.setattr(main, "get_solution_pdf_path", lambda year, etap: None)
 
-    user = {"google_sub": USER_ID, "email": USER_EMAIL, "name": "Kid"}
+    user = {"user_id": USER_ID, "email": USER_EMAIL, "name": "Kid"}
     monkeypatch.setattr(main, "verify_auth", lambda request: True)
     monkeypatch.setattr(main, "get_current_user_id", lambda request: USER_ID)
     monkeypatch.setattr(main, "get_current_user", lambda request: user)

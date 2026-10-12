@@ -45,8 +45,8 @@ def db(tmp_path, monkeypatch):
     # sharing the request session here would hide the very bug this guards.
     session.audit_session_factory = session_factory
 
-    session.add(UserDB(google_sub=ADMIN_ID, email=ADMIN_EMAIL, name="Admin"))
-    session.add(UserDB(google_sub=STUDENT_ID, email="kid@example.com", name="Kid"))
+    session.add(UserDB(id=ADMIN_ID, google_sub=ADMIN_ID, email=ADMIN_EMAIL, name="Admin"))
+    session.add(UserDB(id=STUDENT_ID, google_sub=STUDENT_ID, email="kid@example.com", name="Kid"))
     for user_id in (ADMIN_ID, STUDENT_ID):
         directory = settings.uploads_dir / user_id / "2024" / "etap1" / "1"
         directory.mkdir(parents=True, exist_ok=True)
@@ -78,7 +78,7 @@ def client(db, monkeypatch):
 
     main.app.dependency_overrides[get_db] = override_get_db
 
-    admin = {"google_sub": ADMIN_ID, "email": ADMIN_EMAIL, "name": "Admin"}
+    admin = {"user_id": ADMIN_ID, "email": ADMIN_EMAIL, "name": "Admin"}
     monkeypatch.setattr(main, "verify_auth", lambda request: True)
     monkeypatch.setattr(main, "get_current_user_id", lambda request: ADMIN_ID)
     monkeypatch.setattr(main, "get_current_user", lambda request: admin)

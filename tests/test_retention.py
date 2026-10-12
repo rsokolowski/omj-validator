@@ -40,8 +40,8 @@ def db(tmp_path, monkeypatch):
     Base.metadata.create_all(bind=engine)
     session = sessionmaker(bind=engine)()
 
-    session.add(UserDB(google_sub=USER_ID, email="a@example.com", name="A"))
-    session.add(UserDB(google_sub=OTHER_USER_ID, email="b@example.com", name="B"))
+    session.add(UserDB(id=USER_ID, google_sub=USER_ID, email="a@example.com", name="A"))
+    session.add(UserDB(id=OTHER_USER_ID, google_sub=OTHER_USER_ID, email="b@example.com", name="B"))
     session.commit()
 
     yield session
@@ -314,7 +314,7 @@ class TestEraseUserData:
 
         assert report.submissions_deleted == 2
         assert report.files_deleted == 2
-        assert db.query(UserDB).filter(UserDB.google_sub == USER_ID).first() is None
+        assert db.query(UserDB).filter(UserDB.id == USER_ID).first() is None
         assert [s.id for s in db.query(SubmissionDB).all()] == ["other001"]
         assert not (settings.uploads_dir / USER_ID).exists()
 
@@ -324,7 +324,7 @@ class TestEraseUserData:
 
         erase_user_data(db, USER_ID)
 
-        assert db.query(UserDB).filter(UserDB.google_sub == OTHER_USER_ID).first() is not None
+        assert db.query(UserDB).filter(UserDB.id == OTHER_USER_ID).first() is not None
         assert files_on_disk() == [f"{OTHER_USER_ID}/2024/etap1/1/page1.jpg"]
 
     def test_removes_orphan_files_without_a_row(self, db):
@@ -343,7 +343,7 @@ class TestEraseUserData:
         report = erase_user_data(db, USER_ID, dry_run=True)
 
         assert report.submissions_deleted == 1
-        assert db.query(UserDB).filter(UserDB.google_sub == USER_ID).first() is not None
+        assert db.query(UserDB).filter(UserDB.id == USER_ID).first() is not None
         assert db.query(SubmissionDB).count() == 1
         assert files_on_disk() == ["user-1/2024/etap1/1/page1.jpg"]
 
@@ -360,7 +360,7 @@ class TestEraseUserData:
         report = erase_user_data(db, USER_ID)
 
         assert report.submissions_deleted == 0
-        assert db.query(UserDB).filter(UserDB.google_sub == USER_ID).first() is None
+        assert db.query(UserDB).filter(UserDB.id == USER_ID).first() is None
 
 
 class TestOrphanSweep:
@@ -479,7 +479,7 @@ class TestInactiveAccounts:
     Google id, e-mail and name forever."""
 
     def _set_last_login(self, db, user_id: str, days_ago: int) -> None:
-        user = db.query(UserDB).filter(UserDB.google_sub == user_id).one()
+        user = db.query(UserDB).filter(UserDB.id == user_id).one()
         user.updated_at = datetime.now(timezone.utc).replace(tzinfo=None) - timedelta(
             days=days_ago
         )
@@ -491,7 +491,7 @@ class TestInactiveAccounts:
         report = delete_inactive_accounts(db, months=36)
 
         assert report.accounts_deleted == 1
-        assert db.query(UserDB).filter(UserDB.google_sub == USER_ID).first() is None
+        assert db.query(UserDB).filter(UserDB.id == USER_ID).first() is None
 
     def test_keeps_a_recently_logged_in_account(self, db):
         self._set_last_login(db, USER_ID, days_ago=10)
@@ -499,7 +499,7 @@ class TestInactiveAccounts:
         report = delete_inactive_accounts(db, months=36)
 
         assert report.accounts_deleted == 0
-        assert db.query(UserDB).filter(UserDB.google_sub == USER_ID).first() is not None
+        assert db.query(UserDB).filter(UserDB.id == USER_ID).first() is not None
 
     def test_recent_submission_counts_as_activity(self, db):
         """A 30-day session lets a student submit without signing in again, so
@@ -510,7 +510,7 @@ class TestInactiveAccounts:
         report = delete_inactive_accounts(db, months=36)
 
         assert report.accounts_deleted == 0
-        assert db.query(UserDB).filter(UserDB.google_sub == USER_ID).first() is not None
+        assert db.query(UserDB).filter(UserDB.id == USER_ID).first() is not None
 
     def test_old_submission_does_not_keep_the_account_alive(self, db):
         self._set_last_login(db, USER_ID, days_ago=1500)
@@ -535,16 +535,16 @@ class TestInactiveAccounts:
         report = delete_inactive_accounts(db, months=36)
 
         assert report.accounts_deleted == 0
-        assert db.query(UserDB).filter(UserDB.google_sub == USER_ID).first() is not None
+        assert db.query(UserDB).filter(UserDB.id == USER_ID).first() is not None
 
     def test_skips_the_anonymous_dev_account(self, db):
-        db.add(UserDB(google_sub="anonymous", email="anonymous@localhost"))
+        db.add(UserDB(id="anonymous", google_sub="anonymous", email="anonymous@localhost"))
         db.commit()
         self._set_last_login(db, "anonymous", days_ago=5000)
 
         delete_inactive_accounts(db, months=36)
 
-        assert db.query(UserDB).filter(UserDB.google_sub == "anonymous").first() is not None
+        assert db.query(UserDB).filter(UserDB.id == "anonymous").first() is not None
 
     def test_leaves_other_accounts_alone(self, db):
         self._set_last_login(db, USER_ID, days_ago=1500)
@@ -552,7 +552,7 @@ class TestInactiveAccounts:
 
         delete_inactive_accounts(db, months=36)
 
-        assert db.query(UserDB).filter(UserDB.google_sub == OTHER_USER_ID).first() is not None
+        assert db.query(UserDB).filter(UserDB.id == OTHER_USER_ID).first() is not None
 
     def test_dry_run_changes_nothing(self, db):
         self._set_last_login(db, USER_ID, days_ago=1500)
@@ -561,7 +561,7 @@ class TestInactiveAccounts:
         report = delete_inactive_accounts(db, months=36, dry_run=True)
 
         assert report.accounts_deleted == 1
-        assert db.query(UserDB).filter(UserDB.google_sub == USER_ID).first() is not None
+        assert db.query(UserDB).filter(UserDB.id == USER_ID).first() is not None
         assert files_on_disk() == ["user-1/2024/etap1/1/page1.jpg"]
 
     @pytest.mark.parametrize("months", [0, None])

@@ -37,8 +37,8 @@ def db(monkeypatch):
 
     Base.metadata.create_all(bind=engine)
     session = sessionmaker(bind=engine)()
-    session.add(UserDB(google_sub=USER_ID, email="a@example.com"))
-    session.add(UserDB(google_sub=OTHER_USER_ID, email="b@example.com"))
+    session.add(UserDB(id=USER_ID, google_sub=USER_ID, email="a@example.com"))
+    session.add(UserDB(id=OTHER_USER_ID, google_sub=OTHER_USER_ID, email="b@example.com"))
     session.add(
         PrivateTaskDB(
             id="privtask0001", user_id=USER_ID, title="Invented", content="Invented task text here.",

@@ -1,0 +1,9 @@
+Konto Twojego dziecka jest aktywne
+
+Dziękujemy za zgodę! Konto {{ child_identifier }} w serwisie {{ app_name }} już działa - dziecko może przesyłać rozwiązania.
+
+Na stronie rodzica w każdej chwili możesz usunąć konto razem ze wszystkimi danymi{% if is_login_account %} albo ustawić dziecku nowe hasło{% endif %}. Zachowaj tę wiadomość - link działa 30 dni, a nowy wyślemy Ci po wpisaniu adresu na stronie {{ parent_page_url }}.
+
+Otwórz stronę rodzica:
+{{ manage_url }}
+{% include "_footer.txt" %}

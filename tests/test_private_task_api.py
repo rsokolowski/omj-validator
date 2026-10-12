@@ -83,8 +83,8 @@ def db(tmp_path, monkeypatch):
     )
     Base.metadata.create_all(bind=engine)
     session = sessionmaker(bind=engine)()
-    session.add(UserDB(google_sub=USER_ID, email="kid@example.com", name="Kid"))
-    session.add(UserDB(google_sub=OTHER_USER_ID, email="other@example.com", name="Other"))
+    session.add(UserDB(id=USER_ID, google_sub=USER_ID, email="kid@example.com", name="Kid"))
+    session.add(UserDB(id=OTHER_USER_ID, google_sub=OTHER_USER_ID, email="other@example.com", name="Other"))
     session.commit()
     yield session
     session.close()
@@ -102,7 +102,7 @@ def current_user(monkeypatch):
     state = {"id": USER_ID}
 
     def user(request):
-        return {"google_sub": state["id"], "email": f"{state['id']}@example.com"}
+        return {"user_id": state["id"], "email": f"{state['id']}@example.com"}
 
     async def member(request):
         return True

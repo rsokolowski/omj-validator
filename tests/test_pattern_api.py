@@ -46,8 +46,8 @@ def db(monkeypatch):
 
     Base.metadata.create_all(bind=engine)
     session = sessionmaker(bind=engine)()
-    session.add(UserDB(google_sub=USER_ID, email="kid@example.com"))
-    session.add(UserDB(google_sub=OTHER_USER_ID, email="other@example.com"))
+    session.add(UserDB(id=USER_ID, google_sub=USER_ID, email="kid@example.com"))
+    session.add(UserDB(id=OTHER_USER_ID, google_sub=OTHER_USER_ID, email="other@example.com"))
     for task_id, owner in ((PRIVATE_ID, USER_ID), (FOREIGN_PRIVATE_ID, OTHER_USER_ID)):
         session.add(PrivateTaskDB(id=task_id, user_id=owner, title="Wymyślone",
                                   content="Wymyślone zadanie o parzystości.", hints=[],
@@ -81,7 +81,7 @@ def current_user(monkeypatch):
     monkeypatch.setattr(private_routes, "verify_auth", lambda request: True)
     monkeypatch.setattr(private_routes, "get_current_user_id", lambda request: state["id"])
     monkeypatch.setattr(private_routes, "get_current_user",
-                        lambda request: {"google_sub": state["id"], "email": f"{state['id']}@example.com"})
+                        lambda request: {"user_id": state["id"], "email": f"{state['id']}@example.com"})
     monkeypatch.setattr(private_routes, "is_group_member_async", member)
     monkeypatch.setattr(private_routes, "_get_allowed_emails", lambda: set())
     return state
@@ -357,7 +357,7 @@ class TestE2EEndpoints:
 
         monkeypatch.setattr(settings, "e2e_mode", True)
         monkeypatch.setattr(app_main, "get_current_user",
-                            lambda request: {"google_sub": current_user["id"]})
+                            lambda request: {"user_id": current_user["id"]})
         p = create(client)
         assert client.post(f"/api/patterns/{p['id']}/review",
                            json={"recall_text": "Szukam niezmiennika", "outcome": "ok"}).status_code == 409

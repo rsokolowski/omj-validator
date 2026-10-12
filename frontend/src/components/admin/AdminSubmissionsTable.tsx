@@ -61,7 +61,7 @@ export function AdminSubmissionsTable() {
         });
 
         if (selectedUser) {
-          params.set("user_id", selectedUser.google_sub);
+          params.set("user_id", selectedUser.id);
         }
         if (statusFilter) {
           params.set("status", statusFilter);

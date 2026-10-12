@@ -81,7 +81,7 @@ async def current_member_id(request: Request) -> str:
 def _is_allowlisted(request: Request) -> bool:
     allowed = _get_allowed_emails()
     user = get_current_user(request)
-    email = (user or {}).get("email", "").lower()
+    email = ((user or {}).get("email") or "").lower()
     return bool(allowed and email in allowed)
 
 

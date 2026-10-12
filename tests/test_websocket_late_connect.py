@@ -25,7 +25,7 @@ def client(monkeypatch):
     )
     Base.metadata.create_all(bind=engine)
     db = sessionmaker(bind=engine)()
-    db.add(UserDB(google_sub="anonymous", email="kid@example.com", name="Kid"))
+    db.add(UserDB(id="anonymous", google_sub="anonymous", email="kid@example.com", name="Kid"))
     db.add(SubmissionDB(id="aaaa0001", user_id="anonymous", year="2024", etap="etap1",
                         task_number=1, images=[], status=SubmissionStatus.COMPLETED,
                         score=5, feedback="Dobrze, brakuje sprawdzenia."))

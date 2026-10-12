@@ -144,7 +144,7 @@ export async function waitForFakeGemini(
  */
 export async function ensureTestUser(
   request: APIRequestContext,
-  user: { google_sub: string; email: string; name: string }
+  user: { id: string; email: string; name: string }
 ): Promise<void> {
   // The user will be created automatically when they first access the API
   // with a valid session cookie. This function is a placeholder for future

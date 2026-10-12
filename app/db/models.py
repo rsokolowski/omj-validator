@@ -49,17 +49,57 @@ class IssueType(str, enum.Enum):
     INJECTION = "injection"    # Prompt injection attempt detected
 
 
+class UserStatus:
+    """Values of users.status (plain strings, no DB enum - easier to extend)."""
+
+    ACTIVE = "active"
+    # Under 16 or a login/password account: inert until a parent confirms by e-mail
+    PENDING_PARENT = "pending_parent"
+
+
+# A user signs in with Google, or with a login + password (children without an
+# e-mail). Login accounts always have a parent - the only recovery contact.
+USER_IDENTITY_CHECK = (
+    "google_sub IS NOT NULL OR (login IS NOT NULL AND password_hash IS NOT NULL)"
+)
+USER_LOGIN_PARENT_CHECK = "login IS NULL OR parent_id IS NOT NULL"
+
+
 class UserDB(Base):
-    """User account linked to Google OAuth."""
+    """A student account: Google sign-in or login + password.
+
+    ``id`` is our own identifier. For accounts created before login accounts
+    existed it equals their Google ``sub`` (the column used to be called
+    ``google_sub``), so upload directories and foreign keys never moved; new
+    accounts get ``uuid4().hex``.
+    """
 
     __tablename__ = "users"
 
-    # Google's unique user identifier (from 'sub' claim in OAuth token)
-    google_sub = Column(String(255), primary_key=True)
+    id = Column(String(255), primary_key=True)
 
-    # User profile info from Google
-    email = Column(String(255), nullable=False, unique=True, index=True)
+    # Google's unique user identifier ('sub' claim); NULL for login accounts
+    google_sub = Column(String(255), nullable=True, unique=True)
+
+    # Google profile info; login accounts have neither (no child e-mail is collected)
+    email = Column(String(255), nullable=True, unique=True, index=True)
     name = Column(String(255), nullable=True)
+
+    # Login accounts: lower-case login and an argon2id hash
+    login = Column(String(32), nullable=True, unique=True)
+    password_hash = Column(String(255), nullable=True)
+
+    # NULL = not asked yet (accounts created before the age step existed)
+    birth_year = Column(SmallInteger, nullable=True)
+    status = Column(
+        String(16), nullable=False, default=UserStatus.ACTIVE, server_default=UserStatus.ACTIVE
+    )
+    # Set when entering pending_parent; the account is erased 14 days later
+    # unless a parent confirms it (app/retention.py)
+    pending_since = Column(DateTime, nullable=True)
+    parent_id = Column(String(32), ForeignKey("parents.id"), nullable=True, index=True)
+    # Bumped on a password reset; sessions carrying an older value are rejected
+    session_version = Column(Integer, nullable=False, default=0, server_default="0")
 
     # Timestamps
     created_at = Column(DateTime, nullable=False, default=utc_now, index=True)
@@ -70,9 +110,102 @@ class UserDB(Base):
     private_tasks = relationship("PrivateTaskDB", back_populates="user", cascade="all, delete-orphan")
     ai_usage = relationship("AIUsageDB", cascade="all, delete-orphan")
     patterns = relationship("PatternDB", back_populates="user", cascade="all, delete-orphan")
+    consents = relationship("ConsentDB", cascade="all, delete-orphan")
+    # Not deleted with the account: the rows are the per-parent send log and
+    # must keep counting for 24 h (user_id becomes NULL, nothing personal is
+    # left in them). Retention removes them 30 days after expiry.
+    email_tokens = relationship("EmailTokenDB")
+    parent = relationship("ParentDB", back_populates="children")
+
+    __table_args__ = (
+        CheckConstraint(USER_IDENTITY_CHECK, name="ck_users_identity"),
+        CheckConstraint(USER_LOGIN_PARENT_CHECK, name="ck_users_login_parent"),
+    )
+
+    @property
+    def is_login_account(self) -> bool:
+        return self.login is not None
 
     def __repr__(self) -> str:
-        return f"<User {self.email}>"
+        return f"<User {self.id[:8]}>"
+
+
+class ParentDB(Base):
+    """A parent's (or guardian's) e-mail address, shared by siblings.
+
+    No password and no profile: a parent proves control of the address by
+    clicking a link we e-mailed (email_tokens). Deleted together with the last
+    child pointing at it.
+    """
+
+    __tablename__ = "parents"
+
+    id = Column(String(32), primary_key=True)  # uuid4().hex
+    email = Column(String(255), nullable=False, unique=True)  # lower-cased, trimmed
+    created_at = Column(DateTime, nullable=False, default=utc_now)
+
+    children = relationship("UserDB", back_populates="parent")
+    email_tokens = relationship("EmailTokenDB", cascade="all, delete-orphan")
+
+    def __repr__(self) -> str:
+        return f"<Parent {self.id[:8]}>"
+
+
+class ConsentKind:
+    SELF = "self"  # 16+, ticked the terms checkbox
+    PARENT = "parent"  # a parent clicked "Wyrażam zgodę"
+
+
+class ConsentDB(Base):
+    """Proof of consent (RODO art. 7(1)). No IP, no user agent - minimisation."""
+
+    __tablename__ = "consents"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(String(255), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    kind = Column(String(8), nullable=False)
+    parent_id = Column(String(32), ForeignKey("parents.id", ondelete="SET NULL"), nullable=True)
+    terms_version = Column(String(32), nullable=False)
+    given_at = Column(DateTime, nullable=False, default=utc_now)
+
+
+class EmailTokenPurpose:
+    CONSENT = "consent"  # 14 days, single use
+    PASSWORD_RESET = "password_reset"  # 1 hour, single use
+    PARENT_MANAGE = "parent_manage"  # 30 days, reusable until expiry
+
+
+class EmailTokenDB(Base):
+    """A link we e-mailed to a parent. Only the SHA-256 of the token is stored.
+
+    Rows double as the send log for the e-mail rate limits (counted by parent
+    or by child in the last 24 h) and are purged 30 days after expiry.
+    """
+
+    __tablename__ = "email_tokens"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    token_hash = Column(String(64), nullable=False, unique=True)
+    purpose = Column(String(16), nullable=False)
+    # SET NULL, not CASCADE: an erased account's links stay as the parent's
+    # send log (rate limits) - see UserDB.email_tokens
+    user_id = Column(String(255), ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    parent_id = Column(String(32), ForeignKey("parents.id", ondelete="CASCADE"), nullable=False, index=True)
+    created_at = Column(DateTime, nullable=False, default=utc_now, index=True)
+    expires_at = Column(DateTime, nullable=False, index=True)
+    used_at = Column(DateTime, nullable=True)
+
+
+class LoginFailureDB(Base):
+    """A failed login/password attempt, for the brute-force lockout. Kept 24 h."""
+
+    __tablename__ = "login_failures"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    login = Column(String(64), nullable=False, index=True)
+    # HMAC of the client IP with the session secret - never the address itself
+    ip_hash = Column(String(64), nullable=False, index=True)
+    at = Column(DateTime, nullable=False, default=utc_now, index=True)
 
 
 # A submission points at exactly one task: an OMJ one or a private one
@@ -95,7 +228,7 @@ class SubmissionDB(Base):
     # Foreign key to user
     user_id = Column(
         String(255),
-        ForeignKey("users.google_sub", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False,
         index=True
     )
@@ -199,7 +332,7 @@ class PrivateTaskDB(Base):
 
     user_id = Column(
         String(255),
-        ForeignKey("users.google_sub", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
@@ -266,7 +399,7 @@ class AIUsageDB(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(
         String(255),
-        ForeignKey("users.google_sub", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
@@ -301,7 +434,7 @@ class PatternDB(Base):
     id = Column(String(12), primary_key=True)
     user_id = Column(
         String(255),
-        ForeignKey("users.google_sub", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
@@ -404,7 +537,7 @@ class PatternReviewDB(Base):
     )
     user_id = Column(
         String(255),
-        ForeignKey("users.google_sub", ondelete="CASCADE"),
+        ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False,
     )
     kind = Column(String(8), nullable=False)  # "recall" | "task"
@@ -443,7 +576,8 @@ class DeletedAccountQuotaDB(Base):
 
     __tablename__ = "deleted_account_quota"
 
-    # HMAC-SHA256 of the user's google_sub, hex - see repositories.hash_user_id
+    # HMAC-SHA256 of repositories.quota_identity() (the Google sub for Google
+    # accounts, the account id otherwise), hex - see repositories.hash_user_id
     user_hash = Column(String(64), primary_key=True)
 
     # Submissions the deleted account made inside the rate limit window

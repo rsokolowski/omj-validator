@@ -35,8 +35,8 @@ def factory(monkeypatch):
     monkeypatch.setattr(handler, "SessionLocal", factory)
     monkeypatch.setattr(srs, "today_warsaw", lambda: TODAY)
     db = factory()
-    db.add(UserDB(google_sub=USER_ID, email="a@example.com"))
-    db.add(UserDB(google_sub=OTHER_USER_ID, email="b@example.com"))
+    db.add(UserDB(id=USER_ID, google_sub=USER_ID, email="a@example.com"))
+    db.add(UserDB(id=OTHER_USER_ID, google_sub=OTHER_USER_ID, email="b@example.com"))
     db.add(PrivateTaskDB(id=TASK_ID, user_id=USER_ID, title="Parzystość",
                          content="Wymyślone zadanie o parzystości sumy.", hints=[],
                          source_images=[], origin="typed"))

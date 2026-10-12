@@ -33,8 +33,8 @@ def db(tmp_path, monkeypatch):
     factory = sessionmaker(bind=engine)
     session = factory()
     session.audit_session_factory = factory
-    session.add(UserDB(google_sub=ADMIN_ID, email=ADMIN_EMAIL, name="Admin"))
-    session.add(UserDB(google_sub=STUDENT_ID, email="kid@example.com", name="Kid"))
+    session.add(UserDB(id=ADMIN_ID, google_sub=ADMIN_ID, email=ADMIN_EMAIL, name="Admin"))
+    session.add(UserDB(id=STUDENT_ID, google_sub=STUDENT_ID, email="kid@example.com", name="Kid"))
     session.add(PrivateTaskDB(id=TASK_ID, user_id=STUDENT_ID, title="Moje zadanie",
                               content="Wymyślona treść zadania do testów.", hints=[],
                               source_images=[], origin="typed", category="algebra"))
@@ -63,7 +63,7 @@ def make_client(db, monkeypatch, user_id, email):
         yield db
 
     main.app.dependency_overrides[get_db] = override_get_db
-    user = {"google_sub": user_id, "email": email}
+    user = {"user_id": user_id, "email": email}
     monkeypatch.setattr(main, "verify_auth", lambda request: True)
     monkeypatch.setattr(main, "get_current_user_id", lambda request: user_id)
     monkeypatch.setattr(main, "get_current_user", lambda request: user)

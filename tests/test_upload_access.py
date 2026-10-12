@@ -25,7 +25,7 @@ def client(tmp_path, monkeypatch):
         photo.write_bytes(f"photo of {owner}".encode())
     monkeypatch.setattr(main, "require_auth_redirect", lambda request: None)
     monkeypatch.setattr(main, "get_current_user_id", lambda request: USER_ID)
-    monkeypatch.setattr(main, "get_current_user", lambda request: {"google_sub": USER_ID, "email": "a@example.com"})
+    monkeypatch.setattr(main, "get_current_user", lambda request: {"user_id": USER_ID, "email": "a@example.com"})
     return TestClient(main.app)
 
 
