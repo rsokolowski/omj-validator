@@ -33,3 +33,4 @@ psycopg2-binary>=2.9.0
 
 # Production server
 gunicorn>=26.0.0  # Dockerfile passes --no-control-socket (added in 26)
+anthropic==1.13.0  # Claude provider (app/ai/providers/anthropic.py)

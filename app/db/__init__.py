@@ -11,6 +11,7 @@ from .models import (
     SubmissionStatus,
     DeletedAccountQuotaDB,
     AdminAccessLogDB,
+    AppSettingDB,
     PrivateTaskDB,
     AIUsageDB,
 )
@@ -19,6 +20,7 @@ from .repositories import (
     SubmissionRepository,
     DeletedAccountQuotaRepository,
     AdminAccessLogRepository,
+    AppSettingsRepository,
 )
 from .private_tasks import AIUsageRepository, HintOrderError, PrivateTaskRepository
 
@@ -35,6 +37,7 @@ __all__ = [
     "SubmissionStatus",
     "DeletedAccountQuotaDB",
     "AdminAccessLogDB",
+    "AppSettingDB",
     "PrivateTaskDB",
     "AIUsageDB",
     # Repositories
@@ -42,6 +45,7 @@ __all__ = [
     "SubmissionRepository",
     "DeletedAccountQuotaRepository",
     "AdminAccessLogRepository",
+    "AppSettingsRepository",
     "PrivateTaskRepository",
     "AIUsageRepository",
     "HintOrderError",

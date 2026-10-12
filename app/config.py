@@ -73,6 +73,16 @@ class Settings(BaseSettings):
     gemini_media_resolution_images: str = "ultra_high"  # Per-part resolution for student images (Gemini 3 only): "high", "ultra_high"
     gemini_disable_file_cache: bool = False  # Disable PDF file caching (forces fresh upload each request)
 
+    # Anthropic (Claude) API Configuration - selectable in /admin/settings
+    anthropic_api_key: Optional[str] = None
+    anthropic_api_base_url: Optional[str] = None  # Custom endpoint for testing
+    anthropic_effort: str = "high"        # output_config.effort for grading
+    anthropic_effort_aux: str = "medium"  # extraction, hints, patterns
+    anthropic_timeout: int = 180
+    # GDPR gate: Anthropic is a processor only once the DPIA/regulamin cover it
+    # and the owner has signed off. False keeps every request on Gemini.
+    anthropic_processor_approved: bool = False
+
     # Google Cloud Translation v2 (for status message translation EN->PL)
     translate_enabled: bool = False  # Enable status message translation
     translate_api_key: Optional[str] = None  # API key for Translation v2 Basic
