@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
  */
 export function LogoutForm({ children }: { children: ReactNode }) {
   return (
-    <form method="post" action="/logout" style={{ display: "inline", margin: 0 }}>
+    <form method="post" action="/logout" style={{ display: "inline-flex", margin: 0 }}>
       {children}
     </form>
   );

@@ -163,7 +163,9 @@ export function Header() {
             {isAuthenticated && isGroupMember && (
               <Link
                 href="/wzorce"
-                style={{ textDecoration: "none", color: "#4b5563" }}
+                // flex: the inline-flex Badge would otherwise sit on a text
+                // baseline and drop a few px below the other links
+                style={{ textDecoration: "none", color: "#4b5563", display: "flex" }}
                 aria-label={patternsDue ? `Wzorce, do powtórki: ${patternsDue}` : undefined}
               >
                 <Badge badgeContent={patternsDue} color="warning" max={99}>
