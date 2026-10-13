@@ -235,10 +235,10 @@ SAFETY_THRESHOLDS = (
 
 # Grading answers point out the student's mistakes, and gemini-3.8-flash rates
 # such feedback LOW harassment - a correct 5-point solution came back blocked.
-# Grading alone takes harassment from MEDIUM; its abuse_score still catches a
+# Grading alone blocks harassment only at HIGH; its abuse_score still catches a
 # solution that is itself abusive.
 GRADING_SAFETY_THRESHOLDS = tuple(
-    (category, "BLOCK_MEDIUM_AND_ABOVE" if category == "HARM_CATEGORY_HARASSMENT" else threshold)
+    (category, "BLOCK_ONLY_HIGH" if category == "HARM_CATEGORY_HARASSMENT" else threshold)
     for category, threshold in SAFETY_THRESHOLDS
 )
 
