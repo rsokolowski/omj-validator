@@ -101,8 +101,8 @@ export function TermsCheckbox({ checked, onChange, error, disabled }: TermsCheck
           <Typography variant="body2" sx={{ color: "grey.700" }}>
             Zgadzam się na przetwarzanie moich danych, w tym zdjęć i tekstu moich
             rozwiązań, żeby serwis mógł je ocenić i prowadzić moje konto. Wiem, że
-            do oceny są one wysyłane do firmy Google w USA, a zapasowo (np. gdy
-            usługa Google nie działa) do firmy Anthropic w USA. Szczegóły są w
+            do oceny są one wysyłane do jednej z dwóch firm w USA: Google albo
+            Anthropic. Szczegóły są w
             punktach 6&ndash;8 <RegulaminLink>polityki prywatności</RegulaminLink>.
             Zgodę mogę w każdej chwili cofnąć, usuwając konto.
           </Typography>

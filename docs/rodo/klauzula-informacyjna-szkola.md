@@ -114,20 +114,20 @@ bo uczeń jest zalogowany.
 
 | Odbiorca | Co otrzymuje | Uwagi |
 |---|---|---|
-| **Google** (Gemini API) — dostawca systemu sztucznej inteligencji, **podstawowy** | fotografie i tekst rozwiązania oraz treść zadania (przy własnych zadaniach także zdjęcie strony z zadaniem; przy wzorcach — tekst wzorca) | **Nie przekazujemy** imienia, nazwiska, adresu e-mail ani identyfikatora konta ucznia. Pliki są usuwane z infrastruktury dostawcy zaraz po analizie (gdyby usunięcie się nie udało — Google kasuje je po 48 godzinach). Korzystamy z płatnego poziomu usługi, na którym dostawca zobowiązuje się nie wykorzystywać przesyłanych treści do trenowania swoich modeli, a rejestry techniczne przechowuje maksymalnie 55 dni wyłącznie w celu wykrywania naruszeń zasad korzystania z usługi. |
-| **Anthropic** (Claude API) — dostawca systemu sztucznej inteligencji, **zapasowy** | jak wyżej | **Nie przekazujemy** imienia, nazwiska, adresu e-mail ani identyfikatora konta ucznia. Zdjęcia są przesyłane bezpośrednio w zapytaniu, bez zapisywania ich u dostawcy jako plików. Dostawca usuwa przesłane treści i odpowiedzi w ciągu 30 dni — dłużej tylko wtedy, gdy wymaga tego egzekwowanie zasad korzystania z usługi albo obowiązek prawny. Zgodnie z warunkami umowy dostawca nie może wykorzystywać przesyłanych treści do trenowania swoich modeli. Stroną umowy jest Anthropic Ireland, Limited. |
+| **Google** (Gemini API) — dostawca systemu sztucznej inteligencji | fotografie i tekst rozwiązania oraz treść zadania (przy własnych zadaniach także zdjęcie strony z zadaniem; przy wzorcach — tekst wzorca) | **Nie przekazujemy** imienia, nazwiska, adresu e-mail ani identyfikatora konta ucznia. Pliki są usuwane z infrastruktury dostawcy zaraz po analizie (gdyby usunięcie się nie udało — Google kasuje je po 48 godzinach). Korzystamy z płatnego poziomu usługi, na którym dostawca zobowiązuje się nie wykorzystywać przesyłanych treści do trenowania swoich modeli, a rejestry techniczne przechowuje maksymalnie 55 dni wyłącznie w celu wykrywania naruszeń zasad korzystania z usługi. |
+| **Anthropic** (Claude API) — dostawca systemu sztucznej inteligencji | jak wyżej | **Nie przekazujemy** imienia, nazwiska, adresu e-mail ani identyfikatora konta ucznia. Zdjęcia są przesyłane bezpośrednio w zapytaniu, bez zapisywania ich u dostawcy jako plików. Dostawca usuwa przesłane treści i odpowiedzi w ciągu 30 dni — dłużej tylko wtedy, gdy wymaga tego egzekwowanie zasad korzystania z usługi albo obowiązek prawny. Zgodnie z warunkami umowy dostawca nie może wykorzystywać przesyłanych treści do trenowania swoich modeli. Stroną umowy jest Anthropic Ireland, Limited. |
 | **Google** — usługa logowania | informacja o logowaniu do narzędzia | dotyczy konta [UZUPEŁNIĆ: szkolnego / innego] |
 | [UZUPEŁNIĆ, jeśli dotyczy: dostawca hostingu / firma obsługująca infrastrukturę informatyczną szkoły] | dostęp techniczny do systemu | na podstawie umowy powierzenia przetwarzania (art. 28 RODO) |
 | [JEŚLI DOTYCZY] **Cloudflare, Inc.** — pośrednictwo w przesyłaniu ruchu (tunel) i ochrona rejestracji przed automatami (Turnstile) | cały ruch między przeglądarką a narzędziem (połączenie szyfrowane kończy się na serwerach Cloudflare); przy rejestracji — dane techniczne przeglądarki i adres IP | [UZUPEŁNIĆ: umowa powierzenia / warunki Cloudflare]; usunąć wiersz, jeśli instancja szkolna nie korzysta z Cloudflare |
 | [JEŚLI DOTYCZY] **Resend** — wysyłka wiadomości e-mail do rodziców | adres e-mail rodzica i treść wiadomości (adres konta Google albo login dziecka, linki) | umowa powierzenia włączona do warunków usługi; usunąć wiersz, jeśli Szkoła nie wysyła tych wiadomości albo używa innej poczty |
 | Nauczyciel prowadzący i administrator narzędzia | dostęp do prac i wyników uczniów | wyłącznie osoby upoważnione przez dyrektora szkoły, w zakresie niezbędnym do prowadzenia zajęć i obsługi zgłoszeń |
 
-Narzędzie korzysta na co dzień z **Google**. **Anthropic** jest dostawcą zapasowym: narzędzie
-przełącza się na niego automatycznie, gdy usługa Google jest niedostępna, a administrator
-narzędzia może go też wybrać ręcznie — jedno i drugie dopiero po ustawieniu w konfiguracji
-zgody na tego dostawcę (zob. `dpia.md`, R6a). Rozwiązanie ucznia trafia zwykle tylko do jednego
-dostawcy; jeśli Google przestanie odpowiadać w trakcie analizy, ta sama praca jest wysyłana od
-nowa do Anthropic, więc trafia do obu.
+Narzędzie korzysta z usług **Google** i **Anthropic**. Administrator narzędzia wybiera, który
+dostawca ocenia rozwiązania, i może to zmienić w każdej chwili; gdy wybrana usługa jest
+niedostępna, narzędzie przełącza się automatycznie na drugą (Anthropic — tylko po ustawieniu w
+konfiguracji zgody na tego dostawcę, zob. `dpia.md`, R6a). Rozwiązanie ucznia trafia zwykle tylko
+do jednego dostawcy; jeśli usługa przestanie odpowiadać w trakcie analizy, ta sama praca jest
+wysyłana od nowa do drugiego, więc trafia do obu.
 [UZUPEŁNIĆ: jeżeli Szkoła dopuszcza tylko jednego dostawcę, usunąć wiersz drugiego, ten akapit
 i odpowiedni akapit w punkcie 7 oraz w części B]
 
@@ -152,7 +152,7 @@ nieodwracalnym skrótem — ślad zdarzenia zostaje, ale nie da się już ustali
 
 ## 7. Przekazywanie danych poza Europejski Obszar Gospodarczy
 
-Analiza rozwiązań odbywa się z wykorzystaniem usług **Google**, a zapasowo **Anthropic**
+Analiza rozwiązań odbywa się z wykorzystaniem usług **Google** albo **Anthropic**
 (punkt 6), co wiąże się z przekazaniem fotografii i tekstu pracy do Stanów Zjednoczonych.
 Podstawa przekazania jest u każdego dostawcy inna.
 
@@ -301,9 +301,8 @@ robisz zdjęcie i wysyłasz. Program pisze, ile punktów by za to było i co mo�
 ## Co się dzieje z Twoim zdjęciem
 
 1. Zdjęcie zapisuje się na szkolnym serwerze.
-2. Zdjęcie jest wysyłane do firmy Google w USA, żeby program mógł je przeczytać i ocenić.
-   Zapasowo, np. gdy usługa Google nie działa, zastępuje ją firma Anthropic (też USA) — wtedy
-   zdjęcie może trafić do obu. **Nie wysyłamy tam Twojego imienia, nazwiska ani adresu e-mail** — tylko
+2. Zdjęcie jest wysyłane do firmy Google albo Anthropic w USA, żeby program mógł je przeczytać
+   i ocenić. Czasem, gdy jedna z usług nie działa, zdjęcie może trafić do obu. **Nie wysyłamy tam Twojego imienia, nazwiska ani adresu e-mail** — tylko
    samo zdjęcie pracy i treść zadania. Żadna z tych firm nie trzyma zdjęcia na stałe.
    Google kasuje zdjęcie po sprawdzeniu, ale może przez najwyżej 55 dni trzymać zapisy
    techniczne (tylko po to, żeby wykrywać nadużycia). Anthropic kasuje przesłane zdjęcie

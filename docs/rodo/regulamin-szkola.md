@@ -118,8 +118,8 @@ Uczniowi zabrania się:
 ## § 7. Sztuczna inteligencja — jak działa i czego się po niej nie spodziewać
 
 1. Ocena punktowa i informacja zwrotna są generowane przez **system sztucznej inteligencji**
-   (model językowy dostarczany przez Google, a zapasowo — gdy usługa Google jest niedostępna
-   albo gdy wybierze go Administrator Narzędzia — przez Anthropic), a nie przez człowieka.
+   (model językowy dostarczany przez Google albo Anthropic — zależnie od wyboru Administratora
+   Narzędzia i dostępności usług), a nie przez człowieka.
    Żaden nauczyciel nie
    sprawdza wyniku przed pokazaniem go Uczniowi.
 2. **Ocena AI bywa błędna.** W testach autora oprogramowania ocena zwykle zgadzała się z oceną
@@ -173,8 +173,8 @@ Uczniowi zabrania się:
    wskazania osoby, a bezpośredni dostęp do serwera i bazy danych nie jest rejestrowany. Uczeń
    i rodzic mogą wystąpić o informację z tego dziennika.
    Zapisy przechowywane są przez [UZUPEŁNIĆ — wartość domyślna narzędzia: 12 miesięcy].
-4. Fotografie i tekst rozwiązań są przekazywane dostawcy usługi sztucznej inteligencji (Google,
-   a zapasowo Anthropic) **bez danych identyfikujących Ucznia**. Google
+4. Fotografie i tekst rozwiązań są przekazywane dostawcy usługi sztucznej inteligencji (Google
+   albo Anthropic) **bez danych identyfikujących Ucznia**. Google
    usuwa pliki ze swojej infrastruktury po zakończeniu analizy; Anthropic otrzymuje fotografie
    w treści zapytania, bez zapisywania plików. Google może przechowywać zapisy techniczne
    maksymalnie 55 dni, wyłącznie w celu wykrywania naruszeń zasad korzystania z usługi.

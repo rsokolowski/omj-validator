@@ -76,9 +76,8 @@ export default function RegulaminPage() {
             rekrutację. To trenażer.
           </li>
           <li>
-            <strong>Twoje zdjęcie kartki albo wpisany tekst rozwiązania (i rysunek) są wysyłane do firmy Google</strong>{" "}
-            w USA, żeby program mógł je przeczytać i ocenić. Zapasowo, np. gdy
-            usługa Google nie działa, zastępuje ją firma Anthropic (też USA).
+            <strong>Twoje zdjęcie kartki albo wpisany tekst rozwiązania (i rysunek) są wysyłane do firmy Google albo Anthropic</strong>{" "}
+            w USA, żeby program mógł je przeczytać i ocenić.
             Nie wysyłamy tam
             Twojego imienia, nazwiska ani adresu e-mail.
           </li>
@@ -165,8 +164,8 @@ export default function RegulaminPage() {
           <Typography paragraph>
             <strong>
               Punkty i komentarze są generowane przez sztuczną inteligencję
-              (model językowy Google Gemini, a gdy ta usługa nie działa &ndash;
-              Anthropic Claude) i mogą być błędne.
+              (model językowy firmy Google albo Anthropic &ndash; punkt 7) i
+              mogą być błędne.
             </strong>{" "}
             W naszych testach ocena zwykle zgadzała się z oceną człowieka, ale
             próba była mała. Ryzyko pomyłki rośnie, gdy zdjęcie jest nieostre
@@ -593,15 +592,14 @@ export default function RegulaminPage() {
             <strong>Dostawca analizy rozwiązania (AI).</strong> Twoje zdjęcia i
             wpisany tekst rozwiązania razem z treścią zadania i rozwiązaniem
             wzorcowym są przesyłane do usługi sztucznej inteligencji, która
-            wykonuje ocenę. <strong>Na co dzień jest to Google</strong> (Gemini).{" "}
-            <strong>Anthropic</strong> (Claude) <strong>jest dostawcą
-            zapasowym</strong>: serwis przełącza się na niego automatycznie, gdy
-            usługa Google jest niedostępna (awaria, przeciążenie), a
-            administrator może go też włączyć ręcznie. Z Anthropic korzystamy
-            dopiero po zakończeniu oceny prawnej tego przekazania danych (punkt
-            8). Twoje rozwiązanie trafia zwykle tylko do jednej z tych firm.
-            Wyjątek: jeśli Google przestanie odpowiadać w trakcie oceny, ta sama
-            praca jest wysyłana od nowa do Anthropic &ndash; wtedy trafia do
+            wykonuje ocenę. Korzystamy z usług dwóch firm:{" "}
+            <strong>Google</strong> (Gemini) i <strong>Anthropic</strong>{" "}
+            (Claude). Administrator wybiera, która z nich ocenia rozwiązania, i
+            może to w każdej chwili zmienić; gdy wybrana usługa jest niedostępna
+            (awaria, przeciążenie), serwis automatycznie przełącza się na drugą.
+            Twoje rozwiązanie trafia zwykle tylko do jednej z tych firm.
+            Wyjątek: jeśli usługa przestanie odpowiadać w trakcie oceny, ta sama
+            praca jest wysyłana od nowa do drugiej firmy &ndash; wtedy trafia do
             obu. Zasady wspólne dla obu firm:
           </Typography>
           <Box component="ul" sx={{ pl: 3, mb: 2 }}>
@@ -644,7 +642,7 @@ export default function RegulaminPage() {
             </li>
           </Box>
           <Typography paragraph>
-            <strong>Anthropic (Claude API)</strong> &ndash; gdy serwis go używa:
+            <strong>Anthropic (Claude API):</strong>
           </Typography>
           <Box component="ul" sx={{ pl: 3, mb: 2 }}>
             <li>
