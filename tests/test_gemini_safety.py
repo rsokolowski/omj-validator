@@ -39,7 +39,18 @@ EXPECTED = {
 }
 
 
+GRADING_EXPECTED = {
+    **EXPECTED,
+    types.HarmCategory.HARM_CATEGORY_HARASSMENT: types.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+}
+
+
 # ----------------------------------------------------------- safety settings
+
+
+def test_grading_config_takes_harassment_from_medium():
+    """Feedback on a student's mistakes is rated LOW harassment; only grading relaxes it."""
+    assert thresholds(GeminiProvider._config(grading=True)) == GRADING_EXPECTED
 
 
 def test_config_always_carries_the_safety_settings():
@@ -65,7 +76,9 @@ def test_every_generate_config_in_the_provider_goes_through_config():
 
     source = inspect.getsource(gemini_module)
     assert source.count("types.GenerateContentConfig(") == 1
-    assert "types.GenerateContentConfig(safety_settings=safety_settings()" in source
+    assert "types.GenerateContentConfig(safety_settings=safety_settings(grading)" in source
+    # analyze_solution, analyze_solution_stream, analyze_private_solution_stream
+    assert source.count("grading=True,") == 3
 
 
 # ---------------------------------------------------------------- blocks
@@ -359,3 +372,32 @@ def test_failed_file_processing_is_an_ordinary_error(monkeypatch, tmp_path):
     with pytest.raises(AIProviderError) as excinfo:
         _upload_with(monkeypatch, tmp_path, files)
     assert not isinstance(excinfo.value, AIUnavailableError)
+
+
+def test_block_reason_names_the_tripped_category():
+    rating = lambda category, probability: SimpleNamespace(category=category, probability=probability)
+    candidate = SimpleNamespace(
+        finish_reason=types.FinishReason.SAFETY,
+        safety_ratings=[
+            rating(types.HarmCategory.HARM_CATEGORY_HARASSMENT, types.HarmProbability.LOW),
+            rating(types.HarmCategory.HARM_CATEGORY_HATE_SPEECH, types.HarmProbability.NEGLIGIBLE),
+        ],
+    )
+    resp = SimpleNamespace(prompt_feedback=None, candidates=[candidate])
+    assert block_reason(resp) == "finish:SAFETY HARASSMENT=LOW"
+
+
+def test_block_reason_prefers_the_ratings_marked_blocked():
+    rating = lambda category, probability, blocked=None: SimpleNamespace(
+        category=category, probability=probability, blocked=blocked
+    )
+    feedback = SimpleNamespace(
+        block_reason=types.BlockedReason.SAFETY,
+        safety_ratings=[
+            rating(types.HarmCategory.HARM_CATEGORY_HARASSMENT, types.HarmProbability.LOW),
+            rating(types.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, types.HarmProbability.LOW, blocked=True),
+            rating(None, types.HarmProbability.HIGH),
+        ],
+    )
+    resp = SimpleNamespace(prompt_feedback=feedback, candidates=[])
+    assert block_reason(resp) == "prompt:SAFETY SEXUALLY_EXPLICIT=LOW"

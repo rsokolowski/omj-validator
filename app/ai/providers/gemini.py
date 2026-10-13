@@ -233,6 +233,15 @@ SAFETY_THRESHOLDS = (
     ("HARM_CATEGORY_DANGEROUS_CONTENT", "BLOCK_MEDIUM_AND_ABOVE"),
 )
 
+# Grading answers point out the student's mistakes, and gemini-3.8-flash rates
+# such feedback LOW harassment - a correct 5-point solution came back blocked.
+# Grading alone takes harassment from MEDIUM; its abuse_score still catches a
+# solution that is itself abusive.
+GRADING_SAFETY_THRESHOLDS = tuple(
+    (category, "BLOCK_MEDIUM_AND_ABOVE" if category == "HARM_CATEGORY_HARASSMENT" else threshold)
+    for category, threshold in SAFETY_THRESHOLDS
+)
+
 # finish_reason values that mean the safety system stopped the answer
 # (IMAGE_SAFETY / IMAGE_PROHIBITED_CONTENT included by substring)
 _BLOCK_FINISH_MARKERS = ("SAFETY", "PROHIBITED", "BLOCKLIST", "SPII")
@@ -258,14 +267,15 @@ _UNAVAILABLE_MESSAGES = {
 }
 
 
-def safety_settings() -> list:
+def safety_settings(grading: bool = False) -> list:
     """The SafetySetting list sent with every request."""
+    thresholds = GRADING_SAFETY_THRESHOLDS if grading else SAFETY_THRESHOLDS
     return [
         types.SafetySetting(
             category=getattr(types.HarmCategory, category),
             threshold=getattr(types.HarmBlockThreshold, threshold),
         )
-        for category, threshold in SAFETY_THRESHOLDS
+        for category, threshold in thresholds
     ]
 
 
@@ -282,12 +292,31 @@ def block_reason(response) -> Optional[str]:
     feedback = getattr(response, "prompt_feedback", None)
     reason = _enum_name(getattr(feedback, "block_reason", None))
     if reason and "UNSPECIFIED" not in reason:
-        return f"prompt:{reason}"
+        return f"prompt:{reason}{_flagged_ratings(feedback)}"
     for candidate in getattr(response, "candidates", None) or []:
         finish = _enum_name(getattr(candidate, "finish_reason", None))
         if any(marker in finish for marker in _BLOCK_FINISH_MARKERS):
-            return f"finish:{finish}"
+            return f"finish:{finish}{_flagged_ratings(candidate)}"
     return None
+
+
+def _flagged_ratings(rated) -> str:
+    """Which category tripped, e.g. " HARASSMENT=LOW" - for the log, never content.
+
+    The ratings marked blocked when the API marks any, else every rating above
+    NEGLIGIBLE.
+    """
+    ratings = [
+        r for r in getattr(rated, "safety_ratings", None) or []
+        if _enum_name(getattr(r, "category", None)) and _enum_name(getattr(r, "probability", None))
+    ]
+    blocked = [r for r in ratings if getattr(r, "blocked", None)]
+    flagged = [
+        f"{_enum_name(r.category).removeprefix('HARM_CATEGORY_')}={_enum_name(r.probability)}"
+        for r in blocked or ratings
+        if blocked or _enum_name(r.probability) not in ("NEGLIGIBLE", "HARM_PROBABILITY_UNSPECIFIED")
+    ]
+    return f" {','.join(flagged)}" if flagged else ""
 
 
 # 400 FAILED_PRECONDITION means the key/billing/region/project cannot serve
@@ -780,6 +809,7 @@ class GeminiProvider:
             )
 
             config = self._config(
+                grading=True,
                 thinking_config=thinking_config,
                 response_mime_type="application/json",
                 response_json_schema=RESPONSE_JSON_SCHEMA,
@@ -931,6 +961,7 @@ class GeminiProvider:
             )
 
             config = self._config(
+                grading=True,
                 thinking_config=thinking_config,
                 response_mime_type="application/json",
                 response_json_schema=RESPONSE_JSON_SCHEMA,
@@ -1217,9 +1248,9 @@ class GeminiProvider:
         return map_error(error, PRIVATE_BLOCKED_MESSAGE)
 
     @staticmethod
-    def _config(**kwargs):
+    def _config(grading: bool = False, **kwargs):
         """GenerateContentConfig for every generate call - always with the safety settings."""
-        return types.GenerateContentConfig(safety_settings=safety_settings(), **kwargs)
+        return types.GenerateContentConfig(safety_settings=safety_settings(grading), **kwargs)
 
     def _usage_meta(self, usage_metadata, started: float) -> dict:
         """Model, tokens, cost and timing - never content."""
@@ -1371,6 +1402,7 @@ class GeminiProvider:
                     on_upload_complete()
 
             config = self._config(
+                grading=True,
                 thinking_config=self._thinking_config(),
                 response_mime_type="application/json",
                 response_json_schema=RESPONSE_JSON_SCHEMA,

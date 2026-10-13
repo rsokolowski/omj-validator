@@ -1127,7 +1127,7 @@ async def serve_pdf(request: Request, year: str, etap: str, filename: str):
 
 
 @app.get("/uploads/{path:path}")
-async def serve_upload(request: Request, path: str):
+async def serve_upload(request: Request, path: str, db: Session = Depends(get_db)):
     """Serve uploaded files (with auth check and user ownership verification)."""
     redirect = require_auth_redirect(request)
     if redirect:
@@ -1159,12 +1159,19 @@ async def serve_upload(request: Request, path: str):
     if not file_path.is_file():
         raise HTTPException(status_code=404, detail="File not found")
 
+    # Hand back the pooled connection the app-level account check still holds
+    # (the same cached session): it would otherwise stay checked out while the
+    # file streams, and the admin audit below takes a second one. An admin page
+    # loads ~20 photos at once - 15 requests each holding one connection and
+    # waiting for another exhausted the pool and all failed after 30 s.
+    await asyncio.to_thread(db.close)
+
     # Admin looking at somebody else's photo - the widest read privilege in the
     # app, so it is audited. Own uploads are not (that is every normal request).
     # Audited here, after validation, so the table records real accesses rather
     # than 404s and rejected traversal attempts.
     if is_admin and path_parts[0] != user_id:
-        # The path starts with the owner's Google sub, which subject_user_id
+        # The path starts with the owner's user id, which subject_user_id
         # already carries and which must disappear when that account is erased -
         # so only the part below the user directory is stored.
         await _record_admin_access(

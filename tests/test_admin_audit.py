@@ -192,6 +192,20 @@ class TestEndpoints:
         assert entry.resource == "upload"
         assert entry.subject_user_id == STUDENT_ID
 
+    def test_photo_audit_does_not_hold_two_pooled_connections(self, client, db, monkeypatch):
+        """An admin page loads ~20 photos at once. Each request held the app-level
+        account check's connection while the audit write waited for a second one,
+        so 15 of them exhausted the pool and all failed after 30 s."""
+        db.get(UserDB, ADMIN_ID)  # the account check leaves a transaction open
+        assert db.in_transaction()
+        held = []
+        monkeypatch.setattr(main, "_write_admin_access", lambda *args: held.append(db.in_transaction()))
+
+        response = client.get(f"/uploads/{STUDENT_ID}/2024/etap1/1/page1.jpg")
+
+        assert response.status_code == 200
+        assert held == [False]
+
     def test_resource_id_does_not_repeat_the_users_id(self, client, db):
         """subject_user_id is pseudonymized on erasure; a copy of the id inside
         resource_id would survive it and defeat the point."""
