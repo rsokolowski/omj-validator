@@ -2,6 +2,8 @@
 
 Ten dokument opisuje proces dodawania zadań z Olimpiady Matematycznej Juniorów (OMJ) lub Olimpiady Matematycznej Gimnazjalistów (OMG) do repozytorium.
 
+Skrypty `create_tasks.py`, `generate_task_index.py` i `populate_prerequisites.py` nie są w repozytorium (git-ignored) — są tylko w lokalnej kopii autora.
+
 ## Szybki start (dla Claude)
 
 Jeśli użytkownik wskaże Ci ten dokument i poprosi o dodanie zadań, wykonaj poniższe kroki:

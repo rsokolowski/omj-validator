@@ -170,7 +170,7 @@ The report has four parts. Read them in this order:
    official solution. This is where most differences between models show up.
    Also check the Polish text itself: 3.8-flash once produced corrupted words
    in prod ("Ŵe", "żee" for "że"), see
-   [model-ab-2026-09-05.md](model-ab-2026-09-05.md#production-observations).
+   the 2026-09-05 report (kept outside the repository).
 3. **Cost and latency.** Thinking tokens dominate cost at `thinking_level=high`
    (Gemini) and `ANTHROPIC_EFFORT=high` (Claude).
    Watch the max latency against `GEMINI_TIMEOUT` / `ANTHROPIC_TIMEOUT` in prod (`.env.prod`);
@@ -224,4 +224,4 @@ it around and never commit it.
 | Date | Baseline | Candidate | Sample | Outcome |
 |---|---|---|---|---|
 | 2026-07-31 | gemini-3.1-pro-preview | gemini-3.6-flash | ad hoc | led to the flash switch (see `scripts/rescore_eval.py` history) |
-| 2026-09-05 | gemini-3.7-flash | gemini-3.8-flash | 10, stratified | see `docs/model-ab-2026-09-05.md` |
+| 2026-09-05 | gemini-3.7-flash | gemini-3.8-flash | 10, stratified | report kept outside the repository |

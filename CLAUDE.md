@@ -562,4 +562,3 @@ deployment does.
 ./deploy.sh --ssh           # SSH into server
 ```
 
-See **[docs/production-deployment.md](docs/production-deployment.md)** for complete setup guide, operations, and troubleshooting.

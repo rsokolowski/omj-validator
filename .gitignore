@@ -75,3 +75,17 @@ temp/
 
 # Playwright MCP scratch output
 .playwright-mcp/
+
+# Local-only documents and tools (school handover, compliance working papers,
+# design notes, experiment reports, old setup guide and metadata tools)
+/docs/rodo/
+/docs/dostepnosc/
+/docs/superpowers/
+/docs/model-ab-20*.md
+/data/task_prerequisites_analysis.md
+/docs/production-deployment.md
+/nginx.conf.example
+/review_hints.py
+/create_tasks.py
+/generate_task_index.py
+/populate_prerequisites.py

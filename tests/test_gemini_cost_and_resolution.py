@@ -64,7 +64,7 @@ class TestCost:
 
     def test_prod_model_has_explicit_pricing_for_flash(self):
         assert "gemini-3.7-flash" in GEMINI_PRICING
-        # Candidate evaluated in docs/model-ab-2026-09-05.md; same price list.
+        # Candidate evaluated in the 2026-09-05 model A/B; same price list.
         assert "gemini-3.8-flash" in GEMINI_PRICING
 
     def test_promo_rate_applies_before_expiry_and_lapses_after(self, provider, monkeypatch):
