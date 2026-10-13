@@ -12,7 +12,7 @@
     "Narysuj staranny rysunek. Oznacz środek cięciwy $AB$ jako $M$. Jaki jest związek między odcinkami $SM$ i $AB$? Zauważ, że długości $SA$, $SB$ i $SD$ są równe promieniowi okręgu.",
     "Nierówność $AB > 2CD$ jest równoważna nierówności $AM > CD$. Spróbuj wyrazić kwadraty długości $AM$ i $CD$ za pomocą promienia okręgu $R$ i odległości punktów od środka $S$.",
     "Zwróć uwagę na dwa trójkąty prostokątne: $\\triangle SMA$ oraz $\\triangle SMC$. Zastosuj w nich twierdzenie Pitagorasa, aby powiązać ze sobą długości $AM$, $SM$ i $SC$.",
-    "Wyraziłeś już $AM^2$ w zależności od $R$ i $SM$. Zauważ, że $CD = R - SC$. Porównaj $AM^2$ z $CD^2$, wykorzystując zależność między $SM$ a $SC$ wynikającą z trójkąta $\\triangle SMC$."
+    "Masz już $AM^2$ wyrażone w zależności od $R$ i $SM$. Zauważ, że $CD = R - SC$. Porównaj $AM^2$ z $CD^2$, wykorzystując zależność między $SM$ a $SC$ wynikającą z trójkąta $\\triangle SMC$."
   ],
   "skills_required": [
     "circle_theorems",

@@ -123,7 +123,7 @@ export function Footer() {
               Kontakt
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-              Masz pytania lub znalazłeś błąd?
+              Masz pytania albo widzisz błąd?
             </Typography>
             <MuiLink
               href={`mailto:${CONTACT_EMAIL}`}

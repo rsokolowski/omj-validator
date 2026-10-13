@@ -13,7 +13,7 @@
     "Sprawdź, czy teza jest prawdziwa, gdy punkt $S$ jest środkiem sześciokąta. Jaką część pola całej figury stanowi wtedy suma pól trójkątów $ABO$, $CDO$ i $EFO$?",
     "Suma pól zależy od sumy wysokości opuszczonych z punktu $S$ na boki $AB, CD, EF$. Spróbuj udowodnić, że ta suma wysokości jest stała, niezależnie od położenia punktu $S$.",
     "Przedłuż boki $AB, CD, EF$ sześciokąta. Jaką figurę tworzą proste, na których leżą te boki? Zastanów się nad własnościami tej figury.",
-    "Suma odległości dowolnego punktu wewnątrz trójkąta równobocznego od jego boków jest stała. Jak możesz wykorzystać tę własność dla dużego trójkąta, który narysowałeś, i punktu $S$?"
+    "Suma odległości dowolnego punktu wewnątrz trójkąta równobocznego od jego boków jest stała. Jak możesz wykorzystać tę własność dla narysowanego dużego trójkąta i punktu $S$?"
   ],
   "skills_required": [
     "area_methods",

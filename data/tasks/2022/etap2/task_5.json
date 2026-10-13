@@ -12,7 +12,7 @@
   ],
   "hints": [
     "Wyznacz zbiór wszystkich możliwych sum wierszy oraz zbiór wszystkich możliwych iloczynów kolumn. Wypisz wszystkie liczby, które należą do co najmniej jednego z tych zbiorów.",
-    "Załóż nie wprost, że wszystkie 8 wyników (4 sumy i 4 iloczyny) jest różnych. Policz, ile łącznie wartości wypisałeś w poprzednim kroku i porównaj tę liczbę z liczbą wyników.",
+    "Załóż nie wprost, że wszystkie 8 wyników (4 sumy i 4 iloczyny) jest różnych. Policz, ile łącznie wartości zostało wypisanych w poprzednim kroku i porównaj tę liczbę z liczbą wyników.",
     "Dostępnych jest dokładnie 8 wartości: $1, 2, 4, 5, 6, 7, 8, 16$. Aby wyniki były różne, musimy wykorzystać je wszystkie. Rozważ dwa przypadki: gdy wartość $4$ jest sumą wiersza (a $8$ iloczynem kolumny) i odwrotnie.",
     "W każdym przypadku oblicz sumę wszystkich liczb w tabeli na dwa sposoby: dodając sumy wierszy oraz dodając sumy kolumn (zauważ, że iloczyn kolumny jednoznacznie wyznacza jej sumę)."
   ],

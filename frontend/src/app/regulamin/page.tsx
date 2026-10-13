@@ -25,7 +25,7 @@ const PENDING_DAYS = 14;
 export const metadata: Metadata = {
   title: "Regulamin i polityka prywatności",
   description:
-    "Regulamin serwisu Trener OMJ – zasady korzystania, ochrona danych osobowych, ocena generowana przez AI, prawa użytkownika.",
+    "Regulamin serwisu Trener OMJ – zasady korzystania, ochrona danych osobowych, ocena generowana przez AI, prawa osób korzystających z serwisu.",
   alternates: { canonical: "/regulamin" },
 };
 
@@ -83,7 +83,7 @@ export default function RegulaminPage() {
           </li>
           <li>
             <strong>Nie podpisuj kartki</strong> imieniem i nazwiskiem. Serwis i
-            tak wie, czyja to praca, bo jesteś zalogowany.
+            tak wie, czyja to praca, bo korzystasz z niego po zalogowaniu.
           </li>
           <li>
             <strong>Jeśli masz mniej niż 16 lat</strong>, możesz korzystać z
@@ -117,7 +117,7 @@ export default function RegulaminPage() {
             </MuiLink>
             . Prowadzi go osoba prywatna &ndash; <strong>Rafał Sokołowski</strong>{" "}
             &ndash; jako niekomercyjny projekt edukacyjny. Serwis jest bezpłatny,
-            nie wyświetla reklam i nie zarabia na danych użytkowników.
+            nie wyświetla reklam i nie zarabia na danych osób, które z niego korzystają.
           </Typography>
           <Typography paragraph>
             <strong>
@@ -137,7 +137,7 @@ export default function RegulaminPage() {
             Regulamin akceptujesz, zakładając konto. Zasady korzystania z
             serwisu (punkty 13&ndash;16) obowiązują każdego, kto z niego
             korzysta. <strong>Zgoda na przetwarzanie danych to osobna
-            sprawa</strong> &ndash; wyrażasz ją sam (jeśli masz co najmniej 16
+            sprawa</strong> &ndash; wyrażasz ją samodzielnie (jeśli masz co najmniej 16
             lat) albo wyraża ją Twój rodzic. Opisujemy to w punktach 3 i 6.
           </Typography>
         </Section>
@@ -179,7 +179,7 @@ export default function RegulaminPage() {
               Ocena z serwisu nie jest oceną szkolną i nie ma żadnych skutków
               formalnych.
             </strong>{" "}
-            Ocenianie osiągnięć ucznia jest zadaniem nauczyciela (art. 44b ustawy
+            Ocenianie osiągnięć edukacyjnych w szkole jest zadaniem nauczyciela (art. 44b ustawy
             o systemie oświaty). Wynik z serwisu nie trafia do dziennika, nie
             wpływa na oceny, klasyfikację, promocję do następnej klasy ani na
             rekrutację. Nie jest też oficjalnym wynikiem olimpiady ani jego
@@ -205,8 +205,8 @@ export default function RegulaminPage() {
 
         <Section title="3. Jeśli masz mniej niż 16 lat">
           <Typography paragraph>
-            Serwis jest przeznaczony przede wszystkim dla uczniów szkół
-            podstawowych, czyli w praktyce dla osób poniżej 16. roku życia.
+            Serwis jest przeznaczony przede wszystkim dla osób uczących się w
+            szkołach podstawowych, czyli w praktyce dla osób poniżej 16. roku życia.
           </Typography>
           <Typography paragraph>
             W Polsce dziecko może samodzielnie zgodzić się na przetwarzanie
@@ -324,8 +324,8 @@ export default function RegulaminPage() {
             </li>
           </Box>
           <Typography paragraph>
-            Konto jest potrzebne po to, żebyś widział wyłącznie swoje prace i
-            swoją historię wyników oraz żeby działały limity chroniące serwis
+            Konto jest potrzebne po to, żeby Twoje prace i historia wyników były
+            widoczne wyłącznie dla Ciebie oraz żeby działały limity chroniące serwis
             przed nadużyciami. Bez konta serwis nie może działać.
           </Typography>
           <Typography paragraph>
@@ -343,7 +343,7 @@ export default function RegulaminPage() {
             (chroni to przed odgadywaniem haseł). Z urządzeń, na których ten
             login jeszcze się nie logował, obowiązują dodatkowe limity: 20
             nieudanych prób z jednej sieci i 10 na jeden login w ciągu 15
-            minut. Urządzenie, na którym już się zalogowałeś, zapamiętujemy w
+            minut. Urządzenie, na którym Twoje konto już było zalogowane, zapamiętujemy w
             osobnym ciasteczku, więc czyjeś próby zgadywania Twojego hasła z
             innego miejsca nie zablokują Ci logowania na Twoim urządzeniu.
           </Typography>
@@ -413,7 +413,7 @@ export default function RegulaminPage() {
               przesłane przez Ciebie zdjęcia rozwiązań i rysunki wykonane w
               przeglądarce oraz wpisany przez Ciebie tekst rozwiązania,
             </li>
-            <li>informacja, którego zadania dotyczyły i kiedy je wysłałeś,</li>
+            <li>informacja, którego zadania dotyczyły i kiedy zostały wysłane,</li>
             <li>przyznana liczba punktów i treść informacji zwrotnej,</li>
             <li>
               dane techniczne o przebiegu analizy (nazwa użytego modelu, czas,
@@ -431,14 +431,14 @@ export default function RegulaminPage() {
           </Typography>
           <Box component="ul" sx={{ pl: 3, mb: 2 }}>
             <li>
-              treść zadania, którą wpisałeś albo która została odczytana ze
-              zdjęcia i przez Ciebie zatwierdzona, wraz z tytułem, źródłem,
+              treść zadania wpisana przez Ciebie albo odczytana ze zdjęcia i
+              przez Ciebie zatwierdzona, wraz z tytułem, źródłem,
               kategorią i trudnością,
             </li>
-            <li>zdjęcie strony z zadaniem, jeśli dodałeś zadanie ze zdjęcia,</li>
+            <li>zdjęcie strony z zadaniem, jeśli zadanie zostało dodane ze zdjęcia,</li>
             <li>
-              wygenerowane wskazówki i informacja, ile z nich odkryłeś przed
-              wysłaniem rozwiązania,
+              wygenerowane wskazówki i informacja, ile z nich zostało odkrytych
+              przed wysłaniem rozwiązania,
             </li>
             <li>
               techniczny zapis wywołań modelu przy dodawaniu zadań (rodzaj i czas
@@ -449,14 +449,14 @@ export default function RegulaminPage() {
           <Typography paragraph>
             Własne zadania widzisz Ty, a poza Tobą tylko administrator serwisu
             w zakresie opisanym w punkcie 7. Nie są publikowane, udostępniane
-            innym użytkownikom ani indeksowane przez wyszukiwarki.
+            innym osobom korzystającym z serwisu ani indeksowane przez wyszukiwarki.
           </Typography>
           <Typography paragraph>
             <strong>Wzorce</strong> (zapisane pomysły na rozwiązywanie zadań), jeśli z nich korzystasz:
           </Typography>
           <Box component="ul" sx={{ pl: 3, mb: 2 }}>
             <li>
-              treść wzorca, którą napisałeś albo wybrałeś z propozycji programu
+              treść wzorca napisana przez Ciebie albo wybrana z propozycji programu
               (&bdquo;kiedy w treści widzę&hellip;, to warto spróbować&hellip;&rdquo;),
               wraz z przykładem i kategorią,
             </li>
@@ -469,13 +469,13 @@ export default function RegulaminPage() {
             </li>
             <li>
               historia powtórek: termin, Twoja samoocena albo wynik oceny
-              rozwiązania oraz tekst, który wpisałeś z pamięci.
+              rozwiązania oraz tekst wpisany przez Ciebie z pamięci.
             </li>
           </Box>
           <Typography paragraph>
             Wzorce widzisz Ty, a poza Tobą tylko administrator serwisu w
             zakresie opisanym w punkcie 7. Nie są publikowane ani udostępniane
-            innym użytkownikom.
+            innym osobom korzystającym z serwisu.
           </Typography>
           <Typography paragraph>
             <strong>Dane techniczne:</strong> ciasteczko sesyjne (ważne do 30 dni,
@@ -503,7 +503,7 @@ export default function RegulaminPage() {
           <Typography paragraph>
             <strong>To, co jest na zdjęciu kartki.</strong> To najważniejsze
             zdanie w tym punkcie: na fotografii znajduje się wszystko, co
-            napisałeś na kartce i co znalazło się w kadrze. Dlatego:
+            jest napisane na kartce i co znalazło się w kadrze. Dlatego:
           </Typography>
           <Box component="ul" sx={{ pl: 3, mb: 2 }}>
             <li>
@@ -520,7 +520,7 @@ export default function RegulaminPage() {
           </Box>
           <Typography paragraph>
             Nie zbieramy danych szczególnych kategorii (np. o zdrowiu,
-            pochodzeniu czy przekonaniach) i prosimy, byś ich nie umieszczał na
+            pochodzeniu czy przekonaniach) i prosimy, żeby nie umieszczać ich na
             przesyłanych zdjęciach ani we wpisywanym tekście rozwiązania.
           </Typography>
         </Section>
@@ -613,8 +613,8 @@ export default function RegulaminPage() {
             </li>
             <li>
               przy pracy ze <strong>wzorcami</strong> trafia tam tylko tekst:
-              szkic wzorca, Twoje odpowiedzi, treść zadania, przy którym go
-              zauważyłeś, i informacja zwrotna z oceny &ndash; bez zdjęć i bez
+              szkic wzorca, Twoje odpowiedzi, treść zadania, z którego pochodzi
+              wzorzec, i informacja zwrotna z oceny &ndash; bez zdjęć i bez
               danych konta,
             </li>
             <li>
@@ -697,8 +697,8 @@ export default function RegulaminPage() {
           <Typography paragraph>
             <strong>Nikt inny.</strong> Nie sprzedajemy danych, nie przekazujemy
             ich reklamodawcom, nie korzystamy z zewnętrznej analityki ani
-            mechanizmów śledzących. Inni użytkownicy nie widzą Twoich prac ani
-            wyników.
+            mechanizmów śledzących. Inne osoby korzystające z serwisu nie widzą
+            Twoich prac ani wyników.
           </Typography>
           <Typography paragraph>
             <strong>Dostęp administratora.</strong> Administrator serwisu ma
@@ -709,12 +709,12 @@ export default function RegulaminPage() {
           </Typography>
           <Typography paragraph>
             <strong>Dziennik dostępu administratora.</strong> Otwarcie zdjęcia
-            rozwiązania, listy zgłoszeń konkretnego ucznia, wyszukanie
-            użytkownika i ponowna analiza są zapisywane w osobnym dzienniku:
+            rozwiązania, listy zgłoszeń konkretnej osoby, wyszukanie
+            konta i ponowna analiza są zapisywane w osobnym dzienniku:
             adres e-mail administratora, czyich danych dotyczył dostęp (przy
             wyszukiwaniu &ndash; tylko liczba znalezionych osób), rodzaj zasobu
-            oraz data i godzina. Przegląd zbiorczej listy zgłoszeń wszystkich
-            użytkowników jest zapisywany bez wskazania, czyich danych dotyczył.
+            oraz data i godzina. Przegląd zbiorczej listy zgłoszeń ze wszystkich
+            kont jest zapisywany bez wskazania, czyich danych dotyczył.
             Bezpośredni dostęp administratora do serwera i bazy danych nie jest
             rejestrowany w tym dzienniku. Jeśli zapis do dziennika się nie uda
             (np. przy awarii bazy), operacja administratora i tak się wykona,
@@ -811,7 +811,7 @@ export default function RegulaminPage() {
               &ndash; aż do usunięcia całego zgłoszenia.
             </li>
             <li>
-              <strong>Konto użytkownika</strong> &ndash; do czasu, aż je
+              <strong>Twoje konto</strong> &ndash; do czasu, aż je
               usuniesz. Jeżeli przez {RETENTION_INACTIVE_ACCOUNT} nie zalogujesz
               się i nie wyślesz żadnego rozwiązania, konto zostanie usunięte
               automatycznie razem ze wszystkim, co do niego należy.
@@ -1069,7 +1069,8 @@ export default function RegulaminPage() {
             wygasa sam limit, czyli dobę po Twoim ostatnim zgłoszeniu lub
             wywołaniu programu (przy codziennym sprzątaniu &ndash; najpóźniej po
             około 48 godzinach). Jeśli w ciągu doby przed usunięciem konta nie
-            korzystałeś z programu, zapis w ogóle nie powstaje. Podstawą tego
+            było żadnego zgłoszenia ani wywołania programu, zapis w ogóle nie
+            powstaje. Podstawą tego
             zapisu i pozostałych śladów z listy jest prawnie uzasadniony interes
             administratora (art. 6 ust. 1 lit. f RODO), opisany w punkcie 6.
           </Typography>
@@ -1085,7 +1086,7 @@ export default function RegulaminPage() {
         <Section title="12. Bezpieczeństwo danych">
           <Typography paragraph>
             Połączenie z serwisem jest szyfrowane (HTTPS). Zdjęcia są dostępne
-            wyłącznie po zalogowaniu i tylko dla właściciela konta oraz
+            wyłącznie po zalogowaniu: na koncie, z którego je przesłano, oraz dla
             administratora. Baza danych nie jest dostępna z internetu. Hasła do
             kont Google w ogóle do nas nie trafiają, a hasła do kont z loginem
             przechowujemy wyłącznie jako skrót argon2id &ndash; samego hasła nie
@@ -1130,16 +1131,16 @@ export default function RegulaminPage() {
             </li>
             <li>
               nie podejmować prób obchodzenia zabezpieczeń, limitów ani uzyskania
-              dostępu do danych innych użytkowników,
+              dostępu do cudzych danych,
             </li>
             <li>nie udostępniać swojego konta innym osobom.</li>
           </Box>
           <Typography paragraph>
             <strong>Limity.</strong> Każde sprawdzenie rozwiązania kosztuje, więc
             obowiązują limity chroniące dostępność serwisu: maksymalnie 30
-            zgłoszeń na użytkownika w ciągu doby, najwyżej 2 Twoje rozwiązania
-            sprawdzane jednocześnie oraz limit łączny dla wszystkich
-            użytkowników. Serwis ma też dzienny budżet na sztuczną inteligencję:
+            zgłoszeń na jedno konto w ciągu doby, najwyżej 2 Twoje rozwiązania
+            sprawdzane jednocześnie oraz limit łączny dla całego
+            serwisu. Serwis ma też dzienny budżet na sztuczną inteligencję:
             gdy się wyczerpie, funkcje korzystające z AI są wstrzymane dla
             wszystkich, dopóki w ciągu ostatniej doby nie zwolni się miejsce.
             Zgłoszenie odrzucone przez serwer, zanim trafiło do AI, nie zużywa
@@ -1149,8 +1150,8 @@ export default function RegulaminPage() {
             WebP, HEIC).
           </Typography>
           <Typography paragraph>
-            Administrator może ograniczyć lub zablokować dostęp użytkownikowi,
-            który narusza regulamin.
+            Administrator może ograniczyć lub zablokować dostęp osobie, która
+            narusza regulamin.
           </Typography>
         </Section>
 
@@ -1209,14 +1210,14 @@ export default function RegulaminPage() {
             Zachowujesz wszelkie prawa do przesłanych przez siebie rozwiązań.
             Wykorzystujemy je wyłącznie po to, żeby wygenerować dla Ciebie ocenę i
             pokazać Ci historię prób. Nie publikujemy ich, nie udostępniamy innym
-            użytkownikom i nie wykorzystujemy do trenowania modeli.
+            osobom i nie wykorzystujemy do trenowania modeli.
           </Typography>
         </Section>
 
         <Section title="16. Zmiany regulaminu i zakończenie działania serwisu">
           <Typography paragraph>
             Administrator może zmienić regulamin. O istotnych zmianach
-            użytkownicy zostaną poinformowani komunikatem w serwisie. Dalsze
+            poinformujemy komunikatem w serwisie. Dalsze
             korzystanie po wprowadzeniu zmian oznacza akceptację zmienionych
             zasad korzystania z serwisu. Nie dotyczy to zgody na przetwarzanie
             danych: jej zakresu nie poszerzamy bez pytania. Gdyby zmiana
@@ -1226,7 +1227,7 @@ export default function RegulaminPage() {
           <Typography paragraph>
             <strong>Zakończenie działania serwisu.</strong> Serwis jest projektem
             niekomercyjnym prowadzonym przez jedną osobę i może zostać wygaszony.
-            Gdyby do tego doszło, użytkownicy zostaną poinformowani z
+            Gdyby do tego doszło, poinformujemy o tym z
             wyprzedzeniem. W tym czasie będzie można poprosić e-mailem o kopię
             swoich wyników, a potem wszystkie dane zostaną trwale usunięte.{" "}
             <strong>

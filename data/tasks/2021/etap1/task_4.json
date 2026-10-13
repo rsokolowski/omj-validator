@@ -14,7 +14,7 @@
   "hints": [
     "Oblicz sumę wszystkich liczb od 1 do 17. Zastanów się, jak suma 16 liczb wpisanych do tabeli zależy od wartości pominiętej liczby.",
     "Wykorzystaj warunki dotyczące sum w wierszach i w kolumnach, aby zapisać sumę wszystkich 16 liczb w tabeli na dwa różne sposoby.",
-    "Z zależności, które zapisałeś, wynikają dwa warunki podzielności dla sumy liczb w tabeli. Jaki jest ostateczny warunek podzielności, który musi spełniać ta suma?",
+    "Z zapisanych zależności wynikają dwa warunki podzielności dla sumy liczb w tabeli. Jaki jest ostateczny warunek podzielności, który musi spełniać ta suma?",
     "Gdy ustalisz, która liczba musi zostać pominięta, uzasadnij, że odpowiednie wypełnienie tabeli istnieje. Oblicz wymaganą sumę w każdej kolumnie i spróbuj dobrać pozostałe 16 liczb w pary o takiej właśnie sumie."
   ],
   "prerequisites": [],

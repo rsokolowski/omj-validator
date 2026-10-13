@@ -12,7 +12,7 @@
   "hints": [
     "Zastanów się, co to znaczy, że dwie liczby całkowite są kolejne. Jaka jest wtedy wartość ich różnicy? Zapisz odpowiedni warunek w postaci równania.",
     "Oblicz różnicę między liczbami $a^2+b$ oraz $a+b^2$. Spróbuj przekształcić otrzymane wyrażenie, aby zapisać je w postaci iloczynu dwóch czynników.",
-    "Oznaczmy czynniki, które otrzymałeś w iloczynie, przez $X$ i $Y$. Zbadaj ich sumę $X+Y$. Co możesz powiedzieć o parzystości tej sumy?",
+    "Oznaczmy czynniki otrzymane w iloczynie przez $X$ i $Y$. Zbadaj ich sumę $X+Y$. Co możesz powiedzieć o parzystości tej sumy?",
     "Jeżeli suma dwóch liczb całkowitych jest nieparzysta, to co można powiedzieć o parzystości każdej z nich? Jaka jest wtedy parzystość ich iloczynu i czy może on być równy $1$ lub $-1$?"
   ],
   "skills_required": [

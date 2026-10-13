@@ -14,7 +14,7 @@
     "Oznaczmy zawodników siedzących przy stole zgodnie z ruchem wskazówek zegara jako $Z_1, Z_2, \\ldots, Z_n$. Co wiemy o wyniku meczu między $Z_i$ a $Z_{i+1}$ (oraz między $Z_n$ a $Z_1$)?",
     "Poszukajmy cyklu złożonego z trzech zawodników. Dobrym punktem wyjścia jest przyjrzenie się trzem kolejnym zawodnikom przy stole, np. $Z_1, Z_2, Z_3$. Jakie wyniki meczów między nimi już znamy?",
     "Znamy wyniki meczów $Z_1$ z $Z_2$ i $Z_2$ z $Z_3$. Rozważ dwa możliwe wyniki meczu między $Z_1$ a $Z_3$. Czy w którymś z tych przypadków od razu znajdujemy szukany cykl?",
-    "Jeśli nie znalazłeś cyklu, to znaczy, że $Z_1$ pokonał $Z_3$. Co ten wynik, w połączeniu z brakiem cyklu z udziałem $Z_1, Z_3, Z_4$, mówi nam o wyniku meczu $Z_1$ z $Z_4$? Spróbuj uogólnić tę obserwację."
+    "Jeśli nie ma takiego cyklu, to znaczy, że $Z_1$ pokonał $Z_3$. Co ten wynik, w połączeniu z brakiem cyklu z udziałem $Z_1, Z_3, Z_4$, mówi nam o wyniku meczu $Z_1$ z $Z_4$? Spróbuj uogólnić tę obserwację."
   ],
   "skills_required": [
     "graph_theory",

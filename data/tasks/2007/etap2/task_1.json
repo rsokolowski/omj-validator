@@ -13,7 +13,7 @@
   "hints": [
     "Zacznij od przekształcenia danego równania. Podniesienie obu stron do kwadratu pozwoli pozbyć się pierwiastka i uprościć wyrażenie.",
     "Spróbuj udowodnić tezę nie wprost. Załóż, że obie liczby $a$ i $b$ są wymierne, i poszukaj sprzeczności wynikającej z tego założenia.",
-    "Po poprawnym uproszczeniu równania powinieneś otrzymać $(a-b)^2 = 12$. Zastanów się, jakie własności ma lewa strona tego równania, jeśli przyjąć założenie z poprzedniej wskazówki.",
+    "Po poprawnym uproszczeniu równania otrzymasz $(a-b)^2 = 12$. Zastanów się, jakie własności ma lewa strona tego równania, jeśli przyjąć założenie z poprzedniej wskazówki.",
     "Jeżeli liczby $a$ i $b$ są wymierne, to ich różnica $a-b$ również jest liczbą wymierną. Czy kwadrat liczby wymiernej może być równy 12?"
   ],
   "skills_required": [

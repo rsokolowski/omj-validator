@@ -20,6 +20,6 @@
     "Zauważ, że dzieląc nierówność $a+b \\geq ab$ przez $ab$, otrzymasz warunek wiążący odwrotności liczb. Wprowadź zmienne pomocnicze $x=1/a, y=1/b, z=1/c$.",
     "Po podstawieniu otrzymasz warunki typu $x+y \\geq 1$. Twoim celem jest oszacowanie wyrażenia $xy+yz+zx$. Zacznij od znalezienia dolnego ograniczenia na sumę $x+y+z$.",
     "Aby powiązać sumę $x+y+z$ z iloczynami $xy, yz, zx$, spróbuj 'uzupełnić' każdą nierówność z założenia, mnożąc ją przez brakującą w niej zmienną (np. $x+y \\geq 1$ przez $z$).",
-    "Dodaj otrzymane po mnożeniu trzy nierówności stronami. Wynik pozwoli Ci uzależnić szukaną sumę iloczynów od sumy $x+y+z$, którą oszacowałeś wcześniej."
+    "Dodaj otrzymane po mnożeniu trzy nierówności stronami. Wynik pozwoli Ci uzależnić szukaną sumę iloczynów od sumy $x+y+z$, oszacowanej wcześniej."
   ]
 }

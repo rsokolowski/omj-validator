@@ -11,7 +11,7 @@
   ],
   "hints": [
     "Ile jest czwórek kolejnych wierzchołków w 20-kącie? Zapisz za pomocą nierówności warunek, który musi spełniać suma numerów w każdej takiej czwórce.",
-    "Spróbuj oszacować z góry sumę wszystkich tych 20 czwórek. Wykorzystaj nierówności, które zapisałeś w poprzednim kroku.",
+    "Spróbuj oszacować z góry sumę wszystkich tych 20 czwórek. Wykorzystaj nierówności zapisane w poprzednim kroku.",
     "Teraz oblicz tę samą sumę (wszystkich 20 czwórek) w dokładny sposób. Zastanów się, ile razy w tej łącznej sumie pojawi się numer z każdego wierzchołka.",
     "Porównaj dokładną wartość sumy z jej górnym oszacowaniem. Co ta równość mówi o sumie numerów w *każdej* pojedynczej czwórce? Czy taka sytuacja jest możliwa?"
   ],

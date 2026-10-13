@@ -85,7 +85,7 @@ export function PrepList({ nodes, tasks, title }: PrepListProps) {
       >
         <Typography variant="body2" sx={{ color: "grey.600" }}>
           {completedCount === totalCount
-            ? "Gratulacje! Ukończyłeś wszystkie zadania przygotowawcze."
+            ? "Gratulacje! Wszystkie zadania przygotowawcze są ukończone."
             : `${totalCount - completedCount} zadań do ukończenia`}
         </Typography>
         <FormControlLabel

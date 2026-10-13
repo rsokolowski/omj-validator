@@ -13,7 +13,7 @@
     "Spróbuj przeprowadzić dowód nie wprost. Załóż, że teza zadania jest fałszywa, co oznacza, że zachodzi nierówność $y^2 + y < x$.",
     "Masz teraz dwie nierówności: $x^2 + x \\leq y$ (z treści zadania) oraz $y^2 + y < x$ (z zaprzeczenia tezy). Spróbuj wykorzystać je jednocześnie.",
     "Dodaj te dwie nierówności do siebie stronami. Zredukuj wyrazy $x$ i $y$, które pojawią się po obu stronach.",
-    "Po uproszczeniu powinieneś otrzymać nierówność $x^2 + y^2 < 0$. Czy suma kwadratów liczb rzeczywistych może być ujemna?"
+    "Po uproszczeniu otrzymasz nierówność $x^2 + y^2 < 0$. Czy suma kwadratów liczb rzeczywistych może być ujemna?"
   ],
   "skills_required": [
     "inequality_manipulation",

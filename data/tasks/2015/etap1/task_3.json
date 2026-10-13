@@ -14,7 +14,7 @@
     "Oznacz szukaną liczbę pierwszą jako $p$. Jakie równanie wiąże $n$ i $p$? Aby ułamek był liczbą całkowitą, jaką własność musi mieć licznik $n^4+4$?",
     "Równanie $n^4+4 = 17p$ pokazuje, że liczba $n^4+4$ musi mieć w rozkładzie czynniki 17 i $p$. Spróbuj znaleźć rozkład na czynniki pierwsze wyrażenia $n^4+4$.",
     "Wyrażenie $n^4+4$ można uzupełnić do kwadratu sumy. Spróbuj dodać i odjąć ten sam składnik, aby móc skorzystać ze wzoru na różnicę kwadratów.",
-    "Otrzymałeś iloczyn dwóch liczb naturalnych równy $17p$. Porównaj wielkość obu czynników, a następnie rozważ możliwe przypadki, czemu mogą być równe te czynniki."
+    "Masz teraz iloczyn dwóch liczb naturalnych równy $17p$. Porównaj wielkość obu czynników, a następnie rozważ możliwe przypadki, czemu mogą być równe te czynniki."
   ],
   "skills_required": [
     "algebraic_identities",

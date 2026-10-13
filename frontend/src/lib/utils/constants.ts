@@ -315,7 +315,7 @@ export const PATTERN_VERDICTS: Record<string, { label: string; color: "success" 
 };
 
 export const REVIEW_OUTCOMES: Record<string, string> = {
-  fail: "Nie pamiętałem",
+  fail: "Nie pamiętam",
   hard: "Z trudem",
-  ok: "Pamiętałem",
+  ok: "Pamiętam",
 };

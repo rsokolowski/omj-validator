@@ -89,7 +89,7 @@ test.describe('Wzorce', () => {
     await submitSolution(page);
 
     await page.goto(`/wzorce/${patternId}`);
-    await expect(page.getByTestId('review-history')).toContainText('Zadanie · Pamiętałem · Poziom 1');
+    await expect(page.getByTestId('review-history')).toContainText('Zadanie · Pamiętam · Poziom 1');
 
     // 6. Due again (e2e hook) -> the header badge and a recall card -> level 2
     const due = await page.request.post(`/api/test/patterns/${patternId}/make-due`);
@@ -104,7 +104,7 @@ test.describe('Wzorce', () => {
     await page.getByLabel('…to warto spróbować… (napisz z pamięci)').fill('Jedna z dwóch kolejnych liczb jest parzysta');
     await show.click();
     await expect(page.getByText('Zapisany wzorzec')).toBeVisible();
-    await page.getByRole('button', { name: 'Pamiętałem', exact: true }).click();
+    await page.getByRole('button', { name: 'Pamiętam', exact: true }).click();
     await expect(page.getByText(/Poziom 2 · następna powtórka/)).toBeVisible();
     await page.getByRole('button', { name: 'Zakończ' }).click();
     await expect(page.getByText('Na dziś wszystko')).toBeVisible();
@@ -112,8 +112,8 @@ test.describe('Wzorce', () => {
     await page.goto(`/wzorce/${patternId}`);
     await expect(page.getByTestId('pattern-level')).toHaveText('Poziom 2');
     const history = page.getByTestId('review-history');
-    await expect(history).toContainText('Przypomnienie · Pamiętałem · Poziom 2');
-    await expect(history).toContainText('Zadanie · Pamiętałem · Poziom 1');
+    await expect(history).toContainText('Przypomnienie · Pamiętam · Poziom 2');
+    await expect(history).toContainText('Zadanie · Pamiętam · Poziom 1');
   });
 
   test('another user cannot open the pattern', async ({ page, context }) => {

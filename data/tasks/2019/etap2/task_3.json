@@ -14,7 +14,7 @@
     "Załóżmy nie wprost, że żadna dziewczynka nie wygrała z chłopcem. Oznacza to, że chłopcy ponosili porażki wyłącznie w meczach z innymi chłopcami.",
     "Niech $k$ oznacza liczbę chłopców. Skoro chłopcy przegrywali tylko między sobą, to z iloma maksymalnie przeciwnikami mógł przegrać dany chłopiec?",
     "Każdy chłopiec przegrał co najmniej raz. Wypisz zbiór wszystkich możliwych liczb porażek, jakie może mieć pojedynczy chłopiec w grupie $k$ osób.",
-    "Mamy $k$ chłopców i każdy z nich ma inną liczbę porażek. Porównaj liczebność grupy chłopców z liczbą możliwych wartości porażek, które wyznaczyłeś."
+    "Mamy $k$ chłopców i każdy z nich ma inną liczbę porażek. Porównaj liczebność grupy chłopców z liczbą wyznaczonych możliwych wartości porażek."
   ],
   "prerequisites": [
     "2019_etap1_5"

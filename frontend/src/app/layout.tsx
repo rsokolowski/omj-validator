@@ -74,7 +74,7 @@ export default function RootLayout({
     name: APP_NAME,
     url: SITE_URL,
     description:
-      "Niekomercyjny projekt edukacyjny pomagający uczniom przygotować się do Olimpiady Matematycznej Juniorów",
+      "Niekomercyjny projekt edukacyjny pomagający przygotować się do Olimpiady Matematycznej Juniorów",
   };
 
   return (

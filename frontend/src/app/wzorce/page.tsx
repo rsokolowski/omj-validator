@@ -46,7 +46,7 @@ export default async function PatternsPage({ searchParams }: PageProps) {
     <Box>
       <PageHeader
         title="Wzorce"
-        subtitle="Pomysły na rozwiązywanie zadań, które zauważyłeś: kiedy w treści widzę X, to warto spróbować Y. Powtarzaj je, żeby przychodziły same."
+        subtitle="Pomysły na rozwiązywanie zadań, które udało Ci się zauważyć: kiedy w treści widzę X, to warto spróbować Y. Powtarzaj je, żeby przychodziły same."
       />
 
       {queue.due_total > 0 && (

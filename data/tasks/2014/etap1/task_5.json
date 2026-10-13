@@ -13,7 +13,7 @@
     "Narysuj sytuację: dwa punkty $A$ i $B$ po przeciwnych stronach dwóch równoległych prostych (brzegów rzeki). Most $PQ$ jest prostopadły do brzegów. Jaki warunek muszą spełniać długości dróg $AP$ i $BQ$?",
     "Warunek $|AP|=|BQ|$ jest trudny, bo dotyczy dwóch różnych końców mostu, $P$ i $Q$. Spróbuj przekształcić ten problem tak, aby porównywać odległości do jednego punktu, na przykład do $P$.",
     "Pomyśl o przesunięciu. Most $PQ$ wyznacza pewne przesunięcie. Przesuń punkt $B$ w taki sam sposób, jak punkt $Q$ jest przesunięty do $P$. Nazwij nowy punkt $B'$. Jaka jest relacja między długością $|BQ|$ a odległością $|B'P|$?",
-    "Zauważyłeś, że $|BQ| = |B'P|$. Zatem warunek z zadania, $|AP|=|BQ|$, staje się warunkiem $|AP|=|B'P|$. Gdzie musi leżeć punkt $P$, skoro jest równoodległy od $A$ i $B'$? Skonstruuj odpowiednią prostą."
+    "Wiesz już, że $|BQ| = |B'P|$. Zatem warunek z zadania, $|AP|=|BQ|$, staje się warunkiem $|AP|=|B'P|$. Gdzie musi leżeć punkt $P$, skoro jest równoodległy od $A$ i $B'$? Skonstruuj odpowiednią prostą."
   ],
   "skills_required": [
     "transformations",

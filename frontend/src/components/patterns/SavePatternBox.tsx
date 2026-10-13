@@ -89,7 +89,7 @@ export function SavePatternBox({ source, latestSubmissionId }: SavePatternBoxPro
       )}
 
       <Typography variant="body2" sx={{ color: "grey.700", mb: 2 }}>
-        Zauważyłeś pomysł, który przyda się w innych zadaniach? Zapisz go jako wzorzec i powtarzaj.
+        Masz pomysł, który przyda się w innych zadaniach? Zapisz go jako wzorzec i powtarzaj.
       </Typography>
 
       <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mb: suggestions ? 2 : 0 }}>

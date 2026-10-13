@@ -514,7 +514,7 @@ function FeaturesSection() {
           mx: "auto",
         }}
       >
-        Narzędzia stworzone z myślą o uczniach
+        Narzędzia stworzone z myślą o przygotowaniach do olimpiady
       </Typography>
 
       <Box

@@ -21,7 +21,7 @@ export default async function ReviewPage() {
   }
   return (
     <Box>
-      <PageHeader title="Powtórka wzorców" subtitle="Najpierw przypomnij sobie sam, potem porównaj.">
+      <PageHeader title="Powtórka wzorców" subtitle="Najpierw przypomnij sobie samodzielnie, potem porównaj.">
         <Breadcrumb items={[{ label: "Wzorce", href: "/wzorce" }, { label: "Powtórka" }]} />
       </PageHeader>
       <ReviewSession />

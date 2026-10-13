@@ -13,7 +13,7 @@
     "Oblicz wartości wyrażeń dla $n=1, 2, 3, 4$. Zauważ, że w każdej otrzymanej parze przynajmniej jedna z liczb dzieli się przez 3.",
     "Aby wyjaśnić tę prawidłowość, zbadaj reszty z dzielenia przez 3. Zacznij od wypisania możliwych reszt, jakie może dawać liczba $n$.",
     "Sprawdź, jakie reszty z dzielenia przez 3 daje wyrażenie $n^2+n = n(n+1)$. Rozważ oddzielnie trzy przypadki: gdy $n$ daje resztę $0$, $1$ lub $2$.",
-    "Wykazałeś, że jedna z liczb zawsze dzieli się przez 3. Pamiętaj, że szukamy liczb pierwszych, a jedyną liczbą pierwszą podzielną przez 3 jest samo 3."
+    "Wiesz już, że jedna z liczb zawsze dzieli się przez 3. Pamiętaj, że szukamy liczb pierwszych, a jedyną liczbą pierwszą podzielną przez 3 jest samo 3."
   ],
   "prerequisites": [
     "2006_etap1_3"

@@ -13,7 +13,7 @@
   "hints": [
     "Zapisz równanie wynikające z treści zadania: $n = 21 \\cdot S(n)$. Przypomnij sobie cechy podzielności przez 3 i przez 9 – jaki jest związek między liczbą a sumą jej cyfr?",
     "Przyjrzyj się czynnikowi 21. Przez jaką cyfrę na pewno dzieli się prawa strona równania? Co to oznacza dla liczby $n$, a w konsekwencji dla sumy jej cyfr $S(n)$?",
-    "Skoro ustaliłeś, że suma cyfr $S(n)$ musi być podzielna przez 3, zapisz ją w postaci $S(n) = 3k$ (gdzie $k$ jest liczbą całkowitą). Podstaw to wyrażenie do wyjściowego równania na $n$.",
+    "Skoro suma cyfr $S(n)$ musi być podzielna przez 3, zapisz ją w postaci $S(n) = 3k$ (gdzie $k$ jest liczbą całkowitą). Podstaw to wyrażenie do wyjściowego równania na $n$.",
     "Po podstawieniu otrzymasz $n = 21 \\cdot 3k$. Wykonaj mnożenie i zastanów się, dlaczego otrzymany wynik gwarantuje podzielność liczby $n$ przez 9."
   ],
   "skills_required": [
