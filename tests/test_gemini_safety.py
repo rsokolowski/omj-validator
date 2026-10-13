@@ -42,14 +42,15 @@ EXPECTED = {
 GRADING_EXPECTED = {
     **EXPECTED,
     types.HarmCategory.HARM_CATEGORY_HARASSMENT: types.HarmBlockThreshold.BLOCK_ONLY_HIGH,
+    types.HarmCategory.HARM_CATEGORY_HATE_SPEECH: types.HarmBlockThreshold.BLOCK_ONLY_HIGH,
 }
 
 
 # ----------------------------------------------------------- safety settings
 
 
-def test_grading_config_blocks_harassment_only_at_high():
-    """Feedback on a student's mistakes is rated LOW harassment; only grading relaxes it."""
+def test_grading_config_blocks_harassment_and_hate_only_at_high():
+    """Feedback on a student's mistakes is rated LOW harassment/hate; only grading relaxes it."""
     assert thresholds(GeminiProvider._config(grading=True)) == GRADING_EXPECTED
 
 

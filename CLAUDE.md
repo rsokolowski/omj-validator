@@ -374,7 +374,7 @@ GET  /uploads/{path}                 # Serve uploaded images
    `build_provider()` (A/B, rescore) never fail over.
 
    **Safeguards**: Gemini gets `safety_settings` on every call (harassment, hate, sexual: LOW+;
-   dangerous: MEDIUM+; grading calls block harassment only at HIGH - feedback on mistakes rates LOW); a prompt-level `block_reason` or a safety `finish_reason` is
+   dangerous: MEDIUM+; grading calls block harassment and hate only at HIGH - feedback on mistakes rates LOW); a prompt-level `block_reason` or a safety `finish_reason` is
    `AIContentBlockedError`. Student text in prompts is fenced (`student_text()` `<<<NONCE ...
    NONCE>>>`, `<rozwiazanie_ucznia_NONCE>`) with a random per-request suffix, and look-alikes
    of a fence (any case/spacing, HTML entities, fullwidth, diacritics, zero-width) are removed
