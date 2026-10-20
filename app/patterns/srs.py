@@ -100,17 +100,35 @@ class PracticeCandidate:
     title: str
     difficulty: Optional[int]
     last_attempt: Optional[datetime]
+    # A drill exercise generated for this pattern (a private task)
+    exercise: bool = False
 
 
-def choose_practice(candidates: list[PracticeCandidate], now: datetime) -> Optional[PracticeCandidate]:
-    """The task to offer: never attempted first, else the longest ago."""
+# Up to this level drills come before OMJ tasks; above it, the real problems first
+EXERCISES_FIRST_MAX_LEVEL = 2
+
+
+def _rank(candidate: PracticeCandidate, level: int) -> int:
+    if level <= EXERCISES_FIRST_MAX_LEVEL:
+        return 0 if candidate.exercise else 1 if candidate.kind == "omj" else 2
+    return 0 if candidate.kind == "omj" else 1
+
+
+def choose_practice(
+    candidates: list[PracticeCandidate], now: datetime, level: int = MAINTENANCE
+) -> Optional[PracticeCandidate]:
+    """The task to offer: never attempted first, else the longest ago.
+
+    Among fresh tasks, a pattern at ``level`` 1-2 gets its drill exercises
+    first (easiest first); from level 3 on, OMJ tasks come first.
+    """
     cutoff = now - timedelta(days=PRACTICE_COOLDOWN_DAYS)
     eligible = [c for c in candidates if c.last_attempt is None or c.last_attempt < cutoff]
     fresh = [c for c in eligible if c.last_attempt is None]
     if fresh:
         return min(
             fresh,
-            key=lambda c: (c.kind != "omj", c.difficulty if c.difficulty is not None else 99, c.ref),
+            key=lambda c: (_rank(c, level), c.difficulty if c.difficulty is not None else 99, c.ref),
         )
     if eligible:
         return min(eligible, key=lambda c: c.last_attempt)

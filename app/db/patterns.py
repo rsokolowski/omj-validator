@@ -150,6 +150,10 @@ class PatternRepository:
         self.db.refresh(pattern)
         return pattern
 
+    def touch(self, pattern: PatternDB) -> None:
+        pattern.last_activity_at = _now()
+        self.db.commit()
+
     # ------------------------------------------------------------------ links
 
     def add_link(

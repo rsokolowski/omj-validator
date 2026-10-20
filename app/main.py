@@ -315,6 +315,14 @@ app.on_event("startup")(release_interrupted_submissions)
 
 
 @app.on_event("startup")
+def release_interrupted_exercise_batches() -> None:
+    """Fail exercise batches a restart killed (see patterns.exercises)."""
+    from .patterns.exercises import release_interrupted_batches
+
+    release_interrupted_batches()
+
+
+@app.on_event("startup")
 def warm_ai_provider():
     """Initialize AI provider at startup to avoid latency on first request."""
     try:

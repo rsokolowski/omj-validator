@@ -111,11 +111,16 @@ class PrivateTaskRepository:
     def list_for_user(
         self, user_id: str, offset: int = 0, limit: int = 50
     ) -> tuple[list[dict], int]:
-        """The user's tasks, most recently active first, with score summary.
+        """The user's own tasks, most recently active first, with score summary.
+
+        Exercises generated for a pattern are left out - they are listed per
+        pattern (GET /api/patterns/exercises).
 
         Returns ([{"task", "best_score", "attempts"}], total_count).
         """
-        base = self.db.query(PrivateTaskDB).filter(PrivateTaskDB.user_id == user_id)
+        base = self.db.query(PrivateTaskDB).filter(
+            PrivateTaskDB.user_id == user_id, PrivateTaskDB.pattern_id.is_(None)
+        )
         total = base.count()
         tasks = (
             base.order_by(PrivateTaskDB.last_activity_at.desc(), PrivateTaskDB.created_at.desc())

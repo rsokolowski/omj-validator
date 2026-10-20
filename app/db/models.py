@@ -391,6 +391,8 @@ class PrivateTaskDB(Base):
         cascade="all, delete-orphan",
         passive_deletes=True,
     )
+    # The pattern an exercise drills (None for the student's own tasks)
+    pattern = relationship("PatternDB", foreign_keys=[pattern_id])
 
     __table_args__ = (
         Index("ix_private_tasks_user_activity", "user_id", "last_activity_at"),

@@ -33,6 +33,7 @@ from ..db.private_tasks import (
     new_private_task_id,
 )
 from ..db.repositories import SubmissionRepository, ensure_utc
+from ..db.patterns import PatternRepository
 from ..patterns.service import owned_pattern_id
 from ..models import (
     CreatePrivateTasksRequest,
@@ -93,6 +94,14 @@ def serialize_task(task: PrivateTaskDB) -> dict:
         "difficulty": task.difficulty,
         "origin": task.origin,
         "source_images": task.source_images or [],
+        # Drill exercise of a pattern: its level, short answer and pattern
+        "exercise_level": task.exercise_level,
+        "answer": task.answer,
+        "pattern": (
+            {"id": task.pattern.id, "trigger": task.pattern.trigger}
+            if task.pattern_id and task.pattern is not None
+            else None
+        ),
         "hints_count": len(hints),
         "revealed_hints": hints[:revealed],
         "created_at": ensure_utc(task.created_at).isoformat(),
@@ -529,6 +538,8 @@ async def submit_private_solution(
     """
     user_id = await current_member_id(request)
     task = _owned_task(db, task_id, user_id)
+    # An exercise is always practice of its own pattern, wherever it was opened
+    practiced_pattern_id = owned_pattern_id(db, user_id, pattern_id) or task.pattern_id
 
     # Normalise the text and check there is something to grade - before any
     # file is written, so a rejected request leaves nothing to clean up.
@@ -543,7 +554,7 @@ async def submit_private_solution(
         user_id,
         is_allowlisted(request),
         private_task_id=task.id,
-        pattern_id=owned_pattern_id(db, user_id, pattern_id),
+        pattern_id=practiced_pattern_id,
     )
     if limit_error is not None:
         return limit_error
@@ -568,6 +579,9 @@ async def submit_private_solution(
     if upload_error is not None:
         settle_refused_submission(db, submission, upload_error)
         return upload_error
+    if task.pattern is not None:
+        # Drilling keeps the pattern alive for retention, even on a day it is not due
+        PatternRepository(db).touch(task.pattern)
 
     await progress_manager.create_submission(submission_id)
     job = asyncio.create_task(

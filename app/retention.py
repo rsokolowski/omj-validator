@@ -683,11 +683,13 @@ def purge_expired_patterns(
     months: Optional[int] = None,
     dry_run: bool = False,
 ) -> RetentionReport:
-    """Delete patterns idle for the whole period, with their links and reviews.
+    """Delete patterns idle for the whole period, with their links, reviews and exercises.
 
-    "Idle" is last_activity_at, bumped by edits, refine rounds, reviews and
-    practice results, so a pattern the student keeps practising is never lost.
-    Submissions that practised it stay (their pattern_id becomes NULL).
+    "Idle" is last_activity_at, bumped by edits, refine rounds, reviews,
+    practice results and every solution to one of its exercises, so a pattern
+    the student keeps practising is never lost. Submissions that practised it
+    stay (their pattern_id becomes NULL), except those of its exercises, which
+    go with the exercise like any private task's.
     """
     report = RetentionReport(dry_run=dry_run)
     months = settings.retention_pattern_months if months is None else months
@@ -698,9 +700,18 @@ def purge_expired_patterns(
 
     expired = db.query(PatternDB).filter(PatternDB.last_activity_at < cutoff.replace(tzinfo=None)).all()
     report.patterns_deleted = len(expired)
-    if not dry_run:
-        for pattern in expired:
+    for pattern in expired:
+        exercises = db.query(PrivateTaskDB).filter(PrivateTaskDB.pattern_id == pattern.id).all()
+        for task in exercises:
+            # Files first, row second - see purge_expired_submissions
+            delete_private_task_files(task.user_id, task.id, report, dry_run=dry_run)
+            report.submissions_deleted += len(task.submissions)
+            report.private_tasks_deleted += 1
+            if not dry_run:
+                db.delete(task)
+        if not dry_run:
             db.delete(pattern)  # cascade removes links and reviews
+    if not dry_run:
         db.commit()
     return report
 

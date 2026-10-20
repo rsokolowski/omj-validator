@@ -21,6 +21,10 @@ logger = logging.getLogger(__name__)
 KIND_REFINE = "pattern_refine"
 KIND_SUGGEST = "pattern_suggest"
 KIND_LINK = "pattern_link"
+KIND_EXERCISES = "pattern_exercises"
+
+# Drill exercises have a level, not a 1-5 difficulty: easy ones are offered first
+EXERCISE_DIFFICULTY = {"easy": 1, "medium": 2}
 
 PATTERN_ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]{12}$")
 TASK_KEY_PATTERN = re.compile(r"^(\d{4})_(etap[123])_(\d{1,2})$")
@@ -111,9 +115,12 @@ def practice_candidates(db: Session, pattern: PatternDB, user_id: str) -> list[s
             task = db.get(PrivateTaskDB, link.private_task_id)
             if task is None or task.user_id != user_id:
                 continue
+            exercise = task.pattern_id == pattern.id and task.exercise_level is not None
             candidates.append(srs.PracticeCandidate(
                 kind="private", ref=task.id, title=task.title,
-                difficulty=task.difficulty, last_attempt=_naive(private_attempts.get(task.id)),
+                difficulty=EXERCISE_DIFFICULTY.get(task.exercise_level) if exercise else task.difficulty,
+                last_attempt=_naive(private_attempts.get(task.id)),
+                exercise=exercise,
             ))
     return candidates
 

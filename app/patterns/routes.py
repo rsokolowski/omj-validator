@@ -17,7 +17,7 @@ from ..ai import AIContentBlockedError, AIProviderError, create_ai_provider
 from ..auth import current_member_id, is_allowlisted
 from ..config import settings
 from ..db import get_db
-from ..db.models import PatternDB, PatternLinkDB, PrivateTaskDB, SubmissionDB, SubmissionStatus
+from ..db.models import PatternDB, PatternExerciseBatchDB, PatternLinkDB, PrivateTaskDB, SubmissionDB, SubmissionStatus
 from ..db.patterns import PatternRepository
 from ..db.private_tasks import PrivateTaskRepository
 from ..db.repositories import ensure_utc
@@ -38,7 +38,7 @@ from ..models import (
 from ..privacy import mask_user_id
 from ..private_tasks import service as private_service
 from ..skills import get_skill
-from . import linking, service, srs
+from . import exercises, linking, service, srs
 
 logger = logging.getLogger(__name__)
 
@@ -163,9 +163,22 @@ def serialize_link(db: Session, link: PatternLinkDB) -> dict:
     }
 
 
+def exercise_summary(row: dict) -> dict:
+    task: PrivateTaskDB = row["task"]
+    return {
+        "id": task.id,
+        "title": task.title,
+        "exercise_level": task.exercise_level,
+        "best_score": row["best_score"],
+        "attempts": row["attempts"],
+        "created_at": ensure_utc(task.created_at).isoformat(),
+    }
+
+
 def serialize_pattern(db: Session, pattern: PatternDB, *, detail: bool = False) -> dict:
     today = srs.today_warsaw()
-    links = [l for l in pattern.links if l.status != "rejected"]
+    # Exercise links are listed in their own section, not among the linked tasks
+    links = [l for l in pattern.links if l.status != "rejected" and l.origin != exercises.LINK_ORIGIN]
     data = {
         "id": pattern.id,
         "trigger": pattern.trigger,
@@ -188,6 +201,10 @@ def serialize_pattern(db: Session, pattern: PatternDB, *, detail: bool = False) 
     }
     if detail:
         data["links"] = [serialize_link(db, l) for l in links]
+        rows = exercises.exercise_rows(db, pattern.user_id, [pattern.id]).get(pattern.id, [])
+        data["exercises"] = [exercise_summary(row) for row in rows]
+        batch = exercises.latest_batch(db, pattern.id)
+        data["exercise_batch"] = exercises.serialize_batch(batch) if batch is not None else None
         data["refinement"] = list(pattern.refinement or [])
         data["reviews"] = [
             {
@@ -227,6 +244,12 @@ async def create_pattern(request: Request, payload: CreatePatternRequest, db: Se
     )
     if source is not None:
         repo.add_link(pattern, role="source", origin="manual", status="accepted", **source)
+    try:
+        exercises.start_batch(db, pattern, user_id, is_allowlisted(request))
+    except HTTPException as e:
+        # A limit must not cost the student the pattern: it is saved without
+        # exercises, and the page offers to generate them later
+        logger.info(f"Pattern {pattern.id} saved without an exercise batch ({e.status_code})")
     return {"pattern": serialize_pattern(db, pattern, detail=True)}
 
 
@@ -263,10 +286,66 @@ async def review_queue(request: Request, limit: int = 10, db: Session = Depends(
     return {"items": [serialize_pattern(db, p) for p in ordered[:limit]], "due_total": len(due)}
 
 
+# ------------------------------------------------------------------ exercises
+# Fixed paths first: "/exercises" must not be read as a pattern id
+
+
+@router.get("/exercises")
+async def list_exercises(request: Request, db: Session = Depends(get_db)):
+    """The user's exercises grouped by pattern, the newest group first (Moje zadania)."""
+    user_id = await current_member_id(request)
+    groups = exercises.exercise_rows(db, user_id)
+    patterns = {
+        p.id: p for p in db.query(PatternDB).filter(PatternDB.id.in_(list(groups)), PatternDB.user_id == user_id)
+    }
+    result = [
+        {
+            "pattern": {"id": pid, "trigger": patterns[pid].trigger},
+            "exercises": [exercise_summary(row) for row in rows],
+        }
+        for pid, rows in groups.items()
+        if pid in patterns
+    ]
+    result.sort(key=lambda g: max(e["created_at"] for e in g["exercises"]), reverse=True)
+    return {"groups": result}
+
+
+@router.get("/exercise-batches/active")
+async def active_exercise_batches(request: Request, db: Session = Depends(get_db)):
+    """Batches running now or finished in the last minutes and not yet acknowledged."""
+    user_id = await current_member_id(request)
+    return {
+        "batches": [exercises.serialize_batch(b, trigger) for b, trigger in exercises.active_batches(db, user_id)]
+    }
+
+
+@router.post("/exercise-batches/{batch_id}/ack")
+async def acknowledge_exercise_batch(request: Request, batch_id: str, db: Session = Depends(get_db)):
+    """The student saw the "ready" / "failed" popup - it is not shown again."""
+    user_id = await current_member_id(request)
+    batch = db.get(PatternExerciseBatchDB, batch_id) if service.PATTERN_ID_PATTERN.match(batch_id or "") else None
+    if batch is None or batch.user_id != user_id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Nie znaleziono")
+    batch.acknowledged = True
+    db.commit()
+    return {"success": True}
+
+
+@router.post("/{pattern_id}/exercises", status_code=status.HTTP_202_ACCEPTED)
+async def generate_exercises(request: Request, pattern_id: str, db: Session = Depends(get_db)):
+    """Start another batch of exercises (the first one for patterns saved before them)."""
+    user_id = await current_member_id(request)
+    pattern = owned_pattern(db, pattern_id, user_id)
+    batch = exercises.start_batch(db, pattern, user_id, is_allowlisted(request))
+    return {"batch": exercises.serialize_batch(batch, pattern.trigger)}
+
+
 @router.get("/{pattern_id}")
 async def get_pattern(request: Request, pattern_id: str, db: Session = Depends(get_db)):
     user_id = await current_member_id(request)
-    return {"pattern": serialize_pattern(db, owned_pattern(db, pattern_id, user_id), detail=True)}
+    pattern = owned_pattern(db, pattern_id, user_id)
+    exercises.expire_stale(db, user_id=user_id)
+    return {"pattern": serialize_pattern(db, pattern, detail=True)}
 
 
 @router.patch("/{pattern_id}")
@@ -308,8 +387,12 @@ async def update_pattern(
 @router.delete("/{pattern_id}")
 async def delete_pattern(request: Request, pattern_id: str, db: Session = Depends(get_db)):
     user_id = await current_member_id(request)
-    PatternRepository(db).delete(owned_pattern(db, pattern_id, user_id))
-    return {"success": True}
+    pattern = owned_pattern(db, pattern_id, user_id)
+    deleted, files = exercises.delete_exercises(db, pattern)
+    PatternRepository(db).delete(pattern)
+    if deleted:
+        logger.info(f"Deleted pattern {pattern_id} with {deleted} exercises ({files} files)")
+    return {"success": True, "deleted_exercises": deleted}
 
 
 # ---------------------------------------------------------------------- links
@@ -388,7 +471,7 @@ async def practice_task(request: Request, pattern_id: str, db: Session = Depends
     pattern = owned_pattern(db, pattern_id, user_id)
     if not srs.practice_offered(pattern.review_count, pattern.srs_level):
         return {"task": None}
-    chosen = srs.choose_practice(service.practice_candidates(db, pattern, user_id), _now())
+    chosen = srs.choose_practice(service.practice_candidates(db, pattern, user_id), _now(), pattern.srs_level)
     if chosen is None:
         return {"task": None}
     if chosen.kind == "omj":
