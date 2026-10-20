@@ -354,7 +354,8 @@ export interface PrivateTask {
   /** Drill exercise of a pattern: level, short final answer, the pattern */
   exercise_level: ExerciseLevel | null;
   answer: string | null;
-  pattern: { id: string; trigger: string } | null;
+  /** is_due: a solution sent now counts as the pattern's review */
+  pattern: { id: string; trigger: string; is_due: boolean } | null;
   hints_count: number;
   revealed_hints: string[];
   created_at: string;

@@ -21,7 +21,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 from fastapi import HTTPException, status
-from sqlalchemy import func, or_
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from ..ai import AIContentBlockedError, AIProviderError, create_ai_provider
@@ -33,8 +33,6 @@ from ..db.models import (
     PatternExerciseBatchDB,
     PatternLinkDB,
     PrivateTaskDB,
-    SubmissionDB,
-    SubmissionStatus,
 )
 from ..db.private_tasks import PrivateTaskRepository
 from ..models import EXERCISES_PER_BATCH
@@ -55,8 +53,10 @@ STALE_AFTER = timedelta(minutes=10)
 POPUP_WINDOW = timedelta(minutes=10)
 # Batches younger than this at startup may still belong to the old process
 RESTART_GRACE = timedelta(seconds=60)
-# Earlier exercises sent so a new batch does not repeat them
+# Earlier exercises sent so a new batch does not repeat them - shortened: the
+# model only needs to recognise them, and the prompt must not grow per batch
 PREVIOUS_SENT = 30
+PREVIOUS_CHARS = 200
 
 ALREADY_RUNNING = "Ćwiczenia do tego wzorca już się układają. Poczekaj chwilę."
 ERROR_MESSAGES = {
@@ -82,6 +82,11 @@ def spawn(coro) -> None:
 
 def _now() -> datetime:
     return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
+def _shortened(text: str) -> str:
+    text = " ".join(text.split())
+    return text if len(text) <= PREVIOUS_CHARS else text[: PREVIOUS_CHARS - 1] + "…"
 
 
 def _iso(value: Optional[datetime]) -> Optional[str]:
@@ -164,28 +169,9 @@ def exercise_rows(db: Session, user_id: str, pattern_ids: Optional[list[str]] = 
     tasks = query.order_by(PrivateTaskDB.created_at, PrivateTaskDB.id).all()
     if not tasks:
         return {}
-    ids = [t.id for t in tasks]
-    attempts = dict(
-        db.query(SubmissionDB.private_task_id, func.count(SubmissionDB.id))
-        .filter(SubmissionDB.private_task_id.in_(ids))
-        .group_by(SubmissionDB.private_task_id)
-        .all()
-    )
-    best = dict(
-        db.query(SubmissionDB.private_task_id, func.max(SubmissionDB.score))
-        .filter(
-            SubmissionDB.private_task_id.in_(ids),
-            SubmissionDB.status == SubmissionStatus.COMPLETED,
-            SubmissionDB.score.isnot(None),
-        )
-        .group_by(SubmissionDB.private_task_id)
-        .all()
-    )
     groups: dict[str, list[dict]] = {}
-    for task in tasks:
-        groups.setdefault(task.pattern_id, []).append(
-            {"task": task, "best_score": best.get(task.id), "attempts": attempts.get(task.id, 0)}
-        )
+    for row in PrivateTaskRepository(db).with_scores(tasks):
+        groups.setdefault(row["task"].pattern_id, []).append(row)
     return groups
 
 
@@ -234,10 +220,16 @@ def start_batch(db: Session, pattern: PatternDB, user_id: str, is_allowlisted: b
 # ---------------------------------------------------------------- running
 
 
-def _finish(db: Session, batch: PatternExerciseBatchDB, error: str) -> None:
+def _finish(db: Session, batch_id: str, error: str) -> None:
+    """Fail the batch - unless it is gone (pattern deleted) or already settled (expired)."""
+    db.expire_all()
+    batch = db.get(PatternExerciseBatchDB, batch_id)
+    if batch is None or batch.status != RUNNING:
+        logger.info(f"Exercise batch {batch_id}: gone or already settled, '{error}' not recorded")
+        return
     batch.status, batch.error, batch.finished_at = FAILED, error, _now()
     db.commit()
-    logger.info(f"Exercise batch {batch.id} failed: {error}")
+    logger.info(f"Exercise batch {batch_id} failed: {error}")
 
 
 async def run_batch(batch_id: str, usage_id: Optional[int]) -> None:
@@ -249,9 +241,7 @@ async def run_batch(batch_id: str, usage_id: Optional[int]) -> None:
         logger.exception(f"Exercise batch {batch_id} crashed: {type(e).__name__}")
         try:
             db.rollback()
-            batch = db.get(PatternExerciseBatchDB, batch_id)
-            if batch is not None and batch.status == RUNNING:
-                _finish(db, batch, "ai_error")
+            _finish(db, batch_id, "ai_error")
         except Exception:
             db.rollback()
     finally:
@@ -264,10 +254,10 @@ async def _run(db: Session, batch_id: str, usage_id: Optional[int]) -> None:
         return
     pattern = db.get(PatternDB, batch.pattern_id)
     if pattern is None:
-        _finish(db, batch, "pattern_deleted")
+        _finish(db, batch_id, "pattern_deleted")
         return
     previous = [
-        content
+        _shortened(content)
         for (content,) in db.query(PrivateTaskDB.content)
         .filter(PrivateTaskDB.pattern_id == pattern.id, PrivateTaskDB.user_id == batch.user_id)
         .order_by(PrivateTaskDB.created_at.desc())
@@ -275,19 +265,20 @@ async def _run(db: Session, batch_id: str, usage_id: Optional[int]) -> None:
         .all()
     ][::-1]
     pattern_text = {"trigger": pattern.trigger, "action": pattern.action, "example": pattern.example or ""}
+    requested = batch.requested
     usage_row = db.get(AIUsageDB, usage_id) if usage_id is not None else None
     # The model call can take a minute: no transaction stays open meanwhile
     db.commit()
 
     try:
-        result = await create_ai_provider().generate_pattern_exercises(pattern_text, batch.requested, previous)
+        result = await create_ai_provider().generate_pattern_exercises(pattern_text, requested, previous)
     except AIContentBlockedError:
-        _finish(db, batch, "refused")
+        _finish(db, batch_id, "refused")
         return
     except AIProviderError as e:
         private_service.record_failed_call(db, usage_row, e)
         logger.warning(f"Exercise batch {batch_id}: {type(e).__name__}")
-        _finish(db, batch, "ai_error")
+        _finish(db, batch_id, "ai_error")
         return
     if usage_row is not None:
         usage_row.meta = result.meta or None
@@ -295,14 +286,14 @@ async def _run(db: Session, batch_id: str, usage_id: Optional[int]) -> None:
 
     if result.abuse_score >= settings.private_abuse_threshold:
         logger.warning(f"Exercise batch {batch_id}: pattern text flagged as manipulation")
-        _finish(db, batch, "refused")
+        _finish(db, batch_id, "refused")
         return
     if result.off_topic:
-        _finish(db, batch, "off_topic")
+        _finish(db, batch_id, "off_topic")
         return
-    items = result.exercises[: batch.requested]
+    items = result.exercises[:requested]
     if not items:
-        _finish(db, batch, "empty")
+        _finish(db, batch_id, "empty")
         return
 
     # The pattern (and with it this batch) may have been deleted during the call

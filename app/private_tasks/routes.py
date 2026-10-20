@@ -34,7 +34,7 @@ from ..db.private_tasks import (
 )
 from ..db.repositories import SubmissionRepository, ensure_utc
 from ..db.patterns import PatternRepository
-from ..patterns.service import owned_pattern_id
+from ..patterns.service import owned_pattern_id, pattern_is_due
 from ..models import (
     CreatePrivateTasksRequest,
     PrivateTaskInput,
@@ -97,8 +97,9 @@ def serialize_task(task: PrivateTaskDB) -> dict:
         # Drill exercise of a pattern: its level, short answer and pattern
         "exercise_level": task.exercise_level,
         "answer": task.answer,
+        # is_due: a solution sent now counts as the pattern's review
         "pattern": (
-            {"id": task.pattern.id, "trigger": task.pattern.trigger}
+            {"id": task.pattern.id, "trigger": task.pattern.trigger, "is_due": pattern_is_due(task.pattern)}
             if task.pattern_id and task.pattern is not None
             else None
         ),
@@ -434,13 +435,17 @@ async def update_task(
         if meta is not None:
             usage_row.meta = meta.meta or None
             db.commit()
-        refusal = _refusal(meta, need_hints=content_changed)
+        is_exercise = task.exercise_level is not None
+        refusal = _refusal(meta, need_hints=content_changed and not is_exercise)
         if refusal is not None:
             logger.warning(
                 f"Edited private task text refused ({refusal.status_code}) for user {mask_user_id(user_id)}"
             )
             raise refusal
-        if content_changed:
+        if content_changed and is_exercise:
+            # An exercise has no hints, and its answer was for the old statement
+            fields["answer"] = None
+        elif content_changed:
             # The old hints no longer fit the new statement
             fields["hints"] = meta.hints
 
@@ -488,6 +493,8 @@ async def reveal_hint(request: Request, task_id: str, n: int, db: Session = Depe
 async def regenerate_hints(request: Request, task_id: str, db: Session = Depends(get_db)):
     user_id = await current_member_id(request)
     task = _owned_task(db, task_id, user_id)
+    if task.exercise_level is not None:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Ćwiczenie do wzorca nie ma wskazówek.")
     [usage_row] = service.reserve_ai_calls(
         db,
         user_id,
@@ -538,8 +545,11 @@ async def submit_private_solution(
     """
     user_id = await current_member_id(request)
     task = _owned_task(db, task_id, user_id)
-    # An exercise is always practice of its own pattern, wherever it was opened
-    practiced_pattern_id = owned_pattern_id(db, user_id, pattern_id) or task.pattern_id
+    # An exercise is practice of its own pattern when that pattern waits for a
+    # review today; drilling on other days must not move the schedule early
+    practiced_pattern_id = owned_pattern_id(db, user_id, pattern_id)
+    if practiced_pattern_id is None and task.pattern is not None and pattern_is_due(task.pattern):
+        practiced_pattern_id = task.pattern_id
 
     # Normalise the text and check there is something to grade - before any
     # file is written, so a rejected request leaves nothing to clean up.

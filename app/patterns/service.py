@@ -61,6 +61,11 @@ def private_task_text(task: PrivateTaskDB) -> str:
     return f"{task.title}\n\n{task.content}"
 
 
+def pattern_is_due(pattern: PatternDB) -> bool:
+    """Waits for a review today (and is not paused)."""
+    return pattern.archived_at is None and pattern.due_on <= srs.today_warsaw()
+
+
 def owned_pattern_id(db: Session, user_id: str, raw: Optional[str]) -> Optional[str]:
     """``raw`` if it names one of the user's patterns, else None."""
     if not raw or not PATTERN_ID_PATTERN.match(raw):
@@ -98,6 +103,10 @@ def practice_candidates(db: Session, pattern: PatternDB, user_id: str) -> list[s
     """Accepted linked tasks that still exist, with the user's last attempt."""
     omj_attempts = _last_attempts_omj(db, user_id)
     private_attempts = _last_attempts_private(db, user_id)
+    private_ids = [l.private_task_id for l in pattern.links if l.status == "accepted" and l.private_task_id]
+    private_tasks = {
+        t.id: t for t in db.query(PrivateTaskDB).filter(PrivateTaskDB.id.in_(private_ids))
+    } if private_ids else {}
     candidates = []
     for link in pattern.links:
         if link.status != "accepted":
@@ -112,7 +121,7 @@ def practice_candidates(db: Session, pattern: PatternDB, user_id: str) -> list[s
                 difficulty=task.difficulty, last_attempt=_naive(last),
             ))
         else:
-            task = db.get(PrivateTaskDB, link.private_task_id)
+            task = private_tasks.get(link.private_task_id)
             if task is None or task.user_id != user_id:
                 continue
             exercise = task.pattern_id == pattern.id and task.exercise_level is not None

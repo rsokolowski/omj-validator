@@ -170,6 +170,40 @@ class TestRunBatch:
         assert db.query(PrivateTaskDB).filter_by(origin="exercise").count() == 0
         assert db.query(PatternExerciseBatchDB).count() == 0
 
+    def test_error_after_pattern_deleted_is_quiet(self, client, db, provider, _no_background_exercises, caplog):
+        p, _ = created_pattern(client, db)
+
+        def delete_then_fail():
+            client.delete(f"/api/patterns/{p['id']}")
+            provider.error = AIProviderError("down")
+
+        provider.before_return = delete_then_fail
+        run(*_no_background_exercises[0])
+        assert "crashed" not in caplog.text
+        assert db.query(PatternExerciseBatchDB).count() == 0
+
+    def test_expired_batch_is_not_overwritten(self, client, db, provider, _no_background_exercises):
+        p, batch = created_pattern(client, db)
+
+        def expire_then_off_topic():
+            b = db.get(PatternExerciseBatchDB, batch.id)
+            b.status, b.error = "failed", "interrupted"
+            db.commit()
+            provider.result = ExercisesResult(off_topic=True)
+
+        provider.before_return = expire_then_off_topic
+        run(*_no_background_exercises[0])
+        assert batch_of(db, p["id"]).error == "interrupted"
+
+    def test_previous_statements_are_shortened(self, client, db, provider, _no_background_exercises):
+        p, _ = created_pattern(client, db)
+        provider.result = ExercisesResult(exercises=[ExerciseItem(title="Długie", content="x " * 1000)])
+        run(*_no_background_exercises[0])
+        client.post(f"/api/patterns/{p['id']}/exercises")
+        run(*_no_background_exercises[1])
+        [previous] = provider.calls[1][2]
+        assert len(previous) == exercises.PREVIOUS_CHARS
+
     def test_settled_batch_is_not_run_again(self, client, db, provider, _no_background_exercises):
         p, batch = created_pattern(client, db)
         batch.status = "failed"
@@ -243,7 +277,7 @@ class TestApi:
         task = client.get(f"/api/private-tasks/{task_id}").json()["task"]
         assert task["exercise_level"] in ("easy", "medium")
         assert task["answer"].startswith("Odpowiedź")
-        assert task["pattern"] == {"id": p["id"], "trigger": p["trigger"]}
+        assert task["pattern"] == {"id": p["id"], "trigger": p["trigger"], "is_due": False}
         own = client.get(f"/api/private-tasks/{PRIVATE_ID}").json()["task"]
         assert (own["exercise_level"], own["answer"], own["pattern"]) == (None, None, None)
 
@@ -292,25 +326,61 @@ class TestApi:
         assert db.query(PrivateTaskDB).filter(PrivateTaskDB.id.in_(ids)).count() == 0
         assert db.get(PrivateTaskDB, PRIVATE_ID) is not None
 
-    def test_submitting_an_exercise_practises_its_pattern(
-        self, client, db, provider, _no_background_exercises, monkeypatch
+    def test_submitting_an_exercise_practises_its_pattern_when_due(
+        self, client, db, provider, _no_background_exercises, monkeypatch, today, tmp_path
     ):
+        import app.private_tasks.routes as private_routes
+        from app.db.models import SubmissionDB
+
+        async def no_grading(**kwargs):
+            return None
+
+        monkeypatch.setattr(settings, "data_dir", str(tmp_path))
+        monkeypatch.setattr(private_routes, "process_submission_background", no_grading)
         p = create(client)
         run(*_no_background_exercises[0])
-        task = db.query(PrivateTaskDB).filter_by(pattern_id=p["id"]).first()
+        task_id = db.query(PrivateTaskDB).filter_by(pattern_id=p["id"]).first().id
         pattern = db.get(PatternDB, p["id"])
         pattern.last_activity_at = _now() - timedelta(days=100)
         db.commit()
-        captured = {}
+
+        def submit():
+            r = client.post(f"/api/private-tasks/{task_id}/submit", data={"solution_text": "Moje rozwiązanie"})
+            assert r.status_code == 200, r.text
+            db.expire_all()
+            return db.get(SubmissionDB, r.json()["submission_id"])
+
+        # Not due yet (a new pattern is due tomorrow): drilling does not move the schedule...
+        assert submit().pattern_id is None
+        # ...but keeps the pattern alive for retention
+        assert db.get(PatternDB, p["id"]).last_activity_at > _now() - timedelta(minutes=1)
+
+        db.get(PatternDB, p["id"]).due_on = today["today"]
+        db.commit()
+        assert client.get(f"/api/private-tasks/{task_id}").json()["task"]["pattern"]["is_due"] is True
+        assert submit().pattern_id == p["id"]
+
+    def test_exercise_edit_clears_answer_and_adds_no_hints(
+        self, client, db, provider, _no_background_exercises, monkeypatch
+    ):
+        from app.models import PrivateTaskMeta
+
+        class MetaStub:
+            async def generate_private_task_meta(self, title, content):
+                return PrivateTaskMeta(hints=["h1"], is_math_problem=True, abuse_score=0, checked=True)
+
         import app.private_tasks.routes as private_routes
 
-        def fake_reserve(db_, user_id, allowlisted, **kwargs):
-            captured.update(kwargs)
-            return SimpleNamespace(status_code=429), None, None
+        monkeypatch.setattr(private_routes, "create_ai_provider", lambda: MetaStub())
+        p = create(client)
+        run(*_no_background_exercises[0])
+        task_id = db.query(PrivateTaskDB).filter_by(pattern_id=p["id"]).first().id
 
-        monkeypatch.setattr(private_routes, "reserve_submission", fake_reserve)
-        client.post(f"/api/private-tasks/{task.id}/submit", data={"solution_text": "Moje rozwiązanie"})
-        assert captured["pattern_id"] == p["id"]
+        r = client.patch(f"/api/private-tasks/{task_id}", json={"content": "Wymyślona nowa treść: wykaż, że 2 | n(n+1)."})
+        assert r.status_code == 200, r.text
+        task = r.json()["task"]
+        assert task["answer"] is None and task["hints_count"] == 0
+        assert client.post(f"/api/private-tasks/{task_id}/regenerate-hints").status_code == 409
 
 
 class TestPrint:

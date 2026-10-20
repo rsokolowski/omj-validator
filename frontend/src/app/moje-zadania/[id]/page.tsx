@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Box, Chip, Paper, Typography } from "@mui/material";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
@@ -66,8 +67,8 @@ export default async function PrivateTaskPage({ params, searchParams }: PageProp
   }
 
   const { task, submissions, stats } = data;
-  // An exercise always practises its own pattern, wherever it was opened from
-  const practiced = (await getPracticedPattern(wzorzec)) ?? task.pattern;
+  // An exercise practises its own pattern on a day that pattern is due
+  const practiced = (await getPracticedPattern(wzorzec)) ?? (task.pattern?.is_due ? task.pattern : null);
 
   return (
     <Box>
@@ -129,6 +130,18 @@ export default async function PrivateTaskPage({ params, searchParams }: PageProp
       </Paper>
 
       {practiced && <PracticeBanner pattern={practiced} />}
+      {!practiced && task.pattern && (
+        <Paper sx={{ p: 2, mb: 3, bgcolor: "#f8fafc", border: "1px solid #e2e8f0" }} elevation={0}
+          data-testid="exercise-pattern">
+          <Typography variant="body2" component="div" sx={{ "& .math-content": { display: "inline" } }}>
+            Ćwiczenie do wzorca{" "}
+            <Link href={`/wzorce/${task.pattern.id}`} style={{ fontWeight: 600 }}>
+              <MathContent content={task.pattern.trigger} />
+            </Link>
+            . Wzorzec jest tu wskazówką. Powtórką liczy się dopiero w dniu, w którym na nią czeka.
+          </Typography>
+        </Paper>
+      )}
 
       <SubmitSection
         canSubmit

@@ -14,7 +14,7 @@ from ..privacy import mask_user_id
 logger = logging.getLogger(__name__)
 
 # Fields a student may change after creation (PATCH /api/private-tasks/{id})
-EDITABLE_FIELDS = {"title", "content", "source_label", "category", "difficulty", "hints"}
+EDITABLE_FIELDS = {"title", "content", "source_label", "category", "difficulty", "hints", "answer"}
 
 # ai_usage.kind values
 KIND_EXTRACT = "private_extract"
@@ -128,9 +128,12 @@ class PrivateTaskRepository:
             .limit(limit)
             .all()
         )
-        if not tasks:
-            return [], total
+        return self.with_scores(tasks), total
 
+    def with_scores(self, tasks: list[PrivateTaskDB]) -> list[dict]:
+        """[{"task", "best_score", "attempts"}] for ``tasks``, in their order."""
+        if not tasks:
+            return []
         ids = [t.id for t in tasks]
         attempts = dict(
             self.db.query(SubmissionDB.private_task_id, func.count(SubmissionDB.id))
@@ -148,11 +151,10 @@ class PrivateTaskRepository:
             .group_by(SubmissionDB.private_task_id)
             .all()
         )
-        rows = [
+        return [
             {"task": t, "best_score": best.get(t.id), "attempts": attempts.get(t.id, 0)}
             for t in tasks
         ]
-        return rows, total
 
     def update_fields(self, task: PrivateTaskDB, **fields) -> PrivateTaskDB:
         unknown = set(fields) - EDITABLE_FIELDS

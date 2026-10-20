@@ -700,8 +700,13 @@ def purge_expired_patterns(
 
     expired = db.query(PatternDB).filter(PatternDB.last_activity_at < cutoff.replace(tzinfo=None)).all()
     report.patterns_deleted = len(expired)
+    # A dry run deletes nothing, so exercises the private-task pass already
+    # counted would be counted twice
+    task_cutoff = _cutoff_from_months(settings.retention_private_task_months) if dry_run else None
     for pattern in expired:
         exercises = db.query(PrivateTaskDB).filter(PrivateTaskDB.pattern_id == pattern.id).all()
+        if task_cutoff is not None:
+            exercises = [t for t in exercises if t.last_activity_at >= task_cutoff.replace(tzinfo=None)]
         for task in exercises:
             # Files first, row second - see purge_expired_submissions
             delete_private_task_files(task.user_id, task.id, report, dry_run=dry_run)

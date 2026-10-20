@@ -85,7 +85,9 @@ test.describe('Wzorce', () => {
     // 5. Graded practice from the pattern page: 6/6 without hints counts as a review
     await page.getByRole('region', { name: 'Zadania do tego wzorca' })
       .getByRole('link', { name: 'Rozwiąż' }).first().click();
-    await expect(page.getByTestId('practice-banner')).toBeVisible();
+    // Not due today: a link to the wzorzec, not a review
+    await expect(page.getByTestId('exercise-pattern')).toContainText('Iloczyn kolejnych liczb całkowitych');
+    await expect(page.getByTestId('practice-banner')).toHaveCount(0);
     await submitSolution(page);
 
     await page.goto(`/wzorce/${patternId}`);

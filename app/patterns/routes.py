@@ -250,6 +250,11 @@ async def create_pattern(request: Request, payload: CreatePatternRequest, db: Se
         # A limit must not cost the student the pattern: it is saved without
         # exercises, and the page offers to generate them later
         logger.info(f"Pattern {pattern.id} saved without an exercise batch ({e.status_code})")
+    except Exception as e:
+        # Nor may anything else: the pattern is committed, a 500 would make the
+        # student save it again
+        logger.exception(f"Pattern {pattern.id}: exercise batch not started ({type(e).__name__})")
+        db.rollback()
     return {"pattern": serialize_pattern(db, pattern, detail=True)}
 
 

@@ -3,7 +3,8 @@
 import { createContext, useCallback, useContext, useRef, useState } from "react";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
-import { Alert, Button, Snackbar } from "@mui/material";
+import { Alert, Box, Button, Snackbar } from "@mui/material";
+import { MathContent } from "@/components/ui/MathContent";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { patternsApi } from "@/lib/api/patterns";
 import { ExerciseBatch } from "@/lib/types";
@@ -31,12 +32,14 @@ export function exercisesCount(n: number): string {
   return `${n} ${few ? "ćwiczenia" : "ćwiczeń"}`;
 }
 
-/** Popup copy for a finished batch */
-function popupText(batch: ExerciseBatch): string {
-  if (batch.status === "done") {
-    return `Gotowe: ${exercisesCount(batch.created_count)} do wzorca „${batch.trigger ?? ""}”`;
-  }
-  return "Nie udało się ułożyć ćwiczeń. Spróbuj ponownie na stronie wzorca.";
+/** Popup copy for a finished batch (the trigger may hold $LaTeX$) */
+function PopupText({ batch }: { batch: ExerciseBatch }) {
+  if (batch.status !== "done") return <>Nie udało się ułożyć ćwiczeń. Spróbuj ponownie na stronie wzorca.</>;
+  return (
+    <Box component="span" sx={{ "& .math-content": { display: "inline" } }}>
+      Gotowe: {exercisesCount(batch.created_count)} do wzorca „<MathContent content={batch.trigger ?? ""} />”
+    </Box>
+  );
 }
 
 /**
@@ -130,7 +133,7 @@ export function ExerciseBatchProvider({ children }: { children: React.ReactNode 
             }
             sx={{ alignItems: "center" }}
           >
-            {popupText(current)}
+            <PopupText batch={current} />
           </Alert>
         ) : (
           <span />
