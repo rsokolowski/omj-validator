@@ -141,10 +141,12 @@ from .patterns.routes import router as patterns_router  # noqa: E402
 from .patterns import service as pattern_service  # noqa: E402
 from .accounts.routes import router as accounts_router  # noqa: E402
 from .accounts import service as account_service  # noqa: E402
+from .push.routes import router as push_router  # noqa: E402
 
 app.include_router(private_tasks_router)
 app.include_router(patterns_router)
 app.include_router(accounts_router)
+app.include_router(push_router)
 
 # Split deployment: frontend on a different site than the API (explicit
 # opt-in). FRONTEND_URL alone - production sets it for the OAuth callback while
@@ -320,6 +322,45 @@ def release_interrupted_exercise_batches() -> None:
     from .patterns.exercises import release_interrupted_batches
 
     release_interrupted_batches()
+
+
+def _run_pattern_reminders_once() -> None:
+    """One pass of the phone reminders with its own DB session (blocking - run in a thread)."""
+    from .db import SessionLocal
+    from .push.service import run_reminders
+
+    db = SessionLocal()
+    try:
+        run_reminders(db)
+    finally:
+        db.close()
+
+
+@app.on_event("startup")
+async def start_pattern_reminders():
+    """Phone reminders about due patterns (app/push), checked every minute.
+
+    Single worker, like retention; a second worker would not double-send (the
+    day is claimed with a conditional UPDATE) but would waste queries.
+    """
+    from .push.service import enabled
+
+    if not enabled():
+        logger.info("Pattern reminders disabled (no VAPID keys)")
+        return
+
+    async def reminder_loop():
+        await asyncio.sleep(30)
+        while True:
+            try:
+                await asyncio.to_thread(_run_pattern_reminders_once)
+            except Exception as e:
+                logger.warning(f"Pattern reminder run failed: {type(e).__name__}")
+            await asyncio.sleep(60)
+
+    task = asyncio.create_task(reminder_loop())
+    _background_tasks.add(task)
+    task.add_done_callback(_background_tasks.discard)
 
 
 @app.on_event("startup")

@@ -109,6 +109,13 @@ services:
       TRANSLATE_API_KEY: ${TRANSLATE_API_KEY:-}
       TRANSLATE_TIMEOUT: ${TRANSLATE_TIMEOUT:-2.0}
 
+      # Phone reminders about due wzorce (Web Push, app/push) - off without the keys.
+      # Generate once with scripts/generate_vapid_keys.py; rotating them
+      # switches reminders off on every device.
+      VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+      VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:kontakt@omj-validator.pl}
+
       # Telegram notifications (optional)
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
       TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}

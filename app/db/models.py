@@ -113,6 +113,8 @@ class UserDB(Base):
     ai_usage = relationship("AIUsageDB", cascade="all, delete-orphan")
     patterns = relationship("PatternDB", back_populates="user", cascade="all, delete-orphan")
     consents = relationship("ConsentDB", cascade="all, delete-orphan")
+    push_subscriptions = relationship("PushSubscriptionDB", cascade="all, delete-orphan")
+    reminder_settings = relationship("ReminderSettingsDB", cascade="all, delete-orphan")
     # Not deleted with the account: the rows are the per-parent send log and
     # must keep counting for 24 h (user_id becomes NULL, nothing personal is
     # left in them). Retention removes them 30 days after expiry.
@@ -695,6 +697,50 @@ class AdminAccessLogDB(Base):
             f"<AdminAccessLog {self.resource} by {self.admin_email} "
             f"at {self.created_at}>"
         )
+
+
+class PushSubscriptionDB(Base):
+    """One device that accepts Web Push reminders (app/push).
+
+    ``endpoint`` is the push service URL the browser gave us (Apple, FCM,
+    Mozilla, Microsoft - checked on the way in); ``p256dh`` and ``auth`` encrypt
+    the payload for that device only. Deleted on "Wyłącz", with the account,
+    and when the push service answers 404/410.
+    """
+
+    __tablename__ = "push_subscriptions"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(
+        String(255),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    endpoint = Column(Text, nullable=False, unique=True)
+    p256dh = Column(String(255), nullable=False)
+    auth = Column(String(255), nullable=False)
+    created_at = Column(DateTime, nullable=False, default=utc_now)
+    last_success_at = Column(DateTime, nullable=True)
+
+
+class ReminderSettingsDB(Base):
+    """When to remind a user about due patterns. No row = the defaults.
+
+    ``last_run_on`` (Europe/Warsaw day) is claimed before sending, so a user
+    gets at most one reminder a day.
+    """
+
+    __tablename__ = "reminder_settings"
+
+    user_id = Column(
+        String(255),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        primary_key=True,
+    )
+    weekday_time = Column(String(5), nullable=False)  # "HH:MM", Europe/Warsaw
+    weekend_time = Column(String(5), nullable=False)
+    last_run_on = Column(Date, nullable=True)
 
 
 class AppSettingDB(Base):

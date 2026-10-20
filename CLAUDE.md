@@ -106,6 +106,7 @@ omj-validator/
 │   ├── private_tasks/      # "Moje zadania": router (routes.py) + files/limits (service.py)
 │   ├── patterns/           # "Wzorce": routes, service, srs.py (scheduling), linking.py,
 │   │                       # exercises.py (background drill-exercise batches)
+│   ├── push/               # Phone reminders about due patterns: Web Push (VAPID), daily run, /api/push
 │   ├── db/                 # Database layer
 │   │   ├── session.py      # SQLAlchemy engine, get_db dependency
 │   │   ├── models.py       # ORM: UserDB, SubmissionDB, PrivateTaskDB, AIUsageDB, ...
@@ -247,6 +248,13 @@ GET    /api/patterns/exercises               # Exercises grouped by pattern (Moj
 GET    /api/patterns/exercise-batches/active # Running + finished-unacknowledged batches (header spinner, popup)
 POST   /api/patterns/exercise-batches/{id}/ack
 
+# Phone reminders about due patterns (app/push) - off (enabled=false, 503) without VAPID keys
+GET    /api/push/config                      # {enabled, public_key, weekday_time, weekend_time, devices}
+POST   /api/push/subscriptions               # Browser PushSubscription JSON; endpoint must be a known push service
+POST   /api/push/subscriptions/delete        # {endpoint} - own device only
+PUT    /api/push/settings                    # {weekday_time, weekend_time} "HH:MM", 06:00-21:00, 5-min steps
+POST   /api/push/test                        # Sample notification to own devices (30 s cooldown)
+
 # Admin (ADMIN_EMAILS only)
 GET    /api/admin/ai-config                  # Active provider/model, catalog, per-provider key/approval state, failover/breaker
 PUT    /api/admin/ai-config                  # Switch provider/model (pings the model first; 502 if it fails)
@@ -299,6 +307,9 @@ GET  /uploads/{path}                 # Serve uploaded images
 - `pattern_exercise_batches` - One background generation of drill exercises (running / done /
   failed); the exercises themselves are `private_tasks` rows with `pattern_id`, `exercise_level`
   (`easy`/`medium`) and `answer`, excluded from `GET /api/private-tasks`, deleted with the pattern.
+- `push_subscriptions`, `reminder_settings` - Devices with phone reminders on (endpoint + keys,
+  deleted on "Wyłącz", 404/410 from the push service, and with the account) and per-user
+  reminder times + `last_run_on` (no row = 16:30 weekdays / 10:00 weekends).
 
 **Local**: PostgreSQL 16 via Docker on port 5433 (`postgresql://omj:omj@localhost:5433/omj`)
 
@@ -423,6 +434,15 @@ GET  /uploads/{path}                 # Serve uploaded images
    The frontend `ExerciseBatchProvider` (root layout) polls the active batches while one runs:
    header spinner, then a popup. A batch running > 10 min, or found at startup, is failed.
 
+   **Reminders ("Przypomnienia na telefonie")**: the site is installable (`app/manifest.ts`,
+   `public/sw.js` - push + notification click only, no fetch handler/caching); on iPhone Web
+   Push works only from the Home Screen app. `ReminderCard` on `/wzorce` subscribes the device.
+   An in-process loop (`app/main.py`, every 60 s) runs `app/push/service.py::run_reminders`: past
+   the user's slot (Europe/Warsaw) and before 21:00, once a day (`last_run_on` claimed with a
+   conditional UPDATE), and only when a pattern is due - "N wzorce czekają na powtórkę" + the first
+   trigger, tap opens `/wzorce/powtorka`. Payloads are encrypted end to end (pywebpush); the
+   server POSTs only to allowlisted push-service hosts (SSRF).
+
 6. **LaTeX Rendering**: Frontend uses KaTeX via `MathContent` component, which HTML-escapes
    all non-math text (private task statements are user/AI controlled). `npm test` covers it.
    The typed-solution editor (`SolutionTextEditor`) previews through the same component with `indexMath` for click-to-edit; MathLive and Excalidraw fonts are copied into `frontend/public/{mathlive,excalidraw}` (git-ignored) by `frontend/scripts/copy-editor-assets.mjs` on install/dev/build - nothing is fetched from a CDN.
@@ -493,6 +513,12 @@ RETENTION_AUTO_PURGE=true             # Daily in-app run (single-worker only)
 
 # Typed solutions: cap in code points, mirrored in frontend/src/lib/utils/constants.ts
 # SUBMISSION_TEXT_MAX_CHARS=20000
+
+# Phone reminders (Web Push). Off unless both keys are set; generate with
+# scripts/generate_vapid_keys.py. Dev compose reads DEV_VAPID_* instead (never the prod pair).
+# VAPID_PUBLIC_KEY=...
+# VAPID_PRIVATE_KEY=...
+# VAPID_SUBJECT=mailto:kontakt@omj-validator.pl
 
 # AI - the active provider/model is chosen at runtime in /admin/settings (app_settings);
 # the env below is only the default until an admin saves a choice.

@@ -18,7 +18,7 @@ const RETENTION_ADMIN_AUDIT = "12 miesięcy";
 
 // Zmieniajac tekst, zmien tez TERMS_VERSION w app/config.py (data zapisywana
 // przy kazdej zgodzie) - obie wartosci opisuja te sama wersje dokumentu.
-const LAST_UPDATED = "13 października 2026";
+const LAST_UPDATED = "20 października 2026";
 // Konto czekajace na zgode rodzica - app/accounts/service.py PENDING_TTL
 const PENDING_DAYS = 14;
 
@@ -501,6 +501,15 @@ export default function RegulaminPage() {
             w punkcie 7.
           </Typography>
           <Typography paragraph>
+            <strong>Przypomnienia na telefonie (jeśli je włączysz):</strong>{" "}
+            adres, pod który przeglądarka albo telefon przyjmuje powiadomienia
+            (wydany przez usługę powiadomień producenta, np. Apple albo Google),
+            klucze do szyfrowania powiadomień, wybrane godziny przypomnień i
+            dzień ostatniego przypomnienia. Usuwamy je, gdy wyłączysz
+            przypomnienia na danym urządzeniu, gdy usługa powiadomień zgłosi, że
+            adres jest już nieaktualny, i razem z kontem.
+          </Typography>
+          <Typography paragraph>
             <strong>To, co jest na zdjęciu kartki.</strong> To najważniejsze
             zdanie w tym punkcie: na fotografii znajduje się wszystko, co
             jest napisane na kartce i co znalazło się w kadrze. Dlatego:
@@ -699,6 +708,17 @@ export default function RegulaminPage() {
             ich reklamodawcom, nie korzystamy z zewnętrznej analityki ani
             mechanizmów śledzących. Inne osoby korzystające z serwisu nie widzą
             Twoich prac ani wyników.
+          </Typography>
+          <Typography paragraph>
+            <strong>Usługi powiadomień.</strong> Jeśli włączysz przypomnienia na
+            telefonie, wysyłamy je przez usługę powiadomień, którą wybiera
+            producent Twojego telefonu albo przeglądarki (Apple, Google, Mozilla
+            albo Microsoft; także poza Unią Europejską). Treść przypomnienia
+            &ndash; liczba wzorców do powtórki i początek jednego z nich &ndash;
+            jest <strong>zaszyfrowana</strong> tak, że może ją odczytać tylko
+            Twoje urządzenie; usługa widzi jedynie, że do tego urządzenia idzie
+            wiadomość. Przypomnienie pojawia się na ekranie blokady, więc może je
+            zobaczyć osoba, która spojrzy na telefon.
           </Typography>
           <Typography paragraph>
             <strong>Dostęp administratora.</strong> Administrator serwisu ma

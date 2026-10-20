@@ -10,10 +10,14 @@ const nextConfig: NextConfig = {
   // it: never send their URL to anyone in a Referer (the pages also set
   // <meta name="referrer" content="no-referrer">)
   async headers() {
-    return ["/rodzic", "/rodzic/:path*", "/reset-hasla/:path*"].map((source) => ({
-      source,
-      headers: [{ key: "Referrer-Policy", value: "no-referrer" }],
-    }));
+    return [
+      ...["/rodzic", "/rodzic/:path*", "/reset-hasla/:path*"].map((source) => ({
+        source,
+        headers: [{ key: "Referrer-Policy", value: "no-referrer" }],
+      })),
+      // The service worker (reminders) must never be served stale from a cache
+      { source: "/sw.js", headers: [{ key: "Cache-Control", value: "no-cache, no-store, must-revalidate" }] },
+    ];
   },
   // Proxy API requests to FastAPI backend
   // Use fallback so Next.js API routes and pages are checked first

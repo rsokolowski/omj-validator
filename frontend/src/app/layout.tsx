@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { TimerProvider } from "@/lib/contexts/TimerContext";
@@ -43,6 +43,13 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  // Installed on the iPhone home screen it opens without Safari's bars
+  // (needed there for the reminders, see app/manifest.ts)
+  appleWebApp: {
+    capable: true,
+    title: APP_NAME,
+    statusBarStyle: "default",
+  },
   keywords: [
     "olimpiada matematyczna juniorów",
     "OMJ",
@@ -53,6 +60,10 @@ export const metadata: Metadata = {
     "zadania z matematyki",
     "konkurs matematyczny",
   ],
+};
+
+export const viewport: Viewport = {
+  themeColor: "#2563eb",
 };
 
 export default function RootLayout({

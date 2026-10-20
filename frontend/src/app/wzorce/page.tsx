@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Alert, Box, Button, Paper, Typography } from "@mui/material";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { PatternCard } from "@/components/patterns/PatternCard";
+import { ReminderCard } from "@/components/push/ReminderCard";
 import { APIError, serverFetch } from "@/lib/api/server";
 import { Pattern, PatternQueue } from "@/lib/types";
 
@@ -84,6 +85,8 @@ export default async function PatternsPage({ searchParams }: PageProps) {
           ))}
         </Box>
       )}
+
+      {!archived && <ReminderCard />}
     </Box>
   );
 }

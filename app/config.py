@@ -124,6 +124,14 @@ class Settings(BaseSettings):
     telegram_bot_token: Optional[str] = None
     telegram_chat_id: Optional[str] = None
 
+    # Web Push reminders about due patterns (app/push). Off unless both keys are
+    # set: VAPID_PUBLIC_KEY = applicationServerKey (base64url, uncompressed P-256
+    # point), VAPID_PRIVATE_KEY = raw 32-byte key (base64url). Generate with
+    # scripts/generate_vapid_keys.py. Changing the keys invalidates every device.
+    vapid_public_key: Optional[str] = None
+    vapid_private_key: Optional[str] = None
+    vapid_subject: str = "mailto:kontakt@omj-validator.pl"
+
     # App Configuration
     upload_max_size_mb: int = 10
     # Typed solutions ("solution_text" form field): cap in Unicode code points,
