@@ -1253,18 +1253,23 @@ async def reset_user_submissions(
 
 @app.post("/api/test/reset-user-patterns")
 async def reset_user_patterns(request: Request, db: Session = Depends(get_db)):
-    """Delete all of the current user's patterns (E2E_MODE only)."""
+    """Delete all of the current user's patterns, their exercises and exercise quota (E2E_MODE only)."""
     if not settings.e2e_mode:
         raise HTTPException(status_code=404, detail="Not found")
     user = get_current_user(request)
     if not user or not user.get("user_id"):
         raise HTTPException(status_code=401, detail="Authentication required")
 
-    from .db.models import PatternDB
+    from .db.models import AIUsageDB, PatternDB
+    from .patterns.exercises import delete_exercises
+    from .patterns.service import KIND_EXERCISES
 
     patterns = db.query(PatternDB).filter(PatternDB.user_id == user["user_id"]).all()
     for pattern in patterns:
+        delete_exercises(db, pattern)
         db.delete(pattern)
+    # Every test saves patterns, and each save starts an exercise batch
+    db.query(AIUsageDB).filter(AIUsageDB.user_id == user["user_id"], AIUsageDB.kind == KIND_EXERCISES).delete()
     db.commit()
     return {"success": True, "deleted_count": len(patterns)}
 

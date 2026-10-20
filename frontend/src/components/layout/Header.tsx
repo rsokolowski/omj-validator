@@ -15,11 +15,13 @@ import {
   Container,
   Badge,
   ButtonBase,
+  CircularProgress,
 } from "@mui/material";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { LogoutForm } from "@/components/auth/LogoutForm";
 import { APP_NAME } from "@/lib/utils/constants";
 import { patternsApi } from "@/lib/api/patterns";
+import { useExerciseBatches } from "@/components/patterns/ExerciseBatchProvider";
 
 /** Number of patterns due today - refreshed on every navigation. */
 function usePatternsDue(enabled: boolean): number {
@@ -44,6 +46,7 @@ function usePatternsDue(enabled: boolean): number {
 export function Header() {
   const { user, isAuthenticated, isGroupMember, isAdmin, isLoading } = useAuth();
   const patternsDue = usePatternsDue(isAuthenticated && isGroupMember);
+  const { running: exerciseBatches } = useExerciseBatches();
 
   return (
     <AppBar
@@ -178,6 +181,20 @@ export function Header() {
                     Wzorce
                   </Typography>
                 </Badge>
+              </Link>
+            )}
+
+            {/* Exercises being generated in the background */}
+            {exerciseBatches.length > 0 && (
+              <Link
+                href={`/wzorce/${exerciseBatches[0].pattern_id}`}
+                style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 6 }}
+                aria-label="Układam ćwiczenia do wzorca"
+              >
+                <CircularProgress size={14} thickness={5} aria-hidden />
+                <Typography component="span" sx={{ fontSize: "0.875rem", color: "primary.main" }}>
+                  Ćwiczenia…
+                </Typography>
               </Link>
             )}
 

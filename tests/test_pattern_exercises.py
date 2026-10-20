@@ -313,6 +313,19 @@ class TestApi:
         assert captured["pattern_id"] == p["id"]
 
 
+class TestPrint:
+    def test_print_has_statements_and_answers(self, client, db, provider, _no_background_exercises, current_user):
+        p = create(client)
+        run(*_no_background_exercises[0])
+        data = client.get(f"/api/patterns/{p['id']}/exercises/print").json()
+        assert data["pattern"]["trigger"] == p["trigger"]
+        assert len(data["exercises"]) == 5
+        assert data["exercises"][0]["content"].startswith("Wymyślona treść")
+        assert data["exercises"][0]["answer"] == "Odpowiedź 0"
+        current_user["id"] = OTHER_USER_ID
+        assert client.get(f"/api/patterns/{p['id']}/exercises/print").status_code == 404
+
+
 class TestPractice:
     def test_low_level_offers_an_easy_exercise_first(self, client, db, provider, _no_background_exercises, today):
         p = create(client)

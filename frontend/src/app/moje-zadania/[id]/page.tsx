@@ -13,6 +13,8 @@ import { PrivateTaskActions } from "@/components/private-tasks/PrivateTaskAction
 import { SourcePhotos } from "@/components/private-tasks/SourcePhotos";
 import { PracticeBanner } from "@/components/patterns/PracticeBanner";
 import { SavePatternBox } from "@/components/patterns/SavePatternBox";
+import { ExerciseLevelChip } from "@/components/patterns/ExerciseList";
+import { ExerciseAnswer } from "@/components/patterns/ExerciseAnswer";
 import { APIError, serverFetch } from "@/lib/api/server";
 import { Pattern, PrivateTaskDetailResponse } from "@/lib/types";
 
@@ -64,7 +66,8 @@ export default async function PrivateTaskPage({ params, searchParams }: PageProp
   }
 
   const { task, submissions, stats } = data;
-  const practiced = await getPracticedPattern(wzorzec);
+  // An exercise always practises its own pattern, wherever it was opened from
+  const practiced = (await getPracticedPattern(wzorzec)) ?? task.pattern;
 
   return (
     <Box>
@@ -81,11 +84,18 @@ export default async function PrivateTaskPage({ params, searchParams }: PageProp
             {task.category && <CategoryBadge category={task.category} />}
           </Box>
         </Box>
-        <Chip
-          label="Zadanie prywatne · ocena bez oficjalnego rozwiązania"
-          size="small"
-          sx={{ bgcolor: "#eef2ff", color: "#3730a3", border: "1px solid #c7d2fe", mb: 2 }}
-        />
+        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", alignItems: "center", mb: 2 }}>
+          <Chip
+            label={
+              task.exercise_level
+                ? "Ćwiczenie do wzorca · ocena bez oficjalnego rozwiązania"
+                : "Zadanie prywatne · ocena bez oficjalnego rozwiązania"
+            }
+            size="small"
+            sx={{ bgcolor: "#eef2ff", color: "#3730a3", border: "1px solid #c7d2fe" }}
+          />
+          <ExerciseLevelChip level={task.exercise_level} />
+        </Box>
         <PrivateTaskActions task={task} />
       </Box>
 
@@ -98,6 +108,7 @@ export default async function PrivateTaskPage({ params, searchParams }: PageProp
         )}
         <MathContent content={task.content} className="text-gray-800" />
         <SourcePhotos photos={task.source_images} />
+        {task.answer && <ExerciseAnswer answer={task.answer} />}
       </Paper>
 
       {task.hints_count > 0 && (
@@ -128,10 +139,13 @@ export default async function PrivateTaskPage({ params, searchParams }: PageProp
         patternId={practiced?.id}
       />
 
-      <SavePatternBox
-        source={{ private_task_id: task.id }}
-        latestSubmissionId={submissions.find((s) => s.status === "completed")?.id ?? null}
-      />
+      {/* An exercise already belongs to its pattern (banner above) */}
+      {!task.exercise_level && (
+        <SavePatternBox
+          source={{ private_task_id: task.id }}
+          latestSubmissionId={submissions.find((s) => s.status === "completed")?.id ?? null}
+        />
+      )}
 
       {submissions.length > 0 && (
         <SubmissionHistory submissions={submissions} totalCount={stats.submission_count} />

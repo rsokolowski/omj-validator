@@ -104,7 +104,8 @@ omj-validator/
 │   ├── rate_limits.py      # Rolling 24h limits (submissions; AI calls via ai_usage)
 │   ├── retention.py        # Data retention + account erasure (RODO)
 │   ├── private_tasks/      # "Moje zadania": router (routes.py) + files/limits (service.py)
-│   ├── patterns/           # "Wzorce": routes, service, srs.py (scheduling), linking.py
+│   ├── patterns/           # "Wzorce": routes, service, srs.py (scheduling), linking.py,
+│   │                       # exercises.py (background drill-exercise batches)
 │   ├── db/                 # Database layer
 │   │   ├── session.py      # SQLAlchemy engine, get_db dependency
 │   │   ├── models.py       # ORM: UserDB, SubmissionDB, PrivateTaskDB, AIUsageDB, ...
@@ -240,6 +241,11 @@ POST   /api/patterns/{id}/suggest-links      # AI picks OMJ tasks from server-ch
 POST   /api/patterns/{id}/links              # Link a task by hand; PATCH/DELETE .../links/{link_id}
 POST   /api/patterns/{id}/review             # Self-rated recall card (409 unless due)
 GET    /api/patterns/{id}/practice           # Linked task to solve instead of a recall card
+POST   /api/patterns/{id}/exercises          # Start a batch of 5 drill exercises (202; 409 while one runs)
+GET    /api/patterns/{id}/exercises/print    # Statements + answers for the printable sheet
+GET    /api/patterns/exercises               # Exercises grouped by pattern (Moje zadania)
+GET    /api/patterns/exercise-batches/active # Running + finished-unacknowledged batches (header spinner, popup)
+POST   /api/patterns/exercise-batches/{id}/ack
 
 # Admin (ADMIN_EMAILS only)
 GET    /api/admin/ai-config                  # Active provider/model, catalog, per-provider key/approval state, failover/breaker
@@ -290,6 +296,9 @@ GET  /uploads/{path}                 # Serve uploaded images
 - `patterns`, `pattern_links`, `pattern_reviews` - Student-written problem-solving patterns
   ("Wzorce") with spaced repetition, linked tasks and a review log; owner-only.
   `submissions.pattern_id` (SET NULL) marks a solution submitted as practice of a pattern.
+- `pattern_exercise_batches` - One background generation of drill exercises (running / done /
+  failed); the exercises themselves are `private_tasks` rows with `pattern_id`, `exercise_level`
+  (`easy`/`medium`) and `answer`, excluded from `GET /api/private-tasks`, deleted with the pattern.
 
 **Local**: PostgreSQL 16 via Docker on port 5433 (`postgresql://omj:omj@localhost:5433/omj`)
 
@@ -404,6 +413,16 @@ GET  /uploads/{path}                 # Serve uploaded images
    worker. Scheduling is pure (`app/patterns/srs.py`): levels 1-3 with intervals (1,4),
    (7,14), (30,90) days, then 180-day maintenance.
 
+   **Exercises ("Ćwiczenia do wzorca")**: saving a pattern starts a background batch
+   (`app/patterns/exercises.py`, in-process asyncio task with its own session) - one
+   `generate_pattern_exercises` call writes 5 short drills (2 łatwe, 3 średnie, short answers,
+   no hints), saved as private tasks (`origin="exercise"`) + `pattern_links` (origin `exercise`,
+   hidden from the linked-task list). "Wygeneruj 5 kolejnych" sends the earlier statements so
+   they are not repeated. A submission to an exercise always practises its pattern and bumps
+   its `last_activity_at`; practice offers exercises first at levels 1-2, OMJ tasks from level 3.
+   The frontend `ExerciseBatchProvider` (root layout) polls the active batches while one runs:
+   header spinner, then a popup. A batch running > 10 min, or found at startup, is failed.
+
 6. **LaTeX Rendering**: Frontend uses KaTeX via `MathContent` component, which HTML-escapes
    all non-math text (private task statements are user/AI controlled). `npm test` covers it.
    The typed-solution editor (`SolutionTextEditor`) previews through the same component with `indexMath` for click-to-edit; MathLive and Excalidraw fonts are copied into `frontend/public/{mathlive,excalidraw}` (git-ignored) by `frontend/scripts/copy-editor-assets.mjs` on install/dev/build - nothing is fetched from a CDN.
@@ -470,6 +489,7 @@ RETENTION_AUTO_PURGE=true             # Daily in-app run (single-worker only)
 # RATE_LIMIT_PATTERN_REFINES_PER_USER_PER_DAY=30
 # RATE_LIMIT_PATTERN_SUGGESTS_PER_USER_PER_DAY=10
 # RATE_LIMIT_PATTERN_LINKS_PER_USER_PER_DAY=10
+# RATE_LIMIT_PATTERN_EXERCISES_PER_USER_PER_DAY=6   # exercise batches (5 exercises each)
 
 # Typed solutions: cap in code points, mirrored in frontend/src/lib/utils/constants.ts
 # SUBMISSION_TEXT_MAX_CHARS=20000

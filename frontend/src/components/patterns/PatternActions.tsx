@@ -132,6 +132,8 @@ export function PatternActions({ pattern }: { pattern: PatternDetail }) {
         <DialogContent>
           <DialogContentText>
             Wzorzec zniknie razem z historią powtórek i listą zadań. Twoje rozwiązania zadań zostaną.
+            {pattern.exercises.length > 0 &&
+              ` Usunięte zostaną też ćwiczenia do tego wzorca (${pattern.exercises.length}) razem z rozwiązaniami.`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

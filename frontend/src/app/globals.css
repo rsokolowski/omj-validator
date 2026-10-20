@@ -141,3 +141,17 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+/* Printing (e.g. the exercise sheet): page content only */
+@media print {
+  .MuiAppBar-root,
+  footer,
+  .skip-link,
+  .no-print {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+  }
+}

@@ -116,6 +116,46 @@ test.describe('Wzorce', () => {
     await expect(history).toContainText('Zadanie · Pamiętam · Poziom 1');
   });
 
+  test('saving a pattern generates exercises in the background', async ({ page }) => {
+    // Created through the API, then the page is opened - the batch is already running
+    const created = await page.request.post('/api/patterns', {
+      data: { trigger: 'Iloczyn kolejnych liczb całkowitych', action: 'Jedna z nich jest parzysta', category: 'teoria_liczb' },
+    });
+    expect(created.status()).toBe(201);
+    const id = (await created.json()).pattern.id as string;
+    await page.goto(`/wzorce/${id}`);
+
+    // The popup appears on its own once the fake model has answered
+    const popup = page.getByRole('alert').filter({ hasText: 'Gotowe: 5 ćwiczeń do wzorca' });
+    await expect(popup).toBeVisible({ timeout: 30000 });
+    const section = page.getByRole('region', { name: 'Ćwiczenia' });
+    const list = section.getByTestId('exercise-list');
+    await expect(list.getByRole('listitem')).toHaveCount(5, { timeout: 15000 });
+    await expect(list).toContainText('łatwe');
+    await expect(list).toContainText('średnie');
+    await expect(section.getByRole('button', { name: 'Wygeneruj 5 kolejnych' })).toBeEnabled();
+
+    // Moje zadania: a collapsed group, not mixed with the student's own tasks
+    await page.goto('/moje-zadania');
+    const group = page.getByRole('button', { name: /Ćwiczenia: Iloczyn kolejnych liczb całkowitych/ });
+    await expect(group).toHaveAttribute('aria-expanded', 'false');
+    await expect(group).toContainText('0/5 rozwiązane');
+    await group.click();
+    await page.getByRole('link', { name: 'Dwie kolejne liczby' }).click();
+
+    // The exercise page: label, answer behind a button, no hint generation
+    await expect(page.getByText('Ćwiczenie do wzorca · ocena bez oficjalnego rozwiązania')).toBeVisible();
+    await expect(page.getByTestId('practice-banner')).toBeVisible();
+    await expect(page.getByRole('button', { name: /wskazówki/ })).toHaveCount(0);
+    await page.getByRole('button', { name: 'Pokaż odpowiedź' }).click();
+    await expect(page.getByTestId('exercise-answer')).toContainText('Jedna z dwóch kolejnych liczb jest parzysta.');
+
+    // The printable sheet ends with the answers
+    await page.goto(`/wzorce/${id}/cwiczenia/druk`);
+    await expect(page.getByRole('heading', { name: /Ćwiczenia:/ })).toBeVisible();
+    await expect(page.getByRole('region', { name: 'Odpowiedzi' }).getByRole('listitem')).toHaveCount(5);
+  });
+
   test('another user cannot open the pattern', async ({ page, context }) => {
     const created = await page.request.post('/api/patterns', {
       data: { trigger: 'Wyzwalacz do testu dostępu', action: 'Akcja do testu dostępu' },

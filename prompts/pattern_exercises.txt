@@ -19,6 +19,10 @@ zanim spotka go w trudnym zadaniu olimpijskim.
   sformułowana inaczej, ale nadal wystarcza ten jeden pomysł.
 - Ćwiczenia są różne od siebie i od ćwiczeń, które uczeń już ma (lista poniżej):
   inne liczby to za mało, zmieniaj sytuację lub kontekst.
+- Każde twierdzenie w ćwiczeniu musi być PRAWDZIWE. Zanim dodasz ćwiczenie,
+  najpierw je rozwiąż i sprawdź na kilku konkretnych liczbach lub przypadkach (także
+  brzegowych). Jeśli wynik nie zgadza się z treścią albo nie masz pewności -
+  odrzuć to ćwiczenie i ułóż inne. Lepiej prostsze niż błędne.
 - Układaj WŁASNE ćwiczenia. Nie przepisuj zadań z zawodów ani ze zbiorów.
 - Poziom: uczeń klasy 7-8 szkoły podstawowej. Polecenie jasne i kompletne,
   np. "Udowodnij, że...", "Oblicz...", "Czy można...? Uzasadnij.".

@@ -3,8 +3,9 @@ import { redirect } from "next/navigation";
 import { Alert, Box, Button, Paper, Typography } from "@mui/material";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { PrivateTaskCard } from "@/components/private-tasks/PrivateTaskCard";
+import { ExerciseGroups } from "@/components/patterns/ExerciseGroups";
 import { APIError, serverFetch } from "@/lib/api/server";
-import { PrivateTaskListResponse } from "@/lib/types";
+import { ExerciseGroup, PrivateTaskListResponse } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -15,8 +16,12 @@ export const metadata: Metadata = {
 
 export default async function MyTasksPage() {
   let data: PrivateTaskListResponse;
+  let groups: ExerciseGroup[];
   try {
-    data = await serverFetch<PrivateTaskListResponse>("/api/private-tasks?limit=100");
+    [data, { groups }] = await Promise.all([
+      serverFetch<PrivateTaskListResponse>("/api/private-tasks?limit=100"),
+      serverFetch<{ groups: ExerciseGroup[] }>("/api/patterns/exercises"),
+    ]);
   } catch (error) {
     if (error instanceof APIError && error.status === 401) {
       redirect("/login?next=/moje-zadania");
@@ -47,7 +52,7 @@ export default async function MyTasksPage() {
         </Button>
       </Box>
 
-      {data.tasks.length === 0 ? (
+      {data.tasks.length === 0 && groups.length === 0 ? (
         <Paper sx={{ p: 4, textAlign: "center" }}>
           <Typography sx={{ color: "grey.700", mb: 1 }}>Nie masz jeszcze żadnych własnych zadań.</Typography>
           <Typography variant="body2" sx={{ color: "grey.600" }}>
@@ -55,7 +60,7 @@ export default async function MyTasksPage() {
             tak jak zadania z OMJ.
           </Typography>
         </Paper>
-      ) : (
+      ) : data.tasks.length === 0 ? null : (
         <Box
           component="section"
           aria-label="Lista moich zadań"
@@ -71,6 +76,8 @@ export default async function MyTasksPage() {
           Pokazano {data.tasks.length} z {data.total_count} zadań.
         </Typography>
       )}
+
+      <ExerciseGroups groups={groups} />
     </Box>
   );
 }

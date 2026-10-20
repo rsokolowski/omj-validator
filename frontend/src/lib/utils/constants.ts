@@ -307,6 +307,12 @@ export const PATTERN_LEVEL_NAMES: Record<number, string> = {
   4: "Utrwalony",
 };
 
+/** Labels of the drill exercises generated for a pattern */
+export const EXERCISE_LEVEL_LABELS: Record<string, string> = {
+  easy: "łatwe",
+  medium: "średnie",
+};
+
 export const PATTERN_VERDICTS: Record<string, { label: string; color: "success" | "warning" | "error" | "info" }> = {
   ok: { label: "Dobry", color: "success" },
   za_ogolny: { label: "Za ogólny", color: "warning" },

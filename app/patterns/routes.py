@@ -340,6 +340,27 @@ async def generate_exercises(request: Request, pattern_id: str, db: Session = De
     return {"batch": exercises.serialize_batch(batch, pattern.trigger)}
 
 
+@router.get("/{pattern_id}/exercises/print")
+async def exercises_for_print(request: Request, pattern_id: str, db: Session = Depends(get_db)):
+    """Full statements and answers of the pattern's exercises, for the printable sheet."""
+    user_id = await current_member_id(request)
+    pattern = owned_pattern(db, pattern_id, user_id)
+    rows = exercises.exercise_rows(db, user_id, [pattern.id]).get(pattern.id, [])
+    return {
+        "pattern": {"id": pattern.id, "trigger": pattern.trigger, "action": pattern.action},
+        "exercises": [
+            {
+                "id": row["task"].id,
+                "title": row["task"].title,
+                "content": row["task"].content,
+                "exercise_level": row["task"].exercise_level,
+                "answer": row["task"].answer,
+            }
+            for row in rows
+        ],
+    }
+
+
 @router.get("/{pattern_id}")
 async def get_pattern(request: Request, pattern_id: str, db: Session = Depends(get_db)):
     user_id = await current_member_id(request)

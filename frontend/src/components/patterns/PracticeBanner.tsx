@@ -4,7 +4,7 @@ import { MathContent } from "@/components/ui/MathContent";
 import { Pattern } from "@/lib/types";
 
 /** Shown on a task page opened from a pattern card ("Rozwiąż zadanie"). */
-export function PracticeBanner({ pattern }: { pattern: Pattern }) {
+export function PracticeBanner({ pattern }: { pattern: Pick<Pattern, "id" | "trigger"> }) {
   return (
     <Paper sx={{ p: 2, mb: 3, bgcolor: "#eff6ff", border: "1px solid #bfdbfe" }} elevation={0}
       data-testid="practice-banner">

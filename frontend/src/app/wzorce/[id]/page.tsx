@@ -6,6 +6,7 @@ import { MathContent } from "@/components/ui/MathContent";
 import { CategoryBadge } from "@/components/ui/CategoryBadge";
 import { PatternActions } from "@/components/patterns/PatternActions";
 import { PatternLinks } from "@/components/patterns/PatternLinks";
+import { ExercisesSection } from "@/components/patterns/ExercisesSection";
 import { formatDay } from "@/components/patterns/formatDay";
 import { APIError, serverFetch } from "@/lib/api/server";
 import { PatternDetail } from "@/lib/types";
@@ -77,6 +78,8 @@ export default async function PatternPage({ params, searchParams }: PageProps) {
       </Paper>
 
       <PatternActions key={`${pattern.trigger}|${pattern.action}|${pattern.archived}`} pattern={pattern} />
+
+      <ExercisesSection patternId={pattern.id} exercises={pattern.exercises} batch={pattern.exercise_batch} />
 
       <PatternLinks patternId={pattern.id} initialLinks={pattern.links} autoSuggest={nowy === "1"} />
 

@@ -1,6 +1,8 @@
 // Patterns (Wzorce) API - thin wrappers over fetchAPI
 import { fetchAPI } from "./client";
 import {
+  ExerciseBatch,
+  ExerciseGroup,
   Pattern,
   PatternDetail,
   PatternDraft,
@@ -93,6 +95,19 @@ export const patternsApi = {
 
   practice: (id: string) =>
     fetchAPI<{ task: PracticeTask | null }>(`/api/patterns/${encodeURIComponent(id)}/practice`),
+
+  generateExercises: (id: string) =>
+    fetchAPI<{ batch: ExerciseBatch }>(`/api/patterns/${encodeURIComponent(id)}/exercises`, json("POST")),
+
+  exerciseGroups: () => fetchAPI<{ groups: ExerciseGroup[] }>("/api/patterns/exercises"),
+
+  activeExerciseBatches: () => fetchAPI<{ batches: ExerciseBatch[] }>("/api/patterns/exercise-batches/active"),
+
+  acknowledgeExerciseBatch: (batchId: string) =>
+    fetchAPI<{ success: boolean }>(
+      `/api/patterns/exercise-batches/${encodeURIComponent(batchId)}/ack`,
+      json("POST")
+    ),
 };
 
 export function emptyDraft(): PatternDraft {

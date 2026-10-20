@@ -89,3 +89,6 @@ temp/
 /create_tasks.py
 /generate_task_index.py
 /populate_prerequisites.py
+
+# Brainstorming companion mockups
+/.superpowers/
