@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any, Callable, Optional, Protocol, runtime_checkable
 
 from ..models import (
+    ExercisesResult,
     LinkResult,
     PrivateExtractionResult,
     PrivateTaskMeta,
@@ -97,6 +98,10 @@ class AIProvider(Protocol):
 
     async def link_pattern_tasks(self, pattern: dict, candidates: list[dict]) -> LinkResult:
         """Pick the candidate OMJ tasks that exercise a pattern."""
+        ...
+
+    async def generate_pattern_exercises(self, pattern: dict, count: int, previous: list[str]) -> ExercisesResult:
+        """``count`` drill exercises for a pattern, unlike the ``previous`` statements."""
         ...
 
     def get_timeout(self) -> int:

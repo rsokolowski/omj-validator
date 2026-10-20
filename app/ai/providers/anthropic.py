@@ -35,6 +35,7 @@ from PIL import Image, ImageOps
 
 from ...config import settings
 from ...models import (
+    ExercisesResult,
     LinkResult,
     PrivateExtractionResult,
     PrivateTaskMeta,
@@ -68,9 +69,11 @@ from ..messages import (
 from ..models_catalog import estimate_cost, get_model
 from ..parsing import parse_ai_response
 from ..pattern_parsing import (
+    PATTERN_EXERCISES_SCHEMA,
     PATTERN_LINK_SCHEMA,
     PATTERN_REFINE_SCHEMA,
     PATTERN_SUGGEST_SCHEMA,
+    parse_exercises_response,
     parse_link_response,
     parse_refine_response,
     parse_suggest_response,
@@ -158,6 +161,7 @@ META_SCHEMA_STRICT = _strict(META_SCHEMA)
 REFINE_SCHEMA_STRICT = _strict(PATTERN_REFINE_SCHEMA)
 SUGGEST_SCHEMA_STRICT = _strict(PATTERN_SUGGEST_SCHEMA)
 LINK_SCHEMA_STRICT = _strict(PATTERN_LINK_SCHEMA)
+EXERCISES_SCHEMA_STRICT = _strict(PATTERN_EXERCISES_SCHEMA)
 
 
 # ------------------------------------------------------------------ blocks
@@ -759,5 +763,13 @@ class AnthropicProvider:
         prompt = ai_requests.link_text(pattern, candidates)
         text, meta = await self._create_json([_text_block(prompt)], LINK_SCHEMA_STRICT, "Claude Link")
         result = parse_link_response(text, {c["task_key"] for c in candidates})
+        result.meta = meta
+        return result
+
+    async def generate_pattern_exercises(self, pattern: dict, count: int, previous: list[str]) -> ExercisesResult:
+        """``count`` drill exercises for a pattern, unlike the ``previous`` statements."""
+        prompt = ai_requests.exercises_text(pattern, count, previous)
+        text, meta = await self._create_json([_text_block(prompt)], EXERCISES_SCHEMA_STRICT, "Claude Exercises")
+        result = parse_exercises_response(text)
         result.meta = meta
         return result

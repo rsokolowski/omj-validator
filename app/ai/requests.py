@@ -200,3 +200,14 @@ def link_text(pattern: dict, candidates: list[dict]) -> str:
         f"## Wzorzec ucznia\n{student_text(draft_text(pattern))}\n\n"
         f"## Kandydaci\n" + "\n".join(_candidate_lines(candidates)) + "\n"
     )
+
+
+def exercises_text(pattern: dict, count: int, previous: list[str]) -> str:
+    """Request for ``count`` drill exercises on a pattern, unlike the ``previous`` ones."""
+    earlier = "\n\n".join(f"{i}. {text}" for i, text in enumerate(previous, 1))
+    return (
+        f"{load_private_prompt('pattern_exercises')}\n\n"
+        f"## Liczba ćwiczeń\n{count}\n\n"
+        f"## Wzorzec ucznia\n{student_text(draft_text(pattern))}\n\n"
+        f"## Ćwiczenia, które uczeń już ma (nie powtarzaj ich)\n{student_text(earlier or None)}\n"
+    )

@@ -11,9 +11,11 @@ from types import SimpleNamespace
 import pytest
 
 from app.ai.pattern_parsing import (
+    PATTERN_EXERCISES_SCHEMA,
     PATTERN_LINK_SCHEMA,
     PATTERN_REFINE_SCHEMA,
     PATTERN_SUGGEST_SCHEMA,
+    parse_exercises_response,
     parse_link_response,
     parse_refine_response,
     parse_suggest_response,
@@ -183,6 +185,48 @@ class TestLinkParsing:
         assert len(result.links[0].reason) == 300
 
 
+def exercise(title="Dwie kolejne", content="Udowodnij, że $n(n+1)$ jest parzyste.", level="easy", answer="Tak"):
+    return {"title": title, "content": content, "level": level, "answer": answer}
+
+
+class TestParseExercises:
+    def test_valid(self):
+        result = parse_exercises_response(json.dumps({
+            "off_topic": False, "abuse_score": 3,
+            "exercises": [exercise(), exercise(title="Trzy", content="Wykaż, że $6 | n^3-n$.", level="medium")],
+        }))
+        assert [(e.title, e.level) for e in result.exercises] == [("Dwie kolejne", "easy"), ("Trzy", "medium")]
+        assert result.exercises[0].answer == "Tak"
+        assert (result.off_topic, result.abuse_score) == (False, 3)
+
+    def test_drops_invalid_and_duplicates(self):
+        result = parse_exercises_response(json.dumps({
+            "off_topic": False, "abuse_score": 0,
+            "exercises": [
+                exercise(), exercise(title="Kopia", content="  udowodnij, że $n(n+1)$   jest parzyste. "),
+                exercise(title=""), exercise(content=""), "x", exercise(title="Inne", content="Oblicz $2+2$.", level="hard"),
+            ],
+        }))
+        assert [e.title for e in result.exercises] == ["Dwie kolejne", "Inne"]
+        assert result.exercises[1].level == "medium"
+
+    def test_clamps_lengths_and_count(self):
+        result = parse_exercises_response(json.dumps({
+            "off_topic": False, "abuse_score": 0,
+            "exercises": [exercise(title="t" * 300, content=f"Zadanie {i} " + "x" * 5000, answer="a" * 900)
+                          for i in range(15)],
+        }))
+        assert len(result.exercises) == 10
+        assert len(result.exercises[0].title) == 120
+        assert len(result.exercises[0].content) == 4000
+        assert len(result.exercises[0].answer) == 500
+
+    def test_off_topic_and_unreadable(self):
+        assert parse_exercises_response(json.dumps({"off_topic": True, "exercises": [], "abuse_score": 0})).off_topic
+        result = parse_exercises_response("not json")
+        assert result.exercises == [] and not result.off_topic
+
+
 class TestPrompts:
     def test_all_prompt_files_present(self):
         assert validate_prompts() == []
@@ -191,10 +235,11 @@ class TestPrompts:
         assert "variants" in load_private_prompt("pattern_refine")
         assert "suggestions" in load_private_prompt("pattern_suggest")
         assert "links" in load_private_prompt("pattern_link")
+        assert "exercises" in load_private_prompt("pattern_exercises")
 
     def test_schemas_do_not_collide_with_private_task_routing(self):
         # e2e/fake-gemini tells calls apart by these property names
-        for schema in (PATTERN_REFINE_SCHEMA, PATTERN_SUGGEST_SCHEMA, PATTERN_LINK_SCHEMA):
+        for schema in (PATTERN_REFINE_SCHEMA, PATTERN_SUGGEST_SCHEMA, PATTERN_LINK_SCHEMA, PATTERN_EXERCISES_SCHEMA):
             properties = json.dumps(schema)
             assert '"hints"' not in properties
             assert "is_math_problem" not in properties
@@ -281,3 +326,23 @@ class TestGeminiRequests:
         call = fake.calls[0]
         assert call["config"].response_json_schema == PATTERN_LINK_SCHEMA
         assert "2023_etap2_3" in call["contents"][0]
+
+    def test_exercises_fence_pattern_and_previous(self, provider):
+        fake = _FakeModels(json.dumps({"off_topic": False, "exercises": [exercise()], "abuse_score": 0}))
+        provider._client = SimpleNamespace(models=fake)
+
+        result = asyncio.run(provider.generate_pattern_exercises(
+            {"trigger": "Kolejne liczby", "action": "Szukaj parzystej", "example": ""},
+            5,
+            ["Wcześniejsze ćwiczenie o sumie."],
+        ))
+
+        assert [e.title for e in result.exercises] == ["Dwie kolejne"]
+        call = fake.calls[0]
+        assert call["config"].response_json_schema == PATTERN_EXERCISES_SCHEMA
+        prompt = call["contents"][0]
+        assert "## Liczba ćwiczeń\n5" in prompt
+        assert "Wyzwalacz: Kolejne liczby" in prompt
+        assert "1. Wcześniejsze ćwiczenie o sumie." in prompt
+        # Pattern text and earlier exercises are both fenced (+1: the rule naming the fence)
+        assert prompt.count("<<<") == 3

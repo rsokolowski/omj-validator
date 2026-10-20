@@ -748,6 +748,29 @@ PATTERN_SUGGEST_RESPONSE = {
     "abuse_score": 0,
 }
 
+# Drill exercises for a pattern: two easy, three medium. Invented problems.
+PATTERN_EXERCISES_RESPONSE = {
+    "off_topic": False,
+    "exercises": [
+        {"title": "Dwie kolejne liczby", "level": "easy",
+         "content": "Udowodnij, że iloczyn $n(n+1)$ jest parzysty dla każdej liczby całkowitej $n$.",
+         "answer": "Jedna z dwóch kolejnych liczb jest parzysta."},
+        {"title": "Suma dwóch kolejnych", "level": "easy",
+         "content": "Czy suma dwóch kolejnych liczb całkowitych może być parzysta? Uzasadnij.",
+         "answer": "Nie - $n + (n+1) = 2n+1$."},
+        {"title": "Trzy kolejne liczby", "level": "medium",
+         "content": "Udowodnij, że $n^3 - n$ dzieli się przez $6$ dla każdej liczby całkowitej $n$.",
+         "answer": "$n^3-n=(n-1)n(n+1)$."},
+        {"title": "Kwadrat i liczba", "level": "medium",
+         "content": "Udowodnij, że $n^2 + n + 1$ jest nieparzyste dla każdej liczby całkowitej $n$.",
+         "answer": "$n^2+n=n(n+1)$ jest parzyste."},
+        {"title": "Cztery kolejne", "level": "medium",
+         "content": "Udowodnij, że iloczyn czterech kolejnych liczb całkowitych dzieli się przez $8$.",
+         "answer": "Wśród nich są dwie parzyste, w tym jedna podzielna przez $4$."},
+    ],
+    "abuse_score": 0,
+}
+
 TASK_KEY_RE = re.compile(r"\d{4}_etap[123]_\d{1,2}")
 
 
@@ -761,6 +784,8 @@ def pattern_link_response(body: dict) -> dict:
 def private_call_kind(body: dict) -> Optional[str]:
     """'extract' / 'meta' / pattern_* for schema-constrained calls, None for grading."""
     config = json.dumps(body.get("generationConfig") or body.get("generation_config") or {})
+    if '"exercises"' in config:
+        return "pattern_exercises"
     if '"variants"' in config:
         return "pattern_refine"
     if '"suggestions"' in config:
@@ -802,6 +827,8 @@ async def generate_content(model: str, request: Request):
             payload = PATTERN_SUGGEST_RESPONSE
         elif kind == "pattern_link":
             payload = pattern_link_response(body)
+        elif kind == "pattern_exercises":
+            payload = PATTERN_EXERCISES_RESPONSE
         else:
             payload = PRIVATE_META_RESPONSE
         logger.info(f"generateContent: model={model}, private call={kind}")

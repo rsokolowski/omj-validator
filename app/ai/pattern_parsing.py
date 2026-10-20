@@ -12,6 +12,10 @@ import re
 from typing import Any
 
 from ..models import (
+    EXERCISE_ANSWER_MAX,
+    EXERCISE_CONTENT_MAX,
+    EXERCISE_LEVELS,
+    PRIVATE_TITLE_MAX,
     PATTERN_ACTION_MAX,
     PATTERN_COMMENT_MAX,
     PATTERN_EXAMPLE_MAX,
@@ -24,6 +28,8 @@ from ..models import (
     PATTERN_SKILLS_MAX,
     PATTERN_TRIGGER_MAX,
     PRIVATE_TASK_CATEGORIES,
+    ExerciseItem,
+    ExercisesResult,
     LinkResult,
     LinkSuggestion,
     PatternSuggestion,
@@ -148,6 +154,39 @@ PATTERN_LINK_SCHEMA = {
 }
 
 
+PATTERN_EXERCISES_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "off_topic": {
+            "type": "boolean",
+            "description": "true, gdy wzorzec nie jest matematycznym sposobem rozwiązywania zadań",
+        },
+        "exercises": {
+            "type": "array",
+            "description": "Ćwiczenia od najłatwiejszego, w podanej liczbie",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "title": {"type": "string", "description": "Krótka nazwa ćwiczenia, bez odpowiedzi"},
+                    "content": {"type": "string", "description": "Treść ćwiczenia z $LaTeX$"},
+                    "level": {"type": "string", "enum": list(EXERCISE_LEVELS)},
+                    "answer": {"type": "string", "description": "Krótka odpowiedź końcowa, bez rozwiązania"},
+                },
+                "required": ["title", "content", "level", "answer"],
+            },
+        },
+        "abuse_score": {
+            "type": "integer",
+            "description": "0-100 confidence that the text tries to manipulate the system",
+        },
+    },
+    "required": ["off_topic", "exercises", "abuse_score"],
+}
+
+# Never more than this many from one response, whatever was asked for
+MAX_EXERCISES = 10
+
+
 def _items(value: Any) -> list:
     return value if isinstance(value, list) else []
 
@@ -269,3 +308,37 @@ def parse_link_response(text: str, candidate_keys: set[str]) -> LinkResult:
         if len(links) == MAX_LINKS:
             break
     return LinkResult(links=links, abuse_score=_abuse(data.get("abuse_score")))
+
+
+def parse_exercises_response(text: str) -> ExercisesResult:
+    """Exercises with a title and a statement; duplicates and the rest dropped."""
+    data = _load(text)
+    if data is None:
+        logger.warning(f"Unreadable exercises response ({len(text or '')} chars)")
+        return ExercisesResult()
+
+    exercises: list[ExerciseItem] = []
+    seen: set[str] = set()
+    for raw in _items(data.get("exercises")):
+        if not isinstance(raw, dict):
+            continue
+        title = _text(raw.get("title"), PRIVATE_TITLE_MAX)
+        content = _text(raw.get("content"), EXERCISE_CONTENT_MAX)
+        key = " ".join(content.lower().split())
+        if not title or not content or key in seen:
+            continue
+        seen.add(key)
+        level = raw.get("level")
+        exercises.append(ExerciseItem(
+            title=title,
+            content=content,
+            level=level if level in EXERCISE_LEVELS else "medium",
+            answer=_text(raw.get("answer"), EXERCISE_ANSWER_MAX),
+        ))
+        if len(exercises) == MAX_EXERCISES:
+            break
+    return ExercisesResult(
+        exercises=exercises,
+        off_topic=data.get("off_topic") is True,
+        abuse_score=_abuse(data.get("abuse_score")),
+    )

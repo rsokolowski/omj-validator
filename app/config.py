@@ -163,6 +163,7 @@ class Settings(BaseSettings):
     rate_limit_pattern_refines_per_user_per_day: int = 30   # Guided refine rounds
     rate_limit_pattern_suggests_per_user_per_day: int = 10  # "Podpowiedz wzorzec"
     rate_limit_pattern_links_per_user_per_day: int = 10     # OMJ task suggestions
+    rate_limit_pattern_exercises_per_user_per_day: int = 6  # Exercise batches (5 each)
 
     # Data retention (RODO art. 5(1)(e) - storage limitation)
     # Submissions belong to children, so nothing may be kept "just in case".

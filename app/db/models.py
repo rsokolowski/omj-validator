@@ -27,6 +27,8 @@ from sqlalchemy import (
     Date,
     SmallInteger,
     UniqueConstraint,
+    Boolean,
+    false as sa_false,
     func,
 )
 from sqlalchemy.orm import relationship
@@ -360,6 +362,19 @@ class PrivateTaskDB(Base):
     # present, is stripped by retention like submissions.scoring_meta.
     extraction_meta = Column(JSON, nullable=True)
 
+    # Drill exercise generated for a pattern ("Ćwiczenia do wzorca"): the
+    # pattern it drills, "easy" | "medium", and a short final answer. NULL for
+    # tasks the student added. Deleting the pattern deletes its exercises in
+    # code (photos too); SET NULL is only the database's fallback.
+    pattern_id = Column(
+        String(12),
+        ForeignKey("patterns.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+    exercise_level = Column(String(8), nullable=True)
+    answer = Column(Text, nullable=True)
+
     created_at = Column(DateTime, nullable=False, default=utc_now)
     updated_at = Column(DateTime, nullable=False, default=utc_now, onupdate=utc_now)
     # Bumped on create, edit and every submission - drives retention
@@ -485,6 +500,43 @@ class PatternDB(Base):
 
     def __repr__(self) -> str:
         return f"<Pattern {self.id}>"
+
+
+class PatternExerciseBatchDB(Base):
+    """One background generation of drill exercises for a pattern.
+
+    ``running`` while the model call is in flight (at most one per pattern),
+    then ``done`` (``created_count`` exercises saved) or ``failed`` with an
+    ``error`` code. ``acknowledged`` once the student saw the "ready" popup.
+    """
+
+    __tablename__ = "pattern_exercise_batches"
+
+    # secrets.token_urlsafe(9) - 12 URL-safe chars
+    id = Column(String(12), primary_key=True)
+    pattern_id = Column(
+        String(12),
+        ForeignKey("patterns.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    user_id = Column(
+        String(255),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    status = Column(String(10), nullable=False)  # "running" | "done" | "failed"
+    requested = Column(Integer, nullable=False)
+    created_count = Column(Integer, nullable=False, default=0, server_default="0")
+    # "off_topic" | "refused" | "empty" | "ai_error" | "interrupted" | "pattern_deleted"
+    error = Column(String(32), nullable=True)
+    acknowledged = Column(Boolean, nullable=False, default=False, server_default=sa_false())
+    created_at = Column(DateTime, nullable=False, default=utc_now)
+    finished_at = Column(DateTime, nullable=True)
+
+    def __repr__(self) -> str:
+        return f"<PatternExerciseBatch {self.id} {self.status}>"
 
 
 class PatternLinkDB(Base):

@@ -14,6 +14,7 @@ from typing import AsyncIterator, Optional, Callable, Any
 
 from ...config import settings
 from ...models import (
+    ExercisesResult,
     LinkResult,
     PrivateExtractionResult,
     PrivateTaskMeta,
@@ -23,9 +24,11 @@ from ...models import (
 )
 from ...skills import get_all_skills
 from ..pattern_parsing import (
+    PATTERN_EXERCISES_SCHEMA,
     PATTERN_LINK_SCHEMA,
     PATTERN_REFINE_SCHEMA,
     PATTERN_SUGGEST_SCHEMA,
+    parse_exercises_response,
     parse_link_response,
     parse_refine_response,
     parse_suggest_response,
@@ -1364,6 +1367,14 @@ class GeminiProvider:
         prompt = ai_requests.link_text(pattern, candidates)
         text, meta = await self._generate_json([prompt], PATTERN_LINK_SCHEMA)
         result = parse_link_response(text, {c["task_key"] for c in candidates})
+        result.meta = meta
+        return result
+
+    async def generate_pattern_exercises(self, pattern: dict, count: int, previous: list[str]) -> ExercisesResult:
+        """``count`` drill exercises for a pattern, unlike the ``previous`` statements."""
+        prompt = ai_requests.exercises_text(pattern, count, previous)
+        text, meta = await self._generate_json([prompt], PATTERN_EXERCISES_SCHEMA)
+        result = parse_exercises_response(text)
         result.meta = meta
         return result
 

@@ -40,6 +40,7 @@ PRIVATE_PROMPT_FILES = {
     "pattern_refine": "pattern_refine.txt",
     "pattern_suggest": "pattern_suggest.txt",
     "pattern_link": "pattern_link.txt",
+    "pattern_exercises": "pattern_exercises.txt",
 }
 
 # Typed solution block. The tags fence student data inside the prompt; the

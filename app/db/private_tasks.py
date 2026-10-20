@@ -58,7 +58,12 @@ class PrivateTaskRepository:
         source_images: Optional[list[str]] = None,
         extraction_meta: Optional[dict] = None,
         task_id: Optional[str] = None,
+        pattern_id: Optional[str] = None,
+        exercise_level: Optional[str] = None,
+        answer: Optional[str] = None,
+        commit: bool = True,
     ) -> PrivateTaskDB:
+        """``commit=False`` adds the row to the session only (a batch saves together)."""
         now = _now()
         task = PrivateTaskDB(
             id=task_id or new_private_task_id(),
@@ -72,11 +77,16 @@ class PrivateTaskRepository:
             source_images=list(source_images or []),
             origin=origin,
             extraction_meta=extraction_meta,
+            pattern_id=pattern_id,
+            exercise_level=exercise_level,
+            answer=answer,
             created_at=now,
             updated_at=now,
             last_activity_at=now,
         )
         self.db.add(task)
+        if not commit:
+            return task
         self.db.commit()
         self.db.refresh(task)
         logger.info(f"Created private task {task.id} for user {mask_user_id(user_id)}")

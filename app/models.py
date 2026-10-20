@@ -557,6 +557,28 @@ class LinkResult(BaseModel):
     meta: dict = {}
 
 
+# Drill exercises for a pattern ("Ćwiczenia do wzorca")
+EXERCISE_LEVELS = ("easy", "medium")
+EXERCISE_CONTENT_MAX = 4000
+EXERCISE_ANSWER_MAX = 500
+EXERCISES_PER_BATCH = 5
+
+
+class ExerciseItem(BaseModel):
+    title: str
+    content: str
+    level: str = "medium"  # "easy" | "medium"
+    answer: str = ""
+
+
+class ExercisesResult(BaseModel):
+    exercises: list[ExerciseItem] = []
+    # The pattern is not a mathematical way of solving problems
+    off_topic: bool = False
+    abuse_score: int = 0
+    meta: dict = {}
+
+
 class PatternDraft(BaseModel):
     """A pattern being written: split into trigger/action, or one free sentence."""
 

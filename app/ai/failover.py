@@ -306,3 +306,6 @@ class FailoverProvider:
 
     async def link_pattern_tasks(self, *args, **kwargs):
         return await self._call("link_pattern_tasks", *args, **kwargs)
+
+    async def generate_pattern_exercises(self, *args, **kwargs):
+        return await self._call("generate_pattern_exercises", *args, **kwargs)

@@ -109,6 +109,9 @@ def build_snapshot(monkeypatch) -> dict[str, list[str]]:
     _call(p.link_pattern_tasks({"trigger": "t", "action": "a"}, [CANDIDATE]))
     out["link_pattern_tasks"] = captured.pop()
 
+    _call(p.generate_pattern_exercises({"trigger": "t", "action": "a"}, 5, ["wcześniejsze"]))
+    out["generate_pattern_exercises"] = captured.pop()
+
     # Non-Gemini-3 path: plain strings stand in for the uploaded files.
     out["omj_grading"] = p._build_content_parts(
         build_prompt("etap2"), ["TASK", "SOL", "IMG1", "IMG2"], 3, True, 2,
