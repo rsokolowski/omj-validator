@@ -720,6 +720,9 @@ class PushSubscriptionDB(Base):
     endpoint = Column(Text, nullable=False, unique=True)
     p256dh = Column(String(255), nullable=False)
     auth = Column(String(255), nullable=False)
+    # users.session_version when the device was switched on: a password reset
+    # (which bumps it) silences devices until they are switched on again
+    session_version = Column(Integer, nullable=False, default=0, server_default="0")
     created_at = Column(DateTime, nullable=False, default=utc_now)
     last_success_at = Column(DateTime, nullable=True)
 

@@ -506,8 +506,9 @@ export default function RegulaminPage() {
             (wydany przez usługę powiadomień producenta, np. Apple albo Google),
             klucze do szyfrowania powiadomień, wybrane godziny przypomnień i
             dzień ostatniego przypomnienia. Usuwamy je, gdy wyłączysz
-            przypomnienia na danym urządzeniu, gdy usługa powiadomień zgłosi, że
-            adres jest już nieaktualny, i razem z kontem.
+            przypomnienia na danym urządzeniu albo się na nim wylogujesz, gdy
+            usługa powiadomień zgłosi, że adres jest już nieaktualny, i razem z
+            kontem.
           </Typography>
           <Typography paragraph>
             <strong>To, co jest na zdjęciu kartki.</strong> To najważniejsze

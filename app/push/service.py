@@ -6,6 +6,8 @@ to the push service. One reminder per user per Europe/Warsaw day, and only
 when something is due.
 """
 
+import base64
+import binascii
 import json
 import logging
 import re
@@ -20,8 +22,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from ..config import settings
-from ..db.models import PushSubscriptionDB, ReminderSettingsDB, utc_now
-from ..db.patterns import PatternRepository
+from ..db.models import PatternDB, PushSubscriptionDB, ReminderSettingsDB, UserDB, UserStatus, utc_now
 from ..patterns import srs
 from ..privacy import mask_user_id
 
@@ -31,15 +32,19 @@ WARSAW = ZoneInfo("Europe/Warsaw")
 
 DEFAULT_WEEKDAY_TIME = "16:30"
 DEFAULT_WEEKEND_TIME = "10:00"
-# A reminder the API missed (restart, outage) is still sent until this hour
-LATEST_SEND = time(21, 0)
+# A reminder the API missed (restart, outage, push service error) is still
+# sent until LATEST_SEND; the latest slot a user may pick is LATEST_SLOT
+LATEST_SLOT = time(21, 0)
+LATEST_SEND = time(21, 30)
 EARLIEST_SLOT = time(6, 0)
 SLOT_STEP_MINUTES = 5
 
 REVIEW_URL = "/wzorce/powtorka"
 TAG = "wzorce-review"
-# A reminder older than this is not worth delivering (phone off all evening)
+# A reminder older than this is not worth delivering (phone off all evening);
+# never kept past QUIET_FROM, so a phone back online at night stays quiet
 TTL_SECONDS = 6 * 60 * 60
+QUIET_FROM = time(22, 0)
 TRIGGER_MAX_CHARS = 80
 MAX_SUBSCRIPTIONS_PER_USER = 10
 
@@ -75,8 +80,20 @@ def valid_endpoint(endpoint: str) -> bool:
     return host in _PUSH_HOSTS or host.endswith(_PUSH_HOST_SUFFIXES)
 
 
-def valid_key(value: str) -> bool:
-    return bool(value) and len(value) <= 255 and bool(_KEY_RE.match(value))
+def _b64url_bytes(value: str) -> Optional[bytes]:
+    if not value or len(value) > 255 or not _KEY_RE.match(value):
+        return None
+    bare = value.rstrip("=")
+    try:
+        return base64.urlsafe_b64decode(bare + "=" * (-len(bare) % 4))
+    except (binascii.Error, ValueError):
+        return None
+
+
+def valid_keys(p256dh: str, auth: str) -> bool:
+    """An uncompressed P-256 point (65 bytes, 0x04...) and a 16-byte auth secret."""
+    point, secret = _b64url_bytes(p256dh), _b64url_bytes(auth)
+    return bool(point) and len(point) == 65 and point[0] == 4 and bool(secret) and len(secret) == 16
 
 
 def parse_slot(value: str) -> Optional[str]:
@@ -85,7 +102,7 @@ def parse_slot(value: str) -> Optional[str]:
     if not match:
         return None
     slot = time(int(match.group(1)), int(match.group(2)))
-    if not (EARLIEST_SLOT <= slot <= LATEST_SEND) or slot.minute % SLOT_STEP_MINUTES:
+    if not (EARLIEST_SLOT <= slot <= LATEST_SLOT) or slot.minute % SLOT_STEP_MINUTES:
         return None
     return value
 
@@ -103,6 +120,12 @@ def should_run(now_local: datetime, weekday_time: str, weekend_time: str, last_r
         return False
     now_time = now_local.time()
     return slot_for(today, weekday_time, weekend_time) <= now_time < LATEST_SEND
+
+
+def ttl_seconds(now_local: datetime) -> int:
+    """TTL_SECONDS, but expiring by QUIET_FROM the same evening."""
+    quiet = datetime.combine(now_local.date(), QUIET_FROM, tzinfo=now_local.tzinfo)
+    return max(60, min(TTL_SECONDS, int((quiet - now_local).total_seconds())))
 
 
 def waiting_phrase(count: int) -> str:
@@ -137,10 +160,20 @@ TEST_PAYLOAD = {
 OK, GONE, FAILED = "ok", "gone", "failed"
 
 
+def _no_redirect_session():
+    """The allowlist checks only the endpoint: a 3xx must not take the server elsewhere."""
+    import requests
+
+    session = requests.Session()
+    session.max_redirects = 0
+    return session
+
+
 def send(subscription: PushSubscriptionDB, payload: dict) -> str:
     """POST one encrypted message to the device's push service (blocking)."""
     from pywebpush import WebPushException, webpush
 
+    session = _no_redirect_session()
     try:
         webpush(
             subscription_info={
@@ -151,8 +184,9 @@ def send(subscription: PushSubscriptionDB, payload: dict) -> str:
             vapid_private_key=settings.vapid_private_key,
             # A fresh dict per call: pywebpush writes "aud" and "exp" into it
             vapid_claims={"sub": settings.vapid_subject},
-            ttl=TTL_SECONDS,
+            ttl=ttl_seconds(datetime.now(WARSAW)),
             timeout=10,
+            requests_session=session,
         )
         return OK
     except WebPushException as e:
@@ -161,9 +195,11 @@ def send(subscription: PushSubscriptionDB, payload: dict) -> str:
             return GONE
         logger.warning(f"Web push failed: HTTP {status_code}")
         return FAILED
-    except Exception as e:
+    except Exception as e:  # includes TooManyRedirects for any 3xx
         logger.warning(f"Web push failed: {type(e).__name__}")
         return FAILED
+    finally:
+        session.close()
 
 
 Sender = Callable[[PushSubscriptionDB, dict], str]
@@ -209,13 +245,30 @@ def save_times(db: Session, user_id: str, weekday_time: str, weekend_time: str) 
     db.commit()
 
 
+class EndpointTaken(Exception):
+    """The endpoint belongs to another account and the keys do not prove it is this device."""
+
+
 def subscribe(db: Session, user_id: str, endpoint: str, p256dh: str, auth: str) -> None:
-    """Store a device; an endpoint known for another account moves here (shared phone)."""
+    """Store a device for the account's current session.
+
+    An endpoint stored for another account moves here only with the same keys
+    - the same browser on a shared phone. Knowing someone's endpoint alone is
+    not enough to take their device over.
+    """
+    user = db.get(UserDB, user_id)
+    session_version = user.session_version if user else 0
     row = db.query(PushSubscriptionDB).filter(PushSubscriptionDB.endpoint == endpoint).first()
     if row:
+        if row.user_id != user_id and (row.p256dh, row.auth) != (p256dh, auth):
+            raise EndpointTaken()
         row.user_id, row.p256dh, row.auth = user_id, p256dh, auth
+        row.session_version = session_version
+        # Re-linked now: must not be the "oldest device" the cap drops below
+        row.created_at = utc_now()
     else:
-        db.add(PushSubscriptionDB(user_id=user_id, endpoint=endpoint, p256dh=p256dh, auth=auth))
+        db.add(PushSubscriptionDB(user_id=user_id, endpoint=endpoint, p256dh=p256dh, auth=auth,
+                                  session_version=session_version))
     db.flush()
     # Old devices beyond the cap go first
     rows = (
@@ -241,6 +294,22 @@ def unsubscribe(db: Session, user_id: str, endpoint: str) -> bool:
 
 def subscriptions_of(db: Session, user_id: str) -> list[PushSubscriptionDB]:
     return db.query(PushSubscriptionDB).filter(PushSubscriptionDB.user_id == user_id).all()
+
+
+def live_subscriptions(db: Session, user: UserDB) -> list[PushSubscriptionDB]:
+    """Devices switched on in the current session; older ones are deleted.
+
+    After a password reset (session_version bumped) a device that was signed
+    in before must not keep receiving the account's pattern triggers.
+    """
+    live = []
+    for subscription in subscriptions_of(db, user.id):
+        if subscription.session_version == user.session_version:
+            live.append(subscription)
+        else:
+            db.delete(subscription)
+    db.commit()
+    return live
 
 
 # ------------------------------------------------------------------ the daily run
@@ -276,27 +345,58 @@ def _claim(db: Session, user_id: str, today: date) -> bool:
         return False
 
 
+def _candidates(db: Session, today: date) -> list[tuple[str, str, str]]:
+    """(user_id, weekday_time, weekend_time) of active users with a device, not run today."""
+    rows = (
+        db.query(UserDB.id, ReminderSettingsDB.weekday_time, ReminderSettingsDB.weekend_time)
+        .join(PushSubscriptionDB, PushSubscriptionDB.user_id == UserDB.id)
+        .outerjoin(ReminderSettingsDB, ReminderSettingsDB.user_id == UserDB.id)
+        # Pending (parent consent) accounts cannot use the app - no reminders either
+        .filter(UserDB.status == UserStatus.ACTIVE)
+        .filter(or_(ReminderSettingsDB.last_run_on.is_(None), ReminderSettingsDB.last_run_on != today))
+        .distinct()
+        .all()
+    )
+    return [(uid, wd or DEFAULT_WEEKDAY_TIME, we or DEFAULT_WEEKEND_TIME) for uid, wd, we in rows]
+
+
+def _due_triggers(db: Session, user_id: str, today: date) -> list[tuple[str, Optional[str]]]:
+    """(trigger, category) of due patterns, most overdue first (as PatternRepository.due)."""
+    return (
+        db.query(PatternDB.trigger, PatternDB.category)
+        .filter(PatternDB.user_id == user_id, PatternDB.archived_at.is_(None), PatternDB.due_on <= today)
+        .order_by(PatternDB.due_on, PatternDB.created_at)
+        .all()
+    )
+
+
+def _release(db: Session, user_id: str) -> None:
+    """Every device failed (push service down): let the next run try again."""
+    db.execute(update(ReminderSettingsDB).where(ReminderSettingsDB.user_id == user_id).values(last_run_on=None))
+    db.commit()
+
+
 def run_reminders(db: Session, now: Optional[datetime] = None, sender: Sender = send) -> int:
     """Send today's reminders that are due by now; returns how many users got one."""
     now_local = (now or datetime.now(WARSAW)).astimezone(WARSAW)
     today = now_local.date()
-    user_ids = [uid for (uid,) in db.query(PushSubscriptionDB.user_id).distinct().all()]
     reminded = 0
-    for user_id in user_ids:
-        times = times_for(db, user_id)
-        if not should_run(now_local, times.weekday_time, times.weekend_time, times.last_run_on):
+    for user_id, weekday_time, weekend_time in _candidates(db, today):
+        if not should_run(now_local, weekday_time, weekend_time, None):
             continue
         if not _claim(db, user_id, today):
             continue
-        due = PatternRepository(db).due(user_id, today)
+        due = _due_triggers(db, user_id, today)
         if not due:
             continue
         # The same pattern the review page opens with
-        first = srs.interleave(due, key=lambda p: p.category)[0]
-        payload = reminder_payload(len(due), first.trigger)
-        counts = deliver(db, subscriptions_of(db, user_id), payload, sender)
+        first = srs.interleave(due, key=lambda row: row[1])[0]
+        payload = reminder_payload(len(due), first[0])
+        counts = deliver(db, live_subscriptions(db, db.get(UserDB, user_id)), payload, sender)
         if counts[OK]:
             reminded += 1
+        elif counts[FAILED]:
+            _release(db, user_id)
         logger.info(
             f"Pattern reminder for {mask_user_id(user_id)}: {len(due)} due, "
             f"sent {counts[OK]}, gone {counts[GONE]}, failed {counts[FAILED]}"

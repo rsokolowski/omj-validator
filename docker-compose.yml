@@ -92,11 +92,11 @@ services:
       TELEGRAM_BOT_TOKEN: ${DEV_TELEGRAM_BOT_TOKEN:-}
       TELEGRAM_CHAT_ID: ${DEV_TELEGRAM_CHAT_ID:-}
 
-      # Phone reminders (Web Push, app/push) - off unless DEV_VAPID_* are set.
-      # Own names, like Telegram: dev must not use the production key pair.
-      # Generate: ./venv/bin/python scripts/generate_vapid_keys.py | sed 's/^/DEV_/' >> .env
-      VAPID_PUBLIC_KEY: ${DEV_VAPID_PUBLIC_KEY:-}
-      VAPID_PRIVATE_KEY: ${DEV_VAPID_PRIVATE_KEY:-}
+      # Phone reminders (Web Push, app/push) - off unless VAPID_* are set in .env.
+      # Use a dev pair (./venv/bin/python scripts/generate_vapid_keys.py >> .env);
+      # the production pair lives only in .env.prod on the server.
+      VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:-}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
 
       # E-mail: console by default - messages and their links go to the API log
       EMAIL_BACKEND: ${EMAIL_BACKEND:-console}

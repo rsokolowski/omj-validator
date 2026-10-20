@@ -473,7 +473,7 @@ EMAIL_BACKEND=console                 # "console" (logs + in-memory outbox) or "
 # EMAIL_FROM=Trener OMJ <noreply@omj-validator.pl>
 # EMAIL_REPLY_TO=kontakt@omj-validator.pl
 # PUBLIC_BASE_URL=https://omj-validator.pl   # absolute links + e-mail logo
-# TERMS_VERSION=2026-10-13            # stored with each consent; bump with LAST_UPDATED in /regulamin
+# TERMS_VERSION=2026-10-20            # stored with each consent; bump with LAST_UPDATED in /regulamin
 
 # Data retention (RODO art. 5(1)(e) - storage limitation)
 # 0 disables a pass; docker-compose.yml disables both for local dev.
@@ -515,7 +515,7 @@ RETENTION_AUTO_PURGE=true             # Daily in-app run (single-worker only)
 # SUBMISSION_TEXT_MAX_CHARS=20000
 
 # Phone reminders (Web Push). Off unless both keys are set; generate with
-# scripts/generate_vapid_keys.py. Dev compose reads DEV_VAPID_* instead (never the prod pair).
+# scripts/generate_vapid_keys.py. Dev uses its own pair; the prod pair is only in .env.prod.
 # VAPID_PUBLIC_KEY=...
 # VAPID_PRIVATE_KEY=...
 # VAPID_SUBJECT=mailto:kontakt@omj-validator.pl

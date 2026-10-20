@@ -28,6 +28,7 @@ def upgrade() -> None:
         sa.Column("endpoint", sa.Text(), nullable=False),
         sa.Column("p256dh", sa.String(length=255), nullable=False),
         sa.Column("auth", sa.String(length=255), nullable=False),
+        sa.Column("session_version", sa.Integer(), nullable=False, server_default="0"),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.Column("last_success_at", sa.DateTime(), nullable=True),
         sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),

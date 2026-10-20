@@ -23,6 +23,8 @@ APPLE = "https://web.push.apple.com/QGx1c3QtYS10ZXN0LXRva2Vu"
 FCM = "https://fcm.googleapis.com/fcm/send/abc123:def"
 KEYS = {"p256dh": "BNcRdreALRFXTkOOUHK1EtK2wtaz5Ry4YfYCA_0QTpQtUbVlUls0VJXg7A8u-Ts1XbjhazAkj7I99e8QcYP7DkM", "auth": "tBHItJI5svbpez7KI4CCXg"}
 
+OTHER_KEYS = {"p256dh": "B" + "A" * 86, "auth": "Q" * 22}
+
 # 2026-10-20 is a Tuesday, 2026-10-24 a Saturday
 TUESDAY = date(2026, 10, 20)
 SATURDAY = date(2026, 10, 24)
@@ -109,8 +111,10 @@ class TestDecisions:
         args = (service.DEFAULT_WEEKDAY_TIME, service.DEFAULT_WEEKEND_TIME, None)
         assert not service.should_run(at(TUESDAY, 16, 29), *args)
         assert service.should_run(at(TUESDAY, 16, 30), *args)
-        assert service.should_run(at(TUESDAY, 20, 59), *args)
-        assert not service.should_run(at(TUESDAY, 21, 0), *args)
+        assert service.should_run(at(TUESDAY, 21, 29), *args)
+        assert not service.should_run(at(TUESDAY, 21, 30), *args)
+        # The latest slot one can pick still fires
+        assert service.should_run(at(TUESDAY, 21, 0), "21:00", "21:00", None)
         assert service.should_run(at(SATURDAY, 10, 0), *args)
         assert not service.should_run(at(SATURDAY, 9, 59), *args)
         assert not service.should_run(at(TUESDAY, 17, 0), "16:30", "10:00", TUESDAY)
@@ -133,7 +137,7 @@ class TestDailyRun:
         add_device(db)
         sender = FakeSender()
         service.run_reminders(db, at(TUESDAY, 16, 0), sender)
-        service.run_reminders(db, at(TUESDAY, 21, 30), sender)
+        service.run_reminders(db, at(TUESDAY, 21, 45), sender)
         assert sender.sent == []
 
     def test_nothing_when_nothing_due(self, db):
@@ -216,8 +220,10 @@ class TestApi:
     def test_rejects_foreign_endpoint_and_bad_keys(self, client, vapid):
         r = client.post("/api/push/subscriptions", json={"endpoint": "https://evil.example/x", "keys": KEYS})
         assert r.status_code == 400
-        r = client.post("/api/push/subscriptions", json={"endpoint": APPLE, "keys": {"p256dh": "a b", "auth": "x"}})
-        assert r.status_code == 400
+        for keys in ({"p256dh": "a b", "auth": "x"}, {"p256dh": "AAAA", "auth": KEYS["auth"]},
+                     {"p256dh": KEYS["p256dh"], "auth": "AAAA"}):
+            r = client.post("/api/push/subscriptions", json={"endpoint": APPLE, "keys": keys})
+            assert r.status_code == 400, keys
 
     def test_rejects_bad_time(self, client, vapid):
         r = client.put("/api/push/settings", json={"weekday_time": "23:00", "weekend_time": "10:00"})
@@ -236,3 +242,58 @@ class TestApi:
         assert client.post("/api/push/test").json() == {"sent": 1, "failed": 0}
         assert sender.sent[0][1] == service.TEST_PAYLOAD
         assert client.post("/api/push/test").status_code == 429
+
+
+class TestSecurityFixes:
+    def test_endpoint_of_another_account_needs_its_keys(self, db):
+        add_device(db, OTHER_USER_ID)
+        with pytest.raises(service.EndpointTaken):
+            service.subscribe(db, USER_ID, APPLE, OTHER_KEYS["p256dh"], OTHER_KEYS["auth"])
+        assert db.query(PushSubscriptionDB).one().user_id == OTHER_USER_ID
+
+    def test_api_answers_409_for_a_foreign_endpoint(self, client, db, vapid):
+        add_device(db, OTHER_USER_ID)
+        r = client.post("/api/push/subscriptions",
+                        json={"endpoint": APPLE, "keys": OTHER_KEYS})
+        assert r.status_code == 409
+
+    def test_password_reset_silences_old_devices(self, db):
+        add_pattern(db)
+        add_device(db)
+        db.get(UserDB, USER_ID).session_version += 1
+        db.commit()
+        sender = FakeSender()
+        service.run_reminders(db, at(TUESDAY, 17, 0), sender)
+        assert sender.sent == [] and db.query(PushSubscriptionDB).count() == 0
+
+    def test_pending_account_gets_nothing(self, db):
+        add_pattern(db)
+        add_device(db)
+        db.get(UserDB, USER_ID).status = "pending_parent"
+        db.commit()
+        sender = FakeSender()
+        service.run_reminders(db, at(TUESDAY, 17, 0), sender)
+        assert sender.sent == []
+
+
+class TestReviewFixes:
+    def test_ttl_ends_before_night(self):
+        assert service.ttl_seconds(at(TUESDAY, 12, 0)) == service.TTL_SECONDS
+        assert service.ttl_seconds(at(TUESDAY, 21, 0)) == 60 * 60
+        assert service.ttl_seconds(at(TUESDAY, 23, 0)) == 60
+
+    def test_all_failed_is_retried_next_run(self, db):
+        add_pattern(db)
+        add_device(db)
+        service.run_reminders(db, at(TUESDAY, 16, 30), FakeSender(service.FAILED))
+        sender = FakeSender()
+        service.run_reminders(db, at(TUESDAY, 16, 31), sender)
+        assert len(sender.sent) == 1
+
+    def test_relinked_device_survives_the_cap(self, db):
+        add_device(db, OTHER_USER_ID, endpoint=f"{FCM}old")
+        for i in range(service.MAX_SUBSCRIPTIONS_PER_USER):
+            add_device(db, endpoint=f"{FCM}{i}")
+        add_device(db, endpoint=f"{FCM}old")  # same keys: the shared phone moves here
+        endpoints = {r.endpoint for r in service.subscriptions_of(db, USER_ID)}
+        assert f"{FCM}old" in endpoints and len(endpoints) == service.MAX_SUBSCRIPTIONS_PER_USER

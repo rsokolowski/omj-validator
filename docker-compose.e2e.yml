@@ -165,7 +165,8 @@ services:
       # (only served with E2E_MODE + console backend + real auth)
       EMAIL_BACKEND: console
       # Web Push reminders (app/push): a throwaway key pair used only by the E2E
-      # stack, so the reminder card is shown. Nothing is ever delivered.
+      # stack, so the reminder card is shown. E2E_MODE keeps the delivery loop off;
+      # only POST /api/push/test would reach a real push service (no spec calls it).
       VAPID_PUBLIC_KEY: BDUnQN_RuP6Ku89jPfSw6eFxRvrLfT3V7se2cCosohevjgf30dCDeZpo_TMh7bFmfgrocFjeMMmf-Nyurti2pxk
       VAPID_PRIVATE_KEY: CgZZNHIXwVVJ7z5icCE2F8AehzuUSZ6u2APxjPSBTM8
       PUBLIC_BASE_URL: "http://localhost:3200"

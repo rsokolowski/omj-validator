@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Alert, Box, Button, CircularProgress, Paper, TextField, Typography } from "@mui/material";
 import { pushApi, PushConfig } from "@/lib/api/push";
+import { currentSubscription } from "@/lib/push/device";
 
 type Device = "loading" | "ios-install" | "unsupported" | "denied" | "off" | "on";
 
@@ -39,11 +40,6 @@ function sameKey(subscription: PushSubscription, publicKey: string): boolean {
   const a = new Uint8Array(current);
   const b = keyBytes(publicKey);
   return a.length === b.length && a.every((v, i) => v === b[i]);
-}
-
-async function currentSubscription(): Promise<PushSubscription | null> {
-  const registration = await navigator.serviceWorker.getRegistration("/");
-  return (await registration?.pushManager.getSubscription()) ?? null;
 }
 
 /** "Przypomnienia na telefonie": turn reminders about due wzorce on/off on this device. */

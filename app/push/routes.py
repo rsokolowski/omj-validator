@@ -9,13 +9,16 @@ from sqlalchemy.orm import Session
 from ..auth import current_member_id
 from ..config import settings
 from ..db import get_db
+from ..db.models import UserDB
 from . import service
 
 router = APIRouter(prefix="/api/push", tags=["push"])
 
 DISABLED = "Przypomnienia na telefonie są wyłączone."
 BAD_ENDPOINT = "Ta przeglądarka używa usługi powiadomień, której nie obsługujemy."
+BAD_KEYS = "Przeglądarka przekazała niepoprawne dane powiadomień. Wyłącz i włącz powiadomienia ponownie."
 BAD_TIME = "Wybierz godzinę między 6:00 a 21:00 (co 5 minut)."
+ENDPOINT_TAKEN = "To urządzenie ma włączone przypomnienia na innym koncie. Wyłącz je tam albo wyłącz i włącz powiadomienia w przeglądarce."
 NO_DEVICE = "Najpierw włącz przypomnienia na tym urządzeniu."
 TEST_TOO_SOON = "Poczekaj chwilę przed kolejnym próbnym powiadomieniem."
 TEST_COOLDOWN_SECONDS = 30
@@ -71,9 +74,12 @@ async def subscribe(request: Request, payload: SubscriptionIn, db: Session = Dep
     _require_enabled()
     if not service.valid_endpoint(payload.endpoint):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, BAD_ENDPOINT)
-    if not (service.valid_key(payload.keys.p256dh) and service.valid_key(payload.keys.auth)):
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, BAD_ENDPOINT)
-    service.subscribe(db, user_id, payload.endpoint, payload.keys.p256dh, payload.keys.auth)
+    if not service.valid_keys(payload.keys.p256dh, payload.keys.auth):
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, BAD_KEYS)
+    try:
+        service.subscribe(db, user_id, payload.endpoint, payload.keys.p256dh, payload.keys.auth)
+    except service.EndpointTaken:
+        raise HTTPException(status.HTTP_409_CONFLICT, ENDPOINT_TAKEN)
     return _config(db, user_id)
 
 
@@ -100,7 +106,8 @@ async def send_test(request: Request, db: Session = Depends(get_db)):
     """A sample notification to every device of this user."""
     user_id = await current_member_id(request)
     _require_enabled()
-    subscriptions = service.subscriptions_of(db, user_id)
+    user = db.get(UserDB, user_id)
+    subscriptions = service.live_subscriptions(db, user) if user else []
     if not subscriptions:
         raise HTTPException(status.HTTP_409_CONFLICT, NO_DEVICE)
     now = monotonic_clock.monotonic()

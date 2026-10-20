@@ -348,6 +348,10 @@ async def start_pattern_reminders():
     if not enabled():
         logger.info("Pattern reminders disabled (no VAPID keys)")
         return
+    if settings.e2e_mode:
+        # The E2E stack has keys (for the UI) but must never call a real push service
+        logger.info("Pattern reminders: no delivery loop in E2E mode")
+        return
 
     async def reminder_loop():
         await asyncio.sleep(30)

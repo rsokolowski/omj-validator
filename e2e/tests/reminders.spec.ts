@@ -3,7 +3,8 @@
  *
  * The E2E API has a throwaway VAPID key pair (docker-compose.e2e.yml). The
  * browser's push service is stubbed: PushManager returns a fake FCM
- * subscription, so nothing leaves the test network. Real delivery is covered
+ * subscription. The API's delivery loop is off in E2E_MODE and no spec sends
+ * a test notification, so nothing is posted to a real push service. Real delivery is covered
  * by app/push unit tests (fake sender) and a manual check on a phone.
  */
 
