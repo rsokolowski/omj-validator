@@ -85,9 +85,7 @@ test.describe('Wzorce', () => {
     // 5. Graded practice from the pattern page: 6/6 without hints counts as a review
     await page.getByRole('region', { name: 'Zadania do tego wzorca' })
       .getByRole('link', { name: 'Rozwiąż' }).first().click();
-    // Not due today: a link to the wzorzec, not a review
-    await expect(page.getByTestId('exercise-pattern')).toContainText('Iloczyn kolejnych liczb całkowitych');
-    await expect(page.getByTestId('practice-banner')).toHaveCount(0);
+    await expect(page.getByTestId('practice-banner')).toBeVisible();
     await submitSolution(page);
 
     await page.goto(`/wzorce/${patternId}`);
@@ -147,7 +145,9 @@ test.describe('Wzorce', () => {
 
     // The exercise page: label, answer behind a button, no hint generation
     await expect(page.getByText('Ćwiczenie do wzorca · ocena bez oficjalnego rozwiązania')).toBeVisible();
-    await expect(page.getByTestId('practice-banner')).toBeVisible();
+    // Not due today: a link to the wzorzec, not a review
+    await expect(page.getByTestId('exercise-pattern')).toContainText('Iloczyn kolejnych liczb całkowitych');
+    await expect(page.getByTestId('practice-banner')).toHaveCount(0);
     await expect(page.getByRole('button', { name: /wskazówki/ })).toHaveCount(0);
     await page.getByRole('button', { name: 'Pokaż odpowiedź' }).click();
     await expect(page.getByTestId('exercise-answer')).toContainText('Jedna z dwóch kolejnych liczb jest parzysta.');
