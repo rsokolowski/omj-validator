@@ -13,7 +13,8 @@ import { SubmitSection } from "@/components/task/SubmitSection";
 import { SubmissionHistory } from "@/components/task/SubmissionHistory";
 import { HintsUsageProvider } from "@/components/task/HintsUsageContext";
 import { SavePatternBox } from "@/components/patterns/SavePatternBox";
-import { serverFetch } from "@/lib/api/server";
+import { notFound } from "next/navigation";
+import { APIError, serverFetch } from "@/lib/api/server";
 import { TaskDetailResponse } from "@/lib/types";
 import { ETAP_NAMES, CONTACT_EMAIL, CATEGORY_NAMES } from "@/lib/utils/constants";
 
@@ -62,7 +63,13 @@ async function getTask(year: string, etap: string, num: string): Promise<TaskDet
 
 export default async function TaskPage({ params }: TaskPageProps) {
   const { year, etap, num } = await params;
-  const data = await getTask(year, etap, num);
+  let data: TaskDetailResponse;
+  try {
+    data = await getTask(year, etap, num);
+  } catch (error) {
+    if (error instanceof APIError && error.status === 404) notFound();
+    throw error;
+  }
   const { task, pdf_links, can_submit, skills_required, skills_gained, prerequisite_statuses, submissions, stats } = data;
 
   const etapName = ETAP_NAMES[etap] || etap;
