@@ -146,9 +146,14 @@ export function ReviewSession() {
 
         {stage === "recall" && (
           <Box>
+            {/* A heading-style label, not a floating one: the outline notch for a floating
+                label did not open on iOS Safari (autoFocus), striking the label through. */}
+            <Typography component="label" htmlFor="recall-text" variant="overline" sx={{ display: "block", color: "grey.600" }}>
+              …to warto spróbować…{" "}
+              <Box component="span" sx={{ textTransform: "none", letterSpacing: "normal" }}>(napisz z pamięci)</Box>
+            </Typography>
             <TextField
               id="recall-text"
-              label="…to warto spróbować… (napisz z pamięci)"
               value={recall}
               onChange={(e) => setRecall(e.target.value)}
               multiline
