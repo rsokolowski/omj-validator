@@ -227,6 +227,34 @@ class TestTopUp:
         assert batches(db, pattern["id"]) == before
 
 
+    def test_recently_failed_batch_is_not_retried(self, client, db, pattern):
+        self._review_n(client, db, pattern["id"], 3)
+        latest = exercises.latest_batch(db, pattern["id"])
+        latest.status, latest.error, latest.finished_at = "failed", "off_topic", _now()
+        db.commit()
+        before = batches(db, pattern["id"])
+        card(client, pattern["id"])
+        assert batches(db, pattern["id"]) == before
+
+    def test_inactive_account_does_not_start_a_batch(self, client, db, pattern, monkeypatch):
+        import app.patterns.routes as pattern_routes
+
+        self._review_n(client, db, pattern["id"], 3)
+        monkeypatch.setattr(pattern_routes, "account_may_write", lambda request: False)
+        before = batches(db, pattern["id"])
+        assert card(client, pattern["id"])["exercise"] is not None
+        assert batches(db, pattern["id"]) == before
+
+
+class TestExerciseAsLink:
+    def test_exercise_cannot_be_a_source_or_link(self, client, db, pattern):
+        ex = exercise_ids(db, pattern["id"])[0]
+        r = client.post("/api/patterns", json={"trigger": "Wyzwalacz testowy", "action": "Akcja testowa",
+                                               "source": {"private_task_id": ex}})
+        assert r.status_code == 404
+        assert client.post(f"/api/patterns/{pattern['id']}/links", json={"private_task_id": ex}).status_code == 404
+
+
 class TestOldSystemHistory:
     def _graded(self, db, task_id, score):
         db.add(SubmissionDB(id=f"s{task_id[-7:]}", user_id=USER_ID, private_task_id=task_id, images=[],

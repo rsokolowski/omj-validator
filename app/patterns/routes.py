@@ -14,10 +14,10 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from ..ai import AIContentBlockedError, AIProviderError, create_ai_provider
-from ..auth import current_member_id, is_allowlisted
+from ..auth import account_block_reason, current_account, current_member_id, is_allowlisted
 from ..config import settings
 from ..db import get_db
-from ..db.models import PatternDB, PatternLinkDB, PrivateTaskDB, SubmissionDB, SubmissionStatus
+from ..db.models import PatternDB, PatternLinkDB, PrivateTaskDB, SubmissionDB, SubmissionStatus, UserDB
 from ..db.patterns import PatternRepository
 from ..db.private_tasks import PrivateTaskRepository
 from ..db.repositories import ensure_utc
@@ -75,7 +75,8 @@ def owned_private_task(db: Session, task_id: Optional[str], user_id: str) -> Pri
     if not private_service.TASK_ID_PATTERN.match(task_id or ""):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=TASK_NOT_FOUND)
     task = PrivateTaskRepository(db).get_owned(task_id, user_id)
-    if task is None:
+    # Exercises live only on review cards - never a source or a linked task
+    if task is None or task.origin == service.EXERCISE_ORIGIN:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=TASK_NOT_FOUND)
     return task
 
@@ -165,7 +166,7 @@ def serialize_link(db: Session, link: PatternLinkDB) -> dict:
 
 def serialize_pattern(db: Session, pattern: PatternDB, *, detail: bool = False) -> dict:
     today = srs.today_warsaw()
-    # Exercise links are listed in their own section, not among the linked tasks
+    # Exercise links only feed the review card, never the linked-task list
     links = [l for l in pattern.links if l.status != "rejected" and l.origin != exercises.LINK_ORIGIN]
     data = {
         "id": pattern.id,
@@ -419,8 +420,18 @@ async def delete_link(request: Request, pattern_id: str, link_id: int, db: Sessi
 # -------------------------------------------------------------------- reviews
 
 
+def account_may_write(account: Optional[UserDB]) -> bool:
+    """A GET passes the app-level write guard; a paid top-up must not."""
+    return account_block_reason(account) is None
+
+
 @router.get("/{pattern_id}/card")
-async def review_card(request: Request, pattern_id: str, db: Session = Depends(get_db)):
+async def review_card(
+    request: Request,
+    pattern_id: str,
+    db: Session = Depends(get_db),
+    account: Optional[UserDB] = Depends(current_account),
+):
     """Today's card: one exercise to solve on paper, and whether the trigger starts hidden.
 
     ``exercise`` is null while the pattern has no usable exercise (the card is
@@ -432,7 +443,8 @@ async def review_card(request: Request, pattern_id: str, db: Session = Depends(g
     if not service.pattern_is_due(pattern):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=NOT_DUE)
     tasks, states = service.exercise_states(db, pattern)
-    exercises.maybe_top_up(db, pattern, srs.unseen_count(states), is_allowlisted(request))
+    if account_may_write(account):
+        exercises.maybe_top_up(db, pattern, srs.unseen_count(states), is_allowlisted(request))
     chosen = srs.choose_exercise(states, pattern.srs_level)
     task = next((t for t in tasks if chosen is not None and t.id == chosen.id), None)
     return {

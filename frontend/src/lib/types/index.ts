@@ -310,6 +310,8 @@ export interface UserSubmissionListItem {
   etap: string | null;
   task_number: number | null;
   private_task_id?: string | null;
+  /** A wzorzec's exercise (graded before 2026-10-22): no task page, link to the wzorzec */
+  exercise_pattern_id?: string | null;
   task_title: string;
   task_categories: string[];
   timestamp: string;

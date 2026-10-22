@@ -160,6 +160,14 @@ test.describe('Wzorce', () => {
     await peek.click();
     await expect(page.getByTestId('review-trigger')).toContainText('Iloczyn kolejnych liczb całkowitych');
     await page.getByRole('button', { name: 'Zadanie zrobione' }).click();
+
+    // The answer may show the exercise is broken: skipping is still possible, and the
+    // next exercise keeps the trigger that was already seen
+    const second = await exercise.innerText();
+    await page.getByRole('button', { name: 'Zadanie jest błędne - pomiń' }).click();
+    await expect(exercise).not.toHaveText(second);
+    await expect(page.getByTestId('review-trigger')).toBeVisible();
+    await page.getByRole('button', { name: 'Zadanie zrobione' }).click();
     await page.getByRole('button', { name: 'Tak, z tym wzorcem' }).click();
     await expect(page.getByText(/Poziom 2 · następna powtórka/)).toBeVisible();
 

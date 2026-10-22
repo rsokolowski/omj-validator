@@ -160,7 +160,9 @@ export function SubmissionCard({ submission }: SubmissionCardProps) {
               <MuiLink
                 component={Link}
                 href={
-                  submission.private_task_id
+                  submission.exercise_pattern_id
+                    ? `/wzorce/${submission.exercise_pattern_id}`
+                    : submission.private_task_id
                     ? `/moje-zadania/${submission.private_task_id}`
                     : `/task/${submission.year}/${submission.etap}/${submission.task_number}`
                 }

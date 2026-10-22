@@ -238,16 +238,14 @@ class PatternRepository:
         outcome: str,
         kind: str,
         recall_text: Optional[str] = None,
-        submission_id: Optional[str] = None,
         private_task_id: Optional[str] = None,
         trigger_shown: Optional[bool] = None,
-        conditional: bool = True,
     ) -> Optional[PatternReviewDB]:
         """Move the pattern to its new schedule and log the review.
 
-        ``conditional`` (recall cards): the update only lands while ``due_on``
-        is still what the client saw, so a double click or a second tab counts
-        once - the loser gets None and nothing is written.
+        The update only lands while ``due_on`` is still what the client saw, so
+        a double click or a second tab counts once - the loser gets None and
+        nothing is written.
         """
         now = _now()
         level_before = pattern.srs_level
@@ -263,9 +261,7 @@ class PatternRepository:
         }
         if outcome == "fail":
             values[PatternDB.lapse_count] = PatternDB.lapse_count + 1
-        statement = update(PatternDB).where(PatternDB.id == pattern.id)
-        if conditional:
-            statement = statement.where(PatternDB.due_on == seen_due_on)
+        statement = update(PatternDB).where(PatternDB.id == pattern.id, PatternDB.due_on == seen_due_on)
         result = self.db.execute(statement.values(values).execution_options(synchronize_session=False))
         if result.rowcount != 1:
             self.db.rollback()
@@ -278,7 +274,6 @@ class PatternRepository:
             kind=kind,
             outcome=outcome,
             recall_text=recall_text,
-            submission_id=submission_id,
             private_task_id=private_task_id,
             trigger_shown=trigger_shown,
             level_before=level_before,
@@ -291,14 +286,6 @@ class PatternRepository:
         self.db.commit()
         self.db.refresh(pattern)
         return review
-
-    def has_review_for_submission(self, submission_id: str) -> bool:
-        return (
-            self.db.query(PatternReviewDB.id)
-            .filter(PatternReviewDB.submission_id == submission_id)
-            .first()
-            is not None
-        )
 
     def delete(self, pattern: PatternDB) -> None:
         """Delete the pattern with its links and reviews; submissions stay."""

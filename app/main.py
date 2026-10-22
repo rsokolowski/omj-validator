@@ -1703,6 +1703,12 @@ async def my_submissions(
             "etap": sub.etap,
             "task_number": sub.task_number,
             "private_task_id": sub.private_task_id,
+            # An exercise has no task page (404); its card links to the wzorzec
+            "exercise_pattern_id": (
+                private_task.pattern_id
+                if sub.private_task_id and private_task is not None and private_task.origin == "exercise"
+                else None
+            ),
             "task_title": task_title,
             "task_categories": task_categories,
             "timestamp": ensure_utc(sub.timestamp).isoformat(),

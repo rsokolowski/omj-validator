@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Alert, Box, Button, CircularProgress, LinearProgress, Paper, Typography } from "@mui/material";
 import { MathContent } from "@/components/ui/MathContent";
 import { CategoryBadge } from "@/components/ui/CategoryBadge";
+import { APIError } from "@/lib/api/client";
 import { patternsApi } from "@/lib/api/patterns";
 import { Pattern, ReviewCard, ReviewOutcome } from "@/lib/types";
 import { PATTERN_LEVEL_NAMES, REVIEW_OUTCOMES } from "@/lib/utils/constants";
@@ -33,10 +34,11 @@ export function ReviewSession() {
 
   const current = queue[index];
 
-  const openCard = useCallback(async (pattern: Pattern | undefined) => {
+  /** keepPeek: the same wzorzec again (skip) - a trigger already seen stays seen */
+  const openCard = useCallback(async (pattern: Pattern | undefined, keepPeek = false) => {
     setResult(null);
     setError(null);
-    setPeeked(false);
+    if (!keepPeek) setPeeked(false);
     if (!pattern) {
       setStage("done");
       return;
@@ -81,6 +83,8 @@ export function ReviewSession() {
       setStage("rated");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Nie udało się zapisać powtórki.");
+      // Already rated (another tab) or no longer due: retrying cannot help
+      if (e instanceof APIError && e.status === 409) setStage("failed");
     } finally {
       setBusy(false);
     }
@@ -92,7 +96,7 @@ export function ReviewSession() {
     setError(null);
     try {
       await patternsApi.rejectExercise(current.id, card.exercise.id);
-      await openCard(current);
+      await openCard(current, true);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Nie udało się pominąć zadania.");
     } finally {
@@ -128,6 +132,11 @@ export function ReviewSession() {
   }
 
   const exercise = card?.exercise ?? null;
+  const skipButton = (
+    <Button size="small" onClick={skip} disabled={busy}>
+      Zadanie jest błędne - pomiń
+    </Button>
+  );
   // Solved or not, once rated (or past step 1) the whole wzorzec is shown
   const revealed = stage === "check" || stage === "recalled" || stage === "rated";
   const triggerVisible = !card?.trigger_hidden || peeked || revealed;
@@ -192,9 +201,7 @@ export function ReviewSession() {
               </Button>
             </Box>
             <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-              <Button size="small" onClick={skip} disabled={busy}>
-                Zadanie jest błędne - pomiń
-              </Button>
+              {skipButton}
               <Button size="small" href={`/wzorce/${current.id}/cwiczenia/druk`} target="_blank" rel="noopener">
                 Wydrukuj ćwiczenia
               </Button>
@@ -205,7 +212,7 @@ export function ReviewSession() {
         {stage === "recall" && (
           <Box>
             <Typography variant="body2" sx={{ color: "grey.700", mb: 1.5 }}>
-              Ćwiczenia do tego wzorca jeszcze się układają. Przypomnij sobie, co warto wtedy spróbować.
+              Do tego wzorca nie ma teraz ćwiczenia. Przypomnij sobie, co warto wtedy spróbować.
             </Typography>
             <Button variant="contained" onClick={() => setStage("recalled")}>Pokaż wzorzec</Button>
           </Box>
@@ -257,6 +264,8 @@ export function ReviewSession() {
                 Jednak nie zrobione
               </Button>
             </Box>
+            {/* The answer may show the exercise itself is wrong - that is not a failure */}
+            <Box sx={{ mt: 1 }}>{skipButton}</Box>
           </Box>
         )}
 

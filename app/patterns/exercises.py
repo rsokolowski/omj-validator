@@ -53,6 +53,8 @@ STALE_AFTER = timedelta(minutes=10)
 RESTART_GRACE = timedelta(seconds=60)
 # A review card starts a new batch once this few unseen exercises are left
 TOP_UP_AT = 2
+# ...but not again this soon after a batch failed
+RETRY_FAILED_AFTER = timedelta(hours=6)
 # Earlier exercises sent so a new batch does not repeat them - shortened: the
 # model only needs to recognise them, and the prompt must not grow per batch
 PREVIOUS_SENT = 30
@@ -166,6 +168,12 @@ def maybe_top_up(db: Session, pattern: PatternDB, unseen: int, is_allowlisted: b
     leaves the pool as it is - the review card is served either way.
     """
     if unseen > TOP_UP_AT:
+        return
+    latest = latest_batch(db, pattern.id)
+    if latest is not None and latest.status == FAILED and latest.finished_at and (
+        latest.finished_at > _now() - RETRY_FAILED_AFTER
+    ):
+        # A pattern the model refuses would otherwise spend a call on every card
         return
     try:
         start_batch(db, pattern, pattern.user_id, is_allowlisted)

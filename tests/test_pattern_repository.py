@@ -166,17 +166,6 @@ class TestReviews:
         assert (review.level_before, review.level_after) == (1, 1)
         assert review.due_before == TODAY
 
-    def test_unconditional_task_review_and_lookup_by_submission(self, db, repo):
-        p = create(repo, due_on=TODAY + timedelta(days=10))
-        db.add(SubmissionDB(id="sub00002", user_id=USER_ID, year="2024", etap="etap1", task_number=1,
-                            images=[], status=SubmissionStatus.COMPLETED, score=3, pattern_id=p.id))
-        db.commit()
-        assert not repo.has_review_for_submission("sub00002")
-        row = repo.apply_review(p, seen_due_on=TODAY, new_level=1, new_streak=1, new_due=TODAY,
-                                outcome="ok", kind="task", submission_id="sub00002", conditional=False)
-        assert row is not None
-        assert repo.has_review_for_submission("sub00002")
-
 
 class TestListing:
     def test_filter_by_linked_task_and_archived(self, repo):

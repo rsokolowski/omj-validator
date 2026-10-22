@@ -93,6 +93,28 @@ def test_my_submissions_lists_private_submission_with_task_title(db, monkeypatch
     assert data["stats"]["tasks_attempted"] == 2
 
 
+def test_exercise_submission_points_at_its_wzorzec(db, monkeypatch):
+    # Exercises are 404 under /moje-zadania since reviews became self-rated:
+    # a graded one from before links to its pattern instead
+    from datetime import date
+
+    from app.db.models import PatternDB
+
+    db.add(PatternDB(id="pattern00001", user_id=STUDENT_ID, trigger="t", action="a", skills=[], origin="own",
+                     refinement=[], due_on=date(2026, 10, 2)))
+    db.add(PrivateTaskDB(id="exercise0001", user_id=STUDENT_ID, title="Ćwiczenie", content="Wymyślone.",
+                         hints=[], source_images=[], origin="exercise", pattern_id="pattern00001",
+                         exercise_level="easy"))
+    db.add(SubmissionDB(id="exe00001", user_id=STUDENT_ID, private_task_id="exercise0001", images=[],
+                        status=SubmissionStatus.COMPLETED, score=6,
+                        timestamp=datetime.now(timezone.utc).replace(tzinfo=None)))
+    db.commit()
+    client = make_client(db, monkeypatch, STUDENT_ID, "kid@example.com")
+    by_id = {s["id"]: s for s in client.get("/api/my-submissions").json()["submissions"]}
+    assert by_id["exe00001"]["exercise_pattern_id"] == "pattern00001"
+    assert by_id["prv00001"]["exercise_pattern_id"] is None
+
+
 def test_my_submissions_etap_filter_hides_private(db, monkeypatch):
     client = make_client(db, monkeypatch, STUDENT_ID, "kid@example.com")
     data = client.get("/api/my-submissions?etap=etap1").json()

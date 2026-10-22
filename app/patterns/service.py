@@ -9,7 +9,6 @@ from sqlalchemy.orm import Session
 
 from .. import storage
 from ..db.models import PatternDB, PatternReviewDB, PrivateTaskDB, SubmissionDB, SubmissionStatus
-from ..db.patterns import PatternRepository
 from . import srs
 
 logger = logging.getLogger(__name__)
@@ -58,13 +57,6 @@ def private_task_text(task: PrivateTaskDB) -> str:
 def pattern_is_due(pattern: PatternDB) -> bool:
     """Waits for a review today (and is not paused)."""
     return pattern.archived_at is None and pattern.due_on <= srs.today_warsaw()
-
-
-def owned_pattern_id(db: Session, user_id: str, raw: Optional[str]) -> Optional[str]:
-    """``raw`` if it names one of the user's patterns, else None."""
-    if not raw or not PATTERN_ID_PATTERN.match(raw):
-        return None
-    return raw if PatternRepository(db).get_owned(raw, user_id) is not None else None
 
 
 def usable_exercises(db: Session, pattern: PatternDB) -> list[PrivateTaskDB]:
