@@ -297,9 +297,6 @@ export const PATTERN_EXAMPLE_MAX = 1000;
 export const PATTERN_RAW_MAX = 1000;
 export const PATTERN_ANSWER_MAX = 1000;
 export const PATTERN_MESSAGE_MAX = 1000;
-export const RECALL_TEXT_MIN = 10;
-export const RECALL_TEXT_MAX = 1000;
-
 export const PATTERN_LEVEL_NAMES: Record<number, string> = {
   1: "Poziom 1",
   2: "Poziom 2",
@@ -320,8 +317,15 @@ export const PATTERN_VERDICTS: Record<string, { label: string; color: "success" 
   to_nie_wzorzec: { label: "To jeszcze nie wzorzec", color: "info" },
 };
 
+/** Self-rating labels, gender-neutral; exercise reviews have their own */
 export const REVIEW_OUTCOMES: Record<string, string> = {
-  fail: "Nie pamiętam",
+  fail: "Nie pamiętane",
   hard: "Z trudem",
-  ok: "Pamiętam",
+  ok: "Pamiętane",
+};
+
+export const EXERCISE_REVIEW_OUTCOMES: Record<string, string> = {
+  fail: "Nie zrobione",
+  hard: "Inny sposób",
+  ok: "Z tym wzorcem",
 };

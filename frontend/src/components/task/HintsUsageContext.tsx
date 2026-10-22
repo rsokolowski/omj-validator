@@ -12,8 +12,7 @@ const HintsUsageContext = createContext<HintsUsage | null>(null);
 
 /**
  * Shares how many OMJ hints the student opened (HintsSection) with the submit
- * form, so a graded practice of a pattern can tell "solved alone" from
- * "solved with a hint". OMJ hints live only in the browser.
+ * form, which records it with the submission. OMJ hints live only in the browser.
  */
 export function HintsUsageProvider({ children }: { children: React.ReactNode }) {
   const [used, setUsed] = useState(0);

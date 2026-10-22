@@ -340,7 +340,7 @@ export interface AccountDeleteResponse {
 }
 
 // Private tasks (Moje zadania)
-export type PrivateTaskOrigin = "photo" | "typed" | "exercise";
+export type PrivateTaskOrigin = "photo" | "typed";
 
 export interface PrivateTask {
   id: string;
@@ -351,11 +351,6 @@ export interface PrivateTask {
   difficulty: number | null;
   origin: PrivateTaskOrigin;
   source_images: string[];
-  /** Drill exercise of a pattern: level, short final answer, the pattern */
-  exercise_level: ExerciseLevel | null;
-  answer: string | null;
-  /** is_due: a solution sent now counts as the pattern's review */
-  pattern: { id: string; trigger: string; is_due: boolean } | null;
   hints_count: number;
   revealed_hints: string[];
   created_at: string;
@@ -493,12 +488,17 @@ export interface PatternLink {
   available: boolean;
 }
 
+export type ReviewOutcome = "fail" | "hard" | "ok";
+
 export interface PatternReview {
   id: number;
-  kind: "recall" | "task";
-  outcome: "fail" | "hard" | "ok";
+  /** "exercise": solved on paper and self-rated; "task": graded (before 2026-10-22) */
+  kind: "exercise" | "recall" | "task";
+  outcome: ReviewOutcome;
   recall_text: string | null;
   submission_id: string | null;
+  exercise_title: string | null;
+  trigger_shown: boolean | null;
   level_before: number;
   level_after: number;
   due_after: string;
@@ -530,54 +530,31 @@ export interface PatternDetail extends Pattern {
   links: PatternLink[];
   refinement: RefineRound[];
   reviews: PatternReview[];
-  exercises: ExerciseSummary[];
-  /** Latest exercise generation, null when there was none */
-  exercise_batch: ExerciseBatch | null;
 }
 
 // Drill exercises for a pattern ("Ćwiczenia do wzorca")
 export type ExerciseLevel = "easy" | "medium";
-
-export interface ExerciseSummary {
-  id: string;
-  title: string;
-  exercise_level: ExerciseLevel | null;
-  best_score: number | null;
-  attempts: number;
-  created_at: string;
-}
-
-export interface ExerciseBatch {
-  id: string;
-  pattern_id: string;
-  status: "running" | "done" | "failed";
-  requested: number;
-  created_count: number;
-  error: string | null;
-  /** Polish text for a failed batch */
-  message: string | null;
-  acknowledged: boolean;
-  created_at: string;
-  finished_at: string | null;
-  /** Present in the "active" list */
-  trigger?: string;
-}
-
-export interface ExerciseGroup {
-  pattern: { id: string; trigger: string };
-  exercises: ExerciseSummary[];
-}
 
 export interface PatternQueue {
   items: Pattern[];
   due_total: number;
 }
 
-export interface PracticeTask {
-  kind: "omj" | "private";
-  ref: string;
+/** The exercise of today's review card, solved on paper */
+export interface ReviewExercise {
+  id: string;
   title: string;
-  url: string;
+  content: string;
+  answer: string | null;
+  solution: string | null;
+  level: ExerciseLevel | null;
+}
+
+export interface ReviewCard {
+  /** null: no usable exercise yet - a plain recall card */
+  exercise: ReviewExercise | null;
+  /** The pattern is familiar (level 2+): the trigger starts hidden */
+  trigger_hidden: boolean;
 }
 
 // Accounts: age step, parent consent, login/password accounts

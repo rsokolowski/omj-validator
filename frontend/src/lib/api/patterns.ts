@@ -1,8 +1,6 @@
 // Patterns (Wzorce) API - thin wrappers over fetchAPI
 import { fetchAPI } from "./client";
 import {
-  ExerciseBatch,
-  ExerciseGroup,
   Pattern,
   PatternDetail,
   PatternDraft,
@@ -10,8 +8,9 @@ import {
   PatternQueue,
   PatternSource,
   PatternSuggestion,
-  PracticeTask,
   RefineRound,
+  ReviewCard,
+  ReviewOutcome,
 } from "@/lib/types";
 
 export interface CreatePatternInput {
@@ -87,25 +86,15 @@ export const patternsApi = {
   removeLink: (id: string, linkId: number) =>
     fetchAPI<{ success: boolean }>(`/api/patterns/${encodeURIComponent(id)}/links/${linkId}`, json("DELETE")),
 
-  review: (id: string, recallText: string, outcome: "fail" | "hard" | "ok") =>
-    fetchAPI<{ pattern: Pattern }>(
-      `/api/patterns/${encodeURIComponent(id)}/review`,
-      json("POST", { recall_text: recallText, outcome })
-    ),
+  card: (id: string) => fetchAPI<ReviewCard>(`/api/patterns/${encodeURIComponent(id)}/card`),
 
-  practice: (id: string) =>
-    fetchAPI<{ task: PracticeTask | null }>(`/api/patterns/${encodeURIComponent(id)}/practice`),
+  /** exerciseId null: a plain recall card (no exercise yet) */
+  review: (id: string, body: { outcome: ReviewOutcome; exercise_id: string | null; trigger_shown: boolean }) =>
+    fetchAPI<{ pattern: Pattern }>(`/api/patterns/${encodeURIComponent(id)}/review`, json("POST", body)),
 
-  generateExercises: (id: string) =>
-    fetchAPI<{ batch: ExerciseBatch }>(`/api/patterns/${encodeURIComponent(id)}/exercises`, json("POST")),
-
-  exerciseGroups: () => fetchAPI<{ groups: ExerciseGroup[] }>("/api/patterns/exercises"),
-
-  activeExerciseBatches: () => fetchAPI<{ batches: ExerciseBatch[] }>("/api/patterns/exercise-batches/active"),
-
-  acknowledgeExerciseBatch: (batchId: string) =>
+  rejectExercise: (id: string, exerciseId: string) =>
     fetchAPI<{ success: boolean }>(
-      `/api/patterns/exercise-batches/${encodeURIComponent(batchId)}/ack`,
+      `/api/patterns/${encodeURIComponent(id)}/exercises/${encodeURIComponent(exerciseId)}/reject`,
       json("POST")
     ),
 };

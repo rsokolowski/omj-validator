@@ -6,11 +6,10 @@ import { MathContent } from "@/components/ui/MathContent";
 import { CategoryBadge } from "@/components/ui/CategoryBadge";
 import { PatternActions } from "@/components/patterns/PatternActions";
 import { PatternLinks } from "@/components/patterns/PatternLinks";
-import { ExercisesSection } from "@/components/patterns/ExercisesSection";
 import { formatDay } from "@/components/patterns/formatDay";
 import { APIError, serverFetch } from "@/lib/api/server";
-import { PatternDetail } from "@/lib/types";
-import { PATTERN_LEVEL_NAMES, REVIEW_OUTCOMES } from "@/lib/utils/constants";
+import { PatternDetail, PatternReview } from "@/lib/types";
+import { EXERCISE_REVIEW_OUTCOMES, PATTERN_LEVEL_NAMES, REVIEW_OUTCOMES } from "@/lib/utils/constants";
 import { formatDate } from "@/lib/utils/dates";
 
 export const dynamic = "force-dynamic";
@@ -23,6 +22,18 @@ export const metadata: Metadata = {
 interface PageProps {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ nowy?: string }>;
+}
+
+/** "Ćwiczenie „…”" / "Zadanie" (graded, before self-rated exercises) / "Przypomnienie" */
+function reviewKind(review: PatternReview): React.ReactNode {
+  if (review.kind === "task") return "Zadanie";
+  if (review.kind !== "exercise") return "Przypomnienie";
+  if (!review.exercise_title) return "Ćwiczenie";
+  return (
+    <>
+      Ćwiczenie „<MathContent content={review.exercise_title} />”
+    </>
+  );
 }
 
 export default async function PatternPage({ params, searchParams }: PageProps) {
@@ -72,14 +83,15 @@ export default async function PatternPage({ params, searchParams }: PageProps) {
             <MathContent content={pattern.example} />
           </>
         )}
-        {pattern.is_due && (
-          <Button href="/wzorce/powtorka" variant="contained" sx={{ mt: 2 }}>Powtórz teraz</Button>
-        )}
+        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mt: 2 }}>
+          {pattern.is_due && (
+            <Button href="/wzorce/powtorka" variant="contained">Powtórz teraz</Button>
+          )}
+          <Button href={`/wzorce/${pattern.id}/cwiczenia/druk`} variant="outlined">Wydrukuj ćwiczenia</Button>
+        </Box>
       </Paper>
 
       <PatternActions key={`${pattern.trigger}|${pattern.action}|${pattern.archived}`} pattern={pattern} />
-
-      <ExercisesSection patternId={pattern.id} exercises={pattern.exercises} batch={pattern.exercise_batch} />
 
       <PatternLinks patternId={pattern.id} initialLinks={pattern.links} autoSuggest={nowy === "1"} />
 
@@ -93,9 +105,10 @@ export default async function PatternPage({ params, searchParams }: PageProps) {
           <Box component="ul" sx={{ m: 0, pl: 2 }} data-testid="review-history">
             {pattern.reviews.map((r) => (
               <li key={r.id}>
-                <Typography variant="body2">
-                  {formatDate(r.created_at)} · {r.kind === "task" ? "Zadanie" : "Przypomnienie"} ·{" "}
-                  {REVIEW_OUTCOMES[r.outcome]} · {PATTERN_LEVEL_NAMES[r.level_after]}
+                <Typography variant="body2" component="div" sx={{ "& .math-content": { display: "inline" } }}>
+                  {formatDate(r.created_at)} · {reviewKind(r)} ·{" "}
+                  {(r.kind === "exercise" ? EXERCISE_REVIEW_OUTCOMES : REVIEW_OUTCOMES)[r.outcome]} ·{" "}
+                  {PATTERN_LEVEL_NAMES[r.level_after]}
                 </Typography>
                 {r.recall_text && (
                   <Typography variant="body2" component="div" sx={{ color: "grey.600" }}>

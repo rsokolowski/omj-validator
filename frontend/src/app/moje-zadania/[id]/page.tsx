@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { Box, Chip, Paper, Typography } from "@mui/material";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
@@ -12,12 +11,9 @@ import { SubmissionHistory } from "@/components/task/SubmissionHistory";
 import { PrivateHintsSection } from "@/components/private-tasks/PrivateHintsSection";
 import { PrivateTaskActions } from "@/components/private-tasks/PrivateTaskActions";
 import { SourcePhotos } from "@/components/private-tasks/SourcePhotos";
-import { PracticeBanner } from "@/components/patterns/PracticeBanner";
 import { SavePatternBox } from "@/components/patterns/SavePatternBox";
-import { ExerciseLevelChip } from "@/components/patterns/ExerciseList";
-import { ExerciseAnswer } from "@/components/patterns/ExerciseAnswer";
 import { APIError, serverFetch } from "@/lib/api/server";
-import { Pattern, PrivateTaskDetailResponse } from "@/lib/types";
+import { PrivateTaskDetailResponse } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -30,28 +26,16 @@ export const metadata: Metadata = {
 
 interface PageProps {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ ocena?: string | string[]; wzorzec?: string | string[] }>;
+  searchParams: Promise<{ ocena?: string | string[] }>;
 }
 
 // Submission ids are the first 8 characters of a uuid4
 const SUBMISSION_ID = /^[0-9a-f]{8}$/;
-const PATTERN_ID = /^[A-Za-z0-9_-]{12}$/;
-
-/** The pattern being practised (?wzorzec=), or null - never an error. */
-async function getPracticedPattern(raw: string | string[] | undefined): Promise<Pattern | null> {
-  if (typeof raw !== "string" || !PATTERN_ID.test(raw)) return null;
-  try {
-    const { pattern } = await serverFetch<{ pattern: Pattern }>(`/api/patterns/${raw}`);
-    return pattern;
-  } catch {
-    return null;
-  }
-}
 
 export default async function PrivateTaskPage({ params, searchParams }: PageProps) {
   const { id } = await params;
   // Set by "Odczytaj zadanie i oceń", which sends the solution before coming here
-  const { ocena, wzorzec } = await searchParams;
+  const { ocena } = await searchParams;
   const resumeSubmissionId = typeof ocena === "string" && SUBMISSION_ID.test(ocena) ? ocena : undefined;
   let data: PrivateTaskDetailResponse;
   try {
@@ -67,8 +51,6 @@ export default async function PrivateTaskPage({ params, searchParams }: PageProp
   }
 
   const { task, submissions, stats } = data;
-  // An exercise practises its own pattern on a day that pattern is due
-  const practiced = (await getPracticedPattern(wzorzec)) ?? (task.pattern?.is_due ? task.pattern : null);
 
   return (
     <Box>
@@ -87,15 +69,10 @@ export default async function PrivateTaskPage({ params, searchParams }: PageProp
         </Box>
         <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", alignItems: "center", mb: 2 }}>
           <Chip
-            label={
-              task.exercise_level
-                ? "Ćwiczenie do wzorca · ocena bez oficjalnego rozwiązania"
-                : "Zadanie prywatne · ocena bez oficjalnego rozwiązania"
-            }
+            label="Zadanie prywatne · ocena bez oficjalnego rozwiązania"
             size="small"
             sx={{ bgcolor: "#eef2ff", color: "#3730a3", border: "1px solid #c7d2fe" }}
           />
-          <ExerciseLevelChip level={task.exercise_level} />
         </Box>
         <PrivateTaskActions task={task} />
       </Box>
@@ -109,7 +86,6 @@ export default async function PrivateTaskPage({ params, searchParams }: PageProp
         )}
         <MathContent content={task.content} className="text-gray-800" />
         <SourcePhotos photos={task.source_images} />
-        {task.answer && <ExerciseAnswer answer={task.answer} />}
       </Paper>
 
       {task.hints_count > 0 && (
@@ -129,36 +105,18 @@ export default async function PrivateTaskPage({ params, searchParams }: PageProp
         </Typography>
       </Paper>
 
-      {practiced && <PracticeBanner pattern={practiced} />}
-      {!practiced && task.pattern && (
-        <Paper sx={{ p: 2, mb: 3, bgcolor: "#f8fafc", border: "1px solid #e2e8f0" }} elevation={0}
-          data-testid="exercise-pattern">
-          <Typography variant="body2" component="div" sx={{ "& .math-content": { display: "inline" } }}>
-            Ćwiczenie do wzorca{" "}
-            <Link href={`/wzorce/${task.pattern.id}`} style={{ fontWeight: 600 }}>
-              <MathContent content={task.pattern.trigger} />
-            </Link>
-            . Wzorzec jest tu wskazówką. Powtórką liczy się dopiero w dniu, w którym na nią czeka.
-          </Typography>
-        </Paper>
-      )}
-
       <SubmitSection
         canSubmit
         isAuthenticated
         submitUrl={`/api/private-tasks/${task.id}/submit`}
         pagePath={`/moje-zadania/${task.id}`}
         resumeSubmissionId={resumeSubmissionId}
-        patternId={practiced?.id}
       />
 
-      {/* An exercise already belongs to its pattern (banner above) */}
-      {!task.exercise_level && (
-        <SavePatternBox
-          source={{ private_task_id: task.id }}
-          latestSubmissionId={submissions.find((s) => s.status === "completed")?.id ?? null}
-        />
-      )}
+      <SavePatternBox
+        source={{ private_task_id: task.id }}
+        latestSubmissionId={submissions.find((s) => s.status === "completed")?.id ?? null}
+      />
 
       {submissions.length > 0 && (
         <SubmissionHistory submissions={submissions} totalCount={stats.submission_count} />

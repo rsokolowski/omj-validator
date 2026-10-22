@@ -83,12 +83,9 @@ export function PrivateTaskActions({ task }: { task: PrivateTask }) {
       <Button size="small" variant="outlined" onClick={() => { setValue(toEditable(task)); setEditing(true); }}>
         Edytuj
       </Button>
-      {/* An exercise has no hints: its pattern is the hint */}
-      {!task.exercise_level && (
-        <Button size="small" variant="outlined" onClick={regenerate} disabled={busy}>
-          {task.hints_count ? "Nowe wskazówki" : "Wygeneruj wskazówki"}
-        </Button>
-      )}
+      <Button size="small" variant="outlined" onClick={regenerate} disabled={busy}>
+        {task.hints_count ? "Nowe wskazówki" : "Wygeneruj wskazówki"}
+      </Button>
       <Button size="small" color="error" onClick={() => setDeleting(true)}>
         Usuń
       </Button>

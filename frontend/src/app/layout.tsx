@@ -6,7 +6,6 @@ import { Header } from "@/components/layout/Header";
 import { AccountGate } from "@/components/account/AccountGate";
 import { Footer } from "@/components/layout/Footer";
 import { FloatingTimer } from "@/components/practice/FloatingTimer";
-import { ExerciseBatchProvider } from "@/components/patterns/ExerciseBatchProvider";
 import {
   APP_NAME,
   APP_TITLE,
@@ -110,17 +109,15 @@ export default function RootLayout({
         <AppRouterCacheProvider>
           <ThemeProvider>
             <TimerProvider>
-              <ExerciseBatchProvider>
-                <Header />
-                <AccountGate />
-                <main id="tresc-glowna" tabIndex={-1} className="flex-1 py-8">
-                  <div className="max-w-[1200px] mx-auto px-6">
-                    {children}
-                  </div>
-                </main>
-                <Footer />
-                <FloatingTimer />
-              </ExerciseBatchProvider>
+              <Header />
+              <AccountGate />
+              <main id="tresc-glowna" tabIndex={-1} className="flex-1 py-8">
+                <div className="max-w-[1200px] mx-auto px-6">
+                  {children}
+                </div>
+              </main>
+              <Footer />
+              <FloatingTimer />
             </TimerProvider>
           </ThemeProvider>
         </AppRouterCacheProvider>

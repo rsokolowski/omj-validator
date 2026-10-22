@@ -7,7 +7,6 @@ import { emptyDraft, patternsApi } from "@/lib/api/patterns";
 import { PatternDraft, PatternInitialDraft, PatternSource, PatternVariant, RefineRound } from "@/lib/types";
 import { PatternEditor, validatePattern } from "./PatternEditor";
 import { RefinePanel } from "./RefinePanel";
-import { useExerciseBatches } from "./ExerciseBatchProvider";
 
 interface NewPatternFormProps {
   source?: PatternSource | null;
@@ -19,7 +18,6 @@ interface NewPatternFormProps {
 
 export function NewPatternForm({ source, sourceLabel, initialDraft }: NewPatternFormProps) {
   const router = useRouter();
-  const exerciseBatches = useExerciseBatches();
   const [draft, setDraft] = useState<PatternDraft>(
     initialDraft
       ? { ...emptyDraft(), trigger: initialDraft.trigger, action: initialDraft.action, example: initialDraft.example }
@@ -63,7 +61,6 @@ export function NewPatternForm({ source, sourceLabel, initialDraft }: NewPattern
         source: source ?? null,
         refinement: rounds.slice(-10),
       });
-      exerciseBatches.track(pattern.exercise_batch);
       router.push(`/wzorce/${pattern.id}?nowy=1`);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Nie udało się zapisać wzorca.");

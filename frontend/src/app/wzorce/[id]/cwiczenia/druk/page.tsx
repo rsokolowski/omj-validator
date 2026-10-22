@@ -16,7 +16,14 @@ export const metadata: Metadata = {
 
 interface PrintData {
   pattern: { id: string; trigger: string; action: string };
-  exercises: { id: string; title: string; content: string; exercise_level: ExerciseLevel | null; answer: string | null }[];
+  exercises: {
+    id: string;
+    title: string;
+    content: string;
+    exercise_level: ExerciseLevel | null;
+    answer: string | null;
+    solution: string | null;
+  }[];
 }
 
 interface PageProps {
@@ -27,7 +34,7 @@ function today(): string {
   return new Date().toLocaleDateString("pl-PL", { timeZone: "Europe/Warsaw" });
 }
 
-/** A printable sheet: exercises with room to write, short answers on a new page. */
+/** A printable sheet: exercises with room to write, answers and solutions on a new page. */
 export default async function ExercisesPrintPage({ params }: PageProps) {
   const { id } = await params;
   let data: PrintData;
@@ -87,11 +94,18 @@ export default async function ExercisesPrintPage({ params }: PageProps) {
           </Typography>
           <Box component="ol" sx={{ m: 0, p: 0, listStyle: "none" }}>
             {exercises.map((exercise, index) => (
-              <Box component="li" key={exercise.id} sx={{ display: "flex", gap: 1, mb: 0.5 }}>
+              <Box component="li" key={exercise.id} sx={{ display: "flex", gap: 1, mb: 1.5, breakInside: "avoid" }}>
                 <Typography component="span" sx={{ fontWeight: 700, lineHeight: 1.8 }}>
                   {index + 1}.
                 </Typography>
-                <MathContent content={exercise.answer || "—"} />
+                <Box sx={{ flex: 1, minWidth: 0 }}>
+                  <MathContent content={exercise.answer || "—"} />
+                  {exercise.solution && (
+                    <Box sx={{ color: "grey.700", fontSize: "0.9rem", mt: 0.5 }} data-testid="print-solution">
+                      <MathContent content={exercise.solution} />
+                    </Box>
+                  )}
+                </Box>
               </Box>
             ))}
           </Box>

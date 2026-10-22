@@ -30,10 +30,8 @@ interface PatternLinksProps {
   autoSuggest?: boolean;
 }
 
-function LinkRow({ link, practiceHref, children }: {
+function LinkRow({ link, children }: {
   link: PatternLink;
-  /** Task page that counts the solution as practice of this pattern */
-  practiceHref?: string;
   children?: React.ReactNode;
 }) {
   return (
@@ -55,11 +53,6 @@ function LinkRow({ link, practiceHref, children }: {
           </Typography>
         )}
       </Box>
-      {practiceHref && link.available && (
-        <Button size="small" component={Link} href={practiceHref}>
-          Rozwiąż
-        </Button>
-      )}
       {children}
     </Box>
   );
@@ -167,14 +160,14 @@ export function PatternLinks({ patternId, initialLinks, autoSuggest }: PatternLi
             Źródło
           </Typography>
           {source.map((link) => (
-            <LinkRow key={link.id} link={link} practiceHref={`${link.url}?wzorzec=${patternId}`} />
+            <LinkRow key={link.id} link={link} />
           ))}
         </Box>
       )}
 
       <Box sx={{ mb: 2 }}>
         <Typography variant="subtitle2" sx={{ color: "grey.600" }}>
-          Do ćwiczeń
+          Zadania z tym pomysłem
         </Typography>
         {accepted.length === 0 && (
           <Typography variant="body2" sx={{ color: "grey.600", py: 1 }}>
@@ -182,7 +175,7 @@ export function PatternLinks({ patternId, initialLinks, autoSuggest }: PatternLi
           </Typography>
         )}
         {accepted.map((link) => (
-          <LinkRow key={link.id} link={link} practiceHref={`${link.url}?wzorzec=${patternId}`}>
+          <LinkRow key={link.id} link={link}>
             <Tooltip title="Usuń z listy">
               <IconButton aria-label="Usuń zadanie z listy" size="small" onClick={() => remove(link)} disabled={busy}>
                 <DeleteOutline fontSize="small" />
