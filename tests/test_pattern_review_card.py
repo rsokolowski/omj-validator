@@ -116,6 +116,14 @@ class TestReview:
         assert detail["reviews"][0]["exercise_title"] == "Ćwiczenie 0"
         assert "exercises" not in detail and "exercise_batch" not in detail
 
+    def test_review_keeps_the_exercise_alive_for_retention(self, client, db, pattern):
+        ex = card(client, pattern["id"])["exercise"]["id"]
+        db.get(PrivateTaskDB, ex).last_activity_at = _now() - timedelta(days=400)
+        db.commit()
+        assert review(client, pattern["id"], "ok", ex).status_code == 200
+        db.expire_all()
+        assert db.get(PrivateTaskDB, ex).last_activity_at > _now() - timedelta(minutes=1)
+
     def test_next_card_moves_on_to_an_unseen_exercise(self, client, db, pattern):
         first = card(client, pattern["id"])["exercise"]["id"]
         review(client, pattern["id"], "ok", first)

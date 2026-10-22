@@ -1,10 +1,11 @@
 /**
  * Patterns ("Wzorce") end to end.
  *
- * The fake Gemini answers the three pattern calls with invented wording (see
+ * The fake Gemini answers the pattern calls with invented wording (see
  * PATTERN_* in e2e/fake-gemini/server.py): a refine round with two versions,
- * two suggestions from a graded solution, and a link to the first candidate
- * OMJ task in the prompt. Grading uses the default scenario (6 points).
+ * two suggestions from a graded solution, a link to the first candidate OMJ
+ * task in the prompt, and five exercises with answers and solutions. Grading
+ * uses the default scenario (6 points).
  */
 
 import { test, expect, Page } from '@playwright/test';
@@ -21,6 +22,28 @@ async function createTypedTask(page: Page, title: string): Promise<string> {
   });
   expect(response.ok()).toBeTruthy();
   return (await response.json()).tasks[0].id as string;
+}
+
+/** Wait for the background batch the save started: 5 exercises on the print sheet. */
+async function waitForExercises(page: Page, patternId: string, count = 5) {
+  await expect.poll(async () => {
+    const r = await page.request.get(`/api/patterns/${patternId}/exercises/print`);
+    return (await r.json()).exercises.length as number;
+  }, { timeout: 30000 }).toBe(count);
+}
+
+async function makeDue(page: Page, patternId: string) {
+  expect((await page.request.post(`/api/test/patterns/${patternId}/make-due`)).ok()).toBeTruthy();
+}
+
+/** A self-rated "ok" through the API, on the exercise today's card offers. */
+async function reviewOk(page: Page, patternId: string) {
+  await makeDue(page, patternId);
+  const card = await (await page.request.get(`/api/patterns/${patternId}/card`)).json();
+  const r = await page.request.post(`/api/patterns/${patternId}/review`, {
+    data: { outcome: 'ok', exercise_id: card.exercise.id, trigger_shown: false },
+  });
+  expect(r.ok()).toBeTruthy();
 }
 
 async function submitSolution(page: Page) {
@@ -82,80 +105,83 @@ test.describe('Wzorce', () => {
     await page.waitForTimeout(1500);
     await expect(page.getByTestId('link-proposals')).toHaveCount(0);
 
-    // 5. Graded practice from the pattern page: 6/6 without hints counts as a review
-    await page.getByRole('region', { name: 'Zadania do tego wzorca' })
-      .getByRole('link', { name: 'Rozwiąż' }).first().click();
-    await expect(page.getByTestId('practice-banner')).toBeVisible();
-    await submitSolution(page);
-
-    await page.goto(`/wzorce/${patternId}`);
-    await expect(page.getByTestId('review-history')).toContainText('Zadanie · Pamiętam · Poziom 1');
-
-    // 6. Due again (e2e hook) -> the header badge and a recall card -> level 2
-    const due = await page.request.post(`/api/test/patterns/${patternId}/make-due`);
-    expect(due.ok()).toBeTruthy();
+    // 5. Due (e2e hook) -> the header badge and an exercise card -> solved with the wzorzec
+    await waitForExercises(page, patternId);
+    await makeDue(page, patternId);
     await page.goto('/wzorce');
     await expect(page.getByText('Do powtórki dziś: 1')).toBeVisible();
     await page.getByRole('link', { name: 'Zacznij' }).click();
 
-    await expect(page.getByText('W zadaniu pojawiają się kolejne liczby całkowite')).toBeVisible({ timeout: 15000 });
-    const show = page.getByRole('button', { name: 'Pokaż', exact: true });
-    await expect(show).toBeDisabled();
-    await page.getByLabel('…to warto spróbować… (napisz z pamięci)').fill('Jedna z dwóch kolejnych liczb jest parzysta');
-    await show.click();
-    await expect(page.getByText('Zapisany wzorzec')).toBeVisible();
-    await page.getByRole('button', { name: 'Pamiętam', exact: true }).click();
-    await expect(page.getByText(/Poziom 2 · następna powtórka/)).toBeVisible();
+    // Level 1: the trigger is shown above the exercise
+    await expect(page.getByTestId('review-trigger')).toContainText('W zadaniu pojawiają się kolejne liczby całkowite',
+      { timeout: 15000 });
+    const exercise = page.getByTestId('review-exercise');
+    await expect(exercise).toBeVisible();
+    await page.getByRole('button', { name: 'Zadanie zrobione' }).click();
+    await expect(page.getByTestId('review-answer')).toBeVisible();
+    await expect(page.getByTestId('review-solution')).toBeVisible();
+    await expect(page.getByTestId('review-pattern')).toBeVisible();
+    await expect(page.getByText('Czy ten wzorzec był w rozwiązaniu?')).toBeVisible();
+    await page.getByRole('button', { name: 'Tak, z tym wzorcem' }).click();
+    await expect(page.getByText(/Poziom 1 · następna powtórka/)).toBeVisible();
     await page.getByRole('button', { name: 'Zakończ' }).click();
     await expect(page.getByText('Na dziś wszystko')).toBeVisible();
 
     await page.goto(`/wzorce/${patternId}`);
-    await expect(page.getByTestId('pattern-level')).toHaveText('Poziom 2');
-    const history = page.getByTestId('review-history');
-    await expect(history).toContainText('Przypomnienie · Pamiętam · Poziom 2');
-    await expect(history).toContainText('Zadanie · Pamiętam · Poziom 1');
+    await expect(page.getByTestId('review-history')).toContainText(/Ćwiczenie „.+” · Z tym wzorcem · Poziom 1/);
   });
 
-  test('saving a pattern generates exercises in the background', async ({ page }) => {
-    // Created through the API, then the page is opened - the batch is already running
+  test('familiar wzorzec: hidden trigger, skip, peek cap, not solved', async ({ page }) => {
     const created = await page.request.post('/api/patterns', {
       data: { trigger: 'Iloczyn kolejnych liczb całkowitych', action: 'Jedna z nich jest parzysta', category: 'teoria_liczb' },
     });
     expect(created.status()).toBe(201);
     const id = (await created.json()).pattern.id as string;
+    await waitForExercises(page, id);
+
+    // Two "ok" reviews: level 1 -> level 2 (familiar)
+    await reviewOk(page, id);
+    await reviewOk(page, id);
+    await makeDue(page, id);
+    await page.goto('/wzorce/powtorka');
+
+    // The trigger starts hidden
+    const peek = page.getByRole('button', { name: 'Pokaż, kiedy stosować ten wzorzec' });
+    await expect(peek).toBeVisible({ timeout: 15000 });
+    await expect(page.getByTestId('review-trigger')).toHaveCount(0);
+
+    // "Zadanie jest błędne" swaps the exercise
+    const exercise = page.getByTestId('review-exercise');
+    const before = await exercise.innerText();
+    await page.getByRole('button', { name: 'Zadanie jest błędne - pomiń' }).click();
+    await expect(exercise).not.toHaveText(before);
+
+    // Peeking, then "Tak, z tym wzorcem" is saved as "Inny sposób"
+    await peek.click();
+    await expect(page.getByTestId('review-trigger')).toContainText('Iloczyn kolejnych liczb całkowitych');
+    await page.getByRole('button', { name: 'Zadanie zrobione' }).click();
+    await page.getByRole('button', { name: 'Tak, z tym wzorcem' }).click();
+    await expect(page.getByText(/Poziom 2 · następna powtórka/)).toBeVisible();
+
     await page.goto(`/wzorce/${id}`);
+    await expect(page.getByTestId('review-history')).toContainText(/Ćwiczenie „.+” · Inny sposób · Poziom 2/);
 
-    // The popup appears on its own once the fake model has answered
-    const popup = page.getByRole('alert').filter({ hasText: 'Gotowe: 5 ćwiczeń do wzorca' });
-    await expect(popup).toBeVisible({ timeout: 30000 });
-    const section = page.getByRole('region', { name: 'Ćwiczenia' });
-    const list = section.getByTestId('exercise-list');
-    await expect(list.getByRole('listitem')).toHaveCount(5, { timeout: 15000 });
-    await expect(list).toContainText('łatwe');
-    await expect(list).toContainText('średnie');
-    await expect(section.getByRole('button', { name: 'Wygeneruj 5 kolejnych' })).toBeEnabled();
+    // "Zadanie nie zrobione": recorded at once, the wzorzec is shown, no second question
+    await makeDue(page, id);
+    await page.goto('/wzorce/powtorka');
+    await page.getByRole('button', { name: 'Zadanie nie zrobione' }).click();
+    await expect(page.getByText(/Poziom 1 · następna powtórka/)).toBeVisible();
+    await expect(page.getByTestId('review-pattern')).toContainText('Jedna z nich jest parzysta');
+    await expect(page.getByTestId('review-solution')).toBeVisible();
+    await expect(page.getByText('Czy ten wzorzec był w rozwiązaniu?')).toHaveCount(0);
 
-    // Moje zadania: a collapsed group, not mixed with the student's own tasks
-    await page.goto('/moje-zadania');
-    const group = page.getByRole('button', { name: /Ćwiczenia: Iloczyn kolejnych liczb całkowitych/ });
-    await expect(group).toHaveAttribute('aria-expanded', 'false');
-    await expect(group).toContainText('0/5 rozwiązane');
-    await group.click();
-    await page.getByRole('link', { name: 'Dwie kolejne liczby' }).click();
-
-    // The exercise page: label, answer behind a button, no hint generation
-    await expect(page.getByText('Ćwiczenie do wzorca · ocena bez oficjalnego rozwiązania')).toBeVisible();
-    // Not due today: a link to the wzorzec, not a review
-    await expect(page.getByTestId('exercise-pattern')).toContainText('Iloczyn kolejnych liczb całkowitych');
-    await expect(page.getByTestId('practice-banner')).toHaveCount(0);
-    await expect(page.getByRole('button', { name: /wskazówki/ })).toHaveCount(0);
-    await page.getByRole('button', { name: 'Pokaż odpowiedź' }).click();
-    await expect(page.getByTestId('exercise-answer')).toContainText('Jedna z dwóch kolejnych liczb jest parzysta.');
-
-    // The printable sheet ends with the answers
-    await page.goto(`/wzorce/${id}/cwiczenia/druk`);
+    // The printable sheet, from the wzorzec page, ends with answers and solutions
+    // (the pool may have been topped up meanwhile, so no exact count)
+    await page.goto(`/wzorce/${id}`);
+    await page.getByRole('link', { name: 'Wydrukuj ćwiczenia' }).click();
     await expect(page.getByRole('heading', { name: /Ćwiczenia:/ })).toBeVisible();
-    await expect(page.getByRole('region', { name: 'Odpowiedzi' }).getByRole('listitem')).toHaveCount(5);
+    const answers = page.getByRole('region', { name: 'Odpowiedzi' });
+    await expect(answers.getByTestId('print-solution').first()).toBeVisible();
   });
 
   test('another user cannot open the pattern', async ({ page, context }) => {

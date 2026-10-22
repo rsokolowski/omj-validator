@@ -469,6 +469,9 @@ async def review_pattern(request: Request, pattern_id: str, payload: ReviewReque
     outcome = payload.outcome
     if exercise is not None:
         outcome = srs.capped_outcome(outcome, pattern.srs_level, payload.trigger_shown)
+        # A used exercise stays (private-task retention counts from last activity);
+        # committed together with the review, rolled back if the review loses a race
+        exercise.last_activity_at = _now()
     level, streak, due = srs.schedule(pattern.srs_level, pattern.srs_streak, outcome, today)
     review = PatternRepository(db).apply_review(
         pattern,

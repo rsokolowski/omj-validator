@@ -685,11 +685,11 @@ def purge_expired_patterns(
 ) -> RetentionReport:
     """Delete patterns idle for the whole period, with their links, reviews and exercises.
 
-    "Idle" is last_activity_at, bumped by edits, refine rounds, reviews,
-    practice results and every solution to one of its exercises, so a pattern
-    the student keeps practising is never lost. Submissions that practised it
-    stay (their pattern_id becomes NULL), except those of its exercises, which
-    go with the exercise like any private task's.
+    "Idle" is last_activity_at, bumped by edits, refine rounds and reviews
+    (a review also bumps the exercise it used), so a pattern the student keeps
+    practising is never lost. Submissions that practised it before reviews were
+    self-rated stay (their pattern_id becomes NULL), except those of its
+    exercises, which go with the exercise like any private task's.
     """
     report = RetentionReport(dry_run=dry_run)
     months = settings.retention_pattern_months if months is None else months

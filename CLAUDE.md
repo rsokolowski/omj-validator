@@ -105,7 +105,7 @@ omj-validator/
 │   ├── retention.py        # Data retention + account erasure (RODO)
 │   ├── private_tasks/      # "Moje zadania": router (routes.py) + files/limits (service.py)
 │   ├── patterns/           # "Wzorce": routes, service, srs.py (scheduling), linking.py,
-│   │                       # exercises.py (background drill-exercise batches)
+│   │                       # exercises.py (background exercise batches + pool top-up)
 │   ├── push/               # Phone reminders about due patterns: Web Push (VAPID), daily run, /api/push
 │   ├── db/                 # Database layer
 │   │   ├── session.py      # SQLAlchemy engine, get_db dependency
@@ -240,13 +240,10 @@ PATCH  /api/patterns/{id}                    # Edit, append a round, pause/resum
 DELETE /api/patterns/{id}
 POST   /api/patterns/{id}/suggest-links      # AI picks OMJ tasks from server-chosen candidates
 POST   /api/patterns/{id}/links              # Link a task by hand; PATCH/DELETE .../links/{link_id}
-POST   /api/patterns/{id}/review             # Self-rated recall card (409 unless due)
-GET    /api/patterns/{id}/practice           # Linked task to solve instead of a recall card
-POST   /api/patterns/{id}/exercises          # Start a batch of 5 drill exercises (202; 409 while one runs)
-GET    /api/patterns/{id}/exercises/print    # Statements + answers for the printable sheet
-GET    /api/patterns/exercises               # Exercises grouped by pattern (Moje zadania)
-GET    /api/patterns/exercise-batches/active # Running + finished-unacknowledged batches (header spinner, popup)
-POST   /api/patterns/exercise-batches/{id}/ack
+GET    /api/patterns/{id}/card               # Today's exercise + trigger_hidden (409 unless due); tops the pool up
+POST   /api/patterns/{id}/review             # {outcome, exercise_id?, trigger_shown} self-rating (409 unless due)
+POST   /api/patterns/{id}/exercises/{eid}/reject  # "Zadanie jest błędne" - never offered again
+GET    /api/patterns/{id}/exercises/print    # Statements + answers + solutions for the printable sheet
 
 # Phone reminders about due patterns (app/push) - off (enabled=false, 503) without VAPID keys
 GET    /api/push/config                      # {enabled, public_key, weekday_time, weekend_time, devices}
@@ -303,10 +300,13 @@ GET  /uploads/{path}                 # Serve uploaded images
   `/admin/settings` (no row = env default, Gemini `GEMINI_MODEL`)
 - `patterns`, `pattern_links`, `pattern_reviews` - Student-written problem-solving patterns
   ("Wzorce") with spaced repetition, linked tasks and a review log; owner-only.
-  `submissions.pattern_id` (SET NULL) marks a solution submitted as practice of a pattern.
+  `pattern_reviews.private_task_id` / `trigger_shown`: the exercise a review used and whether
+  the trigger was visible. `submissions.pattern_id` (SET NULL) is history only: graded practice
+  before 2026-10-22; nothing writes it now.
 - `pattern_exercise_batches` - One background generation of drill exercises (running / done /
-  failed); the exercises themselves are `private_tasks` rows with `pattern_id`, `exercise_level`
-  (`easy`/`medium`) and `answer`, excluded from `GET /api/private-tasks`, deleted with the pattern.
+  failed); the exercises themselves are `private_tasks` rows (`origin="exercise"`) with
+  `pattern_id`, `exercise_level` (`easy`/`medium`), `answer`, `solution` and `rejected_at`,
+  excluded from `GET /api/private-tasks` and 404 under `/api/private-tasks/{id}`, deleted with the pattern.
 - `push_subscriptions`, `reminder_settings` - Devices with phone reminders on (endpoint + keys,
   deleted on "Wyłącz", 404/410 from the push service, and with the account) and per-user
   reminder times + `last_run_on` (no row = 16:30 weekdays / 10:00 weekends).
@@ -419,20 +419,23 @@ GET  /uploads/{path}                 # Serve uploaded images
    (or asks `suggest_patterns` for ideas from a graded solution), refines it in guided rounds
    (`refine_pattern`, schema-constrained, 2-3 versions to pick from), and `link_pattern_tasks`
    picks OMJ tasks from candidates `app/patterns/linking.py` chose (skills/category; the model
-   never sees statements). Reviews: self-rated recall cards, and graded practice - a submission
-   carrying `pattern_id` is turned into a review by `apply_practice_result` in the grading
-   worker. Scheduling is pure (`app/patterns/srs.py`): levels 1-3 with intervals (1,4),
-   (7,14), (30,90) days, then 180-day maintenance.
+   never sees statements); linked OMJ tasks are reading material, not reviews. A review
+   (`/wzorce/powtorka`) is one generated exercise solved on paper and self-rated in two steps:
+   "Zadanie nie zrobione" -> `fail`; "Zadanie zrobione" -> answer + worked solution, then "Czy
+   ten wzorzec był w rozwiązaniu?" (`ok` / "Inny sposób" `hard` / "Jednak nie zrobione" `fail`).
+   From level 2 the trigger is hidden; peeking caps `ok` at `hard` (server-side, exercise reviews
+   only). No exercise yet -> a plain recall card. Scheduling and picking are pure
+   (`app/patterns/srs.py`): levels 1-3 with intervals (1,4), (7,14), (30,90) days, then 180-day
+   maintenance; `choose_exercise` offers unseen, then failed, then the rest, easy at levels 1-2.
 
    **Exercises ("Ćwiczenia do wzorca")**: saving a pattern starts a background batch
    (`app/patterns/exercises.py`, in-process asyncio task with its own session) - one
-   `generate_pattern_exercises` call writes 5 short drills (2 łatwe, 3 średnie, short answers,
-   no hints), saved as private tasks (`origin="exercise"`) + `pattern_links` (origin `exercise`,
-   hidden from the linked-task list). "Wygeneruj 5 kolejnych" sends the earlier statements so
-   they are not repeated. A submission to an exercise always practises its pattern and bumps
-   its `last_activity_at`; practice offers exercises first at levels 1-2, OMJ tasks from level 3.
-   The frontend `ExerciseBatchProvider` (root layout) polls the active batches while one runs:
-   header spinner, then a popup. A batch running > 10 min, or found at startup, is failed.
+   `generate_pattern_exercises` call writes 5 short drills (2 łatwe, 3 średnie, short answer +
+   worked solution using the wzorzec, no hints), saved as private tasks (`origin="exercise"`) +
+   `pattern_links` (origin `exercise`, hidden from the linked-task list). They are never shown
+   as tasks - only on the review card and the printable sheet. Serving a card with <= 2 unseen
+   exercises starts another batch quietly (`maybe_top_up`; the earlier statements are sent so
+   they are not repeated). A batch running > 10 min, or found at startup, is failed.
 
    **Reminders ("Przypomnienia na telefonie")**: the site is installable (`app/manifest.ts`,
    `public/sw.js` - push + notification click only, no fetch handler/caching); on iPhone Web
