@@ -17,7 +17,7 @@ from ..ai import AIContentBlockedError, AIProviderError, create_ai_provider
 from ..auth import current_member_id, is_allowlisted
 from ..config import settings
 from ..db import get_db
-from ..db.models import PatternDB, PatternExerciseBatchDB, PatternLinkDB, PrivateTaskDB, SubmissionDB, SubmissionStatus
+from ..db.models import PatternDB, PatternLinkDB, PrivateTaskDB, SubmissionDB, SubmissionStatus
 from ..db.patterns import PatternRepository
 from ..db.private_tasks import PrivateTaskRepository
 from ..db.repositories import ensure_utc
@@ -163,18 +163,6 @@ def serialize_link(db: Session, link: PatternLinkDB) -> dict:
     }
 
 
-def exercise_summary(row: dict) -> dict:
-    task: PrivateTaskDB = row["task"]
-    return {
-        "id": task.id,
-        "title": task.title,
-        "exercise_level": task.exercise_level,
-        "best_score": row["best_score"],
-        "attempts": row["attempts"],
-        "created_at": ensure_utc(task.created_at).isoformat(),
-    }
-
-
 def serialize_pattern(db: Session, pattern: PatternDB, *, detail: bool = False) -> dict:
     today = srs.today_warsaw()
     # Exercise links are listed in their own section, not among the linked tasks
@@ -201,11 +189,12 @@ def serialize_pattern(db: Session, pattern: PatternDB, *, detail: bool = False) 
     }
     if detail:
         data["links"] = [serialize_link(db, l) for l in links]
-        rows = exercises.exercise_rows(db, pattern.user_id, [pattern.id]).get(pattern.id, [])
-        data["exercises"] = [exercise_summary(row) for row in rows]
-        batch = exercises.latest_batch(db, pattern.id)
-        data["exercise_batch"] = exercises.serialize_batch(batch) if batch is not None else None
         data["refinement"] = list(pattern.refinement or [])
+        reviews = sorted(pattern.reviews, key=lambda r: r.id, reverse=True)[:20]
+        exercise_ids = {r.private_task_id for r in reviews if r.private_task_id}
+        titles = dict(
+            db.query(PrivateTaskDB.id, PrivateTaskDB.title).filter(PrivateTaskDB.id.in_(exercise_ids))
+        ) if exercise_ids else {}
         data["reviews"] = [
             {
                 "id": r.id,
@@ -213,12 +202,14 @@ def serialize_pattern(db: Session, pattern: PatternDB, *, detail: bool = False) 
                 "outcome": r.outcome,
                 "recall_text": r.recall_text,
                 "submission_id": r.submission_id,
+                "exercise_title": titles.get(r.private_task_id),
+                "trigger_shown": r.trigger_shown,
                 "level_before": r.level_before,
                 "level_after": r.level_after,
                 "due_after": r.due_after.isoformat(),
                 "created_at": ensure_utc(r.created_at).isoformat(),
             }
-            for r in sorted(pattern.reviews, key=lambda r: r.id, reverse=True)[:20]
+            for r in reviews
         ]
     return data
 
@@ -248,7 +239,7 @@ async def create_pattern(request: Request, payload: CreatePatternRequest, db: Se
         exercises.start_batch(db, pattern, user_id, is_allowlisted(request))
     except HTTPException as e:
         # A limit must not cost the student the pattern: it is saved without
-        # exercises, and the page offers to generate them later
+        # exercises, and its review card tops the pool up later
         logger.info(f"Pattern {pattern.id} saved without an exercise batch ({e.status_code})")
     except Exception as e:
         # Nor may anything else: the pattern is committed, a 500 would make the
@@ -292,79 +283,41 @@ async def review_queue(request: Request, limit: int = 10, db: Session = Depends(
 
 
 # ------------------------------------------------------------------ exercises
-# Fixed paths first: "/exercises" must not be read as a pattern id
-
-
-@router.get("/exercises")
-async def list_exercises(request: Request, db: Session = Depends(get_db)):
-    """The user's exercises grouped by pattern, the newest group first (Moje zadania)."""
-    user_id = await current_member_id(request)
-    groups = exercises.exercise_rows(db, user_id)
-    patterns = {
-        p.id: p for p in db.query(PatternDB).filter(PatternDB.id.in_(list(groups)), PatternDB.user_id == user_id)
-    }
-    result = [
-        {
-            "pattern": {"id": pid, "trigger": patterns[pid].trigger},
-            "exercises": [exercise_summary(row) for row in rows],
-        }
-        for pid, rows in groups.items()
-        if pid in patterns
-    ]
-    result.sort(key=lambda g: max(e["created_at"] for e in g["exercises"]), reverse=True)
-    return {"groups": result}
-
-
-@router.get("/exercise-batches/active")
-async def active_exercise_batches(request: Request, db: Session = Depends(get_db)):
-    """Batches running now or finished in the last minutes and not yet acknowledged."""
-    user_id = await current_member_id(request)
-    return {
-        "batches": [exercises.serialize_batch(b, trigger) for b, trigger in exercises.active_batches(db, user_id)]
-    }
-
-
-@router.post("/exercise-batches/{batch_id}/ack")
-async def acknowledge_exercise_batch(request: Request, batch_id: str, db: Session = Depends(get_db)):
-    """The student saw the "ready" / "failed" popup - it is not shown again."""
-    user_id = await current_member_id(request)
-    batch = db.get(PatternExerciseBatchDB, batch_id) if service.PATTERN_ID_PATTERN.match(batch_id or "") else None
-    if batch is None or batch.user_id != user_id:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Nie znaleziono")
-    batch.acknowledged = True
-    db.commit()
-    return {"success": True}
-
-
-@router.post("/{pattern_id}/exercises", status_code=status.HTTP_202_ACCEPTED)
-async def generate_exercises(request: Request, pattern_id: str, db: Session = Depends(get_db)):
-    """Start another batch of exercises (the first one for patterns saved before them)."""
-    user_id = await current_member_id(request)
-    pattern = owned_pattern(db, pattern_id, user_id)
-    batch = exercises.start_batch(db, pattern, user_id, is_allowlisted(request))
-    return {"batch": exercises.serialize_batch(batch, pattern.trigger)}
 
 
 @router.get("/{pattern_id}/exercises/print")
 async def exercises_for_print(request: Request, pattern_id: str, db: Session = Depends(get_db)):
-    """Full statements and answers of the pattern's exercises, for the printable sheet."""
+    """Statements, answers and solutions of the pattern's exercises, for the printable sheet."""
     user_id = await current_member_id(request)
     pattern = owned_pattern(db, pattern_id, user_id)
-    rows = exercises.exercise_rows(db, user_id, [pattern.id]).get(pattern.id, [])
     return {
         "pattern": {"id": pattern.id, "trigger": pattern.trigger, "action": pattern.action},
         "exercises": [
             {
-                "id": row["task"].id,
-                "title": row["task"].title,
-                "content": row["task"].content,
-                "exercise_level": row["task"].exercise_level,
-                "answer": row["task"].answer,
-                "solution": row["task"].solution,
+                "id": task.id,
+                "title": task.title,
+                "content": task.content,
+                "exercise_level": task.exercise_level,
+                "answer": task.answer,
+                "solution": task.solution,
             }
-            for row in rows
+            for task in service.usable_exercises(db, pattern)
         ],
     }
+
+
+@router.post("/{pattern_id}/exercises/{exercise_id}/reject")
+async def reject_exercise(request: Request, pattern_id: str, exercise_id: str, db: Session = Depends(get_db)):
+    """ "Zadanie jest błędne": the exercise is never offered again. Not a review."""
+    user_id = await current_member_id(request)
+    pattern = owned_pattern(db, pattern_id, user_id)
+    task = service.owned_exercise(db, pattern, exercise_id)
+    if task is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=TASK_NOT_FOUND)
+    task.rejected_at = _now()
+    db.commit()
+    logger.info(f"Pattern {pattern.id}: exercise {task.id} rejected by the student")
+    return {"success": True}
 
 
 @router.get("/{pattern_id}")
@@ -466,47 +419,71 @@ async def delete_link(request: Request, pattern_id: str, link_id: int, db: Sessi
 # -------------------------------------------------------------------- reviews
 
 
-@router.post("/{pattern_id}/review")
-async def review_pattern(request: Request, pattern_id: str, payload: ReviewRequest, db: Session = Depends(get_db)):
-    """A self-rated recall card. Only a due pattern can be reviewed, once."""
+@router.get("/{pattern_id}/card")
+async def review_card(request: Request, pattern_id: str, db: Session = Depends(get_db)):
+    """Today's card: one exercise to solve on paper, and whether the trigger starts hidden.
+
+    ``exercise`` is null while the pattern has no usable exercise (the card is
+    then a plain recall card). Serving it tops the pool up when few unseen
+    exercises are left.
+    """
     user_id = await current_member_id(request)
     pattern = owned_pattern(db, pattern_id, user_id)
+    if not service.pattern_is_due(pattern):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=NOT_DUE)
+    tasks, states = service.exercise_states(db, pattern)
+    exercises.maybe_top_up(db, pattern, srs.unseen_count(states), is_allowlisted(request))
+    chosen = srs.choose_exercise(states, pattern.srs_level)
+    task = next((t for t in tasks if chosen is not None and t.id == chosen.id), None)
+    return {
+        "exercise": None if task is None else {
+            "id": task.id,
+            "title": task.title,
+            "content": task.content,
+            "answer": task.answer,
+            "solution": task.solution,
+            "level": task.exercise_level,
+        },
+        "trigger_hidden": task is not None and srs.trigger_hidden(pattern.srs_level),
+    }
+
+
+@router.post("/{pattern_id}/review")
+async def review_pattern(request: Request, pattern_id: str, payload: ReviewRequest, db: Session = Depends(get_db)):
+    """A self-rated review: an exercise solved on paper, or a plain recall card.
+
+    Only a due pattern can be reviewed, once. Peeking at a hidden trigger caps
+    an exercise review at "hard".
+    """
+    user_id = await current_member_id(request)
+    pattern = owned_pattern(db, pattern_id, user_id)
+    exercise = None
+    if payload.exercise_id is not None:
+        exercise = service.owned_exercise(db, pattern, payload.exercise_id)
+        if exercise is None:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=TASK_NOT_FOUND)
     today = srs.today_warsaw()
     if pattern.archived_at is not None or pattern.due_on > today:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=NOT_DUE)
 
-    level, streak, due = srs.schedule(pattern.srs_level, pattern.srs_streak, payload.outcome, today)
+    outcome = payload.outcome
+    if exercise is not None:
+        outcome = srs.capped_outcome(outcome, pattern.srs_level, payload.trigger_shown)
+    level, streak, due = srs.schedule(pattern.srs_level, pattern.srs_streak, outcome, today)
     review = PatternRepository(db).apply_review(
         pattern,
         seen_due_on=pattern.due_on,
         new_level=level,
         new_streak=streak,
         new_due=due,
-        outcome=payload.outcome,
-        kind="recall",
-        recall_text=payload.recall_text,
+        outcome=outcome,
+        kind="exercise" if exercise is not None else "recall",
+        private_task_id=exercise.id if exercise is not None else None,
+        trigger_shown=payload.trigger_shown,
     )
     if review is None:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=NOT_DUE)
     return {"pattern": serialize_pattern(db, pattern)}
-
-
-@router.get("/{pattern_id}/practice")
-async def practice_task(request: Request, pattern_id: str, db: Session = Depends(get_db)):
-    """The linked task to solve instead of a recall card, when one is due."""
-    user_id = await current_member_id(request)
-    pattern = owned_pattern(db, pattern_id, user_id)
-    if not srs.practice_offered(pattern.review_count, pattern.srs_level):
-        return {"task": None}
-    chosen = srs.choose_practice(service.practice_candidates(db, pattern, user_id), _now(), pattern.srs_level)
-    if chosen is None:
-        return {"task": None}
-    if chosen.kind == "omj":
-        year, etap, number = service.parse_task_key(chosen.ref)
-        url = f"/task/{year}/{etap}/{number}"
-    else:
-        url = f"/moje-zadania/{chosen.ref}"
-    return {"task": {"kind": chosen.kind, "ref": chosen.ref, "title": chosen.title, "url": url}}
 
 
 # ------------------------------------------------------------------------- AI

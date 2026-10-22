@@ -2,14 +2,15 @@
 
 A batch is one model call that writes EXERCISES_PER_BATCH short exercises
 drilling the pattern, from a near-direct application to ones where the trigger
-is a little hidden. Each exercise is saved as an ordinary private task that
-remembers its pattern (``pattern_id``, ``exercise_level``, ``answer``) and is
-linked to it as a practice task (``pattern_links.origin == "exercise"``), so
-the review queue can offer it.
+is a little hidden. Each exercise is saved as a private task that remembers its
+pattern (``pattern_id``, ``exercise_level``, ``answer``, ``solution``) and is
+linked to it (``pattern_links.origin == "exercise"``). The review card offers
+them one per review (``service.exercise_states``) and starts a new batch when
+few unseen ones are left (``maybe_top_up``); they are never shown as tasks.
 
 The call runs as an in-process asyncio task with its own DB session (the API
 runs a single worker, like grading). A ``pattern_exercise_batches`` row tells
-the UI what is going on: ``running``, then ``done`` or ``failed``. A batch a
+what is going on: ``running``, then ``done`` or ``failed``. A batch a
 restart killed is failed at startup; one stuck longer than STALE_AFTER is
 failed when somebody looks at it.
 """
@@ -21,7 +22,6 @@ from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 from fastapi import HTTPException, status
-from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from ..ai import AIContentBlockedError, AIProviderError, create_ai_provider
@@ -49,10 +49,10 @@ TASK_ORIGIN = "exercise"
 # A batch still running after this is treated as lost (the call itself times
 # out long before: provider timeout, at most twice with failover)
 STALE_AFTER = timedelta(minutes=10)
-# A finished batch the student has not acknowledged still gets its popup this long
-POPUP_WINDOW = timedelta(minutes=10)
 # Batches younger than this at startup may still belong to the old process
 RESTART_GRACE = timedelta(seconds=60)
+# A review card starts a new batch once this few unseen exercises are left
+TOP_UP_AT = 2
 # Earlier exercises sent so a new batch does not repeat them - shortened: the
 # model only needs to recognise them, and the prompt must not grow per batch
 PREVIOUS_SENT = 30
@@ -89,10 +89,6 @@ def _shortened(text: str) -> str:
     return text if len(text) <= PREVIOUS_CHARS else text[: PREVIOUS_CHARS - 1] + "…"
 
 
-def _iso(value: Optional[datetime]) -> Optional[str]:
-    return value.replace(tzinfo=timezone.utc).isoformat() if value else None
-
-
 # ---------------------------------------------------------------- reading
 
 
@@ -119,60 +115,6 @@ def latest_batch(db: Session, pattern_id: str) -> Optional[PatternExerciseBatchD
         .order_by(PatternExerciseBatchDB.created_at.desc())
         .first()
     )
-
-
-def active_batches(db: Session, user_id: str) -> list[tuple[PatternExerciseBatchDB, str]]:
-    """(batch, pattern trigger) running now, or finished recently and not yet acknowledged."""
-    expire_stale(db, user_id=user_id)
-    rows = (
-        db.query(PatternExerciseBatchDB, PatternDB.trigger)
-        .join(PatternDB, PatternDB.id == PatternExerciseBatchDB.pattern_id)
-        .filter(
-            PatternExerciseBatchDB.user_id == user_id,
-            or_(
-                PatternExerciseBatchDB.status == RUNNING,
-                (PatternExerciseBatchDB.acknowledged.is_(False))
-                & (PatternExerciseBatchDB.finished_at >= _now() - POPUP_WINDOW),
-            ),
-        )
-        .order_by(PatternExerciseBatchDB.created_at)
-        .all()
-    )
-    return [(batch, trigger) for batch, trigger in rows]
-
-
-def serialize_batch(batch: PatternExerciseBatchDB, trigger: Optional[str] = None) -> dict:
-    data = {
-        "id": batch.id,
-        "pattern_id": batch.pattern_id,
-        "status": batch.status,
-        "requested": batch.requested,
-        "created_count": batch.created_count,
-        "error": batch.error,
-        "message": (ERROR_MESSAGES.get(batch.error or "", GENERIC_ERROR) if batch.status == FAILED else None),
-        "acknowledged": batch.acknowledged,
-        "created_at": _iso(batch.created_at),
-        "finished_at": _iso(batch.finished_at),
-    }
-    if trigger is not None:
-        data["trigger"] = trigger
-    return data
-
-
-def exercise_rows(db: Session, user_id: str, pattern_ids: Optional[list[str]] = None) -> dict[str, list[dict]]:
-    """pattern id -> [{"task", "best_score", "attempts"}], oldest exercise first."""
-    query = db.query(PrivateTaskDB).filter(
-        PrivateTaskDB.user_id == user_id, PrivateTaskDB.pattern_id.isnot(None)
-    )
-    if pattern_ids is not None:
-        query = query.filter(PrivateTaskDB.pattern_id.in_(pattern_ids))
-    tasks = query.order_by(PrivateTaskDB.created_at, PrivateTaskDB.id).all()
-    if not tasks:
-        return {}
-    groups: dict[str, list[dict]] = {}
-    for row in PrivateTaskRepository(db).with_scores(tasks):
-        groups.setdefault(row["task"].pattern_id, []).append(row)
-    return groups
 
 
 # ---------------------------------------------------------------- starting
@@ -215,6 +157,23 @@ def start_batch(db: Session, pattern: PatternDB, user_id: str, is_allowlisted: b
     spawn(run_batch(batch.id, usage_row.id))
     logger.info(f"Exercise batch {batch.id} started for pattern {pattern.id} of user {mask_user_id(user_id)}")
     return batch
+
+
+def maybe_top_up(db: Session, pattern: PatternDB, unseen: int, is_allowlisted: bool) -> None:
+    """Start a batch when the pattern is running out of unseen exercises.
+
+    Quiet: a batch already running, a daily limit or any other failure only
+    leaves the pool as it is - the review card is served either way.
+    """
+    if unseen > TOP_UP_AT:
+        return
+    try:
+        start_batch(db, pattern, pattern.user_id, is_allowlisted)
+    except HTTPException as e:
+        logger.info(f"Pattern {pattern.id}: no top-up batch ({e.status_code})")
+    except Exception as e:
+        logger.exception(f"Pattern {pattern.id}: top-up batch not started ({type(e).__name__})")
+        db.rollback()
 
 
 # ---------------------------------------------------------------- running

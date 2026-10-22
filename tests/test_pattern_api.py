@@ -1,4 +1,6 @@
-"""HTTP API for patterns ("Wzorce"): CRUD, links, queue, recall reviews, practice.
+"""HTTP API for patterns ("Wzorce"): CRUD, links, queue, recall reviews.
+
+Exercise review cards have their own file (test_pattern_review_card.py).
 
 The AI endpoints have their own file (test_pattern_ai_api.py).
 """
@@ -226,24 +228,24 @@ class TestReview:
     def test_not_due_is_409(self, client):
         p = create(client)
         r = client.post(f"/api/patterns/{p['id']}/review",
-                        json={"recall_text": "Szukam niezmiennika", "outcome": "ok"})
+                        json={"outcome": "ok"})
         assert r.status_code == 409
 
     def test_due_review_advances(self, client, db):
         p = create(client)
         make_due(db, p["id"])
         r = client.post(f"/api/patterns/{p['id']}/review",
-                        json={"recall_text": "Szukam niezmiennika", "outcome": "ok"})
+                        json={"outcome": "ok"})
         assert r.status_code == 200
         body = r.json()["pattern"]
         assert (body["level"], body["streak"], body["due_on"]) == (1, 1, (TODAY + timedelta(days=4)).isoformat())
         review = client.get(f"/api/patterns/{p['id']}").json()["pattern"]["reviews"][0]
-        assert (review["kind"], review["outcome"], review["recall_text"]) == ("recall", "ok", "Szukam niezmiennika")
+        assert (review["kind"], review["outcome"], review["recall_text"]) == ("recall", "ok", None)
 
     def test_second_review_same_day_is_409(self, client, db):
         p = create(client)
         make_due(db, p["id"])
-        body = {"recall_text": "Szukam niezmiennika", "outcome": "hard"}
+        body = {"outcome": "hard"}
         assert client.post(f"/api/patterns/{p['id']}/review", json=body).status_code == 200
         # "hard" at level 1 streak 0 schedules tomorrow - still not due today
         assert client.post(f"/api/patterns/{p['id']}/review", json=body).status_code == 409
@@ -255,7 +257,7 @@ class TestReview:
         make_due(db, p["id"])
         monkeypatch.setattr(PatternRepository, "apply_review", lambda self, *a, **k: None)
         r = client.post(f"/api/patterns/{p['id']}/review",
-                        json={"recall_text": "Szukam niezmiennika", "outcome": "ok"})
+                        json={"outcome": "ok"})
         assert r.status_code == 409
 
     def test_archived_is_409(self, client, db):
@@ -263,14 +265,8 @@ class TestReview:
         make_due(db, p["id"])
         client.patch(f"/api/patterns/{p['id']}", json={"archived": True})
         r = client.post(f"/api/patterns/{p['id']}/review",
-                        json={"recall_text": "Szukam niezmiennika", "outcome": "ok"})
+                        json={"outcome": "ok"})
         assert r.status_code == 409
-
-    def test_recall_text_too_short(self, client, db):
-        p = create(client)
-        make_due(db, p["id"])
-        r = client.post(f"/api/patterns/{p['id']}/review", json={"recall_text": "krótko", "outcome": "ok"})
-        assert r.status_code == 422
 
 
 class TestLinks:
@@ -316,34 +312,12 @@ class TestLinks:
         assert r.status_code == 404
 
 
-class TestPractice:
-    def test_level_one_first_review_offers_nothing(self, client):
-        p = create(client, source={"task_key": "2024_etap1_1"})
-        assert client.get(f"/api/patterns/{p['id']}/practice").json() == {"task": None}
-
-    def test_maintenance_offers_never_attempted_task(self, client, db):
-        p = create(client, source={"task_key": "2024_etap1_1"})
-        db.get(PatternDB, p["id"]).srs_level = 4
-        db.commit()
-        task = client.get(f"/api/patterns/{p['id']}/practice").json()["task"]
-        assert task == {"kind": "omj", "ref": "2024_etap1_1", "title": "Zadanie 1",
-                        "url": "/task/2024/etap1/1"}
-
-    def test_every_third_review_offers_private_task(self, client, db):
-        p = create(client, source={"private_task_id": PRIVATE_ID})
-        db.get(PatternDB, p["id"]).review_count = 2
-        db.commit()
-        task = client.get(f"/api/patterns/{p['id']}/practice").json()["task"]
-        assert (task["kind"], task["url"]) == ("private", f"/moje-zadania/{PRIVATE_ID}")
-
+class TestVanishedTask:
     def test_vanished_omj_task(self, client, db, omj):
         p = create(client, source={"task_key": "2024_etap1_1"})
-        db.get(PatternDB, p["id"]).srs_level = 4
-        db.commit()
         del omj[("2024", "etap1", 1)]
         detail = client.get(f"/api/patterns/{p['id']}").json()["pattern"]
         assert detail["links"][0]["available"] is False
-        assert client.get(f"/api/patterns/{p['id']}/practice").json() == {"task": None}
 
 
 class TestE2EEndpoints:
@@ -361,7 +335,7 @@ class TestE2EEndpoints:
                             lambda request: {"user_id": current_user["id"]})
         p = create(client)
         assert client.post(f"/api/patterns/{p['id']}/review",
-                           json={"recall_text": "Szukam niezmiennika", "outcome": "ok"}).status_code == 409
+                           json={"outcome": "ok"}).status_code == 409
         assert client.post(f"/api/test/patterns/{p['id']}/make-due").status_code == 200
         assert client.get(f"/api/patterns/{p['id']}").json()["pattern"]["is_due"] is True
         current_user["id"] = OTHER_USER_ID

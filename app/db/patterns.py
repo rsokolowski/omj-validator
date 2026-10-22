@@ -239,6 +239,8 @@ class PatternRepository:
         kind: str,
         recall_text: Optional[str] = None,
         submission_id: Optional[str] = None,
+        private_task_id: Optional[str] = None,
+        trigger_shown: Optional[bool] = None,
         conditional: bool = True,
     ) -> Optional[PatternReviewDB]:
         """Move the pattern to its new schedule and log the review.
@@ -277,6 +279,8 @@ class PatternRepository:
             outcome=outcome,
             recall_text=recall_text,
             submission_id=submission_id,
+            private_task_id=private_task_id,
+            trigger_shown=trigger_shown,
             level_before=level_before,
             level_after=new_level,
             due_before=due_before,

@@ -293,7 +293,7 @@ def reserve_submission(
 
     Returns (None, reserved_row, rate_limit_headers), or (429, None, headers)
     with nothing reserved. ``task_ref`` holds the row's task fields (year, etap,
-    task_number or private_task_id, pattern_id, hints_used); the row is PENDING
+    task_number or private_task_id, hints_used); the row is PENDING
     with no photos and no text until the caller attaches them
     (SubmissionRepository.attach_solution).
 

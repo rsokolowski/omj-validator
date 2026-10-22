@@ -20,7 +20,6 @@ from ..ai.messages import GENERIC_MESSAGE, OVERLOADED_MESSAGE
 from ..ai.spend import check_spend_limit
 from ..privacy import mask_user_id
 from ..storage import get_task_pdf_path, get_solution_pdf_path
-from ..patterns.service import apply_practice_result
 from ..notifications import (
     record_completed,
     record_failed,
@@ -288,14 +287,6 @@ async def process_submission_background(
             abuse_score=result.abuse_score,
             scoring_meta=result.scoring_meta,
         )
-
-        # A solution submitted from a pattern card counts as that pattern's
-        # review. Bookkeeping only - it must never cost the student the grade.
-        try:
-            apply_practice_result(db, submission_id)
-        except Exception:
-            db.rollback()
-            logger.exception(f"[Submission {submission_id}] Pattern practice result not applied")
 
         # Send completion
         await progress_manager.send_completed(

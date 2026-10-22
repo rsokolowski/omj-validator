@@ -78,6 +78,11 @@ def batch_of(db, pattern_id):
     return exercises.latest_batch(db, pattern_id)
 
 
+def start_another(db, p):
+    """What a review card does when the pool runs low."""
+    exercises.start_batch(db, db.get(PatternDB, p["id"]), USER_ID, False)
+
+
 def created_pattern(client, db, **overrides):
     """A saved pattern and the batch its creation started (not run yet)."""
     p = create(client, **overrides)
@@ -132,8 +137,7 @@ class TestRunBatch:
         run(*_no_background_exercises[0])
         provider.result = ExercisesResult(exercises=items(prefix="Nowe"))
 
-        r = client.post(f"/api/patterns/{p['id']}/exercises")
-        assert r.status_code == 202, r.text
+        start_another(db, p)
         run(*_no_background_exercises[1])
 
         previous = provider.calls[1][2]
@@ -201,7 +205,7 @@ class TestRunBatch:
         p, _ = created_pattern(client, db)
         provider.result = ExercisesResult(exercises=[ExerciseItem(title="Długie", content="x " * 1000)])
         run(*_no_background_exercises[0])
-        client.post(f"/api/patterns/{p['id']}/exercises")
+        start_another(db, p)
         run(*_no_background_exercises[1])
         [previous] = provider.calls[1][2]
         assert len(previous) == exercises.PREVIOUS_CHARS
@@ -235,79 +239,33 @@ class TestStale:
 
 
 class TestApi:
-    def test_create_starts_a_batch_and_detail_shows_it(self, client, db):
+    def test_create_starts_a_batch(self, client, db):
         p = create(client)
-        detail = client.get(f"/api/patterns/{p['id']}").json()["pattern"]
-        assert detail["exercise_batch"]["status"] == "running"
-        assert detail["exercises"] == []
+        assert batch_of(db, p["id"]).status == "running"
+        assert "exercise_batch" not in p and "exercises" not in p
 
     def test_limit_at_create_keeps_the_pattern(self, client, db, monkeypatch, _no_background_exercises):
         monkeypatch.setattr(settings, "rate_limit_pattern_exercises_per_user_per_day", 0)
         p = create(client)
         assert db.get(PatternDB, p["id"]) is not None
         assert _no_background_exercises == []
-        assert p["exercise_batch"] is None
-        r = client.post(f"/api/patterns/{p['id']}/exercises")
-        assert r.status_code == 429
+        assert batch_of(db, p["id"]) is None
 
-    def test_one_running_batch_per_pattern(self, client):
+    def test_one_running_batch_per_pattern(self, client, db):
+        from fastapi import HTTPException
+
         p = create(client)
-        assert client.post(f"/api/patterns/{p['id']}/exercises").status_code == 409
+        with pytest.raises(HTTPException) as e:
+            start_another(db, p)
+        assert e.value.status_code == 409
 
-    def test_detail_lists_exercises_and_hides_their_links(self, client, db, provider, _no_background_exercises):
+    def test_exercises_stay_out_of_links_and_the_own_list(self, client, db, provider, _no_background_exercises):
         p = create(client)
         run(*_no_background_exercises[0])
         detail = client.get(f"/api/patterns/{p['id']}").json()["pattern"]
-        assert [e["exercise_level"] for e in detail["exercises"]] == ["easy", "easy", "medium", "medium", "medium"]
-        assert detail["exercises"][0]["best_score"] is None
         assert detail["links"] == [] and detail["links_count"] == 0
-        assert detail["exercise_batch"]["status"] == "done"
-
-    def test_exercises_grouped_and_out_of_the_own_list(self, client, db, provider, _no_background_exercises):
-        p = create(client)
-        run(*_no_background_exercises[0])
         own = client.get("/api/private-tasks").json()
         assert [t["id"] for t in own["tasks"]] == [PRIVATE_ID]
-        [group] = client.get("/api/patterns/exercises").json()["groups"]
-        assert group["pattern"] == {"id": p["id"], "trigger": p["trigger"]}
-        assert len(group["exercises"]) == 5
-
-    def test_exercise_detail_carries_level_answer_and_pattern(self, client, db, provider, _no_background_exercises):
-        p = create(client)
-        run(*_no_background_exercises[0])
-        task_id = db.query(PrivateTaskDB).filter_by(pattern_id=p["id"]).first().id
-        task = client.get(f"/api/private-tasks/{task_id}").json()["task"]
-        assert task["exercise_level"] in ("easy", "medium")
-        assert task["answer"].startswith("Odpowiedź")
-        assert task["pattern"] == {"id": p["id"], "trigger": p["trigger"], "is_due": False}
-        own = client.get(f"/api/private-tasks/{PRIVATE_ID}").json()["task"]
-        assert (own["exercise_level"], own["answer"], own["pattern"]) == (None, None, None)
-
-    def test_active_batches_and_ack(self, client, db, provider, _no_background_exercises):
-        p = create(client)
-        [b] = client.get("/api/patterns/exercise-batches/active").json()["batches"]
-        assert (b["status"], b["trigger"]) == ("running", p["trigger"])
-        run(*_no_background_exercises[0])
-        [b] = client.get("/api/patterns/exercise-batches/active").json()["batches"]
-        assert (b["status"], b["created_count"]) == ("done", 5)
-        assert client.post(f"/api/patterns/exercise-batches/{b['id']}/ack").status_code == 200
-        assert client.get("/api/patterns/exercise-batches/active").json()["batches"] == []
-
-    def test_failed_batch_carries_a_message(self, client, db, provider, _no_background_exercises):
-        create(client)
-        provider.result = ExercisesResult(off_topic=True)
-        run(*_no_background_exercises[0])
-        [b] = client.get("/api/patterns/exercise-batches/active").json()["batches"]
-        assert b["status"] == "failed" and "matematyczny" in b["message"]
-
-    def test_foreign_pattern_and_batch_are_404(self, client, db, current_user):
-        p = create(client)
-        batch_id = batch_of(db, p["id"]).id
-        current_user["id"] = OTHER_USER_ID
-        assert client.post(f"/api/patterns/{p['id']}/exercises").status_code == 404
-        assert client.post(f"/api/patterns/exercise-batches/{batch_id}/ack").status_code == 404
-        assert client.get("/api/patterns/exercise-batches/active").json()["batches"] == []
-        assert client.get("/api/patterns/exercises").json()["groups"] == []
 
     def test_deleting_the_pattern_deletes_exercises_and_files(
         self, client, db, provider, _no_background_exercises, monkeypatch
@@ -328,62 +286,6 @@ class TestApi:
         assert db.query(PrivateTaskDB).filter(PrivateTaskDB.id.in_(ids)).count() == 0
         assert db.get(PrivateTaskDB, PRIVATE_ID) is not None
 
-    def test_submitting_an_exercise_practises_its_pattern_when_due(
-        self, client, db, provider, _no_background_exercises, monkeypatch, today, tmp_path
-    ):
-        import app.private_tasks.routes as private_routes
-        from app.db.models import SubmissionDB
-
-        async def no_grading(**kwargs):
-            return None
-
-        monkeypatch.setattr(settings, "data_dir", str(tmp_path))
-        monkeypatch.setattr(private_routes, "process_submission_background", no_grading)
-        p = create(client)
-        run(*_no_background_exercises[0])
-        task_id = db.query(PrivateTaskDB).filter_by(pattern_id=p["id"]).first().id
-        pattern = db.get(PatternDB, p["id"])
-        pattern.last_activity_at = _now() - timedelta(days=100)
-        db.commit()
-
-        def submit():
-            r = client.post(f"/api/private-tasks/{task_id}/submit", data={"solution_text": "Moje rozwiązanie"})
-            assert r.status_code == 200, r.text
-            db.expire_all()
-            return db.get(SubmissionDB, r.json()["submission_id"])
-
-        # Not due yet (a new pattern is due tomorrow): drilling does not move the schedule...
-        assert submit().pattern_id is None
-        # ...but keeps the pattern alive for retention
-        assert db.get(PatternDB, p["id"]).last_activity_at > _now() - timedelta(minutes=1)
-
-        db.get(PatternDB, p["id"]).due_on = today["today"]
-        db.commit()
-        assert client.get(f"/api/private-tasks/{task_id}").json()["task"]["pattern"]["is_due"] is True
-        assert submit().pattern_id == p["id"]
-
-    def test_exercise_edit_clears_answer_and_adds_no_hints(
-        self, client, db, provider, _no_background_exercises, monkeypatch
-    ):
-        from app.models import PrivateTaskMeta
-
-        class MetaStub:
-            async def generate_private_task_meta(self, title, content):
-                return PrivateTaskMeta(hints=["h1"], is_math_problem=True, abuse_score=0, checked=True)
-
-        import app.private_tasks.routes as private_routes
-
-        monkeypatch.setattr(private_routes, "create_ai_provider", lambda: MetaStub())
-        p = create(client)
-        run(*_no_background_exercises[0])
-        task_id = db.query(PrivateTaskDB).filter_by(pattern_id=p["id"]).first().id
-
-        r = client.patch(f"/api/private-tasks/{task_id}", json={"content": "Wymyślona nowa treść: wykaż, że 2 | n(n+1)."})
-        assert r.status_code == 200, r.text
-        task = r.json()["task"]
-        assert task["answer"] is None and task["hints_count"] == 0
-        assert client.post(f"/api/private-tasks/{task_id}/regenerate-hints").status_code == 409
-
 
 class TestPrint:
     def test_print_has_statements_and_answers(self, client, db, provider, _no_background_exercises, current_user):
@@ -397,29 +299,6 @@ class TestPrint:
         assert data["exercises"][0]["solution"] == "Rozwiązanie 0"
         current_user["id"] = OTHER_USER_ID
         assert client.get(f"/api/patterns/{p['id']}/exercises/print").status_code == 404
-
-
-class TestPractice:
-    def test_low_level_offers_an_easy_exercise_first(self, client, db, provider, _no_background_exercises, today):
-        p = create(client)
-        client.post(f"/api/patterns/{p['id']}/links", json={"task_key": "2024_etap1_1"})
-        run(*_no_background_exercises[0])
-        pattern = db.get(PatternDB, p["id"])
-        pattern.review_count = 2  # practice_offered: every third review
-        db.commit()
-        task = client.get(f"/api/patterns/{p['id']}/practice").json()["task"]
-        assert task["kind"] == "private"
-        chosen = db.get(PrivateTaskDB, task["ref"])
-        assert chosen.exercise_level == "easy"
-
-    def test_level_three_offers_omj_first(self, client, db, provider, _no_background_exercises):
-        p = create(client)
-        client.post(f"/api/patterns/{p['id']}/links", json={"task_key": "2024_etap1_1"})
-        run(*_no_background_exercises[0])
-        pattern = db.get(PatternDB, p["id"])
-        pattern.review_count, pattern.srs_level = 2, 3
-        db.commit()
-        assert client.get(f"/api/patterns/{p['id']}/practice").json()["task"]["kind"] == "omj"
 
 
 class TestRetention:

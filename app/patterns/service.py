@@ -1,18 +1,15 @@
-"""Patterns: task texts for the AI, practice candidates, graded practice results."""
+"""Patterns: task texts for the AI and the exercises a review card offers."""
 
 import logging
 import re
-from datetime import datetime, time, timezone
+from datetime import datetime, timezone
 from typing import Optional
 
-from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from .. import storage
 from ..db.models import PatternDB, PatternReviewDB, PrivateTaskDB, SubmissionDB, SubmissionStatus
 from ..db.patterns import PatternRepository
-from ..privacy import mask_user_id
-from ..scoring import get_max_score
 from . import srs
 
 logger = logging.getLogger(__name__)
@@ -23,14 +20,11 @@ KIND_SUGGEST = "pattern_suggest"
 KIND_LINK = "pattern_link"
 KIND_EXERCISES = "pattern_exercises"
 
-# Drill exercises have a level, not a 1-5 difficulty: easy ones are offered first
-EXERCISE_DIFFICULTY = {"easy": 1, "medium": 2}
+# private_tasks.origin of a generated exercise
+EXERCISE_ORIGIN = "exercise"
 
 PATTERN_ID_PATTERN = re.compile(r"^[A-Za-z0-9_-]{12}$")
 TASK_KEY_PATTERN = re.compile(r"^(\d{4})_(etap[123])_(\d{1,2})$")
-
-# Private tasks are graded on the 0/2/5/6 scale
-PRIVATE_MAX_SCORE = 6
 
 
 def parse_task_key(key: Optional[str]) -> Optional[tuple[str, str, int]]:
@@ -73,121 +67,82 @@ def owned_pattern_id(db: Session, user_id: str, raw: Optional[str]) -> Optional[
     return raw if PatternRepository(db).get_owned(raw, user_id) is not None else None
 
 
-def _last_attempts_omj(db: Session, user_id: str) -> dict[tuple[str, str, int], datetime]:
-    rows = (
-        db.query(SubmissionDB.year, SubmissionDB.etap, SubmissionDB.task_number, func.max(SubmissionDB.timestamp))
-        .filter(SubmissionDB.user_id == user_id, SubmissionDB.private_task_id.is_(None))
-        .group_by(SubmissionDB.year, SubmissionDB.etap, SubmissionDB.task_number)
+def usable_exercises(db: Session, pattern: PatternDB) -> list[PrivateTaskDB]:
+    """The pattern's usable exercises (not marked broken), oldest first."""
+    return (
+        db.query(PrivateTaskDB)
+        .filter(
+            PrivateTaskDB.pattern_id == pattern.id,
+            PrivateTaskDB.user_id == pattern.user_id,
+            PrivateTaskDB.origin == EXERCISE_ORIGIN,
+            PrivateTaskDB.rejected_at.is_(None),
+        )
+        .order_by(PrivateTaskDB.created_at, PrivateTaskDB.id)
         .all()
     )
-    return {(y, e, n): ts for y, e, n, ts in rows}
 
 
-def _last_attempts_private(db: Session, user_id: str) -> dict[str, datetime]:
-    rows = (
-        db.query(SubmissionDB.private_task_id, func.max(SubmissionDB.timestamp))
-        .filter(SubmissionDB.user_id == user_id, SubmissionDB.private_task_id.isnot(None))
-        .group_by(SubmissionDB.private_task_id)
-        .all()
-    )
-    return dict(rows)
+def exercise_states(db: Session, pattern: PatternDB) -> tuple[list[PrivateTaskDB], list[srs.ExerciseState]]:
+    """Usable exercises and how each was last reviewed.
+
+    History comes from exercise reviews; an exercise graded before reviews
+    became self-rated (2026-10-22) counts by its latest graded submission:
+    0 points is a failure, anything else a success.
+    """
+    tasks = usable_exercises(db, pattern)
+    if not tasks:
+        return [], []
+    ids = [t.id for t in tasks]
+    last: dict[str, tuple[str, datetime]] = {}
+    for task_id, outcome, created_at in (
+        db.query(SubmissionDB.private_task_id, SubmissionDB.score, SubmissionDB.timestamp)
+        .filter(
+            SubmissionDB.private_task_id.in_(ids),
+            SubmissionDB.status == SubmissionStatus.COMPLETED,
+            SubmissionDB.score.isnot(None),
+        )
+        .order_by(SubmissionDB.timestamp)
+    ):
+        last[task_id] = ("fail" if outcome <= 0 else "ok", _naive(created_at))
+    for task_id, outcome, created_at in (
+        db.query(PatternReviewDB.private_task_id, PatternReviewDB.outcome, PatternReviewDB.created_at)
+        .filter(PatternReviewDB.pattern_id == pattern.id, PatternReviewDB.private_task_id.in_(ids))
+        .order_by(PatternReviewDB.id)
+    ):
+        last[task_id] = (outcome, created_at)
+    states = [
+        srs.ExerciseState(
+            id=t.id,
+            level=t.exercise_level or "medium",
+            created_at=t.created_at,
+            last_outcome=last.get(t.id, (None, None))[0],
+            last_reviewed_at=last.get(t.id, (None, None))[1],
+        )
+        for t in tasks
+    ]
+    return tasks, states
+
+
+def owned_exercise(db: Session, pattern: PatternDB, exercise_id: Optional[str]) -> Optional[PrivateTaskDB]:
+    """A usable exercise of ``pattern``, or None (unknown, foreign, broken, not an exercise)."""
+    if not exercise_id:
+        return None
+    task = db.get(PrivateTaskDB, exercise_id)
+    if (
+        task is None
+        or task.pattern_id != pattern.id
+        or task.user_id != pattern.user_id
+        or task.origin != EXERCISE_ORIGIN
+        or task.rejected_at is not None
+    ):
+        return None
+    return task
 
 
 def _naive(ts: Optional[datetime]) -> Optional[datetime]:
     if ts is None:
         return None
     return ts.astimezone(timezone.utc).replace(tzinfo=None) if ts.tzinfo else ts
-
-
-def practice_candidates(db: Session, pattern: PatternDB, user_id: str) -> list[srs.PracticeCandidate]:
-    """Accepted linked tasks that still exist, with the user's last attempt."""
-    omj_attempts = _last_attempts_omj(db, user_id)
-    private_attempts = _last_attempts_private(db, user_id)
-    private_ids = [l.private_task_id for l in pattern.links if l.status == "accepted" and l.private_task_id]
-    private_tasks = {
-        t.id: t for t in db.query(PrivateTaskDB).filter(PrivateTaskDB.id.in_(private_ids))
-    } if private_ids else {}
-    candidates = []
-    for link in pattern.links:
-        if link.status != "accepted":
-            continue
-        if link.task_key:
-            task = omj_task(link.task_key)
-            if task is None:
-                continue
-            last = omj_attempts.get((task.year, task.etap, task.number))
-            candidates.append(srs.PracticeCandidate(
-                kind="omj", ref=link.task_key, title=task.title,
-                difficulty=task.difficulty, last_attempt=_naive(last),
-            ))
-        else:
-            task = private_tasks.get(link.private_task_id)
-            if task is None or task.user_id != user_id:
-                continue
-            exercise = task.pattern_id == pattern.id and task.exercise_level is not None
-            candidates.append(srs.PracticeCandidate(
-                kind="private", ref=task.id, title=task.title,
-                difficulty=EXERCISE_DIFFICULTY.get(task.exercise_level) if exercise else task.difficulty,
-                last_attempt=_naive(private_attempts.get(task.id)),
-                exercise=exercise,
-            ))
-    return candidates
-
-
-def _reviewed_on(db: Session, pattern: PatternDB, day) -> bool:
-    """Did a recall card or a graded practice already move this pattern on ``day`` (Warsaw)?"""
-    start = datetime.combine(day, time.min, tzinfo=srs._WARSAW).astimezone(timezone.utc).replace(tzinfo=None)
-    return (
-        db.query(PatternReviewDB.id)
-        .filter(
-            PatternReviewDB.pattern_id == pattern.id,
-            PatternReviewDB.created_at >= start,
-        )
-        .first()
-        is not None
-    )
-
-
-def apply_practice_result(db: Session, submission_id: str) -> None:
-    """Count a graded practice submission as a review of its pattern.
-
-    A no-op unless the submission completed, names a pattern of the same user,
-    and has not been counted yet. Never raises for a missing pattern.
-    """
-    submission = db.get(SubmissionDB, submission_id)
-    if submission is None or submission.pattern_id is None:
-        return
-    if submission.status != SubmissionStatus.COMPLETED or submission.score is None:
-        return
-    repo = PatternRepository(db)
-    pattern = repo.get_owned(submission.pattern_id, submission.user_id)
-    if pattern is None or pattern.archived_at is not None or repo.has_review_for_submission(submission_id):
-        return
-    today = srs.today_warsaw()
-    if _reviewed_on(db, pattern, today):
-        # A recall card and then a linked task the same afternoon is not
-        # spaced repetition: the schedule moves at most once a day
-        logger.info(f"Pattern {pattern.id}: already reviewed today, submission {submission_id} ignored")
-        return
-
-    max_score = PRIVATE_MAX_SCORE if submission.private_task_id else get_max_score(submission.etap)
-    outcome = srs.outcome_from_grade(submission.score, max_score, submission.hints_used or 0)
-    level, streak, due = srs.schedule(pattern.srs_level, pattern.srs_streak, outcome, today)
-    repo.apply_review(
-        pattern,
-        seen_due_on=pattern.due_on,
-        new_level=level,
-        new_streak=streak,
-        new_due=due,
-        outcome=outcome,
-        kind="task",
-        submission_id=submission_id,
-        conditional=False,
-    )
-    logger.info(
-        f"Pattern {pattern.id} of user {mask_user_id(submission.user_id)}: practice {outcome} "
-        f"(level {level}, next {due.isoformat()})"
-    )
 
 
 def all_omj_tasks() -> list:

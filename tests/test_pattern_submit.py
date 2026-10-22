@@ -1,4 +1,4 @@
-"""Submitting a solution from a pattern card records the pattern (and OMJ hints used)."""
+"""Submitting a solution records the OMJ hints used; a pattern_id from a stale client is ignored."""
 
 import io
 import pathlib
@@ -100,19 +100,17 @@ def submitted(db, response):
     return db.get(SubmissionDB, response.json()["submission_id"])
 
 
-def test_omj_submit_records_own_pattern_and_clamps_hints(client, db):
+def test_omj_submit_no_longer_practises_a_pattern_and_clamps_hints(client, db):
+    # Reviews are self-rated exercises now: a stale client's pattern_id is ignored
     p = pattern(db)
     r = client.post("/task/2024/etap1/1/submit", files=jpeg(), data={"pattern_id": p.id, "hints_used": "9"})
     sub = submitted(db, r)
-    assert sub.pattern_id == p.id
+    assert sub.pattern_id is None
     assert sub.hints_used == 4
 
 
-def test_omj_submit_ignores_foreign_pattern(client, db):
-    p = pattern(db, user_id=OTHER_USER_ID)
-    sub = submitted(db, client.post("/task/2024/etap1/1/submit", files=jpeg(),
-                                    data={"pattern_id": p.id, "hints_used": "-3"}))
-    assert sub.pattern_id is None
+def test_omj_submit_clamps_negative_hints(client, db):
+    sub = submitted(db, client.post("/task/2024/etap1/1/submit", files=jpeg(), data={"hints_used": "-3"}))
     assert sub.hints_used == 0
 
 
@@ -121,9 +119,9 @@ def test_omj_submit_without_fields_unchanged(client, db):
     assert (sub.pattern_id, sub.hints_used) == (None, 0)
 
 
-def test_private_submit_records_pattern_and_ignores_client_hints(client, db):
+def test_private_submit_ignores_pattern_and_client_hints(client, db):
     p = pattern(db)
     sub = submitted(db, client.post(f"/api/private-tasks/{PRIVATE_ID}/submit", files=jpeg(),
                                     data={"pattern_id": p.id, "hints_used": "3"}))
-    assert sub.pattern_id == p.id
+    assert sub.pattern_id is None
     assert sub.hints_used == 0

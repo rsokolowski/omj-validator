@@ -14,7 +14,7 @@ from ..privacy import mask_user_id
 logger = logging.getLogger(__name__)
 
 # Fields a student may change after creation (PATCH /api/private-tasks/{id})
-EDITABLE_FIELDS = {"title", "content", "source_label", "category", "difficulty", "hints", "answer"}
+EDITABLE_FIELDS = {"title", "content", "source_label", "category", "difficulty", "hints"}
 
 # ai_usage.kind values
 KIND_EXTRACT = "private_extract"
@@ -115,8 +115,8 @@ class PrivateTaskRepository:
     ) -> tuple[list[dict], int]:
         """The user's own tasks, most recently active first, with score summary.
 
-        Exercises generated for a pattern are left out - they are listed per
-        pattern (GET /api/patterns/exercises).
+        Exercises generated for a pattern are left out - they appear only on
+        the pattern's review card.
 
         Returns ([{"task", "best_score", "attempts"}], total_count).
         """

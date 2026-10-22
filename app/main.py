@@ -907,7 +907,6 @@ async def submit_solution(
     num: int,
     images: list[UploadFile] = File(default=[]),
     solution_text: OptionalType[str] = Form(default=None),
-    pattern_id: OptionalType[str] = Form(None),
     hints_used: OptionalType[int] = Form(None),
     db: Session = Depends(get_db),
 ):
@@ -919,9 +918,8 @@ async def submit_solution(
     both - at least one of them. Returns immediately with submission_id;
     the client connects to /ws/submissions/{submission_id} for progress.
 
-    ``pattern_id`` (one of the user's patterns) marks the solution as practice
-    of that pattern; ``hints_used`` is the number of hints the task page
-    revealed (OMJ hints are shown client-side), clamped to the task's hints.
+    ``hints_used`` is the number of hints the task page revealed (OMJ hints
+    are shown client-side), clamped to the task's hints.
     """
     # Same audience as private tasks and patterns (auth.current_member_id);
     # this legacy endpoint answers {"error"} rather than {"detail"}
@@ -968,7 +966,6 @@ async def submit_solution(
         year=year,
         etap=etap,
         task_number=num,
-        pattern_id=pattern_service.owned_pattern_id(db, user_id, pattern_id),
         hints_used=max(0, min(hints_used or 0, hints_available)),
     )
     if limit_error is not None:

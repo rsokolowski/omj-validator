@@ -491,8 +491,6 @@ PATTERN_NOTE_MAX = 300
 # OMJ tasks the AI names as evidence that a proposed version applies
 PATTERN_VARIANT_TASKS = 6
 PATTERN_TASK_KEY = re.compile(r"^\d{4}_etap[123]_\d{1,2}$")
-RECALL_TEXT_MIN = 10
-RECALL_TEXT_MAX = 1000
 
 
 class PatternVariant(BaseModel):
@@ -702,16 +700,11 @@ class LinkStatusRequest(BaseModel):
 
 
 class ReviewRequest(BaseModel):
-    recall_text: str = Field(min_length=RECALL_TEXT_MIN, max_length=RECALL_TEXT_MAX)
     outcome: Literal["fail", "hard", "ok"]
-
-    @field_validator("recall_text")
-    @classmethod
-    def _strip(cls, value: str) -> str:
-        value = value.strip()
-        if len(value) < RECALL_TEXT_MIN:
-            raise ValueError("Napisz przynajmniej jedno krótkie zdanie")
-        return value
+    # The exercise solved on paper; None for a plain recall card
+    exercise_id: Optional[str] = Field(default=None, max_length=12)
+    # The student looked at the trigger (always true when it was not hidden)
+    trigger_shown: bool = False
 
 
 class RefineRequest(BaseModel):

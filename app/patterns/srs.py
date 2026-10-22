@@ -16,9 +16,6 @@ MAINTENANCE = 4
 MAINTENANCE_DAYS = 180
 OUTCOMES = ("fail", "hard", "ok")
 
-# A practice task attempted this recently is not offered again
-PRACTICE_COOLDOWN_DAYS = 30
-
 _WARSAW = ZoneInfo("Europe/Warsaw")
 
 T = TypeVar("T")
@@ -61,20 +58,6 @@ def schedule(level: int, streak: int, outcome: str, today: date) -> tuple[int, i
     return new_level, new_streak, today + timedelta(days=_interval(new_level, new_streak))
 
 
-def outcome_from_grade(score: int, max_score: int, hints_used: int) -> str:
-    """Outcome of a graded practice task.
-
-    Solved = 5-6 of 6 points, or 3 of 3 (etap1 scale). Solved without hints is
-    "ok"; solved with hints, or partial credit, is "hard"; zero is "fail".
-    """
-    if score <= 0:
-        return "fail"
-    solved = score >= max_score if max_score <= 3 else score >= max_score - 1
-    if solved and hints_used == 0:
-        return "ok"
-    return "hard"
-
-
 def interleave(items: list[T], key: Callable[[T], object]) -> list[T]:
     """Keep the order, but avoid the same key twice in a row when possible."""
     remaining = list(items)
@@ -86,53 +69,6 @@ def interleave(items: list[T], key: Callable[[T], object]) -> list[T]:
             index = next((i for i, item in enumerate(remaining) if key(item) != previous), 0)
         result.append(remaining.pop(index))
     return result
-
-
-def practice_offered(review_count: int, level: int) -> bool:
-    """Every third review, and always in maintenance, offer a graded task."""
-    return level >= MAINTENANCE or review_count % 3 == 2
-
-
-@dataclass
-class PracticeCandidate:
-    kind: str  # "omj" | "private"
-    ref: str  # OMJ task key or private task id
-    title: str
-    difficulty: Optional[int]
-    last_attempt: Optional[datetime]
-    # A drill exercise generated for this pattern (a private task)
-    exercise: bool = False
-
-
-# Up to this level drills come before OMJ tasks; above it, the real problems first
-EXERCISES_FIRST_MAX_LEVEL = 2
-
-
-def _rank(candidate: PracticeCandidate, level: int) -> int:
-    if level <= EXERCISES_FIRST_MAX_LEVEL:
-        return 0 if candidate.exercise else 1 if candidate.kind == "omj" else 2
-    return 0 if candidate.kind == "omj" else 1
-
-
-def choose_practice(
-    candidates: list[PracticeCandidate], now: datetime, level: int = MAINTENANCE
-) -> Optional[PracticeCandidate]:
-    """The task to offer: never attempted first, else the longest ago.
-
-    Among fresh tasks, a pattern at ``level`` 1-2 gets its drill exercises
-    first (easiest first); from level 3 on, OMJ tasks come first.
-    """
-    cutoff = now - timedelta(days=PRACTICE_COOLDOWN_DAYS)
-    eligible = [c for c in candidates if c.last_attempt is None or c.last_attempt < cutoff]
-    fresh = [c for c in eligible if c.last_attempt is None]
-    if fresh:
-        return min(
-            fresh,
-            key=lambda c: (_rank(c, level), c.difficulty if c.difficulty is not None else 99, c.ref),
-        )
-    if eligible:
-        return min(eligible, key=lambda c: c.last_attempt)
-    return None
 
 
 # ------------------------------------------------------------ exercise reviews
