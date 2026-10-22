@@ -133,3 +133,61 @@ def choose_practice(
     if eligible:
         return min(eligible, key=lambda c: c.last_attempt)
     return None
+
+
+# ------------------------------------------------------------ exercise reviews
+
+
+@dataclass
+class ExerciseState:
+    """A generated exercise of a pattern and how its last review went."""
+
+    id: str
+    level: str  # "easy" | "medium"
+    created_at: datetime
+    last_outcome: Optional[str] = None  # "ok" | "hard" | "fail"; None = never reviewed
+    last_reviewed_at: Optional[datetime] = None
+
+
+# Up to this SRS level easy exercises come first; above it, medium ones
+EASY_FIRST_MAX_LEVEL = 2
+# From this SRS level on the trigger is hidden until the student asks for it
+TRIGGER_HIDDEN_FROM_LEVEL = 2
+
+
+def _tier(state: ExerciseState) -> int:
+    if state.last_outcome is None:
+        return 0
+    return 1 if state.last_outcome == "fail" else 2
+
+
+def choose_exercise(states: list[ExerciseState], srs_level: int) -> Optional[ExerciseState]:
+    """The exercise for today's card: never reviewed, then failed, then the rest.
+
+    Within a tier the preferred level (easy at levels 1-2, medium above) comes
+    first, then the one reviewed (or created) longest ago. Deterministic, so a
+    reload before rating shows the same exercise.
+    """
+    if not states:
+        return None
+    preferred = "easy" if srs_level <= EASY_FIRST_MAX_LEVEL else "medium"
+    return min(
+        states,
+        key=lambda s: (_tier(s), s.level != preferred, s.last_reviewed_at or s.created_at, s.created_at, s.id),
+    )
+
+
+def unseen_count(states: list[ExerciseState]) -> int:
+    return sum(1 for s in states if s.last_outcome is None)
+
+
+def trigger_hidden(srs_level: int) -> bool:
+    """A familiar pattern (level 2+) shows its trigger only on request."""
+    return srs_level >= TRIGGER_HIDDEN_FROM_LEVEL
+
+
+def capped_outcome(outcome: str, srs_level: int, trigger_shown: bool) -> str:
+    """Peeking at a hidden trigger caps the review at "hard"."""
+    if outcome == "ok" and trigger_shown and trigger_hidden(srs_level):
+        return "hard"
+    return outcome
