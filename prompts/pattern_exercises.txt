@@ -29,7 +29,11 @@ zanim spotka go w trudnym zadaniu olimpijskim.
 - "title": krótka nazwa (2-6 słów), która NIE zdradza odpowiedzi.
 - "content": pełna treść ćwiczenia po polsku. Wzory w LaTeX między znakami $.
 - "answer": krótka odpowiedź końcowa (liczba, "tak"/"nie" z jednym zdaniem,
-  albo kluczowa obserwacja przy dowodzie) - BEZ pełnego rozwiązania.
+  albo kluczowa obserwacja przy dowodzie).
+- "solution": krótkie rozwiązanie (2-6 zwięzłych kroków), które rozwiązuje
+  ćwiczenie ZA POMOCĄ WZORCA i wyraźnie pokazuje moment, w którym wzorzec się
+  stosuje (np. "Tu pomaga wzorzec: ..."). Uczeń porówna z nim swoje
+  rozwiązanie na papierze, więc ma być kompletne, ale bez zbędnych rachunków.
 - Zwracaj się do ucznia w formie neutralnej płciowo: bez form rodzajowych typu
   "zrobiłeś"/"zrobiłaś" - używaj trybu rozkazującego, form bezosobowych lub
   rzeczowników.
@@ -47,7 +51,7 @@ Odpowiedz WYŁĄCZNIE obiektem JSON:
 {
   "off_topic": false,
   "exercises": [
-    {"title": "...", "content": "...", "level": "easy", "answer": "..."}
+    {"title": "...", "content": "...", "level": "easy", "answer": "...", "solution": "..."}
   ],
   "abuse_score": 0
 }

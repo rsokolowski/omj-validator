@@ -376,6 +376,10 @@ class PrivateTaskDB(Base):
     )
     exercise_level = Column(String(8), nullable=True)
     answer = Column(Text, nullable=True)
+    # Worked solution using the pattern (exercises generated since 2026-10-22)
+    solution = Column(Text, nullable=True)
+    # The student marked the exercise as broken ("Zadanie jest błędne") - never offered again
+    rejected_at = Column(DateTime, nullable=True)
 
     created_at = Column(DateTime, nullable=False, default=utc_now)
     updated_at = Column(DateTime, nullable=False, default=utc_now, onupdate=utc_now)
@@ -596,7 +600,7 @@ class PatternReviewDB(Base):
         ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False,
     )
-    kind = Column(String(8), nullable=False)  # "recall" | "task"
+    kind = Column(String(8), nullable=False)  # "exercise" | "recall" | legacy "task"
     outcome = Column(String(8), nullable=False)  # "fail" | "hard" | "ok"
     # What the student typed from memory (recall reviews only)
     recall_text = Column(Text, nullable=True)
@@ -611,6 +615,14 @@ class PatternReviewDB(Base):
     due_before = Column(Date, nullable=False)
     due_after = Column(Date, nullable=False)
     created_at = Column(DateTime, nullable=False, default=utc_now)
+    # Exercise reviews: the exercise shown, and whether the trigger was visible
+    private_task_id = Column(
+        String(12),
+        ForeignKey("private_tasks.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+    trigger_shown = Column(Boolean, nullable=True)
 
     pattern = relationship("PatternDB", back_populates="reviews")
 

@@ -61,6 +61,7 @@ class PrivateTaskRepository:
         pattern_id: Optional[str] = None,
         exercise_level: Optional[str] = None,
         answer: Optional[str] = None,
+        solution: Optional[str] = None,
         commit: bool = True,
     ) -> PrivateTaskDB:
         """``commit=False`` adds the row to the session only (a batch saves together)."""
@@ -80,6 +81,7 @@ class PrivateTaskRepository:
             pattern_id=pattern_id,
             exercise_level=exercise_level,
             answer=answer,
+            solution=solution,
             created_at=now,
             updated_at=now,
             last_activity_at=now,

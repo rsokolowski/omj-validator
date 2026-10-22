@@ -360,6 +360,7 @@ async def exercises_for_print(request: Request, pattern_id: str, db: Session = D
                 "content": row["task"].content,
                 "exercise_level": row["task"].exercise_level,
                 "answer": row["task"].answer,
+                "solution": row["task"].solution,
             }
             for row in rows
         ],

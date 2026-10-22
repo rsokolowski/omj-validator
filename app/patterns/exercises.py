@@ -320,6 +320,7 @@ async def _run(db: Session, batch_id: str, usage_id: Optional[int]) -> None:
             pattern_id=pattern.id,
             exercise_level=item.level,
             answer=item.answer or None,
+            solution=item.solution or None,
             commit=False,
         )
         for item in items

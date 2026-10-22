@@ -21,6 +21,7 @@ from app.ai.pattern_parsing import (
     parse_suggest_response,
 )
 from app.ai.prompt_builder import load_private_prompt, validate_prompts
+from app.models import EXERCISE_SOLUTION_MAX
 
 KNOWN_SKILLS = {"parity", "modular_arithmetic", "invariants", "pigeonhole"}
 
@@ -185,8 +186,9 @@ class TestLinkParsing:
         assert len(result.links[0].reason) == 300
 
 
-def exercise(title="Dwie kolejne", content="Udowodnij, że $n(n+1)$ jest parzyste.", level="easy", answer="Tak"):
-    return {"title": title, "content": content, "level": level, "answer": answer}
+def exercise(title="Dwie kolejne", content="Udowodnij, że $n(n+1)$ jest parzyste.", level="easy", answer="Tak",
+             solution="Z wzorca: jedna z liczb $n$, $n+1$ jest parzysta."):
+    return {"title": title, "content": content, "level": level, "answer": answer, "solution": solution}
 
 
 class TestParseExercises:
@@ -220,6 +222,20 @@ class TestParseExercises:
         assert len(result.exercises[0].title) == 120
         assert len(result.exercises[0].content) == 4000
         assert len(result.exercises[0].answer) == 500
+
+    def test_keeps_solution_and_cuts_it(self):
+        result = parse_exercises_response(json.dumps({
+            "off_topic": False, "abuse_score": 0,
+            "exercises": [exercise(), exercise(title="Długie", content="Oblicz $3+3$.", solution="s" * 3000),
+                          {k: v for k, v in exercise(title="Bez", content="Oblicz $4+4$.").items() if k != "solution"}],
+        }))
+        assert result.exercises[0].solution == "Z wzorca: jedna z liczb $n$, $n+1$ jest parzysta."
+        assert len(result.exercises[1].solution) == EXERCISE_SOLUTION_MAX
+        assert result.exercises[2].solution == ""
+
+    def test_schema_requires_solution(self):
+        item = PATTERN_EXERCISES_SCHEMA["properties"]["exercises"]["items"]
+        assert "solution" in item["properties"] and "solution" in item["required"]
 
     def test_off_topic_and_unreadable(self):
         assert parse_exercises_response(json.dumps({"off_topic": True, "exercises": [], "abuse_score": 0})).off_topic

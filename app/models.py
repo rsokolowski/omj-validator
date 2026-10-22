@@ -561,6 +561,7 @@ class LinkResult(BaseModel):
 EXERCISE_LEVELS = ("easy", "medium")
 EXERCISE_CONTENT_MAX = 4000
 EXERCISE_ANSWER_MAX = 500
+EXERCISE_SOLUTION_MAX = 2000
 EXERCISES_PER_BATCH = 5
 
 
@@ -569,6 +570,8 @@ class ExerciseItem(BaseModel):
     content: str
     level: str = "medium"  # "easy" | "medium"
     answer: str = ""
+    # Short worked solution that uses the pattern (shown after the self-rating)
+    solution: str = ""
 
 
 class ExercisesResult(BaseModel):

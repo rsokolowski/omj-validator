@@ -36,7 +36,7 @@ from test_pattern_api import (  # noqa: F401 - fixtures
 def items(n=5, prefix="Ćwiczenie"):
     return [
         ExerciseItem(title=f"{prefix} {i}", content=f"Wymyślona treść {prefix} {i}: wykaż, że $n(n+1)$ jest parzyste.",
-                     level="easy" if i < 2 else "medium", answer=f"Odpowiedź {i}")
+                     level="easy" if i < 2 else "medium", answer=f"Odpowiedź {i}", solution=f"Rozwiązanie {i}")
         for i in range(n)
     ]
 
@@ -97,6 +97,7 @@ class TestModel:
         db.expire_all()
         task = db.get(PrivateTaskDB, "exercise0001")
         assert (task.pattern_id, task.exercise_level, task.answer) == ("pattern00001", "easy", "42")
+        assert (task.solution, task.rejected_at) == (None, None)
         batch = db.get(PatternExerciseBatchDB, "batch0000001")
         assert (batch.created_count, batch.acknowledged) == (0, False)
 
@@ -116,6 +117,7 @@ class TestRunBatch:
         assert all(t.origin == "exercise" and t.hints == [] and t.difficulty is None for t in tasks)
         assert {t.category for t in tasks} == {"kombinatoryka"}
         assert tasks[0].answer == "Odpowiedź 0"
+        assert tasks[0].solution == "Rozwiązanie 0"
         links = db.query(PatternLinkDB).filter_by(pattern_id=p["id"], origin="exercise").all()
         assert {l.private_task_id for l in links} == {t.id for t in tasks}
         assert {(l.role, l.status) for l in links} == {("practice", "accepted")}
@@ -392,6 +394,7 @@ class TestPrint:
         assert len(data["exercises"]) == 5
         assert data["exercises"][0]["content"].startswith("Wymyślona treść")
         assert data["exercises"][0]["answer"] == "Odpowiedź 0"
+        assert data["exercises"][0]["solution"] == "Rozwiązanie 0"
         current_user["id"] = OTHER_USER_ID
         assert client.get(f"/api/patterns/{p['id']}/exercises/print").status_code == 404
 

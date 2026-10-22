@@ -13,6 +13,7 @@ from typing import Any
 
 from ..models import (
     EXERCISE_ANSWER_MAX,
+    EXERCISE_SOLUTION_MAX,
     EXERCISE_CONTENT_MAX,
     EXERCISE_LEVELS,
     PRIVATE_TITLE_MAX,
@@ -170,9 +171,13 @@ PATTERN_EXERCISES_SCHEMA = {
                     "title": {"type": "string", "description": "Krótka nazwa ćwiczenia, bez odpowiedzi"},
                     "content": {"type": "string", "description": "Treść ćwiczenia z $LaTeX$"},
                     "level": {"type": "string", "enum": list(EXERCISE_LEVELS)},
-                    "answer": {"type": "string", "description": "Krótka odpowiedź końcowa, bez rozwiązania"},
+                    "answer": {"type": "string", "description": "Krótka odpowiedź końcowa"},
+                    "solution": {
+                        "type": "string",
+                        "description": "Krótkie rozwiązanie z użyciem wzorca, krok po kroku",
+                    },
                 },
-                "required": ["title", "content", "level", "answer"],
+                "required": ["title", "content", "level", "answer", "solution"],
             },
         },
         "abuse_score": {
@@ -334,6 +339,7 @@ def parse_exercises_response(text: str) -> ExercisesResult:
             content=content,
             level=level if level in EXERCISE_LEVELS else "medium",
             answer=_text(raw.get("answer"), EXERCISE_ANSWER_MAX),
+            solution=_text(raw.get("solution"), EXERCISE_SOLUTION_MAX),
         ))
         if len(exercises) == MAX_EXERCISES:
             break
